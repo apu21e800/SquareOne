@@ -1,0 +1,148 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+:root {
+  /* ─── Square One Brand Colors ───────────────────────── */
+  --color-concrete: #F5F3F0;
+  --color-white: #FFFFFF;
+  --color-orange: #E8581A;
+  --color-orange-hover: #d44f16;
+  --color-stone: #8B8680;
+  --color-charcoal: #2D2D2D;
+  --color-accent: #4A7C9E;
+
+  /* ─── Backgrounds ───────────────────────────────────── */
+  --bg-primary: #F5F3F0;
+  --bg-white: #FFFFFF;
+  --bg-dark: #2D2D2D;
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #F5F3F0;
+
+  /* ─── Text ──────────────────────────────────────────── */
+  --text-primary: #2D2D2D;
+  --text-body: #2D2D2D;
+  --text-secondary: #8B8680;
+  --text-muted: #8B8680;
+  --text-light: #FFFFFF;
+
+  /* ─── Borders ───────────────────────────────────────── */
+  --border-color: rgba(139, 134, 128, 0.2);
+  --border-subtle: rgba(139, 134, 128, 0.1);
+}
+
+body {
+  background-color: var(--color-white);
+  color: var(--color-charcoal);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-charcoal);
+}
+
+p {
+  line-height: 1.75;
+}
+
+/* ─── Section padding utility ─────────────────────────── */
+.section-padding {
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+
+@media (max-width: 768px) {
+  .section-padding {
+    padding-top: 48px;
+    padding-bottom: 48px;
+  }
+}
+
+/* ─── Button styles ─────────────────────────────────── */
+.btn-primary {
+  background-color: var(--color-orange);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-orange-hover);
+}
+
+.btn-secondary {
+  border: 2px solid var(--color-orange);
+  color: var(--color-orange);
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  background: transparent;
+}
+
+.btn-secondary:hover {
+  background-color: rgba(232, 88, 26, 0.1);
+}
+
+/* ─── Card styles ─────────────────────────────────────── */
+.card-light {
+  background-color: var(--bg-primary);
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.card-light:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* ─── Text accent ─────────────────────────────────────── */
+.text-accent {
+  color: var(--color-orange);
+  font-weight: 600;
+}
+
+/* ─── Grid pattern for subtle texture ─────────────────── */
+.grid-pattern {
+  background-image:
+    linear-gradient(rgba(0,0,0,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* ─── Dark section styles ─────────────────────────────── */
+.section-dark {
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+}
+
+.section-dark h1,
+.section-dark h2,
+.section-dark h3,
+.section-dark h4 {
+  color: var(--text-light);
+}
+
+.section-dark p {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ─── Scrollbar hide utility ─────────────────────────── */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
