@@ -18,13 +18,13 @@ const products = [
     name: "TrafficPatterns",
     slug: "trafficpatterns",
     description: "Preformed thermoplastic with decorative patterns for crosswalks, transit stops, and pedestrian zones.",
-    image: "/images/products/trafficpatterns/trafficpatterns-1.jpg",
+    image: "/images/products/traffic-patterns/trafficpatterns-1.jpg",
   },
   {
     name: "TrafficPatternsXD",
     slug: "trafficpatterns-xd",
     description: "Heavy-duty thermoplastic engineered for high-traffic intersections and transit corridors.",
-    image: "/images/products/trafficpatterns-xd/trafficpatterns-xd-1.jpg",
+    image: "/images/products/traffic-patterns-xd/trafficpatterns-xd-1.jpg",
   },
   {
     name: "DecoMark",
@@ -54,7 +54,7 @@ const products = [
     name: "PreMark",
     slug: "premark",
     description: "Preformed thermoplastic road markings — arrows, legends, crosswalks — built for longevity.",
-    image: "/images/products/premark/premark-1.jpg",
+    image: "/images/products/premark/premark-2.jpg",
   },
 ]
 

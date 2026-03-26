@@ -7,21 +7,21 @@ const featuredProjects = [
     name: "Downtown Vancouver Crosswalk",
     service: "Stamped Asphalt",
     location: "Vancouver, BC",
-    image: "/images/applications/commercial-spaces/little-italy-aerial-colourful-intersection-01.jpg",
+    image: "/images/applications/crosswalks/crosswalk-1.jpg",
   },
   {
     id: "2",
     name: "BC Transit Priority Lane",
     service: "Decorative Coatings",
     location: "Victoria, BC",
-    image: "/images/applications/bus-bike-lanes/london-transit-bus-on-red-lane-01.jpg",
+    image: "/images/applications/bus-lanes/beebe-hospital-brick-crosswalk-entry-01.jpg",
   },
   {
     id: "3",
     name: "Westshore Roundabout",
     service: "TrafficPatterns",
     location: "Langford, BC",
-    image: "/images/applications/traffic-calming/roundabout-red-brick-mountains-01.jpg",
+    image: "/images/applications/roundabouts/roundabout-01.jpg",
   },
 ]
 
