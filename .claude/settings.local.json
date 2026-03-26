@@ -3,7 +3,10 @@
     "allow": [
       "Bash(npm run:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(/dev/null ls:*)",
+      "Bash(for dir:*)",
+      "Bash(do echo:*)"
     ]
   }
 }

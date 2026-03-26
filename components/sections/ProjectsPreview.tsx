@@ -1,70 +1,90 @@
+import Image from "next/image"
 import Link from "next/link"
 
-export default function ProjectsPreview() {
-  const featuredProjects = [
-    {
-      id: "1",
-      name: "Downtown Vancouver Crosswalk",
-      service: "Stamped Asphalt",
-      location: "Vancouver, BC",
-    },
-    {
-      id: "2",
-      name: "BC Transit Priority Lane",
-      service: "Decorative Coatings",
-      location: "Victoria, BC",
-    },
-    {
-      id: "3",
-      name: "Westshore Parking Markings",
-      service: "Preformed Thermoplastic",
-      location: "Langford, BC",
-    },
-  ]
+const featuredProjects = [
+  {
+    id: "1",
+    name: "Downtown Vancouver Crosswalk",
+    service: "Stamped Asphalt",
+    location: "Vancouver, BC",
+    image: "/images/applications/commercial-spaces/little-italy-aerial-colourful-intersection-01.jpg",
+  },
+  {
+    id: "2",
+    name: "BC Transit Priority Lane",
+    service: "Decorative Coatings",
+    location: "Victoria, BC",
+    image: "/images/applications/bus-bike-lanes/london-transit-bus-on-red-lane-01.jpg",
+  },
+  {
+    id: "3",
+    name: "Westshore Roundabout",
+    service: "TrafficPatterns",
+    location: "Langford, BC",
+    image: "/images/applications/traffic-calming/roundabout-red-brick-mountains-01.jpg",
+  },
+]
 
+export default function ProjectsPreview() {
   return (
-    <section className="w-full py-20 bg-[#F5F3F0]">
+    <section className="w-full py-24 bg-[#FAFAFA]">
       <div className="max-w-6xl mx-auto px-6 sm:px-8">
-        <div className="mb-16 text-center">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#2D2D2D] mb-4">
-            Featured Projects
-          </h2>
-          <p className="text-lg text-[#8B8680] max-w-2xl mx-auto">
-            Recent installations across BC. Field-tested, designed to last.
+        {/* Header */}
+        <div className="mb-14">
+          <p className="text-[#D66620] text-xs uppercase tracking-[0.2em] font-semibold mb-3">
+            Recent Work
           </p>
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+            <h2 className="text-4xl sm:text-5xl font-black text-[#333333] leading-tight">
+              Featured Projects
+            </h2>
+            <Link href="/projects">
+              <span className="text-[#D66620] font-semibold text-sm hover:text-[#C05A18] transition-colors">
+                View All Projects →
+              </span>
+            </Link>
+          </div>
+          <div className="mt-6 h-px bg-gradient-to-r from-[#D66620]/40 to-transparent" />
         </div>
 
+        {/* Project grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {featuredProjects.map((project) => (
-            <Link key={project.id} href={`/projects/${project.id}`}>
-              <div className="h-full rounded-2xl shadow-md hover:shadow-lg transition-shadow cursor-pointer overflow-hidden bg-white">
-                {/* Placeholder gradient for image */}
-                <div className="h-56 bg-gradient-to-br from-[#8B8680]/30 to-[#E8581A]/20" />
+            <Link key={project.id} href={`/projects/${project.id}`} className="group block">
+              <div className="bg-white rounded-xl overflow-hidden border border-[#E8E4DE] hover:border-[#D66620]/40 hover:shadow-xl transition-all duration-200">
+                {/* Image */}
+                <div className="relative h-56 bg-[#F2EFE9] overflow-hidden">
+                  <Image
+                    src={project.image}
+                    alt={project.name}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+                  {/* Service tag */}
+                  <div className="absolute top-3 left-3">
+                    <span className="bg-[#D66620] text-white text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wide">
+                      {project.service}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Content */}
                 <div className="p-5">
-                  <h3 className="text-xl font-bold text-[#2D2D2D] mb-2">
+                  <h3 className="text-lg font-bold text-[#333333] mb-1">
                     {project.name}
                   </h3>
-                  <p className="text-sm text-[#E8581A] font-semibold mb-2">
-                    {project.service}
-                  </p>
-                  <p className="text-sm text-[#8B8680] mb-4">
+                  <p className="text-[#626262] text-sm mb-4">
                     {project.location}
                   </p>
-                  <div className="text-[#E8581A] font-semibold text-sm">
+                  <span className="text-[#D66620] text-xs font-bold uppercase tracking-widest group-hover:tracking-[0.2em] transition-all duration-200">
                     View Project →
-                  </div>
+                  </span>
                 </div>
               </div>
             </Link>
           ))}
-        </div>
-
-        <div className="mt-12 text-center">
-          <Link href="/projects">
-            <button className="text-[#E8581A] font-semibold hover:underline">
-              View All Projects →
-            </button>
-          </Link>
         </div>
       </div>
     </section>
