@@ -3,7 +3,7 @@ import Link from "next/link"
 
 export default function ServicesGrid() {
   return (
-    <section className="w-full py-20 bg-[#FFFFFF]">
+    <section className="w-full py-20 bg-[#F2EFE9]">
       <div className="max-w-6xl mx-auto px-6 sm:px-8">
         <div className="mb-16 text-center">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#2D2D2D] mb-4">
@@ -17,9 +17,9 @@ export default function ServicesGrid() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {services.map((service) => (
             <Link key={service.slug} href={`/services/${service.slug}`}>
-              <div className="h-full rounded-2xl shadow-md hover:shadow-lg transition-shadow bg-[#F5F3F0] hover:border-[#E8581A] hover:border-2 border-2 border-transparent cursor-pointer overflow-hidden">
+              <div className="h-full rounded-2xl shadow-md hover:shadow-lg transition-shadow bg-[#F5F3F0] hover:border-[#D66620] hover:border-2 border-2 border-transparent cursor-pointer overflow-hidden">
                 {/* Placeholder gradient for image */}
-                <div className="h-40 bg-gradient-to-br from-[#8B8680]/30 to-[#E8581A]/20" />
+                <div className="h-40 bg-gradient-to-br from-[#8B8680]/30 to-[#D66620]/20" />
                 <div className="p-5">
                   <h3 className="text-xl font-bold text-[#2D2D2D] mb-2">
                     {service.name}
@@ -30,7 +30,7 @@ export default function ServicesGrid() {
                   <p className="text-sm text-[#8B8680] mb-4 line-clamp-2">
                     {service.shortDescription}
                   </p>
-                  <div className="text-[#E8581A] font-semibold text-sm flex items-center gap-2">
+                  <div className="text-[#D66620] font-semibold text-sm flex items-center gap-2">
                     Learn More →
                   </div>
                 </div>
