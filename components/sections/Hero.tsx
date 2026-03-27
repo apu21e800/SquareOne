@@ -15,9 +15,9 @@ export default function Hero() {
           className="object-cover"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/15" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/65 to-black/30" />
         {/* Warm orange tint at bottom for brand warmth */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-[#D66620]/20 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-tr from-[#D66620]/15 via-transparent to-transparent" />
       </div>
 
       {/* Main content — bottom-left anchored */}
@@ -26,9 +26,9 @@ export default function Hero() {
           BC&apos;s Surface Specialists
         </p>
         <h1 className="text-5xl sm:text-6xl md:text-7xl font-black text-white leading-[1.04] mb-6 max-w-3xl">
-          Where Every<br />Street Tells<br />a Story.
+          BC&apos;s Surface<br />Specialists. Built<br />for Communities.
         </h1>
-        <p className="text-white/70 text-lg sm:text-xl max-w-xl mb-10 leading-relaxed">
+        <p className="text-white text-lg sm:text-xl max-w-xl mb-10 leading-relaxed" style={{textShadow: "0 1px 3px rgba(0,0,0,0.5)"}}>
           Decorative pavement, surface coatings, and vapor blasting —
           installed by BC&apos;s most experienced HUB applicator since 2000.
         </p>
@@ -51,7 +51,7 @@ export default function Hero() {
       <div className="absolute bottom-0 left-0 right-0 z-10 bg-black/50 backdrop-blur-sm border-t border-white/10">
         <div className="max-w-6xl mx-auto px-6 sm:px-12 py-3 flex gap-8 sm:gap-12 overflow-x-auto">
           {credentials.map((c) => (
-            <span key={c} className="text-white/55 text-xs uppercase tracking-[0.18em] whitespace-nowrap font-medium">
+            <span key={c} className="text-white/80 text-xs uppercase tracking-[0.18em] whitespace-nowrap font-medium">
               {c}
             </span>
           ))}

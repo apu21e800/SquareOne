@@ -291,10 +291,10 @@ export default function Nav() {
           {/* ── Right actions ── */}
           <div className="flex items-center gap-2">
             <a
-              href="tel:6043098212"
+              href="tel:18773910270"
               className="hidden lg:inline-flex items-center gap-1.5 text-[#626262] hover:text-[#D66620] text-sm font-medium transition-colors px-2 py-1"
             >
-              604-309-8212
+              1-877-391-0270
             </a>
             <Link href="/contact" onClick={closeAll} className="hidden lg:inline-flex">
               <span className="bg-[#D66620] hover:bg-[#C05A18] text-white px-5 py-2 rounded-lg font-bold text-sm transition-colors">
@@ -403,8 +403,8 @@ export default function Nav() {
                   Get a Free Quote
                 </span>
               </Link>
-              <a href="tel:6043098212" className="block text-center text-[#626262] text-sm font-medium py-1">
-                Call 604-309-8212
+              <a href="tel:18773910270" className="block text-center text-[#626262] text-sm font-medium py-1">
+                Call 1-877-391-0270
               </a>
             </div>
           </div>

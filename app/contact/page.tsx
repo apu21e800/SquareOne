@@ -75,23 +75,38 @@ export default function ContactPage() {
             <div className="bg-white rounded-2xl border border-[#E8E4DE] p-7 mb-6">
               <p className="text-[#D66620] text-xs uppercase tracking-[0.22em] font-semibold mb-4">Direct Contact</p>
               <div className="space-y-2.5">
-                <a href="tel:6043098212" className="flex items-center gap-3 group">
+                <a href="tel:18773910270" className="flex items-center gap-3 group">
                   <div className="w-8 h-8 rounded-lg bg-[#D66620]/10 flex items-center justify-center text-[#D66620] text-sm flex-shrink-0">
                     ◉
                   </div>
-                  <span className="text-[#333333] font-semibold group-hover:text-[#D66620] transition-colors">604-309-8212</span>
+                  <div>
+                    <span className="text-[#333333] font-semibold group-hover:text-[#D66620] transition-colors block">1-877-391-0270</span>
+                    <span className="text-[#626262] text-xs">Toll Free</span>
+                  </div>
                 </a>
-                <a href="mailto:info@squareonepaving.ca" className="flex items-center gap-3 group">
+                <a href="tel:6046126209" className="flex items-center gap-3 group">
+                  <div className="w-8 h-8 rounded-lg bg-[#D66620]/10 flex items-center justify-center text-[#D66620] text-sm flex-shrink-0">
+                    ◉
+                  </div>
+                  <div>
+                    <span className="text-[#333333] font-semibold group-hover:text-[#D66620] transition-colors block">604-612-6209</span>
+                    <span className="text-[#626262] text-xs">Lower Mainland</span>
+                  </div>
+                </a>
+                <a href="mailto:mail@squareonepaving.com" className="flex items-center gap-3 group">
                   <div className="w-8 h-8 rounded-lg bg-[#D66620]/10 flex items-center justify-center text-[#D66620] text-sm flex-shrink-0">
                     ◈
                   </div>
-                  <span className="text-[#626262] group-hover:text-[#D66620] transition-colors text-sm">info@squareonepaving.ca</span>
+                  <span className="text-[#626262] group-hover:text-[#D66620] transition-colors text-sm">mail@squareonepaving.com</span>
                 </a>
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-lg bg-[#D66620]/10 flex items-center justify-center text-[#D66620] text-sm flex-shrink-0">
                     ◧
                   </div>
-                  <span className="text-[#626262] text-sm">Ladysmith, British Columbia</span>
+                  <div>
+                    <span className="text-[#626262] text-sm block">505 – 20800 Lougheed Hwy</span>
+                    <span className="text-[#626262] text-sm">Maple Ridge, BC V2X 3P2</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -244,7 +259,7 @@ export default function ContactPage() {
                   </button>
 
                   <p className="text-center text-xs text-[#999]">
-                    Or call us directly: <a href="tel:6043098212" className="text-[#D66620] font-semibold">604-309-8212</a>
+                    Or call us directly: <a href="tel:18773910270" className="text-[#D66620] font-semibold">1-877-391-0270</a>
                   </p>
                 </form>
               </>

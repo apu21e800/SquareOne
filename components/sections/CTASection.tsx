@@ -23,9 +23,9 @@ export default function CTASection() {
               Request a Quote
             </button>
           </Link>
-          <a href="tel:6043098212">
-            <button className="border border-white/25 text-white hover:bg-white/10 px-10 py-4 rounded-lg font-semibold text-sm transition-colors w-full sm:w-auto">
-              604-309-8212
+          <a href="tel:18773910270">
+            <button className="border border-white/40 text-white hover:bg-white/10 px-10 py-4 rounded-lg font-semibold text-sm transition-colors w-full sm:w-auto">
+              1-877-391-0270
             </button>
           </a>
         </div>

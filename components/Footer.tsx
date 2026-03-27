@@ -112,14 +112,20 @@ export default function Footer() {
               </li>
             </ul>
             <p className="text-[10px] font-bold text-[#D66620] uppercase tracking-[0.2em] mb-3">Contact</p>
-            <div className="space-y-1.5 text-sm text-white/65">
-              <a href="tel:6043098212" className="block hover:text-white transition-colors">
-                604-309-8212
+            <div className="space-y-1.5 text-sm text-white/75">
+              <a href="tel:18773910270" className="block hover:text-white transition-colors">
+                1-877-391-0270 <span className="text-white/40 text-xs">Toll Free</span>
               </a>
-              <a href="mailto:info@squareonepaving.ca" className="block hover:text-white transition-colors">
-                info@squareonepaving.ca
+              <a href="tel:6046126209" className="block hover:text-white transition-colors">
+                604-612-6209 <span className="text-white/40 text-xs">Lower Mainland</span>
               </a>
-              <p className="text-white/40 text-xs pt-1">Ladysmith, BC</p>
+              <a href="tel:2503910270" className="block hover:text-white transition-colors">
+                250-391-0270 <span className="text-white/40 text-xs">Vancouver Island</span>
+              </a>
+              <a href="mailto:mail@squareonepaving.com" className="block hover:text-white transition-colors">
+                mail@squareonepaving.com
+              </a>
+              <p className="text-white/50 text-xs pt-1">Maple Ridge, BC</p>
             </div>
           </div>
         </div>
