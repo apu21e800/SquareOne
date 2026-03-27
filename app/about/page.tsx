@@ -1,70 +1,81 @@
 import Link from "next/link"
-import { buildMetadata } from "@/lib/seo"
+import Image from "next/image"
+import { Metadata } from "next"
 
-export const metadata = buildMetadata({
-  title: "About Square One Paving",
+export const metadata: Metadata = {
+  title: "About Square One Paving | BC's Decorative Pavement Specialists",
   description:
     "BC's trusted decorative pavement applicator since 2000. Authorized HUB Surface Systems partner serving the Lower Mainland and Vancouver Island.",
-  slug: "about",
-})
+}
 
 const differentiators = [
   {
     title: "BC Climate Expertise",
     desc: "All our systems are designed and tested for BC's unique conditions — wet winters, freeze-thaw cycles, and UV exposure.",
+    icon: "◈",
   },
   {
-    title: "Authorized Applicator",
-    desc: "Square One is an authorized HUB Surface Systems applicator, backed by manufacturer warranties and certified training.",
+    title: "Authorized HUB Applicator",
+    desc: "Square One is an authorized HUB Surface Systems applicator, backed by manufacturer warranties and certified installation training.",
+    icon: "◉",
   },
   {
     title: "Lower Mainland + Island",
     desc: "We serve the entire Lower Mainland, Vancouver Island, and surrounding BC communities — with mobile vapor blasting equipment.",
+    icon: "◧",
   },
   {
     title: "25+ Years Experience",
     desc: "Since 2000, we've been installing decorative pavement systems for municipalities, developers, and contractors across BC.",
+    icon: "◌",
   },
   {
-    title: "Full Service",
-    desc: "From surface prep (vapor blasting) to installation — we handle the entire project lifecycle under one roof.",
+    title: "Full Service Capability",
+    desc: "From surface prep (vapor blasting) to final installation — we handle the entire project lifecycle under one roof.",
+    icon: "◈",
   },
   {
     title: "Vision Zero Aligned",
     desc: "Our crosswalk and bike lane systems support BC's Vision Zero goals with high-visibility, retroreflective, and durable solutions.",
+    icon: "◉",
   },
+]
+
+const timeline = [
+  { year: "2000", event: "Square One Paving founded in BC" },
+  { year: "2005", event: "Became authorized HUB Surface Systems applicator" },
+  { year: "2012", event: "Expanded to Vancouver Island operations" },
+  { year: "2018", event: "Added mobile vapor blasting service" },
+  { year: "2024", event: "100+ municipal and commercial projects completed" },
 ]
 
 export default function AboutPage() {
   return (
-    <main className="min-h-screen bg-[#F5F3F0]">
+    <main className="bg-[#FAFAFA]">
+
       {/* Hero */}
-      <section className="pt-32 pb-16 px-6 sm:px-8">
+      <section className="bg-white border-b border-[#E8E4DE] pt-28 pb-16 px-6 sm:px-8">
         <div className="max-w-6xl mx-auto">
-          <p className="text-xs font-semibold text-[#E8581A] uppercase tracking-widest mb-4">
+          <p className="text-[#D66620] text-xs uppercase tracking-[0.22em] font-semibold mb-3">
             About Square One Paving
           </p>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-[#2D2D2D] mb-6 max-w-3xl">
-            BC&apos;s Trusted Decorative Pavement Applicators
+          <h1 className="text-5xl sm:text-6xl font-black text-[#333333] mb-5 max-w-3xl leading-tight">
+            BC&apos;s Trusted Decorative Pavement Specialists
           </h1>
-          <p className="text-lg text-[#8B8680] max-w-2xl">
-            Since 2000, Square One Paving has been the partner BC municipalities,
-            developers, and contractors call when a surface needs to perform —
-            and look good doing it. From crosswalks in Vancouver to parking
-            markings on the Island, our work is designed to last.
+          <p className="text-lg text-[#626262] max-w-2xl leading-relaxed">
+            Since 2000, Square One Paving has been the partner BC municipalities, developers, and contractors
+            call when a surface needs to perform — and look good doing it.
           </p>
         </div>
       </section>
 
-      {/* Story */}
+      {/* Story + Mission */}
       <section className="py-20 px-6 sm:px-8 bg-white">
         <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             <div>
-              <h2 className="text-3xl font-bold text-[#2D2D2D] mb-6">
-                Our Story
-              </h2>
-              <div className="space-y-4 text-[#8B8680]">
+              <p className="text-[#D66620] text-xs uppercase tracking-[0.22em] font-semibold mb-4">Our Story</p>
+              <div className="space-y-4 text-[#626262] leading-relaxed text-sm">
                 <p>
                   Square One Paving was founded with a simple goal: bring
                   high-quality decorative pavement systems to BC communities.
@@ -86,120 +97,172 @@ export default function AboutPage() {
                   equipment is mobile — we come to you.
                 </p>
               </div>
+
+              {/* Timeline */}
+              <div className="mt-10">
+                <p className="text-[#D66620] text-xs uppercase tracking-[0.22em] font-semibold mb-5">Milestones</p>
+                <div className="space-y-3">
+                  {timeline.map((item) => (
+                    <div key={item.year} className="flex items-start gap-4">
+                      <span className="text-[#D66620] font-black text-sm w-10 flex-shrink-0">{item.year}</span>
+                      <div className="flex-1 flex items-start gap-3 pt-0.5">
+                        <div className="w-2 h-2 rounded-full bg-[#D66620] mt-1 flex-shrink-0" />
+                        <p className="text-[#626262] text-sm">{item.event}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
+
             <div>
-              <h2 className="text-3xl font-bold text-[#2D2D2D] mb-6">
-                Our Mission
-              </h2>
-              <p className="text-xl text-[#2D2D2D] border-l-4 border-[#E8581A] pl-6 mb-6">
-                &ldquo;Build surfaces that perform as good as they look — and
-                last.&rdquo;
-              </p>
-              <p className="text-[#8B8680]">
-                We believe that BC&apos;s public spaces deserve better than
-                fading paint and cracking concrete. Our decorative pavement
-                systems combine aesthetics with durability — crosswalks that
-                stay bright, bike lanes that stay visible, and surfaces that
-                hold up to BC&apos;s climate year after year.
-              </p>
+              {/* Mission quote */}
+              <div className="bg-[#F2EFE9] rounded-2xl p-8 mb-8 border border-[#E8E4DE]">
+                <p className="text-[#D66620] text-xs uppercase tracking-[0.22em] font-semibold mb-4">Our Mission</p>
+                <blockquote className="text-xl font-black text-[#333333] leading-snug border-l-4 border-[#D66620] pl-6">
+                  &ldquo;Build surfaces that perform as good as they look — and last.&rdquo;
+                </blockquote>
+                <p className="text-[#626262] text-sm leading-relaxed mt-5">
+                  We believe BC&apos;s public spaces deserve better than fading paint and cracking concrete.
+                  Our decorative pavement systems combine aesthetics with durability — crosswalks that
+                  stay bright, bike lanes that stay visible, and surfaces that hold up year after year.
+                </p>
+              </div>
+
+              {/* Hero image */}
+              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden">
+                <Image
+                  src="/images/products/streetprint/streetprint-1.jpg"
+                  alt="Square One Paving work"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width:1024px) 100vw, 50vw"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                <div className="absolute bottom-5 left-5">
+                  <span className="text-white text-sm font-bold">StreetPrint Stamped Asphalt</span>
+                  <p className="text-white/70 text-xs mt-0.5">Lower Mainland, BC</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Why Square One */}
-      <section className="py-20 px-6 sm:px-8 bg-[#F5F3F0]">
+      <section className="py-20 px-6 sm:px-8 bg-[#F2EFE9]">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-[#2D2D2D] mb-12">
-            Why Square One
-          </h2>
+          <div className="text-center mb-14">
+            <p className="text-[#D66620] text-xs uppercase tracking-[0.22em] font-semibold mb-3">Our Difference</p>
+            <h2 className="text-4xl sm:text-5xl font-black text-[#333333]">Why Square One</h2>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {differentiators.map((d) => (
-              <div key={d.title} className="bg-white rounded-xl p-8 shadow-md">
-                <div className="w-10 h-1 bg-[#E8581A] mb-5" />
-                <h3 className="font-bold text-lg text-[#2D2D2D] mb-3">
-                  {d.title}
-                </h3>
-                <p className="text-sm text-[#8B8680]">{d.desc}</p>
+              <div key={d.title} className="bg-white rounded-2xl p-7 border border-[#E8E4DE] hover:shadow-lg transition-shadow">
+                <span className="text-[#D66620] text-2xl block mb-4">{d.icon}</span>
+                <div className="w-6 h-1 bg-[#D66620] rounded mb-4" />
+                <h3 className="font-black text-base text-[#333333] mb-3">{d.title}</h3>
+                <p className="text-sm text-[#626262] leading-relaxed">{d.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Contact Info */}
+      {/* Service area + contact */}
       <section className="py-20 px-6 sm:px-8 bg-white">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-[#2D2D2D] mb-10">
-            Get in Touch
-          </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-[#F5F3F0] rounded-xl p-8">
-              <div className="w-full h-1 bg-[#E8581A] mb-6 rounded" />
-              <p className="text-xs font-semibold text-[#E8581A] uppercase tracking-widest mb-3">
-                Service Area
-              </p>
-              <h3 className="text-xl font-bold text-[#2D2D2D] mb-4">
-                Lower Mainland & Vancouver Island
-              </h3>
-              <p className="text-sm text-[#8B8680] mb-6">
-                We serve communities across British Columbia, including
-                Vancouver, Surrey, Burnaby, Richmond, Victoria, Nanaimo, and
-                surrounding areas.
+            <div className="bg-[#F2EFE9] rounded-2xl p-8 border border-[#E8E4DE]">
+              <div className="h-1 w-12 bg-[#D66620] rounded mb-5" />
+              <p className="text-[#D66620] text-xs uppercase tracking-[0.22em] font-semibold mb-3">Service Area</p>
+              <h3 className="text-2xl font-black text-[#333333] mb-4">Lower Mainland &amp; Vancouver Island</h3>
+              <p className="text-sm text-[#626262] leading-relaxed mb-6">
+                We serve communities across BC — Vancouver, Surrey, Burnaby, Richmond,
+                Victoria, Nanaimo, Ladysmith, and surrounding areas. Mobile vapor blasting
+                equipment goes wherever the job is.
               </p>
               <div className="flex flex-wrap gap-2">
-                {["BC", "Lower Mainland", "Vancouver Island"].map((tag) => (
-                  <span
-                    key={tag}
-                    className="text-xs font-semibold px-3 py-1 rounded bg-[#E8581A]/10 text-[#E8581A]"
-                  >
+                {["Greater Vancouver", "Fraser Valley", "Sunshine Coast", "Vancouver Island", "Gulf Islands"].map((tag) => (
+                  <span key={tag} className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-white border border-[#E8E4DE] text-[#626262]">
                     {tag}
                   </span>
                 ))}
               </div>
             </div>
-            <div className="bg-[#F5F3F0] rounded-xl p-8">
-              <div className="w-full h-1 bg-[#E8581A] mb-6 rounded" />
-              <p className="text-xs font-semibold text-[#E8581A] uppercase tracking-widest mb-3">
-                Contact
-              </p>
-              <h3 className="text-xl font-bold text-[#2D2D2D] mb-4">
-                Square One Paving
-              </h3>
-              <div className="space-y-2 text-sm text-[#8B8680]">
-                <p>Ladysmith, British Columbia</p>
-                <a
-                  href="mailto:info@squareonepaving.ca"
-                  className="block hover:text-[#E8581A] transition"
-                >
-                  info@squareonepaving.ca
-                </a>
-                <a
-                  href="tel:6043098212"
-                  className="block hover:text-[#E8581A] transition"
-                >
+
+            <div className="bg-[#32373C] rounded-2xl p-8">
+              <div className="h-1 w-12 bg-[#D66620] rounded mb-5" />
+              <p className="text-[#D66620] text-xs uppercase tracking-[0.22em] font-semibold mb-3">Contact Us</p>
+              <h3 className="text-2xl font-black text-white mb-4">Square One Paving</h3>
+              <div className="space-y-3 text-sm mb-8">
+                <p className="text-white/60">Ladysmith, British Columbia</p>
+                <a href="tel:6043098212" className="block text-white hover:text-[#F0A04B] transition-colors font-semibold">
                   604-309-8212
                 </a>
+                <a href="mailto:info@squareonepaving.ca" className="block text-white/70 hover:text-white transition-colors">
+                  info@squareonepaving.ca
+                </a>
               </div>
+              <Link href="/contact">
+                <span className="inline-block bg-[#D66620] hover:bg-[#C05A18] text-white px-7 py-3.5 rounded-lg font-bold text-sm uppercase tracking-wider transition-colors">
+                  Get a Free Quote
+                </span>
+              </Link>
             </div>
           </div>
         </div>
       </section>
 
+      {/* HUB partnership */}
+      <section className="py-16 px-6 sm:px-8 bg-[#F2EFE9] border-t border-[#E8E4DE]">
+        <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-8 text-center md:text-left">
+          <div className="relative w-36 h-10 flex-shrink-0">
+            <Image
+              src="/images/hub-logo-orange-grey.png"
+              alt="HUB Surface Systems"
+              fill
+              className="object-contain"
+              sizes="144px"
+            />
+          </div>
+          <div>
+            <p className="text-[#333333] font-black text-lg mb-1">Authorized HUB Surface Systems Applicator — Western Canada</p>
+            <p className="text-[#626262] text-sm leading-relaxed">
+              Square One is certified to install the complete HUB product portfolio — the same systems
+              specified by 500+ Canadian municipalities for over 30 years.
+            </p>
+          </div>
+          <a href="https://hubss.com" target="_blank" rel="noopener noreferrer" className="flex-shrink-0">
+            <span className="text-[#D66620] text-sm font-bold hover:text-[#C05A18] transition-colors whitespace-nowrap">
+              About HUB →
+            </span>
+          </a>
+        </div>
+      </section>
+
       {/* CTA */}
-      <section className="py-20 px-6 sm:px-8 bg-[#2D2D2D]">
+      <section className="py-24 px-6 sm:px-8 bg-[#32373C]">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
-            Ready to start a project?
+          <p className="text-[#F0A04B] text-xs uppercase tracking-[0.22em] font-semibold mb-5">Ready to Start?</p>
+          <h2 className="text-4xl sm:text-5xl font-black text-white mb-6">
+            Start a Project With Us
           </h2>
-          <p className="text-white/70 mb-10">
-            Get a free consultation for your next BC surface project.
+          <p className="text-white/60 text-lg mb-10">
+            Free consultation for your next BC surface project — no pressure, no obligation.
           </p>
-          <Link href="/contact">
-            <button className="bg-[#E8581A] hover:bg-[#d44f16] text-white px-10 py-4 rounded-lg font-semibold text-lg transition">
-              Request a Quote
-            </button>
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/contact">
+              <span className="inline-block bg-[#D66620] hover:bg-[#C05A18] text-white px-10 py-4 rounded-lg font-bold text-sm uppercase tracking-wider transition-colors">
+                Request a Free Quote
+              </span>
+            </Link>
+            <Link href="/projects">
+              <span className="inline-block border border-white/25 text-white hover:bg-white/10 px-10 py-4 rounded-lg font-semibold text-sm transition-colors">
+                View Our Projects
+              </span>
+            </Link>
+          </div>
         </div>
       </section>
     </main>

@@ -36,7 +36,7 @@ const products = [
     name: "DuraShield",
     slug: "durashield",
     description: "Protective pavement coating that seals and beautifies asphalt surfaces while extending their lifespan.",
-    image: "/images/products/durashield/durashield-1.jpg",
+    image: "/images/products/durashield/durashield-parking-lot-sealcoat-01.jpg",
   },
   {
     name: "DuraTherm",
@@ -48,13 +48,13 @@ const products = [
     name: "MMAX",
     slug: "mmax",
     description: "MMA-based coloured pavement system for bus rapid transit lanes and high-wear urban corridors.",
-    image: "/images/products/mmax/mmax-1.jpg",
+    image: "/images/products/mmax/mmax-red-bus-lane-downtown-highrise-01.jpg",
   },
   {
     name: "PreMark",
     slug: "premark",
     description: "Preformed thermoplastic road markings — arrows, legends, crosswalks — built for longevity.",
-    image: "/images/products/premark/premark-2.jpg",
+    image: "/images/products/premark/premark-arrows-installation-intersection-01.jpg",
   },
 ]
 
