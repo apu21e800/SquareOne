@@ -107,21 +107,10 @@ export default function Nav() {
 
             {/* ── Logo + wordmark ── */}
             <Link href="/" onClick={closeAll} className="flex-shrink-0 flex items-center gap-2.5 py-2">
-              <Image
-                src="/images/square-one-logo-color.png"
-                alt="Square One Paving"
-                width={36}
-                height={36}
-                className="h-9 w-auto object-contain"
-                priority
-                onError={(e) => {
-                  // fallback to original logo if new one not found
-                  (e.target as HTMLImageElement).src = "/images/square-one-logo.png"
-                }}
-              />
-              <span className="font-bold text-[#32373C] text-[15px] leading-tight hidden sm:block">
-                Square One
-              </span>
+              <div className="w-8 h-8 bg-[#D66620] rounded-md flex items-center justify-center flex-shrink-0">
+                <span className="text-white font-black text-sm tracking-tight">S1</span>
+              </div>
+              <span className="font-bold text-[#32373C] text-lg tracking-tight">Square One</span>
             </Link>
 
             {/* ── Desktop nav links ── */}
@@ -375,16 +364,9 @@ export default function Nav() {
         {/* Drawer header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-[#E8E4DE] flex-shrink-0">
           <Link href="/" onClick={closeAll} className="flex items-center gap-2.5">
-            <Image
-              src="/images/square-one-logo-color.png"
-              alt="Square One Paving"
-              width={32}
-              height={32}
-              className="h-8 w-auto object-contain"
-              onError={(e) => {
-                (e.target as HTMLImageElement).src = "/images/square-one-logo.png"
-              }}
-            />
+            <div className="w-8 h-8 bg-[#D66620] rounded-md flex items-center justify-center flex-shrink-0">
+              <span className="text-white font-black text-sm tracking-tight">S1</span>
+            </div>
             <span className="font-bold text-[#32373C] text-[15px]">Square One</span>
           </Link>
           <button

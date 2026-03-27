@@ -16,10 +16,10 @@ export default function Hero() {
           className="object-cover"
           priority
         />
-        {/* Strong gradient — dark at bottom for text legibility */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/55 to-black/20" />
-        {/* Warm orange tint */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-[#D66620]/15 via-transparent to-transparent" />
+        {/* Full dark base — ensures text readable at all heights */}
+        <div className="absolute inset-0 bg-black/55" />
+        {/* Extra depth at bottom-left where headline lives */}
+        <div className="absolute inset-0 bg-gradient-to-tr from-black/70 via-black/40 to-black/10" />
       </div>
 
       {/* ── Content wrapper — full height, text anchored to bottom ── */}

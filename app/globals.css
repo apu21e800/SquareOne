@@ -3,7 +3,7 @@
 
 :root {
   /* ─── Square One Brand Colors (updated March 2026) ──── */
-  --color-bg: #FAFAFA;
+  --color-bg: #F4F4F2;
   --color-bg-warm: #F2EFE9;
   --color-white: #FFFFFF;
   --color-orange: #D66620;
@@ -14,7 +14,7 @@
   --color-dark: #32373C;
 
   /* ─── Backgrounds ───────────────────────────────────── */
-  --bg-primary: #FAFAFA;
+  --bg-primary: #F4F4F2;
   --bg-warm: #F2EFE9;
   --bg-white: #FFFFFF;
   --bg-dark: #32373C;

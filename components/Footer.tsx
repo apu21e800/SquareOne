@@ -25,14 +25,11 @@ export default function Footer() {
 
           {/* Col 1: Logo + tagline + HUB badge */}
           <div className="md:col-span-1">
-            <Link href="/" className="inline-block mb-4">
-              <Image
-                src="/images/square-one-logo.png"
-                alt="Square One Paving"
-                width={130}
-                height={36}
-                className="object-contain brightness-0 invert"
-              />
+            <Link href="/" className="inline-flex items-center gap-2.5 mb-4">
+              <div className="w-9 h-9 bg-[#D66620] rounded-md flex items-center justify-center flex-shrink-0">
+                <span className="text-white font-black text-sm">S1</span>
+              </div>
+              <span className="text-white font-bold text-xl tracking-tight">Square One</span>
             </Link>
             <p className="text-sm text-white/60 leading-relaxed mb-5">
               BC&apos;s trusted decorative pavement applicator since 2000. Lower Mainland &amp; Vancouver Island.
