@@ -6,31 +6,29 @@ import Footer from "@/components/Footer"
 export const metadata: Metadata = {
   metadataBase: new URL("https://squareonepaving.ca"),
   title: {
-    default: "Square One Paving | BC Decorative Pavement Applicator",
+    default: "Square One Paving | BC Decorative Pavement Specialists",
     template: "%s | Square One Paving",
   },
-  description:
-    "Stamped asphalt, decorative coatings, thermoplastic markings, and vapor blasting installed by BC's most trusted crew since 2000.",
+  description: "BC's most trusted decorative pavement applicators since 2000. StreetPrint stamped asphalt, StreetBond coatings, thermoplastic markings & vapor blasting — Lower Mainland and Vancouver Island.",
   keywords: [
-    "decorative pavement BC",
+    "decorative asphalt BC",
     "stamped asphalt Vancouver",
-    "decorative coatings Victoria",
-    "thermoplastic markings BC",
-    "vapor blasting Lower Mainland",
-    "pavement applicator BC",
+    "StreetPrint installer BC",
+    "vapor blasting BC",
+    "decorative pavement contractor",
     "HUB Surface Systems applicator",
-    "crosswalk installation BC",
-    "bike lane coatings Vancouver",
-    "surface preparation BC",
+    "bike lane coatings BC",
+    "crosswalk installation Vancouver",
+    "thermoplastic road markings BC",
+    "decorative coatings contractor",
   ],
   openGraph: {
     type: "website",
     locale: "en_CA",
     url: "https://squareonepaving.ca",
     siteName: "Square One Paving",
-    title: "Square One Paving | BC Decorative Pavement Applicator",
-    description:
-      "Stamped asphalt, decorative coatings, thermoplastic markings, and vapor blasting since 2000.",
+    title: "Square One Paving | BC Decorative Pavement Specialists",
+    description: "Stamped asphalt, decorative coatings, thermoplastic markings, and vapor blasting — installed by BC's most trusted crew since 2000.",
     images: [
       {
         url: "/images/og-image.jpg",
@@ -42,9 +40,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Square One Paving | BC Decorative Pavement Applicator",
-    description:
-      "Stamped asphalt, decorative coatings, thermoplastic markings, and vapor blasting since 2000.",
+    title: "Square One Paving | BC Decorative Pavement Specialists",
+    description: "Stamped asphalt, decorative coatings, thermoplastic markings, and vapor blasting since 2000.",
   },
   alternates: {
     canonical: "https://squareonepaving.ca",

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useMemo } from "react"
+import Image from "next/image"
 import Link from "next/link"
 import { projects } from "@/lib/projects"
 
@@ -94,23 +95,25 @@ export default function ProjectsPage() {
         {/* Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {filtered.map((project, i) => (
-            <div
+            <Link
               key={project.slug}
-              className="group bg-white rounded-xl shadow-md hover:shadow-lg transition overflow-hidden"
+              href={`/projects/${project.slug}`}
+              className="group bg-white rounded-xl shadow-md hover:shadow-lg transition overflow-hidden block"
             >
-              {/* Featured badge for first 2 */}
-              {i < 2 && (
-                <div className="relative">
-                  <span className="absolute top-3 left-3 bg-[#E8581A] text-white text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded z-10">
+              {/* Image */}
+              <div className="relative h-52 overflow-hidden">
+                <Image
+                  src={project.imageUrl}
+                  alt={project.title}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                {/* Featured badge for first 2 */}
+                {i < 2 && (
+                  <span className="absolute top-3 left-3 bg-[#D66620] text-white text-xs font-bold uppercase tracking-wider px-2 py-1 rounded z-10">
                     Featured
                   </span>
-                </div>
-              )}
-              {/* Image placeholder */}
-              <div className="h-48 bg-gradient-to-br from-[#8B8680]/20 to-[#E8581A]/10 flex items-center justify-center">
-                <span className="text-[#8B8680]/60 text-sm">
-                  {project.service}
-                </span>
+                )}
               </div>
               <div className="p-6">
                 <div className="flex gap-2 mb-3 flex-wrap">
@@ -128,14 +131,11 @@ export default function ProjectsPage() {
                 <p className="text-sm text-[#8B8680] mb-4 line-clamp-2">
                   {project.excerpt}
                 </p>
-                <Link
-                  href={`/projects/${project.slug}`}
-                  className="text-sm font-semibold text-[#E8581A]"
-                >
+                <span className="text-sm font-semibold text-[#E8581A]">
                   View Project →
-                </Link>
+                </span>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation"
+import Image from "next/image"
 import Link from "next/link"
 import { projects, getProjectBySlug } from "@/lib/projects"
 import { buildMetadata } from "@/lib/seo"
@@ -8,7 +9,7 @@ interface Props {
   params: Promise<{ slug: string }>
 }
 
-export async function generateStaticParams() {
+export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }))
 }
 
@@ -32,88 +33,98 @@ export default async function ProjectPage({ params }: Props) {
     notFound()
   }
 
-  const relatedProjects = projects
-    .filter(
-      (p) =>
-        p.slug !== slug &&
-        (p.service === project.service || p.application === project.application)
-    )
-    .slice(0, 3)
+  // Related: same service first, fallback to any 3 other projects
+  const sameService = projects.filter(
+    (p) => p.slug !== slug && p.service === project.service
+  )
+  const relatedProjects =
+    sameService.length >= 3
+      ? sameService.slice(0, 3)
+      : [
+          ...sameService,
+          ...projects.filter(
+            (p) =>
+              p.slug !== slug &&
+              !sameService.find((r) => r.slug === p.slug)
+          ),
+        ].slice(0, 3)
 
   return (
     <main className="min-h-screen bg-[#F5F3F0]">
-      {/* Hero */}
-      <section className="pt-32 pb-16 px-6 sm:px-8">
-        <div className="max-w-6xl mx-auto">
-          <Link
-            href="/projects"
-            className="text-sm text-[#8B8680] hover:text-[#E8581A] transition mb-6 inline-block"
-          >
-            ← Back to Projects
-          </Link>
-          <div className="flex gap-2 mb-4">
-            <span className="text-xs font-semibold px-3 py-1 rounded-full bg-[#E8581A]/10 text-[#E8581A]">
-              {project.service}
-            </span>
-            <span className="text-xs font-semibold px-3 py-1 rounded-full bg-[#8B8680]/10 text-[#8B8680]">
-              {project.application}
-            </span>
+      {/* Hero — full-width image with gradient overlay */}
+      <section className="relative h-[55vh] min-h-[400px] w-full">
+        <Image
+          src={project.imageUrl}
+          alt={project.title}
+          fill
+          priority
+          className="object-cover"
+        />
+        {/* Dark gradient overlay at bottom */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/30" />
+
+        {/* Back link */}
+        <div className="absolute top-0 left-0 right-0 pt-24 px-6 sm:px-8">
+          <div className="max-w-6xl mx-auto">
+            <Link
+              href="/projects"
+              className="text-sm text-white/80 hover:text-white transition inline-flex items-center gap-1"
+            >
+              ← Back to Projects
+            </Link>
           </div>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#2D2D2D] mb-4">
-            {project.title}
-          </h1>
-          <p className="text-[#8B8680]">{project.city}</p>
+        </div>
+
+        {/* Hero text */}
+        <div className="absolute bottom-0 left-0 right-0 px-6 sm:px-8 pb-10">
+          <div className="max-w-6xl mx-auto">
+            <div className="flex gap-2 mb-4">
+              <span className="text-xs font-semibold px-3 py-1 rounded-full bg-[#E8581A] text-white">
+                {project.service}
+              </span>
+              <span className="text-xs font-semibold px-3 py-1 rounded-full bg-white/20 text-white backdrop-blur-sm">
+                {project.application}
+              </span>
+            </div>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-2 drop-shadow-lg">
+              {project.title}
+            </h1>
+            <p className="text-white/80 text-sm font-medium">{project.city}</p>
+          </div>
         </div>
       </section>
 
-      {/* Image placeholder */}
-      <section className="px-6 sm:px-8 pb-16">
-        <div className="max-w-6xl mx-auto">
-          <div className="h-80 md:h-[500px] bg-gradient-to-br from-[#8B8680]/20 to-[#E8581A]/10 rounded-2xl flex items-center justify-center">
-            <p className="text-[#8B8680]/60">Project Image</p>
-          </div>
-        </div>
-      </section>
-
-      {/* Content */}
+      {/* Content — 2-col on lg */}
       <section className="py-16 px-6 sm:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            {/* Left: description + excerpt */}
             <div className="lg:col-span-2">
               <h2 className="text-2xl font-bold text-[#2D2D2D] mb-6">
                 Project Overview
               </h2>
-              <p className="text-[#8B8680] leading-relaxed mb-10">
+              <p className="text-[#2D2D2D] leading-relaxed text-base mb-6">
+                {project.description}
+              </p>
+              <p className="text-[#8B8680] leading-relaxed text-sm">
                 {project.excerpt}
               </p>
-
-              {/* Gallery placeholder */}
-              <h2 className="text-2xl font-bold text-[#2D2D2D] mb-6">
-                Gallery
-              </h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                {[1, 2, 3, 4, 5, 6].map((n) => (
-                  <div
-                    key={n}
-                    className="aspect-square bg-gradient-to-br from-[#8B8680]/10 to-[#E8581A]/5 rounded-lg flex items-center justify-center"
-                  >
-                    <span className="text-[#8B8680]/40 text-xs">Photo {n}</span>
-                  </div>
-                ))}
-              </div>
             </div>
 
+            {/* Right: details sidebar */}
             <div>
               <div className="bg-white rounded-xl p-8 shadow-md sticky top-24">
                 <h3 className="font-bold text-lg text-[#2D2D2D] mb-6">
                   Project Details
                 </h3>
                 <div className="space-y-4">
-                  {[
-                    { label: "Service", value: project.service },
-                    { label: "Application", value: project.application },
-                    { label: "Location", value: project.city },
-                  ].map((detail) => (
+                  {(
+                    [
+                      { label: "Service", value: project.service },
+                      { label: "Application", value: project.application },
+                      { label: "City", value: project.city },
+                    ] as const
+                  ).map((detail) => (
                     <div
                       key={detail.label}
                       className="flex justify-between text-sm border-b border-[#8B8680]/10 pb-3"
@@ -158,10 +169,13 @@ export default async function ProjectPage({ params }: Props) {
                   href={`/projects/${p.slug}`}
                   className="group bg-[#F5F3F0] rounded-xl overflow-hidden hover:shadow-md transition"
                 >
-                  <div className="h-40 bg-gradient-to-br from-[#8B8680]/20 to-[#E8581A]/10 flex items-center justify-center">
-                    <span className="text-[#8B8680]/60 text-sm">
-                      {p.service}
-                    </span>
+                  <div className="relative h-40 overflow-hidden">
+                    <Image
+                      src={p.imageUrl}
+                      alt={p.title}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
                   </div>
                   <div className="p-5">
                     <span className="text-xs font-semibold px-2 py-1 rounded bg-[#E8581A]/10 text-[#E8581A] mb-3 inline-block">
@@ -183,7 +197,7 @@ export default async function ProjectPage({ params }: Props) {
       <section className="py-20 px-6 sm:px-8 bg-[#2D2D2D]">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
-            Ready to start your project?
+            Start Your Own Project
           </h2>
           <p className="text-white/70 mb-10">
             Get a free consultation and quote for your BC surface project.

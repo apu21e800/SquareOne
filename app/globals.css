@@ -157,3 +157,32 @@ p {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* ─── Vapor blasting theme ────────────────────────────── */
+.vapor-gradient {
+  background: linear-gradient(135deg, #0F2A35 0%, #1A3F4F 50%, #0D1F2A 100%);
+}
+
+/* ─── Water shimmer animation ─────────────────────────── */
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.water-shimmer {
+  background: linear-gradient(90deg, #1A3F4F, #2A6B7C, #1A3F4F);
+  background-size: 200% auto;
+  animation: shimmer 3s linear infinite;
+}
+
+/* ─── Heading contrast fix for dark sections ─────────── */
+.on-dark h1,
+.on-dark h2,
+.on-dark h3,
+.on-dark h4 {
+  color: #FFFFFF;
+}
+
+.on-dark p {
+  color: rgba(255, 255, 255, 0.70);
+}
