@@ -5,71 +5,133 @@ const credentials = ["25+ Years", "500+ Projects", "HUB Authorized", "BC & Beyon
 
 export default function Hero() {
   return (
-    <section className="relative w-full h-screen min-h-[600px] overflow-hidden">
+    <>
+      {/* ─────────────── Mobile Hero: photo top, text below ─────────────── */}
+      <section className="lg:hidden flex flex-col">
 
-      {/* Background */}
-      <div className="absolute inset-0 z-0">
-        <Image
-          src="/images/hero/hero-bg.jpg"
-          alt="Decorative stamped asphalt by Square One Paving"
-          fill
-          className="object-cover"
-          priority
-        />
-        {/* Full dark base — ensures text readable at all heights */}
-        <div className="absolute inset-0 bg-black/55" />
-        {/* Extra depth at bottom-left where headline lives */}
-        <div className="absolute inset-0 bg-gradient-to-tr from-black/70 via-black/40 to-black/10" />
-      </div>
+        {/* Photo — full width, landscape crop */}
+        <div
+          className="relative w-full overflow-hidden"
+          style={{ height: "min(62vw, 340px)" }}
+        >
+          <Image
+            src="/images/hero/hero-bg.jpg"
+            alt="Decorative stamped asphalt by Square One Paving"
+            fill
+            className="object-cover object-center"
+            priority
+          />
+          {/* Subtle vignette at bottom for visual flow into text */}
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/25" />
+        </div>
 
-      {/* ── Content wrapper — full height, text anchored to bottom ── */}
-      <div className="absolute inset-0 z-10 flex flex-col justify-end">
-        <div className="w-full max-w-6xl mx-auto px-6 sm:px-12">
-
-          {/* Text block */}
-          <p className="text-[#F0A04B] text-xs uppercase tracking-[0.25em] font-semibold mb-4 text-shadow-sm">
+        {/* Text content — warm background */}
+        <div className="bg-[#F4F4F2] px-5 pt-7 pb-8">
+          <p className="text-[#D66620] text-[10px] uppercase tracking-[0.28em] font-semibold mb-3">
             BC&apos;s Surface Specialists
           </p>
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-black text-white leading-[1.04] mb-5 max-w-3xl">
+          <h1 className="text-[1.95rem] font-black text-[#32373C] leading-[1.08] mb-4 max-w-[18rem]">
             BC&apos;s Surface<br />Specialists. Built<br />for Communities.
           </h1>
-          <p
-            className="text-white/90 text-base sm:text-xl max-w-xl mb-8 leading-relaxed"
-            style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}
-          >
+          <p className="text-[#626262] text-sm leading-relaxed mb-6 max-w-[280px]">
             Decorative pavement, surface coatings, and vapor blasting —
             installed by BC&apos;s most experienced HUB applicator since 2000.
           </p>
 
-          {/* CTAs */}
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pb-20 sm:pb-24">
+          {/* CTAs — side by side if they fit, stacked if not */}
+          <div className="flex flex-wrap gap-3 mb-8">
             <Link href="/contact">
-              <button className="w-full sm:w-auto bg-[#D66620] hover:bg-[#C05A18] active:bg-[#B04E15] text-white px-8 py-4 rounded-lg font-bold text-sm uppercase tracking-wider transition-colors">
+              <span className="inline-block bg-[#D66620] hover:bg-[#C05A18] active:bg-[#B04E15] text-white px-6 py-3.5 rounded-lg font-bold text-sm uppercase tracking-wide transition-colors">
                 Get a Free Quote
-              </button>
+              </span>
             </Link>
             <Link href="/projects">
-              <button className="w-full sm:w-auto border border-white/40 text-white hover:bg-white/10 active:bg-white/20 px-8 py-4 rounded-lg font-semibold text-sm transition-colors">
+              <span className="inline-block border border-[#32373C]/25 text-[#32373C] hover:border-[#D66620] hover:text-[#D66620] px-6 py-3.5 rounded-lg font-semibold text-sm transition-colors">
                 See Our Work
-              </button>
+              </span>
             </Link>
           </div>
-        </div>
-      </div>
 
-      {/* Credential strip — pinned to absolute bottom */}
-      <div className="absolute bottom-0 left-0 right-0 z-20 bg-black/55 backdrop-blur-sm border-t border-white/10">
-        <div className="max-w-6xl mx-auto px-6 sm:px-12 py-3 flex gap-6 sm:gap-12 overflow-x-auto scrollbar-none">
-          {credentials.map((c) => (
-            <span
-              key={c}
-              className="text-white/85 text-xs uppercase tracking-[0.18em] whitespace-nowrap font-medium"
-            >
-              {c}
-            </span>
-          ))}
+          {/* Credentials — 2×2 grid */}
+          <div className="grid grid-cols-2 gap-2.5">
+            {credentials.map((c) => (
+              <div
+                key={c}
+                className="bg-white rounded-lg px-3 py-3 border border-[#E8E4DE] text-xs font-semibold text-[#32373C] uppercase tracking-wider text-center"
+              >
+                {c}
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* ─────────────── Desktop Hero: full-screen overlay (unchanged) ─────────────── */}
+      <section className="hidden lg:block relative w-full h-screen min-h-[600px] overflow-hidden">
+
+        {/* Background */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/images/hero/hero-bg.jpg"
+            alt="Decorative stamped asphalt by Square One Paving"
+            fill
+            className="object-cover"
+            priority
+          />
+          {/* Full dark base — ensures text readable at all heights */}
+          <div className="absolute inset-0 bg-black/55" />
+          {/* Extra depth at bottom-left where headline lives */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-black/70 via-black/40 to-black/10" />
+        </div>
+
+        {/* Content wrapper — full height, text anchored to bottom */}
+        <div className="absolute inset-0 z-10 flex flex-col justify-end">
+          <div className="w-full max-w-6xl mx-auto px-6 sm:px-12">
+
+            <p className="text-[#F0A04B] text-xs uppercase tracking-[0.25em] font-semibold mb-4">
+              BC&apos;s Surface Specialists
+            </p>
+            <h1 className="text-4xl sm:text-6xl md:text-7xl font-black text-white leading-[1.04] mb-5 max-w-3xl">
+              BC&apos;s Surface<br />Specialists. Built<br />for Communities.
+            </h1>
+            <p
+              className="text-white/90 text-base sm:text-xl max-w-xl mb-8 leading-relaxed"
+              style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}
+            >
+              Decorative pavement, surface coatings, and vapor blasting —
+              installed by BC&apos;s most experienced HUB applicator since 2000.
+            </p>
+
+            {/* CTAs */}
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pb-20 sm:pb-24">
+              <Link href="/contact">
+                <button className="w-full sm:w-auto bg-[#D66620] hover:bg-[#C05A18] active:bg-[#B04E15] text-white px-8 py-4 rounded-lg font-bold text-sm uppercase tracking-wider transition-colors">
+                  Get a Free Quote
+                </button>
+              </Link>
+              <Link href="/projects">
+                <button className="w-full sm:w-auto border border-white/40 text-white hover:bg-white/10 active:bg-white/20 px-8 py-4 rounded-lg font-semibold text-sm transition-colors">
+                  See Our Work
+                </button>
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Credential strip — pinned to absolute bottom */}
+        <div className="absolute bottom-0 left-0 right-0 z-20 bg-black/55 backdrop-blur-sm border-t border-white/10">
+          <div className="max-w-6xl mx-auto px-6 sm:px-12 py-3 flex gap-6 sm:gap-12 overflow-x-auto scrollbar-none">
+            {credentials.map((c) => (
+              <span
+                key={c}
+                className="text-white/85 text-xs uppercase tracking-[0.18em] whitespace-nowrap font-medium"
+              >
+                {c}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+    </>
   )
 }

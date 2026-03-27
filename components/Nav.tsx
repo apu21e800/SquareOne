@@ -3,7 +3,8 @@
 import { useState, useRef, useEffect, useCallback } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { Menu, X, ChevronDown, ChevronRight } from "lucide-react"
+import { ChevronDown, ChevronRight, Zap } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
 
 /* ─── Data ───────────────────────────────────────────────── */
 
@@ -34,6 +35,14 @@ const services = [
   },
 ]
 
+// Mobile drawer: Vapor Blasting is featured separately, Driveways added
+const drawerServiceLinks = [
+  { name: "Stamped Asphalt",         href: "/services/stamped-asphalt" },
+  { name: "Decorative Coatings",     href: "/services/decorative-coatings" },
+  { name: "Preformed Thermoplastic", href: "/services/preformed-thermoplastic" },
+  { name: "Decorative Driveways",    href: "/applications/private-driveways" },
+]
+
 const products = [
   { name: "StreetPrint",       slug: "streetprint",        desc: "Stamped asphalt impressions — brick, cobblestone & stone patterns." },
   { name: "StreetBond",        slug: "streetbond",         desc: "Durable coloured surface coatings for any paved application." },
@@ -45,6 +54,36 @@ const products = [
   { name: "MMAX",              slug: "mmax",               desc: "MMA coating for durable transit lanes and crosswalks." },
   { name: "PreMark",           slug: "premark",            desc: "Preformed symbols, arrows & regulatory pavement markings." },
 ]
+
+/* ─── Animation variants ─────────────────────────────────── */
+
+const EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94]
+
+const staggerContainer = {
+  hidden: {},
+  show: {
+    transition: { staggerChildren: 0.04, delayChildren: 0.06 },
+  },
+}
+
+const fadeSlide = {
+  hidden: { x: 16, opacity: 0 },
+  show: {
+    x: 0,
+    opacity: 1,
+    transition: { duration: 0.22, ease: EASE },
+  },
+}
+
+const vaporVariant = {
+  hidden: { x: 16, opacity: 0, scale: 0.97 },
+  show: {
+    x: 0,
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.28, ease: EASE, delay: 0.02 },
+  },
+}
 
 /* ─── Component ──────────────────────────────────────────── */
 
@@ -210,13 +249,46 @@ export default function Nav() {
                 </span>
               </Link>
 
-              {/* Hamburger — 44×44 tap target */}
+              {/* ── Hamburger — three-line morph to X ── */}
               <button
                 onClick={() => { setMobileOpen(!mobileOpen); setActiveMega(null) }}
-                className="lg:hidden flex items-center justify-center w-11 h-11 text-[#333333] rounded-lg hover:bg-[#F2EFE9] transition-colors"
+                className="lg:hidden flex items-center justify-center w-11 h-11 rounded-lg transition-colors"
+                style={{
+                  background: "rgba(50,55,60,0.08)",
+                  border: "1px solid rgba(50,55,60,0.15)",
+                }}
                 aria-label={mobileOpen ? "Close menu" : "Open menu"}
               >
-                <Menu size={22} />
+                {/* Three lines that morph to X */}
+                <div className="relative w-[18px] h-[14px]">
+                  <span
+                    className="absolute left-0 rounded-full bg-[#32373C] transition-all duration-300 ease-in-out origin-center"
+                    style={{
+                      width: 18,
+                      height: 2,
+                      top: mobileOpen ? 6 : 0,
+                      transform: mobileOpen ? "rotate(45deg)" : "rotate(0deg)",
+                    }}
+                  />
+                  <span
+                    className="absolute left-0 rounded-full bg-[#32373C] transition-all duration-300 ease-in-out"
+                    style={{
+                      width: mobileOpen ? 0 : 18,
+                      height: 2,
+                      top: 6,
+                      opacity: mobileOpen ? 0 : 1,
+                    }}
+                  />
+                  <span
+                    className="absolute left-0 rounded-full bg-[#32373C] transition-all duration-300 ease-in-out origin-center"
+                    style={{
+                      width: 18,
+                      height: 2,
+                      top: mobileOpen ? 6 : 12,
+                      transform: mobileOpen ? "rotate(-45deg)" : "rotate(0deg)",
+                    }}
+                  />
+                </div>
               </button>
             </div>
           </div>
@@ -396,178 +468,231 @@ export default function Nav() {
         )}
       </nav>
 
-      {/* ─────────────────── Mobile drawer (portal-style) ─────────────────── */}
+      {/* ─────────────────── Mobile drawer ─────────────────────────── */}
 
       {/* Backdrop */}
-      <div
-        className="lg:hidden fixed inset-0 bg-black/50 z-[60] transition-opacity duration-300"
-        style={{
-          opacity: mobileOpen ? 1 : 0,
-          pointerEvents: mobileOpen ? "auto" : "none",
-        }}
-        onClick={() => setMobileOpen(false)}
-        aria-hidden="true"
-      />
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            className="lg:hidden fixed inset-0 bg-black/40 backdrop-blur-sm z-[60]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => setMobileOpen(false)}
+            aria-hidden="true"
+          />
+        )}
+      </AnimatePresence>
 
       {/* Drawer — slides in from right */}
-      <div
-        className="lg:hidden fixed top-0 right-0 bottom-0 z-[70] w-[85vw] max-w-[360px] bg-white flex flex-col shadow-2xl transition-transform duration-300 ease-out"
-        style={{ transform: mobileOpen ? "translateX(0)" : "translateX(100%)" }}
-        aria-modal="true"
-        role="dialog"
-        aria-label="Navigation menu"
-      >
-        {/* Drawer header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-[#E8E4DE] flex-shrink-0">
-          <Link href="/" onClick={closeAll} className="flex items-center gap-2.5">
-            <div className="w-8 h-8 bg-[#D66620] rounded-md flex items-center justify-center flex-shrink-0">
-              <span className="text-white font-black text-sm tracking-tight">S1</span>
-            </div>
-            <span className="font-bold text-[#32373C] text-[15px]">Square One</span>
-          </Link>
-          <button
-            onClick={() => setMobileOpen(false)}
-            className="flex items-center justify-center w-10 h-10 rounded-lg hover:bg-[#F2EFE9] transition-colors text-[#333333]"
-            aria-label="Close menu"
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            className="lg:hidden fixed top-0 right-0 bottom-0 z-[70] bg-white flex flex-col"
+            style={{
+              width: "min(85vw, 360px)",
+              boxShadow: "-20px 0 60px rgba(0,0,0,0.15)",
+            }}
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ duration: 0.32, ease: [0.32, 0, 0.2, 1] }}
+            aria-modal="true"
+            role="dialog"
+            aria-label="Navigation menu"
           >
-            <X size={20} />
-          </button>
-        </div>
-
-        {/* Scrollable content */}
-        <div className="flex-1 overflow-y-auto">
-
-          {/* Vapor Blasting — featured card */}
-          <div className="px-4 pt-4 pb-2">
-            <Link
-              href="/services/vapor-blasting"
-              onClick={closeAll}
-              className="flex items-center justify-between p-4 bg-[#FFF7F2] rounded-xl border border-[#FFDDC5] active:bg-[#FFE8D5]"
-            >
-              <div>
-                <div className="flex items-center gap-2 mb-0.5">
-                  <span className="text-sm font-bold text-[#333333]">Vapor Blasting</span>
-                  <span className="bg-[#D66620] text-white text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full">
-                    Exclusive
-                  </span>
+            {/* ── Drawer header ── */}
+            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 flex-shrink-0">
+              <Link href="/" onClick={closeAll} className="flex items-center gap-2.5">
+                <div className="w-8 h-8 bg-[#D66620] rounded-md flex items-center justify-center flex-shrink-0">
+                  <span className="text-white font-black text-sm tracking-tight">S1</span>
                 </div>
-                <p className="text-xs text-[#626262]">BC&apos;s only professional service</p>
-              </div>
-              <ChevronRight size={16} className="text-[#D66620] flex-shrink-0" />
-            </Link>
-          </div>
-
-          <div className="px-4">
-
-            {/* Services accordion */}
-            <div className="border-t border-[#F2EFE9]">
-              <button
-                onClick={() => setMobileServices(!mobileServices)}
-                className="w-full flex items-center justify-between py-4 text-[#333333] font-semibold text-[15px] min-h-[56px]"
-              >
-                Services
-                <ChevronDown
-                  size={16}
-                  className={`text-[#626262] transition-transform duration-200 ${mobileServices ? "rotate-180" : ""}`}
-                />
-              </button>
-              {mobileServices && (
-                <div className="pb-3 space-y-0.5">
-                  {services.map((s) => (
-                    <Link
-                      key={s.slug}
-                      href={`/services/${s.slug}`}
-                      onClick={closeAll}
-                      className="flex items-center gap-3 min-h-[52px] py-3 px-2 text-[#626262] hover:text-[#D66620] active:text-[#D66620] text-sm font-medium transition-colors border-b border-[#F5F2EE] last:border-0"
-                    >
-                      <span className="text-[#D66620] text-xs w-4 flex-shrink-0">{s.icon}</span>
-                      {s.name}
-                    </Link>
-                  ))}
-                  <Link
-                    href="/services"
-                    onClick={closeAll}
-                    className="flex items-center min-h-[44px] px-2 pt-2 text-xs font-bold text-[#D66620] uppercase tracking-widest"
-                  >
-                    All Services →
-                  </Link>
-                </div>
-              )}
-            </div>
-
-            {/* Products accordion */}
-            <div className="border-t border-[#F2EFE9]">
-              <button
-                onClick={() => setMobileProducts(!mobileProducts)}
-                className="w-full flex items-center justify-between py-4 text-[#333333] font-semibold text-[15px] min-h-[56px]"
-              >
-                Products
-                <ChevronDown
-                  size={16}
-                  className={`text-[#626262] transition-transform duration-200 ${mobileProducts ? "rotate-180" : ""}`}
-                />
-              </button>
-              {mobileProducts && (
-                <div className="pb-3">
-                  <div className="grid grid-cols-2 gap-x-2">
-                    {products.map((p) => (
-                      <Link
-                        key={p.slug}
-                        href={`/products/${p.slug}`}
-                        onClick={closeAll}
-                        className="flex items-center min-h-[52px] py-3 text-[#626262] hover:text-[#D66620] active:text-[#D66620] text-sm font-medium transition-colors border-b border-[#F5F2EE]"
-                      >
-                        {p.name}
-                      </Link>
-                    ))}
-                  </div>
-                  <Link
-                    href="/products"
-                    onClick={closeAll}
-                    className="flex items-center min-h-[44px] pt-3 text-xs font-bold text-[#D66620] uppercase tracking-widest"
-                  >
-                    All Products →
-                  </Link>
-                </div>
-              )}
-            </div>
-
-            {/* Static links */}
-            {[
-              { label: "Projects",  href: "/projects" },
-              { label: "Driveways", href: "/applications/private-driveways", highlight: true },
-              { label: "About",     href: "/about" },
-              { label: "Contact",   href: "/contact" },
-            ].map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={closeAll}
-                className={`flex items-center min-h-[56px] py-4 text-[15px] font-semibold border-t border-[#F2EFE9] transition-colors ${
-                  item.highlight ? "text-[#D66620]" : "text-[#333333] hover:text-[#D66620]"
-                }`}
-              >
-                {item.label}
+                <span className="font-bold text-[#32373C] text-[15px]">Square One</span>
               </Link>
-            ))}
-          </div>
-        </div>
+              <button
+                onClick={() => setMobileOpen(false)}
+                className="flex items-center justify-center w-9 h-9 rounded-lg hover:bg-gray-100 transition-colors"
+                aria-label="Close menu"
+              >
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path d="M1 1L13 13M13 1L1 13" stroke="#32373C" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              </button>
+            </div>
 
-        {/* Bottom CTA — always pinned */}
-        <div className="px-5 py-5 border-t border-[#E8E4DE] flex-shrink-0 space-y-3">
-          <Link href="/contact" onClick={closeAll}>
-            <span className="block w-full bg-[#D66620] hover:bg-[#C05A18] active:bg-[#B04E15] text-white text-center py-4 rounded-xl font-bold text-sm uppercase tracking-wider transition-colors">
-              Get a Free Quote
-            </span>
-          </Link>
-          <a
-            href="tel:18773910270"
-            className="block text-center text-[#626262] text-sm font-medium py-1 min-h-[44px] flex items-center justify-center"
-          >
-            1-877-391-0270
-          </a>
-        </div>
-      </div>
+            {/* ── Scrollable content ── */}
+            <div className="flex-1 overflow-y-auto overscroll-contain">
+              <motion.div
+                variants={staggerContainer}
+                initial="hidden"
+                animate="show"
+                className="px-4 pt-4"
+              >
+
+                {/* Vapor Blasting — featured card */}
+                <motion.div variants={vaporVariant}>
+                  <Link
+                    href="/services/vapor-blasting"
+                    onClick={closeAll}
+                    className="flex items-center gap-3 mb-3 rounded-xl px-5 py-4 transition-opacity active:opacity-70"
+                    style={{
+                      background: "rgba(214,102,32,0.08)",
+                      border: "1px solid rgba(214,102,32,0.20)",
+                    }}
+                  >
+                    <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
+                      style={{ background: "rgba(214,102,32,0.15)" }}>
+                      <Zap size={17} className="text-[#D66620]" fill="currentColor" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-0.5">
+                        <span className="font-bold text-[#32373C] text-sm">Vapor Blasting</span>
+                        <span className="bg-[#D66620] text-white text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full leading-none">
+                          Exclusive
+                        </span>
+                      </div>
+                      <p className="text-xs text-gray-400">BC&apos;s only mobile service</p>
+                    </div>
+                    <ChevronRight size={14} className="text-[#D66620] flex-shrink-0" />
+                  </Link>
+                </motion.div>
+
+                {/* Services accordion */}
+                <motion.div variants={fadeSlide} className="border-t border-gray-100">
+                  <button
+                    onClick={() => setMobileServices(!mobileServices)}
+                    className="w-full flex items-center justify-between py-4 text-[#32373C] font-semibold text-lg min-h-[56px]"
+                  >
+                    Services
+                    <ChevronDown
+                      size={16}
+                      className={`text-gray-400 transition-transform duration-200 ${mobileServices ? "rotate-180" : ""}`}
+                    />
+                  </button>
+                  <AnimatePresence initial={false}>
+                    {mobileServices && (
+                      <motion.div
+                        key="services-panel"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.22, ease: "easeOut" }}
+                        className="overflow-hidden"
+                      >
+                        <div className="pb-4 space-y-0.5">
+                          {drawerServiceLinks.map((s) => (
+                            <Link
+                              key={s.href}
+                              href={s.href}
+                              onClick={closeAll}
+                              className="flex items-center gap-3 min-h-[48px] py-2.5 px-4 text-gray-500 hover:text-[#D66620] active:text-[#D66620] text-sm font-medium transition-colors rounded-lg hover:bg-gray-50"
+                            >
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#D66620] flex-shrink-0" />
+                              {s.name}
+                            </Link>
+                          ))}
+                          <Link
+                            href="/services"
+                            onClick={closeAll}
+                            className="flex items-center min-h-[40px] px-4 pt-1 text-xs font-bold text-[#D66620] uppercase tracking-widest"
+                          >
+                            All Services →
+                          </Link>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+
+                {/* Products accordion */}
+                <motion.div variants={fadeSlide} className="border-t border-gray-100">
+                  <button
+                    onClick={() => setMobileProducts(!mobileProducts)}
+                    className="w-full flex items-center justify-between py-4 text-[#32373C] font-semibold text-lg min-h-[56px]"
+                  >
+                    Products
+                    <ChevronDown
+                      size={16}
+                      className={`text-gray-400 transition-transform duration-200 ${mobileProducts ? "rotate-180" : ""}`}
+                    />
+                  </button>
+                  <AnimatePresence initial={false}>
+                    {mobileProducts && (
+                      <motion.div
+                        key="products-panel"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.22, ease: "easeOut" }}
+                        className="overflow-hidden"
+                      >
+                        <div className="pb-4">
+                          <div className="bg-gray-50 rounded-lg p-4 grid grid-cols-3 gap-2">
+                            {products.map((p) => (
+                              <Link
+                                key={p.slug}
+                                href={`/products/${p.slug}`}
+                                onClick={closeAll}
+                                className="bg-white border border-gray-200 rounded-md px-2 py-1.5 text-xs text-center font-medium text-[#32373C] hover:border-[#D66620] hover:text-[#D66620] transition-colors"
+                              >
+                                {p.name}
+                              </Link>
+                            ))}
+                          </div>
+                          <Link
+                            href="/products"
+                            onClick={closeAll}
+                            className="flex items-center min-h-[40px] pt-3 text-xs font-bold text-[#D66620] uppercase tracking-widest"
+                          >
+                            All Products →
+                          </Link>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+
+                {/* Static links */}
+                {[
+                  { label: "Projects",  href: "/projects",                   highlight: false },
+                  { label: "Driveways", href: "/applications/private-driveways", highlight: true  },
+                  { label: "About",     href: "/about",                      highlight: false },
+                ].map((item) => (
+                  <motion.div key={item.href} variants={fadeSlide}>
+                    <Link
+                      href={item.href}
+                      onClick={closeAll}
+                      className={`flex items-center min-h-[56px] py-4 text-lg font-semibold border-t border-gray-100 transition-colors ${
+                        item.highlight
+                          ? "text-[#D66620]"
+                          : "text-[#32373C] hover:text-[#D66620]"
+                      }`}
+                    >
+                      {item.label}
+                    </Link>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </div>
+
+            {/* ── Bottom CTA — always pinned ── */}
+            <div className="px-5 py-5 border-t border-gray-100 flex-shrink-0 space-y-3">
+              <Link href="/contact" onClick={closeAll} className="block">
+                <span className="block w-full bg-[#D66620] hover:bg-[#C05A18] active:bg-[#B04E15] text-white text-center py-4 rounded-xl font-semibold text-lg transition-colors">
+                  Get a Free Quote
+                </span>
+              </Link>
+              <a
+                href="tel:18773910270"
+                className="flex items-center justify-center min-h-[44px] text-center text-sm text-gray-400 font-medium"
+              >
+                1-877-391-0270
+              </a>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   )
 }
