@@ -26,18 +26,24 @@ const services = [
     desc: "Precision thermoplastic markings — arrows, logos, and crosswalks.",
     icon: "◧",
   },
+  {
+    name: "Vapor Blasting",
+    slug: "vapor-blasting",
+    desc: "Mobile surface prep — graffiti removal, marking removal, and more.",
+    icon: "◌",
+  },
 ]
 
 const products = [
-  { name: "StreetPrint",       slug: "streetprint" },
-  { name: "StreetBond",        slug: "streetbond" },
-  { name: "TrafficPatterns",   slug: "trafficpatterns" },
-  { name: "TrafficPatternsXD", slug: "trafficpatterns-xd" },
-  { name: "DecoMark",          slug: "decomark" },
-  { name: "DuraShield",        slug: "durashield" },
-  { name: "DuraTherm",         slug: "duratherm" },
-  { name: "MMAX",              slug: "mmax" },
-  { name: "PreMark",           slug: "premark" },
+  { name: "StreetPrint",       slug: "streetprint",        desc: "Stamped asphalt impressions — brick, cobblestone & stone patterns." },
+  { name: "StreetBond",        slug: "streetbond",         desc: "Durable coloured surface coatings for any paved application." },
+  { name: "TrafficPatterns",   slug: "trafficpatterns",    desc: "Preformed thermoplastic for custom pavement art & branding." },
+  { name: "TrafficPatternsXD", slug: "trafficpatterns-xd", desc: "Heavy-duty thermoplastic for high-traffic transit corridors." },
+  { name: "DecoMark",          slug: "decomark",           desc: "Retroreflective thermoplastic for safety-critical markings." },
+  { name: "DuraShield",        slug: "durashield",         desc: "Penetrating pavement coating and protective sealant." },
+  { name: "DuraTherm",         slug: "duratherm",          desc: "High-build thermoplastic with textured anti-slip surface." },
+  { name: "MMAX",              slug: "mmax",               desc: "MMA coating for durable transit lanes and crosswalks." },
+  { name: "PreMark",           slug: "premark",            desc: "Preformed symbols, arrows & regulatory pavement markings." },
 ]
 
 /* ─── Component ──────────────────────────────────────────── */
@@ -97,10 +103,17 @@ export default function Nav() {
 
   return (
     <>
+      <style>{`
+        @keyframes megaIn {
+          from { opacity: 0; transform: translateY(-6px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
+
       {/* ─────────────────────────── Nav bar ─────────────────────────── */}
       <nav
         ref={navRef}
-        className="sticky top-0 z-50 w-full bg-white/97 backdrop-blur-md border-b border-[#E8E4DE]"
+        className="relative sticky top-0 z-50 w-full bg-white/97 backdrop-blur-md border-b border-[#E8E4DE]"
       >
         <div className="max-w-6xl mx-auto px-5 sm:px-8 py-0">
           <div className="flex items-center justify-between h-16">
@@ -118,7 +131,6 @@ export default function Nav() {
 
               {/* Services trigger */}
               <div
-                className="relative"
                 onMouseEnter={() => openMenu("services")}
                 onMouseLeave={scheduleClose}
               >
@@ -137,98 +149,10 @@ export default function Nav() {
                     className={`transition-transform duration-200 ${activeMega === "services" ? "rotate-180" : ""}`}
                   />
                 </button>
-
-                {activeMega === "services" && (
-                  <div
-                    {...panelProps}
-                    className="absolute top-[calc(100%+8px)] left-1/2 -translate-x-1/2 w-[580px] bg-white rounded-2xl shadow-2xl border border-[#E8E4DE] overflow-hidden"
-                  >
-                    <div className="grid grid-cols-[1fr_220px]">
-                      <div className="p-4 space-y-0.5">
-                        <p className="text-[10px] uppercase tracking-[0.2em] text-[#999] font-semibold mb-2 px-3">
-                          What We Do
-                        </p>
-                        {services.map((s) => (
-                          <Link
-                            key={s.slug}
-                            href={`/services/${s.slug}`}
-                            onClick={closeAll}
-                            className="flex items-start gap-3 px-3 py-3 rounded-xl hover:bg-[#F9F5F2] group transition-colors"
-                          >
-                            <span className="text-[#D66620] text-base mt-0.5 leading-none flex-shrink-0">{s.icon}</span>
-                            <div>
-                              <p className="text-sm font-semibold text-[#333333] group-hover:text-[#D66620] transition-colors">
-                                {s.name}
-                              </p>
-                              <p className="text-xs text-[#626262] leading-snug mt-0.5">{s.desc}</p>
-                            </div>
-                          </Link>
-                        ))}
-                        {/* Vapor Blasting featured in services menu */}
-                        <Link
-                          href="/services/vapor-blasting"
-                          onClick={closeAll}
-                          className="flex items-start gap-3 px-3 py-3 rounded-xl hover:bg-[#FFF7F2] group transition-colors border border-[#FFDDC5] mt-1"
-                        >
-                          <span className="text-[#D66620] text-base mt-0.5 leading-none flex-shrink-0">◌</span>
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2">
-                              <p className="text-sm font-semibold text-[#333333] group-hover:text-[#D66620] transition-colors">
-                                Vapor Blasting
-                              </p>
-                              <span className="bg-[#D66620] text-white text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full leading-none">
-                                Exclusive
-                              </span>
-                            </div>
-                            <p className="text-xs text-[#626262] leading-snug mt-0.5">
-                              Mobile surface prep — graffiti removal, marking removal, and more.
-                            </p>
-                          </div>
-                        </Link>
-                        <div className="pt-2 px-3 border-t border-[#F2EFE9] mt-2">
-                          <Link
-                            href="/services"
-                            onClick={closeAll}
-                            className="text-xs font-bold text-[#D66620] uppercase tracking-widest hover:text-[#C05A18] transition-colors"
-                          >
-                            View All Services →
-                          </Link>
-                        </div>
-                      </div>
-
-                      <div className="bg-[#F9F5F2] p-4 flex flex-col justify-between border-l border-[#EDE9E3]">
-                        <div className="relative h-28 rounded-xl overflow-hidden mb-3">
-                          <Image
-                            src="/images/products/streetprint/streetprint-1.jpg"
-                            alt="Stamped asphalt crosswalk"
-                            fill
-                            className="object-cover"
-                            sizes="220px"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                          <span className="absolute bottom-2 left-3 text-white text-xs font-semibold">
-                            StreetPrint
-                          </span>
-                        </div>
-                        <p className="text-xs text-[#626262] mb-3 leading-relaxed">
-                          Authorized HUB Surface Systems applicator. Serving BC since 2000.
-                        </p>
-                        <Link
-                          href="/contact"
-                          onClick={closeAll}
-                          className="block bg-[#D66620] hover:bg-[#C05A18] text-white text-xs font-bold uppercase tracking-wider px-4 py-2.5 rounded-lg transition-colors text-center"
-                        >
-                          Get a Free Quote
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                )}
               </div>
 
               {/* Products trigger */}
               <div
-                className="relative"
                 onMouseEnter={() => openMenu("products")}
                 onMouseLeave={scheduleClose}
               >
@@ -247,47 +171,6 @@ export default function Nav() {
                     className={`transition-transform duration-200 ${activeMega === "products" ? "rotate-180" : ""}`}
                   />
                 </button>
-
-                {activeMega === "products" && (
-                  <div
-                    {...panelProps}
-                    className="absolute top-[calc(100%+8px)] left-1/2 -translate-x-1/2 w-[480px] bg-white rounded-2xl shadow-2xl border border-[#E8E4DE] overflow-hidden"
-                  >
-                    <div className="p-4">
-                      <div className="flex items-center justify-between mb-3 px-1">
-                        <p className="text-[10px] uppercase tracking-[0.2em] text-[#999] font-semibold">
-                          HUB Surface Systems
-                        </p>
-                        <Link
-                          href="/products"
-                          onClick={closeAll}
-                          className="text-xs font-bold text-[#D66620] uppercase tracking-widest hover:text-[#C05A18] transition-colors"
-                        >
-                          All Products →
-                        </Link>
-                      </div>
-                      <div className="grid grid-cols-3 gap-1">
-                        {products.map((p) => (
-                          <Link
-                            key={p.slug}
-                            href={`/products/${p.slug}`}
-                            onClick={closeAll}
-                            className="group px-3 py-2.5 rounded-xl hover:bg-[#F9F5F2] transition-colors"
-                          >
-                            <p className="text-sm font-semibold text-[#333333] group-hover:text-[#D66620] transition-colors leading-snug">
-                              {p.name}
-                            </p>
-                          </Link>
-                        ))}
-                      </div>
-                      <div className="mt-3 pt-3 border-t border-[#F2EFE9] px-1">
-                        <p className="text-xs text-[#999]">
-                          Authorized applicator — full HUB product portfolio installed across BC
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                )}
               </div>
 
               <Link
@@ -338,6 +221,179 @@ export default function Nav() {
             </div>
           </div>
         </div>
+
+        {/* ── Services mega panel — full width ── */}
+        {activeMega === "services" && (
+          <div
+            {...panelProps}
+            style={{ animation: "megaIn 200ms ease-out both" }}
+            className="absolute top-full left-0 w-full bg-white shadow-2xl border-t-2 border-[#D66620] z-50"
+          >
+            <div className="grid grid-cols-[30%_40%_30%]">
+
+              {/* Column 1: Editorial Feature — Vapor Blasting */}
+              <div className="bg-[#32373C] text-white p-8 flex flex-col justify-between min-h-[340px]">
+                <div>
+                  <p className="text-[#D66620] text-[10px] uppercase tracking-[0.25em] font-semibold mb-3">
+                    OUR DIFFERENTIATOR
+                  </p>
+                  <h3 className="text-white text-[28px] font-bold leading-tight mb-3">
+                    Vapor Blasting
+                  </h3>
+                  <p className="text-white/70 text-sm leading-relaxed mb-5">
+                    BC&apos;s only mobile vapor blasting service. Dustless, precise, zero mess.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {["No Silica Dust", "Mobile to Site", "BC Exclusive"].map((tag) => (
+                      <span key={tag} className="text-xs border border-white/25 text-white/65 px-3 py-1 rounded-full">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <Link
+                  href="/services/vapor-blasting"
+                  onClick={closeAll}
+                  className="text-sm font-bold text-[#D66620] hover:text-[#F07030] transition-colors mt-8"
+                >
+                  Explore Vapor Blasting →
+                </Link>
+              </div>
+
+              {/* Column 2: Services list */}
+              <div className="p-8">
+                <p className="text-[10px] uppercase tracking-[0.25em] text-[#D66620] font-semibold mb-4">
+                  What We Do
+                </p>
+                <div className="space-y-0.5">
+                  {services.map((s) => (
+                    <Link
+                      key={s.slug}
+                      href={`/services/${s.slug}`}
+                      onClick={closeAll}
+                      className="flex items-start gap-3 px-3 py-3 rounded-lg hover:bg-[#F9F5F2] border-l-2 border-transparent hover:border-[#D66620] group transition-all"
+                    >
+                      <span className="text-[#D66620] text-base mt-0.5 flex-shrink-0">{s.icon}</span>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <p className="text-sm font-semibold text-[#333333] group-hover:text-[#D66620] transition-colors">
+                            {s.name}
+                          </p>
+                          {s.slug === "vapor-blasting" && (
+                            <span className="text-[9px] font-bold uppercase tracking-wider bg-[#D66620] text-white px-1.5 py-0.5 rounded-full leading-none">
+                              EXCLUSIVE
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-xs text-[#626262] leading-snug mt-0.5">{s.desc}</p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+                <div className="pt-4 mt-2 border-t border-[#F2EFE9]">
+                  <Link
+                    href="/services"
+                    onClick={closeAll}
+                    className="text-xs font-bold text-[#D66620] uppercase tracking-widest hover:text-[#C05A18] transition-colors"
+                  >
+                    View All Services →
+                  </Link>
+                </div>
+              </div>
+
+              {/* Column 3: Featured project card */}
+              <div className="p-8 border-l border-[#F2EFE9]">
+                <p className="text-[10px] uppercase tracking-[0.25em] text-[#D66620] font-semibold mb-4">
+                  Featured Project
+                </p>
+                <div className="relative h-44 rounded-xl overflow-hidden mb-4">
+                  <Image
+                    src="/images/products/streetprint/streetprint-1.jpg"
+                    alt="Stamped asphalt crosswalk installation"
+                    fill
+                    className="object-cover"
+                    sizes="300px"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-4">
+                    <span className="text-[10px] uppercase tracking-wider text-white/75 bg-black/30 px-2 py-0.5 rounded-full">
+                      Stamped Asphalt
+                    </span>
+                    <p className="text-white font-semibold text-sm mt-1.5">Decorative Crosswalk</p>
+                    <p className="text-white/60 text-xs mt-0.5">Vancouver, BC</p>
+                  </div>
+                </div>
+                <Link
+                  href="/projects"
+                  onClick={closeAll}
+                  className="text-xs font-bold text-[#D66620] uppercase tracking-widest hover:text-[#C05A18] transition-colors"
+                >
+                  View All Projects →
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ── Products mega panel — full width ── */}
+        {activeMega === "products" && (
+          <div
+            {...panelProps}
+            style={{ animation: "megaIn 200ms ease-out both" }}
+            className="absolute top-full left-0 w-full bg-white shadow-2xl border-t-2 border-[#D66620] z-50"
+          >
+            <div className="grid grid-cols-[25%_75%]">
+
+              {/* Left sidebar: HUB info */}
+              <div className="bg-[#32373C] text-white p-8 flex flex-col justify-between min-h-[320px]">
+                <div>
+                  <h3 className="text-white text-lg font-bold mb-1">
+                    HUB Surface Systems
+                  </h3>
+                  <p className="text-white/60 text-sm mb-5">
+                    Authorized Western Canada Applicator
+                  </p>
+                  <div className="w-10 h-0.5 bg-[#D66620] mb-5" />
+                  <p className="text-white/70 text-sm leading-relaxed">
+                    We install the full HUB product suite — specified by 500+ Canadian municipalities.
+                  </p>
+                </div>
+                <Link
+                  href="/products"
+                  onClick={closeAll}
+                  className="text-sm font-bold text-[#D66620] hover:text-[#F07030] transition-colors mt-6 block"
+                >
+                  Browse All Products →
+                </Link>
+              </div>
+
+              {/* Right: product grid */}
+              <div className="p-8">
+                <p className="text-[10px] uppercase tracking-[0.25em] text-[#D66620] font-semibold mb-5">
+                  Product Line
+                </p>
+                <div className="grid grid-cols-3 gap-1">
+                  {products.map((p) => (
+                    <Link
+                      key={p.slug}
+                      href={`/products/${p.slug}`}
+                      onClick={closeAll}
+                      className="group px-3 py-3 rounded-lg hover:bg-gray-50 border-l-2 border-transparent hover:border-[#D66620] transition-all"
+                    >
+                      <p className="text-sm font-bold text-[#333333] group-hover:text-[#D66620] transition-colors leading-snug">
+                        {p.name}
+                      </p>
+                      <p className="text-xs text-[#888] leading-snug mt-0.5">{p.desc}</p>
+                      <p className="text-xs font-semibold text-[#D66620] mt-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                        Learn More →
+                      </p>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </nav>
 
       {/* ─────────────────── Mobile drawer (portal-style) ─────────────────── */}
