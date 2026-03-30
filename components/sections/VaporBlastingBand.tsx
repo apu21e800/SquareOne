@@ -17,7 +17,7 @@ export default function VaporBlastingBand() {
   ]
 
   return (
-    <section className="relative w-full py-24 bg-[#32373C] overflow-hidden">
+    <section className="relative w-full py-20 bg-[#32373C] overflow-hidden">
       {/* Subtle diagonal texture */}
       <div
         className="absolute inset-0 opacity-[0.03]"
@@ -41,7 +41,7 @@ export default function VaporBlastingBand() {
             <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-white leading-[1.04] mb-6">
               Mobile<br />Vapor<br />Blasting
             </h2>
-            <p className="text-white/65 text-lg mb-8 leading-relaxed max-w-lg">
+            <p className="text-white/80 text-lg mb-8 leading-relaxed max-w-lg">
               Surface prep done right — before the beauty begins. We bring
               controlled, dustless vapor blasting directly to your job site.
               No silica hazard, no heavy setup, no mess left behind.
@@ -62,14 +62,14 @@ export default function VaporBlastingBand() {
 
             {/* Applications list */}
             <div className="mb-10">
-              <p className="text-white/40 text-xs uppercase tracking-widest font-semibold mb-4">
+              <p className="text-white/60 text-xs uppercase tracking-widest font-semibold mb-4">
                 Applications
               </p>
               <div className="grid grid-cols-2 gap-y-3 gap-x-8">
                 {applications.map((app) => (
                   <div key={app} className="flex items-center gap-2.5">
                     <div className="w-1 h-1 bg-[#D66620] rounded-full flex-shrink-0" />
-                    <span className="text-white/75 text-sm">{app}</span>
+                    <span className="text-white/85 text-sm">{app}</span>
                   </div>
                 ))}
               </div>
@@ -104,7 +104,7 @@ export default function VaporBlastingBand() {
                   <p className="text-white font-bold text-base mb-1">
                     The cleanest surface prep available.
                   </p>
-                  <p className="text-white/55 text-sm leading-relaxed">
+                  <p className="text-white/75 text-sm leading-relaxed">
                     Used by municipalities removing old road markings before new
                     installations — and by property managers tackling graffiti.
                   </p>

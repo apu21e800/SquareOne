@@ -150,7 +150,7 @@ export default function ServicesPage() {
           <h2 className="text-4xl sm:text-5xl font-black text-white mb-6">
             Tell Us About Your Project
           </h2>
-          <p className="text-white/60 text-lg mb-10">
+          <p className="text-white/75 text-lg mb-10">
             We&apos;ll recommend the right system and give you a free, no-obligation quote.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

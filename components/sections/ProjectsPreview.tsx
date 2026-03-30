@@ -27,7 +27,7 @@ const featuredProjects = [
 
 export default function ProjectsPreview() {
   return (
-    <section className="w-full py-24 bg-[#FAFAFA]">
+    <section className="w-full py-20 bg-[#FAFAFA] grid-pattern">
       <div className="max-w-6xl mx-auto px-6 sm:px-8">
         {/* Header */}
         <div className="mb-14">

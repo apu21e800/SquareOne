@@ -196,7 +196,7 @@ export default function AboutPage() {
               <p className="text-[#D66620] text-xs uppercase tracking-[0.22em] font-semibold mb-3">Contact Us</p>
               <h3 className="text-2xl font-black text-white mb-4">Square One Paving</h3>
               <div className="space-y-3 text-sm mb-8">
-                <p className="text-white/60">Ladysmith, British Columbia</p>
+                <p className="text-white/75">Ladysmith, British Columbia</p>
                 <a href="tel:6043098212" className="block text-white hover:text-[#F0A04B] transition-colors font-semibold">
                   604-309-8212
                 </a>
@@ -248,7 +248,7 @@ export default function AboutPage() {
           <h2 className="text-4xl sm:text-5xl font-black text-white mb-6">
             Start a Project With Us
           </h2>
-          <p className="text-white/60 text-lg mb-10">
+          <p className="text-white/75 text-lg mb-10">
             Free consultation for your next BC surface project — no pressure, no obligation.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

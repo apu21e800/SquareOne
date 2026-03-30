@@ -87,7 +87,7 @@ export default async function ProjectPage({ params }: Props) {
           <h1 className="text-4xl sm:text-5xl font-black text-white leading-tight mb-3 max-w-3xl">
             {project.title}
           </h1>
-          <p className="text-white/65">{project.city}</p>
+          <p className="text-white/80">{project.city}</p>
         </div>
       </section>
 
@@ -195,7 +195,7 @@ export default async function ProjectPage({ params }: Props) {
           <h2 className="text-3xl sm:text-4xl font-black text-white mb-5">
             Ready to Transform Your Surface?
           </h2>
-          <p className="text-white/60 mb-10">
+          <p className="text-white/75 mb-10">
             Free consultation and quote for your BC surface project.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

@@ -125,7 +125,7 @@ export default async function ProductPage({ params }: Props) {
           <h2 className="text-3xl sm:text-4xl font-black text-white mb-5">
             Get a Free {product.name} Quote
           </h2>
-          <p className="text-white/60 mb-10">
+          <p className="text-white/75 mb-10">
             Tell us about your project and we&apos;ll recommend the right specification and installation approach.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

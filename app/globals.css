@@ -127,9 +127,9 @@ p {
 /* ─── Grid pattern for subtle texture ─────────────────── */
 .grid-pattern {
   background-image:
-    linear-gradient(rgba(0,0,0,0.015) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,0,0,0.015) 1px, transparent 1px);
-  background-size: 60px 60px;
+    linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
 }
 
 /* ─── Dark section styles ─────────────────────────────── */

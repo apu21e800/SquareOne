@@ -1,6 +1,7 @@
 import Hero from "@/components/sections/Hero"
 import StatsBar from "@/components/sections/StatsBar"
 import ProductsGrid from "@/components/sections/ProductsGrid"
+import ApplicationsSection from "@/components/sections/ApplicationsSection"
 import VaporBlastingBand from "@/components/sections/VaporBlastingBand"
 import DrivewayCTA from "@/components/sections/DrivewayCTA"
 import ProjectsPreview from "@/components/sections/ProjectsPreview"
@@ -13,6 +14,7 @@ export default function Home() {
       <Hero />
       <StatsBar />
       <ProductsGrid />
+      <ApplicationsSection />
       <VaporBlastingBand />
       <DrivewayCTA />
       <ProjectsPreview />

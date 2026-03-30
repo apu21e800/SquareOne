@@ -60,7 +60,7 @@ export default function VaporBlastingPage() {
             <h1 className="text-5xl sm:text-6xl md:text-7xl font-black text-white leading-[1.04] mb-6">
               Clean Surface.<br />Clear Results.
             </h1>
-            <p className="text-white/65 text-lg leading-relaxed mb-10 max-w-lg">
+            <p className="text-white/80 text-lg leading-relaxed mb-10 max-w-lg">
               Surface prep done right — before the beauty begins. We bring controlled, dustless vapor blasting directly to your job site. No silica hazard. No mess. Just a clean surface ready for what comes next.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
@@ -151,7 +151,7 @@ export default function VaporBlastingPage() {
         <div className="max-w-3xl mx-auto px-6 text-center">
           <p className="text-[#F0A04B] text-xs uppercase tracking-[0.22em] font-semibold mb-5">Ready to Start?</p>
           <h2 className="text-4xl sm:text-5xl font-black text-white mb-6">Book a Free Site Assessment</h2>
-          <p className="text-white/60 text-lg mb-10 leading-relaxed">
+          <p className="text-white/75 text-lg mb-10 leading-relaxed">
             Tell us what you need removed. We&apos;ll come to your site, assess the surface, and give you a clear quote — no obligation.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

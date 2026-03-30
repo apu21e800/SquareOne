@@ -99,7 +99,7 @@ export default function ProductsPage() {
           <h2 className="text-3xl sm:text-4xl font-black text-white mb-5">
             We&apos;ll Specify the Right System
           </h2>
-          <p className="text-white/60 mb-10">
+          <p className="text-white/75 mb-10">
             Tell us about your project and we&apos;ll recommend the right product, application method, and specification.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

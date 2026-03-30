@@ -175,7 +175,7 @@ export default function ProjectsPage() {
           <h2 className="text-4xl sm:text-5xl font-black text-white mb-6">
             Ready to Start Your Project?
           </h2>
-          <p className="text-white/60 text-lg mb-10">
+          <p className="text-white/75 text-lg mb-10">
             Free consultation and quote for your BC surface project — no obligation.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

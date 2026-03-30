@@ -2,7 +2,7 @@ import Link from "next/link"
 
 export default function CTASection() {
   return (
-    <section className="w-full py-24 bg-[#32373C] relative overflow-hidden">
+    <section className="w-full py-20 bg-[#32373C] relative overflow-hidden">
       {/* Subtle orange accent */}
       <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#D66620] via-[#F0A04B] to-transparent" />
 
@@ -13,7 +13,7 @@ export default function CTASection() {
         <h2 className="text-4xl sm:text-5xl font-black text-white mb-6 leading-tight">
           Ready to Build<br />Something That Lasts?
         </h2>
-        <p className="text-white/60 text-lg mb-10 max-w-md mx-auto leading-relaxed">
+        <p className="text-white/75 text-lg mb-10 max-w-md mx-auto leading-relaxed">
           Free consultation for your next BC surface project.
           Municipal, commercial, or residential — we&apos;ll come to you.
         </p>

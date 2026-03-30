@@ -217,7 +217,7 @@ export default function PrivateDrivewaysPage() {
         <div className="max-w-3xl mx-auto px-6 text-center">
           <p className="text-[#F0A04B] text-xs uppercase tracking-[0.22em] font-semibold mb-5">Ready to Transform Your Driveway?</p>
           <h2 className="text-4xl sm:text-5xl font-black text-white mb-6">Get a Free Driveway Consultation</h2>
-          <p className="text-white/60 text-lg mb-10">We&apos;ll come to your property, walk through the options, and give you a detailed quote — no pressure, no obligation.</p>
+          <p className="text-white/75 text-lg mb-10">We&apos;ll come to your property, walk through the options, and give you a detailed quote — no pressure, no obligation.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/contact">
               <span className="inline-block bg-[#D66620] hover:bg-[#C05A18] text-white px-10 py-4 rounded-lg font-bold text-sm uppercase tracking-wider transition-colors">

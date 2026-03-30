@@ -140,7 +140,7 @@ export default async function ServicePage({ params }: Props) {
           <h2 className="text-3xl sm:text-4xl font-black text-white mb-5">
             Get a Free {service.name} Consultation
           </h2>
-          <p className="text-white/60 mb-10">
+          <p className="text-white/75 mb-10">
             We&apos;ll assess your site and give you a detailed, no-obligation quote.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
