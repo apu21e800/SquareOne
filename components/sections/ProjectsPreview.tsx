@@ -3,23 +3,23 @@ import Link from "next/link"
 
 const featuredProjects = [
   {
-    id: "1",
+    slug: "downtown-vancouver-crosswalk",
     name: "Downtown Vancouver Crosswalk",
     service: "Stamped Asphalt",
     location: "Vancouver, BC",
     image: "/images/applications/crosswalks/crosswalk-1.jpg",
   },
   {
-    id: "2",
+    slug: "bc-transit-victoria",
     name: "BC Transit Priority Lane",
     service: "Decorative Coatings",
     location: "Victoria, BC",
     image: "/images/applications/bus-lanes/beebe-hospital-brick-crosswalk-entry-01.jpg",
   },
   {
-    id: "3",
-    name: "Westshore Roundabout",
-    service: "TrafficPatterns",
+    slug: "westshore-parking-markings",
+    name: "Westshore Town Centre",
+    service: "Preformed Thermoplastic",
     location: "Langford, BC",
     image: "/images/applications/roundabouts/roundabout-01.jpg",
   },
@@ -50,7 +50,7 @@ export default function ProjectsPreview() {
         {/* Project grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {featuredProjects.map((project) => (
-            <Link key={project.id} href={`/projects/${project.id}`} className="group block">
+            <Link key={project.slug} href={`/projects/${project.slug}`} className="group block">
               <div className="bg-white rounded-xl overflow-hidden border border-[#E8E4DE] hover:border-[#D66620]/40 hover:shadow-xl transition-all duration-200">
                 {/* Image */}
                 <div className="relative h-56 bg-[#F2EFE9] overflow-hidden">

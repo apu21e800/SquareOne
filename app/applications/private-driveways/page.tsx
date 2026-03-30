@@ -212,7 +212,7 @@ export default function PrivateDrivewaysPage() {
       </section>
 
       {/* CTA */}
-      <section className="w-full py-24 bg-[#32373C]">
+      <section className="relative w-full py-24 bg-[#32373C]">
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#D66620] via-[#F0A04B] to-transparent" />
         <div className="max-w-3xl mx-auto px-6 text-center">
           <p className="text-[#F0A04B] text-xs uppercase tracking-[0.22em] font-semibold mb-5">Ready to Transform Your Driveway?</p>

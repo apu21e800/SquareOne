@@ -119,8 +119,8 @@ export default function Footer() {
               <a href="tel:2503910270" className="block hover:text-white transition-colors">
                 250-391-0270 <span className="text-white/40 text-xs">Vancouver Island</span>
               </a>
-              <a href="mailto:mail@squareonepaving.com" className="block hover:text-white transition-colors">
-                mail@squareonepaving.com
+              <a href="mailto:info@squareonepaving.ca" className="block hover:text-white transition-colors">
+                info@squareonepaving.ca
               </a>
               <p className="text-white/50 text-xs pt-1">Maple Ridge, BC</p>
             </div>
