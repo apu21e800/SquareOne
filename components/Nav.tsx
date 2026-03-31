@@ -489,10 +489,12 @@ export default function Nav() {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            className="lg:hidden fixed top-0 right-0 bottom-0 z-[70] bg-white flex flex-col"
+            className="lg:hidden fixed top-0 right-0 bottom-0 z-[70] bg-[#fafaf9] flex flex-col"
             style={{
               width: "min(85vw, 360px)",
               boxShadow: "-20px 0 60px rgba(0,0,0,0.15)",
+              borderLeft: "1px solid rgba(0,0,0,0.06)",
+              borderTop: "3px solid #D66620",
             }}
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
@@ -503,7 +505,7 @@ export default function Nav() {
             aria-label="Navigation menu"
           >
             {/* ── Drawer header ── */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 flex-shrink-0">
+            <div className="flex items-center justify-between px-5 py-3 border-b border-gray-100 flex-shrink-0" style={{ background: "#ffffff" }}>
               <Link href="/" onClick={closeAll} className="flex items-center gap-2.5">
                 <div className="w-8 h-8 bg-[#D66620] rounded-md flex items-center justify-center flex-shrink-0">
                   <span className="text-white font-black text-sm tracking-tight">S1</span>
@@ -512,7 +514,8 @@ export default function Nav() {
               </Link>
               <button
                 onClick={() => setMobileOpen(false)}
-                className="flex items-center justify-center w-9 h-9 rounded-lg hover:bg-gray-100 transition-colors"
+                className="flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors"
+                style={{ width: 44, height: 44, minWidth: 44 }}
                 aria-label="Close menu"
               >
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
@@ -627,23 +630,22 @@ export default function Nav() {
                         transition={{ duration: 0.22, ease: "easeOut" }}
                         className="overflow-hidden"
                       >
-                        <div className="pb-4">
-                          <div className="bg-gray-50 rounded-lg p-4 grid grid-cols-3 gap-2">
-                            {products.map((p) => (
-                              <Link
-                                key={p.slug}
-                                href={`/products/${p.slug}`}
-                                onClick={closeAll}
-                                className="bg-white border border-gray-200 rounded-md px-2 py-1.5 text-xs text-center font-medium text-[#32373C] hover:border-[#D66620] hover:text-[#D66620] transition-colors"
-                              >
-                                {p.name}
-                              </Link>
-                            ))}
-                          </div>
+                        <div className="pb-4 space-y-0.5">
+                          {products.map((p) => (
+                            <Link
+                              key={p.slug}
+                              href={`/products/${p.slug}`}
+                              onClick={closeAll}
+                              className="flex items-center gap-3 min-h-[48px] py-2.5 px-4 text-gray-500 hover:text-[#D66620] active:text-[#D66620] text-sm font-medium transition-colors rounded-lg hover:bg-gray-50"
+                            >
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#D66620] flex-shrink-0" />
+                              {p.name}
+                            </Link>
+                          ))}
                           <Link
                             href="/products"
                             onClick={closeAll}
-                            className="flex items-center min-h-[40px] pt-3 text-xs font-bold text-[#D66620] uppercase tracking-widest"
+                            className="flex items-center min-h-[40px] px-4 pt-1 text-xs font-bold text-[#D66620] uppercase tracking-widest"
                           >
                             All Products →
                           </Link>
@@ -677,18 +679,32 @@ export default function Nav() {
             </div>
 
             {/* ── Bottom CTA — always pinned ── */}
-            <div className="px-5 py-5 border-t border-gray-100 flex-shrink-0 space-y-3">
+            <div className="px-5 py-5 border-t border-gray-100 flex-shrink-0 space-y-3" style={{ background: "#ffffff" }}>
               <Link href="/contact" onClick={closeAll} className="block">
-                <span className="block w-full bg-[#D66620] hover:bg-[#C05A18] active:bg-[#B04E15] text-white text-center py-4 rounded-xl font-semibold text-lg transition-colors">
+                <span className="block w-full bg-[#D66620] hover:bg-[#C05A18] active:bg-[#B04E15] text-white text-center py-4 rounded-xl font-semibold text-base transition-colors">
                   Get a Free Quote
                 </span>
               </Link>
-              <a
-                href="tel:18773910270"
-                className="flex items-center justify-center min-h-[44px] text-center text-sm text-gray-400 font-medium"
-              >
-                1-877-391-0270
-              </a>
+              <Link href="/projects" onClick={closeAll} className="block">
+                <span className="block w-full border border-gray-200 hover:border-[#D66620] text-[#32373C] hover:text-[#D66620] text-center py-3.5 rounded-xl font-semibold text-base transition-colors">
+                  View Our Projects
+                </span>
+              </Link>
+              <div className="flex items-center justify-center gap-4 pt-1">
+                <a
+                  href="tel:18773910270"
+                  className="text-sm text-gray-400 hover:text-[#D66620] font-medium transition-colors"
+                >
+                  1-877-391-0270
+                </a>
+                <span className="text-gray-200">·</span>
+                <a
+                  href="mailto:info@squareonepaving.ca"
+                  className="text-sm text-gray-400 hover:text-[#D66620] font-medium transition-colors"
+                >
+                  info@squareonepaving.ca
+                </a>
+              </div>
             </div>
           </motion.div>
         )}
