@@ -65,15 +65,14 @@ export default function ProductsGrid() {
         {/* Section header */}
         <div className="mb-14">
           <p className="text-[#D66620] text-xs uppercase tracking-[0.2em] font-semibold mb-3">
-            HUB Surface Systems — Authorized Applicator
+            Products We Apply
           </p>
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
             <h2 className="text-4xl sm:text-5xl font-black text-[#333333] leading-tight">
               Our Systems
             </h2>
             <p className="text-[#626262] max-w-sm text-sm leading-relaxed">
-              We install the full suite of HUB Surface Systems products — the same
-              systems specified by 500+ Canadian municipalities.
+              Industry-leading surface systems — specified by 500+ Canadian municipalities and installed by our certified crews.
             </p>
           </div>
           <div className="mt-6 h-px bg-gradient-to-r from-[#D66620]/40 to-transparent" />
@@ -114,31 +113,20 @@ export default function ProductsGrid() {
           ))}
         </div>
 
-        {/* HUB logo trust signal */}
+        {/* Credential trust signal */}
         <div className="mt-14 pt-10 border-t border-[#E8E4DE] flex flex-col sm:flex-row items-center gap-6 justify-between">
           <div className="flex items-center gap-4">
-            <div className="relative w-32 h-10">
-              <Image
-                src="/images/hub-logo-orange-grey.png"
-                alt="HUB Surface Systems"
-                fill
-                className="object-contain object-left"
-                sizes="128px"
-              />
+            <div className="flex flex-col">
+              <span className="text-[#333333] text-sm font-bold">Manufacturer-Certified Installer</span>
+              <span className="text-[#626262] text-xs mt-0.5">Authorized Applicator — Western Canada</span>
             </div>
-            <div className="h-8 w-px bg-[#E8E4DE]" />
-            <p className="text-[#626262] text-sm">
-              Authorized Applicator — Western Canada
-            </p>
           </div>
-          <a
-            href="https://hubss.com"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href="/contact"
             className="text-sm text-[#D66620] hover:text-[#C05A18] font-semibold transition-colors"
           >
-            Learn about HUB products →
-          </a>
+            Request a Spec Sheet →
+          </Link>
         </div>
       </div>
     </section>

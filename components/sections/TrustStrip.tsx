@@ -1,7 +1,5 @@
-import Image from "next/image"
-
 const trustItems = [
-  { label: "Authorized HUB Surface Systems Applicator" },
+  { label: "Manufacturer-Certified Installer" },
   { label: "25+ Years Field Experience" },
   { label: "500+ Projects Across BC" },
   { label: "Lower Mainland & Vancouver Island" },
@@ -12,15 +10,15 @@ export default function TrustStrip() {
     <section className="w-full py-10 bg-white border-t border-[#E8E4DE]">
       <div className="max-w-6xl mx-auto px-6 sm:px-8">
         <div className="flex flex-col sm:flex-row items-center gap-8 sm:gap-0 sm:justify-between">
-          {/* HUB logo */}
-          <div className="relative w-28 h-8 flex-shrink-0">
-            <Image
-              src="/images/hub-logo-orange-grey.png"
-              alt="HUB Surface Systems Authorized Applicator"
-              fill
-              className="object-contain object-left"
-              sizes="112px"
-            />
+          {/* S1 credential badge */}
+          <div className="flex items-center gap-3 flex-shrink-0">
+            <div className="w-8 h-8 rounded-full bg-[#D66620] flex items-center justify-center flex-shrink-0">
+              <span className="text-white text-xs font-black">S1</span>
+            </div>
+            <div>
+              <p className="text-[#333333] text-sm font-bold leading-tight">Square One Paving</p>
+              <p className="text-[#626262] text-xs">BC&apos;s Leading Decorative Pavement Installer</p>
+            </div>
           </div>
 
           {/* Divider */}

@@ -24,7 +24,7 @@ export default function DrivewayCTA() {
           {/* Left: Content */}
           <div>
             <p className="text-[#D66620] text-xs uppercase tracking-[0.22em] font-semibold mb-4">
-              BC&apos;s #1 Residential Upgrade
+              Residential &amp; Strata
             </p>
             <h2 className="text-4xl sm:text-5xl font-black text-[#333333] leading-[1.05] mb-5">
               Decorative Driveways<br />
@@ -56,7 +56,7 @@ export default function DrivewayCTA() {
                   Get a Free Driveway Quote
                 </button>
               </Link>
-              <Link href="/applications/private-driveways">
+              <Link href="/driveways">
                 <button className="border border-[#D66620]/30 text-[#D66620] hover:bg-[#D66620]/5 px-8 py-4 rounded-lg font-semibold text-sm transition-colors">
                   See Driveway Options
                 </button>

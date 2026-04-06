@@ -25,7 +25,7 @@ export default function ServicesGrid() {
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
             <h2 className="text-4xl sm:text-5xl font-black text-[#333333]">Our Services</h2>
             <p className="text-[#626262] max-w-sm text-sm leading-relaxed">
-              Four core service lines, all delivered with BC field expertise and authorized HUB product application.
+              Four core service lines. Every crew certified. Every install built to outlast the warranty.
             </p>
           </div>
           <div className="mt-6 h-px bg-gradient-to-r from-[#D66620]/40 to-transparent" />

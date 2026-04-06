@@ -159,10 +159,13 @@ export default function Nav() {
 
             {/* ── Logo + wordmark ── */}
             <Link href="/" onClick={closeAll} className="flex-shrink-0 flex items-center gap-2.5 py-2">
-              <div className="w-8 h-8 bg-[#D66620] rounded-md flex items-center justify-center flex-shrink-0">
-                <span className="text-white font-black text-sm tracking-tight">S1</span>
+              <div className="relative w-8 h-8 flex-shrink-0">
+                <Image src="/images/square-one-logo.png" alt="Square One Paving" fill className="object-contain" sizes="32px" />
               </div>
-              <span className="font-bold text-[#32373C] text-lg tracking-tight">Square One</span>
+              <span className="font-black text-[#32373C] text-lg tracking-tight leading-none">
+                Square One<br />
+                <span className="text-[#D66620] font-semibold text-[10px] uppercase tracking-[0.15em]">Paving</span>
+              </span>
             </Link>
 
             {/* ── Desktop nav links ── */}
@@ -416,18 +419,18 @@ export default function Nav() {
           >
             <div className="grid grid-cols-[25%_75%]">
 
-              {/* Left sidebar: HUB info */}
+              {/* Left sidebar: S1 credential */}
               <div className="bg-[#32373C] text-white p-8 flex flex-col justify-between min-h-[320px]">
                 <div>
                   <h3 className="text-white text-lg font-bold mb-1">
-                    HUB Surface Systems
+                    Products We Apply
                   </h3>
                   <p className="text-white/60 text-sm mb-5">
-                    Authorized Western Canada Applicator
+                    Manufacturer-Certified Installer
                   </p>
                   <div className="w-10 h-0.5 bg-[#D66620] mb-5" />
                   <p className="text-white/70 text-sm leading-relaxed">
-                    We install the full HUB product suite — specified by 500+ Canadian municipalities.
+                    Industry-leading surface systems — specified by 500+ Canadian municipalities and installed by our crews.
                   </p>
                 </div>
                 <Link
@@ -507,10 +510,13 @@ export default function Nav() {
             {/* ── Drawer header ── */}
             <div className="flex items-center justify-between px-5 py-3 border-b border-gray-100 flex-shrink-0" style={{ background: "#ffffff" }}>
               <Link href="/" onClick={closeAll} className="flex items-center gap-2.5">
-                <div className="w-8 h-8 bg-[#D66620] rounded-md flex items-center justify-center flex-shrink-0">
-                  <span className="text-white font-black text-sm tracking-tight">S1</span>
+                <div className="relative w-8 h-8 flex-shrink-0">
+                  <Image src="/images/square-one-logo.png" alt="Square One Paving" fill className="object-contain" sizes="32px" />
                 </div>
-                <span className="font-bold text-[#32373C] text-[15px]">Square One</span>
+                <span className="font-black text-[#32373C] text-[15px] leading-none">
+                  Square One<br />
+                  <span className="text-[#D66620] font-semibold text-[10px] uppercase tracking-[0.15em]">Paving</span>
+                </span>
               </Link>
               <button
                 onClick={() => setMobileOpen(false)}
