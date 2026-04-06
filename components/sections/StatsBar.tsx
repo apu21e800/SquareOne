@@ -3,7 +3,7 @@ export default function StatsBar() {
     { value: "25+", label: "Years in BC", sub: "Since 2000" },
     { value: "500+", label: "Projects Installed", sub: "Across BC" },
     { value: "4", label: "Service Lines", sub: "Full spectrum" },
-    { value: "2", label: "Regions Served", sub: "Lower Mainland + VI" },
+    { value: "#1", label: "HUB Applicator", sub: "Western Canada" },
   ]
 
   return (

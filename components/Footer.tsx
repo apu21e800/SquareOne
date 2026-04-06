@@ -23,29 +23,28 @@ export default function Footer() {
         {/* Top grid */}
         <div className="grid md:grid-cols-4 gap-10 mb-14">
 
-          {/* Col 1: Logo + tagline */}
+          {/* Col 1: Logo + tagline + HUB badge */}
           <div className="md:col-span-1">
-            <Link href="/" className="inline-flex items-center gap-3 mb-5">
-              <div className="relative w-9 h-9 flex-shrink-0">
-                <Image
-                  src="/images/square-one-logo.png"
-                  alt="Square One Paving"
-                  fill
-                  className="object-contain"
-                  sizes="36px"
-                />
+            <Link href="/" className="inline-flex items-center gap-2.5 mb-4">
+              <div className="w-9 h-9 bg-[#D66620] rounded-md flex items-center justify-center flex-shrink-0">
+                <span className="text-white font-black text-sm">S1</span>
               </div>
-              <span className="text-white font-black text-lg tracking-tight leading-tight">
-                Square One<br />
-                <span className="text-[#D66620] font-semibold text-xs uppercase tracking-[0.18em]">Paving</span>
-              </span>
+              <span className="text-white font-bold text-xl tracking-tight">Square One</span>
             </Link>
             <p className="text-sm text-white/60 leading-relaxed mb-5">
-              BC&apos;s leading decorative pavement installer since 2000. Lower Mainland &amp; Vancouver Island.
+              BC&apos;s trusted decorative pavement applicator since 2000. Lower Mainland &amp; Vancouver Island.
             </p>
-            <div className="flex items-center gap-2 text-xs text-white/40 border border-white/10 rounded-md px-3 py-2 w-fit">
-              <span className="text-[#D66620]">✓</span>
-              <span>Authorized HUB Surface Systems Applicator</span>
+            <div className="flex items-center gap-3">
+              <div className="relative w-20 h-6">
+                <Image
+                  src="/images/hub-logo-white.png"
+                  alt="HUB Surface Systems"
+                  fill
+                  className="object-contain object-left"
+                  sizes="80px"
+                />
+              </div>
+              <span className="text-white/40 text-xs">Authorized Applicator</span>
             </div>
           </div>
 
@@ -74,7 +73,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/driveways" className="hover:text-white transition-colors">
+                <Link href="/applications/private-driveways" className="hover:text-white transition-colors">
                   Decorative Driveways
                 </Link>
               </li>
@@ -83,7 +82,7 @@ export default function Footer() {
 
           {/* Col 3: Products */}
           <div>
-            <p className="text-[10px] font-bold text-[#D66620] uppercase tracking-[0.2em] mb-4">Products We Apply</p>
+            <p className="text-[10px] font-bold text-[#D66620] uppercase tracking-[0.2em] mb-4">HUB Products</p>
             <ul className="space-y-2.5 text-sm text-white/65">
               {products.map((p) => (
                 <li key={p.slug}>
