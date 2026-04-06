@@ -159,10 +159,13 @@ export default function Nav() {
 
             {/* ── Logo + wordmark ── */}
             <Link href="/" onClick={closeAll} className="flex-shrink-0 flex items-center gap-2.5 py-2">
-              <div className="w-8 h-8 bg-[#D66620] rounded-md flex items-center justify-center flex-shrink-0">
-                <span className="text-white font-black text-sm tracking-tight">S1</span>
+              <div className="relative w-8 h-8 flex-shrink-0">
+                <Image src="/images/square-one-logo.png" alt="Square One Paving" fill className="object-contain" sizes="32px" />
               </div>
-              <span className="font-bold text-[#32373C] text-lg tracking-tight">Square One</span>
+              <span className="font-black text-[#32373C] text-lg tracking-tight leading-none">
+                Square One<br />
+                <span className="text-[#D66620] font-semibold text-[10px] uppercase tracking-[0.15em]">Paving</span>
+              </span>
             </Link>
 
             {/* ── Desktop nav links ── */}
@@ -507,10 +510,13 @@ export default function Nav() {
             {/* ── Drawer header ── */}
             <div className="flex items-center justify-between px-5 py-3 border-b border-gray-100 flex-shrink-0" style={{ background: "#ffffff" }}>
               <Link href="/" onClick={closeAll} className="flex items-center gap-2.5">
-                <div className="w-8 h-8 bg-[#D66620] rounded-md flex items-center justify-center flex-shrink-0">
-                  <span className="text-white font-black text-sm tracking-tight">S1</span>
+                <div className="relative w-8 h-8 flex-shrink-0">
+                  <Image src="/images/square-one-logo.png" alt="Square One Paving" fill className="object-contain" sizes="32px" />
                 </div>
-                <span className="font-bold text-[#32373C] text-[15px]">Square One</span>
+                <span className="font-black text-[#32373C] text-[15px] leading-none">
+                  Square One<br />
+                  <span className="text-[#D66620] font-semibold text-[10px] uppercase tracking-[0.15em]">Paving</span>
+                </span>
               </Link>
               <button
                 onClick={() => setMobileOpen(false)}
