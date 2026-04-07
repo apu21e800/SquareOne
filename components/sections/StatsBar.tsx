@@ -7,7 +7,7 @@ export default function StatsBar() {
   ]
 
   return (
-    <section className="w-full py-12 bg-white grid-pattern border-t border-[#32373C]/8">
+    <section className="w-full py-12 bg-white border-t border-[#32373C]/8">
       <div className="max-w-6xl mx-auto px-6 sm:px-8">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-0 lg:divide-x lg:divide-[#32373C]/10">
           {stats.map((stat, idx) => (

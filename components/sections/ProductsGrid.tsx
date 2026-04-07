@@ -60,7 +60,7 @@ const products = [
 
 export default function ProductsGrid() {
   return (
-    <section className="w-full py-20 bg-[#FAFAFA] grid-pattern">
+    <section className="w-full py-20 bg-[#FAFAFA]">
       <div className="max-w-6xl mx-auto px-6 sm:px-8">
         {/* Section header */}
         <div className="mb-14">

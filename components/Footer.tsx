@@ -35,10 +35,10 @@ export default function Footer() {
                   sizes="36px"
                 />
               </div>
-              <span className="text-white font-black text-lg tracking-tight leading-tight">
-                Square One<br />
-                <span className="text-[#D66620] font-semibold text-xs uppercase tracking-[0.18em]">Paving</span>
-              </span>
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-white font-black text-base tracking-tight leading-none">Square One</span>
+                <span className="text-[#D66620] font-bold text-[11px] uppercase tracking-[0.14em] leading-none">Paving</span>
+              </div>
             </Link>
             <p className="text-sm text-white/60 leading-relaxed mb-5">
               BC&apos;s leading decorative pavement installer since 2000. Lower Mainland &amp; Vancouver Island.
