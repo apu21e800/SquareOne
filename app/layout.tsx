@@ -6,11 +6,11 @@ import Footer from "@/components/Footer"
 export const metadata: Metadata = {
   metadataBase: new URL("https://squareonepaving.com"),
   title: {
-    default: "Square One Paving | BC Decorative Pavement Applicator",
+    default: "Square One Paving | Premium Residential Paving in BC",
     template: "%s | Square One Paving",
   },
   description:
-    "Stamped asphalt, decorative coatings, thermoplastic markings, and vapor blasting installed by BC's most trusted crew since 2000.",
+    "BC's premier residential paving and vapor blasting specialists. Driveways, patios, and surfaces transformed by certified professionals in Victoria and Vancouver Island.",
   keywords: [
     "decorative pavement BC",
     "stamped asphalt Vancouver",
@@ -28,9 +28,9 @@ export const metadata: Metadata = {
     locale: "en_CA",
     url: "https://squareonepaving.com",
     siteName: "Square One Paving",
-    title: "Square One Paving | BC Decorative Pavement Applicator",
+    title: "Square One Paving | Premium Residential Paving in BC",
     description:
-      "Stamped asphalt, decorative coatings, thermoplastic markings, and vapor blasting since 2000.",
+      "BC's premier residential paving and vapor blasting specialists. Driveways, patios, and surfaces transformed by certified professionals in Victoria and Vancouver Island.",
     images: [
       {
         url: "/images/og-image.jpg",
@@ -42,9 +42,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Square One Paving | BC Decorative Pavement Applicator",
+    title: "Square One Paving | Premium Residential Paving in BC",
     description:
-      "Stamped asphalt, decorative coatings, thermoplastic markings, and vapor blasting since 2000.",
+      "BC's premier residential paving and vapor blasting specialists. Driveways, patios, and surfaces transformed by certified professionals in Victoria and Vancouver Island.",
   },
   alternates: {
     canonical: "https://squareonepaving.com",

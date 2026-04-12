@@ -5,13 +5,13 @@ import Image from "next/image"
 import Link from "next/link"
 
 const projectTypes = [
-  "Stamped Asphalt / Crosswalks",
-  "Decorative Coatings / Bike Lanes",
-  "Preformed Thermoplastic / Markings",
-  "Vapor Blasting / Surface Prep",
-  "Decorative Driveways (Residential)",
+  "Paving — Residential Driveway",
+  "Paving — Patio or Walkway",
+  "Paving — Parking Area / Commercial",
+  "Paving — Municipal / Crosswalk / Bike Lane",
+  "Vapor Blasting",
   "Multiple Services",
-  "Not Sure — Need Consultation",
+  "Other / Not Sure",
 ]
 
 const trustPoints = [
