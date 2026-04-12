@@ -30,7 +30,7 @@ const services = [
   {
     name: "Vapor Blasting",
     slug: "vapor-blasting",
-    desc: "Mobile surface prep — graffiti removal, marking removal, and more.",
+    desc: "Surface restoration — paint, coatings, graffiti, and rust removed without damage.",
     icon: "◌",
   },
 ]
@@ -39,20 +39,9 @@ const drawerServiceLinks = [
   { name: "Stamped Asphalt",         href: "/services/stamped-asphalt" },
   { name: "Decorative Coatings",     href: "/services/decorative-coatings" },
   { name: "Preformed Thermoplastic", href: "/services/preformed-thermoplastic" },
-  { name: "Decorative Driveways",    href: "/driveways" },
+  { name: "Vapor Blasting",          href: "/services/vapor-blasting" },
 ]
 
-const products = [
-  { name: "StreetPrint",       slug: "streetprint",        desc: "Stamped asphalt impressions — brick, cobblestone & stone patterns." },
-  { name: "StreetBond",        slug: "streetbond",         desc: "Durable coloured surface coatings for any paved application." },
-  { name: "TrafficPatterns",   slug: "trafficpatterns",    desc: "Preformed thermoplastic for custom pavement art & branding." },
-  { name: "TrafficPatternsXD", slug: "trafficpatterns-xd", desc: "Heavy-duty thermoplastic for high-traffic transit corridors." },
-  { name: "DecoMark",          slug: "decomark",           desc: "Retroreflective thermoplastic for safety-critical markings." },
-  { name: "DuraShield",        slug: "durashield",         desc: "Penetrating pavement coating and protective sealant." },
-  { name: "DuraTherm",         slug: "duratherm",          desc: "High-build thermoplastic with textured anti-slip surface." },
-  { name: "MMAX",              slug: "mmax",               desc: "MMA coating for durable transit lanes and crosswalks." },
-  { name: "PreMark",           slug: "premark",            desc: "Preformed symbols, arrows & regulatory pavement markings." },
-]
 
 /* ─── Animation variants ─────────────────────────────────── */
 
@@ -75,13 +64,12 @@ const vaporVariant = {
 
 /* ─── Component ──────────────────────────────────────────── */
 
-type MegaMenu = "services" | "products" | null
+type MegaMenu = "services" | null
 
 export default function Nav() {
   const [mobileOpen,     setMobileOpen]     = useState(false)
   const [activeMega,     setActiveMega]     = useState<MegaMenu>(null)
   const [mobileServices, setMobileServices] = useState(false)
-  const [mobileProducts, setMobileProducts] = useState(false)
 
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : ""
@@ -113,7 +101,6 @@ export default function Nav() {
     setMobileOpen(false)
     setActiveMega(null)
     setMobileServices(false)
-    setMobileProducts(false)
   }
 
   const panelProps = { onMouseEnter: cancelClose, onMouseLeave: scheduleClose }
@@ -135,11 +122,11 @@ export default function Nav() {
             {/* ── Logo + wordmark — inline, not stacked ── */}
             <Link href="/" onClick={closeAll} className="flex-shrink-0 flex items-center gap-3 py-2 group">
               <div className="relative w-9 h-9 flex-shrink-0">
-                <Image src="/images/square-one-logo.png" alt="Square One Paving" fill className="object-contain" sizes="36px" />
+                <Image src="/images/logo/S1_Square.png" alt="Square One Paving" fill className="object-contain" sizes="36px" />
               </div>
               <div className="flex items-baseline gap-1.5">
                 <span className="font-black text-[#32373C] text-base tracking-tight leading-none">Square One</span>
-                <span className="text-[#D66620] font-bold text-[11px] uppercase tracking-[0.14em] leading-none">Paving</span>
+                <span className="text-[#C85A3A] font-bold text-[11px] uppercase tracking-[0.14em] leading-none">Paving</span>
               </div>
             </Link>
 
@@ -151,7 +138,7 @@ export default function Nav() {
                   onClick={() => setActiveMega(activeMega === "services" ? null : "services")}
                   aria-expanded={activeMega === "services"}
                   className={`flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    activeMega === "services" ? "text-[#D66620] bg-[#FFF7F2]" : "text-[#333333] hover:text-[#D66620] hover:bg-[#FFF7F2]"
+                    activeMega === "services" ? "text-[#C85A3A] bg-[#FFF7F2]" : "text-[#2D2D2D] hover:text-[#C85A3A] hover:bg-[#FFF7F2]"
                   }`}
                 >
                   Services
@@ -159,28 +146,17 @@ export default function Nav() {
                 </button>
               </div>
 
-              {/* Products trigger */}
-              <div onMouseEnter={() => openMenu("products")} onMouseLeave={scheduleClose}>
-                <button
-                  onClick={() => setActiveMega(activeMega === "products" ? null : "products")}
-                  aria-expanded={activeMega === "products"}
-                  className={`flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    activeMega === "products" ? "text-[#D66620] bg-[#FFF7F2]" : "text-[#333333] hover:text-[#D66620] hover:bg-[#FFF7F2]"
-                  }`}
-                >
-                  Products
-                  <ChevronDown size={13} className={`transition-transform duration-200 ${activeMega === "products" ? "rotate-180" : ""}`} />
-                </button>
-              </div>
-
-              <Link href="/projects" onClick={closeAll} className="px-3 py-2 rounded-lg text-sm font-medium text-[#333333] hover:text-[#D66620] hover:bg-[#FFF7F2] transition-colors">
+              <Link href="/projects" onClick={closeAll} className="px-3 py-2 rounded-lg text-sm font-medium text-[#2D2D2D] hover:text-[#C85A3A] hover:bg-[#FFF7F2] transition-colors">
                 Projects
               </Link>
-              <Link href="/driveways" onClick={closeAll} className="px-3 py-2 rounded-lg text-sm font-semibold text-[#D66620] hover:bg-[#FFF7F2] transition-colors">
-                Driveways
+              <Link href="/services/vapor-blasting" onClick={closeAll} className="px-3 py-2 rounded-lg text-sm font-medium text-[#2D2D2D] hover:text-[#C85A3A] hover:bg-[#FFF7F2] transition-colors">
+                Vapor Blasting
               </Link>
-              <Link href="/about" onClick={closeAll} className="px-3 py-2 rounded-lg text-sm font-medium text-[#333333] hover:text-[#D66620] hover:bg-[#FFF7F2] transition-colors">
+              <Link href="/about" onClick={closeAll} className="px-3 py-2 rounded-lg text-sm font-medium text-[#2D2D2D] hover:text-[#C85A3A] hover:bg-[#FFF7F2] transition-colors">
                 About
+              </Link>
+              <Link href="/contact" onClick={closeAll} className="px-3 py-2 rounded-lg text-sm font-medium text-[#2D2D2D] hover:text-[#C85A3A] hover:bg-[#FFF7F2] transition-colors">
+                Contact
               </Link>
             </div>
 
@@ -190,7 +166,7 @@ export default function Nav() {
                 1-877-391-0270
               </a>
               <Link href="/contact" onClick={closeAll} className="hidden lg:inline-flex">
-                <span className="bg-[#D66620] hover:bg-[#C05A18] text-white px-5 py-2 rounded-lg font-bold text-sm transition-colors">
+                <span className="bg-[#C85A3A] hover:bg-[#B74D2E] text-white px-5 py-2 rounded-lg font-bold text-sm transition-colors">
                   Get a Quote
                 </span>
               </Link>
@@ -220,24 +196,24 @@ export default function Nav() {
           <div
             {...panelProps}
             style={{ animation: "megaIn 200ms ease-out both" }}
-            className="absolute top-full left-0 w-full bg-white shadow-2xl border-t-2 border-[#D66620] z-50"
+            className="absolute top-full left-0 w-full bg-white shadow-2xl border-t-2 border-[#C85A3A] z-50"
           >
             <div className="grid grid-cols-[28%_42%_30%] min-h-[400px]">
 
               {/* Col 1: Vapor Blasting feature — dark panel */}
-              <div className="bg-[#1C2226] text-white p-8 flex flex-col justify-between">
+              <div className="bg-[#2D2D2D] text-white p-8 flex flex-col justify-between">
                 <div>
-                  <p className="text-[#F0A04B] text-[10px] uppercase tracking-[0.25em] font-bold mb-4">
-                    Our Differentiator
+                  <p className="text-[#C85A3A] text-[10px] uppercase tracking-[0.25em] font-bold mb-4">
+                    Signature Service
                   </p>
-                  <h3 className="text-white text-2xl font-black leading-tight mb-4">
-                    Mobile Vapor<br />Blasting
+                  <h3 className="text-white text-2xl font-black leading-tight mb-4" style={{ color: "#ffffff" }}>
+                    Vapor<br />Blasting
                   </h3>
                   <p className="text-white/65 text-sm leading-relaxed mb-6">
-                    BC&apos;s only mobile vapor blasting service. Dustless, precise, zero chemical runoff.
+                    Wet abrasive blasting for road marking removal, surface prep, and restoration.
                   </p>
                   <div className="space-y-2">
-                    {["✓ No Silica Dust", "✓ Mobile to Your Site", "✓ BC-Wide Coverage"].map((tag) => (
+                    {["✓ No Dust", "✓ Mobile Service", "✓ BC Coverage"].map((tag) => (
                       <div key={tag} className="text-sm text-white/80 font-medium">{tag}</div>
                     ))}
                   </div>
@@ -247,9 +223,9 @@ export default function Nav() {
                   <Link
                     href="/services/vapor-blasting"
                     onClick={closeAll}
-                    className="inline-flex items-center gap-2 text-sm font-bold text-[#F0A04B] hover:text-white transition-colors group"
+                    className="inline-flex items-center gap-2 text-sm font-bold text-[#C85A3A] hover:text-white transition-colors group"
                   >
-                    Explore Vapor Blasting
+                    Learn More
                     <ChevronRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
                   </Link>
                 </div>
@@ -257,8 +233,8 @@ export default function Nav() {
 
               {/* Col 2: Services list */}
               <div className="p-8 bg-white">
-                <p className="text-[10px] uppercase tracking-[0.25em] text-[#D66620] font-bold mb-5">
-                  What We Do
+                <p className="text-[10px] uppercase tracking-[0.25em] text-[#C85A3A] font-bold mb-5">
+                  Our Services
                 </p>
                 <div className="space-y-1">
                   {services.map((s) => (
@@ -266,33 +242,33 @@ export default function Nav() {
                       key={s.slug}
                       href={`/services/${s.slug}`}
                       onClick={closeAll}
-                      className="flex items-start gap-3 px-3 py-3.5 rounded-lg hover:bg-[#F9F5F2] border-l-2 border-transparent hover:border-[#D66620] group transition-all"
+                      className="flex items-start gap-3 px-3 py-3.5 rounded-lg hover:bg-[#F5F3F0] border-l-2 border-transparent hover:border-[#C85A3A] group transition-all"
                     >
-                      <span className="text-[#D66620] text-base mt-0.5 flex-shrink-0">{s.icon}</span>
+                      <span className="text-[#C85A3A] text-base mt-0.5 flex-shrink-0">{s.icon}</span>
                       <div>
                         <div className="flex items-center gap-2 mb-0.5">
-                          <p className="text-sm font-semibold text-[#1C2226] group-hover:text-[#D66620] transition-colors">{s.name}</p>
+                          <p className="text-sm font-semibold text-[#2D2D2D] group-hover:text-[#C85A3A] transition-colors">{s.name}</p>
                           {s.slug === "vapor-blasting" && (
-                            <span className="text-[9px] font-bold uppercase tracking-wider bg-[#D66620] text-white px-1.5 py-0.5 rounded-full leading-none">
-                              EXCLUSIVE
+                            <span className="text-[9px] font-bold uppercase tracking-wider bg-[#C85A3A] text-white px-1.5 py-0.5 rounded-full leading-none">
+                              SIGNATURE
                             </span>
                           )}
                         </div>
-                        <p className="text-xs text-[#626262] leading-snug">{s.desc}</p>
+                        <p className="text-xs text-[#8B8680] leading-snug">{s.desc}</p>
                       </div>
                     </Link>
                   ))}
                 </div>
-                <div className="pt-5 mt-3 border-t border-[#F2EFE9]">
-                  <Link href="/services" onClick={closeAll} className="text-xs font-bold text-[#D66620] uppercase tracking-widest hover:text-[#C05A18] transition-colors">
+                <div className="pt-5 mt-3 border-t border-[#E8E4DE]">
+                  <Link href="/services" onClick={closeAll} className="text-xs font-bold text-[#C85A3A] uppercase tracking-widest hover:text-[#B74D2E] transition-colors">
                     View All Services →
                   </Link>
                 </div>
               </div>
 
               {/* Col 3: Featured project */}
-              <div className="p-8 bg-[#FAFAF9] border-l border-[#F0EDEA]">
-                <p className="text-[10px] uppercase tracking-[0.25em] text-[#D66620] font-bold mb-5">
+              <div className="p-8 bg-[#F5F3F0] border-l border-[#E8E4DE]">
+                <p className="text-[10px] uppercase tracking-[0.25em] text-[#C85A3A] font-bold mb-5">
                   Featured Project
                 </p>
                 <div className="relative h-48 rounded-xl overflow-hidden mb-5">
@@ -312,12 +288,12 @@ export default function Nav() {
                     <p className="text-white/60 text-xs mt-0.5">Vancouver, BC</p>
                   </div>
                 </div>
-                <div className="bg-white rounded-lg p-4 border border-[#F0EDEA] mb-4">
-                  <p className="text-xs text-[#626262] leading-relaxed">
+                <div className="bg-white rounded-lg p-4 border border-[#E8E4DE] mb-4">
+                  <p className="text-xs text-[#8B8680] leading-relaxed">
                     StreetPrint stamped asphalt with brick pattern and retroreflective finish.
                   </p>
                 </div>
-                <Link href="/projects" onClick={closeAll} className="text-xs font-bold text-[#D66620] uppercase tracking-widest hover:text-[#C05A18] transition-colors">
+                <Link href="/projects" onClick={closeAll} className="text-xs font-bold text-[#C85A3A] uppercase tracking-widest hover:text-[#B74D2E] transition-colors">
                   View All Projects →
                 </Link>
               </div>
@@ -325,53 +301,6 @@ export default function Nav() {
           </div>
         )}
 
-        {/* ── Products mega panel ── */}
-        {activeMega === "products" && (
-          <div
-            {...panelProps}
-            style={{ animation: "megaIn 200ms ease-out both" }}
-            className="absolute top-full left-0 w-full bg-white shadow-2xl border-t-2 border-[#D66620] z-50"
-          >
-            <div className="grid grid-cols-[22%_78%] min-h-[380px]">
-
-              {/* Left: S1 credential panel */}
-              <div className="bg-[#1C2226] text-white p-8 flex flex-col justify-between">
-                <div>
-                  <p className="text-[#F0A04B] text-[10px] uppercase tracking-[0.25em] font-bold mb-4">Products We Apply</p>
-                  <h3 className="text-white text-xl font-black leading-tight mb-4">
-                    Manufacturer-<br />Certified Installer
-                  </h3>
-                  <div className="w-8 h-0.5 bg-[#D66620] mb-4" />
-                  <p className="text-white/65 text-sm leading-relaxed">
-                    Industry-leading surface systems — specified by 500+ Canadian municipalities, installed by our crews.
-                  </p>
-                </div>
-                <Link href="/products" onClick={closeAll} className="inline-flex items-center gap-1.5 text-sm font-bold text-[#F0A04B] hover:text-white transition-colors group mt-8">
-                  Browse All Products
-                  <ChevronRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
-                </Link>
-              </div>
-
-              {/* Right: product grid */}
-              <div className="p-8 bg-white">
-                <p className="text-[10px] uppercase tracking-[0.25em] text-[#D66620] font-bold mb-5">Product Line</p>
-                <div className="grid grid-cols-3 gap-1">
-                  {products.map((p) => (
-                    <Link
-                      key={p.slug}
-                      href={`/products/${p.slug}`}
-                      onClick={closeAll}
-                      className="group px-3 py-3.5 rounded-lg hover:bg-[#F9F5F2] border-l-2 border-transparent hover:border-[#D66620] transition-all"
-                    >
-                      <p className="text-sm font-bold text-[#1C2226] group-hover:text-[#D66620] transition-colors leading-snug">{p.name}</p>
-                      <p className="text-xs text-[#888] leading-snug mt-0.5 line-clamp-2">{p.desc}</p>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </nav>
 
       {/* ── Mobile drawer ── */}
@@ -405,11 +334,11 @@ export default function Nav() {
             <div className="flex items-center justify-between px-5 py-3 border-b border-gray-100 flex-shrink-0 bg-white">
               <Link href="/" onClick={closeAll} className="flex items-center gap-2.5">
                 <div className="relative w-8 h-8 flex-shrink-0">
-                  <Image src="/images/square-one-logo.png" alt="Square One Paving" fill className="object-contain" sizes="32px" />
+                  <Image src="/images/logo/S1_Square.png" alt="Square One Paving" fill className="object-contain" sizes="32px" />
                 </div>
                 <div className="flex items-baseline gap-1.5">
                   <span className="font-black text-[#32373C] text-[15px] leading-none">Square One</span>
-                  <span className="text-[#D66620] font-bold text-[11px] uppercase tracking-[0.14em] leading-none">Paving</span>
+                  <span className="text-[#C85A3A] font-bold text-[11px] uppercase tracking-[0.14em] leading-none">Paving</span>
                 </div>
               </Link>
               <button
@@ -434,19 +363,19 @@ export default function Nav() {
                     href="/services/vapor-blasting"
                     onClick={closeAll}
                     className="flex items-center gap-3 mb-3 rounded-xl px-5 py-4 transition-opacity active:opacity-70"
-                    style={{ background: "rgba(214,102,32,0.08)", border: "1px solid rgba(214,102,32,0.20)" }}
+                    style={{ background: "rgba(200,90,58,0.08)", border: "1px solid rgba(200,90,58,0.20)" }}
                   >
-                    <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: "rgba(214,102,32,0.15)" }}>
-                      <Zap size={17} className="text-[#D66620]" fill="currentColor" />
+                    <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: "rgba(200,90,58,0.15)" }}>
+                      <Zap size={17} className="text-[#C85A3A]" fill="currentColor" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-0.5">
                         <span className="font-bold text-[#32373C] text-sm">Vapor Blasting</span>
-                        <span className="bg-[#D66620] text-white text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full leading-none">Exclusive</span>
+                        <span className="bg-[#C85A3A] text-white text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full leading-none">Signature</span>
                       </div>
-                      <p className="text-xs text-gray-400">BC&apos;s only mobile service</p>
+                      <p className="text-xs text-gray-400">Surface prep & restoration</p>
                     </div>
-                    <ChevronRight size={14} className="text-[#D66620] flex-shrink-0" />
+                    <ChevronRight size={14} className="text-[#C85A3A] flex-shrink-0" />
                   </Link>
                 </motion.div>
 
@@ -468,45 +397,13 @@ export default function Nav() {
                         <div className="pb-4 space-y-0.5">
                           {drawerServiceLinks.map((s) => (
                             <Link key={s.href} href={s.href} onClick={closeAll}
-                              className="flex items-center gap-3 min-h-[48px] py-2.5 px-4 text-gray-500 hover:text-[#D66620] active:text-[#D66620] text-sm font-medium transition-colors rounded-lg hover:bg-gray-50">
-                              <span className="w-1.5 h-1.5 rounded-full bg-[#D66620] flex-shrink-0" />
+                              className="flex items-center gap-3 min-h-[48px] py-2.5 px-4 text-gray-500 hover:text-[#C85A3A] active:text-[#C85A3A] text-sm font-medium transition-colors rounded-lg hover:bg-gray-50">
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#C85A3A] flex-shrink-0" />
                               {s.name}
                             </Link>
                           ))}
-                          <Link href="/services" onClick={closeAll} className="flex items-center min-h-[40px] px-4 pt-1 text-xs font-bold text-[#D66620] uppercase tracking-widest">
+                          <Link href="/services" onClick={closeAll} className="flex items-center min-h-[40px] px-4 pt-1 text-xs font-bold text-[#C85A3A] uppercase tracking-widest">
                             All Services →
-                          </Link>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
-
-                {/* Products accordion */}
-                <motion.div variants={fadeSlide} className="border-t border-gray-100">
-                  <button
-                    onClick={() => setMobileProducts(!mobileProducts)}
-                    className="w-full flex items-center justify-between py-4 text-[#32373C] font-semibold text-lg min-h-[56px]"
-                  >
-                    Products
-                    <ChevronDown size={16} className={`text-gray-400 transition-transform duration-200 ${mobileProducts ? "rotate-180" : ""}`} />
-                  </button>
-                  <AnimatePresence initial={false}>
-                    {mobileProducts && (
-                      <motion.div key="products-panel"
-                        initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.22, ease: "easeOut" }} className="overflow-hidden"
-                      >
-                        <div className="pb-4 space-y-0.5">
-                          {products.map((p) => (
-                            <Link key={p.slug} href={`/products/${p.slug}`} onClick={closeAll}
-                              className="flex items-center gap-3 min-h-[48px] py-2.5 px-4 text-gray-500 hover:text-[#D66620] active:text-[#D66620] text-sm font-medium transition-colors rounded-lg hover:bg-gray-50">
-                              <span className="w-1.5 h-1.5 rounded-full bg-[#D66620] flex-shrink-0" />
-                              {p.name}
-                            </Link>
-                          ))}
-                          <Link href="/products" onClick={closeAll} className="flex items-center min-h-[40px] px-4 pt-1 text-xs font-bold text-[#D66620] uppercase tracking-widest">
-                            All Products →
                           </Link>
                         </div>
                       </motion.div>
@@ -517,15 +414,15 @@ export default function Nav() {
                 {/* Static links */}
                 {[
                   { label: "Projects",  href: "/projects",   highlight: false },
-                  { label: "Driveways", href: "/driveways",  highlight: true  },
                   { label: "About",     href: "/about",      highlight: false },
+                  { label: "Contact",   href: "/contact",    highlight: false },
                 ].map((item) => (
                   <motion.div key={item.href} variants={fadeSlide}>
                     <Link
                       href={item.href}
                       onClick={closeAll}
                       className={`flex items-center min-h-[56px] py-4 text-lg font-semibold border-t border-gray-100 transition-colors ${
-                        item.highlight ? "text-[#D66620]" : "text-[#32373C] hover:text-[#D66620]"
+                        item.highlight ? "text-[#C85A3A]" : "text-[#32373C] hover:text-[#C85A3A]"
                       }`}
                     >
                       {item.label}
@@ -538,19 +435,19 @@ export default function Nav() {
             {/* Bottom CTA */}
             <div className="px-5 py-5 border-t border-gray-100 flex-shrink-0 space-y-3 bg-white">
               <Link href="/contact" onClick={closeAll} className="block">
-                <span className="block w-full bg-[#D66620] hover:bg-[#C05A18] active:bg-[#B04E15] text-white text-center py-4 rounded-xl font-semibold text-base transition-colors">
-                  Get a Free Quote
+                <span className="block w-full bg-[#C85A3A] hover:bg-[#B74D2E] active:bg-[#A6432A] text-white text-center py-4 rounded-xl font-semibold text-base transition-colors">
+                  Get a Quote
                 </span>
               </Link>
               <Link href="/projects" onClick={closeAll} className="block">
-                <span className="block w-full border border-gray-200 hover:border-[#D66620] text-[#32373C] hover:text-[#D66620] text-center py-3.5 rounded-xl font-semibold text-base transition-colors">
-                  View Our Projects
+                <span className="block w-full border border-gray-200 hover:border-[#C85A3A] text-[#32373C] hover:text-[#C85A3A] text-center py-3.5 rounded-xl font-semibold text-base transition-colors">
+                  View Our Work
                 </span>
               </Link>
               <div className="flex items-center justify-center gap-4 pt-1">
-                <a href="tel:18773910270" className="text-sm text-gray-400 hover:text-[#D66620] font-medium transition-colors">1-877-391-0270</a>
+                <a href="tel:16043098212" className="text-sm text-gray-400 hover:text-[#C85A3A] font-medium transition-colors">604-309-8212</a>
                 <span className="text-gray-200">·</span>
-                <a href="mailto:info@squareonepaving.ca" className="text-sm text-gray-400 hover:text-[#D66620] font-medium transition-colors">info@squareonepaving.ca</a>
+                <a href="mailto:info@squareonepaving.ca" className="text-sm text-gray-400 hover:text-[#C85A3A] font-medium transition-colors">info@squareonepaving.ca</a>
               </div>
             </div>
           </motion.div>

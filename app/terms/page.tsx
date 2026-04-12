@@ -3,13 +3,13 @@ import type { Metadata } from "next"
 export const metadata: Metadata = {
   title: "Terms of Use | Square One Paving",
   description:
-    "Terms of use for squareonepaving.ca — governing law, intellectual property, and disclaimer of warranties.",
+    "Terms of use for squareonepaving.com — governing law, intellectual property, and disclaimer of warranties.",
 }
 
 const sections = [
   {
     heading: "1. Acceptance of Terms",
-    body: `By accessing or using squareonepaving.ca (the "Site"), you agree to be bound by these Terms of Use. If you do not agree, please do not use the Site. Square One Paving reserves the right to modify these terms at any time. Continued use of the Site following any changes constitutes your acceptance of the revised terms.`,
+    body: `By accessing or using squareonepaving.com (the "Site"), you agree to be bound by these Terms of Use. If you do not agree, please do not use the Site. Square One Paving reserves the right to modify these terms at any time. Continued use of the Site following any changes constitutes your acceptance of the revised terms.`,
   },
   {
     heading: "2. Use of the Site",
@@ -61,7 +61,7 @@ Any dispute arising out of or relating to these Terms shall be subject to the ex
 
 Square One Paving
 Ladysmith, British Columbia
-info@squareonepaving.ca | 604-309-8212`,
+info@squareonepaving.com | 604-309-8212`,
   },
 ]
 
@@ -79,7 +79,7 @@ export default function TermsPage() {
 
         <p className="text-[#8B8680] leading-relaxed mb-12">
           Please read these Terms of Use carefully before using
-          squareonepaving.ca, operated by Square One Paving. These terms govern
+          squareonepaving.com, operated by Square One Paving. These terms govern
           your access to and use of the Site.
         </p>
 

@@ -69,7 +69,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/services/vapor-blasting" className="hover:text-white transition-colors">
+                <Link href="/vapor-blasting" className="hover:text-white transition-colors">
                   Vapor Blasting
                 </Link>
               </li>
@@ -120,8 +120,8 @@ export default function Footer() {
               <a href="tel:2503910270" className="block hover:text-white transition-colors">
                 250-391-0270 <span className="text-white/40 text-xs">Vancouver Island</span>
               </a>
-              <a href="mailto:info@squareonepaving.ca" className="block hover:text-white transition-colors">
-                info@squareonepaving.ca
+              <a href="mailto:info@squareonepaving.com" className="block hover:text-white transition-colors">
+                info@squareonepaving.com
               </a>
               <p className="text-white/50 text-xs pt-1">Maple Ridge, BC</p>
             </div>

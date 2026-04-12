@@ -1,3 +1,18 @@
+// ─── SEO PILLAR PAGE ──────────────────────────────────────────────────────────
+// This is the primary SEO pillar page for decorative driveway paving in BC.
+// Target keywords:
+//   - "driveway paving Vancouver"
+//   - "driveway paving Victoria"
+//   - "stamped asphalt driveway Vancouver"
+//   - "decorative driveway BC"
+//   - "driveway resurfacing Lower Mainland"
+// Page intent: capture high-intent residential + strata buyers researching
+// decorative driveway options. Content should prioritize product differentiation
+// (StreetPrint, StreetBond, DuraShield), trust signals, and regional coverage.
+// TODO: Add structured FAQ schema (JSON-LD) for rich snippet eligibility.
+// TODO: Add before/after image gallery with alt-text optimized for local SEO.
+// ─────────────────────────────────────────────────────────────────────────────
+
 import Link from "next/link"
 import Image from "next/image"
 import { Metadata } from "next"
@@ -17,7 +32,7 @@ export const metadata: Metadata = {
     "concrete driveway alternative BC",
   ],
   alternates: {
-    canonical: "https://squareonepaving.ca/driveways",
+    canonical: "https://squareonepaving.com/driveways",
   },
 }
 
@@ -95,7 +110,7 @@ export default function DriveywaysPage() {
         {/* Background image */}
         <div className="absolute inset-0">
           <Image
-            src="/images/applications/residential-driveways/residential-driveways-01.jpg"
+            src="/images/applications/private-driveways/chilliwack-townhomes-brick-driveway-01.jpg"
             alt="Decorative stamped asphalt driveway installed by Square One Paving"
             fill
             className="object-cover object-center opacity-30"
@@ -227,10 +242,10 @@ export default function DriveywaysPage() {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {[
-              "/images/applications/residential-driveways/residential-driveways-01.jpg",
-              "/images/applications/residential-driveways/residential-driveways-02.jpg",
-              "/images/applications/residential-driveways/residential-driveways-03.jpg",
-              "/images/applications/residential-driveways/residential-driveways-04.jpg",
+              "/images/applications/private-driveways/chilliwack-townhomes-brick-driveway-01.jpg",
+              "/images/applications/private-driveways/cobblestone-residential-driveway-closeup-01.jpg",
+              "/images/applications/private-driveways/craftsman-home-charcoal-herringbone-driveway-01.jpg",
+              "/images/applications/private-driveways/estate-herringbone-gated-driveway-01.jpg",
             ].map((src, i) => (
               <div key={i} className="relative aspect-square rounded-xl overflow-hidden bg-[#F2EFE9]">
                 <Image

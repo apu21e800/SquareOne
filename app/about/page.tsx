@@ -200,8 +200,8 @@ export default function AboutPage() {
                 <a href="tel:6043098212" className="block text-white hover:text-[#F0A04B] transition-colors font-semibold">
                   604-309-8212
                 </a>
-                <a href="mailto:info@squareonepaving.ca" className="block text-white/70 hover:text-white transition-colors">
-                  info@squareonepaving.ca
+                <a href="mailto:info@squareonepaving.com" className="block text-white/70 hover:text-white transition-colors">
+                  info@squareonepaving.com
                 </a>
               </div>
               <Link href="/contact">

@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/admin/", "/api/"],
     },
-    sitemap: "https://squareonepaving.ca/sitemap.xml",
+    sitemap: "https://squareonepaving.com/sitemap.xml",
   };
 }

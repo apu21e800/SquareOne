@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next"
 import { services } from "@/lib/services"
 import { projects } from "@/lib/projects"
 
-const BASE_URL = "https://squareonepaving.ca"
+const BASE_URL = "https://squareonepaving.com"
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes: MetadataRoute.Sitemap = [
@@ -35,6 +35,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: "yearly",
       priority: 0.7,
+    },
+    {
+      url: `${BASE_URL}/vapor-blasting`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
+    {
+      url: `${BASE_URL}/driveways`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.9,
     },
     {
       url: `${BASE_URL}/privacy`,

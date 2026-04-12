@@ -18,7 +18,7 @@ const benefits = [
 
 export default function DrivewayCTA() {
   return (
-    <section className="w-full py-20 bg-[#F2EFE9]">
+    <section className="w-full py-20 bg-white border-t border-[#EDEAE4]">
       <div className="max-w-6xl mx-auto px-6 sm:px-8">
         <div className="grid lg:grid-cols-2 gap-14 items-center">
           {/* Left: Content */}

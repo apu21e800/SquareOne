@@ -93,11 +93,11 @@ export default function ContactPage() {
                     <span className="text-[#626262] text-xs">Lower Mainland</span>
                   </div>
                 </a>
-                <a href="mailto:info@squareonepaving.ca" className="flex items-center gap-3 group">
+                <a href="mailto:info@squareonepaving.com" className="flex items-center gap-3 group">
                   <div className="w-8 h-8 rounded-lg bg-[#D66620]/10 flex items-center justify-center text-[#D66620] text-sm flex-shrink-0">
                     ◈
                   </div>
-                  <span className="text-[#626262] group-hover:text-[#D66620] transition-colors text-sm">info@squareonepaving.ca</span>
+                  <span className="text-[#626262] group-hover:text-[#D66620] transition-colors text-sm">info@squareonepaving.com</span>
                 </a>
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-lg bg-[#D66620]/10 flex items-center justify-center text-[#D66620] text-sm flex-shrink-0">

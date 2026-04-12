@@ -18,7 +18,7 @@ const serviceIcons: Record<string, string> = {
 
 export default function ServicesGrid() {
   return (
-    <section className="w-full py-24 bg-[#F4F0EB]">
+    <section className="w-full py-24 bg-white border-b border-[#EDEAE4]">
       <div className="max-w-6xl mx-auto px-6 sm:px-8">
         <div className="mb-14">
           <p className="text-[#D66620] text-xs uppercase tracking-[0.22em] font-semibold mb-3">What We Do</p>

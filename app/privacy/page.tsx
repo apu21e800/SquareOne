@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 const sections = [
   {
     heading: "1. Information We Collect",
-    body: `When you use squareonepaving.ca or submit an inquiry, we may collect the following personal information:
+    body: `When you use squareonepaving.com or submit an inquiry, we may collect the following personal information:
 
 — Contact details: name, email address, phone number, company name, and job title
 — Project information: location, project type, and details you provide in form submissions
@@ -48,7 +48,7 @@ Each service operates under its own privacy policy. We choose partners who maint
   },
   {
     heading: "5. Cookies",
-    body: `squareonepaving.ca uses cookies to:
+    body: `squareonepaving.com uses cookies to:
 
 — Remember your preferences and session state
 — Collect anonymized analytics data
@@ -78,7 +78,7 @@ To exercise any of these rights, contact us using the information below.`,
 
 Square One Paving
 Ladysmith, British Columbia
-info@squareonepaving.ca | 604-309-8212`,
+info@squareonepaving.com | 604-309-8212`,
   },
 ]
 
@@ -98,7 +98,7 @@ export default function PrivacyPage() {
           Square One Paving (&ldquo;we,&rdquo; &ldquo;us,&rdquo; or
           &ldquo;our&rdquo;) is committed to protecting your privacy. This
           policy explains how we collect, use, and safeguard your personal
-          information when you visit squareonepaving.ca or contact us about our
+          information when you visit squareonepaving.com or contact us about our
           services.
         </p>
 

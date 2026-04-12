@@ -4,7 +4,7 @@ import Nav from "@/components/Nav"
 import Footer from "@/components/Footer"
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://squareonepaving.ca"),
+  metadataBase: new URL("https://squareonepaving.com"),
   title: {
     default: "Square One Paving | BC Decorative Pavement Applicator",
     template: "%s | Square One Paving",
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_CA",
-    url: "https://squareonepaving.ca",
+    url: "https://squareonepaving.com",
     siteName: "Square One Paving",
     title: "Square One Paving | BC Decorative Pavement Applicator",
     description:
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
       "Stamped asphalt, decorative coatings, thermoplastic markings, and vapor blasting since 2000.",
   },
   alternates: {
-    canonical: "https://squareonepaving.ca",
+    canonical: "https://squareonepaving.com",
   },
   robots: {
     index: true,

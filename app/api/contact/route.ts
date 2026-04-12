@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { Resend } from "resend"
 
-const TO_EMAIL = process.env.CONTACT_EMAIL ?? "info@squareonepaving.ca"
+const TO_EMAIL = process.env.CONTACT_EMAIL ?? "info@squareonepaving.com"
 
 interface ContactPayload {
   formType: "contact"
@@ -44,7 +44,7 @@ function buildEmailHtml(data: ContactPayload): string {
       </table>
       <hr style="margin:24px 0;border:none;border-top:1px solid #eee">
       <p style="font-size:12px;color:#8B8680;margin:0">
-        Submitted via squareonepaving.ca · ${new Date().toLocaleString("en-CA", { timeZone: "America/Vancouver" })} PT
+        Submitted via squareonepaving.com · ${new Date().toLocaleString("en-CA", { timeZone: "America/Vancouver" })} PT
       </p>
     </div>
   `
@@ -79,7 +79,7 @@ export async function POST(req: NextRequest) {
 
     const resend = new Resend(process.env.RESEND_API_KEY)
     const { error } = await resend.emails.send({
-      from: "Square One Paving <noreply@squareonepaving.ca>",
+      from: "Square One Paving <noreply@squareonepaving.com>",
       to: [TO_EMAIL],
       replyTo: body.email,
       subject: buildSubjectLine(body),
