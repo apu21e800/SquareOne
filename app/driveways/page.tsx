@@ -64,15 +64,15 @@ const products = [
     name: "StreetBond Colour Coating",
     eyebrow: "Colour & Finish",
     body: "Premium coating system applied over sound existing asphalt. Slip-resistant, UV-stable, and available in dozens of colours. Recoat cycle every 7–10 years.",
-    image: "/images/products/streetbond/streetbond-1.jpg",
+    image: "/images/products/streetbond/streetbond-red-waterfront-promenade-01.jpg",
   },
 ]
 
 const gallery = [
-  "/images/projects/west-vancouver-driveway.jpg",
-  "/images/projects/coquitlam-strata-driveway.jpg",
-  "/images/products/streetprint/streetprint-1.jpg",
-  "/images/products/streetbond/streetbond-1.jpg",
+  "/images/applications/private-driveways/estate-herringbone-gated-driveway-01.jpg",
+  "/images/applications/private-driveways/chilliwack-townhomes-brick-driveway-01.jpg",
+  "/images/applications/private-driveways/craftsman-home-charcoal-herringbone-driveway-01.jpg",
+  "/images/applications/private-driveways/luxury-grey-gated-driveway-01.jpg",
 ]
 
 export default function DrivewaysPage() {
@@ -119,7 +119,7 @@ export default function DrivewaysPage() {
           <div className="relative min-h-[400px] md:min-h-0">
             <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-[#C8601A] z-10" />
             <Image
-              src="/images/projects/west-vancouver-driveway.jpg"
+              src="/images/applications/private-driveways/estate-herringbone-gated-driveway-01.jpg"
               alt="Stamped asphalt driveway — West Vancouver, installed by Square One Paving"
               fill
               priority

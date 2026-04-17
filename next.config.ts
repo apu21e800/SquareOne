@@ -126,9 +126,8 @@ const nextConfig: NextConfig = {
       // Footer/nav link variants
       { source: "/traffic-patterns", destination: "/products/traffic-patterns", permanent: true },
       // Other pages
-      { source: "/case-studies", destination: "/blog", permanent: true },
-      { source: "/projects", destination: "/blog", permanent: true },
-      { source: "/featured-projects", destination: "/blog", permanent: true },
+      { source: "/case-studies", destination: "/projects", permanent: true },
+      { source: "/featured-projects", destination: "/projects", permanent: true },
       { source: "/documentation", destination: "/resources", permanent: true },
       { source: "/about-us", destination: "/about", permanent: true },
       { source: "/contact-us", destination: "/contact", permanent: true },
@@ -144,6 +143,8 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "plus.unsplash.com" },
+      { protocol: "https", hostname: "squareonepaving.com" },
+      { protocol: "https", hostname: "www.squareonepaving.com" },
     ],
   },
 };

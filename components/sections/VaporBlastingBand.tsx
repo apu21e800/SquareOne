@@ -42,7 +42,7 @@ export default function VaporBlastingBand() {
 
           <div className="relative aspect-[4/5] overflow-hidden bg-[#242A32]">
             <Image
-              src="/images/services/vapor-blasting/hero.jpg"
+              src="/images/products/durashield/durashield-parking-lot-sealcoat-01.jpg"
               alt="Mobile vapor blasting by Square One Paving"
               fill
               className="object-cover"

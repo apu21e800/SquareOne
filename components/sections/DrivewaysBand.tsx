@@ -8,7 +8,7 @@ export default function DrivewaysBand() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
           <div className="relative aspect-[4/5] overflow-hidden bg-[#EDE9E3]">
             <Image
-              src="/images/products/streetbond/streetbond-1.jpg"
+              src="/images/applications/private-driveways/estate-herringbone-gated-driveway-01.jpg"
               alt="Decorative driveway installed by Square One Paving"
               fill
               className="object-cover"
