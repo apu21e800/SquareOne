@@ -1,74 +1,120 @@
-import { services } from "@/lib/services"
 import Image from "next/image"
 import Link from "next/link"
 
-const serviceImages: Record<string, string> = {
-  "stamped-asphalt": "/images/products/streetprint/streetprint-1.jpg",
-  "decorative-coatings": "/images/products/streetbond/streetbond-1.jpg",
-  "preformed-thermoplastic": "/images/products/traffic-patterns/trafficpatterns-1.jpg",
-  "vapor-blasting": "/images/products/streetbond/streetbond-1.jpg",
+type Service = {
+  slug: string
+  name: string
+  eyebrow: string
+  desc: string
+  image: string
+  dark?: boolean
 }
 
-const serviceIcons: Record<string, string> = {
-  "stamped-asphalt": "◈",
-  "decorative-coatings": "◉",
-  "preformed-thermoplastic": "◧",
-  "vapor-blasting": "◌",
-}
+const services: Service[] = [
+  {
+    slug: "stamped-asphalt",
+    name: "Stamped Asphalt",
+    eyebrow: "Pattern & Texture",
+    desc: "Custom-patterned asphalt for crosswalks, driveways, and plazas.",
+    image: "/images/services/stamped-asphalt/hero.jpg",
+  },
+  {
+    slug: "decorative-coatings",
+    name: "Decorative Coatings",
+    eyebrow: "Colour & Contrast",
+    desc: "Colour-fast coatings for bike lanes, transit corridors, and parking lots.",
+    image: "/images/services/decorative-coatings/hero.jpg",
+  },
+  {
+    slug: "preformed-thermoplastic",
+    name: "Preformed Thermoplastic",
+    eyebrow: "Precision Markings",
+    desc: "Thermoplastic crosswalks, logos, and regulatory markings.",
+    image: "/images/services/preformed-thermoplastic/hero.jpg",
+  },
+  {
+    slug: "vapor-blasting",
+    name: "Vapor Blasting",
+    eyebrow: "Signature Service",
+    desc: "Wet-abrasive surface restoration and marking removal across BC.",
+    image: "/images/services/vapor-blasting/hero.jpg",
+    dark: true,
+  },
+]
+
+const serviceLink = (slug: string) =>
+  slug === "vapor-blasting" ? "/vapor-blasting" : `/services/${slug}`
 
 export default function ServicesGrid() {
   return (
-    <section className="w-full py-24 bg-white border-b border-[#EDEAE4]">
-      <div className="max-w-6xl mx-auto px-6 sm:px-8">
-        <div className="mb-14">
-          <p className="text-[#D66620] text-xs uppercase tracking-[0.22em] font-semibold mb-3">What We Do</p>
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-            <h2 className="text-4xl sm:text-5xl font-black text-[#333333]">Our Services</h2>
-            <p className="text-[#626262] max-w-sm text-sm leading-relaxed">
-              Four core service lines. Every crew certified. Every install built to outlast the warranty.
-            </p>
-          </div>
-          <div className="mt-6 h-px bg-gradient-to-r from-[#D66620]/40 to-transparent" />
+    <section className="w-full bg-white py-20 sm:py-24">
+      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-20">
+        <div className="max-w-2xl mb-14">
+          <p className="text-[#C8601A] text-xs uppercase tracking-[0.22em] font-semibold mb-4">
+            What We Do
+          </p>
+          <h2
+            className="text-[#111111]"
+            style={{
+              fontWeight: 400,
+              lineHeight: 1.1,
+              letterSpacing: "-0.02em",
+              fontSize: "clamp(1.8rem, 3vw, 3rem)",
+            }}
+          >
+            Four services. One studio.
+          </h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {services.map((service) => {
-            const img = serviceImages[service.slug]
-            const icon = serviceIcons[service.slug] ?? "◈"
-            return (
-              <Link key={service.slug} href={`/services/${service.slug}`} className="group block bg-white rounded-xl overflow-hidden border border-[#E8E4DE] hover:border-[#D66620]/40 hover:shadow-xl transition-all">
-                {/* Image */}
-                <div className="relative h-44 overflow-hidden bg-[#F2EFE9]">
-                  {img ? (
-                    <Image
-                      src={img}
-                      alt={service.name}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 25vw"
-                    />
-                  ) : (
-                    <div className="h-full bg-gradient-to-br from-[#D66620]/20 to-[#F0A04B]/10" />
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                  <span className="absolute bottom-3 left-3 text-white text-lg">{icon}</span>
-                </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-0 sm:gap-6">
+          {services.map((service) => (
+            <Link
+              key={service.slug}
+              href={serviceLink(service.slug)}
+              className="group block"
+            >
+              <div className="relative aspect-[4/3] overflow-hidden border border-[#E2DDD8] bg-[#F6F4F0]">
+                <Image
+                  src={service.image}
+                  alt={service.name}
+                  fill
+                  className="object-cover transition-transform duration-[600ms] ease-out group-hover:scale-[1.03]"
+                  sizes="(max-width: 640px) 100vw, 45vw"
+                />
+              </div>
 
-                <div className="p-5">
-                  <h3 className="text-base font-black text-[#333333] mb-1.5 group-hover:text-[#D66620] transition-colors">
-                    {service.name}
-                  </h3>
-                  <p className="text-[#D66620] text-xs font-semibold mb-2">{service.tagline}</p>
-                  <p className="text-sm text-[#626262] line-clamp-2 leading-relaxed">
-                    {service.shortDescription}
-                  </p>
-                  <p className="text-[#D66620] text-xs font-bold uppercase tracking-widest mt-3 group-hover:tracking-[0.2em] transition-all duration-200">
-                    Learn More →
-                  </p>
-                </div>
-              </Link>
-            )
-          })}
+              <div
+                className={`border-x border-b border-[#E2DDD8] p-6 sm:p-8 ${
+                  service.dark ? "bg-[#1C2026]" : "bg-white"
+                }`}
+              >
+                <p
+                  className={`text-xs uppercase tracking-[0.18em] font-semibold mb-3 ${
+                    service.dark ? "text-[#C8601A]" : "text-[#C8601A]"
+                  }`}
+                >
+                  {service.eyebrow}
+                </p>
+                <h3
+                  className={`mb-3 ${service.dark ? "text-white" : "text-[#111111]"}`}
+                  style={{ fontWeight: 600, fontSize: "1.25rem", lineHeight: 1.3 }}
+                >
+                  {service.name}
+                </h3>
+                <p
+                  className={`text-sm leading-relaxed mb-5 ${
+                    service.dark ? "text-white/65" : "text-[#5A5A5A]"
+                  }`}
+                >
+                  {service.desc}
+                </p>
+                <span className="inline-flex items-center gap-2 text-[#C8601A] text-xs font-semibold uppercase tracking-[0.15em] group-hover:tracking-[0.2em] transition-all duration-200">
+                  Explore
+                  <span aria-hidden>→</span>
+                </span>
+              </div>
+            </Link>
+          ))}
         </div>
       </div>
     </section>
