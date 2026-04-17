@@ -181,7 +181,7 @@ export default function ApplicationsPage() {
         <div className="max-w-5xl mx-auto px-6 flex flex-wrap justify-center gap-x-10 gap-y-2">
           {[
             "Serving BC Since 2000",
-            "Authorized HUB Surface Systems Applicator",
+            "BC Decorative Pavement Studio",
             "Lower Mainland & Vancouver Island",
             "Free Consultations",
           ].map((t) => (

@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import Image from "next/image"
 import Link from "next/link"
 
 const projectTypes = [
@@ -15,7 +14,7 @@ const projectTypes = [
 ]
 
 const trustPoints = [
-  { icon: "◈", text: "Authorized HUB Surface Systems Applicator" },
+  { icon: "◈", text: "BC Decorative Pavement Studio — Since 2000" },
   { icon: "◉", text: "Free site consultations — no obligation" },
   { icon: "◧", text: "Serving BC since 2000" },
   { icon: "◌", text: "Lower Mainland & Vancouver Island" },
@@ -111,21 +110,6 @@ export default function ContactPage() {
               </div>
             </div>
 
-            {/* HUB badge */}
-            <div className="flex items-center gap-3 bg-[#F2EFE9] rounded-xl p-4 border border-[#E8E4DE]">
-              <div className="relative w-20 h-6 flex-shrink-0">
-                <Image
-                  src="/images/hub-logo-orange-grey.png"
-                  alt="HUB Surface Systems"
-                  fill
-                  className="object-contain object-left"
-                  sizes="80px"
-                />
-              </div>
-              <p className="text-xs text-[#626262] leading-snug">
-                Authorized HUB Surface Systems Applicator — Western Canada
-              </p>
-            </div>
           </div>
 
           {/* Right: Form */}

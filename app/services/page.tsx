@@ -66,7 +66,7 @@ export default function ServicesPage() {
             Decorative Pavement Services
           </h1>
           <p className="text-lg text-[#626262] max-w-2xl leading-relaxed">
-            Authorized HUB Surface Systems applicator for BC. From stamped asphalt crosswalks to mobile
+            BC&apos;s decorative pavement studio since 2000. From stamped asphalt crosswalks to mobile
             vapor blasting — we bring precision and durability to every surface we touch.
           </p>
         </div>
@@ -137,7 +137,7 @@ export default function ServicesPage() {
       {/* Trust band */}
       <div className="bg-[#D66620] py-5">
         <div className="max-w-5xl mx-auto px-6 flex flex-wrap justify-center gap-x-10 gap-y-2">
-          {["Authorized HUB Surface Systems Applicator", "Serving BC Since 2000", "Free Site Consultations", "Lower Mainland & Vancouver Island"].map((t) => (
+          {["BC Decorative Pavement Studio", "Serving BC Since 2000", "Free Site Consultations", "Lower Mainland & Vancouver Island"].map((t) => (
             <span key={t} className="text-white text-xs font-semibold uppercase tracking-wider">✓ {t}</span>
           ))}
         </div>

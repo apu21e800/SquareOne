@@ -49,7 +49,6 @@ const nextConfig: NextConfig = {
       { source: "/decorative-hardscape-solutions-grey-is-the-new-black", destination: "/blog/decorative-hardscape-grey-is-new-black", permanent: true },
       { source: "/decorative-paving-solutions", destination: "/blog/decorative-paving-solutions", permanent: true },
       { source: "/trafficpatternsxd-urban-design-solutions", destination: "/blog/trafficpatternsxd-urban-design", permanent: true },
-      { source: "/hubss-com-rainbow-crosswalk", destination: "/blog/simcoe-rainbow-crosswalk", permanent: true },
       { source: "/streetbondsr-solar-reflective-coatings", destination: "/blog/streetbondsr-solar-reflective-coatings", permanent: true },
       { source: "/new-traffic-pattern-crosswalk-upgrade-for-tsain-ko-centre-2", destination: "/blog/pictograph-crosswalk-sechelt", permanent: true },
       { source: "/strengthening-cycling-and-transit-integration-with-long-lasting-surface-solutions", destination: "/blog/cycling-transit-integration-surface-solutions", permanent: true },
@@ -127,9 +126,8 @@ const nextConfig: NextConfig = {
       // Footer/nav link variants
       { source: "/traffic-patterns", destination: "/products/traffic-patterns", permanent: true },
       // Other pages
-      { source: "/case-studies", destination: "/blog", permanent: true },
-      { source: "/projects", destination: "/blog", permanent: true },
-      { source: "/featured-projects", destination: "/blog", permanent: true },
+      { source: "/case-studies", destination: "/projects", permanent: true },
+      { source: "/featured-projects", destination: "/projects", permanent: true },
       { source: "/documentation", destination: "/resources", permanent: true },
       { source: "/about-us", destination: "/about", permanent: true },
       { source: "/contact-us", destination: "/contact", permanent: true },
@@ -145,6 +143,8 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "plus.unsplash.com" },
+      { protocol: "https", hostname: "squareonepaving.com" },
+      { protocol: "https", hostname: "www.squareonepaving.com" },
     ],
   },
 };
