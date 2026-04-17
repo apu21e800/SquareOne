@@ -2,151 +2,155 @@
 @plugin "@tailwindcss/typography";
 
 :root {
-  /* ─── Square One Brand Colors (updated March 2026) ──── */
-  --color-bg: #F4F4F2;
-  --color-bg-warm: #F2EFE9;
-  --color-white: #FFFFFF;
-  --color-orange: #D66620;
-  --color-orange-hover: #C05A18;
-  --color-orange-light: #F0A04B;
-  --color-stone: #626262;
-  --color-charcoal: #333333;
-  --color-dark: #32373C;
+  /* ─── Square One Studio Palette — Architectural ─────── */
+  --color-orange: #C8601A;
+  --color-orange-hover: #A84F15;
+  --color-orange-muted: rgba(200, 96, 26, 0.07);
 
-  /* ─── Backgrounds ───────────────────────────────────── */
-  --bg-primary: #F4F4F2;
-  --bg-warm: #F2EFE9;
-  --bg-white: #FFFFFF;
-  --bg-dark: #32373C;
-  --bg-card: #FFFFFF;
-  --bg-card-hover: #F2EFE9;
+  --bg-primary: #FFFFFF;
+  --bg-warm: #F6F4F0;
+  --bg-stone: #EDE9E3;
+  --bg-dark: #1C2026;
+  --bg-dark-surface: #242A32;
 
-  /* ─── Text ──────────────────────────────────────────── */
-  --text-primary: #333333;
-  --text-body: #333333;
-  --text-secondary: #626262;
-  --text-muted: #626262;
-  --text-light: #FFFFFF;
+  --text-primary: #111111;
+  --text-body: #2C2C2C;
+  --text-secondary: #5A5A5A;
+  --text-muted: #8C8C8C;
 
-  /* ─── Borders ───────────────────────────────────────── */
-  --border-color: rgba(99, 98, 98, 0.15);
-  --border-subtle: rgba(99, 98, 98, 0.08);
-}
+  --border-color: #E2DDD8;
+  --border-subtle: #EDEBE7;
 
-body {
-  background-color: var(--color-bg);
-  color: var(--color-charcoal);
-  font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 16px;
-  line-height: 1.7;
-  overflow-x: hidden;
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
+  --shadow-card-hover: 0 4px 16px rgba(0,0,0,0.10), 0 1px 3px rgba(0,0,0,0.06);
 }
 
 html {
   scroll-behavior: smooth;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 700;
-  line-height: 1.2;
-  color: var(--color-charcoal);
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-body);
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Display scale — architectural hierarchy ─────────── */
+h1 {
+  font-size: clamp(2.8rem, 5.5vw, 5.5rem);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  font-family: var(--font-inter), sans-serif;
+  color: var(--text-primary);
+}
+
+h2 {
+  font-size: clamp(1.8rem, 3vw, 3rem);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  font-family: var(--font-inter), sans-serif;
+}
+
+h3 {
+  font-size: clamp(1rem, 1.5vw, 1.3rem);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  font-family: var(--font-inter), sans-serif;
+}
+
+h4, h5, h6 {
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.005em;
+  color: var(--text-primary);
 }
 
 p {
-  line-height: 1.75;
+  line-height: 1.7;
+  color: var(--text-body);
+}
+
+/* ─── Display serif — used in stat numerals & selective pull quotes */
+.font-display {
+  font-family: var(--font-display), Georgia, serif;
+}
+
+/* ─── Eyebrows — tracked caps ─────────────────────────── */
+.eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-orange);
+}
+
+.eyebrow-muted {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* ─── Rule — 3px orange accent bar ────────────────────── */
+.rule-orange {
+  display: block;
+  width: 3rem;
+  height: 3px;
+  background: var(--color-orange);
 }
 
 /* ─── Section padding utility ─────────────────────────── */
 .section-padding {
-  padding-top: 80px;
-  padding-bottom: 80px;
+  padding-top: 96px;
+  padding-bottom: 96px;
 }
 
 @media (max-width: 768px) {
   .section-padding {
-    padding-top: 48px;
-    padding-bottom: 48px;
+    padding-top: 64px;
+    padding-bottom: 64px;
   }
 }
 
-/* ─── Gradient text utility ─────────────────────────────*/
-.grad-text-orange {
-  background: linear-gradient(90deg, #D66620, #F0A04B);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* ─── Button styles ─────────────────────────────────── */
-.btn-primary {
-  background-color: var(--color-orange);
-  color: white;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: all 0.2s ease;
-}
-
-.btn-primary:hover {
-  background-color: var(--color-orange-hover);
-}
-
-.btn-secondary {
-  border: 2px solid var(--color-orange);
-  color: var(--color-orange);
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: all 0.2s ease;
-  background: transparent;
-}
-
-.btn-secondary:hover {
-  background-color: rgba(214, 102, 32, 0.08);
-}
-
 /* ─── Card styles ─────────────────────────────────────── */
-.card-light {
-  background-color: var(--bg-white);
-  border-radius: 12px;
-  padding: 24px;
-  border: 1px solid var(--border-subtle);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+.card-architectural {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 0;
+  transition: box-shadow 200ms ease, border-color 200ms ease;
 }
 
-.card-light:hover {
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+.card-architectural:hover {
+  box-shadow: var(--shadow-card-hover);
+  border-color: var(--text-primary);
 }
 
-/* ─── Text accent ─────────────────────────────────────── */
-.text-accent {
-  color: var(--color-orange);
-  font-weight: 600;
-}
-
-/* ─── Grid pattern for subtle texture ─────────────────── */
-.grid-pattern {
-  background-image:
-    linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
-  background-size: 48px 48px;
-}
-
-/* ─── Dark section styles ─────────────────────────────── */
+/* ─── Dark section ────────────────────────────────────── */
 .section-dark {
   background-color: var(--bg-dark);
-  color: var(--text-light);
+  color: #FFFFFF;
 }
 
 .section-dark h1,
 .section-dark h2,
 .section-dark h3,
 .section-dark h4 {
-  color: var(--text-light);
+  color: #FFFFFF;
 }
 
 .section-dark p {
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(255, 255, 255, 0.72);
 }
 
 /* ─── Scrollbar hide utility ─────────────────────────── */
