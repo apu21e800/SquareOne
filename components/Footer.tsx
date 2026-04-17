@@ -45,7 +45,7 @@ export default function Footer() {
             </p>
             <div className="flex items-center gap-2 text-xs text-white/40 border border-white/10 rounded-md px-3 py-2 w-fit">
               <span className="text-[#D66620]">✓</span>
-              <span>Authorized HUB Surface Systems Applicator</span>
+              <span>BC Decorative Pavement Studio — Since 2000</span>
             </div>
           </div>
 

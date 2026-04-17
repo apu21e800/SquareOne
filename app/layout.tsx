@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     "thermoplastic markings BC",
     "vapor blasting Lower Mainland",
     "pavement applicator BC",
-    "HUB Surface Systems applicator",
+    "decorative pavement installer BC",
     "crosswalk installation BC",
     "bike lane coatings Vancouver",
     "surface preparation BC",

@@ -5,7 +5,7 @@ import { Metadata } from "next"
 export const metadata: Metadata = {
   title: "About Square One Paving | BC's Decorative Pavement Specialists",
   description:
-    "BC's trusted decorative pavement applicator since 2000. Authorized HUB Surface Systems partner serving the Lower Mainland and Vancouver Island.",
+    "BC's trusted decorative pavement studio since 2000. Serving the Lower Mainland and Vancouver Island.",
 }
 
 const differentiators = [
@@ -15,8 +15,8 @@ const differentiators = [
     icon: "◈",
   },
   {
-    title: "Authorized HUB Applicator",
-    desc: "Square One is an authorized HUB Surface Systems applicator, backed by manufacturer warranties and certified installation training.",
+    title: "Certified Installation Training",
+    desc: "Every crew member is trained and certified on the decorative pavement systems we install — backed by manufacturer warranties and 25 years of field experience.",
     icon: "◉",
   },
   {
@@ -43,7 +43,7 @@ const differentiators = [
 
 const timeline = [
   { year: "2000", event: "Square One Paving founded in BC" },
-  { year: "2005", event: "Became authorized HUB Surface Systems applicator" },
+  { year: "2005", event: "Added professional decorative pavement systems to portfolio" },
   { year: "2012", event: "Expanded to Vancouver Island operations" },
   { year: "2018", event: "Added mobile vapor blasting service" },
   { year: "2024", event: "100+ municipal and commercial projects completed" },
@@ -84,9 +84,9 @@ export default function AboutPage() {
                   climate.
                 </p>
                 <p>
-                  We partnered with HUB Surface Systems to bring their proven
-                  product portfolio to Western Canada — stamped asphalt,
-                  decorative coatings, preformed thermoplastic, and more. Each
+                  Over 25 years we&apos;ve built a portfolio of professional
+                  decorative pavement systems — stamped asphalt, decorative
+                  coatings, preformed thermoplastic, and vapor blasting. Each
                   system is engineered for Canadian conditions and backed by
                   manufacturer warranties.
                 </p>
@@ -211,33 +211,6 @@ export default function AboutPage() {
               </Link>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* HUB partnership */}
-      <section className="py-16 px-6 sm:px-8 bg-[#F2EFE9] border-t border-[#E8E4DE]">
-        <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-8 text-center md:text-left">
-          <div className="relative w-36 h-10 flex-shrink-0">
-            <Image
-              src="/images/hub-logo-orange-grey.png"
-              alt="HUB Surface Systems"
-              fill
-              className="object-contain"
-              sizes="144px"
-            />
-          </div>
-          <div>
-            <p className="text-[#333333] font-black text-lg mb-1">Authorized HUB Surface Systems Applicator — Western Canada</p>
-            <p className="text-[#626262] text-sm leading-relaxed">
-              Square One is certified to install the complete HUB product portfolio — the same systems
-              specified by 500+ Canadian municipalities for over 30 years.
-            </p>
-          </div>
-          <a href="https://hubss.com" target="_blank" rel="noopener noreferrer" className="flex-shrink-0">
-            <span className="text-[#D66620] text-sm font-bold hover:text-[#C05A18] transition-colors whitespace-nowrap">
-              About HUB →
-            </span>
-          </a>
         </div>
       </section>
 

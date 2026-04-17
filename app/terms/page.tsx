@@ -25,7 +25,7 @@ const sections = [
     heading: "3. Intellectual Property",
     body: `All content on this Site — including text, images, service descriptions, logos, graphics, and design — is the property of Square One Paving or its licensors and is protected by Canadian and international copyright law.
 
-Product names including TrafficPatterns, StreetPrint, StreetBond, DecoMark, DuraTherm, and other HUB Surface Systems products may be trademarks of their respective owners. Nothing on this Site grants any license or right to use any trademark without prior written permission.`,
+Product names including TrafficPatterns, StreetPrint, StreetBond, DecoMark, DuraTherm, and other referenced product systems may be trademarks of their respective owners. Nothing on this Site grants any license or right to use any trademark without prior written permission.`,
   },
   {
     heading: "4. Service Information",

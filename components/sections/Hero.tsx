@@ -66,7 +66,7 @@ export default function Hero() {
         <div className="inline-flex items-center gap-2.5 mb-8 w-fit">
           <div className="w-1.5 h-1.5 rounded-full bg-[#C85A3A]" />
           <span className="text-[#C85A3A] text-xs font-bold uppercase tracking-[0.2em]">
-            Authorized HUB Surface Systems Applicator — BC, Lower Mainland & Vancouver Island
+            BC Decorative Pavement Studio — Lower Mainland & Vancouver Island
           </span>
         </div>
 

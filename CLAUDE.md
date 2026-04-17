@@ -1,8 +1,8 @@
 # Square One Paving — Project Intelligence File
 
 ## Client
-Square One Paving — BC's trusted decorative pavement applicator since 2000.
-Authorized HUB Surface Systems applicator serving Western Canada.
+Square One Paving — BC's trusted decorative pavement studio since 2000.
+Independent BC pavement specialists serving the Lower Mainland and Vancouver Island.
 - Office: Ladysmith, BC (info@squareonepaving.ca / 604-309-8212)
 
 ## What They Do

@@ -179,8 +179,8 @@ export default function DriveywaysPage() {
               },
               {
                 icon: "◌",
-                title: "Manufacturer-Certified",
-                desc: "We're an authorized HUB Surface Systems applicator — the only way to access StreetPrint, StreetBond, and DuraShield for residential and commercial installations.",
+                title: "Certified Material Systems",
+                desc: "We install StreetPrint, StreetBond, and DuraShield under manufacturer-certified training — the same systems specified by 500+ Canadian municipalities.",
               },
             ].map((item) => (
               <div key={item.title} className="flex gap-5">

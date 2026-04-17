@@ -4,9 +4,9 @@ import { products } from "@/lib/products"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "HUB Surface Systems Products | Square One Paving BC",
+  title: "Material Systems | Square One Paving BC",
   description:
-    "Square One Paving installs the complete HUB Surface Systems product portfolio — StreetPrint, StreetBond, MMAX, TrafficPatterns, and more across BC.",
+    "Decorative pavement systems Square One installs across BC — StreetPrint, StreetBond, MMAX, TrafficPatterns, and more.",
 }
 
 const categories = ["All", "Stamped Asphalt", "Decorative Coatings", "Thermoplastic", "Surface Protection"]
@@ -26,30 +26,15 @@ export default function ProductsPage() {
       <section className="bg-white border-b border-[#E8E4DE] pt-28 pb-14 px-6 sm:px-8">
         <div className="max-w-6xl mx-auto">
           <p className="text-[#D66620] text-xs uppercase tracking-[0.22em] font-semibold mb-3">
-            HUB Surface Systems — Authorized Applicator
+            Material Systems — BC Applications
           </p>
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-5">
-            <div>
-              <h1 className="text-5xl sm:text-6xl font-black text-[#333333] mb-4 leading-tight">
-                Our Products
-              </h1>
-              <p className="text-lg text-[#626262] max-w-xl">
-                We install the complete HUB Surface Systems product portfolio — the same systems
-                specified by 500+ Canadian municipalities for 30+ years.
-              </p>
-            </div>
-            <div className="flex items-center gap-4 flex-shrink-0">
-              <div className="relative w-28 h-8">
-                <Image
-                  src="/images/hub-logo-orange-grey.png"
-                  alt="HUB Surface Systems"
-                  fill
-                  className="object-contain object-right"
-                  sizes="112px"
-                />
-              </div>
-            </div>
-          </div>
+          <h1 className="text-5xl sm:text-6xl font-black text-[#333333] mb-4 leading-tight">
+            Our Products
+          </h1>
+          <p className="text-lg text-[#626262] max-w-xl">
+            Professional decorative pavement systems we install across British Columbia —
+            engineered for Canadian conditions and backed by proven field performance.
+          </p>
         </div>
       </section>
 

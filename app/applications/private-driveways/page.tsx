@@ -182,7 +182,7 @@ export default function PrivateDrivewaysPage() {
       {/* Trust strip */}
       <div className="bg-[#D66620] py-5">
         <div className="max-w-5xl mx-auto px-6 flex flex-wrap justify-center gap-x-10 gap-y-2">
-          {["Trusted by BC Homeowners Since 2000", "Authorized HUB Surface Systems Applicator", "Lower Mainland & Vancouver Island", "Free Consultations"].map((t) => (
+          {["Trusted by BC Homeowners Since 2000", "Certified Decorative Pavement Installers", "Lower Mainland & Vancouver Island", "Free Consultations"].map((t) => (
             <span key={t} className="text-white text-xs font-semibold uppercase tracking-wider">✓ {t}</span>
           ))}
         </div>
