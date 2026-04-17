@@ -1,75 +1,95 @@
-import { services } from "@/lib/services"
 import Image from "next/image"
 import Link from "next/link"
 
-const serviceImages: Record<string, string> = {
-  "stamped-asphalt": "/images/products/streetprint/streetprint-1.jpg",
-  "decorative-coatings": "/images/products/streetbond/streetbond-1.jpg",
-  "preformed-thermoplastic": "/images/products/traffic-patterns/trafficpatterns-1.jpg",
-  "vapor-blasting": "/images/products/streetbond/streetbond-1.jpg",
-}
-
-const serviceIcons: Record<string, string> = {
-  "stamped-asphalt": "◈",
-  "decorative-coatings": "◉",
-  "preformed-thermoplastic": "◧",
-  "vapor-blasting": "◌",
-}
+const services = [
+  {
+    slug: "stamped-asphalt",
+    eyebrow: "01 · Service",
+    name: "Stamped Asphalt",
+    desc: "StreetPrint patterns that transform asphalt into architectural pavement.",
+    image: "/images/products/streetprint/streetprint-1.jpg",
+    dark: false,
+  },
+  {
+    slug: "decorative-coatings",
+    eyebrow: "02 · Service",
+    name: "Decorative Coatings",
+    desc: "Colour systems engineered for BC's freeze-thaw climate.",
+    image: "/images/products/streetbond/streetbond-1.jpg",
+    dark: false,
+  },
+  {
+    slug: "preformed-thermoplastic",
+    eyebrow: "03 · Service",
+    name: "Thermoplastic Markings",
+    desc: "Precision markings for municipalities and developers.",
+    image: "/images/products/trafficpatterns/trafficpatterns-1.jpg",
+    dark: false,
+  },
+  {
+    slug: "vapor-blasting",
+    eyebrow: "04 · Signature",
+    name: "Vapor Blasting",
+    desc: "BC's most advanced surface preparation.",
+    image: "/images/applications/commercial-spaces/granville-island-installation-crew-01.jpg",
+    dark: true,
+  },
+]
 
 export default function ServicesGrid() {
   return (
-    <section className="w-full py-24 bg-white border-b border-[#EDEAE4]">
-      <div className="max-w-6xl mx-auto px-6 sm:px-8">
-        <div className="mb-14">
-          <p className="text-[#D66620] text-xs uppercase tracking-[0.22em] font-semibold mb-3">What We Do</p>
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-            <h2 className="text-4xl sm:text-5xl font-black text-[#333333]">Our Services</h2>
-            <p className="text-[#626262] max-w-sm text-sm leading-relaxed">
-              Four core service lines. Every crew certified. Every install built to outlast the warranty.
-            </p>
-          </div>
-          <div className="mt-6 h-px bg-gradient-to-r from-[#D66620]/40 to-transparent" />
+    <section className="bg-white py-24 lg:py-32">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+
+        {/* Header */}
+        <div className="mb-14 lg:mb-20 max-w-2xl">
+          <p className="text-[11px] tracking-[0.2em] uppercase text-[#C8601A] font-medium mb-6">
+            What We Do
+          </p>
+          <h2 className="text-[#111111]">
+            Four services.<br />
+            One studio.
+          </h2>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {services.map((service) => {
-            const img = serviceImages[service.slug]
-            const icon = serviceIcons[service.slug] ?? "◈"
+        {/* 2×2 grid */}
+        <div className="grid md:grid-cols-2 gap-px bg-[#E2DDD8]">
+          {services.map((s) => {
+            const href = s.slug === "vapor-blasting" ? "/vapor-blasting" : `/services/${s.slug}`
             return (
-              <Link key={service.slug} href={`/services/${service.slug}`} className="group block bg-white rounded-xl overflow-hidden border border-[#E8E4DE] hover:border-[#D66620]/40 hover:shadow-xl transition-all">
-                {/* Image */}
-                <div className="relative h-44 overflow-hidden bg-[#F2EFE9]">
-                  {img ? (
-                    <Image
-                      src={img}
-                      alt={service.name}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 25vw"
-                    />
-                  ) : (
-                    <div className="h-full bg-gradient-to-br from-[#D66620]/20 to-[#F0A04B]/10" />
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                  <span className="absolute bottom-3 left-3 text-white text-lg">{icon}</span>
+              <Link
+                key={s.slug}
+                href={href}
+                className={`group relative block ${s.dark ? "bg-[#1C2026]" : "bg-white"}`}
+              >
+                <div className="relative aspect-[4/3] overflow-hidden bg-[#EDE9E3]">
+                  <Image
+                    src={s.image}
+                    alt={s.name}
+                    fill
+                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
                 </div>
-
-                <div className="p-5">
-                  <h3 className="text-base font-black text-[#333333] mb-1.5 group-hover:text-[#D66620] transition-colors">
-                    {service.name}
+                <div className={`p-8 lg:p-10 ${s.dark ? "text-white" : "text-[#111111]"}`}>
+                  <p className={`text-[10px] tracking-[0.2em] uppercase font-medium mb-4 ${s.dark ? "text-[#C8601A]" : "text-[#C8601A]"}`}>
+                    {s.eyebrow}
+                  </p>
+                  <h3 className={`text-2xl lg:text-3xl font-light tracking-[-0.02em] mb-3 ${s.dark ? "text-white" : "text-[#111111]"}`}>
+                    {s.name}
                   </h3>
-                  <p className="text-[#D66620] text-xs font-semibold mb-2">{service.tagline}</p>
-                  <p className="text-sm text-[#626262] line-clamp-2 leading-relaxed">
-                    {service.shortDescription}
+                  <p className={`text-[15px] leading-relaxed max-w-sm ${s.dark ? "text-white/70" : "text-[#5A5A5A]"}`}>
+                    {s.desc}
                   </p>
-                  <p className="text-[#D66620] text-xs font-bold uppercase tracking-widest mt-3 group-hover:tracking-[0.2em] transition-all duration-200">
-                    Learn More →
-                  </p>
+                  <span className={`inline-flex items-center gap-2 mt-6 text-[11px] tracking-[0.15em] uppercase font-semibold ${s.dark ? "text-[#C8601A]" : "text-[#C8601A]"} group-hover:gap-3 transition-all`}>
+                    Explore →
+                  </span>
                 </div>
               </Link>
             )
           })}
         </div>
+
       </div>
     </section>
   )

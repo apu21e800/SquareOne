@@ -1,113 +1,69 @@
 import Image from "next/image"
 import Link from "next/link"
-import { getFeaturedProjects } from "@/lib/projects"
+import { projects, getFeaturedProjects } from "@/lib/projects"
 
-/* Fallback images by service — always something relevant */
-const serviceImageMap: Record<string, string> = {
-  "Stamped Asphalt":          "/images/products/streetprint/streetprint-1.jpg",
-  "Decorative Coatings":      "/images/products/streetbond/streetbond-1.jpg",
-  "Preformed Thermoplastic":  "/images/products/traffic-patterns/trafficpatterns-1.jpg",
-  "Vapor Blasting":           "/images/products/streetprint/streetprint-1.jpg",
-}
-
-const GLOBAL_FALLBACK = "/images/products/streetprint/streetprint-1.jpg"
+const FALLBACK = "/images/applications/private-driveways/estate-herringbone-gated-driveway-01.jpg"
 
 export default function ProjectsPreview() {
-  const featuredProjects = getFeaturedProjects().slice(0, 3)
+  const featured = getFeaturedProjects()
+  const pool = featured.length >= 3 ? featured : projects.slice(0, 6)
+  const [hero, a, b] = pool.slice(0, 3)
+
+  if (!hero) return null
+
+  const card = (p: typeof hero, aspectClass: string) => (
+    <Link
+      key={p.slug}
+      href={`/projects/${p.slug}`}
+      className={`group relative block overflow-hidden bg-[#EDE9E3] ${aspectClass}`}
+    >
+      <Image
+        src={p.imageUrl || FALLBACK}
+        alt={p.title}
+        fill
+        className="object-cover transition-transform duration-[800ms] ease-out group-hover:scale-[1.04]"
+        sizes="(max-width: 768px) 100vw, 33vw"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 p-6 lg:p-7">
+        <p className="text-white font-semibold text-[15px] lg:text-[17px] tracking-[-0.01em] leading-snug">
+          {p.title}
+        </p>
+        <p className="text-white/60 text-[11px] tracking-[0.15em] uppercase mt-1.5">
+          {p.city}
+        </p>
+      </div>
+    </Link>
+  )
 
   return (
-    <section className="w-full py-20 bg-[#F9F6F2]">
-      <div className="max-w-6xl mx-auto px-6 sm:px-8">
+    <section className="bg-[#F6F4F0] py-24 lg:py-32">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10">
 
-        {/* Header */}
-        <div className="mb-12">
-          <p className="text-[#D66620] text-xs uppercase tracking-[0.2em] font-semibold mb-3">
-            Recent Work
+        <div className="mb-14 lg:mb-20 max-w-2xl">
+          <p className="text-[11px] tracking-[0.2em] uppercase text-[#C8601A] font-medium mb-6">
+            Selected Work
           </p>
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-            <h2 className="text-4xl sm:text-5xl font-black text-[#1C2226] leading-tight">
-              Featured Projects
-            </h2>
-            <Link href="/projects">
-              <span className="text-[#D66620] font-semibold text-sm hover:text-[#C05A18] transition-colors">
-                View All Projects →
-              </span>
-            </Link>
+          <h2 className="text-[#111111]">Projects that speak.</h2>
+        </div>
+
+        {/* Asymmetric grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+          <div className="md:row-span-2">
+            {card(hero, "aspect-[3/4] h-full")}
           </div>
-          <div className="mt-6 h-px bg-gradient-to-r from-[#D66620]/40 to-transparent" />
+          {a && <div>{card(a, "aspect-[4/3]")}</div>}
+          {b && <div>{card(b, "aspect-[4/3]")}</div>}
         </div>
 
-        {/* Project grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {featuredProjects.map((project) => {
-            const imgSrc = project.imageUrl ?? serviceImageMap[project.service] ?? GLOBAL_FALLBACK
-            return (
-              <Link key={project.slug} href={`/projects/${project.slug}`} className="group block">
-                <div className="bg-white rounded-2xl overflow-hidden border border-[#E8E4DE] hover:border-[#D66620]/40 hover:shadow-xl transition-all duration-200">
-
-                  {/* Image */}
-                  <div className="relative h-60 overflow-hidden" style={{
-                    background: "linear-gradient(135deg, #E8E4DE 0%, #D5D0C8 100%)",
-                  }}>
-                    {/* Subtle placeholder pattern behind image */}
-                    <div className="absolute inset-0 opacity-30" style={{
-                      backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,0.03) 10px, rgba(0,0,0,0.03) 20px)",
-                    }} />
-                    <Image
-                      src={imgSrc}
-                      alt={project.title}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
-
-                    {/* Service tag */}
-                    <div className="absolute top-3 left-3">
-                      <span className="bg-[#D66620] text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide">
-                        {project.service}
-                      </span>
-                    </div>
-
-                    {project.year && (
-                      <div className="absolute top-3 right-3">
-                        <span className="bg-black/50 text-white/85 text-[10px] font-semibold px-2 py-1 rounded">
-                          {project.year}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-5">
-                    <div className="flex items-center gap-2 mb-2.5">
-                      <span className="text-xs font-medium text-[#A0A0A0]">{project.application}</span>
-                      <span className="text-[#D0CCC5]">·</span>
-                      <span className="text-xs font-medium text-[#A0A0A0]">{project.city}</span>
-                    </div>
-                    <h3 className="text-base font-black text-[#1C2226] mb-3 group-hover:text-[#D66620] transition-colors leading-snug">
-                      {project.title}
-                    </h3>
-                    <div className="flex items-center gap-1.5 text-[#D66620] text-xs font-bold uppercase tracking-widest">
-                      <span className="group-hover:mr-1 transition-all duration-200">View Project</span>
-                      <span className="group-hover:translate-x-1 transition-transform duration-200">→</span>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            )
-          })}
-        </div>
-
-        {/* Bottom CTA */}
-        <div className="mt-10 text-center">
-          <Link href="/projects">
-            <span className="inline-block border border-[#D66620]/30 hover:border-[#D66620] text-[#D66620] hover:bg-[#D66620] hover:text-white px-8 py-3 rounded-lg font-bold text-sm transition-all duration-200">
-              See All Projects
-            </span>
+        <div className="mt-14 text-center">
+          <Link
+            href="/projects"
+            className="inline-block text-[#C8601A] hover:text-[#A84F15] text-sm font-semibold tracking-[0.1em] uppercase underline underline-offset-8 decoration-1"
+          >
+            View All Projects →
           </Link>
         </div>
-
       </div>
     </section>
   )
