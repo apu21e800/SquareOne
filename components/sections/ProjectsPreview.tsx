@@ -1,113 +1,103 @@
 import Image from "next/image"
 import Link from "next/link"
-import { getFeaturedProjects } from "@/lib/projects"
+import { getFeaturedProjects, projects } from "@/lib/projects"
 
-/* Fallback images by service — always something relevant */
-const serviceImageMap: Record<string, string> = {
-  "Stamped Asphalt":          "/images/products/streetprint/streetprint-1.jpg",
-  "Decorative Coatings":      "/images/products/streetbond/streetbond-1.jpg",
-  "Preformed Thermoplastic":  "/images/products/traffic-patterns/trafficpatterns-1.jpg",
-  "Vapor Blasting":           "/images/products/streetprint/streetprint-1.jpg",
-}
-
-const GLOBAL_FALLBACK = "/images/products/streetprint/streetprint-1.jpg"
+const FALLBACK = "/images/products/streetprint/streetprint-1.jpg"
 
 export default function ProjectsPreview() {
-  const featuredProjects = getFeaturedProjects().slice(0, 3)
+  const featured = getFeaturedProjects()
+  const [one, two, three] =
+    featured.length >= 3
+      ? [featured[0], featured[1], featured[2]]
+      : [projects[0], projects[1], projects[2]]
 
   return (
-    <section className="w-full py-20 bg-[#F9F6F2]">
-      <div className="max-w-6xl mx-auto px-6 sm:px-8">
-
-        {/* Header */}
-        <div className="mb-12">
-          <p className="text-[#D66620] text-xs uppercase tracking-[0.2em] font-semibold mb-3">
-            Recent Work
-          </p>
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-            <h2 className="text-4xl sm:text-5xl font-black text-[#1C2226] leading-tight">
-              Featured Projects
+    <section className="w-full bg-[#F6F4F0] py-20 sm:py-24">
+      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-20">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14">
+          <div className="max-w-2xl">
+            <p className="text-[#C8601A] text-xs uppercase tracking-[0.22em] font-semibold mb-4">
+              Selected Work
+            </p>
+            <h2
+              className="text-[#111111]"
+              style={{
+                fontWeight: 400,
+                lineHeight: 1.1,
+                letterSpacing: "-0.02em",
+                fontSize: "clamp(1.8rem, 3vw, 3rem)",
+              }}
+            >
+              A record of installed surfaces.
             </h2>
-            <Link href="/projects">
-              <span className="text-[#D66620] font-semibold text-sm hover:text-[#C05A18] transition-colors">
-                View All Projects →
-              </span>
-            </Link>
           </div>
-          <div className="mt-6 h-px bg-gradient-to-r from-[#D66620]/40 to-transparent" />
-        </div>
-
-        {/* Project grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {featuredProjects.map((project) => {
-            const imgSrc = project.imageUrl ?? serviceImageMap[project.service] ?? GLOBAL_FALLBACK
-            return (
-              <Link key={project.slug} href={`/projects/${project.slug}`} className="group block">
-                <div className="bg-white rounded-2xl overflow-hidden border border-[#E8E4DE] hover:border-[#D66620]/40 hover:shadow-xl transition-all duration-200">
-
-                  {/* Image */}
-                  <div className="relative h-60 overflow-hidden" style={{
-                    background: "linear-gradient(135deg, #E8E4DE 0%, #D5D0C8 100%)",
-                  }}>
-                    {/* Subtle placeholder pattern behind image */}
-                    <div className="absolute inset-0 opacity-30" style={{
-                      backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,0.03) 10px, rgba(0,0,0,0.03) 20px)",
-                    }} />
-                    <Image
-                      src={imgSrc}
-                      alt={project.title}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
-
-                    {/* Service tag */}
-                    <div className="absolute top-3 left-3">
-                      <span className="bg-[#D66620] text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide">
-                        {project.service}
-                      </span>
-                    </div>
-
-                    {project.year && (
-                      <div className="absolute top-3 right-3">
-                        <span className="bg-black/50 text-white/85 text-[10px] font-semibold px-2 py-1 rounded">
-                          {project.year}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-5">
-                    <div className="flex items-center gap-2 mb-2.5">
-                      <span className="text-xs font-medium text-[#A0A0A0]">{project.application}</span>
-                      <span className="text-[#D0CCC5]">·</span>
-                      <span className="text-xs font-medium text-[#A0A0A0]">{project.city}</span>
-                    </div>
-                    <h3 className="text-base font-black text-[#1C2226] mb-3 group-hover:text-[#D66620] transition-colors leading-snug">
-                      {project.title}
-                    </h3>
-                    <div className="flex items-center gap-1.5 text-[#D66620] text-xs font-bold uppercase tracking-widest">
-                      <span className="group-hover:mr-1 transition-all duration-200">View Project</span>
-                      <span className="group-hover:translate-x-1 transition-transform duration-200">→</span>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            )
-          })}
-        </div>
-
-        {/* Bottom CTA */}
-        <div className="mt-10 text-center">
-          <Link href="/projects">
-            <span className="inline-block border border-[#D66620]/30 hover:border-[#D66620] text-[#D66620] hover:bg-[#D66620] hover:text-white px-8 py-3 rounded-lg font-bold text-sm transition-all duration-200">
-              See All Projects
-            </span>
+          <Link
+            href="/projects"
+            className="text-[#1C2026] hover:text-[#C8601A] text-xs font-semibold uppercase tracking-[0.18em] transition-colors inline-flex items-center gap-2"
+          >
+            View All Projects
+            <span aria-hidden>→</span>
           </Link>
         </div>
 
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <Link
+            href={`/projects/${one.slug}`}
+            className="group block md:row-span-1"
+          >
+            <div className="relative aspect-[3/4] overflow-hidden bg-[#EDE9E3]">
+              <Image
+                src={one.imageUrl || FALLBACK}
+                alt={one.title}
+                fill
+                className="object-cover transition-transform duration-[600ms] ease-out group-hover:scale-[1.03]"
+                sizes="(max-width: 768px) 100vw, 33vw"
+              />
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent p-6">
+                <p className="text-[#E8C9A8] text-[10px] uppercase tracking-[0.2em] font-semibold mb-2">
+                  {one.service} · {one.city}
+                </p>
+                <h3
+                  className="text-white"
+                  style={{ fontWeight: 500, fontSize: "1.35rem", lineHeight: 1.25 }}
+                >
+                  {one.title}
+                </h3>
+              </div>
+            </div>
+          </Link>
+
+          <div className="flex flex-col gap-6 md:col-span-2">
+            {[two, three].map((project) => (
+              <Link
+                key={project.slug}
+                href={`/projects/${project.slug}`}
+                className="group block"
+              >
+                <div className="relative aspect-[4/3] md:aspect-[16/9] overflow-hidden bg-[#EDE9E3]">
+                  <Image
+                    src={project.imageUrl || FALLBACK}
+                    alt={project.title}
+                    fill
+                    className="object-cover transition-transform duration-[600ms] ease-out group-hover:scale-[1.03]"
+                    sizes="(max-width: 768px) 100vw, 66vw"
+                  />
+                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent p-6">
+                    <p className="text-[#E8C9A8] text-[10px] uppercase tracking-[0.2em] font-semibold mb-2">
+                      {project.service} · {project.city}
+                    </p>
+                    <h3
+                      className="text-white"
+                      style={{ fontWeight: 500, fontSize: "1.15rem", lineHeight: 1.25 }}
+                    >
+                      {project.title}
+                    </h3>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   )
