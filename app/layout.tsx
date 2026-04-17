@@ -1,23 +1,38 @@
 import type { Metadata } from "next"
+import { Inter, Playfair_Display } from "next/font/google"
 import "./globals.css"
 import Nav from "@/components/Nav"
 import Footer from "@/components/Footer"
 
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-inter",
+  display: "swap",
+})
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-playfair",
+  display: "swap",
+})
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://squareonepaving.com"),
   title: {
-    default: "Square One Paving | Premium Residential Paving in BC",
+    default: "Square One Paving | BC's Decorative Pavement Studio",
     template: "%s | Square One Paving",
   },
   description:
-    "BC's premier residential paving and vapor blasting specialists. Driveways, patios, and surfaces transformed by certified professionals in Victoria and Vancouver Island.",
+    "BC's decorative pavement studio since 2000. Stamped asphalt, decorative coatings, preformed thermoplastics, and vapor blasting across the Lower Mainland and Vancouver Island.",
   keywords: [
     "decorative pavement BC",
     "stamped asphalt Vancouver",
     "decorative coatings Victoria",
     "thermoplastic markings BC",
     "vapor blasting Lower Mainland",
-    "pavement applicator BC",
     "decorative pavement installer BC",
     "crosswalk installation BC",
     "bike lane coatings Vancouver",
@@ -28,9 +43,9 @@ export const metadata: Metadata = {
     locale: "en_CA",
     url: "https://squareonepaving.com",
     siteName: "Square One Paving",
-    title: "Square One Paving | Premium Residential Paving in BC",
+    title: "Square One Paving | BC's Decorative Pavement Studio",
     description:
-      "BC's premier residential paving and vapor blasting specialists. Driveways, patios, and surfaces transformed by certified professionals in Victoria and Vancouver Island.",
+      "BC's decorative pavement studio since 2000. Stamped asphalt, decorative coatings, preformed thermoplastics, and vapor blasting across the Lower Mainland and Vancouver Island.",
     images: [
       {
         url: "/images/og-image.jpg",
@@ -42,9 +57,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Square One Paving | Premium Residential Paving in BC",
+    title: "Square One Paving | BC's Decorative Pavement Studio",
     description:
-      "BC's premier residential paving and vapor blasting specialists. Driveways, patios, and surfaces transformed by certified professionals in Victoria and Vancouver Island.",
+      "BC's decorative pavement studio since 2000. Stamped asphalt, decorative coatings, preformed thermoplastics, and vapor blasting across the Lower Mainland and Vancouver Island.",
   },
   alternates: {
     canonical: "https://squareonepaving.com",
@@ -61,7 +76,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
       <body className="antialiased">
         <Nav />
         {children}
