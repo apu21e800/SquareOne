@@ -39,7 +39,7 @@ const drawerServiceLinks = [
   { name: "Stamped Asphalt",         href: "/services/stamped-asphalt" },
   { name: "Decorative Coatings",     href: "/services/decorative-coatings" },
   { name: "Preformed Thermoplastic", href: "/services/preformed-thermoplastic" },
-  { name: "Vapor Blasting",          href: "/services/vapor-blasting" },
+  { name: "Vapor Blasting",          href: "/vapor-blasting" },
 ]
 
 
@@ -115,14 +115,14 @@ export default function Nav() {
       `}</style>
 
       {/* ── Nav bar ── */}
-      <nav ref={navRef} className="relative sticky top-0 z-50 w-full bg-white/97 backdrop-blur-md border-b border-[#E8E4DE]">
+      <nav ref={navRef} className="relative sticky top-0 z-50 w-full bg-white border-b border-[#E2DDD8]">
         <div className="max-w-6xl mx-auto px-5 sm:px-8 py-0">
           <div className="flex items-center justify-between h-16">
 
             {/* ── Logo + wordmark — inline, not stacked ── */}
             <Link href="/" onClick={closeAll} className="flex-shrink-0 flex items-center gap-3 py-2 group">
               <div className="relative w-9 h-9 flex-shrink-0">
-                <Image src="/images/logo/S1_Square.png" alt="Square One Paving" fill className="object-contain" sizes="36px" />
+                <Image src="/images/square-one-logo.png" alt="Square One Paving" fill className="object-contain" sizes="36px" />
               </div>
               <div className="flex items-baseline gap-1.5">
                 <span className="font-black text-[#32373C] text-base tracking-tight leading-none">Square One</span>
@@ -138,7 +138,7 @@ export default function Nav() {
                   onClick={() => setActiveMega(activeMega === "services" ? null : "services")}
                   aria-expanded={activeMega === "services"}
                   className={`flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    activeMega === "services" ? "text-[#C85A3A] bg-[#FFF7F2]" : "text-[#2D2D2D] hover:text-[#C85A3A] hover:bg-[#FFF7F2]"
+                    activeMega === "services" ? "text-[#C85A3A] bg-[#FFF7F2]" : "text-[#2D2D2D] hover:text-[#C8601A] hover:bg-[#FFF7F2]"
                   }`}
                 >
                   Services
@@ -146,27 +146,27 @@ export default function Nav() {
                 </button>
               </div>
 
-              <Link href="/projects" onClick={closeAll} className="px-3 py-2 rounded-lg text-sm font-medium text-[#2D2D2D] hover:text-[#C85A3A] hover:bg-[#FFF7F2] transition-colors">
+              <Link href="/projects" onClick={closeAll} className="px-3 py-2 rounded-lg text-sm font-medium text-[#2D2D2D] hover:text-[#C8601A] hover:bg-[#FFF7F2] transition-colors">
                 Projects
               </Link>
-              <Link href="/services/vapor-blasting" onClick={closeAll} className="px-3 py-2 rounded-lg text-sm font-medium text-[#2D2D2D] hover:text-[#C85A3A] hover:bg-[#FFF7F2] transition-colors">
+              <Link href="/driveways" onClick={closeAll} className="px-3 py-2 text-sm font-medium text-[#2D2D2D] hover:text-[#C8601A] hover:bg-[#FFF7F2] transition-colors">
+                Driveways
+              </Link>
+              <Link href="/vapor-blasting" onClick={closeAll} className="px-3 py-2 text-sm font-medium text-[#2D2D2D] hover:text-[#C8601A] hover:bg-[#FFF7F2] transition-colors">
                 Vapor Blasting
               </Link>
-              <Link href="/about" onClick={closeAll} className="px-3 py-2 rounded-lg text-sm font-medium text-[#2D2D2D] hover:text-[#C85A3A] hover:bg-[#FFF7F2] transition-colors">
+              <Link href="/about" onClick={closeAll} className="px-3 py-2 rounded-lg text-sm font-medium text-[#2D2D2D] hover:text-[#C8601A] hover:bg-[#FFF7F2] transition-colors">
                 About
               </Link>
-              <Link href="/contact" onClick={closeAll} className="px-3 py-2 rounded-lg text-sm font-medium text-[#2D2D2D] hover:text-[#C85A3A] hover:bg-[#FFF7F2] transition-colors">
+              <Link href="/contact" onClick={closeAll} className="px-3 py-2 rounded-lg text-sm font-medium text-[#2D2D2D] hover:text-[#C8601A] hover:bg-[#FFF7F2] transition-colors">
                 Contact
               </Link>
             </div>
 
             {/* ── Right actions ── */}
             <div className="flex items-center gap-2">
-              <a href="tel:18773910270" className="hidden lg:inline-flex items-center gap-1.5 text-[#626262] hover:text-[#D66620] text-sm font-medium transition-colors px-2 py-1">
-                1-877-391-0270
-              </a>
               <Link href="/contact" onClick={closeAll} className="hidden lg:inline-flex">
-                <span className="bg-[#C85A3A] hover:bg-[#B74D2E] text-white px-5 py-2 rounded-lg font-bold text-sm transition-colors">
+                <span className="bg-[#1C2026] hover:bg-[#C8601A] text-white px-5 py-2.5 font-semibold text-sm tracking-[0.06em] uppercase transition-colors duration-200">
                   Get a Quote
                 </span>
               </Link>
@@ -196,7 +196,7 @@ export default function Nav() {
           <div
             {...panelProps}
             style={{ animation: "megaIn 200ms ease-out both" }}
-            className="absolute top-full left-0 w-full bg-white shadow-2xl border-t-2 border-[#C85A3A] z-50"
+            className="absolute top-full left-0 w-full bg-white shadow-2xl border-t-2 border-[#C8601A] z-50"
           >
             <div className="grid grid-cols-[28%_42%_30%] min-h-[400px]">
 
@@ -221,9 +221,9 @@ export default function Nav() {
                 <div className="mt-8">
                   <div className="w-full h-px bg-white/10 mb-5" />
                   <Link
-                    href="/services/vapor-blasting"
+                    href="/vapor-blasting"
                     onClick={closeAll}
-                    className="inline-flex items-center gap-2 text-sm font-bold text-[#C85A3A] hover:text-white transition-colors group"
+                    className="inline-flex items-center gap-2 text-sm font-bold text-[#C8601A] hover:text-white transition-colors group"
                   >
                     Learn More
                     <ChevronRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
@@ -242,12 +242,12 @@ export default function Nav() {
                       key={s.slug}
                       href={`/services/${s.slug}`}
                       onClick={closeAll}
-                      className="flex items-start gap-3 px-3 py-3.5 rounded-lg hover:bg-[#F5F3F0] border-l-2 border-transparent hover:border-[#C85A3A] group transition-all"
+                      className="flex items-start gap-3 px-3 py-3.5 rounded-lg hover:bg-[#F5F3F0] border-l-2 border-transparent hover:border-[#C8601A] group transition-all"
                     >
                       <span className="text-[#C85A3A] text-base mt-0.5 flex-shrink-0">{s.icon}</span>
                       <div>
                         <div className="flex items-center gap-2 mb-0.5">
-                          <p className="text-sm font-semibold text-[#2D2D2D] group-hover:text-[#C85A3A] transition-colors">{s.name}</p>
+                          <p className="text-sm font-semibold text-[#2D2D2D] group-hover:text-[#C8601A] transition-colors">{s.name}</p>
                           {s.slug === "vapor-blasting" && (
                             <span className="text-[9px] font-bold uppercase tracking-wider bg-[#C85A3A] text-white px-1.5 py-0.5 rounded-full leading-none">
                               SIGNATURE
@@ -334,7 +334,7 @@ export default function Nav() {
             <div className="flex items-center justify-between px-5 py-3 border-b border-gray-100 flex-shrink-0 bg-white">
               <Link href="/" onClick={closeAll} className="flex items-center gap-2.5">
                 <div className="relative w-8 h-8 flex-shrink-0">
-                  <Image src="/images/logo/S1_Square.png" alt="Square One Paving" fill className="object-contain" sizes="32px" />
+                  <Image src="/images/square-one-logo.png" alt="Square One Paving" fill className="object-contain" sizes="32px" />
                 </div>
                 <div className="flex items-baseline gap-1.5">
                   <span className="font-black text-[#32373C] text-[15px] leading-none">Square One</span>
@@ -360,7 +360,7 @@ export default function Nav() {
                 {/* Vapor Blasting featured card */}
                 <motion.div variants={vaporVariant}>
                   <Link
-                    href="/services/vapor-blasting"
+                    href="/vapor-blasting"
                     onClick={closeAll}
                     className="flex items-center gap-3 mb-3 rounded-xl px-5 py-4 transition-opacity active:opacity-70"
                     style={{ background: "rgba(200,90,58,0.08)", border: "1px solid rgba(200,90,58,0.20)" }}
@@ -397,7 +397,7 @@ export default function Nav() {
                         <div className="pb-4 space-y-0.5">
                           {drawerServiceLinks.map((s) => (
                             <Link key={s.href} href={s.href} onClick={closeAll}
-                              className="flex items-center gap-3 min-h-[48px] py-2.5 px-4 text-gray-500 hover:text-[#C85A3A] active:text-[#C85A3A] text-sm font-medium transition-colors rounded-lg hover:bg-gray-50">
+                              className="flex items-center gap-3 min-h-[48px] py-2.5 px-4 text-gray-500 hover:text-[#C8601A] active:text-[#C8601A] text-sm font-medium transition-colors rounded-lg hover:bg-gray-50">
                               <span className="w-1.5 h-1.5 rounded-full bg-[#C85A3A] flex-shrink-0" />
                               {s.name}
                             </Link>
@@ -413,16 +413,18 @@ export default function Nav() {
 
                 {/* Static links */}
                 {[
-                  { label: "Projects",  href: "/projects",   highlight: false },
-                  { label: "About",     href: "/about",      highlight: false },
-                  { label: "Contact",   href: "/contact",    highlight: false },
+                  { label: "Projects",      href: "/projects",      highlight: false },
+                  { label: "Driveways",     href: "/driveways",     highlight: false },
+                  { label: "Vapor Blasting", href: "/vapor-blasting", highlight: false },
+                  { label: "About",         href: "/about",         highlight: false },
+                  { label: "Contact",       href: "/contact",        highlight: false },
                 ].map((item) => (
                   <motion.div key={item.href} variants={fadeSlide}>
                     <Link
                       href={item.href}
                       onClick={closeAll}
                       className={`flex items-center min-h-[56px] py-4 text-lg font-semibold border-t border-gray-100 transition-colors ${
-                        item.highlight ? "text-[#C85A3A]" : "text-[#32373C] hover:text-[#C85A3A]"
+                        item.highlight ? "text-[#C85A3A]" : "text-[#32373C] hover:text-[#C8601A]"
                       }`}
                     >
                       {item.label}
@@ -435,19 +437,14 @@ export default function Nav() {
             {/* Bottom CTA */}
             <div className="px-5 py-5 border-t border-gray-100 flex-shrink-0 space-y-3 bg-white">
               <Link href="/contact" onClick={closeAll} className="block">
-                <span className="block w-full bg-[#C85A3A] hover:bg-[#B74D2E] active:bg-[#A6432A] text-white text-center py-4 rounded-xl font-semibold text-base transition-colors">
+                <span className="block w-full bg-[#1C2026] hover:bg-[#C8601A] text-white text-center py-4 font-semibold text-sm tracking-[0.08em] uppercase transition-colors">
                   Get a Quote
                 </span>
               </Link>
-              <Link href="/projects" onClick={closeAll} className="block">
-                <span className="block w-full border border-gray-200 hover:border-[#C85A3A] text-[#32373C] hover:text-[#C85A3A] text-center py-3.5 rounded-xl font-semibold text-base transition-colors">
-                  View Our Work
-                </span>
-              </Link>
               <div className="flex items-center justify-center gap-4 pt-1">
-                <a href="tel:16043098212" className="text-sm text-gray-400 hover:text-[#C85A3A] font-medium transition-colors">604-309-8212</a>
+                <a href="tel:16043098212" className="text-sm text-gray-400 hover:text-[#C8601A] font-medium transition-colors">604-309-8212</a>
                 <span className="text-gray-200">·</span>
-                <a href="mailto:info@squareonepaving.ca" className="text-sm text-gray-400 hover:text-[#C85A3A] font-medium transition-colors">info@squareonepaving.ca</a>
+                <a href="mailto:info@squareonepaving.ca" className="text-sm text-gray-400 hover:text-[#C8601A] font-medium transition-colors">info@squareonepaving.ca</a>
               </div>
             </div>
           </motion.div>

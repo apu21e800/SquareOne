@@ -1,113 +1,80 @@
-import Image from "next/image"
 import Link from "next/link"
 import { getFeaturedProjects } from "@/lib/projects"
 
-/* Fallback images by service — always something relevant */
-const serviceImageMap: Record<string, string> = {
-  "Stamped Asphalt":          "/images/products/streetprint/streetprint-1.jpg",
-  "Decorative Coatings":      "/images/products/streetbond/streetbond-1.jpg",
-  "Preformed Thermoplastic":  "/images/products/traffic-patterns/trafficpatterns-1.jpg",
-  "Vapor Blasting":           "/images/products/streetprint/streetprint-1.jpg",
-}
-
-const GLOBAL_FALLBACK = "/images/products/streetprint/streetprint-1.jpg"
-
 export default function ProjectsPreview() {
-  const featuredProjects = getFeaturedProjects().slice(0, 3)
+  const projects = getFeaturedProjects().slice(0, 3)
+
+  const gradients = [
+    "from-[#C8C4BC] to-[#9E9890]",
+    "from-[#B8B0A4] to-[#8C8480]",
+    "from-[#D5D0C8] to-[#A8A09A]",
+  ]
 
   return (
-    <section className="w-full py-20 bg-[#F9F6F2]">
-      <div className="max-w-6xl mx-auto px-6 sm:px-8">
+    <section className="w-full py-24 md:py-32 bg-white border-t border-[#E2DDD8]">
+      <div className="max-w-7xl mx-auto px-6 lg:px-12">
 
         {/* Header */}
-        <div className="mb-12">
-          <p className="text-[#D66620] text-xs uppercase tracking-[0.2em] font-semibold mb-3">
-            Recent Work
-          </p>
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-            <h2 className="text-4xl sm:text-5xl font-black text-[#1C2226] leading-tight">
-              Featured Projects
-            </h2>
-            <Link href="/projects">
-              <span className="text-[#D66620] font-semibold text-sm hover:text-[#C05A18] transition-colors">
-                View All Projects →
-              </span>
-            </Link>
+        <div className="mb-16 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+          <div>
+            <span className="text-[11px] font-semibold tracking-[0.18em] uppercase text-[#C8601A]">
+              Selected Work
+            </span>
+            <h2 className="mt-3 text-[#111111]">Projects that speak.</h2>
           </div>
-          <div className="mt-6 h-px bg-gradient-to-r from-[#D66620]/40 to-transparent" />
+          <Link
+            href="/projects"
+            className="text-[#C8601A] text-sm font-semibold underline-offset-4 hover:underline"
+          >
+            View All Projects →
+          </Link>
         </div>
 
-        {/* Project grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {featuredProjects.map((project) => {
-            const imgSrc = project.imageUrl ?? serviceImageMap[project.service] ?? GLOBAL_FALLBACK
+        {/* Asymmetric grid — single row on desktop, stacked on mobile */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-[#E2DDD8]">
+          {projects.map((project, i) => {
+            const isFirst = i === 0
+            const paddingMobile = "75%"
+            const paddingDesktop = isFirst ? "100%" : "75%"
+
             return (
-              <Link key={project.slug} href={`/projects/${project.slug}`} className="group block">
-                <div className="bg-white rounded-2xl overflow-hidden border border-[#E8E4DE] hover:border-[#D66620]/40 hover:shadow-xl transition-all duration-200">
+              <Link
+                key={project.slug}
+                href={`/projects/${project.slug}`}
+                className="group relative overflow-hidden bg-[#EDE9E3]"
+              >
+                {/* Placeholder bg */}
+                <div
+                  className={`absolute inset-0 bg-gradient-to-br ${gradients[i] ?? gradients[0]} group-hover:scale-105 transition-transform duration-700`}
+                />
+                {/* Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
-                  {/* Image */}
-                  <div className="relative h-60 overflow-hidden" style={{
-                    background: "linear-gradient(135deg, #E8E4DE 0%, #D5D0C8 100%)",
-                  }}>
-                    {/* Subtle placeholder pattern behind image */}
-                    <div className="absolute inset-0 opacity-30" style={{
-                      backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,0.03) 10px, rgba(0,0,0,0.03) 20px)",
-                    }} />
-                    <Image
-                      src={imgSrc}
-                      alt={project.title}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent" />
+                {/* Aspect ratio spacers — different per breakpoint */}
+                <div className="block md:hidden" style={{ paddingBottom: paddingMobile }} />
+                <div className="hidden md:block" style={{ paddingBottom: paddingDesktop }} />
 
-                    {/* Service tag */}
-                    <div className="absolute top-3 left-3">
-                      <span className="bg-[#D66620] text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wide">
-                        {project.service}
-                      </span>
-                    </div>
-
-                    {project.year && (
-                      <div className="absolute top-3 right-3">
-                        <span className="bg-black/50 text-white/85 text-[10px] font-semibold px-2 py-1 rounded">
-                          {project.year}
-                        </span>
-                      </div>
-                    )}
+                {/* Bottom info */}
+                <div className="absolute bottom-0 left-0 right-0 px-5 py-5">
+                  <div className="text-white font-semibold text-sm leading-snug">
+                    {project.title}
                   </div>
-
-                  {/* Content */}
-                  <div className="p-5">
-                    <div className="flex items-center gap-2 mb-2.5">
-                      <span className="text-xs font-medium text-[#A0A0A0]">{project.application}</span>
-                      <span className="text-[#D0CCC5]">·</span>
-                      <span className="text-xs font-medium text-[#A0A0A0]">{project.city}</span>
-                    </div>
-                    <h3 className="text-base font-black text-[#1C2226] mb-3 group-hover:text-[#D66620] transition-colors leading-snug">
-                      {project.title}
-                    </h3>
-                    <div className="flex items-center gap-1.5 text-[#D66620] text-xs font-bold uppercase tracking-widest">
-                      <span className="group-hover:mr-1 transition-all duration-200">View Project</span>
-                      <span className="group-hover:translate-x-1 transition-transform duration-200">→</span>
-                    </div>
-                  </div>
+                  <div className="text-white/60 text-xs mt-1">{project.city}</div>
                 </div>
               </Link>
             )
           })}
         </div>
 
-        {/* Bottom CTA */}
+        {/* Bottom link */}
         <div className="mt-10 text-center">
-          <Link href="/projects">
-            <span className="inline-block border border-[#D66620]/30 hover:border-[#D66620] text-[#D66620] hover:bg-[#D66620] hover:text-white px-8 py-3 rounded-lg font-bold text-sm transition-all duration-200">
-              See All Projects
-            </span>
+          <Link
+            href="/projects"
+            className="text-[#C8601A] text-sm font-semibold tracking-[0.08em] uppercase hover:underline"
+          >
+            View All Projects →
           </Link>
         </div>
-
       </div>
     </section>
   )

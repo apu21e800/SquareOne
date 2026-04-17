@@ -1,26 +1,29 @@
 const stats = [
-  { value: "25+", label: "Years in BC", detail: "Since 2000" },
-  { value: "500+", label: "Projects Installed", detail: "Across BC" },
-  { value: "4", label: "Service Lines", detail: "Full spectrum" },
-  { value: "2", label: "Regions Served", detail: "Lower Mainland + VI" },
+  { value: "500+", label: "Projects across BC" },
+  { value: "25", label: "Years of expertise" },
+  { value: "2", label: "Regions served" },
+  { value: "4", label: "Core specializations" },
 ]
 
 export default function StatsBar() {
   return (
-    <section className="w-full bg-white border-y border-[#E8E4DE]">
-      <div className="max-w-6xl mx-auto px-6 sm:px-8">
-        <div className="flex flex-wrap sm:flex-nowrap divide-y sm:divide-y-0 sm:divide-x divide-[#E8E4DE]">
+    <section className="w-full bg-[#1C2026] py-16 border-t border-[#E2DDD8]">
+      <div className="max-w-7xl mx-auto px-6 lg:px-12">
+        <div className="grid grid-cols-2 md:grid-cols-4">
           {stats.map((stat, idx) => (
             <div
               key={idx}
-              className="flex items-center gap-3 w-1/2 sm:w-auto sm:flex-1 py-4 sm:py-5 sm:px-6 first:pl-0 last:pr-0"
+              className={`py-8 px-6 text-center border-white/10 ${idx < 3 ? "md:border-r" : ""} ${idx % 2 === 0 ? "border-r md:border-r" : ""} ${idx < 2 ? "border-b md:border-b-0" : ""}`}
             >
-              {/* Vertical accent */}
-              <div className="w-[3px] h-8 bg-[#D66620] rounded-full flex-shrink-0" />
-              <div>
-                <span className="text-[#D66620] font-black text-xl leading-none">{stat.value}</span>
-                <p className="text-[#1A1A1A] font-semibold text-xs leading-tight mt-0.5">{stat.label}</p>
-                <p className="text-[#999] text-[11px] leading-none mt-0.5">{stat.detail}</p>
+              {/* Use Playfair Display via CSS var for the number */}
+              <div
+                className="text-5xl font-semibold italic text-white leading-none"
+                style={{ fontFamily: "var(--font-display, serif)" }}
+              >
+                {stat.value}
+              </div>
+              <div className="mt-3 text-xs tracking-[0.15em] uppercase text-white/50">
+                {stat.label}
               </div>
             </div>
           ))}
