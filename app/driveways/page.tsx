@@ -1,193 +1,227 @@
-// ─── SEO PILLAR PAGE ──────────────────────────────────────────────────────────
-// This is the primary SEO pillar page for decorative driveway paving in BC.
-// Target keywords:
-//   - "driveway paving Vancouver"
-//   - "driveway paving Victoria"
-//   - "stamped asphalt driveway Vancouver"
-//   - "decorative driveway BC"
-//   - "driveway resurfacing Lower Mainland"
-// Page intent: capture high-intent residential + strata buyers researching
-// decorative driveway options. Content should prioritize product differentiation
-// (StreetPrint, StreetBond, DuraShield), trust signals, and regional coverage.
-// TODO: Add structured FAQ schema (JSON-LD) for rich snippet eligibility.
-// TODO: Add before/after image gallery with alt-text optimized for local SEO.
-// ─────────────────────────────────────────────────────────────────────────────
-
-import Link from "next/link"
 import Image from "next/image"
-import { Metadata } from "next"
+import Link from "next/link"
+import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Decorative Driveways BC | Stamped Asphalt & Coatings | Square One Paving",
+  title: "Decorative Driveways | Metro Vancouver & Victoria | Square One Paving",
   description:
-    "Transform your driveway with stamped asphalt, StreetBond coatings, or StreetPrint patterns. BC's most experienced decorative pavement installer. Free quotes — Lower Mainland & Vancouver Island.",
+    "Stamped asphalt and StreetBond driveways installed across Metro Vancouver and Victoria since 2000. Pattern, colour, and texture — engineered for BC freeze-thaw.",
   keywords: [
-    "decorative driveway BC",
     "stamped asphalt driveway Vancouver",
     "stamped asphalt driveway Victoria",
-    "StreetPrint driveway BC",
-    "decorative asphalt driveway Lower Mainland",
-    "Vancouver driveway resurfacing",
-    "Victoria driveway decorative",
-    "concrete driveway alternative BC",
+    "decorative driveway BC",
+    "Vancouver driveways",
+    "Victoria driveways",
+    "StreetPrint driveway",
+    "StreetBond driveway coating",
+    "residential driveway paving BC",
+    "Metro Vancouver driveway installer",
+    "Vancouver Island driveway contractor",
   ],
   alternates: {
     canonical: "https://squareonepaving.com/driveways",
   },
+  openGraph: {
+    title: "Decorative Driveways | Metro Vancouver & Victoria",
+    description:
+      "Stamped asphalt and StreetBond driveways installed across Metro Vancouver and Victoria. Engineered for BC freeze-thaw. Free site visits.",
+    url: "https://squareonepaving.com/driveways",
+    type: "website",
+  },
 }
 
-const systems = [
+const processSteps = [
+  {
+    n: "01",
+    title: "Site visit",
+    body: "We walk the driveway. Check the base, read the drainage, flag what matters before a product is selected.",
+  },
+  {
+    n: "02",
+    title: "Specification",
+    body: "Pattern, colour, and product — chosen to suit the house. StreetPrint or StreetBond, with a written quote and a schedule.",
+  },
+  {
+    n: "03",
+    title: "Single-day install",
+    body: "Standard residential driveways go down in one day. Cure overnight. Drive on within 24 hours in most conditions.",
+  },
+  {
+    n: "04",
+    title: "Season-one check-in",
+    body: "We come back the following spring to inspect edges, joints, and colour retention. If something moved, we address it.",
+  },
+]
+
+const products = [
   {
     name: "StreetPrint Stamped Asphalt",
-    tagline: "The look of stone. The durability of asphalt.",
-    desc: "StreetPrint transforms your existing asphalt into a rich decorative surface — brick, cobblestone, slate, and custom patterns — without excavating the base. Installed in place, in days.",
-    specs: ["Installed over existing asphalt", "Patterns: Brick, Cobblestone, Slate, Running Bond", "Snowplow safe, ASTM slip-resistant", "8–12 year service life"],
-    badge: "Most Popular",
-    badgeColor: "#D66620",
+    eyebrow: "Pattern & Texture",
+    body: "Ashlar slate, herringbone, cobblestone, and running-bond brick — stamped into fresh asphalt. Structurally asphalt. Visually hardscape. 15–20 year service life.",
+    image: "/images/products/streetprint/streetprint-1.jpg",
   },
   {
     name: "StreetBond Colour Coating",
-    tagline: "Vivid colour. 5+ years of retention.",
-    desc: "StreetBond is a high-performance acrylic coating that bonds permanently to asphalt or concrete. UV stable, anti-skid, and available in dozens of custom colours. Ideal for refreshing and protecting existing driveways.",
-    specs: ["Bonds to asphalt and concrete", "20-year colour retention warranty", "Anti-skid aggregate", "Pantone custom colour matching"],
-    badge: "Best Value",
-    badgeColor: "#32373C",
-  },
-  {
-    name: "DuraShield Pavement Rejuvenation",
-    tagline: "Protect what you have. Extend by years.",
-    desc: "DuraShield penetrates oxidized asphalt, rejuvenating the binder and extending pavement life 3–5 years. The smart first step before any decorative system, or a standalone maintenance treatment.",
-    specs: ["Penetrating rejuvenator", "Extends pavement life 3–5 years", "Restores oxidized asphalt", "Often the first step before StreetPrint"],
-    badge: null,
-    badgeColor: null,
+    eyebrow: "Colour & Finish",
+    body: "Premium coating system applied over sound existing asphalt. Slip-resistant, UV-stable, and available in dozens of colours. Recoat cycle every 7–10 years.",
+    image: "/images/products/streetbond/streetbond-1.jpg",
   },
 ]
 
-const regions = [
-  { name: "Vancouver", sub: "Metro Vancouver" },
-  { name: "Victoria", sub: "Greater Victoria" },
-  { name: "Burnaby", sub: "& New Westminster" },
-  { name: "Surrey", sub: "& Langley" },
-  { name: "Coquitlam", sub: "Tri-Cities" },
-  { name: "Richmond", sub: "& Delta" },
-  { name: "North Shore", sub: "North Vancouver · West Vancouver" },
-  { name: "Saanich", sub: "& Oak Bay" },
-  { name: "Langford", sub: "West Shore" },
-  { name: "Maple Ridge", sub: "& Pitt Meadows" },
-  { name: "Abbotsford", sub: "& Chilliwack" },
-  { name: "Nanaimo", sub: "& Central Island" },
+const gallery = [
+  "/images/projects/west-vancouver-driveway.jpg",
+  "/images/projects/coquitlam-strata-driveway.jpg",
+  "/images/products/streetprint/streetprint-1.jpg",
+  "/images/products/streetbond/streetbond-1.jpg",
 ]
 
-const faqs = [
-  {
-    q: "Can you install over my existing driveway?",
-    a: "Yes — StreetPrint and StreetBond are applied directly over existing asphalt, so there's no demolition of the base. We assess the surface condition first and may recommend DuraShield rejuvenation if the base is oxidized.",
-  },
-  {
-    q: "How long does a decorative driveway last?",
-    a: "StreetPrint stamped asphalt typically lasts 8–12 years in BC conditions. StreetBond coatings carry a 20-year colour retention warranty. Maintenance cycles and recoats can extend service life significantly.",
-  },
-  {
-    q: "Is stamped asphalt safe in BC winters?",
-    a: "Absolutely. StreetPrint patterns are ASTM D3939 slip-resistant, and the impression depth is designed to be snowplow safe. The product has been installed across BC — including areas with regular freeze-thaw cycles — for over 25 years.",
-  },
-  {
-    q: "How do I get a quote?",
-    a: "Contact us with your address and a description of the work. We'll schedule a free site visit, assess the surface, and provide a written quote within 48 hours.",
-  },
-  {
-    q: "Do you serve Vancouver Island?",
-    a: "Yes — we serve both the Lower Mainland and Vancouver Island. Our mobile crews operate out of Maple Ridge and Victoria, so no job site in the covered regions is out of reach.",
-  },
-]
-
-export default function DriveywaysPage() {
+export default function DrivewaysPage() {
   return (
-    <main className="bg-[#FAFAFA]">
-
-      {/* ── Hero ── */}
-      <section className="relative overflow-hidden bg-[#1A1A1A] min-h-[75vh] flex items-center">
-        {/* Background image */}
-        <div className="absolute inset-0">
-          <Image
-            src="/images/applications/private-driveways/chilliwack-townhomes-brick-driveway-01.jpg"
-            alt="Decorative stamped asphalt driveway installed by Square One Paving"
-            fill
-            className="object-cover object-center opacity-30"
-            priority
-          />
-        </div>
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#1A1A1A]/95 via-[#1A1A1A]/70 to-[#1A1A1A]/20" />
-        {/* Orange top accent */}
-        <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-[#D66620] via-[#F0A04B] to-transparent" />
-
-        <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-12 py-28">
-          <div className="max-w-2xl">
-            <p className="text-[#D66620] text-xs uppercase tracking-[0.25em] font-bold mb-5">
-              Decorative Driveways · BC
+    <main className="bg-white">
+      {/* Hero */}
+      <section className="w-full bg-white">
+        <div className="grid grid-cols-1 md:grid-cols-[55%_45%] min-h-[80vh]">
+          <div className="flex flex-col justify-center px-6 sm:px-10 lg:px-20 py-16 md:py-24">
+            <p className="text-[#C8601A] text-xs uppercase tracking-[0.22em] font-semibold mb-5">
+              Serving Metro Vancouver &amp; Victoria
             </p>
-            <h1 className="text-5xl sm:text-6xl md:text-7xl font-black text-white leading-[0.96] tracking-tight mb-7">
-              The Driveway<br />
-              <span className="text-[#D66620]">Your Property</span><br />
-              Deserves.
+            <h1
+              className="text-[#111111] mb-0"
+              style={{
+                fontWeight: 300,
+                lineHeight: 1.05,
+                letterSpacing: "-0.03em",
+                fontSize: "clamp(2.5rem, 5vw, 4.75rem)",
+              }}
+            >
+              Driveways that hold<br />through BC winters.
             </h1>
-            <p className="text-white/80 text-xl leading-relaxed mb-10 max-w-lg">
-              Stamped asphalt patterns, decorative colour coatings, and pavement
-              rejuvenation — installed by BC&apos;s most experienced crew.
-              No demolition. No disruption. Just results.
+            <div className="w-12 h-[3px] bg-[#C8601A] my-6" />
+            <p className="text-lg font-light text-[#5A5A5A] max-w-md leading-relaxed">
+              Stamped asphalt and StreetBond coatings for residential and strata
+              driveways across the Lower Mainland and Vancouver Island. Installed
+              in a single day. Engineered for freeze-thaw, UV, and rain that doesn&apos;t quit.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row gap-3 mt-10">
               <Link href="/contact">
-                <span className="inline-block bg-[#D66620] hover:bg-[#C05A18] text-white px-8 py-4 rounded-lg font-bold text-sm uppercase tracking-wider transition-colors">
-                  Get a Free Quote
-                </span>
+                <button className="w-full sm:w-auto bg-[#1C2026] hover:bg-black text-white px-7 py-3.5 text-sm font-semibold tracking-[0.08em] uppercase rounded-none transition-colors">
+                  Request a Site Visit
+                </button>
               </Link>
-              <a href="tel:6046126209">
-                <span className="inline-block border border-white/25 text-white hover:bg-white/10 px-8 py-4 rounded-lg font-semibold text-sm transition-colors">
-                  604-612-6209
-                </span>
+              <a href="tel:16043098212">
+                <button className="w-full sm:w-auto border border-[#1C2026] text-[#1C2026] hover:bg-[#1C2026] hover:text-white px-7 py-3.5 text-sm font-semibold tracking-[0.08em] uppercase rounded-none transition-colors">
+                  604-309-8212
+                </button>
               </a>
             </div>
           </div>
-        </div>
 
-        {/* Floating trust signals */}
-        <div className="absolute right-10 bottom-10 hidden lg:flex flex-col gap-3">
-          {["No Excavation Required", "Free Site Visits", "Serving BC Since 2000", "Lower Mainland + Vancouver Island"].map((t) => (
-            <span key={t} className="bg-white/10 backdrop-blur-sm border border-white/15 text-white/80 text-xs font-semibold px-4 py-2 rounded-full">
-              ✓ {t}
-            </span>
-          ))}
+          <div className="relative min-h-[400px] md:min-h-0">
+            <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-[#C8601A] z-10" />
+            <Image
+              src="/images/projects/west-vancouver-driveway.jpg"
+              alt="Stamped asphalt driveway — West Vancouver, installed by Square One Paving"
+              fill
+              priority
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 45vw"
+            />
+          </div>
         </div>
       </section>
 
-      {/* ── Why S1 ── */}
-      <section className="py-20 bg-white border-b border-[#E8E4DE]">
-        <div className="max-w-6xl mx-auto px-6 sm:px-8">
-          <div className="grid md:grid-cols-3 gap-10">
-            {[
-              {
-                icon: "◈",
-                title: "Installed In-Place",
-                desc: "No excavation. No base removal. We work directly over your existing asphalt — cleaner, faster, and significantly less expensive than full replacement.",
-              },
-              {
-                icon: "◉",
-                title: "25 Years of BC Installs",
-                desc: "We've installed decorative driveways across the Lower Mainland and Vancouver Island in every climate condition BC throws at a surface.",
-              },
-              {
-                icon: "◌",
-                title: "Certified Material Systems",
-                desc: "We install StreetPrint, StreetBond, and DuraShield under manufacturer-certified training — the same systems specified by 500+ Canadian municipalities.",
-              },
-            ].map((item) => (
-              <div key={item.title} className="flex gap-5">
-                <div className="text-2xl text-[#D66620] flex-shrink-0 mt-1">{item.icon}</div>
-                <div>
-                  <h3 className="font-black text-[#333333] text-lg mb-2">{item.title}</h3>
-                  <p className="text-[#626262] text-sm leading-relaxed">{item.desc}</p>
+      {/* Process */}
+      <section className="w-full bg-[#F6F4F0] py-20 sm:py-24">
+        <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-20">
+          <div className="max-w-2xl mb-14">
+            <p className="text-[#C8601A] text-xs uppercase tracking-[0.22em] font-semibold mb-4">
+              Process
+            </p>
+            <h2
+              className="text-[#111111]"
+              style={{
+                fontWeight: 400,
+                lineHeight: 1.1,
+                letterSpacing: "-0.02em",
+                fontSize: "clamp(1.8rem, 3vw, 3rem)",
+              }}
+            >
+              Four steps. No surprises.
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-[#E2DDD8]">
+            {processSteps.map((step) => (
+              <div key={step.n} className="bg-[#F6F4F0] p-8">
+                <p
+                  className="text-[#C8601A] mb-5"
+                  style={{
+                    fontFamily: "var(--font-playfair), ui-serif, Georgia, serif",
+                    fontStyle: "italic",
+                    fontSize: "1.75rem",
+                    lineHeight: 1,
+                  }}
+                >
+                  {step.n}
+                </p>
+                <h3 className="text-[#111111] text-base font-semibold mb-3">
+                  {step.title}
+                </h3>
+                <p className="text-[#5A5A5A] text-sm leading-relaxed">
+                  {step.body}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Products */}
+      <section className="w-full bg-white py-20 sm:py-24">
+        <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-20">
+          <div className="max-w-2xl mb-14">
+            <p className="text-[#C8601A] text-xs uppercase tracking-[0.22em] font-semibold mb-4">
+              Systems
+            </p>
+            <h2
+              className="text-[#111111]"
+              style={{
+                fontWeight: 400,
+                lineHeight: 1.1,
+                letterSpacing: "-0.02em",
+                fontSize: "clamp(1.8rem, 3vw, 3rem)",
+              }}
+            >
+              Two products. Chosen to fit the home.
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {products.map((p) => (
+              <div
+                key={p.name}
+                className="border border-[#E2DDD8] flex flex-col"
+              >
+                <div className="relative aspect-[4/3] bg-[#EDE9E3]">
+                  <Image
+                    src={p.image}
+                    alt={p.name}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 45vw"
+                  />
+                </div>
+                <div className="p-8">
+                  <p className="text-[#C8601A] text-xs uppercase tracking-[0.18em] font-semibold mb-3">
+                    {p.eyebrow}
+                  </p>
+                  <h3
+                    className="text-[#111111] mb-4"
+                    style={{ fontWeight: 600, fontSize: "1.25rem" }}
+                  >
+                    {p.name}
+                  </h3>
+                  <p className="text-[#5A5A5A] text-sm leading-relaxed">
+                    {p.body}
+                  </p>
                 </div>
               </div>
             ))}
@@ -195,143 +229,112 @@ export default function DriveywaysPage() {
         </div>
       </section>
 
-      {/* ── Systems ── */}
-      <section className="py-24 px-6 sm:px-8 bg-[#F2EFE9]">
-        <div className="max-w-6xl mx-auto">
-          <div className="mb-14">
-            <p className="text-[#D66620] text-xs uppercase tracking-[0.22em] font-semibold mb-3">What We Install</p>
-            <h2 className="text-4xl sm:text-5xl font-black text-[#333333] mb-4">Three Systems. One Right Fit.</h2>
-            <p className="text-[#626262] text-lg max-w-2xl">We&apos;ll assess your surface and recommend the right system — or a combination of them.</p>
-            <div className="mt-6 h-px bg-gradient-to-r from-[#D66620]/40 to-transparent" />
+      {/* Gallery */}
+      <section className="w-full bg-[#F6F4F0] py-20 sm:py-24">
+        <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-20">
+          <div className="max-w-2xl mb-14">
+            <p className="text-[#C8601A] text-xs uppercase tracking-[0.22em] font-semibold mb-4">
+              Installed
+            </p>
+            <h2
+              className="text-[#111111]"
+              style={{
+                fontWeight: 400,
+                lineHeight: 1.1,
+                letterSpacing: "-0.02em",
+                fontSize: "clamp(1.8rem, 3vw, 3rem)",
+              }}
+            >
+              Driveways across BC.
+            </h2>
           </div>
-
-          <div className="grid lg:grid-cols-3 gap-7">
-            {systems.map((s) => (
-              <div key={s.name} className="bg-white rounded-2xl border border-[#E8E4DE] p-8 flex flex-col relative overflow-hidden hover:shadow-xl hover:border-[#D66620]/30 transition-all">
-                {s.badge && (
-                  <span
-                    className="absolute top-5 right-5 text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full"
-                    style={{ background: s.badgeColor! }}
-                  >
-                    {s.badge}
-                  </span>
-                )}
-                <h3 className="text-xl font-black text-[#333333] mb-1.5 pr-24">{s.name}</h3>
-                <p className="text-[#D66620] text-sm font-semibold mb-4">{s.tagline}</p>
-                <p className="text-[#626262] text-sm leading-relaxed mb-7 flex-1">{s.desc}</p>
-                <ul className="space-y-2.5">
-                  {s.specs.map((spec) => (
-                    <li key={spec} className="flex items-start gap-2.5 text-sm text-[#333333]">
-                      <span className="text-[#D66620] flex-shrink-0 mt-0.5">✓</span>
-                      {spec}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Gallery strip placeholder ── */}
-      <section className="py-20 bg-white">
-        <div className="max-w-6xl mx-auto px-6 sm:px-8">
-          <div className="mb-10">
-            <p className="text-[#D66620] text-xs uppercase tracking-[0.22em] font-semibold mb-3">Our Work</p>
-            <h2 className="text-4xl font-black text-[#333333]">Driveways Across BC</h2>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {[
-              "/images/applications/private-driveways/chilliwack-townhomes-brick-driveway-01.jpg",
-              "/images/applications/private-driveways/cobblestone-residential-driveway-closeup-01.jpg",
-              "/images/applications/private-driveways/craftsman-home-charcoal-herringbone-driveway-01.jpg",
-              "/images/applications/private-driveways/estate-herringbone-gated-driveway-01.jpg",
-            ].map((src, i) => (
-              <div key={i} className="relative aspect-square rounded-xl overflow-hidden bg-[#F2EFE9]">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+            {gallery.map((src, i) => (
+              <div
+                key={i}
+                className="relative aspect-square overflow-hidden bg-[#EDE9E3]"
+              >
                 <Image
                   src={src}
-                  alt={`Decorative driveway project by Square One Paving — BC`}
+                  alt={`Decorative driveway installation ${i + 1}`}
                   fill
-                  className="object-cover hover:scale-105 transition-transform duration-500"
-                  sizes="(max-width:768px) 50vw, 25vw"
+                  className="object-cover"
+                  sizes="(max-width: 768px) 50vw, 25vw"
                 />
               </div>
             ))}
           </div>
-          <div className="mt-8 text-center">
-            <Link href="/projects">
-              <span className="inline-block border border-[#32373C]/20 text-[#32373C] hover:bg-[#32373C]/5 px-8 py-3 rounded-lg font-semibold text-sm transition-colors">
-                View All Projects →
-              </span>
-            </Link>
-          </div>
         </div>
       </section>
 
-      {/* ── Regions ── */}
-      <section className="py-20 bg-[#F2EFE9]">
-        <div className="max-w-6xl mx-auto px-6 sm:px-8">
-          <div className="mb-10">
-            <p className="text-[#D66620] text-xs uppercase tracking-[0.22em] font-semibold mb-3">Service Area</p>
-            <h2 className="text-4xl font-black text-[#333333]">We Come to You</h2>
-            <p className="text-[#626262] mt-3 max-w-xl">Mobile crews operating from Maple Ridge and Victoria cover both regions. No travel surcharge within service areas.</p>
+      {/* Local SEO */}
+      <section className="w-full bg-white py-20 sm:py-24 border-t border-[#E2DDD8]">
+        <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-20">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">
+            <div>
+              <p className="text-[#C8601A] text-xs uppercase tracking-[0.22em] font-semibold mb-4">
+                Metro Vancouver
+              </p>
+              <h3
+                className="text-[#111111] mb-5"
+                style={{ fontWeight: 500, fontSize: "1.35rem" }}
+              >
+                Vancouver driveways — Lower Mainland coverage.
+              </h3>
+              <p className="text-[#5A5A5A] leading-relaxed text-base mb-4">
+                West Vancouver. North Vancouver. Burnaby. Coquitlam. Port Moody.
+                New Westminster. Richmond. Surrey. Langley. White Rock. Maple
+                Ridge. Pitt Meadows.
+              </p>
+              <p className="text-[#5A5A5A] leading-relaxed text-base">
+                Driveway installs across the full Lower Mainland, from hillside
+                estates to strata refreshes. Free site visits within a 90-minute
+                drive of downtown Vancouver.
+              </p>
+            </div>
+            <div>
+              <p className="text-[#C8601A] text-xs uppercase tracking-[0.22em] font-semibold mb-4">
+                Vancouver Island
+              </p>
+              <h3
+                className="text-[#111111] mb-5"
+                style={{ fontWeight: 500, fontSize: "1.35rem" }}
+              >
+                Victoria driveways — Island-wide coverage.
+              </h3>
+              <p className="text-[#5A5A5A] leading-relaxed text-base mb-4">
+                Victoria. Saanich. Oak Bay. Langford. Colwood. Sidney. Duncan.
+                Ladysmith. Nanaimo. Parksville. Courtenay. Comox.
+              </p>
+              <p className="text-[#5A5A5A] leading-relaxed text-base">
+                Our Vancouver Island crew is based out of Ladysmith. Coverage
+                from Victoria north to the Comox Valley. Written quotes,
+                honest timelines.
+              </p>
+            </div>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-            {regions.map((r) => (
-              <div key={r.name} className="bg-white rounded-xl p-4 border border-[#E8E4DE] hover:border-[#D66620]/40 transition-colors text-center">
-                <p className="font-black text-[#333333] text-sm">{r.name}</p>
-                <p className="text-[#626262] text-xs mt-0.5 leading-tight">{r.sub}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* ── FAQ ── */}
-      <section className="py-24 bg-white">
-        <div className="max-w-3xl mx-auto px-6 sm:px-8">
-          <div className="mb-12 text-center">
-            <p className="text-[#D66620] text-xs uppercase tracking-[0.22em] font-semibold mb-3">Common Questions</p>
-            <h2 className="text-4xl font-black text-[#333333]">What We Get Asked</h2>
-          </div>
-          <div className="space-y-0 divide-y divide-[#E8E4DE]">
-            {faqs.map((faq) => (
-              <div key={faq.q} className="py-6">
-                <p className="font-black text-[#333333] text-base mb-3">{faq.q}</p>
-                <p className="text-[#626262] text-sm leading-relaxed">{faq.a}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── CTA ── */}
-      <section className="py-24 bg-[#32373C]">
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <p className="text-[#F0A04B] text-xs uppercase tracking-[0.22em] font-semibold mb-5">Ready to Get Started?</p>
-          <h2 className="text-4xl sm:text-5xl font-black text-white mb-6">
-            Get a Free Driveway Quote
-          </h2>
-          <p className="text-white/75 text-lg mb-10 leading-relaxed max-w-xl mx-auto">
-            Tell us your address, surface condition, and what you have in mind.
-            We&apos;ll come to you, assess the surface, and give you a clear written quote — no obligation.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="mt-16 pt-12 border-t border-[#E2DDD8] flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div className="max-w-2xl">
+              <h3
+                className="text-[#111111] mb-3"
+                style={{ fontWeight: 500, fontSize: "1.5rem" }}
+              >
+                Book a driveway site visit.
+              </h3>
+              <p className="text-[#5A5A5A] leading-relaxed">
+                Free, no-pressure walkthrough. You&apos;ll leave with a written
+                quote and a realistic schedule.
+              </p>
+            </div>
             <Link href="/contact">
-              <span className="inline-block bg-[#D66620] hover:bg-[#C05A18] text-white px-10 py-4 rounded-lg font-bold text-sm uppercase tracking-wider transition-colors">
+              <button className="bg-[#1C2026] hover:bg-black text-white px-8 py-4 text-sm font-semibold tracking-[0.08em] uppercase rounded-none transition-colors">
                 Request a Quote
-              </span>
+              </button>
             </Link>
-            <a href="tel:6046126209">
-              <span className="inline-block border border-white/25 text-white hover:bg-white/10 px-10 py-4 rounded-lg font-semibold text-sm transition-colors">
-                604-612-6209 · Lower Mainland
-              </span>
-            </a>
           </div>
-          <p className="text-white/40 text-xs mt-6">Also serving Victoria & Vancouver Island · 250-391-0270</p>
         </div>
       </section>
-
     </main>
   )
 }
