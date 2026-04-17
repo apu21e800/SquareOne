@@ -1,24 +1,24 @@
 import Hero from "@/components/sections/Hero"
-import StatsBar from "@/components/sections/StatsBar"
 import ServicesGrid from "@/components/sections/ServicesGrid"
+import StatsBar from "@/components/sections/StatsBar"
 import ProjectsPreview from "@/components/sections/ProjectsPreview"
-import ApplicationsSection from "@/components/sections/ApplicationsSection"
 import VaporBlastingBand from "@/components/sections/VaporBlastingBand"
-import DrivewayCTA from "@/components/sections/DrivewayCTA"
-import TrustStrip from "@/components/sections/TrustStrip"
+import DrivewaysBand from "@/components/sections/DrivewaysBand"
+import Testimonials from "@/components/sections/Testimonials"
+import BlogFeed from "@/components/sections/BlogFeed"
 import CTASection from "@/components/sections/CTASection"
 
 export default function Home() {
   return (
     <main>
       <Hero />
-      <StatsBar />
       <ServicesGrid />
+      <StatsBar />
       <ProjectsPreview />
-      <ApplicationsSection />
       <VaporBlastingBand />
-      <DrivewayCTA />
-      <TrustStrip />
+      <DrivewaysBand />
+      <Testimonials />
+      <BlogFeed />
       <CTASection />
     </main>
   )

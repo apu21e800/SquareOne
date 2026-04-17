@@ -47,6 +47,7 @@ export const projects: Project[] = [
     application: "Crosswalks",
     city: "Vancouver, BC",
     year: "2023",
+    featured: true,
     excerpt:
       "Custom StreetPrint stamped asphalt crosswalks for a high-traffic downtown intersection, featuring brick pattern and retroreflective finish.",
     imageUrl: "/images/projects/crosswalk-vancouver.jpg",
@@ -58,6 +59,7 @@ export const projects: Project[] = [
     application: "Bus & Bike Lanes",
     city: "Victoria, BC",
     year: "2022",
+    featured: true,
     excerpt:
       "StreetBond SR red coating for a BC Transit priority lane, providing high-visibility and anti-skid performance on a busy arterial route.",
     imageUrl: "/images/projects/transit-victoria.jpg",
@@ -116,7 +118,6 @@ export const projects: Project[] = [
     application: "Driveways",
     city: "Coquitlam, BC",
     year: "2024",
-    featured: true,
     excerpt:
       "StreetPrint cobblestone pattern applied to 22-unit strata complex entry and visitor driveways. Full resurfacing with colour integration and border detailing — no disruption to existing asphalt base.",
     imageUrl: "/images/projects/coquitlam-strata-driveway.jpg",
