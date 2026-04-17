@@ -1,5 +1,14 @@
 import Link from "next/link"
 import Image from "next/image"
+import { HubBadge } from "@/components/ui/HubBadge"
+
+const services = [
+  { name: "Stamped Asphalt", href: "/services/stamped-asphalt" },
+  { name: "Decorative Coatings", href: "/services/decorative-coatings" },
+  { name: "Preformed Thermoplastic", href: "/services/preformed-thermoplastic" },
+  { name: "Vapor Blasting", href: "/vapor-blasting" },
+  { name: "Decorative Driveways", href: "/driveways" },
+]
 
 const products = [
   { name: "StreetPrint", slug: "streetprint" },
@@ -15,15 +24,15 @@ const products = [
 
 export default function Footer() {
   return (
-    <footer className="w-full bg-[#32373C] text-white">
-      {/* Orange top accent */}
-      <div className="h-1 bg-gradient-to-r from-[#D66620] via-[#F0A04B] to-transparent" />
+    <footer className="w-full bg-[#1C2026] text-white">
+      {/* Orange top accent — 3px solid, not gradient */}
+      <div className="h-[3px] bg-[#C8601A]" />
 
-      <div className="max-w-6xl mx-auto px-6 sm:px-8 py-16">
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 py-16">
         {/* Top grid */}
         <div className="grid md:grid-cols-4 gap-10 mb-14">
 
-          {/* Col 1: Logo + tagline */}
+          {/* Col 1: Logo + tagline + HubBadge */}
           <div className="md:col-span-1">
             <Link href="/" className="inline-flex items-center gap-3 mb-5">
               <div className="relative w-9 h-9 flex-shrink-0">
@@ -37,53 +46,32 @@ export default function Footer() {
               </div>
               <div className="flex items-baseline gap-1.5">
                 <span className="text-white font-black text-base tracking-tight leading-none">Square One</span>
-                <span className="text-[#D66620] font-bold text-[11px] uppercase tracking-[0.14em] leading-none">Paving</span>
+                <span className="text-[#C8601A] font-bold text-[11px] uppercase tracking-[0.14em] leading-none">Paving</span>
               </div>
             </Link>
             <p className="text-sm text-white/60 leading-relaxed mb-5">
-              BC&apos;s leading decorative pavement installer since 2000. Lower Mainland &amp; Vancouver Island.
+              BC&apos;s trusted decorative pavement studio since 2000. Lower Mainland &amp; Vancouver Island.
             </p>
-            <div className="flex items-center gap-2 text-xs text-white/40 border border-white/10 rounded-md px-3 py-2 w-fit">
-              <span className="text-[#D66620]">✓</span>
-              <span>Authorized HUB Surface Systems Applicator</span>
-            </div>
+            <HubBadge variant="dark" />
           </div>
 
           {/* Col 2: Services */}
           <div>
-            <p className="text-[10px] font-bold text-[#D66620] uppercase tracking-[0.2em] mb-4">Services</p>
+            <p className="text-[10px] font-bold text-[#C8601A] uppercase tracking-[0.2em] mb-4">Services</p>
             <ul className="space-y-2.5 text-sm text-white/65">
-              <li>
-                <Link href="/services/stamped-asphalt" className="hover:text-white transition-colors">
-                  Stamped Asphalt
-                </Link>
-              </li>
-              <li>
-                <Link href="/services/decorative-coatings" className="hover:text-white transition-colors">
-                  Decorative Coatings
-                </Link>
-              </li>
-              <li>
-                <Link href="/services/preformed-thermoplastic" className="hover:text-white transition-colors">
-                  Preformed Thermoplastic
-                </Link>
-              </li>
-              <li>
-                <Link href="/vapor-blasting" className="hover:text-white transition-colors">
-                  Vapor Blasting
-                </Link>
-              </li>
-              <li>
-                <Link href="/driveways" className="hover:text-white transition-colors">
-                  Decorative Driveways
-                </Link>
-              </li>
+              {services.map((s) => (
+                <li key={s.href}>
+                  <Link href={s.href} className="hover:text-white transition-colors">
+                    {s.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           {/* Col 3: Products */}
           <div>
-            <p className="text-[10px] font-bold text-[#D66620] uppercase tracking-[0.2em] mb-4">Products We Apply</p>
+            <p className="text-[10px] font-bold text-[#C8601A] uppercase tracking-[0.2em] mb-4">Products We Apply</p>
             <ul className="space-y-2.5 text-sm text-white/65">
               {products.map((p) => (
                 <li key={p.slug}>
@@ -95,35 +83,40 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Col 4: Company + Contact */}
+          {/* Col 4: Contact — two regional blocks */}
           <div>
-            <p className="text-[10px] font-bold text-[#D66620] uppercase tracking-[0.2em] mb-4">Company</p>
-            <ul className="space-y-2.5 text-sm text-white/65 mb-6">
-              <li>
-                <Link href="/projects" className="hover:text-white transition-colors">Projects</Link>
-              </li>
-              <li>
-                <Link href="/about" className="hover:text-white transition-colors">About Us</Link>
-              </li>
-              <li>
-                <Link href="/contact" className="hover:text-white transition-colors">Contact</Link>
-              </li>
-            </ul>
-            <p className="text-[10px] font-bold text-[#D66620] uppercase tracking-[0.2em] mb-3">Contact</p>
-            <div className="space-y-1.5 text-sm text-white/75">
-              <a href="tel:18773910270" className="block hover:text-white transition-colors">
-                1-877-391-0270 <span className="text-white/40 text-xs">Toll Free</span>
-              </a>
-              <a href="tel:6046126209" className="block hover:text-white transition-colors">
-                604-612-6209 <span className="text-white/40 text-xs">Lower Mainland</span>
-              </a>
-              <a href="tel:2503910270" className="block hover:text-white transition-colors">
-                250-391-0270 <span className="text-white/40 text-xs">Vancouver Island</span>
-              </a>
-              <a href="mailto:info@squareonepaving.com" className="block hover:text-white transition-colors">
-                info@squareonepaving.com
-              </a>
-              <p className="text-white/50 text-xs pt-1">Maple Ridge, BC</p>
+            <p className="text-[10px] font-bold text-[#C8601A] uppercase tracking-[0.2em] mb-4">Contact</p>
+
+            {/* Lower Mainland */}
+            <div className="mb-6">
+              <div className="flex items-start gap-3">
+                <div className="w-[3px] self-stretch bg-[#C8601A] flex-shrink-0 mt-1" />
+                <div>
+                  <p className="text-white text-xs font-semibold uppercase tracking-wider mb-2">Lower Mainland</p>
+                  <div className="space-y-1 text-sm text-white/65">
+                    <p>Jan Stewart — Owner</p>
+                    <a href="tel:6046126209" className="block hover:text-white transition-colors">604-612-6209</a>
+                    <a href="tel:18773910270" className="block hover:text-white transition-colors">
+                      1-877-391-0270 <span className="text-white/40 text-xs">Toll-Free</span>
+                    </a>
+                    <a href="mailto:info@squareonepaving.com" className="block hover:text-white transition-colors">info@squareonepaving.com</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Vancouver Island */}
+            <div>
+              <div className="flex items-start gap-3">
+                <div className="w-[3px] self-stretch bg-[#C8601A] flex-shrink-0 mt-1" />
+                <div>
+                  <p className="text-white text-xs font-semibold uppercase tracking-wider mb-2">Vancouver Island</p>
+                  <div className="space-y-1 text-sm text-white/65">
+                    <a href="tel:2503910270" className="block hover:text-white transition-colors">250-391-0270</a>
+                    <p>Serving Victoria &amp; beyond</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -131,7 +124,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="border-t border-white/10 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-xs text-white/40 text-center sm:text-left">
-            &copy; {new Date().getFullYear()} Square One Paving Ltd. All rights reserved.
+            &copy; {new Date().getFullYear()} Square One Paving Ltd. All rights reserved. · Authorized HUB Surface Systems Applicator · BC Canada
           </p>
           <div className="flex gap-6 text-xs text-white/40">
             <Link href="/privacy" className="hover:text-white/70 transition-colors">Privacy Policy</Link>
