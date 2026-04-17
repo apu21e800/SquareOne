@@ -1,26 +1,22 @@
-const stats = [
-  { value: "25+", label: "Years in BC", detail: "Since 2000" },
-  { value: "500+", label: "Projects Installed", detail: "Across BC" },
-  { value: "4", label: "Service Lines", detail: "Full spectrum" },
-  { value: "2", label: "Regions Served", detail: "Lower Mainland + VI" },
-]
-
 export default function StatsBar() {
+  const stats = [
+    { number: "500+", label: "Projects across BC" },
+    { number: "25", label: "Years of expertise" },
+    { number: "2", label: "Regions served" },
+    { number: "4", label: "Core specializations" },
+  ]
+
   return (
-    <section className="w-full bg-white border-y border-[#E8E4DE]">
-      <div className="max-w-6xl mx-auto px-6 sm:px-8">
-        <div className="flex flex-wrap sm:flex-nowrap divide-y sm:divide-y-0 sm:divide-x divide-[#E8E4DE]">
-          {stats.map((stat, idx) => (
-            <div
-              key={idx}
-              className="flex items-center gap-3 w-1/2 sm:w-auto sm:flex-1 py-4 sm:py-5 sm:px-6 first:pl-0 last:pr-0"
-            >
-              {/* Vertical accent */}
-              <div className="w-[3px] h-8 bg-[#D66620] rounded-full flex-shrink-0" />
-              <div>
-                <span className="text-[#D66620] font-black text-xl leading-none">{stat.value}</span>
-                <p className="text-[#1A1A1A] font-semibold text-xs leading-tight mt-0.5">{stat.label}</p>
-                <p className="text-[#999] text-[11px] leading-none mt-0.5">{stat.detail}</p>
+    <section className="w-full bg-[#1C2026] py-16">
+      <div className="max-w-7xl mx-auto px-6 lg:px-12">
+        <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/10">
+          {stats.map((stat, i) => (
+            <div key={i} className="px-6 first:pl-0 last:pr-0">
+              <div className="font-display italic text-5xl text-white mb-2">
+                {stat.number}
+              </div>
+              <div className="text-xs tracking-[0.15em] uppercase text-white/50">
+                {stat.label}
               </div>
             </div>
           ))}

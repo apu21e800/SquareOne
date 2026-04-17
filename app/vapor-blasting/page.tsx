@@ -100,76 +100,39 @@ export default function VaporBlastingPage() {
     <main className="bg-[#FAFAFA]">
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <section
-        className="relative w-full min-h-[80vh] flex items-center overflow-hidden"
-        style={{ background: "linear-gradient(140deg, #0E1F26 0%, #162D38 45%, #0A1A22 100%)" }}
-      >
-        {/* Subtle radial shimmer */}
-        <div
-          className="absolute inset-0 opacity-20"
-          style={{
-            backgroundImage:
-              "radial-gradient(ellipse at 20% 60%, rgba(30,90,110,0.7) 0%, transparent 55%), radial-gradient(ellipse at 75% 25%, rgba(18,55,70,0.9) 0%, transparent 50%)",
-          }}
-        />
-
-        {/* Diagonal grain texture overlay */}
-        <div
-          className="absolute inset-0 opacity-[0.04]"
-          style={{
-            backgroundImage: "repeating-linear-gradient(45deg, #ffffff 0px, #ffffff 1px, transparent 1px, transparent 6px)",
-          }}
-        />
-
-        {/* Orange top rule */}
-        <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-[#D66620] via-[#F0A04B] to-transparent" />
-
-        <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-12 py-28">
+      <section className="bg-[#1C2026] min-h-[80vh] flex items-center">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 py-28">
           <div className="max-w-3xl">
-            <p className="text-[#F0A04B] text-[11px] uppercase tracking-[0.28em] font-bold mb-6">
-              Surface Restoration · BC-Wide
-            </p>
-            <h1 className="text-5xl sm:text-6xl md:text-7xl font-black text-white leading-[1.02] mb-6 tracking-tight">
-              Vapor Blasting —<br />
-              <span className="text-[#F0A04B]">Surface Restoration</span><br />
-              Without Damage.
+            <span className="eyebrow text-[#C8601A]">
+              Specialist Service · BC Exclusive
+            </span>
+
+            <h1 className="mt-6 mb-6 text-white font-light">
+              The most thorough<br />
+              surface preparation<br />
+              in British Columbia.
             </h1>
-            <p className="text-white/75 text-xl leading-relaxed mb-10 max-w-xl">
-              Gentle but relentless. Vapor (wet) blasting removes paint, coatings, grime, and rust
-              from virtually any surface — concrete, brick, stone, or metal — without silica dust,
-              chemical runoff, or substrate damage.
+
+            <p className="text-white/60 text-lg leading-relaxed mb-10 max-w-xl">
+              Vapor blasting combines pressurised water and fine abrasive media to clean,
+              restore, and prepare surfaces at the microscopic level. No heat stress.
+              No media embedment. No shortcuts. We brought this technology to BC because
+              the surfaces we install deserve better than sandblasting.
             </p>
+
             <div className="flex flex-col sm:flex-row gap-4">
               <Link href="/contact">
-                <span className="inline-block bg-[#D66620] hover:bg-[#C05A18] text-white px-8 py-4 rounded-lg font-bold text-sm uppercase tracking-wider transition-colors">
-                  Get a Free Quote
-                </span>
+                <button className="bg-white text-[#1C2026] px-8 py-4 font-semibold text-sm tracking-[0.08em] uppercase transition-colors duration-200 hover:bg-[#F6F4F0] w-full sm:w-auto">
+                  Request a Consultation →
+                </button>
               </Link>
               <a href="tel:18773910270">
-                <span className="inline-block border border-white/25 text-white hover:bg-white/10 px-8 py-4 rounded-lg font-semibold text-sm transition-colors">
+                <button className="border border-white/30 text-white px-8 py-4 font-semibold text-sm tracking-[0.08em] uppercase transition-colors duration-200 hover:border-white hover:bg-white/10 w-full sm:w-auto">
                   1-877-391-0270
-                </span>
+                </button>
               </a>
             </div>
           </div>
-        </div>
-
-        {/* Floating attribute chips */}
-        <div className="absolute right-8 top-1/2 -translate-y-1/2 hidden xl:flex flex-col gap-3">
-          {[
-            "No Silica Dust",
-            "Zero Surface Damage",
-            "Mobile to Your Site",
-            "All Substrate Types",
-            "BC-Wide Coverage",
-          ].map((label) => (
-            <span
-              key={label}
-              className="bg-white/8 backdrop-blur-sm border border-white/12 text-white/75 text-xs font-semibold px-4 py-2.5 rounded-full"
-            >
-              ✓ {label}
-            </span>
-          ))}
         </div>
       </section>
 
@@ -345,36 +308,24 @@ export default function VaporBlastingPage() {
       </section>
 
       {/* ── CTA ──────────────────────────────────────────────────────────── */}
-      <section
-        className="w-full py-28"
-        style={{ background: "linear-gradient(140deg, #0E1F26 0%, #162D38 60%, #0A1A22 100%)" }}
-      >
+      <section className="w-full py-24 bg-[#C8601A]">
         <div className="max-w-3xl mx-auto px-6 text-center">
-          <p className="text-[#F0A04B] text-[11px] uppercase tracking-[0.28em] font-bold mb-6">
-            Ready to Restore?
-          </p>
-          <h2 className="text-4xl sm:text-5xl font-black text-white mb-5 leading-tight">
-            Get a Free Quote
+          <h2 className="text-white font-light mb-6">
+            Ready to see what your surface could look like?
           </h2>
-          <p className="text-white/70 text-lg leading-relaxed mb-10 max-w-xl mx-auto">
-            Tell us what surface you&apos;re working with and what needs to come off.
-            We&apos;ll assess the scope and give you a clear, no-obligation quote.
+          <p className="text-white/80 text-lg leading-relaxed mb-10 max-w-xl mx-auto">
+            We assess, quote, and schedule within the week.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/contact">
-              <span className="inline-block bg-[#D66620] hover:bg-[#C05A18] text-white px-10 py-4 rounded-lg font-bold text-sm uppercase tracking-wider transition-colors">
-                Get a Free Quote
-              </span>
+              <button className="bg-white text-[#1C2026] px-8 py-4 font-semibold text-sm tracking-[0.08em] uppercase transition-colors duration-200 hover:bg-[#F6F4F0] w-full sm:w-auto">
+                Book a Free Assessment
+              </button>
             </Link>
             <a href="tel:18773910270">
-              <span className="inline-block border border-white/25 text-white hover:bg-white/10 px-10 py-4 rounded-lg font-semibold text-sm transition-colors">
-                1-877-391-0270
-              </span>
+              <p className="text-white/60 text-sm mt-4">Or call: 1-877-391-0270</p>
             </a>
           </div>
-          <p className="text-white/35 text-xs mt-8">
-            Lower Mainland · Vancouver Island · BC-Wide
-          </p>
         </div>
       </section>
 
