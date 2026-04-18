@@ -1,22 +1,20 @@
 import Hero from "@/components/sections/Hero"
-import ServicesGrid from "@/components/sections/ServicesGrid"
-import DrivewaysBand from "@/components/sections/DrivewaysBand"
 import StatsBar from "@/components/sections/StatsBar"
+import ServicesGrid from "@/components/sections/ServicesGrid"
 import ProjectsPreview from "@/components/sections/ProjectsPreview"
-import VaporBlastingBand from "@/components/sections/VaporBlastingBand"
-import Testimonials from "@/components/sections/Testimonials"
+import DrivewaysBand from "@/components/sections/DrivewaysBand"
+import BlogFeed from "@/components/sections/BlogFeed"
 import CTASection from "@/components/sections/CTASection"
 
 export default function Home() {
   return (
     <main>
       <Hero />
-      <ServicesGrid />
-      <DrivewaysBand />
       <StatsBar />
+      <ServicesGrid />
       <ProjectsPreview />
-      <VaporBlastingBand />
-      <Testimonials />
+      <DrivewaysBand />
+      <BlogFeed />
       <CTASection />
     </main>
   )

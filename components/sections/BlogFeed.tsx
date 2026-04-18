@@ -2,84 +2,47 @@ import Image from "next/image"
 import Link from "next/link"
 import { getAllPosts } from "@/lib/blog"
 
-function formatDate(iso: string) {
-  if (!iso) return ""
-  const d = new Date(iso)
-  return d.toLocaleDateString("en-CA", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  })
-}
-
 export default function BlogFeed() {
   const posts = getAllPosts().slice(0, 3)
 
   if (posts.length === 0) return null
 
   return (
-    <section className="w-full bg-white py-20 sm:py-24">
-      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-20">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14">
-          <div className="max-w-2xl">
-            <p className="text-[#C8601A] text-xs uppercase tracking-[0.22em] font-semibold mb-4">
-              Journal
-            </p>
-            <h2
-              className="text-[#111111]"
-              style={{
-                fontWeight: 400,
-                lineHeight: 1.1,
-                letterSpacing: "-0.02em",
-                fontSize: "clamp(1.8rem, 3vw, 3rem)",
-              }}
-            >
-              Notes from the studio.
-            </h2>
+    <section className="bg-white py-20">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="mb-12 flex justify-between items-end">
+          <div>
+            <p className="text-[11px] uppercase tracking-[0.15em] text-[#C8601A] font-semibold mb-3">From the Field</p>
+            <h2 className="text-[2.5rem] font-light text-[#111111] leading-tight tracking-[-0.02em]">Case studies &amp; insights.</h2>
           </div>
-          <Link
-            href="/blog"
-            className="text-[#1C2026] hover:text-[#C8601A] text-xs font-semibold uppercase tracking-[0.18em] transition-colors inline-flex items-center gap-2"
-          >
-            All Articles
-            <span aria-hidden>→</span>
+          <Link href="/blog" className="text-[#C8601A] text-sm font-semibold hover:underline whitespace-nowrap">
+            All Posts →
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {posts.map((post) => (
-            <Link
-              key={post.slug}
-              href={`/blog/${post.slug}`}
-              className="group block"
-            >
-              <div className="relative aspect-[4/3] overflow-hidden bg-[#EDE9E3] mb-5 border border-[#E2DDD8]">
-                {post.featured_image && (
-                  <Image
-                    src={post.featured_image}
-                    alt={post.title}
-                    fill
-                    className="object-cover transition-transform duration-[600ms] ease-out group-hover:scale-[1.03]"
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                  />
-                )}
+            <Link key={post.slug} href={`/blog/${post.slug}`} className="group block rounded-none">
+              <div className="relative aspect-[16/10] overflow-hidden rounded-none">
+                <Image
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 33vw"
+                  className="object-cover rounded-none transition-transform duration-500 group-hover:scale-105"
+                  src={post.featured_image || "/images/blog/placeholder.jpg"}
+                  alt={post.title}
+                />
               </div>
-              <p className="text-[#8C8C8C] text-[10px] uppercase tracking-[0.18em] font-semibold mb-3">
-                {post.category || "Journal"} · {formatDate(post.date)}
-              </p>
-              <h3
-                className="text-[#111111] mb-3 group-hover:text-[#C8601A] transition-colors"
-                style={{
-                  fontWeight: 500,
-                  fontSize: "1.15rem",
-                  lineHeight: 1.3,
-                }}
-              >
-                {post.title}
-              </h3>
-              <p className="text-[#5A5A5A] text-sm leading-relaxed line-clamp-3">
-                {post.description}
-              </p>
+              <div className="pt-5">
+                <p className="text-[10px] uppercase tracking-wider text-[#C8601A] font-semibold">{post.category}</p>
+                <h3 className="font-semibold text-[#111111] text-lg leading-tight mt-1.5 line-clamp-2">{post.title}</h3>
+                <p className="text-sm text-[#5A5A5A] mt-2 line-clamp-2">{post.description}</p>
+                <span className="text-[#C8601A] text-sm font-semibold mt-4 flex items-center gap-1">
+                  Read case study
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                    <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </span>
+              </div>
             </Link>
           ))}
         </div>

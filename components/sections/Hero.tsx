@@ -2,88 +2,124 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { HubBadge } from "@/components/ui/HubBadge"
 
 export default function Hero() {
   return (
-    <section className="flex flex-col md:flex-row min-h-screen">
+    <section
+      className="relative min-h-screen flex items-end pb-20 lg:pb-28 bg-[#1C2026] pt-16"
+    >
+      {/* Background image */}
+      <Image
+        src="/images/applications/bus-bike-lanes/red-bus-lane-long-perspective-01.jpg"
+        alt="Decorative pavement installation by Square One Paving"
+        fill
+        className="object-cover"
+        sizes="100vw"
+        priority
+      />
 
-      {/* ── Left column: Content (55%) ── */}
-      <div className="flex flex-col justify-center px-6 py-16 md:px-12 lg:px-20 xl:px-24 md:w-[55%] bg-white">
+      {/* Dark overlay */}
+      <div className="absolute inset-0 bg-[rgba(20,22,26,0.72)]" />
 
-        <HubBadge variant="light" />
+      {/* Content */}
+      <div className="relative z-10 w-full px-6 md:px-12 lg:px-20">
+        <div className="max-w-3xl">
+          {/* Eyebrow */}
+          <p className="text-[11px] uppercase tracking-[0.2em] text-[#C8601A] font-semibold mb-4">
+            BC's Decorative Pavement Specialists · Since 2000
+          </p>
 
-        <div className="mt-6 mb-8">
-          <span className="text-[11px] font-semibold tracking-[0.18em] uppercase text-[#C8601A]">
-            Vancouver · Victoria · BC Since 2000
-          </span>
-        </div>
+          {/* Headline */}
+          <h1
+            className="font-light text-white leading-[1.05] tracking-[-0.03em]"
+            style={{ fontSize: "clamp(3.5rem, 6vw, 6rem)" }}
+          >
+            Surfaces that{" "}
+            <span
+              style={{
+                fontStyle: "italic",
+                fontFamily: "var(--font-display)",
+                color: "#C8601A",
+              }}
+            >
+              define
+            </span>
+            <br />
+            a place.
+          </h1>
 
-        <h1 className="font-light text-[#111111] leading-[1.05] tracking-[-0.03em] mb-8"
-            style={{ fontSize: 'clamp(3rem, 5.5vw, 5.5rem)' }}>
-          BC's most<br />
-          considered<br />
-          surfaces.
-        </h1>
+          {/* Body copy */}
+          <p className="text-lg text-white/70 max-w-lg mt-5 leading-relaxed">
+            From crosswalks and transit lanes to driveways and public art —
+            Square One has transformed over 50 BC communities with surfaces
+            that perform and inspire.
+          </p>
 
-        {/* Thin orange rule */}
-        <div className="w-12 h-[1px] bg-[#C8601A] mb-8" />
-
-        <p className="text-[#5A5A5A] text-lg leading-relaxed max-w-sm mb-10">
-          We install stamped asphalt, decorative coatings, and preformed thermoplastics
-          for municipalities, developers, and discerning property owners
-          across the Lower Mainland and Vancouver Island.
-        </p>
-
-        {/* Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 mb-12">
-          <Link href="/contact">
-            <button className="bg-[#1C2026] text-white px-8 py-4 font-semibold text-sm tracking-[0.08em] uppercase transition-colors duration-200 hover:bg-[#C8601A] w-full sm:w-auto">
-              Request a Quote →
-            </button>
-          </Link>
-          <Link href="/projects">
-            <button className="border border-[#1C2026] text-[#1C2026] px-8 py-4 font-semibold text-sm tracking-[0.08em] uppercase transition-colors duration-200 hover:bg-[#1C2026] hover:text-white w-full sm:w-auto">
-              View Our Work
-            </button>
-          </Link>
-        </div>
-
-        {/* Stats row */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-8 border-t border-[#E2DDD8]">
-          <div>
-            <div className="text-2xl font-semibold text-[#111111]">500+</div>
-            <div className="text-xs text-[#8C8C8C] mt-1">Projects installed in BC</div>
-          </div>
-          <div>
-            <div className="text-2xl font-semibold text-[#111111]">25</div>
-            <div className="text-xs text-[#8C8C8C] mt-1">Years of specialized expertise</div>
-          </div>
-          <div className="hidden md:block">
-            <div className="text-2xl font-semibold text-[#111111]">4</div>
-            <div className="text-xs text-[#8C8C8C] mt-1">Core services, one studio</div>
-          </div>
-          <div className="hidden md:block">
-            <div className="text-2xl font-semibold text-[#111111]">2</div>
-            <div className="text-xs text-[#8C8C8C] mt-1">Regions: Lower Mainland & Island</div>
+          {/* CTAs */}
+          <div className="mt-8 flex flex-wrap gap-4">
+            <Link
+              href="/projects"
+              className="bg-white text-[#111111] px-6 py-3 font-semibold text-sm rounded-none hover:bg-[#F6F4F0] transition-colors duration-200"
+            >
+              See Our Work
+            </Link>
+            <Link
+              href="/contact"
+              className="border border-white/30 text-white px-6 py-3 font-semibold text-sm rounded-none hover:border-white transition-colors duration-200"
+            >
+              Get a Quote
+            </Link>
           </div>
         </div>
       </div>
 
-      {/* ── Right column: Image (45%) ── */}
-      <div className="relative md:w-[45%] min-h-[400px] md:min-h-0">
-        <Image
-          src="/images/hero/hero-1.jpg"
-          alt="Decorative stamped asphalt installation by Square One Paving"
-          fill
-          className="object-cover object-center"
-          priority
-          sizes="(max-width: 768px) 100vw, 45vw"
-        />
-        {/* Orange left-edge accent */}
-        <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-[#C8601A]" />
-      </div>
+      {/* Floating stat card — desktop only */}
+      <div className="hidden md:block absolute right-12 bottom-20 z-10 bg-white/10 backdrop-blur-md border border-white/15 p-6 rounded-none">
+        {/* Stat: communities */}
+        <div className="py-4">
+          <div
+            className="text-white leading-none"
+            style={{ fontFamily: "var(--font-display)", fontSize: "2.5rem", fontWeight: 400 }}
+          >
+            51+
+          </div>
+          <div className="text-xs text-white/60 uppercase tracking-wider mt-0.5">
+            BC communities served
+          </div>
+        </div>
 
+        {/* Divider */}
+        <div className="border-t border-white/15" />
+
+        {/* Stat: years */}
+        <div className="py-4">
+          <div
+            className="text-white leading-none"
+            style={{ fontFamily: "var(--font-display)", fontSize: "2.5rem", fontWeight: 400 }}
+          >
+            25 yrs
+          </div>
+          <div className="text-xs text-white/60 uppercase tracking-wider mt-0.5">
+            in operation
+          </div>
+        </div>
+
+        {/* Divider */}
+        <div className="border-t border-white/15" />
+
+        {/* Stat: services */}
+        <div className="py-4">
+          <div
+            className="text-white leading-none"
+            style={{ fontFamily: "var(--font-display)", fontSize: "2.5rem", fontWeight: 400 }}
+          >
+            4
+          </div>
+          <div className="text-xs text-white/60 uppercase tracking-wider mt-0.5">
+            specialist services
+          </div>
+        </div>
+      </div>
     </section>
   )
 }

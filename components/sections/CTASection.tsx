@@ -2,31 +2,33 @@ import Link from "next/link"
 
 export default function CTASection() {
   return (
-    <section className="w-full py-24 bg-[#C8601A]">
-      <div className="max-w-3xl mx-auto px-6 text-center">
-
-        <h2 className="text-white font-light mb-6">
-          Ready to transform your surface?
+    <section className="bg-[#1C2026] py-24">
+      <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
+        <p className="text-[11px] uppercase tracking-[0.15em] text-[#C8601A] font-semibold mb-4">Ready to Start?</p>
+        <h2 className="text-[2.5rem] font-light text-white leading-tight tracking-[-0.02em]">
+          Let&#39;s build something{' '}
+          <span style={{ fontStyle: 'italic', fontFamily: 'var(--font-display)', color: '#C8601A' }}>
+            worth looking at.
+          </span>
         </h2>
-
-        <p className="text-white/80 text-lg leading-relaxed mb-10 max-w-xl mx-auto">
-          We work with municipalities, developers, strata corporations,
-          and private property owners across Greater Vancouver and Vancouver Island.
+        <p className="max-w-xl mx-auto text-white/60 mt-4 leading-relaxed">
+          Whether it&#39;s a municipal crosswalk, a commercial plaza, or your home driveway —
+          we bring 25 years of BC expertise to every square metre.
         </p>
-
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link href="/contact">
-            <button className="bg-white text-[#1C2026] px-8 py-4 font-semibold text-sm tracking-[0.08em] uppercase transition-colors duration-200 hover:bg-[#F6F4F0] w-full sm:w-auto">
-              Request a Quote
-            </button>
+        <div className="mt-10 flex justify-center flex-wrap gap-4">
+          <Link
+            href="/contact"
+            className="bg-[#C8601A] text-white px-8 py-4 rounded-none font-semibold hover:brightness-110 transition-all"
+          >
+            Request a Quote
           </Link>
-          <a href="tel:18773910270">
-            <button className="border border-white/30 text-white px-8 py-4 font-semibold text-sm tracking-[0.08em] uppercase transition-colors duration-200 hover:border-white hover:bg-white/10 w-full sm:w-auto">
-              1-877-391-0270
-            </button>
-          </a>
+          <Link
+            href="/contact"
+            className="border border-white/30 text-white px-8 py-4 rounded-none hover:border-white transition-colors"
+          >
+            Book a Site Visit
+          </Link>
         </div>
-
       </div>
     </section>
   )

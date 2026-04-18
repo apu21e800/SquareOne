@@ -1,36 +1,24 @@
 import Link from "next/link"
 import Image from "next/image"
 
-const serviceLinks = [
-  { label: "Stamped Asphalt", href: "/services/stamped-asphalt" },
-  { label: "Decorative Coatings", href: "/services/decorative-coatings" },
-  { label: "Preformed Thermoplastic", href: "/services/preformed-thermoplastic" },
-  { label: "Vapor Blasting", href: "/vapor-blasting" },
-  { label: "Driveways", href: "/driveways" },
-]
-
-const studioLinks = [
-  { label: "Projects", href: "/projects" },
-  { label: "Journal", href: "/blog" },
-  { label: "About", href: "/about" },
-  { label: "Contact", href: "/contact" },
-]
-
 export default function Footer() {
   return (
-    <footer className="w-full bg-[#1C2026] text-white">
-      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-20 py-20 sm:py-24">
-        <div className="grid grid-cols-1 md:grid-cols-[1.4fr_1fr_1fr_1fr] gap-12 md:gap-10 mb-16">
-          {/* Brand block */}
+    <footer className="bg-[#111111] pt-16 pb-8">
+      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-20">
+        {/* 4-column grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+
+          {/* Col 1 — Brand */}
           <div>
-            <Link href="/" className="inline-flex items-center gap-3 mb-6">
+            <Link href="/" className="inline-flex items-center gap-3 mb-4">
               <div className="relative w-10 h-10 flex-shrink-0">
                 <Image
                   src="/images/logo/S1_Square.png"
                   alt="Square One Paving"
                   fill
-                  className="object-contain"
                   sizes="40px"
+                  className="object-contain"
+                  style={{ filter: 'brightness(0) invert(1)' }}
                 />
               </div>
               <div className="flex items-baseline gap-1.5">
@@ -42,132 +30,116 @@ export default function Footer() {
                 </span>
               </div>
             </Link>
-            <p className="text-white/60 text-sm leading-relaxed max-w-xs mb-6">
-              BC&apos;s decorative pavement studio. Installed across the Lower
-              Mainland and Vancouver Island since 2000.
+            <p className="text-white/60 text-sm mt-4 leading-relaxed">
+              BC&#39;s decorative pavement specialists since 2000.
             </p>
-            <div className="w-10 h-[2px] bg-[#C8601A]" />
-          </div>
-
-          {/* Services */}
-          <div>
-            <p className="text-[#C8601A] text-[10px] font-semibold uppercase tracking-[0.22em] mb-5">
-              Services
-            </p>
-            <ul className="space-y-3 text-sm text-white/70">
-              {serviceLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="hover:text-white transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Studio */}
-          <div>
-            <p className="text-[#C8601A] text-[10px] font-semibold uppercase tracking-[0.22em] mb-5">
-              Studio
-            </p>
-            <ul className="space-y-3 text-sm text-white/70">
-              {studioLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="hover:text-white transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Contact — single compact block */}
-          <div>
-            <p className="text-[#C8601A] text-[10px] font-semibold uppercase tracking-[0.22em] mb-5">
-              Contact
-            </p>
-            <div className="space-y-2 text-sm">
-              <a
-                href="tel:16043098212"
-                className="block text-white/80 hover:text-white transition-colors"
-              >
-                604-309-8212
+            {/* Social icons row */}
+            <div className="flex gap-4 mt-6">
+              {/* Instagram */}
+              <a href="#" aria-label="Instagram" className="text-white/50 hover:text-white transition-colors">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke="currentColor" strokeWidth="1.5"/>
+                  <circle cx="12" cy="12" r="5" stroke="currentColor" strokeWidth="1.5"/>
+                  <circle cx="17.5" cy="6.5" r="1" fill="currentColor"/>
+                </svg>
               </a>
-              <a
-                href="mailto:info@squareonepaving.ca"
-                className="block text-white/80 hover:text-white transition-colors"
-              >
-                info@squareonepaving.ca
+              {/* LinkedIn */}
+              <a href="#" aria-label="LinkedIn" className="text-white/50 hover:text-white transition-colors">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/>
+                  <circle cx="4" cy="4" r="2"/>
+                </svg>
+              </a>
+              {/* Facebook */}
+              <a href="#" aria-label="Facebook" className="text-white/50 hover:text-white transition-colors">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>
+                </svg>
               </a>
             </div>
           </div>
-        </div>
 
-        {/* Regional blocks */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/10 mb-16">
-          <div className="bg-[#1C2026] p-8">
-            <p className="text-[#C8601A] text-[10px] font-semibold uppercase tracking-[0.22em] mb-4">
-              Lower Mainland
-            </p>
-            <p className="text-white text-lg font-medium leading-tight mb-3">
-              Metro Vancouver coverage.
-            </p>
-            <p className="text-white/55 text-sm leading-relaxed mb-4">
-              Vancouver · Burnaby · Coquitlam · Surrey · Langley · Richmond ·
-              North Shore · Fraser Valley.
-            </p>
-            <a
-              href="tel:16043098212"
-              className="text-white/80 hover:text-white text-sm font-semibold transition-colors"
-            >
-              604-309-8212
-            </a>
+          {/* Col 2 — Services */}
+          <div>
+            <h4 className="text-white font-semibold text-xs uppercase tracking-[0.15em] mb-4">Services</h4>
+            <ul className="space-y-2.5">
+              {[
+                { label: 'Asphalt Stamping', href: '/services/stamped-asphalt' },
+                { label: 'Decorative Coatings', href: '/services/decorative-coatings' },
+                { label: 'Preformed Thermoplastic', href: '/services/preformed-thermoplastic' },
+                { label: 'Vapor Blasting', href: '/services/vapor-blasting' },
+                { label: 'All Services →', href: '/services' },
+              ].map(link => (
+                <li key={link.href}>
+                  <Link href={link.href} className="text-white/60 hover:text-white text-sm transition-colors">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
-          <div className="bg-[#1C2026] p-8">
-            <p className="text-[#C8601A] text-[10px] font-semibold uppercase tracking-[0.22em] mb-4">
-              Vancouver Island
-            </p>
-            <p className="text-white text-lg font-medium leading-tight mb-3">
-              Based in Ladysmith. Island-wide.
-            </p>
-            <p className="text-white/55 text-sm leading-relaxed mb-4">
-              Victoria · Saanich · Langford · Duncan · Nanaimo · Parksville ·
-              Courtenay · Comox Valley.
-            </p>
-            <a
-              href="tel:16043098212"
-              className="text-white/80 hover:text-white text-sm font-semibold transition-colors"
-            >
-              604-309-8212
-            </a>
+
+          {/* Col 3 — Products */}
+          <div>
+            <h4 className="text-white font-semibold text-xs uppercase tracking-[0.15em] mb-4">Products</h4>
+            <ul className="space-y-2.5">
+              {[
+                { label: 'StreetPrint', href: '/products/streetprint' },
+                { label: 'StreetBond', href: '/products/streetbond' },
+                { label: 'TrafficPatterns', href: '/products/trafficpatterns' },
+                { label: 'TrafficPatterns XD', href: '/products/trafficpatternsxd' },
+                { label: 'DecoMark', href: '/products/decomark' },
+                { label: 'All Products →', href: '/products' },
+              ].map(link => (
+                <li key={link.href}>
+                  <Link href={link.href} className="text-white/60 hover:text-white text-sm transition-colors">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Col 4 — Contact */}
+          <div>
+            <h4 className="text-white font-semibold text-xs uppercase tracking-[0.15em] mb-4">Contact</h4>
+            <address className="not-italic space-y-3 text-white/60 text-sm leading-relaxed">
+              <div>
+                <p className="text-white/40 text-xs uppercase tracking-wider mb-1">Metro Vancouver</p>
+                <p>505 – 20800 Lougheed Hwy</p>
+                <p>Maple Ridge, BC V2X 3P2</p>
+              </div>
+              <div>
+                <p className="text-white/40 text-xs uppercase tracking-wider mb-1">Vancouver Island</p>
+                <p>Ladysmith, BC</p>
+              </div>
+              <div className="pt-1">
+                <a href="mailto:info@squareonepaving.ca" className="hover:text-white transition-colors">info@squareonepaving.ca</a>
+              </div>
+              <div>
+                <a href="tel:+16043098212" className="hover:text-white transition-colors">604-309-8212</a>
+                {' / '}
+                <a href="tel:+18776098200" className="hover:text-white transition-colors">1-877-609-8200</a>
+              </div>
+            </address>
           </div>
         </div>
 
         {/* Bottom bar */}
-        <div className="border-t border-white/10 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-xs text-white/40 text-center sm:text-left">
-            &copy; {new Date().getFullYear()} Square One Paving Ltd. Independent
-            BC studio.
-          </p>
-          <div className="flex gap-6 text-xs text-white/40">
-            <Link
-              href="/privacy"
-              className="hover:text-white/70 transition-colors"
-            >
-              Privacy
-            </Link>
-            <Link
-              href="/terms"
-              className="hover:text-white/70 transition-colors"
-            >
-              Terms
-            </Link>
+        <div className="border-t border-white/10 mt-12 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <div className="flex items-center gap-4 text-white/40 text-xs">
+            <span>© {new Date().getFullYear()} Square One Paving Ltd.</span>
+            <Link href="/privacy" className="hover:text-white/70 transition-colors">Privacy</Link>
+            <Link href="/terms" className="hover:text-white/70 transition-colors">Terms</Link>
+          </div>
+          <div className="flex items-center gap-2 text-white/40 text-xs">
+            <svg viewBox="0 0 20 10" style={{width:28,height:14,display:'inline-block',flexShrink:0}} aria-hidden="true">
+              <rect x="0" y="0" width="5" height="10" fill="#D80621"/>
+              <rect x="5" y="0" width="10" height="10" fill="#FFFFFF"/>
+              <rect x="15" y="0" width="5" height="10" fill="#D80621"/>
+              <path d="M10 1.5 L10.6 3.5 L12.5 3.5 L11.1 4.6 L11.6 6.5 L10 5.4 L8.4 6.5 L8.9 4.6 L7.5 3.5 L9.4 3.5 Z" fill="#D80621"/>
+            </svg>
+            <span>Proudly Canadian · Serving BC since 2000</span>
           </div>
         </div>
       </div>

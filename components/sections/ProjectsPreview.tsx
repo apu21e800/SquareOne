@@ -2,73 +2,63 @@ import Image from "next/image"
 import Link from "next/link"
 import { getFeaturedProjects } from "@/lib/projects"
 
-const serviceImageMap: Record<string, string> = {
-  "Stamped Asphalt":          "/images/products/streetprint/streetprint-1.jpg",
-  "Decorative Coatings":      "/images/products/streetbond/streetbond-red-roundabout-mountains-01.jpg",
-  "Preformed Thermoplastic":  "/images/products/traffic-patterns/trafficpatterns-1.jpg",
-  "Vapor Blasting":           "/images/services/vapor-blasting/hero.jpg",
-}
-
-const GLOBAL_FALLBACK = "/images/products/streetprint/streetprint-1.jpg"
-
 export default function ProjectsPreview() {
-  const featuredProjects = getFeaturedProjects().slice(0, 3)
+  const featuredProjects = getFeaturedProjects().slice(0, 6)
 
   return (
-    <section className="w-full py-24 md:py-32 bg-white">
+    <section className="bg-[#1C2026] py-24">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
 
-        {/* Header */}
-        <div className="mb-16">
-          <span className="eyebrow">Selected Work</span>
-          <h2 className="mt-4">Projects that speak.</h2>
-        </div>
-
-        {/* Asymmetric grid: col 1 (tall), cols 2+3 (standard) */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          {featuredProjects.map((project, idx) => {
-            const imgSrc = project.imageUrl ?? serviceImageMap[project.service] ?? GLOBAL_FALLBACK
-            const isFeatured = idx === 0
-
-            return (
-              <Link
-                key={project.slug}
-                href={`/projects/${project.slug}`}
-                className={`group block relative overflow-hidden ${
-                  isFeatured ? 'md:row-span-2' : ''
-                }`}
-              >
-                {/* Image */}
-                <div className={`relative overflow-hidden ${
-                  isFeatured ? 'aspect-[3/4]' : 'aspect-[4/3]'
-                }`}>
-                  <Image
-                    src={imgSrc}
-                    alt={project.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-700"
-                    sizes={isFeatured ? "(max-width: 768px) 100vw, 40vw" : "(max-width: 768px) 100vw, 30vw"}
-                  />
-                  {/* Bottom info strip */}
-                  <div className="absolute bottom-0 left-0 right-0 px-4 py-3 bg-gradient-to-t from-black/60 to-transparent">
-                    <h3 className="text-white font-semibold text-sm">
-                      {project.title}
-                    </h3>
-                    <p className="text-white/60 text-xs mt-0.5">
-                      {project.city}
-                    </p>
-                  </div>
-                </div>
-              </Link>
-            )
-          })}
-        </div>
-
-        {/* CTA link */}
-        <div className="text-center">
-          <Link href="/projects" className="inline-flex items-center gap-2 text-[#C8601A] text-sm font-semibold border-b border-[#C8601A] pb-1 hover:gap-3 transition-all">
-            View All Projects <span>→</span>
+        {/* Header row */}
+        <div className="mb-12 flex justify-between items-end">
+          <div>
+            <p className="text-[11px] uppercase tracking-[0.15em] text-[#C8601A] font-semibold mb-3">
+              Our Work
+            </p>
+            <h2 className="text-[2.5rem] font-light text-white leading-tight tracking-[-0.02em]">
+              Transforming BC, one surface at a time.
+            </h2>
+          </div>
+          <Link
+            href="/projects"
+            className="text-[#C8601A] text-sm font-semibold hover:underline whitespace-nowrap"
+          >
+            All Projects →
           </Link>
+        </div>
+
+        {/* Projects grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {featuredProjects.map((project) => (
+            <Link
+              key={project.slug}
+              href={`/projects/${project.slug}`}
+              className="group block relative overflow-hidden rounded-none"
+            >
+              <div className="relative aspect-[4/3] overflow-hidden">
+                <Image
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  className="object-cover rounded-none transition-transform duration-500 group-hover:scale-105"
+                  src={project.imageUrl || "/images/placeholder.jpg"}
+                  alt={project.title}
+                />
+                {/* Hover overlay */}
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all duration-300" />
+                {/* Hover content */}
+                <div className="absolute inset-0 flex flex-col justify-end p-5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <p className="text-[10px] uppercase tracking-wider text-[#C8601A] font-semibold">
+                    {project.service}
+                  </p>
+                  <h3 className="font-semibold text-white text-lg leading-tight mt-1">
+                    {project.title}
+                  </h3>
+                </div>
+              </div>
+              {/* Bottom orange accent on hover */}
+              <div className="h-[3px] bg-[#C8601A] w-0 group-hover:w-full transition-all duration-300" />
+            </Link>
+          ))}
         </div>
 
       </div>
