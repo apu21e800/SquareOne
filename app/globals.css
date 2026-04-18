@@ -6,7 +6,14 @@
   --color-orange: #C8601A;
   --color-orange-hover: #A84F15;
   --color-orange-light: #E8895A;
+  --color-orange-warm: #E8895A;
   --color-orange-muted: rgba(200, 96, 26, 0.08);
+  --color-orange-gradient: linear-gradient(90deg, #C8601A, #E8895A);
+
+  /* ─── Layout containers ─────────────────────────────── */
+  --container-max: 1400px;
+  --container-px: 1.5rem;
+  --container-px-lg: 2.5rem;
 
   /* ─── Surfaces — Light-first architecture ───────────── */
   --bg-primary: #FFFFFF;
@@ -49,20 +56,21 @@ html {
   scroll-behavior: smooth;
 }
 
+h1, h2, h3, h4 {
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
 h1 {
   font-size: clamp(3rem, 5.5vw, 5.5rem);
   font-weight: 300;
-  line-height: 1.05;
-  letter-spacing: -0.03em;
-  color: var(--text-primary);
 }
 
 h2 {
   font-size: clamp(1.9rem, 3vw, 3rem);
-  font-weight: 400;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  color: var(--text-primary);
+  font-weight: 300;
 }
 
 h3 {
@@ -70,10 +78,14 @@ h3 {
   font-weight: 600;
   line-height: 1.3;
   letter-spacing: -0.01em;
-  color: var(--text-primary);
 }
 
-h4, h5, h6 {
+h4 {
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+h5, h6 {
   font-weight: 600;
   line-height: 1.3;
   color: var(--text-primary);
@@ -94,11 +106,6 @@ p {
   color: var(--color-orange);
 }
 
-/* Display font (Playfair) for hero headlines */
-.font-display {
-  font-family: var(--font-display);
-}
-
 /* Scrollbar hide utility */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
@@ -106,4 +113,107 @@ p {
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* ─── Ticker marquee ──────────────────────────────────── */
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.ticker-track {
+  animation: ticker 55s linear infinite;
+  display: flex;
+  width: max-content;
+  align-items: center;
+}
+.ticker-mask {
+  mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
+}
+
+/* ─── Page sweep on load ──────────────────────────────── */
+@keyframes page-sweep {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(100%); }
+}
+@keyframes page-sweep-fade {
+  0%   { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { opacity: 0; pointer-events: none; }
+}
+.page-sweep {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: hidden;
+  pointer-events: none;
+  animation: page-sweep-fade 0.6s ease-out forwards;
+}
+.page-sweep::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, #C8601A 50%, transparent);
+  animation: page-sweep 0.4s ease-out forwards;
+}
+
+/* ─── Hover underline (scaleX) ────────────────────────── */
+.hover-underline {
+  position: relative;
+}
+.hover-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background: #C8601A;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.25s ease-out;
+}
+.hover-underline:hover::after {
+  transform: scaleX(1);
+}
+
+/* ─── Container utility ───────────────────────────────── */
+.container-xl {
+  max-width: var(--container-max);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--container-px);
+  padding-right: var(--container-px);
+}
+@media (min-width: 1024px) {
+  .container-xl {
+    padding-left: var(--container-px-lg);
+    padding-right: var(--container-px-lg);
+  }
+}
+
+/* ─── Section rhythm ──────────────────────────────────── */
+.section-padding {
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+}
+@media (min-width: 1024px) {
+  .section-padding {
+    padding-top: 8rem;
+    padding-bottom: 8rem;
+  }
+}
+
+/* ─── Subtle pavement texture overlay utility ─────────── */
+.texture-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url('/images/textures/stamped-asphalt-texture.webp');
+  background-size: cover;
+  opacity: 0.08;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  z-index: 1;
 }

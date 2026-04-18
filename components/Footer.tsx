@@ -1,12 +1,21 @@
 import Link from "next/link"
 import Image from "next/image"
+import Container from "@/components/ui/Container"
 
 export default function Footer() {
   return (
-    <footer className="bg-[#111111] pt-16 pb-8">
-      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-20">
+    <footer className="bg-[#111111] pb-8">
+      {/* Gradient top border */}
+      <div
+        className="h-[2px] w-full"
+        style={{
+          background:
+            "linear-gradient(90deg, transparent 0%, #C8601A 20%, #E8895A 50%, #C8601A 80%, transparent 100%)",
+        }}
+      />
+      <Container>
         {/* 4-column grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12 pt-16">
 
           {/* Col 1 — Brand */}
           <div>
@@ -30,7 +39,7 @@ export default function Footer() {
                 </span>
               </div>
             </Link>
-            <p className="text-white/60 text-sm mt-4 leading-relaxed">
+            <p className="text-white/70 text-[15px] mt-5 leading-[1.6] max-w-[280px]">
               BC&#39;s decorative pavement specialists since 2000.
             </p>
             {/* Social icons row */}
@@ -61,7 +70,7 @@ export default function Footer() {
 
           {/* Col 2 — Services */}
           <div>
-            <h4 className="text-white font-semibold text-xs uppercase tracking-[0.15em] mb-4">Services</h4>
+            <h4 className="text-white font-semibold text-xs uppercase tracking-[0.15em] mb-5 pb-2 inline-block border-b-2 border-[#C8601A]">Services</h4>
             <ul className="space-y-2.5">
               {[
                 { label: 'Asphalt Stamping', href: '/services/stamped-asphalt' },
@@ -71,7 +80,7 @@ export default function Footer() {
                 { label: 'All Services →', href: '/services' },
               ].map(link => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-white/60 hover:text-white text-sm transition-colors">
+                  <Link href={link.href} className="text-white/60 hover:text-white text-sm transition-colors hover-underline inline-block">
                     {link.label}
                   </Link>
                 </li>
@@ -81,7 +90,7 @@ export default function Footer() {
 
           {/* Col 3 — Products */}
           <div>
-            <h4 className="text-white font-semibold text-xs uppercase tracking-[0.15em] mb-4">Products</h4>
+            <h4 className="text-white font-semibold text-xs uppercase tracking-[0.15em] mb-5 pb-2 inline-block border-b-2 border-[#C8601A]">Products</h4>
             <ul className="space-y-2.5">
               {[
                 { label: 'StreetPrint', href: '/products/streetprint' },
@@ -92,7 +101,7 @@ export default function Footer() {
                 { label: 'All Products →', href: '/products' },
               ].map(link => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-white/60 hover:text-white text-sm transition-colors">
+                  <Link href={link.href} className="text-white/60 hover:text-white text-sm transition-colors hover-underline inline-block">
                     {link.label}
                   </Link>
                 </li>
@@ -102,34 +111,36 @@ export default function Footer() {
 
           {/* Col 4 — Contact */}
           <div>
-            <h4 className="text-white font-semibold text-xs uppercase tracking-[0.15em] mb-4">Contact</h4>
+            <h4 className="text-white font-semibold text-xs uppercase tracking-[0.15em] mb-5 pb-2 inline-block border-b-2 border-[#C8601A]">Contact</h4>
             <address className="not-italic space-y-3 text-white/60 text-sm leading-relaxed">
-              <div>
+              <div className="pl-4 border-l-2 border-[#C8601A]">
                 <p className="text-white/40 text-xs uppercase tracking-wider mb-1">Metro Vancouver</p>
                 <p>505 – 20800 Lougheed Hwy</p>
                 <p>Maple Ridge, BC V2X 3P2</p>
               </div>
-              <div>
+              <div className="pl-4 border-l-2 border-[#C8601A]">
                 <p className="text-white/40 text-xs uppercase tracking-wider mb-1">Vancouver Island</p>
                 <p>Ladysmith, BC</p>
               </div>
-              <div className="pt-1">
-                <a href="mailto:info@squareonepaving.ca" className="hover:text-white transition-colors">info@squareonepaving.ca</a>
+              <div className="pt-2">
+                <a href="mailto:info@squareonepaving.ca" className="text-white hover:text-[#E8895A] transition-colors text-sm font-medium">info@squareonepaving.ca</a>
               </div>
-              <div>
-                <a href="tel:+16043098212" className="hover:text-white transition-colors">604-309-8212</a>
-                {' / '}
-                <a href="tel:+18776098200" className="hover:text-white transition-colors">1-877-609-8200</a>
+              <div className="text-sm">
+                <a href="tel:+16043098212" className="text-white/80 hover:text-white transition-colors">604-309-8212</a>
+                <span className="text-white/40 mx-2">/</span>
+                <a href="tel:+18776098200" className="text-white/80 hover:text-white transition-colors">1-877-609-8200</a>
               </div>
             </address>
           </div>
         </div>
 
         {/* Bottom bar */}
-        <div className="border-t border-white/10 mt-12 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-4 text-white/40 text-xs">
+        <div className="border-t border-white/10 mt-12 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <div className="flex items-center gap-3 text-white/40 text-xs">
             <span>© {new Date().getFullYear()} Square One Paving Ltd.</span>
+            <span className="text-white/20">·</span>
             <Link href="/privacy" className="hover:text-white/70 transition-colors">Privacy</Link>
+            <span className="text-white/20">·</span>
             <Link href="/terms" className="hover:text-white/70 transition-colors">Terms</Link>
           </div>
           <div className="flex items-center gap-2 text-white/40 text-xs">
@@ -142,7 +153,7 @@ export default function Footer() {
             <span>Proudly Canadian · Serving BC since 2000</span>
           </div>
         </div>
-      </div>
+      </Container>
     </footer>
   )
 }

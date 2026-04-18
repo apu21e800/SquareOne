@@ -81,12 +81,25 @@ const serviceItems: ServiceItem[] = [
 // ---------------------------------------------------------------------------
 
 const panelVariants: Variants = {
-  hidden: { opacity: 0, y: -8 },
-  visible: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -8 },
+  hidden: { opacity: 0, y: -8, scale: 0.98 },
+  visible: { opacity: 1, y: 0, scale: 1 },
+  exit: { opacity: 0, y: -8, scale: 0.98 },
 }
 
-const panelTransitionIn: Transition = { duration: 0.18, ease: "easeOut" }
+const panelTransitionIn: Transition = { duration: 0.22, ease: "easeOut" }
+
+// Reusable small arrow for sidebar CTA
+const ArrowRight = () => (
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+    <path
+      d="M2 7h10M8 3l4 4-4 4"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+)
 
 // ---------------------------------------------------------------------------
 // Products mega panel
@@ -103,28 +116,59 @@ function ProductsPanel({ onClose }: { onClose: () => void }) {
       className="absolute top-full left-0 right-0 bg-white border-b border-[#E2DDD8]"
       style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.12)" }}
     >
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-8">
-        <div className="grid grid-cols-3 gap-8">
-          {productColumns.map((col) => (
-            <div key={col.category}>
-              <p className="text-[10px] uppercase tracking-[0.15em] text-[#8C8C8C] font-semibold mb-3">
-                {col.category}
-              </p>
-              <ul className="space-y-0.5">
-                {col.items.map((item) => (
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      onClick={onClose}
-                      className="flex items-center min-h-[38px] px-3 text-sm font-semibold text-[#111111] hover:text-[#C8601A] hover:bg-[#F6F4F0] border-l-2 border-transparent hover:border-[#C8601A] transition-all"
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+      <div className="max-w-[1400px] mx-auto px-5 sm:px-8 py-8">
+        <div className="grid grid-cols-[1fr_340px] gap-10">
+          {/* Left: 3-col product list */}
+          <div className="grid grid-cols-3 gap-8">
+            {productColumns.map((col) => (
+              <div key={col.category}>
+                <p className="text-[10px] uppercase tracking-[0.15em] text-[#8C8C8C] font-semibold mb-3">
+                  {col.category}
+                </p>
+                <ul className="space-y-0.5">
+                  {col.items.map((item) => (
+                    <li key={item.href}>
+                      <Link
+                        href={item.href}
+                        onClick={onClose}
+                        className="flex items-center min-h-[38px] px-3 text-[13px] font-medium tracking-[0.01em] text-[#111111] hover:text-[#C8601A] hover:bg-[#F6F4F0] border-l-2 border-transparent hover:border-[#C8601A] transition-all"
+                      >
+                        {item.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+
+          {/* Right: featured sidebar */}
+          <div className="bg-[#F6F4F0] p-6 flex flex-col h-full">
+            <p className="text-[10px] uppercase tracking-[0.18em] text-[#C8601A] font-semibold mb-3">
+              Most Requested
+            </p>
+            <div className="relative aspect-[4/3] overflow-hidden mb-4 flex-shrink-0">
+              <Image
+                fill
+                src="/images/applications/bus-bike-lanes/red-bus-lane-long-perspective-01.jpg"
+                alt="StreetBond bus lane"
+                className="object-cover"
+                sizes="340px"
+              />
             </div>
-          ))}
+            <h4 className="text-base font-semibold text-[#111111] mb-2">StreetBond by HUB</h4>
+            <p className="text-sm text-[#5A5A5A] leading-relaxed mb-5 flex-1">
+              Our most-installed decorative coating — proven on BC transit corridors, cycle lanes, and urban plazas.
+            </p>
+            <Link
+              href="/products/streetbond"
+              onClick={onClose}
+              className="inline-flex items-center gap-2 text-sm font-semibold text-[#C8601A] hover:gap-3 transition-all"
+            >
+              Learn about StreetBond
+              <ArrowRight />
+            </Link>
+          </div>
         </div>
 
         {/* Bottom strip */}
@@ -164,21 +208,52 @@ function ServicesPanel({ onClose }: { onClose: () => void }) {
       className="absolute top-full left-0 right-0 bg-white border-b border-[#E2DDD8]"
       style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.12)" }}
     >
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-8">
-        <div className="grid grid-cols-2 gap-3">
-          {serviceItems.map((item) => (
+      <div className="max-w-[1400px] mx-auto px-5 sm:px-8 py-8">
+        <div className="grid grid-cols-[1fr_340px] gap-10">
+          {/* Left: 2-col services list */}
+          <div className="grid grid-cols-2 gap-3">
+            {serviceItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={onClose}
+                className="flex flex-col justify-center min-h-[64px] px-4 py-3 border-l-2 border-transparent hover:border-[#C8601A] hover:bg-[#F6F4F0] transition-all group"
+              >
+                <span className="text-[13px] font-semibold tracking-[0.01em] text-[#111111] group-hover:text-[#C8601A] transition-colors">
+                  {item.label}
+                </span>
+                <span className="text-xs text-[#5A5A5A] mt-0.5">{item.description}</span>
+              </Link>
+            ))}
+          </div>
+
+          {/* Right: featured sidebar */}
+          <div className="bg-[#F6F4F0] p-6 flex flex-col h-full">
+            <p className="text-[10px] uppercase tracking-[0.18em] text-[#C8601A] font-semibold mb-3">
+              Flagship Service
+            </p>
+            <div className="relative aspect-[4/3] overflow-hidden mb-4 flex-shrink-0">
+              <Image
+                fill
+                src="/images/applications/private-driveways/estate-herringbone-gated-driveway-01.jpg"
+                alt="Stamped asphalt driveway"
+                className="object-cover"
+                sizes="340px"
+              />
+            </div>
+            <h4 className="text-base font-semibold text-[#111111] mb-2">Stamped Asphalt</h4>
+            <p className="text-sm text-[#5A5A5A] leading-relaxed mb-5 flex-1">
+              Custom patterns, slip-resistant, 8+ year life. Our foundational service for driveways, crosswalks, and plazas.
+            </p>
             <Link
-              key={item.href}
-              href={item.href}
+              href="/services/stamped-asphalt"
               onClick={onClose}
-              className="flex flex-col justify-center min-h-[64px] px-4 py-3 border-l-2 border-transparent hover:border-[#C8601A] hover:bg-[#F6F4F0] transition-all group"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-[#C8601A] hover:gap-3 transition-all"
             >
-              <span className="text-sm font-semibold text-[#111111] group-hover:text-[#C8601A] transition-colors">
-                {item.label}
-              </span>
-              <span className="text-xs text-[#5A5A5A] mt-0.5">{item.description}</span>
+              See stamped asphalt
+              <ArrowRight />
             </Link>
-          ))}
+          </div>
         </div>
 
         {/* Bottom strip */}
@@ -286,6 +361,19 @@ export default function Nav() {
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [activePanel])
 
+  // Close panels + mobile menu on Escape
+  useEffect(() => {
+    if (!activePanel && !mobileOpen) return
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setActivePanel(null)
+        setMobileOpen(false)
+      }
+    }
+    document.addEventListener("keydown", handleKey)
+    return () => document.removeEventListener("keydown", handleKey)
+  }, [activePanel, mobileOpen])
+
   const closeAll = () => {
     setActivePanel(null)
     setMobileOpen(false)
@@ -353,7 +441,7 @@ export default function Nav() {
               {/* Products dropdown trigger */}
               <button
                 onClick={() => togglePanel("products")}
-                className={`flex items-center px-4 py-2 text-sm font-medium transition-colors ${
+                className={`flex items-center px-4 py-2 text-[13px] font-medium tracking-[0.01em] transition-colors ${
                   activePanel === "products"
                     ? "text-[#C8601A]"
                     : "text-[#2C2C2C] hover:text-[#C8601A]"
@@ -372,7 +460,7 @@ export default function Nav() {
               {/* Services dropdown trigger */}
               <button
                 onClick={() => togglePanel("services")}
-                className={`flex items-center px-4 py-2 text-sm font-medium transition-colors ${
+                className={`flex items-center px-4 py-2 text-[13px] font-medium tracking-[0.01em] transition-colors ${
                   activePanel === "services"
                     ? "text-[#C8601A]"
                     : "text-[#2C2C2C] hover:text-[#C8601A]"
@@ -401,7 +489,7 @@ export default function Nav() {
                   key={link.href}
                   href={link.href}
                   onClick={closeAll}
-                  className="px-4 py-2 text-sm font-medium text-[#2C2C2C] hover:text-[#C8601A] transition-colors"
+                  className="px-4 py-2 text-[13px] font-medium tracking-[0.01em] text-[#2C2C2C] hover:text-[#C8601A] transition-colors"
                 >
                   {link.label}
                 </Link>
@@ -411,46 +499,33 @@ export default function Nav() {
             {/* CTA + hamburger */}
             <div className="flex items-center gap-3">
               <Link href="/contact" onClick={closeAll} className="hidden lg:inline-flex">
-                <span className="bg-[#C8601A] hover:brightness-110 text-white px-5 py-2.5 text-sm font-semibold rounded-none transition-all">
+                <span
+                  className="text-white px-5 py-2.5 text-[13px] font-semibold tracking-[0.01em] rounded-none transition-all hover:brightness-110 hover:shadow-[0_4px_20px_rgba(200,96,26,0.35)]"
+                  style={{ background: "linear-gradient(135deg, #C8601A 0%, #E8895A 100%)" }}
+                >
                   Get a Quote
                 </span>
               </Link>
 
-              {/* Hamburger */}
+              {/* Hamburger — 2-bar morph to X */}
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
-                className="lg:hidden flex items-center justify-center w-11 h-11 border border-[#E2DDD8] transition-colors"
+                className="lg:hidden relative w-11 h-11 flex items-center justify-center"
                 aria-label={mobileOpen ? "Close menu" : "Open menu"}
+                aria-expanded={mobileOpen}
               >
-                <div className="relative w-[18px] h-[14px]">
-                  <span
-                    className="absolute left-0 bg-[#1C2026] transition-all duration-300 ease-in-out origin-center"
-                    style={{
-                      width: 18,
-                      height: 2,
-                      top: mobileOpen ? 6 : 0,
-                      transform: mobileOpen ? "rotate(45deg)" : "rotate(0deg)",
-                    }}
-                  />
-                  <span
-                    className="absolute left-0 bg-[#1C2026] transition-all duration-300 ease-in-out"
-                    style={{
-                      width: mobileOpen ? 0 : 18,
-                      height: 2,
-                      top: 6,
-                      opacity: mobileOpen ? 0 : 1,
-                    }}
-                  />
-                  <span
-                    className="absolute left-0 bg-[#1C2026] transition-all duration-300 ease-in-out origin-center"
-                    style={{
-                      width: 18,
-                      height: 2,
-                      top: mobileOpen ? 6 : 12,
-                      transform: mobileOpen ? "rotate(-45deg)" : "rotate(0deg)",
-                    }}
-                  />
-                </div>
+                <span
+                  className="absolute block h-[2px] w-6 bg-[#111111] transition-all duration-300"
+                  style={{
+                    transform: mobileOpen ? "translateY(0) rotate(45deg)" : "translateY(-4px)",
+                  }}
+                />
+                <span
+                  className="absolute block h-[2px] w-6 bg-[#111111] transition-all duration-300"
+                  style={{
+                    transform: mobileOpen ? "translateY(0) rotate(-45deg)" : "translateY(4px)",
+                  }}
+                />
               </button>
             </div>
           </div>
@@ -501,22 +576,22 @@ export default function Nav() {
               </Link>
               <button
                 onClick={() => setMobileOpen(false)}
-                className="flex items-center justify-center w-11 h-11 hover:bg-[#F6F4F0] transition-colors"
+                className="relative w-11 h-11 flex items-center justify-center hover:bg-[#F6F4F0] transition-colors"
                 aria-label="Close menu"
               >
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                  <path
-                    d="M1 1L13 13M13 1L1 13"
-                    stroke="#1C2026"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                  />
-                </svg>
+                <span
+                  className="absolute block h-[2px] w-6 bg-[#111111] transition-all duration-300"
+                  style={{ transform: "translateY(0) rotate(45deg)" }}
+                />
+                <span
+                  className="absolute block h-[2px] w-6 bg-[#111111] transition-all duration-300"
+                  style={{ transform: "translateY(0) rotate(-45deg)" }}
+                />
               </button>
             </div>
 
             {/* Mobile nav items */}
-            <div className="flex-1 overflow-y-auto overscroll-contain">
+            <div className="flex-1 overflow-y-auto overscroll-contain pb-12">
               {/* Products accordion */}
               <MobileAccordion label="Products">
                 {productColumns.map((col) => (
@@ -529,7 +604,7 @@ export default function Nav() {
                         key={item.href}
                         href={item.href}
                         onClick={closeAll}
-                        className="flex items-center min-h-[40px] pl-2 text-[15px] font-medium text-[#2C2C2C] hover:text-[#C8601A] transition-colors border-l-2 border-transparent hover:border-[#C8601A]"
+                        className="flex items-center min-h-[48px] pl-2 text-[15px] font-medium text-[#2C2C2C] hover:text-[#C8601A] transition-colors border-l-2 border-transparent hover:border-[#C8601A]"
                       >
                         {item.label}
                       </Link>
@@ -555,7 +630,7 @@ export default function Nav() {
                       key={item.href}
                       href={item.href}
                       onClick={closeAll}
-                      className="flex flex-col min-h-[52px] justify-center pl-2 py-2 border-l-2 border-transparent hover:border-[#C8601A] hover:bg-[#F6F4F0] transition-all"
+                      className="flex flex-col min-h-[56px] justify-center pl-2 py-2 border-l-2 border-transparent hover:border-[#C8601A] hover:bg-[#F6F4F0] transition-all"
                     >
                       <span className="text-[15px] font-medium text-[#2C2C2C] hover:text-[#C8601A]">
                         {item.label}
@@ -600,7 +675,8 @@ export default function Nav() {
               <Link
                 href="/contact"
                 onClick={closeAll}
-                className="block bg-[#C8601A] hover:brightness-110 text-white text-center py-4 text-sm font-semibold tracking-[0.1em] uppercase transition-all"
+                className="block text-white text-center py-4 text-sm font-semibold tracking-[0.1em] uppercase transition-all hover:brightness-110"
+                style={{ background: "linear-gradient(135deg, #C8601A 0%, #E8895A 100%)" }}
               >
                 Get a Quote
               </Link>

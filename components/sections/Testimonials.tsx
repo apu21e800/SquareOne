@@ -27,8 +27,8 @@ export default function Testimonials() {
               {/* 3px left orange border */}
               <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-[#C8601A]" />
 
-              <p className="text-[#2C2C2C] text-base italic leading-relaxed font-light mb-6">
-                "{t.quote}"
+              <p className="text-[#2C2C2C] text-base leading-relaxed font-light mb-6">
+                &ldquo;{t.quote}&rdquo;
               </p>
 
               {/* 24px orange rule */}
@@ -44,7 +44,7 @@ export default function Testimonials() {
           ))}
         </div>
 
-        <p className="text-center text-[#8C8C8C] text-xs italic mt-8">
+        <p className="text-center text-[#8C8C8C] text-xs mt-8">
           TODO: Replace with real client testimonials
         </p>
 
