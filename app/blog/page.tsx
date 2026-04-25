@@ -18,7 +18,7 @@ export default function BlogPage() {
   return (
     <main style={{ background: "var(--bg-warm, #F6F4F0)" }}>
 
-      {/* ── Page header ─────────────────────────────────────────── */}
+      {/* ── Page header ─────────────────────────────────────────────── */}
       <section className="bg-white border-b border-[#E2DDD8] pt-28 pb-12 px-6 sm:px-8">
         <div className="max-w-[1400px] mx-auto">
           <p className="eyebrow mb-3">From the Field</p>
@@ -56,10 +56,10 @@ export default function BlogPage() {
         </div>
       </section>
 
-      {/* ── Client component: category tabs + posts ────────────────── */}
+      {/* ── Client component: category tabs + posts ──────────────────── */}
       <BlogFilterClient posts={posts} />
 
-      {/* ── CTA ────────────────────────────────────────────── */}
+      {/* ── CTA ────────────────────────────────────────────────────────── */}
       <section className="py-20 px-6 sm:px-8" style={{ background: "#1C2026" }}>
         <div className="max-w-3xl mx-auto text-center">
           <p className="eyebrow mb-5" style={{ color: "#E8895A" }}>

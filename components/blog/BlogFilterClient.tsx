@@ -15,10 +15,6 @@ function formatDate(dateStr: string) {
   })
 }
 
-function estimateReadTime(wordCount: number) {
-  return Math.max(2, Math.ceil(wordCount / 200))
-}
-
 interface Props {
   posts: BlogPostMeta[]
 }
@@ -42,7 +38,7 @@ export default function BlogFilterClient({ posts }: Props) {
   return (
     <>
       {/* Category filter tabs */}
-      <div className="flex flex-wrap gap-2 mt-8 overflow-x-auto scrollbar-hide pb-1 px-6 sm:px-8 max-w-[1400px] mx-auto">
+      <div className="flex flex-wrap gap-2 mt-8 overflow-x-auto scrollbar-hide pb-1">
         {CATEGORIES.map((cat) => (
           <button
             key={cat}
@@ -66,7 +62,7 @@ export default function BlogFilterClient({ posts }: Props) {
           </p>
         ) : (
           <>
-            {/* ── Featured post ─────────────────────────────────────────────── */}
+            {/* ── Featured post ─────────────────────────────────────── */}
             {featured && (
               <Link href={`/blog/${featured.slug}`} className="group block mb-14">
                 <div
@@ -125,7 +121,7 @@ export default function BlogFilterClient({ posts }: Props) {
               </Link>
             )}
 
-            {/* ── Remaining posts grid ────────────────────────────────────────── */}
+            {/* ── Remaining posts grid ──────────────────────────────── */}
             {rest.length > 0 && (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {rest.map((post) => (
