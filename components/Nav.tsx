@@ -5,7 +5,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { motion, AnimatePresence, type Variants, type Transition } from "framer-motion"
 
-// ─── Data ──────────────────────────────────────────────────────────────────
+// ─── Data ──────────────────────────────────────────────────
 
 interface ProductItem { label: string; href: string }
 interface ProductColumn { category: string; items: ProductItem[] }
@@ -44,7 +44,7 @@ const serviceItems: ServiceItem[] = [
   { label: "Asphalt Stamping", href: "/services/stamped-asphalt", description: "Custom patterns, slip-resistant, 8+ year life" },
   { label: "Decorative Coatings", href: "/services/decorative-coatings", description: "StreetBond systems for BC parks, plazas & transit" },
   { label: "Preformed Thermoplastic", href: "/services/preformed-thermoplastic", description: "High-visibility markings engineered to last" },
-  { label: "Vapor Blasting", href: "/services/vapor-blasting", description: "Surface prep & line removal — zero chemicals" },
+  { label: "Vapor Blasting", href: "/vapor-blasting", description: "Surface prep & line removal — zero chemicals" },
 ]
 
 const vaporItems = [
@@ -54,7 +54,7 @@ const vaporItems = [
   { label: "BC-Wide Coverage", desc: "Lower Mainland to Vancouver Island" },
 ]
 
-// ─── Animation ─────────────────────────────────────────────────────────────
+// ─── Animation ───────────────────────────────────────────────
 
 const panelVariants: Variants = {
   hidden: { opacity: 0, y: -8 },
@@ -69,7 +69,7 @@ const ArrowRight = () => (
   </svg>
 )
 
-// ─── Products Panel ─────────────────────────────────────────────────────────
+// ─── Products Panel ─────────────────────────────────────────────
 
 function ProductsPanel({ onClose }: { onClose: () => void }) {
   return (
@@ -105,7 +105,7 @@ function ProductsPanel({ onClose }: { onClose: () => void }) {
               <Link href="/products" onClick={onClose} className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#C8601A] hover:underline">
                 View All Products →
               </Link>
-              <Link href="/products" onClick={onClose} className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#C8601A] hover:underline">
+              <Link href="/contact" onClick={onClose} className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#C8601A] hover:underline">
                 Download Spec Sheets →
               </Link>
             </div>
@@ -141,7 +141,7 @@ function ProductsPanel({ onClose }: { onClose: () => void }) {
   )
 }
 
-// ─── Services Panel ─────────────────────────────────────────────────────────
+// ─── Services Panel ─────────────────────────────────────────────
 
 function ServicesPanel({ onClose }: { onClose: () => void }) {
   return (
@@ -203,7 +203,7 @@ function ServicesPanel({ onClose }: { onClose: () => void }) {
   )
 }
 
-// ─── Vapor Blasting Panel (dark industrial) ─────────────────────────────────
+// ─── Vapor Blasting Panel (dark industrial) ───────────────────────────
 
 function VaporBlastingPanel({ onClose }: { onClose: () => void }) {
   return (
@@ -237,7 +237,7 @@ function VaporBlastingPanel({ onClose }: { onClose: () => void }) {
               ))}
             </div>
             <div className="mt-8 pt-6 border-t border-white/10 flex items-center gap-8">
-              <Link href="/services/vapor-blasting" onClick={onClose}
+              <Link href="/vapor-blasting" onClick={onClose}
                 className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.14em] text-[#E8895A] hover:gap-3 transition-all"
               >
                 Explore Vapor Blasting <ArrowRight />
@@ -259,7 +259,7 @@ function VaporBlastingPanel({ onClose }: { onClose: () => void }) {
             <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.2) 60%, transparent 100%)" }} />
             <div className="absolute bottom-5 left-5 right-5">
               <div className="flex gap-6">
-                {[["0", "Chemicals"], ["BC", "Wide"], ["Zero", "Dust"]].map(([n, l]) => (
+                {([["0", "Chemicals"], ["BC", "Wide"], ["Zero", "Dust"]] as [string, string][]).map(([n, l]) => (
                   <div key={l}>
                     <p className="text-white font-black text-xl leading-none tracking-tight">{n}</p>
                     <p className="text-white/40 text-[9px] uppercase tracking-[0.16em] mt-1">{l}</p>
@@ -274,7 +274,7 @@ function VaporBlastingPanel({ onClose }: { onClose: () => void }) {
   )
 }
 
-// ─── Mobile Accordion ───────────────────────────────────────────────────────
+// ─── Mobile Accordion ──────────────────────────────────────────────
 
 function MobileAccordion({ label, children }: { label: string; children: React.ReactNode }) {
   const [open, setOpen] = useState(false)
@@ -307,7 +307,7 @@ function MobileAccordion({ label, children }: { label: string; children: React.R
   )
 }
 
-// ─── Nav ────────────────────────────────────────────────────────────────────
+// ─── Nav ──────────────────────────────────────────────────────────
 
 type ActivePanel = "products" | "services" | "vapor" | null
 
@@ -316,6 +316,8 @@ export default function Nav() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const navRef = useRef<HTMLElement>(null)
+  // hover-intent: small delay before closing so cursor can travel into panel
+  const hoverTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 10)
@@ -349,22 +351,35 @@ export default function Nav() {
   const closeAll = () => { setActivePanel(null); setMobileOpen(false) }
   const togglePanel = (panel: ActivePanel) => setActivePanel(prev => prev === panel ? null : panel)
 
+  // Hover-intent helpers
+  const openPanel = (panel: ActivePanel) => {
+    if (hoverTimer.current) clearTimeout(hoverTimer.current)
+    setActivePanel(panel)
+  }
+  const scheduleClose = () => {
+    hoverTimer.current = setTimeout(() => setActivePanel(null), 150)
+  }
+  const cancelClose = () => {
+    if (hoverTimer.current) clearTimeout(hoverTimer.current)
+  }
+
   const dropdownItems: { id: ActivePanel; label: string }[] = [
     { id: "products", label: "Products" },
     { id: "services", label: "Services" },
-    { id: "vapor", label: "Vapor Blasting" },
+    { id: "vapor",    label: "Vapor Blasting" },
   ]
 
   const plainLinks = [
     { label: "Projects", href: "/projects" },
     { label: "Driveways", href: "/driveways" },
-    { label: "About", href: "/about" },
+    { label: "About",    href: "/about" },
   ]
 
   return (
     <>
       <nav
         ref={navRef}
+        onMouseLeave={scheduleClose}
         className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-200 ${
           scrolled
             ? "bg-white/96 backdrop-blur-md border-b border-[#E2DDD8] shadow-[0_1px_24px_rgba(0,0,0,0.06)]"
@@ -391,6 +406,7 @@ export default function Nav() {
                 <button
                   key={id}
                   onClick={() => togglePanel(id)}
+                  onMouseEnter={() => openPanel(id)}
                   className={`relative flex items-center gap-1 px-4 py-2 text-[13px] font-semibold tracking-[-0.005em] transition-colors ${
                     activePanel === id ? "text-[#C8601A]" : "text-[#2C2C2C] hover:text-[#C8601A]"
                   }`}
@@ -446,16 +462,18 @@ export default function Nav() {
           </div>
         </div>
 
-        {/* Mega panels */}
-        <AnimatePresence>
-          {activePanel === "products" && <ProductsPanel key="products" onClose={closeAll} />}
-        </AnimatePresence>
-        <AnimatePresence>
-          {activePanel === "services" && <ServicesPanel key="services" onClose={closeAll} />}
-        </AnimatePresence>
-        <AnimatePresence>
-          {activePanel === "vapor" && <VaporBlastingPanel key="vapor" onClose={closeAll} />}
-        </AnimatePresence>
+        {/* Mega panels — wrapped so onMouseEnter cancels the close timer */}
+        <div onMouseEnter={cancelClose}>
+          <AnimatePresence>
+            {activePanel === "products" && <ProductsPanel key="products" onClose={closeAll} />}
+          </AnimatePresence>
+          <AnimatePresence>
+            {activePanel === "services" && <ServicesPanel key="services" onClose={closeAll} />}
+          </AnimatePresence>
+          <AnimatePresence>
+            {activePanel === "vapor" && <VaporBlastingPanel key="vapor" onClose={closeAll} />}
+          </AnimatePresence>
+        </div>
       </nav>
 
       {/* Mobile overlay */}
@@ -521,7 +539,7 @@ export default function Nav() {
                       <span className="text-xs text-[#5A5A5A]">{item.desc}</span>
                     </div>
                   ))}
-                  <Link href="/services/vapor-blasting" onClick={closeAll}
+                  <Link href="/vapor-blasting" onClick={closeAll}
                     className="inline-flex items-center gap-1.5 mt-4 text-sm font-bold text-[#C8601A] hover:underline"
                   >
                     Explore Vapor Blasting <ArrowRight />
@@ -530,10 +548,10 @@ export default function Nav() {
               </MobileAccordion>
 
               {[
-                { label: "Projects", href: "/projects" },
+                { label: "Projects",  href: "/projects" },
                 { label: "Driveways", href: "/driveways" },
-                { label: "About", href: "/about" },
-                { label: "Contact", href: "/contact" },
+                { label: "About",     href: "/about" },
+                { label: "Contact",   href: "/contact" },
               ].map(({ label, href }) => (
                 <Link key={href} href={href} onClick={closeAll}
                   className="flex items-center min-h-[56px] px-6 text-[17px] font-bold text-[#2C2C2C] border-b border-[#EDEBE7] hover:text-[#C8601A] transition-colors"
