@@ -56,7 +56,6 @@ export default async function BlogPostPage({ params }: Props) {
 
   if (!post) notFound()
 
-  // Article JSON-LD for SEO rich snippets
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -87,11 +86,15 @@ export default async function BlogPostPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <main style={{ background: "#FAFAFA" }}>
+      <main style={{ background: "#F6F4F0" }}>
 
         {/* ── Hero image ──────────────────────────────────────────── */}
         {post.featured_image && (
           <div className="relative w-full overflow-hidden" style={{ height: "clamp(280px, 55vh, 580px)" }}>
+            <div
+              className="absolute left-6 lg:left-10 top-0 w-16 h-[3px] z-10"
+              style={{ background: "linear-gradient(to right, #C8601A, #E8895A)" }}
+            />
             <Image
               src={post.featured_image}
               alt={post.title}
@@ -105,17 +108,25 @@ export default async function BlogPostPage({ params }: Props) {
               style={{ background: "linear-gradient(to top, rgba(17,17,17,0.82) 0%, rgba(17,17,17,0.25) 55%, transparent 100%)" }}
             />
             {/* Title overlay */}
-            <div className="absolute bottom-0 left-0 right-0 px-6 sm:px-8 pb-10" style={{ maxWidth: "900px", margin: "0 auto" }}>
+            <div className="absolute bottom-0 left-0 right-0 px-6 sm:px-10 pb-10" style={{ maxWidth: "960px" }}>
               {post.category && (
-                <p className="eyebrow mb-3" style={{ color: "#E8895A" }}>{post.category}</p>
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-6 h-px" style={{ background: "#E8895A" }} />
+                  <p
+                    className="font-semibold uppercase"
+                    style={{ fontSize: "11px", letterSpacing: "0.18em", color: "#E8895A" }}
+                  >
+                    {post.category}
+                  </p>
+                </div>
               )}
               <h1
                 style={{
                   fontSize: "clamp(1.8rem, 4vw, 3.25rem)",
-                  fontWeight: 300,
-                  letterSpacing: "-0.03em",
+                  fontWeight: 800,
+                  letterSpacing: "-0.045em",
                   color: "white",
-                  lineHeight: 1.1,
+                  lineHeight: 0.95,
                   maxWidth: "800px",
                 }}
               >
@@ -161,7 +172,7 @@ export default async function BlogPostPage({ params }: Props) {
                   <span
                     key={tag}
                     className="text-xs px-2.5 py-1 font-medium"
-                    style={{ background: "#F6F4F0", color: "#5A5A5A", border: "1px solid #E2DDD8" }}
+                    style={{ background: "white", color: "#5A5A5A", border: "1px solid #E2DDD8" }}
                   >
                     {tag}
                   </span>
@@ -194,18 +205,21 @@ export default async function BlogPostPage({ params }: Props) {
             <MDXRemote source={post.content} />
           </div>
 
-          {/* Mid-article CTA (visible after content) */}
+          {/* Mid-article CTA */}
           <div
             className="my-14 p-8"
-            style={{ background: "#F6F4F0", borderLeft: "3px solid #C8601A" }}
+            style={{ background: "white", borderLeft: "3px solid #C8601A" }}
           >
-            <p className="eyebrow mb-2">Working on a similar project?</p>
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-6 h-px" style={{ background: "#C8601A" }} />
+              <p className="font-semibold uppercase" style={{ fontSize: "11px", letterSpacing: "0.18em", color: "#C8601A" }}>Working on a similar project?</p>
+            </div>
             <p className="text-base mb-5" style={{ color: "#5A5A5A" }}>
               We serve the Lower Mainland and Vancouver Island. Free site visit, written quote within 48 hours.
             </p>
             <Link href="/contact">
               <span
-                className="inline-block px-7 py-3 text-sm font-semibold text-white transition-all hover:brightness-110"
+                className="inline-block px-7 py-3 text-sm font-bold text-white uppercase tracking-[0.08em] transition-all hover:brightness-110"
                 style={{ background: "linear-gradient(135deg, #C8601A 0%, #E8895A 100%)" }}
               >
                 Request a Quote →

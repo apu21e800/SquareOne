@@ -32,9 +32,18 @@ export default function ContactPage() {
     <main className="min-h-screen" style={{ background: "#F6F4F0" }}>
 
       {/* Page header */}
-      <section className="bg-white border-b border-[#E2DDD8] pt-28 pb-16 px-6 sm:px-8">
+      <section className="relative bg-white border-b border-[#E2DDD8] pt-28 pb-16 px-6 sm:px-8">
+        <div
+          className="absolute left-6 lg:left-10 top-0 w-16 h-[3px]"
+          style={{ background: "linear-gradient(to right, #C8601A, #E8895A)" }}
+        />
         <div className="max-w-[1300px] mx-auto">
-          <p className="eyebrow mb-5">Get In Touch</p>
+          <div className="flex items-center gap-3 mb-5">
+            <div className="w-8 h-px" style={{ background: "#C8601A" }} />
+            <p className="font-semibold uppercase" style={{ fontSize: "11px", letterSpacing: "0.18em", color: "#C8601A" }}>
+              Get In Touch
+            </p>
+          </div>
           <h1
             style={{
               fontSize: "clamp(3rem, 6vw, 6rem)",
@@ -78,7 +87,12 @@ export default function ContactPage() {
 
             {/* Contact details */}
             <div className="bg-white border border-[#E2DDD8] p-7">
-              <p className="eyebrow mb-6">Direct Contact</p>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-8 h-px" style={{ background: "#C8601A" }} />
+                <p className="font-semibold uppercase" style={{ fontSize: "11px", letterSpacing: "0.18em", color: "#C8601A" }}>
+                  Direct Contact
+                </p>
+              </div>
               <div className="space-y-5">
                 <a href="tel:18773910270" className="flex items-start gap-4 group">
                   <div className="w-8 h-8 border border-[#C8601A]/30 flex items-center justify-center flex-shrink-0 mt-0.5">

@@ -34,11 +34,18 @@ export default function ProjectsPage() {
     <main style={{ background: "#F6F4F0", minHeight: "100vh" }}>
 
       {/* ── Page header ────────────────────────────────────────────── */}
-      <section className="bg-white border-b border-[#E2DDD8] pt-28 pb-16 px-6 sm:px-8">
+      <section className="relative bg-white border-b border-[#E2DDD8] pt-28 pb-16 px-6 sm:px-8">
+        <div
+          className="absolute left-6 lg:left-10 top-0 w-16 h-[3px]"
+          style={{ background: "linear-gradient(to right, #C8601A, #E8895A)" }}
+        />
         <div className="max-w-[1500px] mx-auto">
-          <p className="eyebrow mb-5">Our Work</p>
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
             <div>
+              <div className="flex items-center gap-3 mb-5">
+                <div className="w-8 h-px" style={{ background: "#C8601A" }} />
+                <p className="font-semibold uppercase" style={{ fontSize: "11px", letterSpacing: "0.18em", color: "#C8601A" }}>Our Work</p>
+              </div>
               <h1
                 style={{
                   fontSize: "clamp(3rem, 6vw, 6rem)",
@@ -74,7 +81,10 @@ export default function ProjectsPage() {
       {featured.length > 0 && (
         <section className="bg-white border-b border-[#E2DDD8] px-6 sm:px-8 py-12">
           <div className="max-w-[1500px] mx-auto">
-            <p className="text-[10px] uppercase tracking-[0.22em] font-bold text-[#8C8C8C] mb-6">Featured Projects</p>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-6 h-px" style={{ background: "#C8601A" }} />
+              <p className="font-bold uppercase" style={{ fontSize: "10px", letterSpacing: "0.22em", color: "#8C8C8C" }}>Featured Projects</p>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {featured.map((p) => {
                 const img = p.imageUrl || serviceFallback[p.service] || serviceFallback["Stamped Asphalt"]
@@ -280,16 +290,24 @@ export default function ProjectsPage() {
       </div>
 
       {/* ── CTA ──────────────────────────────────────────────────── */}
-      <section className="py-28 px-6 sm:px-8" style={{ background: "#1C2026" }}>
+      <section className="relative py-28 px-6 sm:px-8" style={{ background: "#1C2026" }}>
+        <div
+          className="absolute left-6 lg:left-10 top-0 w-16 h-[3px]"
+          style={{ background: "linear-gradient(to right, #C8601A, #E8895A)" }}
+        />
         <div className="max-w-3xl mx-auto text-center">
-          <p className="eyebrow mb-5" style={{ color: "#E8895A" }}>Work With Us</p>
+          <div className="flex items-center justify-center gap-3 mb-5">
+            <div className="w-8 h-px" style={{ background: "#E8895A" }} />
+            <p className="font-semibold uppercase" style={{ fontSize: "11px", letterSpacing: "0.18em", color: "#E8895A" }}>Work With Us</p>
+            <div className="w-8 h-px" style={{ background: "#E8895A" }} />
+          </div>
           <h2
             style={{ fontSize: "clamp(2rem, 3.5vw, 3.5rem)", fontWeight: 800, color: "white", letterSpacing: "-0.04em", lineHeight: 0.95 }}
             className="mb-7"
           >
             Ready to start
             <br />
-            your project?
+            <em style={{ fontStyle: "italic", fontWeight: 700, color: "#E8895A" }}>your project?</em>
           </h2>
           <p className="text-[17px] mb-12" style={{ color: "rgba(255,255,255,0.55)" }}>
             Free consultation and quote for your BC surface project — no obligation.
