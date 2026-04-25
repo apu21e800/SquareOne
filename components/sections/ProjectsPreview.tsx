@@ -4,85 +4,176 @@ import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { getFeaturedProjects } from "@/lib/projects"
-import Container from "@/components/ui/Container"
 
-const easeOut: [number, number, number, number] = [0.22, 1, 0.36, 1]
-
+/**
+ * ProjectsPreview — warm-light band, "Our Work".
+ *
+ * Municipal-weighted: hero card spans 2×2, "Featured Municipal" pill.
+ * 4 standard cards fill the rest. Driveway projects filtered out
+ * (Driveways gets its own section).
+ */
 export default function ProjectsPreview() {
-  const featuredProjects = getFeaturedProjects().slice(0, 6)
+  const featured = getFeaturedProjects().filter(
+    (p) => p.application !== "Driveways",
+  )
+  const [hero, ...rest] = featured
+  const grid = rest.slice(0, 4)
+
+  if (!hero) return null
 
   return (
-    <section className="bg-[#1C2026] section-padding">
-      <Container>
+    <section className="relative bg-[#EDE9E3] overflow-hidden">
+      {/* Top-left orange tick */}
+      <span
+        aria-hidden
+        className="absolute left-6 lg:left-10 top-0 w-16 h-[3px]"
+        style={{ background: "linear-gradient(90deg, #C8601A 0%, #E8895A 100%)" }}
+      />
+      {/* Subtle texture */}
+      <div
+        aria-hidden
+        className="absolute inset-0 opacity-[0.06] pointer-events-none mix-blend-multiply"
+        style={{
+          backgroundImage: "url('/images/textures/stamped-asphalt-texture.webp')",
+          backgroundSize: "cover",
+        }}
+      />
 
-        {/* Header row */}
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.6, ease: easeOut }}
-          className="mb-12 flex flex-wrap gap-4 justify-between items-end"
-        >
+      <div className="relative max-w-[1400px] mx-auto px-6 lg:px-10 py-24 lg:py-32">
+        {/* Header */}
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-12 lg:mb-16">
           <div>
-            <p className="text-[11px] uppercase tracking-[0.15em] text-[#C8601A] font-semibold mb-3">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-[#C8601A] font-semibold mb-5 flex items-center gap-3">
+              <span className="inline-block w-8 h-px bg-[#C8601A]" />
               Our Work
             </p>
-            <h2 className="text-[clamp(2rem,4vw,2.5rem)] font-light text-white leading-tight tracking-[-0.02em]">
-              Transforming BC, one surface at a time.
+            <h2
+              className="text-[#111111]"
+              style={{
+                fontSize: "clamp(1.9rem, 4vw, 3rem)",
+                fontWeight: 300,
+                lineHeight: 1.02,
+                letterSpacing: "-0.03em",
+                textWrap: "balance",
+              }}
+            >
+              Transforming BC,{" "}
+              <em style={{ fontStyle: "italic", fontWeight: 400, color: "#C8601A" }}>
+                one surface at a time.
+              </em>
             </h2>
           </div>
           <Link
             href="/projects"
-            className="hover-underline text-[#C8601A] text-sm font-semibold whitespace-nowrap"
+            className="group self-start lg:self-end inline-flex items-center gap-2 text-[#C8601A] text-sm font-semibold hover:gap-3 transition-all"
           >
-            All Projects &#8594;
+            All Projects
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
           </Link>
-        </motion.div>
+        </div>
 
-        {/* Projects grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {featuredProjects.map((project, i) => (
+        {/* Asymmetric grid */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
+          {/* HERO — municipal flagship */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.6, ease: [0.2, 0.7, 0.2, 1] }}
+            className="col-span-2 lg:row-span-2"
+          >
+            <Link
+              href={`/projects/${hero.slug}`}
+              className="group block relative aspect-[4/3] lg:aspect-auto lg:h-full min-h-[420px] overflow-hidden bg-[#F6F4F0] border border-[#E2DDD8]"
+            >
+              <Image
+                src={hero.imageUrl}
+                alt={hero.title}
+                fill
+                sizes="(min-width: 1024px) 50vw, 100vw"
+                className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+              />
+              <div
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background: "linear-gradient(180deg, rgba(20,22,26,0) 35%, rgba(20,22,26,0.78) 100%)",
+                }}
+              />
+              <span className="absolute top-5 left-5 inline-flex items-center gap-2 bg-[#C8601A] text-white text-[10px] uppercase tracking-[0.22em] font-bold px-3 py-1.5">
+                <span className="w-1.5 h-1.5 bg-white rounded-full" />
+                Featured Municipal
+              </span>
+              <div className="absolute inset-x-0 bottom-0 p-6 lg:p-8">
+                <p className="text-[10px] uppercase tracking-[0.22em] text-[#E8895A] font-semibold mb-3">
+                  {hero.service} · {hero.city}{hero.year ? ` · ${hero.year}` : ""}
+                </p>
+                <h3
+                  className="text-white"
+                  style={{
+                    fontSize: "clamp(1.5rem, 2.4vw, 2.25rem)",
+                    fontWeight: 400,
+                    lineHeight: 1.05,
+                    letterSpacing: "-0.025em",
+                    textWrap: "balance",
+                  }}
+                >
+                  {hero.title}
+                </h3>
+                <p className="text-white/80 text-sm leading-relaxed mt-3 max-w-lg line-clamp-3">
+                  {hero.excerpt}
+                </p>
+                <span
+                  aria-hidden
+                  className="block mt-5 h-[2px] bg-[#C8601A] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"
+                />
+              </div>
+            </Link>
+          </motion.div>
+
+          {/* Standard cards */}
+          {grid.map((p, i) => (
             <motion.div
-              key={project.slug}
-              initial={{ y: 20, opacity: 0 }}
-              whileInView={{ y: 0, opacity: 1 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.7, ease: easeOut, delay: i * 0.08 }}
+              key={p.slug}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.55, delay: 0.1 + i * 0.06, ease: [0.2, 0.7, 0.2, 1] }}
             >
               <Link
-                href={`/projects/${project.slug}`}
-                className="group block relative overflow-hidden rounded-none transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(0,0,0,0.25)]"
+                href={`/projects/${p.slug}`}
+                className="group block relative bg-white border border-[#E2DDD8] hover:shadow-[0_4px_16px_rgba(0,0,0,0.10)] transition-shadow"
               >
-                <div className="relative aspect-[3/2] overflow-hidden">
-                  {project.service && (
-                    <span className="absolute top-4 left-4 z-10 text-[10px] uppercase tracking-[0.18em] font-semibold bg-[#C8601A] text-white px-3 py-1.5">
-                      {project.service}
-                    </span>
-                  )}
+                <div className="relative aspect-[4/3] overflow-hidden bg-[#EDE9E3]">
                   <Image
+                    src={p.imageUrl}
+                    alt={p.title}
                     fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover rounded-none group-hover:scale-105 transition-transform duration-700 ease-out"
-                    src={project.imageUrl || "/images/placeholder.jpg"}
-                    alt={project.title}
+                    sizes="(min-width: 1024px) 25vw, 50vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-[1.05]"
                   />
-                  {/* Hover overlay */}
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/50 transition-all duration-300" />
-                  {/* Hover content */}
-                  <div className="absolute inset-0 flex flex-col justify-end p-5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <h3 className="font-semibold text-white text-lg leading-tight">
-                      {project.title}
-                    </h3>
-                  </div>
                 </div>
-                {/* Bottom orange accent on hover */}
-                <div className="h-[3px] bg-[#C8601A] w-0 group-hover:w-full transition-all duration-300" />
+                <div className="p-4">
+                  <p className="text-[9px] uppercase tracking-[0.22em] text-[#C8601A] font-semibold mb-2">
+                    {p.application}
+                  </p>
+                  <h4 className="text-[#111111] text-[14.5px] font-semibold leading-tight tracking-tight">
+                    {p.title}
+                  </h4>
+                  <p className="text-[#5A5A5A] text-[11px] uppercase tracking-[0.12em] mt-1.5">
+                    {p.city}
+                  </p>
+                </div>
+                <span
+                  aria-hidden
+                  className="absolute left-0 right-0 bottom-0 h-[2px] bg-[#C8601A] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"
+                />
               </Link>
             </motion.div>
           ))}
         </div>
-
-      </Container>
+      </div>
     </section>
   )
 }

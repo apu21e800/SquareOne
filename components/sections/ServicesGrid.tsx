@@ -1,64 +1,119 @@
 "use client"
 
-import { services } from "@/lib/services"
 import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
-import Container from "@/components/ui/Container"
+import { services } from "@/lib/services"
 
-const easeOut: [number, number, number, number] = [0.22, 1, 0.36, 1]
-
+/**
+ * ServicesGrid — 4 cards driven by lib/services.ts.
+ * Order: municipal-first (stamped → coatings → thermoplastic → vapor).
+ *
+ * Each card: image with category eyebrow overlay, body with 3px orange
+ * top accent, name, short description, "Learn more →" link.
+ *
+ * Reveal-on-scroll via framer-motion.
+ */
 export default function ServicesGrid() {
+  const order = [
+    "stamped-asphalt",
+    "decorative-coatings",
+    "preformed-thermoplastic",
+    "vapor-blasting",
+  ]
+  const ordered = order
+    .map((slug) => services.find((s) => s.slug === slug))
+    .filter((s): s is NonNullable<typeof s> => Boolean(s))
+
   return (
-    <section className="bg-white section-padding">
-      <Container>
+    <section className="bg-white relative">
+      {/* Top-left orange tick */}
+      <span
+        aria-hidden
+        className="absolute left-6 lg:left-10 top-0 w-16 h-[3px]"
+        style={{
+          background: "linear-gradient(90deg, #C8601A 0%, #E8895A 100%)",
+        }}
+      />
+      <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-24 lg:py-32">
+        {/* Header */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_420px] gap-10 lg:gap-20 items-end mb-16">
+          <div>
+            <p className="text-[11px] uppercase tracking-[0.18em] text-[#C8601A] font-semibold mb-5 flex items-center gap-3">
+              <span className="inline-block w-8 h-px bg-[#C8601A]" />
+              What We Do
+            </p>
+            <h2
+              className="text-[#111111]"
+              style={{
+                fontSize: "clamp(2.25rem, 4.4vw, 3.5rem)",
+                fontWeight: 300,
+                lineHeight: 1.02,
+                letterSpacing: "-0.035em",
+                textWrap: "balance",
+              }}
+            >
+              Four services.{" "}
+              <em
+                style={{
+                  fontStyle: "italic",
+                  fontWeight: 400,
+                  color: "#C8601A",
+                }}
+              >
+                One specialist team.
+              </em>
+            </h2>
+          </div>
+          <p className="text-[15px] leading-relaxed text-[#5A5A5A] max-w-md lg:justify-self-end">
+            We install the surfaces that define BC communities — crosswalks, transit corridors, plazas, and driveways.
+            Each service is run in house, by the same crew, to a single municipal-grade standard.
+          </p>
+        </div>
 
-        {/* Section header */}
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          whileInView={{ y: 0, opacity: 1 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.6, ease: easeOut }}
-          className="mb-16"
-        >
-          <p className="text-[11px] uppercase tracking-[0.15em] text-[#C8601A] font-semibold mb-3">What We Do</p>
-          <h2 className="text-[clamp(2rem,4vw,2.5rem)] font-light text-[#111111] leading-tight tracking-[-0.02em]">Four services. One specialist team.</h2>
-          <p className="text-[#5A5A5A] mt-4 max-w-xl leading-relaxed">We install the surfaces that define BC communities — from municipal crosswalks to residential driveways.</p>
-        </motion.div>
-
-        {/* 4 cards grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {services.map((service, i) => (
+        {/* Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {ordered.map((service, i) => (
             <motion.div
               key={service.slug}
-              initial={{ y: 20, opacity: 0 }}
-              whileInView={{ y: 0, opacity: 1 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.7, ease: easeOut, delay: i * 0.08 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{
+                duration: 0.55,
+                delay: i * 0.08,
+                ease: [0.2, 0.7, 0.2, 1],
+              }}
             >
               <Link
                 href={`/services/${service.slug}`}
-                className="border border-[#E2DDD8] rounded-none overflow-hidden group block bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(0,0,0,0.10)] hover:border-[#C8601A]"
+                className="group block bg-white border border-[#E2DDD8] hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)] transition-shadow rounded-none overflow-hidden h-full flex flex-col"
               >
                 {/* Image */}
-                <div className="relative aspect-[3/2] w-full overflow-hidden">
-                  <span className="absolute top-4 left-4 z-10 text-[10px] uppercase tracking-[0.18em] font-semibold bg-[#111111] text-white px-3 py-1.5">Service</span>
+                <div className="relative aspect-[4/3] overflow-hidden bg-[#EDE9E3]">
                   <Image
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                    className="object-cover rounded-none group-hover:scale-105 transition-transform duration-700 ease-out"
-                    src={service.imageUrl || "/images/applications/crosswalks/crosswalk-hero.jpg"}
+                    src={service.imageUrl}
                     alt={service.name}
+                    fill
+                    sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                   />
+                  <span className="absolute top-3 left-3 text-[10px] uppercase tracking-[0.22em] text-white/85 font-semibold">
+                    0{i + 1}
+                  </span>
                 </div>
-                {/* Body */}
-                <div className="p-6 bg-white border-t-[3px] border-[#C8601A]">
-                  <h3 className="font-semibold text-lg text-[#111111]">{service.name}</h3>
-                  <p className="text-sm text-[#5A5A5A] mt-2 leading-relaxed">{service.tagline}</p>
-                  <span className="hover-underline text-[#C8601A] text-sm font-semibold mt-4 inline-flex items-center gap-1">
+                {/* Body — 3px orange top accent */}
+                <div className="flex-1 p-6 border-t-[3px] border-[#C8601A] bg-white flex flex-col">
+                  <h3 className="text-[17px] font-semibold text-[#111111] tracking-tight">
+                    {service.name}
+                  </h3>
+                  <p className="text-[13.5px] text-[#5A5A5A] leading-relaxed mt-2 flex-1">
+                    {service.tagline}
+                  </p>
+                  <span className="text-[12.5px] font-semibold text-[#C8601A] mt-5 flex items-center gap-1.5 group-hover:gap-2.5 transition-all">
                     Learn more
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-                      <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+                      <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </span>
                 </div>
@@ -66,8 +121,7 @@ export default function ServicesGrid() {
             </motion.div>
           ))}
         </div>
-
-      </Container>
+      </div>
     </section>
   )
 }

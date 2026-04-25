@@ -2,215 +2,162 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { motion, type Variants } from "framer-motion"
-import { useEffect, useState } from "react"
-import Container from "@/components/ui/Container"
+import { motion } from "framer-motion"
 
-const tickerItems: string[] = [
-  "BC's Decorative Pavement Specialists",
-  "Since 2000",
-  "Metro Vancouver",
-  "Vancouver Island",
-  "Ladysmith",
-  "Municipal-Grade",
-  "25 Years",
-  "Vapor Blasting Certified",
-  "Stamped Asphalt",
-  "StreetBond Applicator",
-]
-
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: {
-      duration: 0.3,
-      staggerChildren: 0.08,
-      delayChildren: 0.1,
-    },
-  },
-}
-
-const childVariants: Variants = {
-  hidden: { y: 32, opacity: 0 },
-  show: {
-    y: 0,
-    opacity: 1,
-    transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] },
-  },
-}
-
-const stats: { value: string; label: string }[] = [
-  { value: "51+", label: "BC communities" },
-  { value: "25", label: "Years in operation" },
-  { value: "4", label: "Specialist services" },
-]
-
-function ArrowRight() {
-  return (
-    <svg
-      width="14"
-      height="14"
-      viewBox="0 0 14 14"
-      fill="none"
-      aria-hidden="true"
-      className="transition-transform duration-300 group-hover:translate-x-1"
-    >
-      <path
-        d="M1 7H13M13 7L7.5 1.5M13 7L7.5 12.5"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="square"
-      />
-    </svg>
-  )
-}
-
+/**
+ * Hero — light, full-bleed image with a soft warm scrim. Dark text on top.
+ *
+ * Composition:
+ *   - Full-bleed photo (municipal install) with a light warm overlay so
+ *     dark headline + body type sits comfortably on top.
+ *   - Eyebrow — editorial H1 (clamp 3rem–5.5rem, weight 300, italic accent
+ *     in primary orange).
+ *   - Two CTAs: primary (orange, 8px radius) + secondary outline.
+ *   - Floating stats card on the right (cream w/ subtle border).
+ */
 export default function Hero() {
-  const [scrollY, setScrollY] = useState<number>(0)
-
-  useEffect(() => {
-    if (typeof window !== "undefined" && window.innerWidth < 1024) return
-    const onScroll = () => setScrollY(window.scrollY)
-    onScroll()
-    window.addEventListener("scroll", onScroll, { passive: true })
-    return () => window.removeEventListener("scroll", onScroll)
-  }, [])
-
   return (
-    <section className="relative min-h-screen flex items-end overflow-hidden bg-[#14161A]">
-      {/* Background image (parallax) */}
-      <div
-        className="absolute inset-0 will-change-transform"
-        style={{ transform: `translateY(${scrollY * 0.08}px)` }}
-      >
+    <section className="relative min-h-[88vh] lg:min-h-screen w-full flex items-end overflow-hidden bg-[#F6F4F0]">
+      {/* Background image */}
+      <div className="absolute inset-0">
         <Image
-          src="/images/applications/bus-bike-lanes/red-bus-lane-long-perspective-01.jpg"
-          alt="Decorative pavement installation by Square One Paving"
+          src="/images/products/streetbond/streetbond-red-roundabout-mountains-01.jpg"
+          alt="StreetBond decorative coating across a BC roundabout"
           fill
           priority
           sizes="100vw"
           className="object-cover"
         />
+        {/* Light warm scrim — keeps headline legible without going dark */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(246,244,240,0.55) 0%, rgba(246,244,240,0.35) 35%, rgba(246,244,240,0.92) 100%)",
+          }}
+        />
+        {/* Side wash from left so the type column has a calm reading surface */}
+        <div
+          className="absolute inset-0 hidden lg:block"
+          style={{
+            background:
+              "linear-gradient(90deg, rgba(246,244,240,0.92) 0%, rgba(246,244,240,0.55) 45%, rgba(246,244,240,0.0) 75%)",
+          }}
+        />
       </div>
-
-      {/* Gradient overlay */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 bg-gradient-to-b from-[rgba(20,22,26,0.4)] via-[rgba(20,22,26,0.55)] to-[rgba(20,22,26,0.88)]"
-      />
-
-      {/* Stamped-asphalt texture overlay */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 pointer-events-none opacity-[0.08] mix-blend-overlay"
-        style={{
-          backgroundImage:
-            "url('/images/textures/stamped-asphalt-texture.webp')",
-          backgroundSize: "cover",
-        }}
-      />
 
       {/* Content */}
-      <Container className="relative z-10 w-full pt-32 pb-24 lg:pb-32">
-        <div className="relative max-w-3xl">
-          {/* Left accent bar */}
-          <div
-            aria-hidden="true"
-            className="absolute -left-6 lg:-left-10 top-0 bottom-0 w-[3px] bg-gradient-to-b from-[#C8601A] via-[#E8895A] to-[#C8601A] opacity-70"
-          />
-
+      <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 lg:px-10 pb-20 lg:pb-28 pt-32">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-12 lg:gap-20 items-end">
           <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate="show"
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: [0.2, 0.7, 0.2, 1] }}
+            className="max-w-[820px]"
           >
-            <motion.p
-              variants={childVariants}
-              className="text-[11px] uppercase tracking-[0.22em] text-[#E8895A] font-semibold mb-5"
-            >
-              BC&apos;s Decorative Pavement Specialists &middot; Since 2000
-            </motion.p>
+            {/* Eyebrow */}
+            <p className="text-[11px] uppercase tracking-[0.18em] text-[#C8601A] font-semibold mb-6 flex items-center gap-3">
+              <span className="inline-block w-8 h-px bg-[#C8601A]" />
+              BC&apos;s Decorative Pavement Specialists · Since 2000
+            </p>
 
-            <motion.h1
-              variants={childVariants}
-              className="font-light leading-[0.95] tracking-[-0.03em] text-white"
-              style={{ fontSize: "clamp(2.75rem, 7vw, 6.5rem)" }}
-            >
-              Surfaces that{" "}
-              <span className="text-[#E8895A]">define</span>
-              <br />
-              a place.
-            </motion.h1>
-
-            <motion.p
-              variants={childVariants}
-              className="text-base lg:text-xl text-white/85 max-w-xl mt-6 leading-relaxed font-light"
-            >
-              From crosswalks and transit lanes to driveways and public art
-              &mdash; Square One has transformed over 50 BC communities with
-              surfaces that perform and inspire.
-            </motion.p>
-
-            <motion.div
-              variants={childVariants}
-              className="mt-10 flex flex-wrap gap-3 items-center"
-            >
-              <Link
-                href="/projects"
-                className="group bg-white text-[#111111] px-7 py-3.5 font-semibold text-sm rounded-none hover:bg-[#F6F4F0] transition-colors inline-flex items-center gap-2"
-              >
-                See Our Work
-                <ArrowRight />
-              </Link>
-              <Link
-                href="/contact"
-                className="border border-white/40 text-white px-7 py-3.5 font-medium text-sm rounded-none hover:bg-white hover:text-[#111111] transition-colors"
-              >
-                Get a Quote
-              </Link>
-            </motion.div>
-          </motion.div>
-        </div>
-      </Container>
-
-      {/* Stat card (desktop only) */}
-      <div className="hidden lg:block absolute right-8 xl:right-12 bottom-32 z-10 bg-white/[0.08] backdrop-blur-lg border border-white/15 p-7 rounded-none min-w-[220px]">
-        {stats.map((stat, i) => (
-          <div
-            key={stat.label}
-            className={`py-5 ${i !== 0 ? "border-t border-white/10" : ""}`}
-          >
-            <div
-              className="text-white"
+            {/* Headline */}
+            <h1
+              className="text-[#111111]"
               style={{
+                fontSize: "clamp(3rem, 5.8vw, 5.5rem)",
                 fontWeight: 300,
+                lineHeight: 1.02,
                 letterSpacing: "-0.03em",
-                fontSize: "3rem",
-                lineHeight: 1,
+                textWrap: "balance",
               }}
             >
-              {stat.value}
-            </div>
-            <div className="text-[10px] uppercase tracking-[0.15em] text-white/75 mt-1">
-              {stat.label}
-            </div>
-          </div>
-        ))}
-      </div>
+              From crosswalks to driveways —{" "}
+              <em
+                style={{
+                  fontStyle: "italic",
+                  fontWeight: 400,
+                  color: "#C8601A",
+                }}
+              >
+                built to last.
+              </em>
+            </h1>
 
-      {/* Ticker marquee */}
-      <div className="absolute bottom-0 left-0 right-0 z-10 border-t border-white/10 bg-[rgba(20,22,26,0.72)] backdrop-blur-sm py-3 overflow-hidden ticker-mask">
-        <div className="ticker-track">
-          {[...tickerItems, ...tickerItems].map((item, i) => (
-            <span
-              key={i}
-              className="flex items-center whitespace-nowrap px-6 text-[11px] uppercase tracking-[0.18em] text-white/70"
-            >
-              {item}
-              <span className="mx-6 text-[#E8895A]">&middot;</span>
-            </span>
-          ))}
+            {/* Sub */}
+            <p className="text-base lg:text-lg text-[#2C2C2C] max-w-xl mt-7 leading-relaxed">
+              From municipal crosswalks and BRT corridors to private driveways — Square One delivers decorative
+              pavement that performs in BC&apos;s climate and stands up to a generation of weather.
+            </p>
+
+            {/* CTAs */}
+            <div className="mt-10 flex flex-wrap gap-3">
+              <Link
+                href="/contact"
+                className="group inline-flex items-center gap-2 bg-[#C8601A] text-white px-6 py-3.5 text-sm font-semibold rounded-[8px] hover:bg-[#A84F15] transition-colors"
+                style={{ boxShadow: "0 4px 20px rgba(200,96,26,0.25)" }}
+              >
+                Request a Quote
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="transition-transform group-hover:translate-x-0.5">
+                  <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </Link>
+              <Link
+                href="/projects"
+                className="inline-flex items-center gap-2 border border-[#111111]/15 text-[#111111] px-6 py-3.5 text-sm font-semibold rounded-[8px] hover:border-[#111111]/40 hover:bg-white/40 transition-colors"
+              >
+                See Our Work
+              </Link>
+            </div>
+          </motion.div>
+
+          {/* Floating stats card (desktop) */}
+          <motion.aside
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.2, ease: [0.2, 0.7, 0.2, 1] }}
+            className="hidden lg:block w-[300px] bg-white/85 backdrop-blur-sm border border-[#E2DDD8] p-7"
+            style={{ boxShadow: "0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04)" }}
+          >
+            <p className="text-[10px] uppercase tracking-[0.2em] text-[#C8601A] font-semibold mb-5">
+              At a glance
+            </p>
+            <ul className="divide-y divide-[#E2DDD8]">
+              {[
+                { num: "51+", label: "BC communities served" },
+                { num: "25 yrs", label: "in operation" },
+                { num: "4", label: "specialist services" },
+              ].map((s) => (
+                <li key={s.label} className="py-4 first:pt-0 last:pb-0">
+                  <div className="text-[#111111] text-[2.25rem] leading-none font-light tracking-tight">
+                    {s.num}
+                  </div>
+                  <div className="text-[11px] uppercase tracking-[0.14em] text-[#5A5A5A] mt-1.5">
+                    {s.label}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </motion.aside>
+        </div>
+
+        {/* Bottom rule */}
+        <div className="hidden lg:flex items-center justify-between mt-16 pt-6 border-t border-[#111111]/10 text-[#5A5A5A]">
+          <span className="text-[10px] uppercase tracking-[0.28em]">
+            S1 — Stamping · Coatings · Thermoplastic · Vapor
+          </span>
+          <span className="text-[10px] uppercase tracking-[0.22em] flex items-center gap-2">
+            Scroll
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path
+                d="M7 2v10M3 8l4 4 4-4"
+                stroke="currentColor"
+                strokeWidth="1.3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </span>
         </div>
       </div>
     </section>
