@@ -531,7 +531,7 @@ export default function Nav() {
           </div>
         </div>
 
-        {/* Desktop mega panels (absolutely positioned below nav bar, inside nav for click-outside to work) */}
+        {/* Desktop mega panels */}
         <AnimatePresence>
           {activePanel === "products" && (
             <ProductsPanel key="products-panel" onClose={closeAll} />

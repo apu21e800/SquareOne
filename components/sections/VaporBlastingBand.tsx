@@ -28,34 +28,34 @@ export default function VaporBlastingBand() {
         {/* Feature list - 2 columns */}
         <div className="grid grid-cols-2 gap-x-6 gap-y-3 mb-10 text-sm text-white/80">
           <div className="flex items-start gap-2">
-            <span className="text-[#C8601A] flex-shrink-0">✓</span>
+            <span className="text-[#C8601A] flex-shrink-0">&#10003;</span>
             <span>Concrete &amp; stone restoration</span>
           </div>
           <div className="flex items-start gap-2">
-            <span className="text-[#C8601A] flex-shrink-0">✓</span>
+            <span className="text-[#C8601A] flex-shrink-0">&#10003;</span>
             <span>Pre-coating preparation</span>
           </div>
           <div className="flex items-start gap-2">
-            <span className="text-[#C8601A] flex-shrink-0">✓</span>
+            <span className="text-[#C8601A] flex-shrink-0">&#10003;</span>
             <span>Industrial equipment cleaning</span>
           </div>
           <div className="flex items-start gap-2">
-            <span className="text-[#C8601A] flex-shrink-0">✓</span>
+            <span className="text-[#C8601A] flex-shrink-0">&#10003;</span>
             <span>Heritage surface work</span>
           </div>
           <div className="flex items-start gap-2">
-            <span className="text-[#C8601A] flex-shrink-0">✓</span>
+            <span className="text-[#C8601A] flex-shrink-0">&#10003;</span>
             <span>Patio &amp; hardscape refresh</span>
           </div>
           <div className="flex items-start gap-2">
-            <span className="text-[#C8601A] flex-shrink-0">✓</span>
+            <span className="text-[#C8601A] flex-shrink-0">&#10003;</span>
             <span>Automotive &amp; marine</span>
           </div>
         </div>
 
         <Link href="/vapor-blasting">
           <button className="border border-white/30 text-white px-8 py-4 font-semibold text-sm tracking-[0.08em] uppercase transition-colors duration-200 hover:border-white hover:bg-white/10">
-            Learn About Vapor Blasting →
+            Learn About Vapor Blasting &#8594;
           </button>
         </Link>
       </div>

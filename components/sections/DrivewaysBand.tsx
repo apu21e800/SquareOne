@@ -64,7 +64,7 @@ export default function DrivewaysBand() {
               </Link>
             </div>
             <p className="mt-6 text-xs text-[#8C8C8C]">
-              ★★★★★&nbsp; Metro Vancouver · Victoria · Vancouver Island
+              &#9733;&#9733;&#9733;&#9733;&#9733;&nbsp; Metro Vancouver &#183; Victoria &#183; Vancouver Island
             </p>
           </motion.div>
         </div>

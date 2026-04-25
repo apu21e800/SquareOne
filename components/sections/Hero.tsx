@@ -70,7 +70,6 @@ export default function Hero() {
   const [scrollY, setScrollY] = useState<number>(0)
 
   useEffect(() => {
-    // Disable parallax on mobile (avoids scroll jank on small screens)
     if (typeof window !== "undefined" && window.innerWidth < 1024) return
     const onScroll = () => setScrollY(window.scrollY)
     onScroll()
@@ -140,7 +139,8 @@ export default function Hero() {
             >
               Surfaces that{" "}
               <span className="text-[#E8895A]">define</span>
-              <br />a place.
+              <br />
+              a place.
             </motion.h1>
 
             <motion.p

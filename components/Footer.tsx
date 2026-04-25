@@ -115,7 +115,7 @@ export default function Footer() {
             <address className="not-italic space-y-3 text-white/60 text-sm leading-relaxed">
               <div className="pl-4 border-l-2 border-[#C8601A]">
                 <p className="text-white/40 text-xs uppercase tracking-wider mb-1">Metro Vancouver</p>
-                <p>505 – 20800 Lougheed Hwy</p>
+                <p>505 &#8211; 20800 Lougheed Hwy</p>
                 <p>Maple Ridge, BC V2X 3P2</p>
               </div>
               <div className="pl-4 border-l-2 border-[#C8601A]">
@@ -137,10 +137,10 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="border-t border-white/10 mt-12 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-3 text-white/40 text-xs">
-            <span>© {new Date().getFullYear()} Square One Paving Ltd.</span>
-            <span className="text-white/20">·</span>
+            <span>&#169; {new Date().getFullYear()} Square One Paving Ltd.</span>
+            <span className="text-white/20">&#183;</span>
             <Link href="/privacy" className="hover:text-white/70 transition-colors">Privacy</Link>
-            <span className="text-white/20">·</span>
+            <span className="text-white/20">&#183;</span>
             <Link href="/terms" className="hover:text-white/70 transition-colors">Terms</Link>
           </div>
           <div className="flex items-center gap-2 text-white/40 text-xs">
@@ -150,7 +150,7 @@ export default function Footer() {
               <rect x="15" y="0" width="5" height="10" fill="#D80621"/>
               <path d="M10 1.5 L10.6 3.5 L12.5 3.5 L11.1 4.6 L11.6 6.5 L10 5.4 L8.4 6.5 L8.9 4.6 L7.5 3.5 L9.4 3.5 Z" fill="#D80621"/>
             </svg>
-            <span>Proudly Canadian · Serving BC since 2000</span>
+            <span>Proudly Canadian &#183; Serving BC since 2000</span>
           </div>
         </div>
       </Container>

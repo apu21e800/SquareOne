@@ -35,7 +35,7 @@ export default function ProjectsPreview() {
             href="/projects"
             className="hover-underline text-[#C8601A] text-sm font-semibold whitespace-nowrap"
           >
-            All Projects →
+            All Projects &#8594;
           </Link>
         </motion.div>
 

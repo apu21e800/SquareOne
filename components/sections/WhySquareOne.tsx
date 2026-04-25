@@ -98,7 +98,7 @@ export default function WhySquareOne() {
           >
             We do one thing for a living — decorative pavement — and we do it
             across the toughest environments in the province. Municipal
-            stress-tests become your driveway's baseline.
+            stress-tests become your driveway&apos;s baseline.
           </motion.p>
         </div>
 
