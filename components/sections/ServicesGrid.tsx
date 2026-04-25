@@ -5,15 +5,6 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 import { services } from "@/lib/services"
 
-/**
- * ServicesGrid — 4 cards driven by lib/services.ts.
- * Order: municipal-first (stamped → coatings → thermoplastic → vapor).
- *
- * Each card: image with category eyebrow overlay, body with 3px orange
- * top accent, name, short description, "Learn more →" link.
- *
- * Reveal-on-scroll via framer-motion.
- */
 export default function ServicesGrid() {
   const order = [
     "stamped-asphalt",
@@ -27,13 +18,10 @@ export default function ServicesGrid() {
 
   return (
     <section className="bg-white relative">
-      {/* Top-left orange tick */}
       <span
         aria-hidden
         className="absolute left-6 lg:left-10 top-0 w-16 h-[3px]"
-        style={{
-          background: "linear-gradient(90deg, #C8601A 0%, #E8895A 100%)",
-        }}
+        style={{ background: "linear-gradient(90deg, #C8601A 0%, #E8895A 100%)" }}
       />
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-24 lg:py-32">
         {/* Header */}
@@ -47,27 +35,21 @@ export default function ServicesGrid() {
               className="text-[#111111]"
               style={{
                 fontSize: "clamp(2.25rem, 4.4vw, 3.5rem)",
-                fontWeight: 300,
-                lineHeight: 1.02,
-                letterSpacing: "-0.035em",
+                fontWeight: 800,
+                lineHeight: 0.97,
+                letterSpacing: "-0.04em",
                 textWrap: "balance",
               }}
             >
               Four services.{" "}
-              <em
-                style={{
-                  fontStyle: "italic",
-                  fontWeight: 400,
-                  color: "#C8601A",
-                }}
-              >
+              <em style={{ fontStyle: "italic", fontWeight: 700, color: "#C8601A" }}>
                 One specialist team.
               </em>
             </h2>
           </div>
           <p className="text-[15px] leading-relaxed text-[#5A5A5A] max-w-md lg:justify-self-end">
-            We install the surfaces that define BC communities — crosswalks, transit corridors, plazas, and driveways.
-            Each service is run in house, by the same crew, to a single municipal-grade standard.
+            We install the surfaces that define BC communities — crosswalks, transit corridors, plazas,
+            and driveways. Each service is run in house, by the same crew, to a single municipal-grade standard.
           </p>
         </div>
 
@@ -79,17 +61,12 @@ export default function ServicesGrid() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-80px" }}
-              transition={{
-                duration: 0.55,
-                delay: i * 0.08,
-                ease: [0.2, 0.7, 0.2, 1],
-              }}
+              transition={{ duration: 0.55, delay: i * 0.08, ease: [0.2, 0.7, 0.2, 1] }}
             >
               <Link
                 href={`/services/${service.slug}`}
-                className="group block bg-white border border-[#E2DDD8] hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)] transition-shadow rounded-none overflow-hidden h-full flex flex-col"
+                className="group block bg-white border border-[#E2DDD8] hover:shadow-[0_6px_24px_rgba(0,0,0,0.10)] hover:-translate-y-1 transition-all duration-300 overflow-hidden h-full flex flex-col"
               >
-                {/* Image */}
                 <div className="relative aspect-[4/3] overflow-hidden bg-[#EDE9E3]">
                   <Image
                     src={service.imageUrl}
@@ -102,7 +79,6 @@ export default function ServicesGrid() {
                     0{i + 1}
                   </span>
                 </div>
-                {/* Body — 3px orange top accent */}
                 <div className="flex-1 p-6 border-t-[3px] border-[#C8601A] bg-white flex flex-col">
                   <h3 className="text-[17px] font-semibold text-[#111111] tracking-tight">
                     {service.name}

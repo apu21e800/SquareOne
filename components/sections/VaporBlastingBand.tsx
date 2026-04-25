@@ -5,15 +5,16 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 
 /**
- * VaporBlastingBand — standalone industrial sub-brand callout.
+ * VaporBlastingBand — dark industrial sub-brand callout.
  * Dark #0F1216 background. Brand-within-a-brand treatment.
+ * H2 at 800 weight to match hero energy.
  */
 export default function VaporBlastingBand() {
   const specs = [
-    { num: "0", unit: "chemicals", label: "Water + abrasive only" },
-    { num: "1.2k", unit: "PSI", label: "Variable system pressure" },
-    { num: "8+", unit: "surfaces", label: "Concrete, steel, brick, marine" },
-    { num: "BC", unit: "wide", label: "Mobile across the province" },
+    { num: "0",     unit: "chemicals",  label: "Water + abrasive only" },
+    { num: "1.2k",  unit: "PSI",        label: "Variable system pressure" },
+    { num: "8+",    unit: "surfaces",   label: "Concrete, steel, brick, marine" },
+    { num: "BC",    unit: "wide",       label: "Mobile across the province" },
   ]
 
   return (
@@ -52,14 +53,14 @@ export default function VaporBlastingBand() {
               className="text-white"
               style={{
                 fontSize: "clamp(2.5rem, 5vw, 4.5rem)",
-                fontWeight: 300,
-                lineHeight: 1,
-                letterSpacing: "-0.04em",
+                fontWeight: 800,
+                lineHeight: 0.97,
+                letterSpacing: "-0.045em",
                 textWrap: "balance",
               }}
             >
               Surface prep,{" "}
-              <em style={{ fontStyle: "italic", fontWeight: 400, color: "#E8895A" }}>
+              <em style={{ fontStyle: "italic", fontWeight: 700, color: "#E8895A" }}>
                 done right.
               </em>
             </h2>
@@ -73,7 +74,7 @@ export default function VaporBlastingBand() {
                   <div className="flex items-baseline gap-1.5">
                     <span
                       className="text-white leading-none"
-                      style={{ fontSize: "2rem", fontWeight: 300, letterSpacing: "-0.03em" }}
+                      style={{ fontSize: "2rem", fontWeight: 800, letterSpacing: "-0.045em" }}
                     >
                       {s.num}
                     </span>
@@ -88,7 +89,7 @@ export default function VaporBlastingBand() {
             <div className="mt-10 flex flex-wrap gap-3">
               <Link
                 href="/services/vapor-blasting"
-                className="group inline-flex items-center gap-2 bg-white text-[#111111] px-6 py-3.5 text-sm font-semibold rounded-[8px] hover:bg-[#F6F4F0] transition-colors"
+                className="group inline-flex items-center gap-2 bg-white text-[#111111] px-6 py-3.5 text-sm font-semibold hover:bg-[#F6F4F0] transition-colors"
               >
                 Vapor Blasting Spec
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
@@ -97,7 +98,7 @@ export default function VaporBlastingBand() {
               </Link>
               <Link
                 href="/contact"
-                className="inline-flex items-center gap-2 border border-white/30 text-white px-6 py-3.5 text-sm font-semibold rounded-[8px] hover:border-white hover:bg-white/5 transition-colors"
+                className="inline-flex items-center gap-2 border border-white/30 text-white px-6 py-3.5 text-sm font-semibold hover:border-white hover:bg-white/5 transition-colors"
               >
                 Request a Site Visit
               </Link>

@@ -5,13 +5,6 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 import { getFeaturedProjects } from "@/lib/projects"
 
-/**
- * ProjectsPreview — warm-light band, "Our Work".
- *
- * Municipal-weighted: hero card spans 2×2, "Featured Municipal" pill.
- * 4 standard cards fill the rest. Driveway projects filtered out
- * (Driveways gets its own section).
- */
 export default function ProjectsPreview() {
   const featured = getFeaturedProjects().filter(
     (p) => p.application !== "Driveways",
@@ -23,13 +16,11 @@ export default function ProjectsPreview() {
 
   return (
     <section className="relative bg-[#EDE9E3] overflow-hidden">
-      {/* Top-left orange tick */}
       <span
         aria-hidden
         className="absolute left-6 lg:left-10 top-0 w-16 h-[3px]"
         style={{ background: "linear-gradient(90deg, #C8601A 0%, #E8895A 100%)" }}
       />
-      {/* Subtle texture */}
       <div
         aria-hidden
         className="absolute inset-0 opacity-[0.06] pointer-events-none mix-blend-multiply"
@@ -51,14 +42,14 @@ export default function ProjectsPreview() {
               className="text-[#111111]"
               style={{
                 fontSize: "clamp(1.9rem, 4vw, 3rem)",
-                fontWeight: 300,
-                lineHeight: 1.02,
-                letterSpacing: "-0.03em",
+                fontWeight: 800,
+                lineHeight: 0.97,
+                letterSpacing: "-0.04em",
                 textWrap: "balance",
               }}
             >
               Transforming BC,{" "}
-              <em style={{ fontStyle: "italic", fontWeight: 400, color: "#C8601A" }}>
+              <em style={{ fontStyle: "italic", fontWeight: 700, color: "#C8601A" }}>
                 one surface at a time.
               </em>
             </h2>
@@ -76,7 +67,7 @@ export default function ProjectsPreview() {
 
         {/* Asymmetric grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
-          {/* HERO — municipal flagship */}
+          {/* HERO */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -113,7 +104,7 @@ export default function ProjectsPreview() {
                   className="text-white"
                   style={{
                     fontSize: "clamp(1.5rem, 2.4vw, 2.25rem)",
-                    fontWeight: 400,
+                    fontWeight: 700,
                     lineHeight: 1.05,
                     letterSpacing: "-0.025em",
                     textWrap: "balance",
@@ -143,7 +134,7 @@ export default function ProjectsPreview() {
             >
               <Link
                 href={`/projects/${p.slug}`}
-                className="group block relative bg-white border border-[#E2DDD8] hover:shadow-[0_4px_16px_rgba(0,0,0,0.10)] transition-shadow"
+                className="group block relative bg-white border border-[#E2DDD8] hover:shadow-[0_4px_16px_rgba(0,0,0,0.10)] hover:-translate-y-1 transition-all duration-300"
               >
                 <div className="relative aspect-[4/3] overflow-hidden bg-[#EDE9E3]">
                   <Image
