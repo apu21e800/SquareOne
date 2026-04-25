@@ -13,13 +13,6 @@ const projectTypes = [
   "Other / Not Sure",
 ]
 
-const trustPoints = [
-  { icon: "◈", text: "BC Decorative Pavement Studio — Since 2000" },
-  { icon: "◉", text: "Free site consultations — no obligation" },
-  { icon: "▧", text: "Serving BC since 2000" },
-  { icon: "◌", text: "Lower Mainland & Vancouver Island" },
-]
-
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState("")
@@ -33,102 +26,145 @@ export default function ContactPage() {
     message: "",
   })
 
-  const fieldClass = "w-full px-4 py-3.5 rounded-lg text-sm outline-none border border-[#E8E4DE] bg-[#FAFAFA] text-[#333333] placeholder-[#999] focus:border-[#D66620] focus:ring-2 focus:ring-[#D66620]/15 transition-colors"
+  const fieldClass = "w-full px-4 py-3.5 text-sm outline-none border border-[#E2DDD8] bg-[#FAFAFA] text-[#333333] placeholder-[#AAA] focus:border-[#C8601A] focus:ring-2 focus:ring-[#C8601A]/12 transition-colors"
 
   return (
-    <main className="min-h-screen bg-[#FAFAFA]">
+    <main className="min-h-screen" style={{ background: "#F6F4F0" }}>
 
       {/* Page header */}
-      <section className="bg-white border-b border-[#E8E4DE] pt-28 pb-12 px-6 sm:px-8">
-        <div className="max-w-6xl mx-auto">
-          <p className="text-[#D66620] text-xs uppercase tracking-[0.22em] font-semibold mb-3">
-            Get In Touch
-          </p>
-          <h1 className="text-5xl sm:text-6xl font-black text-[#333333]">
+      <section className="bg-white border-b border-[#E2DDD8] pt-28 pb-16 px-6 sm:px-8">
+        <div className="max-w-[1300px] mx-auto">
+          <p className="eyebrow mb-5">Get In Touch</p>
+          <h1
+            style={{
+              fontSize: "clamp(3rem, 6vw, 6rem)",
+              fontWeight: 800,
+              letterSpacing: "-0.05em",
+              lineHeight: 0.9,
+              color: "#111111",
+            }}
+          >
             Start a Project
           </h1>
+          <p className="text-[17px] mt-5 max-w-xl leading-relaxed" style={{ color: "#5A5A5A" }}>
+            Crosswalk, bike lane, driveway, or surface prep — tell us about your BC project
+            and we&apos;ll provide a free, no-obligation quote.
+          </p>
         </div>
       </section>
 
-      <div className="max-w-6xl mx-auto px-6 sm:px-8 py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.4fr] gap-14">
+      <div className="max-w-[1300px] mx-auto px-6 sm:px-8 py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.5fr] gap-14">
 
-          {/* Left: Context + trust */}
+          {/* Left: Trust + contact */}
           <div>
-            <p className="text-[#626262] text-base leading-relaxed mb-10">
-              Tell us about your project — crosswalk, bike lane, parking lot, decorative driveway,
-              or surface prep. We&apos;ll recommend the right solution and provide a free, no-obligation quote.
-            </p>
-
             {/* Trust points */}
-            <div className="space-y-4 mb-10">
-              {trustPoints.map((tp) => (
-                <div key={tp.text} className="flex items-start gap-3">
-                  <span className="text-[#D66620] text-base mt-0.5 flex-shrink-0">{tp.icon}</span>
-                  <span className="text-sm text-[#626262]">{tp.text}</span>
+            <div className="space-y-5 mb-10">
+              {[
+                { label: "BC Decorative Pavement Studio", sub: "Since 2000 — 25 years serving BC" },
+                { label: "Free Site Consultations", sub: "No obligation — we come to you" },
+                { label: "Lower Mainland & Vancouver Island", sub: "From Vancouver to Victoria and beyond" },
+                { label: "All Installs Done In-House", sub: "No subcontracting — our crew, our standards" },
+              ].map((tp) => (
+                <div key={tp.label} className="flex items-start gap-4">
+                  <div className="w-1.5 h-1.5 bg-[#C8601A] flex-shrink-0 mt-[7px]" />
+                  <div>
+                    <p className="text-[14px] font-bold text-[#111111] tracking-[-0.01em]">{tp.label}</p>
+                    <p className="text-[13px] text-[#5A5A5A] mt-0.5">{tp.sub}</p>
+                  </div>
                 </div>
               ))}
             </div>
 
             {/* Contact details */}
-            <div className="bg-white rounded-2xl border border-[#E8E4DE] p-7 mb-6">
-              <p className="text-[#D66620] text-xs uppercase tracking-[0.22em] font-semibold mb-4">Direct Contact</p>
-              <div className="space-y-2.5">
-                <a href="tel:18773910270" className="flex items-center gap-3 group">
-                  <div className="w-8 h-8 rounded-lg bg-[#D66620]/10 flex items-center justify-center text-[#D66620] text-sm flex-shrink-0">
-                    &#9673;
+            <div className="bg-white border border-[#E2DDD8] p-7">
+              <p className="eyebrow mb-6">Direct Contact</p>
+              <div className="space-y-5">
+                <a href="tel:18773910270" className="flex items-start gap-4 group">
+                  <div className="w-8 h-8 border border-[#C8601A]/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C8601A" strokeWidth="2" strokeLinecap="round">
+                      <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.64A2 2 0 012 .94h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" />
+                    </svg>
                   </div>
                   <div>
-                    <span className="text-[#333333] font-semibold group-hover:text-[#D66620] transition-colors block">1-877-391-0270</span>
-                    <span className="text-[#626262] text-xs">Toll Free</span>
+                    <p className="text-[14px] font-bold text-[#111111] group-hover:text-[#C8601A] transition-colors">1-877-391-0270</p>
+                    <p className="text-[12px] text-[#8C8C8C] uppercase tracking-[0.1em] font-semibold">Toll Free</p>
                   </div>
                 </a>
-                <a href="tel:6046126209" className="flex items-center gap-3 group">
-                  <div className="w-8 h-8 rounded-lg bg-[#D66620]/10 flex items-center justify-center text-[#D66620] text-sm flex-shrink-0">
-                    &#9673;
+
+                <a href="tel:6046126209" className="flex items-start gap-4 group">
+                  <div className="w-8 h-8 border border-[#C8601A]/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C8601A" strokeWidth="2" strokeLinecap="round">
+                      <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.64A2 2 0 012 .94h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" />
+                    </svg>
                   </div>
                   <div>
-                    <span className="text-[#333333] font-semibold group-hover:text-[#D66620] transition-colors block">604-612-6209</span>
-                    <span className="text-[#626262] text-xs">Lower Mainland</span>
+                    <p className="text-[14px] font-bold text-[#111111] group-hover:text-[#C8601A] transition-colors">604-612-6209</p>
+                    <p className="text-[12px] text-[#8C8C8C] uppercase tracking-[0.1em] font-semibold">Lower Mainland</p>
                   </div>
                 </a>
-                <a href="mailto:info@squareonepaving.com" className="flex items-center gap-3 group">
-                  <div className="w-8 h-8 rounded-lg bg-[#D66620]/10 flex items-center justify-center text-[#D66620] text-sm flex-shrink-0">
-                    &#9672;
-                  </div>
-                  <span className="text-[#626262] group-hover:text-[#D66620] transition-colors text-sm">info@squareonepaving.com</span>
-                </a>
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-[#D66620]/10 flex items-center justify-center text-[#D66620] text-sm flex-shrink-0">
-                    &#9671;
+
+                <a href="mailto:info@squareonepaving.com" className="flex items-start gap-4 group">
+                  <div className="w-8 h-8 border border-[#C8601A]/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C8601A" strokeWidth="2" strokeLinecap="round">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                      <polyline points="22,6 12,13 2,6" />
+                    </svg>
                   </div>
                   <div>
-                    <span className="text-[#626262] text-sm block">505 &#8211; 20800 Lougheed Hwy</span>
-                    <span className="text-[#626262] text-sm">Maple Ridge, BC V2X 3P2</span>
+                    <p className="text-[13px] text-[#5A5A5A] group-hover:text-[#C8601A] transition-colors">info@squareonepaving.com</p>
+                    <p className="text-[12px] text-[#8C8C8C] uppercase tracking-[0.1em] font-semibold">Email</p>
+                  </div>
+                </a>
+
+                <div className="flex items-start gap-4">
+                  <div className="w-8 h-8 border border-[#E2DDD8] flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8C8C8C" strokeWidth="2" strokeLinecap="round">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-[13px] text-[#5A5A5A]">505 – 20800 Lougheed Hwy</p>
+                    <p className="text-[13px] text-[#5A5A5A]">Maple Ridge, BC V2X 3P2</p>
                   </div>
                 </div>
               </div>
             </div>
-
           </div>
 
           {/* Right: Form */}
-          <div className="bg-white rounded-2xl border border-[#E8E4DE] p-8 sm:p-10 shadow-sm">
+          <div className="bg-white border border-[#E2DDD8] p-8 sm:p-10">
             {submitted ? (
-              <div className="flex flex-col items-center justify-center h-full py-20 text-center">
-                <div className="w-16 h-16 rounded-full flex items-center justify-center mb-6 bg-[#D66620]/10">
-                  <svg className="w-7 h-7 text-[#D66620]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="flex flex-col items-center justify-center h-full py-24 text-center">
+                <div
+                  className="w-14 h-14 flex items-center justify-center mb-8 border border-[#C8601A]/30"
+                  style={{ background: "rgba(200,96,26,0.08)" }}
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="#C8601A" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <h3 className="text-2xl font-black text-[#333333] mb-2">Message Sent!</h3>
-                <p className="text-[#626262] text-sm max-w-xs">
-                  We&apos;ll be in touch within one business day. We look forward to working on your project.
+                <h3
+                  style={{ fontSize: "1.6rem", fontWeight: 800, letterSpacing: "-0.03em", color: "#111111" }}
+                  className="mb-3"
+                >
+                  Message Sent
+                </h3>
+                <p className="text-[#5A5A5A] text-[15px] max-w-xs leading-relaxed">
+                  We&apos;ll be in touch within one business day. Looking forward to your project.
                 </p>
               </div>
             ) : (
               <>
-                <h2 className="text-xl font-black text-[#333333] mb-7">Tell Us About Your Project</h2>
+                <h2
+                  style={{ fontSize: "clamp(1.4rem, 2vw, 1.8rem)", fontWeight: 800, letterSpacing: "-0.03em", color: "#111111", lineHeight: 1 }}
+                  className="mb-8"
+                >
+                  Tell Us About
+                  <br />
+                  Your Project
+                </h2>
                 <form
                   onSubmit={async (e) => {
                     e.preventDefault()
@@ -156,94 +192,74 @@ export default function ContactPage() {
                 >
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-semibold text-[#333333] uppercase tracking-wider mb-2">Full Name *</label>
-                      <input
-                        type="text"
-                        required
-                        value={form.name}
+                      <label className="block text-[10px] font-bold text-[#111111] uppercase tracking-[0.16em] mb-2">Full Name *</label>
+                      <input type="text" required value={form.name}
                         onChange={(e) => setForm({ ...form, name: e.target.value })}
-                        placeholder="Jane Smith"
-                        className={fieldClass}
+                        placeholder="Jane Smith" className={fieldClass}
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-[#333333] uppercase tracking-wider mb-2">Company / Organization</label>
-                      <input
-                        type="text"
-                        value={form.company}
+                      <label className="block text-[10px] font-bold text-[#111111] uppercase tracking-[0.16em] mb-2">Company / Org</label>
+                      <input type="text" value={form.company}
                         onChange={(e) => setForm({ ...form, company: e.target.value })}
-                        placeholder="City of Vancouver"
-                        className={fieldClass}
+                        placeholder="City of Vancouver" className={fieldClass}
                       />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-semibold text-[#333333] uppercase tracking-wider mb-2">Email *</label>
-                      <input
-                        type="email"
-                        required
-                        value={form.email}
+                      <label className="block text-[10px] font-bold text-[#111111] uppercase tracking-[0.16em] mb-2">Email *</label>
+                      <input type="email" required value={form.email}
                         onChange={(e) => setForm({ ...form, email: e.target.value })}
-                        placeholder="jane@city.ca"
-                        className={fieldClass}
+                        placeholder="jane@city.ca" className={fieldClass}
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-[#333333] uppercase tracking-wider mb-2">Phone</label>
-                      <input
-                        type="tel"
-                        value={form.phone}
+                      <label className="block text-[10px] font-bold text-[#111111] uppercase tracking-[0.16em] mb-2">Phone</label>
+                      <input type="tel" value={form.phone}
                         onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                        placeholder="604-555-0100"
-                        className={fieldClass}
+                        placeholder="604-555-0100" className={fieldClass}
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-[#333333] uppercase tracking-wider mb-2">Project Type</label>
-                    <select
-                      value={form.projectType}
+                    <label className="block text-[10px] font-bold text-[#111111] uppercase tracking-[0.16em] mb-2">Project Type</label>
+                    <select value={form.projectType}
                       onChange={(e) => setForm({ ...form, projectType: e.target.value })}
                       className={fieldClass}
                     >
-                      <option value="">Select project type...</option>
-                      {projectTypes.map((t) => (
-                        <option key={t} value={t}>{t}</option>
-                      ))}
+                      <option value="">Select project type…</option>
+                      {projectTypes.map((t) => <option key={t} value={t}>{t}</option>)}
                     </select>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-[#333333] uppercase tracking-wider mb-2">Message</label>
-                    <textarea
-                      rows={4}
-                      value={form.message}
+                    <label className="block text-[10px] font-bold text-[#111111] uppercase tracking-[0.16em] mb-2">Message</label>
+                    <textarea rows={4} value={form.message}
                       onChange={(e) => setForm({ ...form, message: e.target.value })}
-                      placeholder="Tell us about your project — location, timeline, requirements..."
+                      placeholder="Tell us about your project — location, timeline, requirements…"
                       className={`${fieldClass} resize-none`}
                     />
                   </div>
 
-                  {/* Honeypot */}
                   <input type="text" name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
 
                   {error && (
-                    <p className="text-sm text-red-500 bg-red-50 border border-red-200 px-4 py-3 rounded-lg">{error}</p>
+                    <p className="text-sm text-red-600 bg-red-50 border border-red-200 px-4 py-3">{error}</p>
                   )}
 
                   <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full bg-[#D66620] hover:bg-[#C05A18] text-white font-bold py-4 rounded-lg text-sm uppercase tracking-wider transition-colors disabled:opacity-60"
+                    type="submit" disabled={loading}
+                    className="w-full text-white font-bold py-4 text-sm uppercase tracking-[0.12em] transition-all hover:brightness-110 disabled:opacity-60"
+                    style={{ background: "linear-gradient(135deg, #C8601A 0%, #E8895A 100%)", boxShadow: "0 4px 20px rgba(200,96,26,0.25)" }}
                   >
-                    {loading ? "Sending..." : "Send Your Project Details"}
+                    {loading ? "Sending…" : "Send Your Project Details"}
                   </button>
 
-                  <p className="text-center text-xs text-[#999]">
-                    Or call us directly: <a href="tel:18773910270" className="text-[#D66620] font-semibold">1-877-391-0270</a>
+                  <p className="text-center text-xs text-[#8C8C8C]">
+                    Or call us: <a href="tel:18773910270" className="font-bold" style={{ color: "#C8601A" }}>1-877-391-0270</a>
                   </p>
                 </form>
               </>
