@@ -1,266 +1,397 @@
 import Link from "next/link"
-import { Metadata } from "next"
+import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Vapor Blasting BC | Surface Restoration Without Damage | Square One Paving",
+  title: "Vapor Blasting BC — Mobile Surface Restoration | Square One Paving",
   description:
-    "BC's mobile vapor blasting specialists. Remove paint, coatings, graffiti, and grime from concrete, brick, stone, and metal — no silica dust, no surface damage. Lower Mainland & Vancouver Island.",
+    "BC’s mobile vapor blasting specialists. Heritage stonework, industrial equipment, marine, and concrete — wet abrasive surface restoration without heat damage or surface scarring. Ladysmith & Kelowna.",
   keywords: [
     "vapor blasting BC",
-    "wet blasting Vancouver",
+    "wet blasting Vancouver Island",
     "surface restoration BC",
-    "graffiti removal Vancouver",
-    "paint removal concrete BC",
-    "vapor blasting service BC",
-    "dustless blasting Lower Mainland",
-    "historic building restoration BC",
+    "heritage building cleaning BC",
+    "mobile vapor blasting Ladysmith",
+    "industrial surface prep BC",
+    "dustless blasting BC",
+    "marine hull cleaning BC",
   ],
-  alternates: {
-    canonical: "https://squareonepaving.com/vapor-blasting",
-  },
+  alternates: { canonical: "https://squareonepaving.com/vapor-blasting" },
 }
+
+const comparisonRows = [
+  { attr: "DUST OUTPUT",     vapor: "< 5% airborne",       sand: "High — full PPE",    grind: "High — full PPE" },
+  { attr: "HEAT DAMAGE",     vapor: "None — water cooled", sand: "Localized",            grind: "Risk of warping" },
+  { attr: "SURFACE FINISH",  vapor: "Uniform satin",        sand: "Aggressive profile",  grind: "Linear scoring" },
+  { attr: "HERITAGE-SAFE",   vapor: "Yes",                  sand: "No",                  grind: "No" },
+  { attr: "SPEED (TYPICAL)", vapor: "15–25 m²/hr",    sand: "20–30 m²/hr",    grind: "5–10 m²/hr" },
+  { attr: "MOBILE",          vapor: "Yes — truck-mounted", sand: "Yes",                 grind: "Limited" },
+]
 
 const applications = [
+  { num: "01", title: "Industrial Equipment", desc: "Pumps, motors, frames, hydraulic components — full restoration without disassembly damage." },
+  { num: "02", title: "Heritage Stonework",   desc: "Sandstone, limestone, granite façades. Pollution and biofilm removed; substrate untouched." },
+  { num: "03", title: "Concrete Surfaces",    desc: "Coating removal, laitance prep, line stripe removal, graffiti abatement on concrete and pavers." },
+  { num: "04", title: "Metal Fabrication",    desc: "Mill scale, weld discoloration, oxidation. Uniform satin profile ready for coating or inspection." },
+  { num: "05", title: "Marine",               desc: "Hulls, decks, props, anchors. Antifouling and barnacle removal without gelcoat damage." },
+  { num: "06", title: "Pre-Coating Prep",     desc: "Surface profile to spec for paint, powder coat, plasma spray, or thermal barrier coatings." },
+]
+
+const processSteps = [
+  { num: "01", title: "Assess",  desc: "On-site walkthrough. Substrate identification, contamination type, target finish spec." },
+  { num: "02", title: "Prep",    desc: "Containment, runoff control, surface masking. Adjacent areas protected before water meets media." },
+  { num: "03", title: "Blast",   desc: "Wet abrasive at calibrated pressure. Continuous monitoring of surface profile and consumption rate." },
+  { num: "04", title: "Inspect", desc: "Sign-off photo set, profile gauge readings, and a written report. Site cleared, runoff captured." },
+]
+
+const results = [
   {
-    icon: "◈",
-    title: "Painted Concrete Removal",
-    desc: "Strip decades of paint layers from concrete floors, walls, and hardscapes without scarring the substrate.",
+    location: "VICTORIA · INNER HARBOUR",
+    title: "Heritage limestone façade restoration",
+    specs: ["240 m²", "4 days", "Recycled glass", "Heritage permit"],
   },
   {
-    icon: "◎",
-    title: "Graffiti Removal",
-    desc: "Clean tags and aerosol paint from concrete, brick, stone, and metal — leaving a clean, uniform matte surface.",
+    location: "NANAIMO · INDUSTRIAL",
+    title: "Hydraulic pump frame — coating removal",
+    specs: ["12 units", "2 days", "No disassembly", "Pre-paint profile"],
   },
   {
-    icon: "◉",
-    title: "Rust & Scale from Metal",
-    desc: "Remove corrosion, mill scale, and oxidation from steel, iron, and aluminium surfaces — prep-ready for coating.",
+    location: "VANCOUVER · CONCRETE",
+    title: "Parkade deck — line stripe & coating removal",
+    specs: ["1,400 m²", "6 days", "Occupied facility", "Night shift"],
   },
   {
-    icon: "▧",
-    title: "Historic Building Restoration",
-    desc: "The gentlest method for cleaning heritage brick, cut stone, and ornamental masonry without eroding fine detail.",
-  },
-  {
-    icon: "⬡",
-    title: "Pre-Paving Surface Prep",
-    desc: "Strip old road markings, sealers, and contaminants before new thermoplastic or decorative coatings are applied.",
-  },
-  {
-    icon: "◌",
-    title: "Strata & Commercial Exteriors",
-    desc: "Clean stained parking decks, building exteriors, and cladding for strata corporations and commercial property managers.",
+    location: "SIDNEY · MARINE",
+    title: "Aluminum hull — antifouling removal",
+    specs: ["52 ft vessel", "3 days", "Gelcoat preserved"],
   },
 ]
 
-const steps = [
+const whyStats = [
   {
-    num: "01",
-    title: "Surface Assessment",
-    desc: "We inspect the substrate, coating type, contamination depth, and surrounding environment to select the correct media, pressure, and angle for the job.",
+    stat: "25yrs",
+    label: "Years on the ground",
+    desc: "SquareOne has run BC restoration jobs since 1999 — through every regulatory shift in airborne particulate, runoff containment, and heritage permitting.",
   },
   {
-    num: "02",
-    title: "Vapor Blast Treatment",
-    desc: "Our mobile unit delivers a precise water-and-abrasive mixture to the surface — removing coatings cleanly without generating silica dust or damaging the substrate.",
+    stat: "100% BC",
+    label: "BC-based, on-site",
+    desc: "Two bases — Ladysmith on the Island, Kelowna in the Interior. Mobile rig dispatched same week. No subcontractors, ever.",
   },
   {
-    num: "03",
-    title: "Surface Inspection & Cleanup",
-    desc: "We inspect the treated area, clean the work zone, and confirm the surface is ready for its next step — whether that's a new coating, sealer, or bare finish.",
+    stat: "51+",
+    label: "Municipal-trusted",
+    desc: "City of Nanaimo, District of Saanich, City of Kelowna, BC Transit. The same compliance and reporting standards apply on every private job.",
   },
 ]
 
-type TableRow = {
-  attribute: string
-  pressure: string
-  sand: string
-  vapor: string
-}
-
-const comparisonRows: TableRow[] = [
-  { attribute: "Surface damage risk",            pressure: "High",          sand: "Very High",      vapor: "Low"        },
-  { attribute: "Dust / airborne debris",         pressure: "Minimal",       sand: "Severe",         vapor: "None"       },
-  { attribute: "Water usage",                    pressure: "Very High",     sand: "None",           vapor: "Low"        },
-  { attribute: "Suitable for delicate surfaces", pressure: "Rarely",        sand: "No",             vapor: "Yes"        },
-  { attribute: "Finish quality",                 pressure: "Inconsistent",  sand: "Rough / Pitted", vapor: "Clean Matte"},
-  { attribute: "Chemical runoff",                pressure: "Possible",      sand: "None",           vapor: "None"       },
-]
+const Arrow = () => (
+  <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+    <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+)
 
 export default function VaporBlastingPage() {
   return (
-    <main className="bg-[#FAFAFA]">
+    <main style={{ background: "#F6F4F0" }}>
 
-      {/* Hero */}
-      <section className="bg-[#1C2026] min-h-[80vh] flex items-center">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 py-28">
-          <div className="max-w-3xl">
-            <span className="eyebrow text-[#C8601A]">
-              Specialist Service &#183; BC Exclusive
-            </span>
+      {/* ── Hero ──────────────────────────────────────────── */}
+      <section
+        style={{
+          background: "#0A0C10",
+          minHeight: "88vh",
+          paddingTop: "68px",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-end",
+        }}
+      >
+        <div className="max-w-[1500px] mx-auto px-6 sm:px-10 lg:px-16 pb-20 pt-24 w-full">
+          <p
+            className="mb-8 font-bold uppercase"
+            style={{ fontSize: "10px", letterSpacing: "0.28em", color: "#E8895A" }}
+          >
+            Mobile Vapor Blasting · British Columbia
+          </p>
 
-            <h1 className="mt-6 mb-6 text-white font-light">
-              The most thorough<br />
-              surface preparation<br />
-              in British Columbia.
-            </h1>
-
-            <p className="text-white/60 text-lg leading-relaxed mb-10 max-w-xl">
-              Vapor blasting combines pressurised water and fine abrasive media to clean,
-              restore, and prepare surfaces at the microscopic level. No heat stress.
-              No media embedment. No shortcuts. We brought this technology to BC because
-              the surfaces we install deserve better than sandblasting.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Link href="/contact">
-                <button className="bg-white text-[#1C2026] px-8 py-4 font-semibold text-sm tracking-[0.08em] uppercase transition-colors duration-200 hover:bg-[#F6F4F0] w-full sm:w-auto">
-                  Request a Consultation &#8594;
-                </button>
-              </Link>
-              <a href="tel:18773910270">
-                <button className="border border-white/30 text-white px-8 py-4 font-semibold text-sm tracking-[0.08em] uppercase transition-colors duration-200 hover:border-white hover:bg-white/10 w-full sm:w-auto">
-                  1-877-391-0270
-                </button>
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* What Is Vapor Blasting */}
-      <section className="w-full py-24 bg-white border-b border-[#E8E4DE]">
-        <div className="max-w-6xl mx-auto px-6 sm:px-8">
-          <div className="grid lg:grid-cols-[1fr_1.4fr] gap-16 items-start">
+          <div className="grid lg:grid-cols-[1fr_380px] gap-16 items-end">
             <div>
-              <p className="text-[#C8601A] text-[11px] uppercase tracking-[0.25em] font-bold mb-4">
-                The Technology
+              <h1
+                style={{
+                  fontWeight: 800,
+                  fontSize: "clamp(3.4rem, 8vw, 8rem)",
+                  letterSpacing: "-0.045em",
+                  lineHeight: 0.9,
+                  color: "white",
+                }}
+              >
+                Surface restoration<br />done right.
+              </h1>
+
+              <p
+                className="mt-8 mb-10 max-w-xl"
+                style={{ fontSize: "1.05rem", lineHeight: 1.7, color: "rgba(255,255,255,0.55)" }}
+              >
+                Vapor blasting removes rust, coatings, and contaminants without heat
+                damage, warping, or surface scarring. Mobile across BC, used by municipalities,
+                heritage sites, and food-grade facilities since 1999.
               </p>
-              <h2 className="font-light text-[#111111]" style={{ fontSize: "clamp(1.9rem, 3vw, 3rem)", letterSpacing: "-0.025em" }}>
-                What Is<br />Vapor Blasting?
+
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Link href="#quote">
+                  <span
+                    className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-bold tracking-[0.04em] text-white transition-all hover:brightness-110"
+                    style={{ background: "linear-gradient(135deg, #C8601A 0%, #E8895A 100%)" }}
+                  >
+                    Request a Vapor Blast <Arrow />
+                  </span>
+                </Link>
+                <a href="#process">
+                  <span
+                    className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-bold tracking-[0.04em] transition-all hover:bg-white/10"
+                    style={{ border: "1px solid rgba(255,255,255,0.18)", color: "rgba(255,255,255,0.65)" }}
+                  >
+                    See the process
+                  </span>
+                </a>
+              </div>
+            </div>
+
+            {/* Spec strip */}
+            <div
+              className="hidden lg:flex flex-col divide-y"
+              style={{ border: "1px solid rgba(255,255,255,0.10)", borderColor: "rgba(255,255,255,0.10)" }}
+            >
+              {[
+                { label: "METHOD",       value: "Wet abrasive" },
+                { label: "PARTICULATE",  value: "< 5%" },
+                { label: "SERVICE AREA", value: "BC-wide" },
+              ].map(({ label, value }) => (
+                <div key={label} className="px-6 py-5" style={{ borderColor: "rgba(255,255,255,0.10)" }}>
+                  <p
+                    className="uppercase mb-1.5"
+                    style={{ fontSize: "9px", letterSpacing: "0.22em", color: "rgba(255,255,255,0.30)", fontWeight: 700 }}
+                  >
+                    {label}
+                  </p>
+                  <p style={{ fontWeight: 700, color: "white", fontSize: "1rem" }}>{value}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── What is Vapor Blasting ──────────────────────── */}
+      <section className="py-28 bg-white" style={{ borderBottom: "1px solid #E2DDD8" }}>
+        <div className="max-w-[1500px] mx-auto px-6 sm:px-10 lg:px-16">
+          <p
+            className="font-bold uppercase mb-6"
+            style={{ fontSize: "10px", letterSpacing: "0.28em", color: "#C8601A" }}
+          >
+            What is Vapor Blasting
+          </p>
+          <div className="grid lg:grid-cols-[380px_1fr] gap-16 items-start">
+            <h2
+              style={{
+                fontWeight: 800,
+                fontSize: "clamp(2rem, 4vw, 3.6rem)",
+                letterSpacing: "-0.04em",
+                lineHeight: 0.95,
+                color: "#111111",
+              }}
+            >
+              Water and abrasive media. Pressurized together.
+            </h2>
+
+            <div>
+              <p style={{ color: "#4A4A4A", lineHeight: 1.75, fontSize: "1.05rem", marginBottom: "1.5rem" }}>
+                Compressed water and recycled glass media meet at the nozzle. The water cushions
+                the abrasive, suppressing 95%+ of airborne dust and lowering the working
+                temperature — so we can clean, prep, or restore without damaging the substrate
+                underneath.
+              </p>
+              <p style={{ color: "#4A4A4A", lineHeight: 1.75, fontSize: "1.05rem", marginBottom: "2.5rem" }}>
+                The result is a uniform, contaminant-free surface ready for inspection, coating,
+                or service. No warping. No micro-fractures. No dust cloud — which is why we&apos;re
+                approved to work in occupied facilities, heritage sites, and food-grade
+                environments where dry methods can&apos;t go.
+              </p>
+
+              {/* Comparison table */}
+              <div className="overflow-x-auto" style={{ border: "1px solid #E2DDD8" }}>
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr style={{ background: "#0A0C10" }}>
+                      <th className="text-left px-5 py-4" style={{ fontSize: "10px", letterSpacing: "0.14em", fontWeight: 700, color: "rgba(255,255,255,0.45)", textTransform: "uppercase" }}>Attribute</th>
+                      <th className="px-5 py-4 text-center" style={{ fontSize: "10px", letterSpacing: "0.14em", fontWeight: 700, color: "#E8895A", textTransform: "uppercase" }}>Vapor Blasting</th>
+                      <th className="px-5 py-4 text-center" style={{ fontSize: "10px", letterSpacing: "0.14em", fontWeight: 700, color: "rgba(255,255,255,0.45)", textTransform: "uppercase" }}>Sandblasting</th>
+                      <th className="px-5 py-4 text-center" style={{ fontSize: "10px", letterSpacing: "0.14em", fontWeight: 700, color: "rgba(255,255,255,0.45)", textTransform: "uppercase" }}>Grinding</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {comparisonRows.map((row, i) => (
+                      <tr key={row.attr} style={{ background: i % 2 === 0 ? "white" : "#FAFAF8" }}>
+                        <td className="px-5 py-3.5" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 700, color: "#8C8C8C", textTransform: "uppercase" }}>{row.attr}</td>
+                        <td className="px-5 py-3.5 text-center" style={{ fontWeight: 700, color: "#111111" }}>{row.vapor}</td>
+                        <td className="px-5 py-3.5 text-center" style={{ color: "#8C8C8C" }}>{row.sand}</td>
+                        <td className="px-5 py-3.5 text-center" style={{ color: "#8C8C8C" }}>{row.grind}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Applications ───────────────────────────────── */}
+      <section className="py-28" style={{ background: "#F6F4F0", borderBottom: "1px solid #E2DDD8" }}>
+        <div className="max-w-[1500px] mx-auto px-6 sm:px-10 lg:px-16">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
+            <div>
+              <p className="font-bold uppercase mb-4" style={{ fontSize: "10px", letterSpacing: "0.28em", color: "#C8601A" }}>
+                Applications
+              </p>
+              <h2 style={{ fontWeight: 800, fontSize: "clamp(2rem, 4vw, 3.5rem)", letterSpacing: "-0.04em", lineHeight: 0.95, color: "#111111" }}>
+                Where we work.
               </h2>
-              <div className="mt-6 h-[3px] w-12 bg-[#C8601A] rounded" />
             </div>
-            <div className="space-y-5 text-[#626262] text-base leading-relaxed">
-              <p>
-                Vapor blasting — also called wet blasting or slurry blasting — combines water with
-                fine abrasive media in a controlled pressurized stream. Unlike dry sandblasting,
-                which accelerates dry grit at full velocity and generates dangerous airborne silica
-                dust, vapor blasting wraps each abrasive particle in a water cushion. The result
-                is far gentler impact energy: coatings and contaminants are lifted away without
-                etching, pitting, or fracturing the substrate beneath. The finish is a uniform,
-                clean matte — ready for whatever comes next.
-              </p>
-              <p>
-                This makes vapor blasting ideal for surfaces where you need precision over
-                aggression: historic brick and masonry, decorative concrete, architectural stone,
-                painted metal, and any surface where substrate integrity is non-negotiable. It
-                also produces no airborne silica hazard and minimal liquid waste — an important
-                advantage for occupied sites, strata properties, and environmentally sensitive
-                locations across BC.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Comparison Table */}
-      <section className="w-full py-24 bg-[#F2EFE9]">
-        <div className="max-w-6xl mx-auto px-6 sm:px-8">
-          <div className="mb-14">
-            <p className="text-[#C8601A] text-[11px] uppercase tracking-[0.25em] font-bold mb-4">
-              Method Comparison
+            <p style={{ color: "#5A5A5A", maxWidth: "380px", lineHeight: 1.6 }}>
+              From single industrial components to multi-storey heritage façades — same rig, same crew.
             </p>
-            <h2 className="font-light text-[#111111]" style={{ fontSize: "clamp(1.9rem, 3vw, 3rem)", letterSpacing: "-0.025em" }}>
-              Why Vapor Blasting Wins
-            </h2>
-            <p className="text-[#626262] text-base max-w-xl">
-              Not all surface cleaning methods are equal. Here&apos;s how vapor blasting stacks up
-              against the alternatives.
-            </p>
-            <div className="mt-6 h-px bg-gradient-to-r from-[#C8601A]/40 to-transparent" />
           </div>
 
-          <div className="overflow-x-auto rounded-2xl border border-[#E8E4DE] shadow-sm">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="bg-[#1C2226] text-white">
-                  <th className="text-left px-6 py-4 font-semibold text-xs uppercase tracking-wider text-white/60 w-[30%]">Attribute</th>
-                  <th className="px-6 py-4 font-semibold text-xs uppercase tracking-wider text-white/60 text-center">Pressure Washing</th>
-                  <th className="px-6 py-4 font-semibold text-xs uppercase tracking-wider text-white/60 text-center">Sandblasting</th>
-                  <th className="px-6 py-4 font-bold text-xs uppercase tracking-wider text-[#F0A04B] text-center">Vapor Blasting</th>
-                </tr>
-              </thead>
-              <tbody>
-                {comparisonRows.map((row, i) => (
-                  <tr key={row.attribute} className={i % 2 === 0 ? "bg-white" : "bg-[#FAFAF9]"}>
-                    <td className="px-6 py-4 text-[#333333] font-semibold text-sm">{row.attribute}</td>
-                    <td className="px-6 py-4 text-center text-[#888] text-sm">{row.pressure}</td>
-                    <td className="px-6 py-4 text-center text-[#888] text-sm">{row.sand}</td>
-                    <td className="px-6 py-4 text-center">
-                      <span className="inline-flex items-center gap-1.5 text-sm font-bold text-[#1C8C50]">
-                        <span className="text-[#1C8C50]">&#10003;</span>
-                        {row.vapor}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      {/* Applications Grid */}
-      <section className="w-full py-24 bg-white">
-        <div className="max-w-6xl mx-auto px-6 sm:px-8">
-          <div className="mb-14">
-            <p className="text-[#C8601A] text-[11px] uppercase tracking-[0.25em] font-bold mb-4">Use Cases</p>
-            <h2 className="font-light text-[#111111]" style={{ fontSize: "clamp(1.9rem, 3vw, 3rem)", letterSpacing: "-0.025em" }}>
-              What We Can Restore
-            </h2>
-            <p className="text-[#626262] text-base max-w-xl">
-              Vapor blasting works across a wide range of substrates and contamination types —
-              residential, commercial, municipal, and heritage.
-            </p>
-            <div className="mt-6 h-px bg-gradient-to-r from-[#C8601A]/40 to-transparent" />
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3" style={{ border: "1px solid #E2DDD8", gap: "1px", background: "#E2DDD8" }}>
             {applications.map((app) => (
               <div
-                key={app.title}
-                className="group bg-[#FAFAFA] rounded-xl p-7 border border-[#E8E4DE] hover:border-[#C8601A]/40 hover:bg-white hover:shadow-lg transition-all duration-200"
+                key={app.num}
+                className="p-8 group transition-colors duration-300"
+                style={{ background: "white" }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "#0A0C10" }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "white" }}
               >
-                <span className="text-2xl text-[#C8601A] block mb-4">{app.icon}</span>
-                <h3 className="text-base font-black text-[#1C2226] mb-2 group-hover:text-[#C8601A] transition-colors">{app.title}</h3>
-                <p className="text-[#626262] text-sm leading-relaxed">{app.desc}</p>
+                <p
+                  className="font-black mb-4"
+                  style={{ fontSize: "11px", letterSpacing: "0.20em", color: "#C8601A" }}
+                >
+                  {app.num}
+                </p>
+                <h3
+                  className="font-bold mb-3"
+                  style={{ fontSize: "1.15rem", letterSpacing: "-0.02em", color: "#111111" }}
+                >
+                  {app.title}
+                </h3>
+                <p className="text-sm leading-relaxed" style={{ color: "#5A5A5A" }}>
+                  {app.desc}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Process */}
-      <section className="w-full py-24 bg-[#F2EFE9]">
-        <div className="max-w-6xl mx-auto px-6 sm:px-8">
-          <div className="text-center mb-16">
-            <p className="text-[#C8601A] text-[11px] uppercase tracking-[0.25em] font-bold mb-4">The Process</p>
-            <h2 className="font-light text-[#111111]" style={{ fontSize: "clamp(1.9rem, 3vw, 3rem)", letterSpacing: "-0.025em" }}>Three Steps</h2>
+      {/* ── Process ──────────────────────────────────────── */}
+      <section id="process" className="py-28 bg-white" style={{ borderBottom: "1px solid #E2DDD8" }}>
+        <div className="max-w-[1500px] mx-auto px-6 sm:px-10 lg:px-16">
+          <p className="font-bold uppercase mb-4" style={{ fontSize: "10px", letterSpacing: "0.28em", color: "#C8601A" }}>
+            Our Process
+          </p>
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
+            <h2 style={{ fontWeight: 800, fontSize: "clamp(2rem, 4vw, 3.5rem)", letterSpacing: "-0.04em", lineHeight: 0.95, color: "#111111" }}>
+              Four steps.<br />Documented every time.
+            </h2>
+            <p style={{ color: "#5A5A5A", maxWidth: "380px", lineHeight: 1.6 }}>
+              Every job ships with a pre-blast assessment, mid-job inspection photos, and a
+              post-blast surface profile report.
+            </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            {steps.map((step) => (
-              <div key={step.num} className="bg-white rounded-2xl p-8 border border-[#E8E4DE] relative overflow-hidden">
-                <div
-                  className="absolute top-4 right-5 font-black text-[#C8601A]/08 leading-none select-none"
-                  style={{ fontSize: "6rem" }}
-                  aria-hidden="true"
+
+          <div
+            className="grid sm:grid-cols-2 lg:grid-cols-4"
+            style={{ border: "1px solid #E2DDD8", gap: "1px", background: "#E2DDD8" }}
+          >
+            {processSteps.map((step, i) => (
+              <div
+                key={step.num}
+                className="p-8"
+                style={{ background: i % 2 === 1 ? "#F6F4F0" : "white" }}
+              >
+                <p
+                  className="font-black mb-6"
+                  style={{
+                    fontSize: "clamp(3rem, 5vw, 4.5rem)",
+                    letterSpacing: "-0.05em",
+                    lineHeight: 1,
+                    color: "#E2DDD8",
+                  }}
                 >
                   {step.num}
-                </div>
-                <div className="relative z-10">
-                  <div className="w-10 h-[3px] bg-[#C8601A] rounded mb-6" />
-                  <h3 className="text-lg font-black text-[#1C2226] mb-3">{step.title}</h3>
-                  <p className="text-[#626262] text-sm leading-relaxed">{step.desc}</p>
+                </p>
+                <h3
+                  className="font-bold mb-3"
+                  style={{ fontSize: "1.1rem", letterSpacing: "-0.02em", color: "#111111" }}
+                >
+                  {step.title}
+                </h3>
+                <p className="text-sm leading-relaxed" style={{ color: "#5A5A5A" }}>
+                  {step.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Results ──────────────────────────────────────── */}
+      <section className="py-28" style={{ background: "#0A0C10", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+        <div className="max-w-[1500px] mx-auto px-6 sm:px-10 lg:px-16">
+          <p className="font-bold uppercase mb-4" style={{ fontSize: "10px", letterSpacing: "0.28em", color: "#E8895A" }}>
+            Results
+          </p>
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
+            <h2 style={{ fontWeight: 800, fontSize: "clamp(2rem, 4vw, 3.5rem)", letterSpacing: "-0.04em", lineHeight: 0.95, color: "white" }}>
+              Recent BC restorations.
+            </h2>
+            <p style={{ color: "rgba(255,255,255,0.35)", maxWidth: "280px", lineHeight: 1.6, fontSize: "0.9rem" }}>
+              Selected projects from the last 18 months.
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {results.map((result) => (
+              <div
+                key={result.location}
+                className="p-6 transition-all"
+                style={{ border: "1px solid rgba(255,255,255,0.10)" }}
+              >
+                <p
+                  className="font-bold uppercase mb-3"
+                  style={{ fontSize: "9px", letterSpacing: "0.22em", color: "#E8895A" }}
+                >
+                  {result.location}
+                </p>
+                <h3
+                  className="font-bold mb-4 leading-snug"
+                  style={{ fontSize: "1rem", letterSpacing: "-0.02em", color: "white" }}
+                >
+                  {result.title}
+                </h3>
+                <div className="flex flex-wrap gap-1.5">
+                  {result.specs.map((spec) => (
+                    <span
+                      key={spec}
+                      className="text-[10px] font-semibold px-2.5 py-1"
+                      style={{
+                        background: "rgba(255,255,255,0.06)",
+                        color: "rgba(255,255,255,0.45)",
+                        border: "1px solid rgba(255,255,255,0.08)",
+                      }}
+                    >
+                      {spec}
+                    </span>
+                  ))}
                 </div>
               </div>
             ))}
@@ -268,24 +399,221 @@ export default function VaporBlastingPage() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="w-full py-24 bg-[#C8601A]">
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <h2 className="text-white font-light mb-6">
-            Ready to see what your surface could look like?
-          </h2>
-          <p className="text-white/80 text-lg leading-relaxed mb-10 max-w-xl mx-auto">
-            We assess, quote, and schedule within the week.
+      {/* ── Why SquareOne ───────────────────────────────── */}
+      <section className="py-28 bg-white" style={{ borderBottom: "1px solid #E2DDD8" }}>
+        <div className="max-w-[1500px] mx-auto px-6 sm:px-10 lg:px-16">
+          <p className="font-bold uppercase mb-4" style={{ fontSize: "10px", letterSpacing: "0.28em", color: "#C8601A" }}>
+            Why SquareOne
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/contact">
-              <button className="bg-white text-[#1C2026] px-8 py-4 font-semibold text-sm tracking-[0.08em] uppercase transition-colors duration-200 hover:bg-[#F6F4F0] w-full sm:w-auto">
-                Book a Free Assessment
+          <h2
+            className="mb-16"
+            style={{
+              fontWeight: 800,
+              fontSize: "clamp(2rem, 4vw, 3.5rem)",
+              letterSpacing: "-0.04em",
+              lineHeight: 0.95,
+              color: "#111111",
+              maxWidth: "600px",
+            }}
+          >
+            Few BC contractors offer this. None do it longer.
+          </h2>
+
+          <div
+            className="grid sm:grid-cols-3"
+            style={{ border: "1px solid #E2DDD8", gap: "1px", background: "#E2DDD8" }}
+          >
+            {whyStats.map((item, i) => (
+              <div
+                key={item.stat}
+                className="p-10"
+                style={{ background: i % 2 === 1 ? "#F6F4F0" : "white" }}
+              >
+                <p
+                  className="font-black mb-1"
+                  style={{
+                    fontSize: "clamp(2.5rem, 5vw, 4rem)",
+                    letterSpacing: "-0.05em",
+                    lineHeight: 1,
+                    color: "#C8601A",
+                  }}
+                >
+                  {item.stat}
+                </p>
+                <p
+                  className="font-bold mb-3"
+                  style={{
+                    fontSize: "0.75rem",
+                    letterSpacing: "0.10em",
+                    color: "#111111",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {item.label}
+                </p>
+                <p className="text-sm leading-relaxed" style={{ color: "#5A5A5A" }}>
+                  {item.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Quote Form ───────────────────────────────────── */}
+      <section id="quote" className="py-28" style={{ background: "#F6F4F0", borderBottom: "1px solid #E2DDD8" }}>
+        <div className="max-w-[1500px] mx-auto px-6 sm:px-10 lg:px-16">
+          <div className="grid lg:grid-cols-[480px_1fr] gap-20">
+            <div>
+              <p className="font-bold uppercase mb-4" style={{ fontSize: "10px", letterSpacing: "0.28em", color: "#C8601A" }}>
+                Get a Quote
+              </p>
+              <h2
+                className="mb-6"
+                style={{
+                  fontWeight: 800,
+                  fontSize: "clamp(2rem, 4vw, 3.2rem)",
+                  letterSpacing: "-0.04em",
+                  lineHeight: 0.95,
+                  color: "#111111",
+                }}
+              >
+                Tell us what needs blasting.
+              </h2>
+              <p className="mb-8" style={{ color: "#5A5A5A", lineHeight: 1.7 }}>
+                We&apos;ll spec it within one business day. Every quote includes substrate
+                assessment, target finish profile, runoff plan, and fixed-price written
+                estimate. We don&apos;t take work we can&apos;t spec accurately.
+              </p>
+              <ul className="space-y-2.5">
+                {[
+                  "On-site or remote assessment",
+                  "Surface profile spec to SSPC/NACE",
+                  "Containment & runoff plan included",
+                  "Pre & post photo documentation",
+                ].map((item) => (
+                  <li key={item} className="flex items-center gap-3 text-sm" style={{ color: "#4A4A4A" }}>
+                    <span style={{ color: "#C8601A", fontWeight: 900 }}>—</span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <form
+              action="/api/contact"
+              method="POST"
+              className="p-10"
+              style={{ background: "white", border: "1px solid #E2DDD8" }}
+            >
+              <input type="hidden" name="formType" value="vapor-blasting" />
+              <div className="grid sm:grid-cols-2 gap-5 mb-5">
+                <div>
+                  <label
+                    className="block mb-2"
+                    style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.18em", color: "#8C8C8C", textTransform: "uppercase" }}
+                  >
+                    Name <span style={{ color: "#C8601A" }}>*</span>
+                  </label>
+                  <input
+                    name="name" type="text" required
+                    placeholder="Your name"
+                    className="w-full px-4 py-3 text-sm outline-none transition-colors"
+                    style={{ border: "1px solid #E2DDD8" }}
+                  />
+                </div>
+                <div>
+                  <label
+                    className="block mb-2"
+                    style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.18em", color: "#8C8C8C", textTransform: "uppercase" }}
+                  >
+                    Phone <span style={{ color: "#C8601A" }}>*</span>
+                  </label>
+                  <input
+                    name="phone" type="tel" required
+                    placeholder="604-xxx-xxxx"
+                    className="w-full px-4 py-3 text-sm outline-none transition-colors"
+                    style={{ border: "1px solid #E2DDD8" }}
+                  />
+                </div>
+              </div>
+              <div className="mb-5">
+                <label
+                  className="block mb-2"
+                  style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.18em", color: "#8C8C8C", textTransform: "uppercase" }}
+                >
+                  Email <span style={{ color: "#C8601A" }}>*</span>
+                </label>
+                <input
+                  name="email" type="email" required
+                  placeholder="you@company.com"
+                  className="w-full px-4 py-3 text-sm outline-none transition-colors"
+                  style={{ border: "1px solid #E2DDD8" }}
+                />
+              </div>
+              <div className="grid sm:grid-cols-2 gap-5 mb-5">
+                <div>
+                  <label
+                    className="block mb-2"
+                    style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.18em", color: "#8C8C8C", textTransform: "uppercase" }}
+                  >
+                    Project Type <span style={{ color: "#C8601A" }}>*</span>
+                  </label>
+                  <select
+                    name="projectType" required
+                    className="w-full px-4 py-3 text-sm outline-none transition-colors bg-white"
+                    style={{ border: "1px solid #E2DDD8" }}
+                  >
+                    <option value="">Select project type</option>
+                    <option>Industrial Equipment</option>
+                    <option>Concrete</option>
+                    <option>Heritage Stonework</option>
+                    <option>Metal Fabrication</option>
+                    <option>Marine</option>
+                    <option>Pre-Coating Prep</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+                <div>
+                  <label
+                    className="block mb-2"
+                    style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.18em", color: "#8C8C8C", textTransform: "uppercase" }}
+                  >
+                    City <span style={{ color: "#C8601A" }}>*</span>
+                  </label>
+                  <input
+                    name="city" type="text" required
+                    placeholder="Nanaimo, Victoria, Kelowna…"
+                    className="w-full px-4 py-3 text-sm outline-none transition-colors"
+                    style={{ border: "1px solid #E2DDD8" }}
+                  />
+                </div>
+              </div>
+              <div className="mb-8">
+                <label
+                  className="block mb-2"
+                  style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.18em", color: "#8C8C8C", textTransform: "uppercase" }}
+                >
+                  Project Notes
+                </label>
+                <textarea
+                  name="message" rows={4}
+                  placeholder="Surface area, substrate type, current condition, any access constraints…"
+                  className="w-full px-4 py-3 text-sm outline-none transition-colors resize-none"
+                  style={{ border: "1px solid #E2DDD8" }}
+                />
+              </div>
+              <button
+                type="submit"
+                className="w-full py-4 text-sm font-bold tracking-[0.08em] uppercase text-white transition-all hover:brightness-110"
+                style={{ background: "linear-gradient(135deg, #C8601A 0%, #E8895A 100%)" }}
+              >
+                Get a Vapor Blasting Quote →
               </button>
-            </Link>
-            <a href="tel:18773910270">
-              <p className="text-white/60 text-sm mt-4">Or call: 1-877-391-0270</p>
-            </a>
+              <p className="text-center text-xs mt-4" style={{ color: "#A0A0A0" }}>
+                We respond within 1 business day.
+              </p>
+            </form>
           </div>
         </div>
       </section>
