@@ -16,7 +16,7 @@ const projectTypes = [
 const trustPoints = [
   { icon: "◈", text: "BC Decorative Pavement Studio — Since 2000" },
   { icon: "◉", text: "Free site consultations — no obligation" },
-  { icon: "◧", text: "Serving BC since 2000" },
+  { icon: "▧", text: "Serving BC since 2000" },
   { icon: "◌", text: "Lower Mainland & Vancouver Island" },
 ]
 
@@ -76,7 +76,7 @@ export default function ContactPage() {
               <div className="space-y-2.5">
                 <a href="tel:18773910270" className="flex items-center gap-3 group">
                   <div className="w-8 h-8 rounded-lg bg-[#D66620]/10 flex items-center justify-center text-[#D66620] text-sm flex-shrink-0">
-                    ◉
+                    &#9673;
                   </div>
                   <div>
                     <span className="text-[#333333] font-semibold group-hover:text-[#D66620] transition-colors block">1-877-391-0270</span>
@@ -85,7 +85,7 @@ export default function ContactPage() {
                 </a>
                 <a href="tel:6046126209" className="flex items-center gap-3 group">
                   <div className="w-8 h-8 rounded-lg bg-[#D66620]/10 flex items-center justify-center text-[#D66620] text-sm flex-shrink-0">
-                    ◉
+                    &#9673;
                   </div>
                   <div>
                     <span className="text-[#333333] font-semibold group-hover:text-[#D66620] transition-colors block">604-612-6209</span>
@@ -94,16 +94,16 @@ export default function ContactPage() {
                 </a>
                 <a href="mailto:info@squareonepaving.com" className="flex items-center gap-3 group">
                   <div className="w-8 h-8 rounded-lg bg-[#D66620]/10 flex items-center justify-center text-[#D66620] text-sm flex-shrink-0">
-                    ◈
+                    &#9672;
                   </div>
                   <span className="text-[#626262] group-hover:text-[#D66620] transition-colors text-sm">info@squareonepaving.com</span>
                 </a>
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-lg bg-[#D66620]/10 flex items-center justify-center text-[#D66620] text-sm flex-shrink-0">
-                    ◧
+                    &#9671;
                   </div>
                   <div>
-                    <span className="text-[#626262] text-sm block">505 – 20800 Lougheed Hwy</span>
+                    <span className="text-[#626262] text-sm block">505 &#8211; 20800 Lougheed Hwy</span>
                     <span className="text-[#626262] text-sm">Maple Ridge, BC V2X 3P2</span>
                   </div>
                 </div>

@@ -56,7 +56,7 @@ export default async function ProductPage({ params }: Props) {
         </div>
         <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-12 pb-14 pt-36 w-full">
           <Link href="/products" className="text-white/60 hover:text-white text-sm transition-colors mb-4 inline-block">
-            ← All Products
+            &#8592; All Products
           </Link>
           <span className={`inline-block text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded border mb-3 ${categoryColour[product.category]}`}>
             {product.category}
@@ -83,7 +83,7 @@ export default async function ProductPage({ params }: Props) {
             <ul className="space-y-3">
               {product.keyBenefits.map((b) => (
                 <li key={b} className="flex items-start gap-2.5 text-sm text-[#333333]">
-                  <span className="text-[#D66620] font-bold mt-0.5 flex-shrink-0">✓</span>
+                  <span className="text-[#D66620] font-bold mt-0.5 flex-shrink-0">&#10003;</span>
                   {b}
                 </li>
               ))}

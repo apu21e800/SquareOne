@@ -44,7 +44,7 @@ function buildEmailHtml(data: ContactPayload): string {
       </table>
       <hr style="margin:24px 0;border:none;border-top:1px solid #eee">
       <p style="font-size:12px;color:#8B8680;margin:0">
-        Submitted via squareonepaving.com · ${new Date().toLocaleString("en-CA", { timeZone: "America/Vancouver" })} PT
+        Submitted via squareonepaving.com &#183; ${new Date().toLocaleString("en-CA", { timeZone: "America/Vancouver" })} PT
       </p>
     </div>
   `
@@ -72,7 +72,6 @@ export async function POST(req: NextRequest) {
     }
 
     if (!process.env.RESEND_API_KEY) {
-      // Dev fallback: log to console when no key is configured
       console.log("[contact API] No RESEND_API_KEY — would send:", body)
       return NextResponse.json({ success: true })
     }

@@ -1,8 +1,6 @@
 import Link from "next/link"
 import { Metadata } from "next"
 
-// ─── SEO ─────────────────────────────────────────────────────────────────────
-
 export const metadata: Metadata = {
   title: "Vapor Blasting BC | Surface Restoration Without Damage | Square One Paving",
   description:
@@ -22,8 +20,6 @@ export const metadata: Metadata = {
   },
 }
 
-// ─── Data ─────────────────────────────────────────────────────────────────────
-
 const applications = [
   {
     icon: "◈",
@@ -41,7 +37,7 @@ const applications = [
     desc: "Remove corrosion, mill scale, and oxidation from steel, iron, and aluminium surfaces — prep-ready for coating.",
   },
   {
-    icon: "◧",
+    icon: "▧",
     title: "Historic Building Restoration",
     desc: "The gentlest method for cleaning heritage brick, cut stone, and ornamental masonry without eroding fine detail.",
   },
@@ -75,8 +71,6 @@ const steps = [
   },
 ]
 
-// ─── Comparison data ──────────────────────────────────────────────────────────
-
 type TableRow = {
   attribute: string
   pressure: string
@@ -93,18 +87,16 @@ const comparisonRows: TableRow[] = [
   { attribute: "Chemical runoff",                pressure: "Possible",      sand: "None",           vapor: "None"       },
 ]
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
-
 export default function VaporBlastingPage() {
   return (
     <main className="bg-[#FAFAFA]">
 
-      {/* ── Hero ─────────────────────────────────────────────────────────── */}
+      {/* Hero */}
       <section className="bg-[#1C2026] min-h-[80vh] flex items-center">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 py-28">
           <div className="max-w-3xl">
             <span className="eyebrow text-[#C8601A]">
-              Specialist Service · BC Exclusive
+              Specialist Service &#183; BC Exclusive
             </span>
 
             <h1 className="mt-6 mb-6 text-white font-light">
@@ -123,7 +115,7 @@ export default function VaporBlastingPage() {
             <div className="flex flex-col sm:flex-row gap-4">
               <Link href="/contact">
                 <button className="bg-white text-[#1C2026] px-8 py-4 font-semibold text-sm tracking-[0.08em] uppercase transition-colors duration-200 hover:bg-[#F6F4F0] w-full sm:w-auto">
-                  Request a Consultation →
+                  Request a Consultation &#8594;
                 </button>
               </Link>
               <a href="tel:18773910270">
@@ -136,12 +128,10 @@ export default function VaporBlastingPage() {
         </div>
       </section>
 
-      {/* ── What Is Vapor Blasting ────────────────────────────────────────── */}
+      {/* What Is Vapor Blasting */}
       <section className="w-full py-24 bg-white border-b border-[#E8E4DE]">
         <div className="max-w-6xl mx-auto px-6 sm:px-8">
           <div className="grid lg:grid-cols-[1fr_1.4fr] gap-16 items-start">
-
-            {/* Label + heading */}
             <div>
               <p className="text-[#C8601A] text-[11px] uppercase tracking-[0.25em] font-bold mb-4">
                 The Technology
@@ -151,8 +141,6 @@ export default function VaporBlastingPage() {
               </h2>
               <div className="mt-6 h-[3px] w-12 bg-[#C8601A] rounded" />
             </div>
-
-            {/* Body copy */}
             <div className="space-y-5 text-[#626262] text-base leading-relaxed">
               <p>
                 Vapor blasting — also called wet blasting or slurry blasting — combines water with
@@ -176,7 +164,7 @@ export default function VaporBlastingPage() {
         </div>
       </section>
 
-      {/* ── Comparison Table ─────────────────────────────────────────────── */}
+      {/* Comparison Table */}
       <section className="w-full py-24 bg-[#F2EFE9]">
         <div className="max-w-6xl mx-auto px-6 sm:px-8">
           <div className="mb-14">
@@ -193,43 +181,25 @@ export default function VaporBlastingPage() {
             <div className="mt-6 h-px bg-gradient-to-r from-[#C8601A]/40 to-transparent" />
           </div>
 
-          {/* Table */}
           <div className="overflow-x-auto rounded-2xl border border-[#E8E4DE] shadow-sm">
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-[#1C2226] text-white">
-                  <th className="text-left px-6 py-4 font-semibold text-xs uppercase tracking-wider text-white/60 w-[30%]">
-                    Attribute
-                  </th>
-                  <th className="px-6 py-4 font-semibold text-xs uppercase tracking-wider text-white/60 text-center">
-                    Pressure Washing
-                  </th>
-                  <th className="px-6 py-4 font-semibold text-xs uppercase tracking-wider text-white/60 text-center">
-                    Sandblasting
-                  </th>
-                  <th className="px-6 py-4 font-bold text-xs uppercase tracking-wider text-[#F0A04B] text-center">
-                    Vapor Blasting
-                  </th>
+                  <th className="text-left px-6 py-4 font-semibold text-xs uppercase tracking-wider text-white/60 w-[30%]">Attribute</th>
+                  <th className="px-6 py-4 font-semibold text-xs uppercase tracking-wider text-white/60 text-center">Pressure Washing</th>
+                  <th className="px-6 py-4 font-semibold text-xs uppercase tracking-wider text-white/60 text-center">Sandblasting</th>
+                  <th className="px-6 py-4 font-bold text-xs uppercase tracking-wider text-[#F0A04B] text-center">Vapor Blasting</th>
                 </tr>
               </thead>
               <tbody>
                 {comparisonRows.map((row, i) => (
-                  <tr
-                    key={row.attribute}
-                    className={i % 2 === 0 ? "bg-white" : "bg-[#FAFAF9]"}
-                  >
-                    <td className="px-6 py-4 text-[#333333] font-semibold text-sm">
-                      {row.attribute}
-                    </td>
-                    <td className="px-6 py-4 text-center text-[#888] text-sm">
-                      {row.pressure}
-                    </td>
-                    <td className="px-6 py-4 text-center text-[#888] text-sm">
-                      {row.sand}
-                    </td>
+                  <tr key={row.attribute} className={i % 2 === 0 ? "bg-white" : "bg-[#FAFAF9]"}>
+                    <td className="px-6 py-4 text-[#333333] font-semibold text-sm">{row.attribute}</td>
+                    <td className="px-6 py-4 text-center text-[#888] text-sm">{row.pressure}</td>
+                    <td className="px-6 py-4 text-center text-[#888] text-sm">{row.sand}</td>
                     <td className="px-6 py-4 text-center">
                       <span className="inline-flex items-center gap-1.5 text-sm font-bold text-[#1C8C50]">
-                        <span className="text-[#1C8C50]">✓</span>
+                        <span className="text-[#1C8C50]">&#10003;</span>
                         {row.vapor}
                       </span>
                     </td>
@@ -241,13 +211,11 @@ export default function VaporBlastingPage() {
         </div>
       </section>
 
-      {/* ── Applications Grid ─────────────────────────────────────────────── */}
+      {/* Applications Grid */}
       <section className="w-full py-24 bg-white">
         <div className="max-w-6xl mx-auto px-6 sm:px-8">
           <div className="mb-14">
-            <p className="text-[#C8601A] text-[11px] uppercase tracking-[0.25em] font-bold mb-4">
-              Use Cases
-            </p>
+            <p className="text-[#C8601A] text-[11px] uppercase tracking-[0.25em] font-bold mb-4">Use Cases</p>
             <h2 className="font-light text-[#111111]" style={{ fontSize: "clamp(1.9rem, 3vw, 3rem)", letterSpacing: "-0.025em" }}>
               What We Can Restore
             </h2>
@@ -257,7 +225,6 @@ export default function VaporBlastingPage() {
             </p>
             <div className="mt-6 h-px bg-gradient-to-r from-[#C8601A]/40 to-transparent" />
           </div>
-
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {applications.map((app) => (
               <div
@@ -265,9 +232,7 @@ export default function VaporBlastingPage() {
                 className="group bg-[#FAFAFA] rounded-xl p-7 border border-[#E8E4DE] hover:border-[#C8601A]/40 hover:bg-white hover:shadow-lg transition-all duration-200"
               >
                 <span className="text-2xl text-[#C8601A] block mb-4">{app.icon}</span>
-                <h3 className="text-base font-black text-[#1C2226] mb-2 group-hover:text-[#C8601A] transition-colors">
-                  {app.title}
-                </h3>
+                <h3 className="text-base font-black text-[#1C2226] mb-2 group-hover:text-[#C8601A] transition-colors">{app.title}</h3>
                 <p className="text-[#626262] text-sm leading-relaxed">{app.desc}</p>
               </div>
             ))}
@@ -275,20 +240,16 @@ export default function VaporBlastingPage() {
         </div>
       </section>
 
-      {/* ── Process ──────────────────────────────────────────────────────── */}
+      {/* Process */}
       <section className="w-full py-24 bg-[#F2EFE9]">
         <div className="max-w-6xl mx-auto px-6 sm:px-8">
           <div className="text-center mb-16">
-            <p className="text-[#C8601A] text-[11px] uppercase tracking-[0.25em] font-bold mb-4">
-              The Process
-            </p>
+            <p className="text-[#C8601A] text-[11px] uppercase tracking-[0.25em] font-bold mb-4">The Process</p>
             <h2 className="font-light text-[#111111]" style={{ fontSize: "clamp(1.9rem, 3vw, 3rem)", letterSpacing: "-0.025em" }}>Three Steps</h2>
           </div>
-
           <div className="grid md:grid-cols-3 gap-8">
             {steps.map((step) => (
               <div key={step.num} className="bg-white rounded-2xl p-8 border border-[#E8E4DE] relative overflow-hidden">
-                {/* Large step number watermark */}
                 <div
                   className="absolute top-4 right-5 font-black text-[#C8601A]/08 leading-none select-none"
                   style={{ fontSize: "6rem" }}
@@ -307,7 +268,7 @@ export default function VaporBlastingPage() {
         </div>
       </section>
 
-      {/* ── CTA ──────────────────────────────────────────────────────────── */}
+      {/* CTA */}
       <section className="w-full py-24 bg-[#C8601A]">
         <div className="max-w-3xl mx-auto px-6 text-center">
           <h2 className="text-white font-light mb-6">

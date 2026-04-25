@@ -24,7 +24,7 @@ export default function BlogFeedGrid({ posts }: { posts: BlogPostMeta[] }) {
             <h2 className="text-[clamp(2rem,4vw,2.5rem)] font-light text-[#111111] leading-tight tracking-[-0.02em]">Case studies &amp; insights.</h2>
           </div>
           <Link href="/blog" className="hover-underline text-[#C8601A] text-sm font-semibold whitespace-nowrap">
-            All Posts →
+            All Posts &#8594;
           </Link>
         </motion.div>
 

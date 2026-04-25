@@ -74,7 +74,7 @@ export default async function ProjectPage({ params }: Props) {
 
         <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-12 pb-16 pt-36 w-full">
           <Link href="/projects" className="text-white/60 hover:text-white text-sm transition-colors mb-4 inline-block">
-            ← All Projects
+            &#8592; All Projects
           </Link>
           <div className="flex gap-2 mb-4">
             <span className="bg-[#D66620] text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded">
@@ -101,7 +101,7 @@ export default async function ProjectPage({ params }: Props) {
               <h2 className="text-2xl font-black text-[#333333] mb-5">Project Overview</h2>
               <p className="text-[#626262] leading-relaxed mb-12 text-base">{project.excerpt}</p>
 
-              {/* Gallery — using service image with multiple cards */}
+              {/* Gallery */}
               <h2 className="text-2xl font-black text-[#333333] mb-6">Gallery</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 {[1, 2, 3, 4, 5, 6].map((n) => (

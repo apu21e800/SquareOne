@@ -22,7 +22,7 @@ const differentiators = [
   {
     title: "Lower Mainland + Island",
     desc: "We serve the entire Lower Mainland, Vancouver Island, and surrounding BC communities — with mobile vapor blasting equipment.",
-    icon: "◧",
+    icon: "▧",
   },
   {
     title: "25+ Years Experience",
