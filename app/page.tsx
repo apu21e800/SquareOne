@@ -4,6 +4,7 @@ import WhySquareOne from "@/components/sections/WhySquareOne"
 import ServicesGrid from "@/components/sections/ServicesGrid"
 import ProjectsPreview from "@/components/sections/ProjectsPreview"
 import DrivewaysBand from "@/components/sections/DrivewaysBand"
+import VaporBlastingBand from "@/components/sections/VaporBlastingBand"
 import BlogFeed from "@/components/sections/BlogFeed"
 import CTASection from "@/components/sections/CTASection"
 
@@ -16,6 +17,7 @@ export default function Home() {
       <ServicesGrid />
       <ProjectsPreview />
       <DrivewaysBand />
+      <VaporBlastingBand />
       <BlogFeed />
       <CTASection />
     </main>

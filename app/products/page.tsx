@@ -25,10 +25,10 @@ export default function ProductsPage() {
       {/* Header */}
       <section className="bg-white border-b border-[#E8E4DE] pt-28 pb-14 px-6 sm:px-8">
         <div className="max-w-6xl mx-auto">
-          <p className="text-[#D66620] text-xs uppercase tracking-[0.22em] font-semibold mb-3">
+          <p className="text-[#C8601A] text-xs uppercase tracking-[0.22em] font-semibold mb-3">
             Material Systems — BC Applications
           </p>
-          <h1 className="text-5xl sm:text-6xl font-black text-[#333333] mb-4 leading-tight">
+          <h1 style={{ fontSize: "clamp(2.5rem, 5.5vw, 5rem)", fontWeight: 300, letterSpacing: "-0.035em", color: "#111111", lineHeight: 1.0 }} className="mb-4">
             Our Products
           </h1>
           <p className="text-lg text-[#626262] max-w-xl">
@@ -45,7 +45,7 @@ export default function ProductsPage() {
             <Link
               key={product.slug}
               href={`/products/${product.slug}`}
-              className="group bg-white rounded-2xl border border-[#E8E4DE] hover:border-[#D66620]/40 hover:shadow-xl transition-all overflow-hidden"
+              className="group bg-white rounded-2xl border border-[#E8E4DE] hover:border-[#C8601A]/40 hover:shadow-xl transition-all overflow-hidden"
             >
               <div className="relative aspect-video overflow-hidden bg-[#F2EFE9]">
                 <Image
@@ -63,12 +63,12 @@ export default function ProductsPage() {
                 </div>
               </div>
               <div className="p-5">
-                <h3 className="text-lg font-black text-[#333333] mb-1.5 group-hover:text-[#D66620] transition-colors">
+                <h3 className="text-lg font-black text-[#333333] mb-1.5 group-hover:text-[#C8601A] transition-colors">
                   {product.name}
                 </h3>
-                <p className="text-sm text-[#D66620] font-semibold mb-2">{product.tagline}</p>
+                <p className="text-sm text-[#C8601A] font-semibold mb-2">{product.tagline}</p>
                 <p className="text-sm text-[#626262] line-clamp-2 leading-relaxed">{product.shortDescription}</p>
-                <p className="text-[#D66620] text-xs font-bold uppercase tracking-widest mt-3 group-hover:tracking-[0.2em] transition-all duration-200">
+                <p className="text-[#C8601A] text-xs font-bold uppercase tracking-widest mt-3 group-hover:tracking-[0.2em] transition-all duration-200">
                   Explore →
                 </p>
               </div>
@@ -89,7 +89,7 @@ export default function ProductsPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/contact">
-              <span className="inline-block bg-[#D66620] hover:bg-[#C05A18] text-white px-10 py-4 rounded-lg font-bold text-sm uppercase tracking-wider transition-colors">
+              <span className="inline-block bg-[#C8601A] hover:bg-[#A84F15] text-white px-10 py-4 rounded-lg font-bold text-sm uppercase tracking-wider transition-colors">
                 Get a Free Consultation
               </span>
             </Link>

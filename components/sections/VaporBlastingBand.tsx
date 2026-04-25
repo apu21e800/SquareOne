@@ -29,7 +29,7 @@ export default function VaporBlastingBand() {
         <div className="grid grid-cols-2 gap-x-6 gap-y-3 mb-10 text-sm text-white/80">
           <div className="flex items-start gap-2">
             <span className="text-[#C8601A] flex-shrink-0">✓</span>
-            <span>Concrete & stone restoration</span>
+            <span>Concrete &amp; stone restoration</span>
           </div>
           <div className="flex items-start gap-2">
             <span className="text-[#C8601A] flex-shrink-0">✓</span>
@@ -45,11 +45,11 @@ export default function VaporBlastingBand() {
           </div>
           <div className="flex items-start gap-2">
             <span className="text-[#C8601A] flex-shrink-0">✓</span>
-            <span>Patio & hardscape refresh</span>
+            <span>Patio &amp; hardscape refresh</span>
           </div>
           <div className="flex items-start gap-2">
             <span className="text-[#C8601A] flex-shrink-0">✓</span>
-            <span>Automotive & marine</span>
+            <span>Automotive &amp; marine</span>
           </div>
         </div>
 
@@ -69,7 +69,6 @@ export default function VaporBlastingBand() {
           className="object-cover"
           sizes="(max-width: 768px) 100vw, 60vw"
         />
-        {/* TODO: Implement before/after slider when before/after images are available */}
       </div>
 
     </section>

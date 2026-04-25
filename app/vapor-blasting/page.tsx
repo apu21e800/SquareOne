@@ -143,13 +143,13 @@ export default function VaporBlastingPage() {
 
             {/* Label + heading */}
             <div>
-              <p className="text-[#D66620] text-[11px] uppercase tracking-[0.25em] font-bold mb-4">
+              <p className="text-[#C8601A] text-[11px] uppercase tracking-[0.25em] font-bold mb-4">
                 The Technology
               </p>
-              <h2 className="text-4xl sm:text-5xl font-black text-[#1C2226] leading-tight mb-0">
+              <h2 className="font-light text-[#111111]" style={{ fontSize: "clamp(1.9rem, 3vw, 3rem)", letterSpacing: "-0.025em" }}>
                 What Is<br />Vapor Blasting?
               </h2>
-              <div className="mt-6 h-[3px] w-12 bg-[#D66620] rounded" />
+              <div className="mt-6 h-[3px] w-12 bg-[#C8601A] rounded" />
             </div>
 
             {/* Body copy */}
@@ -180,17 +180,17 @@ export default function VaporBlastingPage() {
       <section className="w-full py-24 bg-[#F2EFE9]">
         <div className="max-w-6xl mx-auto px-6 sm:px-8">
           <div className="mb-14">
-            <p className="text-[#D66620] text-[11px] uppercase tracking-[0.25em] font-bold mb-4">
+            <p className="text-[#C8601A] text-[11px] uppercase tracking-[0.25em] font-bold mb-4">
               Method Comparison
             </p>
-            <h2 className="text-4xl sm:text-5xl font-black text-[#1C2226] mb-3">
+            <h2 className="font-light text-[#111111]" style={{ fontSize: "clamp(1.9rem, 3vw, 3rem)", letterSpacing: "-0.025em" }}>
               Why Vapor Blasting Wins
             </h2>
             <p className="text-[#626262] text-base max-w-xl">
               Not all surface cleaning methods are equal. Here&apos;s how vapor blasting stacks up
               against the alternatives.
             </p>
-            <div className="mt-6 h-px bg-gradient-to-r from-[#D66620]/40 to-transparent" />
+            <div className="mt-6 h-px bg-gradient-to-r from-[#C8601A]/40 to-transparent" />
           </div>
 
           {/* Table */}
@@ -245,27 +245,27 @@ export default function VaporBlastingPage() {
       <section className="w-full py-24 bg-white">
         <div className="max-w-6xl mx-auto px-6 sm:px-8">
           <div className="mb-14">
-            <p className="text-[#D66620] text-[11px] uppercase tracking-[0.25em] font-bold mb-4">
+            <p className="text-[#C8601A] text-[11px] uppercase tracking-[0.25em] font-bold mb-4">
               Use Cases
             </p>
-            <h2 className="text-4xl sm:text-5xl font-black text-[#1C2226] mb-3">
+            <h2 className="font-light text-[#111111]" style={{ fontSize: "clamp(1.9rem, 3vw, 3rem)", letterSpacing: "-0.025em" }}>
               What We Can Restore
             </h2>
             <p className="text-[#626262] text-base max-w-xl">
               Vapor blasting works across a wide range of substrates and contamination types —
               residential, commercial, municipal, and heritage.
             </p>
-            <div className="mt-6 h-px bg-gradient-to-r from-[#D66620]/40 to-transparent" />
+            <div className="mt-6 h-px bg-gradient-to-r from-[#C8601A]/40 to-transparent" />
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {applications.map((app) => (
               <div
                 key={app.title}
-                className="group bg-[#FAFAFA] rounded-xl p-7 border border-[#E8E4DE] hover:border-[#D66620]/40 hover:bg-white hover:shadow-lg transition-all duration-200"
+                className="group bg-[#FAFAFA] rounded-xl p-7 border border-[#E8E4DE] hover:border-[#C8601A]/40 hover:bg-white hover:shadow-lg transition-all duration-200"
               >
-                <span className="text-2xl text-[#D66620] block mb-4">{app.icon}</span>
-                <h3 className="text-base font-black text-[#1C2226] mb-2 group-hover:text-[#D66620] transition-colors">
+                <span className="text-2xl text-[#C8601A] block mb-4">{app.icon}</span>
+                <h3 className="text-base font-black text-[#1C2226] mb-2 group-hover:text-[#C8601A] transition-colors">
                   {app.title}
                 </h3>
                 <p className="text-[#626262] text-sm leading-relaxed">{app.desc}</p>
@@ -279,10 +279,10 @@ export default function VaporBlastingPage() {
       <section className="w-full py-24 bg-[#F2EFE9]">
         <div className="max-w-6xl mx-auto px-6 sm:px-8">
           <div className="text-center mb-16">
-            <p className="text-[#D66620] text-[11px] uppercase tracking-[0.25em] font-bold mb-4">
+            <p className="text-[#C8601A] text-[11px] uppercase tracking-[0.25em] font-bold mb-4">
               The Process
             </p>
-            <h2 className="text-4xl sm:text-5xl font-black text-[#1C2226]">Three Steps</h2>
+            <h2 className="font-light text-[#111111]" style={{ fontSize: "clamp(1.9rem, 3vw, 3rem)", letterSpacing: "-0.025em" }}>Three Steps</h2>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
@@ -290,14 +290,14 @@ export default function VaporBlastingPage() {
               <div key={step.num} className="bg-white rounded-2xl p-8 border border-[#E8E4DE] relative overflow-hidden">
                 {/* Large step number watermark */}
                 <div
-                  className="absolute top-4 right-5 font-black text-[#D66620]/08 leading-none select-none"
+                  className="absolute top-4 right-5 font-black text-[#C8601A]/08 leading-none select-none"
                   style={{ fontSize: "6rem" }}
                   aria-hidden="true"
                 >
                   {step.num}
                 </div>
                 <div className="relative z-10">
-                  <div className="w-10 h-[3px] bg-[#D66620] rounded mb-6" />
+                  <div className="w-10 h-[3px] bg-[#C8601A] rounded mb-6" />
                   <h3 className="text-lg font-black text-[#1C2226] mb-3">{step.title}</h3>
                   <p className="text-[#626262] text-sm leading-relaxed">{step.desc}</p>
                 </div>

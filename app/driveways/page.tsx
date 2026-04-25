@@ -43,7 +43,7 @@ const systems = [
     desc: "StreetPrint transforms your existing asphalt into a rich decorative surface — brick, cobblestone, slate, and custom patterns — without excavating the base. Installed in place, in days.",
     specs: ["Installed over existing asphalt", "Patterns: Brick, Cobblestone, Slate, Running Bond", "Snowplow safe, ASTM slip-resistant", "8–12 year service life"],
     badge: "Most Popular",
-    badgeColor: "#D66620",
+    badgeColor: "#C8601A",
   },
   {
     name: "StreetBond Colour Coating",
@@ -245,12 +245,12 @@ export default function DriveywaysPage() {
         </div>
       </section>
 
-      {/* ── Gallery strip placeholder ── */}
+      {/* ── Gallery strip ── */}
       <section className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-6 sm:px-8">
           <div className="mb-10">
-            <p className="text-[#D66620] text-xs uppercase tracking-[0.22em] font-semibold mb-3">Our Work</p>
-            <h2 className="text-4xl font-black text-[#333333]">Driveways Across BC</h2>
+            <p className="text-[#C8601A] text-xs uppercase tracking-[0.22em] font-semibold mb-3">Our Work</p>
+            <h2 className="font-light text-[#111111]" style={{ fontSize: "clamp(1.9rem, 3vw, 3rem)", letterSpacing: "-0.025em" }}>Driveways Across BC</h2>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {[
@@ -284,13 +284,13 @@ export default function DriveywaysPage() {
       <section className="py-20 bg-[#F2EFE9]">
         <div className="max-w-6xl mx-auto px-6 sm:px-8">
           <div className="mb-10">
-            <p className="text-[#D66620] text-xs uppercase tracking-[0.22em] font-semibold mb-3">Service Area</p>
-            <h2 className="text-4xl font-black text-[#333333]">We Come to You</h2>
+            <p className="text-[#C8601A] text-xs uppercase tracking-[0.22em] font-semibold mb-3">Service Area</p>
+            <h2 className="font-light text-[#111111]" style={{ fontSize: "clamp(1.9rem, 3vw, 3rem)", letterSpacing: "-0.025em" }}>We Come to You</h2>
             <p className="text-[#626262] mt-3 max-w-xl">Mobile crews operating from Maple Ridge and Victoria cover both regions. No travel surcharge within service areas.</p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
             {regions.map((r) => (
-              <div key={r.name} className="bg-white rounded-xl p-4 border border-[#E8E4DE] hover:border-[#D66620]/40 transition-colors text-center">
+              <div key={r.name} className="bg-white rounded-xl p-4 border border-[#E8E4DE] hover:border-[#C8601A]/40 transition-colors text-center">
                 <p className="font-black text-[#333333] text-sm">{r.name}</p>
                 <p className="text-[#626262] text-xs mt-0.5 leading-tight">{r.sub}</p>
               </div>
@@ -303,8 +303,8 @@ export default function DriveywaysPage() {
       <section className="py-24 bg-white">
         <div className="max-w-3xl mx-auto px-6 sm:px-8">
           <div className="mb-12 text-center">
-            <p className="text-[#D66620] text-xs uppercase tracking-[0.22em] font-semibold mb-3">Common Questions</p>
-            <h2 className="text-4xl font-black text-[#333333]">What We Get Asked</h2>
+            <p className="text-[#C8601A] text-xs uppercase tracking-[0.22em] font-semibold mb-3">Common Questions</p>
+            <h2 className="font-light text-[#111111]" style={{ fontSize: "clamp(1.9rem, 3vw, 3rem)", letterSpacing: "-0.025em" }}>What We Get Asked</h2>
           </div>
           <div className="space-y-0 divide-y divide-[#E8E4DE]">
             {faqs.map((faq) => (

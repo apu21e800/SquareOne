@@ -19,14 +19,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!post) return {}
 
   return {
-    title: post.title,
+    title: `${post.title} | Square One Paving`,
     description: post.description,
+    alternates: {
+      canonical: `https://squareonepaving.com/blog/${slug}`,
+    },
     openGraph: {
       title: post.title,
       description: post.description,
       type: "article",
       publishedTime: post.date,
-      images: post.featured_image ? [{ url: post.featured_image }] : [],
+      authors: post.author ? [post.author] : ["Square One Paving"],
+      images: post.featured_image
+        ? [{ url: post.featured_image, width: 1200, height: 630, alt: post.title }]
+        : [],
     },
   }
 }
@@ -39,99 +45,206 @@ function formatDate(dateStr: string) {
   })
 }
 
+function estimateReadTime(content: string) {
+  const words = content?.split(/\s+/).length ?? 0
+  return Math.max(2, Math.ceil(words / 200))
+}
+
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params
   const post = getPostBySlug(slug)
 
   if (!post) notFound()
 
+  // Article JSON-LD for SEO rich snippets
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.description,
+    image: post.featured_image ?? "",
+    datePublished: post.date,
+    dateModified: post.date,
+    author: {
+      "@type": "Person",
+      name: post.author ?? "Square One Paving",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Square One Paving",
+      url: "https://squareonepaving.com",
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://squareonepaving.com/blog/${slug}`,
+    },
+  }
+
   return (
-    <main className="bg-[#FAFAFA]">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
-      {/* Hero image */}
-      {post.featured_image && (
-        <div className="relative w-full h-[55vh] min-h-[380px] overflow-hidden">
-          <Image
-            src={post.featured_image}
-            alt={post.title}
-            fill
-            className="object-cover"
-            priority
-            sizes="100vw"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-          <div className="absolute bottom-0 left-0 right-0 px-6 sm:px-8 pb-12 max-w-4xl mx-auto w-full">
-            {post.category && (
-              <p className="text-[#F0A04B] text-xs uppercase tracking-[0.22em] font-semibold mb-3">
-                {post.category}
-              </p>
-            )}
-            <h1 className="text-3xl sm:text-5xl font-black text-white leading-tight max-w-3xl">
-              {post.title}
-            </h1>
-          </div>
-        </div>
-      )}
+      <main style={{ background: "#FAFAFA" }}>
 
-      {/* Article */}
-      <div className="max-w-3xl mx-auto px-6 sm:px-8 py-14">
-
-        {/* Meta */}
-        <div className="flex flex-wrap items-center gap-4 mb-10 pb-8 border-b border-[#E8E4DE]">
-          <span className="text-[#8B8680] text-sm">{formatDate(post.date)}</span>
-          {post.tags.length > 0 && (
-            <div className="flex flex-wrap gap-2">
-              {post.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="text-xs px-3 py-1 rounded-full bg-[#F2EFE9] text-[#626262] font-medium"
-                >
-                  {tag}
-                </span>
-              ))}
+        {/* ── Hero image ──────────────────────────────────────────── */}
+        {post.featured_image && (
+          <div className="relative w-full overflow-hidden" style={{ height: "clamp(280px, 55vh, 580px)" }}>
+            <Image
+              src={post.featured_image}
+              alt={post.title}
+              fill
+              className="object-cover"
+              priority
+              sizes="100vw"
+            />
+            <div
+              className="absolute inset-0"
+              style={{ background: "linear-gradient(to top, rgba(17,17,17,0.82) 0%, rgba(17,17,17,0.25) 55%, transparent 100%)" }}
+            />
+            {/* Title overlay */}
+            <div className="absolute bottom-0 left-0 right-0 px-6 sm:px-8 pb-10" style={{ maxWidth: "900px", margin: "0 auto" }}>
+              {post.category && (
+                <p className="eyebrow mb-3" style={{ color: "#E8895A" }}>{post.category}</p>
+              )}
+              <h1
+                style={{
+                  fontSize: "clamp(1.8rem, 4vw, 3.25rem)",
+                  fontWeight: 300,
+                  letterSpacing: "-0.03em",
+                  color: "white",
+                  lineHeight: 1.1,
+                  maxWidth: "800px",
+                }}
+              >
+                {post.title}
+              </h1>
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
-        {/* MDX content */}
-        <div className="prose prose-neutral max-w-none prose-headings:font-black prose-headings:text-[#333333] prose-p:text-[#444444] prose-p:leading-relaxed prose-a:text-[#D66620] prose-a:no-underline hover:prose-a:underline prose-strong:text-[#333333] prose-li:text-[#444444] prose-h2:text-3xl prose-h2:mt-10 prose-h2:mb-4 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3">
-          <MDXRemote source={post.content} />
-        </div>
+        {/* ── Article body ─────────────────────────────────────────── */}
+        <div className="max-w-[720px] mx-auto px-6 sm:px-8 py-12">
 
-        {/* Footer CTA */}
-        <div className="mt-16 pt-10 border-t border-[#E8E4DE]">
-          <div className="bg-[#F2EFE9] rounded-2xl p-8 sm:p-10">
-            <p className="text-[#D66620] text-xs uppercase tracking-[0.22em] font-semibold mb-3">
-              Ready to Get Started?
+          {/* Breadcrumb */}
+          <nav className="flex items-center gap-2 text-xs mb-8" style={{ color: "#8C8C8C" }}>
+            <Link href="/" className="hover:text-[#C8601A] transition-colors">Home</Link>
+            <span>›</span>
+            <Link href="/blog" className="hover:text-[#C8601A] transition-colors">Blog</Link>
+            <span>›</span>
+            <span style={{ color: "#2C2C2C" }}>{post.title}</span>
+          </nav>
+
+          {/* Meta strip */}
+          <div
+            className="flex flex-wrap items-center gap-x-6 gap-y-2 mb-10 pb-8"
+            style={{ borderBottom: "1px solid #E2DDD8" }}
+          >
+            {post.author && (
+              <span className="text-sm font-medium" style={{ color: "#2C2C2C" }}>
+                {post.author}
+              </span>
+            )}
+            <span className="text-sm" style={{ color: "#8C8C8C" }}>
+              {formatDate(post.date)}
+            </span>
+            {post.content && (
+              <span className="text-sm" style={{ color: "#8C8C8C" }}>
+                {estimateReadTime(post.content)} min read
+              </span>
+            )}
+            {post.tags && post.tags.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 ml-auto">
+                {post.tags.slice(0, 4).map((tag) => (
+                  <span
+                    key={tag}
+                    className="text-xs px-2.5 py-1 font-medium"
+                    style={{ background: "#F6F4F0", color: "#5A5A5A", border: "1px solid #E2DDD8" }}
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* MDX prose */}
+          <div
+            className="prose max-w-none"
+            style={{
+              "--tw-prose-body": "#2C2C2C",
+              "--tw-prose-headings": "#111111",
+              "--tw-prose-links": "#C8601A",
+              "--tw-prose-bold": "#111111",
+              "--tw-prose-counters": "#5A5A5A",
+              "--tw-prose-bullets": "#C8601A",
+              "--tw-prose-hr": "#E2DDD8",
+              "--tw-prose-quotes": "#111111",
+              "--tw-prose-quote-borders": "#C8601A",
+              "--tw-prose-captions": "#8C8C8C",
+              "--tw-prose-code": "#111111",
+              "--tw-prose-pre-code": "#F6F4F0",
+              "--tw-prose-pre-bg": "#1C2026",
+              fontSize: "1.1rem",
+              lineHeight: "1.8",
+            } as React.CSSProperties}
+          >
+            <MDXRemote source={post.content} />
+          </div>
+
+          {/* Mid-article CTA (visible after content) */}
+          <div
+            className="my-14 p-8"
+            style={{ background: "#F6F4F0", borderLeft: "3px solid #C8601A" }}
+          >
+            <p className="eyebrow mb-2">Working on a similar project?</p>
+            <p className="text-base mb-5" style={{ color: "#5A5A5A" }}>
+              We serve the Lower Mainland and Vancouver Island. Free site visit, written quote within 48 hours.
             </p>
-            <h3 className="text-2xl sm:text-3xl font-black text-[#333333] mb-4">
-              Book a Free Site Consultation
-            </h3>
-            <p className="text-[#626262] mb-7 leading-relaxed">
-              We&apos;ll come to your property, assess your surface, and walk you through the best options — no pressure, no obligation.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Link href="/contact">
-                <span className="inline-block bg-[#D66620] hover:bg-[#C05A18] text-white px-8 py-3.5 rounded-lg font-bold text-sm uppercase tracking-wider transition-colors">
-                  Request a Quote
-                </span>
-              </Link>
-              <a href="tel:6043098212">
-                <span className="inline-block border border-[#D66620]/40 text-[#D66620] hover:bg-[#D66620]/5 px-8 py-3.5 rounded-lg font-semibold text-sm transition-colors">
-                  604-309-8212
-                </span>
+            <Link href="/contact">
+              <span
+                className="inline-block px-7 py-3 text-sm font-semibold text-white transition-all hover:brightness-110"
+                style={{ background: "linear-gradient(135deg, #C8601A 0%, #E8895A 100%)" }}
+              >
+                Request a Quote →
+              </span>
+            </Link>
+          </div>
+
+          {/* Footer nav */}
+          <div
+            className="flex items-center justify-between pt-8"
+            style={{ borderTop: "1px solid #E2DDD8" }}
+          >
+            <Link href="/blog" className="text-sm font-medium transition-colors hover:text-[#C8601A]" style={{ color: "#5A5A5A" }}>
+              ← Back to Blog
+            </Link>
+            <div className="flex items-center gap-4">
+              <span className="text-xs uppercase tracking-wider" style={{ color: "#8C8C8C" }}>Share</span>
+              <a
+                href={`https://www.linkedin.com/sharing/share-offsite/?url=https://squareonepaving.com/blog/${slug}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs font-semibold transition-colors hover:text-[#C8601A]"
+                style={{ color: "#5A5A5A" }}
+              >
+                LinkedIn
+              </a>
+              <a
+                href={`https://www.facebook.com/sharer/sharer.php?u=https://squareonepaving.com/blog/${slug}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs font-semibold transition-colors hover:text-[#C8601A]"
+                style={{ color: "#5A5A5A" }}
+              >
+                Facebook
               </a>
             </div>
           </div>
         </div>
-
-        {/* Back link */}
-        <div className="mt-8">
-          <Link href="/blog" className="text-[#8B8680] text-sm hover:text-[#D66620] transition-colors">
-            ← Back to Blog
-          </Link>
-        </div>
-      </div>
-    </main>
+      </main>
+    </>
   )
 }
