@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Image from "next/image"
 
 const projectTypes = [
   "Residential Driveway",
@@ -15,7 +16,7 @@ const projectTypes = [
 
 // Underline-style field — luxury brand form treatment
 const field = "w-full pb-3 border-b border-[#E2DDD8] bg-transparent text-[14px] text-[#111111] placeholder-[#C0BAB3] focus:border-[#C8601A] focus:outline-none transition-colors duration-200"
-const label = "block text-[10px] font-bold text-[#8C8C8C] uppercase tracking-[0.18em] mb-2"
+const label = "block text-[10px] font-bold text-[#767676] uppercase tracking-[0.18em] mb-2"
 
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false)
@@ -103,7 +104,7 @@ export default function ContactPage() {
                     <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.64A2 2 0 012 .94h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
                   </svg>
                   604 466 9902
-                  <span className="text-[11px] text-[#8C8C8C] uppercase tracking-[0.1em] font-semibold">Office</span>
+                  <span className="text-[11px] text-[#767676] uppercase tracking-[0.1em] font-semibold">Office</span>
                 </a>
                 <a
                   href="tel:+12502162190"
@@ -114,7 +115,7 @@ export default function ContactPage() {
                     <line x1="12" y1="18" x2="12.01" y2="18"/>
                   </svg>
                   250 216 2190
-                  <span className="text-[11px] text-[#8C8C8C] uppercase tracking-[0.1em] font-semibold">Mobile</span>
+                  <span className="text-[11px] text-[#767676] uppercase tracking-[0.1em] font-semibold">Mobile</span>
                 </a>
               </div>
 
@@ -138,8 +139,7 @@ export default function ContactPage() {
               {/* BBB Accredited Business badge */}
               <div className="border-t border-[#E2DDD8] pt-6">
                 <div className="flex items-center gap-4">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                  <Image
                     src="/images/S1_update_v2/Old%20Square%20One%20Web%20Assets/Contact%20Page/BBB-Logo.png"
                     alt="BBB Accredited Business"
                     width={60}
@@ -285,7 +285,7 @@ export default function ContactPage() {
                     </button>
                   </div>
 
-                  <p className="text-[12px] text-[#8C8C8C]">
+                  <p className="text-[12px] text-[#767676]">
                     Prefer to call?{" "}
                     <a href="tel:+16044669902" className="font-semibold text-[#C8601A] hover:text-[#A84F15] transition-colors">
                       604 466 9902
