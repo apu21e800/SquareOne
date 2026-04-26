@@ -1,10 +1,12 @@
+"use client"
+
 import Link from "next/link"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Vapor Blasting BC — Mobile Surface Restoration | Square One Paving",
   description:
-    "BC’s mobile vapor blasting specialists. Heritage stonework, industrial equipment, marine, and concrete — wet abrasive surface restoration without heat damage or surface scarring. Ladysmith & Kelowna.",
+    "BC's mobile vapor blasting specialists. Heritage stonework, industrial equipment, marine, and concrete — wet abrasive surface restoration without heat damage or surface scarring. Ladysmith & Kelowna.",
   keywords: [
     "vapor blasting BC",
     "wet blasting Vancouver Island",
@@ -23,7 +25,7 @@ const comparisonRows = [
   { attr: "HEAT DAMAGE",     vapor: "None — water cooled", sand: "Localized",            grind: "Risk of warping" },
   { attr: "SURFACE FINISH",  vapor: "Uniform satin",        sand: "Aggressive profile",  grind: "Linear scoring" },
   { attr: "HERITAGE-SAFE",   vapor: "Yes",                  sand: "No",                  grind: "No" },
-  { attr: "SPEED (TYPICAL)", vapor: "15–25 m²/hr",    sand: "20–30 m²/hr",    grind: "5–10 m²/hr" },
+  { attr: "SPEED (TYPICAL)", vapor: "15–25 m²/hr",    sand: "20–30 m²/hr",    grind: "5–10 m²/hr" },
   { attr: "MOBILE",          vapor: "Yes — truck-mounted", sand: "Yes",                 grind: "Limited" },
 ]
 
@@ -47,7 +49,7 @@ const results = [
   {
     location: "VICTORIA · INNER HARBOUR",
     title: "Heritage limestone façade restoration",
-    specs: ["240 m²", "4 days", "Recycled glass", "Heritage permit"],
+    specs: ["240 m²", "4 days", "Recycled glass", "Heritage permit"],
   },
   {
     location: "NANAIMO · INDUSTRIAL",
@@ -57,12 +59,12 @@ const results = [
   {
     location: "VANCOUVER · CONCRETE",
     title: "Parkade deck — line stripe & coating removal",
-    specs: ["1,400 m²", "6 days", "Occupied facility", "Night shift"],
+    specs: ["1,400 m²", "6 days", "Occupied facility", "Night shift"],
   },
   {
     location: "SIDNEY · MARINE",
     title: "Aluminum hull — antifouling removal",
-    specs: ["52 ft vessel", "3 days", "Gelcoat preserved"],
+    specs: ["52 ft vessel", "3 days", "Gelcoat preserved"],
   },
 ]
 
@@ -73,7 +75,7 @@ const whyStats = [
     desc: "SquareOne has run BC restoration jobs since 1999 — through every regulatory shift in airborne particulate, runoff containment, and heritage permitting.",
   },
   {
-    stat: "100% BC",
+    stat: "100% BC",
     label: "BC-based, on-site",
     desc: "Two bases — Ladysmith on the Island, Kelowna in the Interior. Mobile rig dispatched same week. No subcontractors, ever.",
   },
@@ -266,24 +268,22 @@ export default function VaporBlastingPage() {
             {applications.map((app) => (
               <div
                 key={app.num}
-                className="p-8 group transition-colors duration-300"
+                className="p-8 group transition-colors duration-300 hover:bg-[#0A0C10]"
                 style={{ background: "white" }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = "#0A0C10" }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "white" }}
               >
                 <p
-                  className="font-black mb-4"
+                  className="font-black mb-4 group-hover:text-[#E8895A]"
                   style={{ fontSize: "11px", letterSpacing: "0.20em", color: "#C8601A" }}
                 >
                   {app.num}
                 </p>
                 <h3
-                  className="font-bold mb-3"
+                  className="font-bold mb-3 group-hover:text-white"
                   style={{ fontSize: "1.15rem", letterSpacing: "-0.02em", color: "#111111" }}
                 >
                   {app.title}
                 </h3>
-                <p className="text-sm leading-relaxed" style={{ color: "#5A5A5A" }}>
+                <p className="text-sm leading-relaxed group-hover:text-white/60" style={{ color: "#5A5A5A" }}>
                   {app.desc}
                 </p>
               </div>
