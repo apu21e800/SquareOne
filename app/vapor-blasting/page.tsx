@@ -1,5 +1,3 @@
-"use client"
-
 import Link from "next/link"
 import type { Metadata } from "next"
 
@@ -233,10 +231,10 @@ export default function VaporBlastingPage() {
                   <tbody>
                     {comparisonRows.map((row, i) => (
                       <tr key={row.attr} style={{ background: i % 2 === 0 ? "white" : "#FAFAF8" }}>
-                        <td className="px-5 py-3.5" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 700, color: "#8C8C8C", textTransform: "uppercase" }}>{row.attr}</td>
+                        <td className="px-5 py-3.5" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 700, color: "#767676", textTransform: "uppercase" }}>{row.attr}</td>
                         <td className="px-5 py-3.5 text-center" style={{ fontWeight: 700, color: "#111111" }}>{row.vapor}</td>
-                        <td className="px-5 py-3.5 text-center" style={{ color: "#8C8C8C" }}>{row.sand}</td>
-                        <td className="px-5 py-3.5 text-center" style={{ color: "#8C8C8C" }}>{row.grind}</td>
+                        <td className="px-5 py-3.5 text-center" style={{ color: "#767676" }}>{row.sand}</td>
+                        <td className="px-5 py-3.5 text-center" style={{ color: "#767676" }}>{row.grind}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -511,7 +509,7 @@ export default function VaporBlastingPage() {
                 <div>
                   <label
                     className="block mb-2"
-                    style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.18em", color: "#8C8C8C", textTransform: "uppercase" }}
+                    style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.18em", color: "#767676", textTransform: "uppercase" }}
                   >
                     Name <span style={{ color: "#C8601A" }}>*</span>
                   </label>
@@ -525,7 +523,7 @@ export default function VaporBlastingPage() {
                 <div>
                   <label
                     className="block mb-2"
-                    style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.18em", color: "#8C8C8C", textTransform: "uppercase" }}
+                    style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.18em", color: "#767676", textTransform: "uppercase" }}
                   >
                     Phone <span style={{ color: "#C8601A" }}>*</span>
                   </label>
@@ -540,7 +538,7 @@ export default function VaporBlastingPage() {
               <div className="mb-5">
                 <label
                   className="block mb-2"
-                  style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.18em", color: "#8C8C8C", textTransform: "uppercase" }}
+                  style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.18em", color: "#767676", textTransform: "uppercase" }}
                 >
                   Email <span style={{ color: "#C8601A" }}>*</span>
                 </label>
@@ -555,7 +553,7 @@ export default function VaporBlastingPage() {
                 <div>
                   <label
                     className="block mb-2"
-                    style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.18em", color: "#8C8C8C", textTransform: "uppercase" }}
+                    style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.18em", color: "#767676", textTransform: "uppercase" }}
                   >
                     Project Type <span style={{ color: "#C8601A" }}>*</span>
                   </label>
@@ -577,7 +575,7 @@ export default function VaporBlastingPage() {
                 <div>
                   <label
                     className="block mb-2"
-                    style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.18em", color: "#8C8C8C", textTransform: "uppercase" }}
+                    style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.18em", color: "#767676", textTransform: "uppercase" }}
                   >
                     City <span style={{ color: "#C8601A" }}>*</span>
                   </label>
@@ -592,7 +590,7 @@ export default function VaporBlastingPage() {
               <div className="mb-8">
                 <label
                   className="block mb-2"
-                  style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.18em", color: "#8C8C8C", textTransform: "uppercase" }}
+                  style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.18em", color: "#767676", textTransform: "uppercase" }}
                 >
                   Project Notes
                 </label>
@@ -610,7 +608,7 @@ export default function VaporBlastingPage() {
               >
                 Get a Vapor Blasting Quote →
               </button>
-              <p className="text-center text-xs mt-4" style={{ color: "#A0A0A0" }}>
+              <p className="text-center text-xs mt-4" style={{ color: "#767676" }}>
                 We respond within 1 business day.
               </p>
             </form>
