@@ -1,45 +1,56 @@
 /**
- * StatsBar — warm light band, 4 stats with vertical dividers.
- * Numbers match hero weight (800) so the energy carries past the fold.
+ * StatsBar — white strip, 4 numbers in orange, column dividers.
+ * Sits between Hero and the service sections. Light, clean, Tesla-style.
  */
 export default function StatsBar() {
   const stats = [
-    { num: "51+",    label: "BC communities served" },
-    { num: "25 yrs", label: "In operation" },
-    { num: "4",      label: "Specialist services" },
-    { num: "100%",   label: "BC-based team" },
+    { num: "25",  suffix: "+", label: "Years in business" },
+    { num: "200", suffix: "+", label: "Projects installed across BC" },
+    { num: "51",  suffix: "+", label: "BC communities served" },
+    { num: "#1",  suffix: "",  label: "HUB certified applicator in BC" },
   ]
 
   return (
-    <section className="bg-[#F6F4F0] border-y border-[#E2DDD8] relative">
-      <span
-        aria-hidden
-        className="absolute left-6 lg:left-10 top-0 w-16 h-[3px]"
-        style={{ background: "linear-gradient(90deg, #C8601A 0%, #E8895A 100%)" }}
-      />
+    <section className="bg-white border-b border-[#E2DDD8]">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-14 lg:py-16">
         <div className="grid grid-cols-2 lg:grid-cols-4 divide-x divide-[#E2DDD8]">
           {stats.map((s, i) => (
             <div
               key={s.label}
-              className={`flex flex-col items-start px-6 lg:px-10 ${
+              className={`flex flex-col items-start px-8 lg:px-12 ${
                 i === 0 ? "pl-0 lg:pl-0" : ""
               } ${
                 i === stats.length - 1 ? "pr-0 lg:pr-0" : ""
+              } ${
+                i >= 2 ? "mt-8 lg:mt-0" : ""
               }`}
             >
-              <span
-                className="text-[#111111] leading-none"
-                style={{
-                  fontSize: "clamp(2.5rem, 4.5vw, 4.25rem)",
-                  fontWeight: 800,
-                  letterSpacing: "-0.055em",
-                  lineHeight: 0.88,
-                }}
-              >
-                {s.num}
-              </span>
-              <span className="text-[11px] uppercase tracking-[0.16em] text-[#5A5A5A] font-semibold mt-4 leading-snug">
+              <div className="flex items-baseline gap-0.5 leading-none">
+                <span
+                  style={{
+                    fontSize: "clamp(2.6rem, 4.5vw, 4.25rem)",
+                    fontWeight: 800,
+                    letterSpacing: "-0.055em",
+                    lineHeight: 0.88,
+                    color: "#C8601A",
+                  }}
+                >
+                  {s.num}
+                </span>
+                {s.suffix && (
+                  <span
+                    style={{
+                      fontSize: "clamp(1.3rem, 2.2vw, 2rem)",
+                      fontWeight: 800,
+                      letterSpacing: "-0.04em",
+                      color: "#C8601A",
+                    }}
+                  >
+                    {s.suffix}
+                  </span>
+                )}
+              </div>
+              <span className="text-[11px] uppercase tracking-[0.16em] text-[#5A5A5A] font-semibold mt-4 leading-snug max-w-[160px]">
                 {s.label}
               </span>
             </div>
