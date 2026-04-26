@@ -49,14 +49,15 @@ export default function VaporBlastingBand() {
             <p className="text-[10px] uppercase tracking-[0.28em] text-[#E8895A] font-bold mb-6">
               S1 / 04 — Vapor Blasting
             </p>
+            {/* H2 — color in style prop: global CSS h2{color:#111} beats className="text-white" */}
             <h2
-              className="text-white"
               style={{
                 fontSize: "clamp(2.5rem, 5vw, 4.5rem)",
                 fontWeight: 800,
                 lineHeight: 0.97,
                 letterSpacing: "-0.045em",
                 textWrap: "balance",
+                color: "white",
               }}
             >
               Surface prep,{" "}

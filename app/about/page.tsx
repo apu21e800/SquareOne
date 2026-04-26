@@ -67,14 +67,15 @@ export default function AboutPage() {
             <span className="inline-block w-8 h-px" style={{ background: "#C8601A" }} />
             About Square One
           </p>
+          {/* H1 — color in style prop: global CSS h1{color:#111} beats className="text-white" */}
           <h1
-            className="text-white"
             style={{
               fontSize: "clamp(2.8rem, 6vw, 5rem)",
               fontWeight: 800,
               lineHeight: 0.95,
               letterSpacing: "-0.04em",
               maxWidth: "14ch",
+              color: "white",
             }}
           >
             BC&apos;s Surface{" "}

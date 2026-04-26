@@ -35,14 +35,15 @@ export default function CTASection() {
           <span className="inline-block w-8 h-px" style={{ background: "#C8601A" }} />
         </p>
 
-        {/* H2 */}
+        {/* H2 — color in style prop: global CSS h2{color:#111} beats className="text-white" */}
         <h2
-          className="text-white max-w-2xl mx-auto"
+          className="max-w-2xl mx-auto"
           style={{
             fontSize: "clamp(2.6rem, 5.5vw, 5rem)",
             fontWeight: 800,
             lineHeight: 0.93,
             letterSpacing: "-0.048em",
+            color: "white",
           }}
         >
           Your Surface Is Ready.{" "}
