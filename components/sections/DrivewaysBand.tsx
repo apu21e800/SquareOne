@@ -1,3 +1,5 @@
+"use client"
+
 import Image from "next/image"
 import Link from "next/link"
 
@@ -53,7 +55,7 @@ export default function DrivewaysBand() {
           and Vancouver Island.
         </p>
         <ul className="mt-8 grid grid-cols-2 gap-x-8 gap-y-3 max-w-md">
-          {["ASTM D3939 slip-resistant", "8+ year service life", "Snowplow safe", "Custom patterns + colour"].map(
+          {["ASTM D3939 slip-resistant", "20+ year service life", "Snowplow safe", "Custom patterns + colour"].map(
             (spec) => (
               <li key={spec} className="text-[12.5px] text-[#5A5A5A] flex items-start gap-2">
                 <span aria-hidden className="inline-block w-1 h-1 bg-[#C8601A] mt-2 flex-shrink-0" />
@@ -80,7 +82,7 @@ export default function DrivewaysBand() {
           </Link>
         </div>
         <p className="mt-7 text-[11px] uppercase tracking-[0.18em] text-[#8C8C8C] font-medium">
-          ★★★★★ &nbsp; Metro Vancouver · Victoria · Vancouver Island
+          <span aria-label="Five stars">★★★★★</span> &nbsp; Metro Vancouver · Victoria · Vancouver Island
         </p>
       </div>
     </section>
