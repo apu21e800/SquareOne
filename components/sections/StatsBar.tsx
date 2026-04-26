@@ -13,17 +13,23 @@ export default function StatsBar() {
   return (
     <section className="bg-white border-b border-[#E2DDD8]">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-14 lg:py-16">
-        <div className="grid grid-cols-2 lg:grid-cols-4 divide-x divide-[#E2DDD8]">
+        {/* 2-col on mobile, 4-col on desktop. Borders set per-cell to avoid
+            divide-x misaligning on the second mobile row. */}
+        <div className="grid grid-cols-2 lg:grid-cols-4">
           {stats.map((s, i) => (
             <div
               key={s.label}
-              className={`flex flex-col items-start px-8 lg:px-12 ${
-                i === 0 ? "pl-0 lg:pl-0" : ""
-              } ${
-                i === stats.length - 1 ? "pr-0 lg:pr-0" : ""
-              } ${
-                i >= 2 ? "mt-8 lg:mt-0" : ""
-              }`}
+              className={[
+                "flex flex-col px-6 lg:px-10 py-2",
+                // Right border on col-1 and col-3 (left column on each row)
+                i === 0 || i === 2 ? "border-r border-[#E2DDD8]" : "",
+                // Top border on the second row (items 2 & 3) on mobile only
+                i >= 2 ? "border-t border-[#E2DDD8] lg:border-t-0 mt-6 pt-8 lg:mt-0 lg:pt-2" : "",
+                // Left-flush the first item
+                i === 0 ? "pl-0 lg:pl-0" : "",
+                // Vertical divider between all 4 on desktop (left border on items 1,2,3)
+                i > 0 ? "lg:border-l lg:border-[#E2DDD8]" : "",
+              ].filter(Boolean).join(" ")}
             >
               <div className="flex items-baseline gap-0.5 leading-none">
                 <span
