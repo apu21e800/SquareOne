@@ -3,14 +3,32 @@ import Image from "next/image"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "About Square One Surface Solutions | BC's HUB Certified Applicator Since 2000",
+  title: "About Us | BC's HUB Certified Applicator Since 2000 | Square One Surface Solutions",
   description:
-    "Jan Stewart and the Square One team have been BC's only certified HUB Surface Systems applicator since 2000. Serving Metro Vancouver and Vancouver Island with StreetPrint, StreetBond, and specialty coatings.",
+    "Jan Stewart and the Square One team have been BC's only certified HUB Surface Systems applicator since 2000 — serving Metro Vancouver, Fraser Valley, and Vancouver Island with StreetPrint, StreetBond, and specialty coatings.",
+  keywords: [
+    "Square One Paving BC",
+    "Jan Stewart paving contractor BC",
+    "HUB Surface Systems certified BC",
+    "decorative pavement contractor BC",
+    "BC paving company since 2000",
+    "decorative pavement Maple Ridge",
+    "stamped asphalt contractor Lower Mainland",
+    "StreetPrint certified applicator BC",
+  ],
+  alternates: {
+    canonical: "https://squareonepaving.ca/about",
+  },
+  openGraph: {
+    title: "About Us | BC's HUB Certified Applicator Since 2000 | Square One Surface Solutions",
+    description:
+      "Jan Stewart and the Square One team have been BC's only certified HUB Surface Systems applicator since 2000 — serving Metro Vancouver, Fraser Valley, and Vancouver Island.",
+  },
 }
 
 const timeline = [
   { year: "2000", event: "Square One Surface Solutions founded in Maple Ridge, BC" },
-  { year: "2004", event: "Became BC’s only certified HUB Surface Systems applicator" },
+  { year: "2004", event: "Became BC's only certified HUB Surface Systems applicator" },
   { year: "2012", event: "Expanded operations to Vancouver Island" },
   { year: "2018", event: "Added vapor blasting division with mobile equipment" },
   { year: "2025", event: "25 years — 200+ projects across 51+ BC communities" },
@@ -68,7 +86,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── Jan’s story — 2-col narrative ── */}
+      {/* ── Jan's story — 2-col narrative ── */}
       <section className="bg-white border-b border-[#E2DDD8]">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-20 lg:py-28">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
@@ -116,7 +134,7 @@ export default function AboutPage() {
                 </p>
               </div>
 
-              {/* Jan’s direct contact */}
+              {/* Jan's direct contact */}
               <div className="mt-10 pt-8 border-t border-[#E2DDD8]">
                 <p className="text-[10px] uppercase tracking-[0.16em] font-bold text-[#C8601A] mb-4">Get in Touch</p>
                 <p className="text-[14px] font-semibold text-[#111111] mb-1">Jan Stewart, Managing Partner</p>
@@ -278,7 +296,7 @@ export default function AboutPage() {
                 className="text-[#111111] mb-3"
                 style={{ fontWeight: 800, fontSize: "1.1rem", letterSpacing: "-0.02em" }}
               >
-                BC’s only certified applicator for HUB Surface Systems
+                BC's only certified applicator for HUB Surface Systems
               </h3>
               <p className="text-[14px] text-[#5A5A5A] leading-relaxed mb-5">
                 StreetPrint, StreetBond, TrafficPatterns, and DecoMark are HUB

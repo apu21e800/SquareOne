@@ -1,8 +1,9 @@
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata = buildMetadata({
-  title: "Start a Project",
-  description: "Tell us about your BC surface project. Serving the Lower Mainland and Vancouver Island. Response within one business day.",
+  title: "Contact & Free Quote | Maple Ridge BC",
+  description:
+    "Get a free site visit and written quote within 48 hours. Reach Jan Stewart directly — decorative pavement specialists serving Metro Vancouver, Fraser Valley, and Vancouver Island.",
   slug: "contact",
 });
 
