@@ -1,67 +1,58 @@
 import Link from "next/link"
 import Image from "next/image"
-import Container from "@/components/ui/Container"
 
 export default function Footer() {
   return (
-    <footer className="bg-[#111111] pb-8">
-      {/* Gradient top border */}
-      <div
-        className="h-[2px] w-full"
-        style={{
-          background:
-            "linear-gradient(90deg, transparent 0%, #C8601A 20%, #E8895A 50%, #C8601A 80%, transparent 100%)",
-        }}
-      />
-      <Container>
+    <footer className="bg-[#F6F4F0]">
+      {/* Top border */}
+      <div className="h-px w-full bg-[#E2DDD8]" />
+
+      <div className="max-w-[1500px] mx-auto px-5 sm:px-8">
         {/* 4-column grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12 pt-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 pt-16 mb-12">
 
           {/* Col 1 — Brand */}
           <div>
-            <Link href="/" className="inline-flex items-center gap-3 mb-4">
-              <div className="relative w-10 h-10 flex-shrink-0">
-                <Image
-                  src="/images/logo/S1_Square.png"
-                  alt="Square One Paving"
-                  fill
-                  sizes="40px"
-                  className="object-contain"
-                  style={{ filter: 'brightness(0) invert(1)' }}
-                />
-              </div>
-              <div className="flex items-baseline gap-1.5">
-                <span className="text-white font-semibold text-base tracking-tight leading-none">
-                  Square One
-                </span>
-                <span className="text-white/55 font-medium text-[11px] uppercase tracking-[0.14em] leading-none">
-                  Paving
-                </span>
-              </div>
+            <Link href="/" className="inline-flex items-center mb-5">
+              <Image
+                src="/images/logo/square-one-logo-dark.svg"
+                alt="Square One Surface Solutions"
+                width={180}
+                height={30}
+                className="object-contain"
+              />
             </Link>
-            <p className="text-white/70 text-[15px] mt-5 leading-[1.6] max-w-[280px]">
-              BC&#39;s decorative pavement specialists since 2000.
+            <p className="text-[#5A5A5A] text-[14px] leading-[1.65] max-w-[240px] mt-2">
+              BC&#39;s certified HUB Surface Systems applicator since 2000.
             </p>
-            {/* Social icons row */}
-            <div className="flex gap-4 mt-6">
-              {/* Instagram */}
-              <a href="#" aria-label="Instagram" className="text-white/50 hover:text-white transition-colors">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            {/* Proudly Canadian */}
+            <div className="flex items-center gap-2.5 mt-5">
+              <Image
+                src="/images/logo/canada-flag.svg"
+                alt="Canada"
+                width={24}
+                height={12}
+                className="object-contain flex-shrink-0"
+              />
+              <span className="text-[#8C8C8C] text-[11px] uppercase tracking-[0.12em] font-medium">Proudly Canadian</span>
+            </div>
+            {/* Social icons */}
+            <div className="flex gap-4 mt-5">
+              <a href="#" aria-label="Instagram" className="text-[#8C8C8C] hover:text-[#C8601A] transition-colors">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                   <rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke="currentColor" strokeWidth="1.5"/>
                   <circle cx="12" cy="12" r="5" stroke="currentColor" strokeWidth="1.5"/>
                   <circle cx="17.5" cy="6.5" r="1" fill="currentColor"/>
                 </svg>
               </a>
-              {/* LinkedIn */}
-              <a href="#" aria-label="LinkedIn" className="text-white/50 hover:text-white transition-colors">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <a href="#" aria-label="LinkedIn" className="text-[#8C8C8C] hover:text-[#C8601A] transition-colors">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                   <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/>
                   <circle cx="4" cy="4" r="2"/>
                 </svg>
               </a>
-              {/* Facebook */}
-              <a href="#" aria-label="Facebook" className="text-white/50 hover:text-white transition-colors">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <a href="#" aria-label="Facebook" className="text-[#8C8C8C] hover:text-[#C8601A] transition-colors">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                   <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>
                 </svg>
               </a>
@@ -70,17 +61,18 @@ export default function Footer() {
 
           {/* Col 2 — Services */}
           <div>
-            <h4 className="text-white font-semibold text-xs uppercase tracking-[0.15em] mb-5 pb-2 inline-block border-b-2 border-[#C8601A]">Services</h4>
+            <h4 className="text-[#111111] font-bold text-[10px] uppercase tracking-[0.18em] mb-5">Services</h4>
             <ul className="space-y-2.5">
               {[
                 { label: 'Asphalt Stamping', href: '/services/stamped-asphalt' },
                 { label: 'Decorative Coatings', href: '/services/decorative-coatings' },
                 { label: 'Preformed Thermoplastic', href: '/services/preformed-thermoplastic' },
-                { label: 'Vapor Blasting', href: '/services/vapor-blasting' },
+                { label: 'Vapor Blasting', href: '/vapor-blasting' },
+                { label: 'Driveways', href: '/driveways' },
                 { label: 'All Services →', href: '/services' },
               ].map(link => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-white/60 hover:text-white text-sm transition-colors hover-underline inline-block">
+                  <Link href={link.href} className="text-[#5A5A5A] hover:text-[#C8601A] text-[13.5px] transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -90,7 +82,7 @@ export default function Footer() {
 
           {/* Col 3 — Products */}
           <div>
-            <h4 className="text-white font-semibold text-xs uppercase tracking-[0.15em] mb-5 pb-2 inline-block border-b-2 border-[#C8601A]">Products</h4>
+            <h4 className="text-[#111111] font-bold text-[10px] uppercase tracking-[0.18em] mb-5">Products</h4>
             <ul className="space-y-2.5">
               {[
                 { label: 'StreetPrint', href: '/products/streetprint' },
@@ -101,7 +93,7 @@ export default function Footer() {
                 { label: 'All Products →', href: '/products' },
               ].map(link => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-white/60 hover:text-white text-sm transition-colors hover-underline inline-block">
+                  <Link href={link.href} className="text-[#5A5A5A] hover:text-[#C8601A] text-[13.5px] transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -111,49 +103,54 @@ export default function Footer() {
 
           {/* Col 4 — Contact */}
           <div>
-            <h4 className="text-white font-semibold text-xs uppercase tracking-[0.15em] mb-5 pb-2 inline-block border-b-2 border-[#C8601A]">Contact</h4>
-            <address className="not-italic space-y-3 text-white/60 text-sm leading-relaxed">
-              <div className="pl-4 border-l-2 border-[#C8601A]">
-                <p className="text-white/40 text-xs uppercase tracking-wider mb-1">Metro Vancouver</p>
+            <h4 className="text-[#111111] font-bold text-[10px] uppercase tracking-[0.18em] mb-5">Contact</h4>
+            <address className="not-italic space-y-3.5 text-[#5A5A5A] text-[13.5px] leading-relaxed">
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.12em] text-[#C8601A] font-semibold mb-1">Metro Vancouver</p>
                 <p>505 &#8211; 20800 Lougheed Hwy</p>
                 <p>Maple Ridge, BC V2X 3P2</p>
               </div>
-              <div className="pl-4 border-l-2 border-[#C8601A]">
-                <p className="text-white/40 text-xs uppercase tracking-wider mb-1">Vancouver Island</p>
-                <p>Ladysmith, BC</p>
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.12em] text-[#C8601A] font-semibold mb-1">Vancouver Island</p>
+                <p>Victoria, BC</p>
               </div>
-              <div className="pt-2">
-                <a href="mailto:info@squareonepaving.ca" className="text-white hover:text-[#E8895A] transition-colors text-sm font-medium">info@squareonepaving.ca</a>
+              <div>
+                <a href="mailto:jan@squareonepaving.com" className="text-[#C8601A] hover:text-[#A84F15] transition-colors font-medium block">
+                  jan@squareonepaving.com
+                </a>
               </div>
-              <div className="text-sm">
-                <a href="tel:+16043098212" className="text-white/80 hover:text-white transition-colors">604-309-8212</a>
-                <span className="text-white/40 mx-2">/</span>
-                <a href="tel:+18776098200" className="text-white/80 hover:text-white transition-colors">1-877-609-8200</a>
+              <div className="flex items-center gap-2 text-[13.5px]">
+                <a href="tel:+16044669902" className="text-[#2C2C2C] hover:text-[#C8601A] transition-colors">604 466 9902</a>
+                <span className="text-[#E2DDD8]" aria-hidden="true">|</span>
+                <a href="tel:+12502162190" className="text-[#2C2C2C] hover:text-[#C8601A] transition-colors">250 216 2190</a>
               </div>
             </address>
           </div>
         </div>
 
         {/* Bottom bar */}
-        <div className="border-t border-white/10 mt-12 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-3 text-white/40 text-xs">
-            <span>&#169; {new Date().getFullYear()} Square One Paving Ltd.</span>
-            <span className="text-white/20">&#183;</span>
-            <Link href="/privacy" className="hover:text-white/70 transition-colors">Privacy</Link>
-            <span className="text-white/20">&#183;</span>
-            <Link href="/terms" className="hover:text-white/70 transition-colors">Terms</Link>
+        <div className="border-t border-[#E2DDD8] py-7 flex flex-col sm:flex-row justify-between items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2 text-[#8C8C8C] text-[11px]">
+            <span>&#169; {new Date().getFullYear()} Square One Surface Solutions Ltd.</span>
+            <span className="text-[#E2DDD8]" aria-hidden="true">&#183;</span>
+            <Link href="/privacy" className="hover:text-[#2C2C2C] transition-colors">Privacy</Link>
+            <span className="text-[#E2DDD8]" aria-hidden="true">&#183;</span>
+            <Link href="/terms" className="hover:text-[#2C2C2C] transition-colors">Terms</Link>
           </div>
-          <div className="flex items-center gap-2 text-white/40 text-xs">
-            <svg viewBox="0 0 20 10" style={{width:28,height:14,display:'inline-block',flexShrink:0}} aria-hidden="true">
-              <rect x="0" y="0" width="5" height="10" fill="#D80621"/>
-              <rect x="5" y="0" width="10" height="10" fill="#FFFFFF"/>
-              <rect x="15" y="0" width="5" height="10" fill="#D80621"/>
-              <path d="M10 1.5 L10.6 3.5 L12.5 3.5 L11.1 4.6 L11.6 6.5 L10 5.4 L8.4 6.5 L8.9 4.6 L7.5 3.5 L9.4 3.5 Z" fill="#D80621"/>
-            </svg>
-            <span>Proudly Canadian &#183; Serving BC since 2000</span>
+          <div className="flex items-center gap-2 text-[#8C8C8C] text-[11px]">
+            <span className="inline-flex items-center gap-1.5">
+              <svg viewBox="0 0 30 15" width="30" height="15" aria-hidden="true" style={{flexShrink:0}}>
+                <rect width="30" height="15" fill="#fff"/>
+                <rect x="0" y="0" width="7.5" height="15" fill="#D80621"/>
+                <rect x="22.5" y="0" width="7.5" height="15" fill="#D80621"/>
+                <rect x="7.5" y="0" width="15" height="15" fill="#fff"/>
+                <path d="M15 2.5 L15.9 5.2 L18.8 5.2 L16.5 6.9 L17.4 9.6 L15 7.9 L12.6 9.6 L13.5 6.9 L11.2 5.2 L14.1 5.2 Z" fill="#D80621"/>
+              </svg>
+              HUB Certified &#183; BC since 2000
+            </span>
           </div>
         </div>
-      </Container>
+      </div>
     </footer>
   )
 }

@@ -316,7 +316,6 @@ export default function Nav() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const navRef = useRef<HTMLElement>(null)
-  // hover-intent: small delay before closing so cursor can travel into panel
   const hoverTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
@@ -351,7 +350,6 @@ export default function Nav() {
   const closeAll = () => { setActivePanel(null); setMobileOpen(false) }
   const togglePanel = (panel: ActivePanel) => setActivePanel(prev => prev === panel ? null : panel)
 
-  // Hover-intent helpers
   const openPanel = (panel: ActivePanel) => {
     if (hoverTimer.current) clearTimeout(hoverTimer.current)
     setActivePanel(panel)
@@ -390,14 +388,15 @@ export default function Nav() {
           <div className="flex items-center justify-between h-[68px]">
 
             {/* Logo */}
-            <Link href="/" onClick={closeAll} className="flex-shrink-0 flex items-center gap-3 py-2">
-              <div className="relative w-9 h-9 flex-shrink-0">
-                <Image src="/images/logo/S1_Square.png" alt="Square One Paving" fill className="object-contain" sizes="36px" priority />
-              </div>
-              <div className="flex items-baseline gap-1.5">
-                <span className="font-black text-[#111111] text-[15px] tracking-tight leading-none">Square One</span>
-                <span className="text-[#8C8C8C] font-bold text-[10px] uppercase tracking-[0.18em] leading-none">Paving</span>
-              </div>
+            <Link href="/" onClick={closeAll} className="flex-shrink-0 flex items-center py-2">
+              <Image
+                src="/images/logo/square-one-logo-dark.svg"
+                alt="Square One Surface Solutions"
+                width={194}
+                height={32}
+                priority
+                className="object-contain"
+              />
             </Link>
 
             {/* Desktop nav */}
@@ -462,7 +461,7 @@ export default function Nav() {
           </div>
         </div>
 
-        {/* Mega panels — wrapped so onMouseEnter cancels the close timer */}
+        {/* Mega panels */}
         <div onMouseEnter={cancelClose}>
           <AnimatePresence>
             {activePanel === "products" && <ProductsPanel key="products" onClose={closeAll} />}
@@ -486,11 +485,14 @@ export default function Nav() {
             aria-modal="true" role="dialog" aria-label="Navigation menu"
           >
             <div className="flex items-center justify-between px-5 h-[68px] border-b border-[#E2DDD8] flex-shrink-0">
-              <Link href="/" onClick={closeAll} className="flex items-center gap-2.5">
-                <div className="relative w-8 h-8">
-                  <Image src="/images/logo/S1_Square.png" alt="Square One Paving" fill className="object-contain" sizes="32px" />
-                </div>
-                <span className="font-black text-[#111111] text-[15px] leading-none">Square One</span>
+              <Link href="/" onClick={closeAll}>
+                <Image
+                  src="/images/logo/square-one-logo-dark.svg"
+                  alt="Square One Surface Solutions"
+                  width={160}
+                  height={26}
+                  className="object-contain"
+                />
               </Link>
               <button onClick={() => setMobileOpen(false)} className="relative w-11 h-11 flex items-center justify-center" aria-label="Close menu">
                 <span className="absolute block h-[2px] w-6 bg-[#111111]" style={{ transform: "rotate(45deg)" }} />
