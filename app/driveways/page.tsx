@@ -1,8 +1,8 @@
-// ─── SEO PILLAR PAGE ──────────────────────────────────────────────────────────
+// ─── SEO PILLAR PAGE ────────────────────────────────────────────────────────────────────────────────
 // Primary SEO pillar page for decorative driveway paving in BC.
 // Target keywords: "driveway paving Vancouver", "stamped asphalt driveway BC",
 // "decorative driveway Lower Mainland", "StreetPrint driveway BC"
-// ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────────
 
 import Link from "next/link"
 import Image from "next/image"
@@ -105,14 +105,16 @@ export default function DriveywaysPage() {
             <span className="inline-block w-8 h-px" style={{ background: "#C8601A" }} />
             Residential Driveways · Vancouver & Vancouver Island
           </p>
+          {/* H1 — color in style prop: global CSS h1{color:#111} beats className="text-white" */}
           <h1
-            className="text-white mb-8"
+            className="mb-8"
             style={{
               fontSize: "clamp(2.8rem, 6vw, 5.5rem)",
               fontWeight: 800,
               lineHeight: 0.93,
               letterSpacing: "-0.04em",
               maxWidth: "16ch",
+              color: "white",
             }}
           >
             Driveways that earn{" "}
@@ -330,7 +332,7 @@ export default function DriveywaysPage() {
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-16">
           <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-10 items-center">
             <div>
-              <p className="text-[11px] uppercase tracking-[0.18em] text-[#8C8C8C] font-semibold mb-4 flex items-center gap-3">
+              <p className="text-[11px] uppercase tracking-[0.18em] text-[#767676] font-semibold mb-4 flex items-center gap-3">
                 <span className="inline-block w-8 h-px bg-[#E2DDD8]" />
                 Surface Prep & Protection
               </p>
@@ -539,7 +541,7 @@ export default function DriveywaysPage() {
                 style={{ border: "1px solid #E2DDD8" }}
               >
                 <p className="font-bold text-[#111111] text-[13px]">{r.name}</p>
-                <p className="text-[#8C8C8C] text-[11px] mt-0.5 leading-tight">{r.sub}</p>
+                <p className="text-[#767676] text-[11px] mt-0.5 leading-tight">{r.sub}</p>
               </div>
             ))}
           </div>

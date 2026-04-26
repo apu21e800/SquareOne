@@ -34,26 +34,37 @@ export default function Footer() {
                 height={12}
                 className="object-contain flex-shrink-0"
               />
-              <span className="text-[#8C8C8C] text-[11px] uppercase tracking-[0.12em] font-medium">Proudly Canadian</span>
+              <span className="text-[#767676] text-[11px] uppercase tracking-[0.12em] font-medium">Proudly Canadian</span>
             </div>
             {/* Social icons */}
             <div className="flex gap-4 mt-5">
-              <a href="#" aria-label="Instagram" className="text-[#8C8C8C] hover:text-[#C8601A] transition-colors">
+              <a href="#" aria-label="Instagram" className="text-[#767676] hover:text-[#C8601A] transition-colors">
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                   <rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke="currentColor" strokeWidth="1.5"/>
                   <circle cx="12" cy="12" r="5" stroke="currentColor" strokeWidth="1.5"/>
                   <circle cx="17.5" cy="6.5" r="1" fill="currentColor"/>
                 </svg>
               </a>
-              <a href="#" aria-label="LinkedIn" className="text-[#8C8C8C] hover:text-[#C8601A] transition-colors">
+              <a href="#" aria-label="LinkedIn" className="text-[#767676] hover:text-[#C8601A] transition-colors">
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                   <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/>
                   <circle cx="4" cy="4" r="2"/>
                 </svg>
               </a>
-              <a href="#" aria-label="Facebook" className="text-[#8C8C8C] hover:text-[#C8601A] transition-colors">
+              <a href="#" aria-label="Facebook" className="text-[#767676] hover:text-[#C8601A] transition-colors">
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                   <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>
+                </svg>
+              </a>
+              <a href="#" aria-label="YouTube" className="text-[#767676] hover:text-[#C8601A] transition-colors">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.96A29 29 0 0023 12a29 29 0 00-.46-5.58z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+                  <polygon points="9.75,15.02 15.5,12 9.75,8.98" fill="currentColor"/>
+                </svg>
+              </a>
+              <a href="#" aria-label="X (Twitter)" className="text-[#767676] hover:text-[#C8601A] transition-colors">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                 </svg>
               </a>
             </div>
@@ -130,24 +141,15 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="border-t border-[#E2DDD8] py-7 flex flex-col sm:flex-row justify-between items-center gap-3">
-          <div className="flex flex-wrap items-center gap-2 text-[#8C8C8C] text-[11px]">
+          <div className="flex flex-wrap items-center gap-2 text-[#767676] text-[11px]">
             <span>&#169; {new Date().getFullYear()} Square One Surface Solutions Ltd.</span>
             <span className="text-[#E2DDD8]" aria-hidden="true">&#183;</span>
             <Link href="/privacy" className="hover:text-[#2C2C2C] transition-colors">Privacy</Link>
             <span className="text-[#E2DDD8]" aria-hidden="true">&#183;</span>
             <Link href="/terms" className="hover:text-[#2C2C2C] transition-colors">Terms</Link>
           </div>
-          <div className="flex items-center gap-2 text-[#8C8C8C] text-[11px]">
-            <span className="inline-flex items-center gap-1.5">
-              <svg viewBox="0 0 30 15" width="30" height="15" aria-hidden="true" style={{flexShrink:0}}>
-                <rect width="30" height="15" fill="#fff"/>
-                <rect x="0" y="0" width="7.5" height="15" fill="#D80621"/>
-                <rect x="22.5" y="0" width="7.5" height="15" fill="#D80621"/>
-                <rect x="7.5" y="0" width="15" height="15" fill="#fff"/>
-                <path d="M15 2.5 L15.9 5.2 L18.8 5.2 L16.5 6.9 L17.4 9.6 L15 7.9 L12.6 9.6 L13.5 6.9 L11.2 5.2 L14.1 5.2 Z" fill="#D80621"/>
-              </svg>
-              HUB Certified &#183; BC since 2000
-            </span>
+          <div className="flex items-center gap-2 text-[#767676] text-[11px]">
+            <span>HUB Certified &#183; BC since 2000</span>
           </div>
         </div>
       </div>
