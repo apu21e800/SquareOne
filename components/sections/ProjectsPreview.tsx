@@ -14,6 +14,9 @@ export default function ProjectsPreview() {
 
   if (!hero) return null
 
+  // Derive a readable badge from the project's own data rather than hardcoding
+  const featuredLabel = hero.application || hero.service || "Featured"
+
   return (
     <section className="relative bg-[#EDE9E3] overflow-hidden">
       <span
@@ -94,7 +97,7 @@ export default function ProjectsPreview() {
               />
               <span className="absolute top-5 left-5 inline-flex items-center gap-2 bg-[#C8601A] text-white text-[10px] uppercase tracking-[0.22em] font-bold px-3 py-1.5">
                 <span className="w-1.5 h-1.5 bg-white rounded-full" />
-                Featured Municipal
+                Featured {featuredLabel}
               </span>
               <div className="absolute inset-x-0 bottom-0 p-6 lg:p-8">
                 <p className="text-[10px] uppercase tracking-[0.22em] text-[#E8895A] font-semibold mb-3">
