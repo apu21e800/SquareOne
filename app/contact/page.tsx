@@ -1,150 +1,185 @@
 "use client"
 
 import { useState } from "react"
-import Link from "next/link"
 
 const projectTypes = [
-  "Paving — Residential Driveway",
-  "Paving — Patio or Walkway",
-  "Paving — Parking Area / Commercial",
-  "Paving — Municipal / Crosswalk / Bike Lane",
-  "Vapor Blasting",
+  "Residential Driveway",
+  "Patio or Walkway",
+  "Parking Area / Commercial",
+  "Municipal — Crosswalk or Bike Lane",
+  "Municipal — Road or Plaza",
+  "Vapor Blasting / Surface Prep",
   "Multiple Services",
   "Other / Not Sure",
 ]
 
-const trustPoints = [
-  { icon: "◈", text: "BC Decorative Pavement Studio — Since 2000" },
-  { icon: "◉", text: "Free site consultations — no obligation" },
-  { icon: "◧", text: "Serving BC since 2000" },
-  { icon: "◌", text: "Lower Mainland & Vancouver Island" },
-]
+// Underline-style field — luxury brand form treatment
+const field = "w-full pb-3 border-b border-[#E2DDD8] bg-transparent text-[14px] text-[#111111] placeholder-[#C0BAB3] focus:border-[#C8601A] focus:outline-none transition-colors duration-200"
+const label = "block text-[10px] font-bold text-[#8C8C8C] uppercase tracking-[0.18em] mb-2"
 
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
   const [form, setForm] = useState({
-    name: "",
-    company: "",
-    email: "",
-    phone: "",
-    projectType: "",
-    message: "",
+    name: "", company: "", email: "", phone: "", projectType: "", message: "",
   })
 
-  const fieldClass = "w-full px-4 py-3.5 rounded-lg text-sm outline-none border border-[#E8E4DE] bg-[#FAFAFA] text-[#333333] placeholder-[#999] focus:border-[#D66620] focus:ring-2 focus:ring-[#D66620]/15 transition-colors"
-
   return (
-    <main className="min-h-screen bg-[#FAFAFA]">
+    <main className="min-h-screen bg-white">
 
-      {/* Page header */}
-      <section className="bg-white border-b border-[#E8E4DE] pt-28 pb-12 px-6 sm:px-8">
-        <div className="max-w-6xl mx-auto">
-          <p className="text-[#D66620] text-xs uppercase tracking-[0.22em] font-semibold mb-3">
+      {/* ── Page hero ── */}
+      <section className="bg-[#F6F4F0] border-b border-[#E2DDD8]" style={{ paddingTop: "calc(68px + 4rem)", paddingBottom: "4rem" }}>
+        <div className="max-w-[1300px] mx-auto px-6 sm:px-8">
+          <p className="text-[11px] uppercase tracking-[0.18em] text-[#C8601A] font-semibold mb-5 flex items-center gap-3">
+            <span className="inline-block w-8 h-px bg-[#C8601A]" />
             Get In Touch
           </p>
-          <h1 className="text-5xl sm:text-6xl font-black text-[#333333]">
-            Start a Project
+          <h1
+            style={{
+              fontSize: "clamp(2.8rem, 6vw, 5rem)",
+              fontWeight: 800,
+              lineHeight: 0.95,
+              letterSpacing: "-0.04em",
+              color: "#111111",
+            }}
+          >
+            Let&apos;s{" "}
+            <em style={{ fontStyle: "italic", color: "#C8601A" }}>Talk.</em>
           </h1>
+          <p className="text-[16px] mt-5 max-w-lg leading-relaxed text-[#5A5A5A]">
+            Free site visit. Written quote in 48 hours. We serve Metro Vancouver
+            and Vancouver Island.
+          </p>
         </div>
       </section>
 
-      <div className="max-w-6xl mx-auto px-6 sm:px-8 py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.4fr] gap-14">
+      {/* ── Content ── */}
+      <div className="max-w-[1300px] mx-auto px-6 sm:px-8 py-16 lg:py-24">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.6fr] gap-16 lg:gap-24">
 
-          {/* Left: Context + trust */}
+          {/* ── Left: contact details ── */}
           <div>
-            <p className="text-[#626262] text-base leading-relaxed mb-10">
-              Tell us about your project — crosswalk, bike lane, parking lot, decorative driveway,
-              or surface prep. We&apos;ll recommend the right solution and provide a free, no-obligation quote.
-            </p>
+            <h2
+              className="text-[#111111] mb-8"
+              style={{ fontSize: "1.15rem", fontWeight: 800, letterSpacing: "-0.02em" }}
+            >
+              Contact Jan directly
+            </h2>
 
-            {/* Trust points */}
-            <div className="space-y-4 mb-10">
-              {trustPoints.map((tp) => (
-                <div key={tp.text} className="flex items-start gap-3">
-                  <span className="text-[#D66620] text-base mt-0.5 flex-shrink-0">{tp.icon}</span>
-                  <span className="text-sm text-[#626262]">{tp.text}</span>
-                </div>
-              ))}
-            </div>
-
-            {/* Contact details */}
-            <div className="bg-white rounded-2xl border border-[#E8E4DE] p-7 mb-6">
-              <p className="text-[#D66620] text-xs uppercase tracking-[0.22em] font-semibold mb-4">Direct Contact</p>
-              <div className="space-y-2.5">
-                <a href="tel:18773910270" className="flex items-center gap-3 group">
-                  <div className="w-8 h-8 rounded-lg bg-[#D66620]/10 flex items-center justify-center text-[#D66620] text-sm flex-shrink-0">
-                    ◉
-                  </div>
-                  <div>
-                    <span className="text-[#333333] font-semibold group-hover:text-[#D66620] transition-colors block">1-877-391-0270</span>
-                    <span className="text-[#626262] text-xs">Toll Free</span>
-                  </div>
-                </a>
-                <a href="tel:6046126209" className="flex items-center gap-3 group">
-                  <div className="w-8 h-8 rounded-lg bg-[#D66620]/10 flex items-center justify-center text-[#D66620] text-sm flex-shrink-0">
-                    ◉
-                  </div>
-                  <div>
-                    <span className="text-[#333333] font-semibold group-hover:text-[#D66620] transition-colors block">604-612-6209</span>
-                    <span className="text-[#626262] text-xs">Lower Mainland</span>
-                  </div>
-                </a>
-                <a href="mailto:info@squareonepaving.com" className="flex items-center gap-3 group">
-                  <div className="w-8 h-8 rounded-lg bg-[#D66620]/10 flex items-center justify-center text-[#D66620] text-sm flex-shrink-0">
-                    ◈
-                  </div>
-                  <span className="text-[#626262] group-hover:text-[#D66620] transition-colors text-sm">info@squareonepaving.com</span>
-                </a>
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-[#D66620]/10 flex items-center justify-center text-[#D66620] text-sm flex-shrink-0">
-                    ◧
-                  </div>
-                  <div>
-                    <span className="text-[#626262] text-sm block">505 – 20800 Lougheed Hwy</span>
-                    <span className="text-[#626262] text-sm">Maple Ridge, BC V2X 3P2</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* BBB Accredited Business badge */}
-            <div className="flex items-center gap-4 bg-white rounded-2xl border border-[#E8E4DE] p-5">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/images/S1_update_v2/Old%20Square%20One%20Web%20Assets/Contact%20Page/BBB-Logo.png"
-                alt="BBB Accredited Business"
-                width={72}
-                height={72}
-                className="flex-shrink-0 object-contain"
-              />
+            <div className="space-y-8">
+              {/* Metro Vancouver */}
               <div>
-                <p className="text-xs font-bold text-[#333333] uppercase tracking-wider mb-1">BBB Accredited Business</p>
-                <p className="text-xs text-[#626262] leading-relaxed">Committed to ethical business practices and customer satisfaction.</p>
+                <p className="text-[10px] uppercase tracking-[0.16em] font-bold text-[#C8601A] mb-2">Metro Vancouver</p>
+                <p className="text-[14px] text-[#2C2C2C] leading-relaxed">
+                  505 &#8211; 20800 Lougheed Hwy<br />
+                  Maple Ridge, BC V2X 3P2
+                </p>
+              </div>
+
+              {/* Vancouver Island */}
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.16em] font-bold text-[#C8601A] mb-2">Vancouver Island</p>
+                <p className="text-[14px] text-[#2C2C2C]">Victoria, BC</p>
+              </div>
+
+              {/* Direct contact */}
+              <div className="space-y-3 pt-2 border-t border-[#E2DDD8]">
+                <a
+                  href="mailto:jan@squareonepaving.com"
+                  className="flex items-center gap-3 text-[14px] text-[#C8601A] hover:text-[#A84F15] font-medium transition-colors"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                    <polyline points="22,6 12,13 2,6"/>
+                  </svg>
+                  jan@squareonepaving.com
+                </a>
+                <a
+                  href="tel:+16044669902"
+                  className="flex items-center gap-3 text-[14px] text-[#2C2C2C] hover:text-[#C8601A] transition-colors"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
+                    <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.64A2 2 0 012 .94h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+                  </svg>
+                  604 466 9902
+                  <span className="text-[11px] text-[#8C8C8C] uppercase tracking-[0.1em] font-semibold">Office</span>
+                </a>
+                <a
+                  href="tel:+12502162190"
+                  className="flex items-center gap-3 text-[14px] text-[#2C2C2C] hover:text-[#C8601A] transition-colors"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
+                    <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                    <line x1="12" y1="18" x2="12.01" y2="18"/>
+                  </svg>
+                  250 216 2190
+                  <span className="text-[11px] text-[#8C8C8C] uppercase tracking-[0.1em] font-semibold">Mobile</span>
+                </a>
+              </div>
+
+              {/* Response promise */}
+              <div className="border-t border-[#E2DDD8] pt-6">
+                <div className="space-y-2">
+                  {[
+                    "Free site consultations — we come to you",
+                    "Written quote within 48 hours",
+                    "No subcontracting — our crew, our standards",
+                    "Mon – Fri, 8am – 5pm PT",
+                  ].map((point) => (
+                    <div key={point} className="flex items-start gap-3">
+                      <span className="mt-[6px] flex-shrink-0 w-3.5 h-px bg-[#C8601A] block" />
+                      <p className="text-[13px] text-[#5A5A5A]">{point}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* BBB Accredited Business badge */}
+              <div className="border-t border-[#E2DDD8] pt-6">
+                <div className="flex items-center gap-4">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/images/S1_update_v2/Old%20Square%20One%20Web%20Assets/Contact%20Page/BBB-Logo.png"
+                    alt="BBB Accredited Business"
+                    width={60}
+                    height={60}
+                    className="flex-shrink-0 object-contain"
+                  />
+                  <div>
+                    <p className="text-[11px] font-bold text-[#2C2C2C] uppercase tracking-wider mb-0.5">BBB Accredited Business</p>
+                    <p className="text-[12px] text-[#5A5A5A] leading-relaxed">Committed to ethical business practices and customer satisfaction.</p>
+                  </div>
+                </div>
               </div>
             </div>
-
           </div>
 
-          {/* Right: Form */}
-          <div className="bg-white rounded-2xl border border-[#E8E4DE] p-8 sm:p-10 shadow-sm">
+          {/* ── Right: form ── */}
+          <div>
             {submitted ? (
-              <div className="flex flex-col items-center justify-center h-full py-20 text-center">
-                <div className="w-16 h-16 rounded-full flex items-center justify-center mb-6 bg-[#D66620]/10">
-                  <svg className="w-7 h-7 text-[#D66620]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="flex flex-col items-start py-16">
+                <div className="w-12 h-12 flex items-center justify-center mb-6" style={{ background: "rgba(200,96,26,0.08)" }}>
+                  <svg className="w-5 h-5" fill="none" stroke="#C8601A" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <h3 className="text-2xl font-black text-[#333333] mb-2">Message Sent!</h3>
-                <p className="text-[#626262] text-sm max-w-xs">
-                  We&apos;ll be in touch within one business day. We look forward to working on your project.
+                <h3 style={{ fontSize: "1.5rem", fontWeight: 800, letterSpacing: "-0.03em", color: "#111111" }} className="mb-3">
+                  Message Sent
+                </h3>
+                <p className="text-[15px] text-[#5A5A5A] leading-relaxed max-w-sm">
+                  Jan will be in touch within one business day. We look forward to your project.
                 </p>
               </div>
             ) : (
               <>
-                <h2 className="text-xl font-black text-[#333333] mb-7">Tell Us About Your Project</h2>
+                <h2
+                  style={{ fontSize: "clamp(1.3rem, 2vw, 1.6rem)", fontWeight: 800, letterSpacing: "-0.03em", color: "#111111", lineHeight: 1.1 }}
+                  className="mb-10"
+                >
+                  Tell us about your project
+                </h2>
+
                 <form
                   onSubmit={async (e) => {
                     e.preventDefault()
@@ -168,78 +203,62 @@ export default function ContactPage() {
                       setLoading(false)
                     }
                   }}
-                  className="space-y-5"
+                  className="space-y-8"
                 >
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-8">
                     <div>
-                      <label className="block text-xs font-semibold text-[#333333] uppercase tracking-wider mb-2">Full Name *</label>
-                      <input
-                        type="text"
-                        required
-                        value={form.name}
+                      <label className={label}>Full Name *</label>
+                      <input type="text" required value={form.name}
                         onChange={(e) => setForm({ ...form, name: e.target.value })}
-                        placeholder="Jane Smith"
-                        className={fieldClass}
+                        placeholder="Jane Smith" className={field}
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-[#333333] uppercase tracking-wider mb-2">Company / Organization</label>
-                      <input
-                        type="text"
-                        value={form.company}
+                      <label className={label}>Company / Org</label>
+                      <input type="text" value={form.company}
                         onChange={(e) => setForm({ ...form, company: e.target.value })}
-                        placeholder="City of Vancouver"
-                        className={fieldClass}
+                        placeholder="City of Richmond" className={field}
                       />
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-8">
                     <div>
-                      <label className="block text-xs font-semibold text-[#333333] uppercase tracking-wider mb-2">Email *</label>
-                      <input
-                        type="email"
-                        required
-                        value={form.email}
+                      <label className={label}>Email *</label>
+                      <input type="email" required value={form.email}
                         onChange={(e) => setForm({ ...form, email: e.target.value })}
-                        placeholder="jane@city.ca"
-                        className={fieldClass}
+                        placeholder="jane@city.ca" className={field}
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold text-[#333333] uppercase tracking-wider mb-2">Phone</label>
-                      <input
-                        type="tel"
-                        value={form.phone}
+                      <label className={label}>Phone</label>
+                      <input type="tel" value={form.phone}
                         onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                        placeholder="604-555-0100"
-                        className={fieldClass}
+                        placeholder="604 555 0100" className={field}
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-[#333333] uppercase tracking-wider mb-2">Project Type</label>
+                    <label className={label}>Project Type</label>
                     <select
                       value={form.projectType}
                       onChange={(e) => setForm({ ...form, projectType: e.target.value })}
-                      className={fieldClass}
+                      className={`${field} cursor-pointer`}
                     >
-                      <option value="">Select project type...</option>
-                      {projectTypes.map((t) => (
-                        <option key={t} value={t}>{t}</option>
-                      ))}
+                      <option value="">Select project type…</option>
+                      {projectTypes.map((t) => <option key={t} value={t}>{t}</option>)}
                     </select>
                   </div>
 
                   <div>
-                    <label className="block text-xs font-semibold text-[#333333] uppercase tracking-wider mb-2">Message</label>
+                    <label className={label}>Message</label>
                     <textarea
                       rows={4}
                       value={form.message}
                       onChange={(e) => setForm({ ...form, message: e.target.value })}
-                      placeholder="Tell us about your project — location, timeline, requirements..."
-                      className={`${fieldClass} resize-none`}
+                      placeholder="Location, scope, timeline, any specifics…"
+                      className={`${field} resize-none`}
                     />
                   </div>
 
@@ -247,19 +266,30 @@ export default function ContactPage() {
                   <input type="text" name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
 
                   {error && (
-                    <p className="text-sm text-red-500 bg-red-50 border border-red-200 px-4 py-3 rounded-lg">{error}</p>
+                    <p className="text-sm text-red-600 bg-red-50 border border-red-200 px-4 py-3">{error}</p>
                   )}
 
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full bg-[#D66620] hover:bg-[#C05A18] text-white font-bold py-4 rounded-lg text-sm uppercase tracking-wider transition-colors disabled:opacity-60"
-                  >
-                    {loading ? "Sending..." : "Send Your Project Details"}
-                  </button>
+                  <div className="pt-2">
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="group inline-flex items-center gap-2 bg-[#C8601A] hover:bg-[#A84F15] text-white px-8 py-4 text-[13px] font-bold tracking-[0.02em] uppercase transition-colors disabled:opacity-60"
+                      style={{ boxShadow: "0 4px 24px rgba(200,96,26,0.25)" }}
+                    >
+                      {loading ? "Sending…" : "Send Project Details"}
+                      {!loading && (
+                        <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true" className="transition-transform group-hover:translate-x-1">
+                          <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      )}
+                    </button>
+                  </div>
 
-                  <p className="text-center text-xs text-[#999]">
-                    Or call us directly: <a href="tel:18773910270" className="text-[#D66620] font-semibold">1-877-391-0270</a>
+                  <p className="text-[12px] text-[#8C8C8C]">
+                    Prefer to call?{" "}
+                    <a href="tel:+16044669902" className="font-semibold text-[#C8601A] hover:text-[#A84F15] transition-colors">
+                      604 466 9902
+                    </a>
                   </p>
                 </form>
               </>
