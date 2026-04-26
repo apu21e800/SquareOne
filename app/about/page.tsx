@@ -185,7 +185,7 @@ export default function AboutPage() {
                   &ldquo;Build surfaces that perform as good as they look
                   — and hold up through BC winters.&rdquo;
                 </blockquote>
-                <p className="text-[12px] text-[#8C8C8C] uppercase tracking-[0.14em] font-semibold mt-4">
+                <p className="text-[12px] text-[#767676] uppercase tracking-[0.14em] font-semibold mt-4">
                   Jan Stewart &middot; Founder
                 </p>
               </div>
@@ -197,17 +197,26 @@ export default function AboutPage() {
       {/* ── 4 stats — white bg ── */}
       <section className="bg-white border-b border-[#E2DDD8]">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-14 lg:py-16">
-          <div className="grid grid-cols-2 lg:grid-cols-4 divide-x divide-[#E2DDD8]">
+          {/*
+            Explicit per-cell borders instead of divide-x:
+            divide-x on a 2-col mobile grid bleeds border-left onto the
+            first item of row 2, which sits flush at the row's left edge.
+          */}
+          <div className="grid grid-cols-2 lg:grid-cols-4">
             {stats.map((s, i) => (
               <div
                 key={s.label}
-                className={`flex flex-col items-start px-8 lg:px-12 ${
-                  i === 0 ? "pl-0 lg:pl-0" : ""
-                } ${
-                  i === stats.length - 1 ? "pr-0 lg:pr-0" : ""
-                } ${
-                  i >= 2 ? "mt-8 lg:mt-0" : ""
-                }`}
+                className={[
+                  "flex flex-col items-start px-8 lg:px-12",
+                  i === 0 ? "pl-0 lg:pl-0" : "",
+                  i === stats.length - 1 ? "pr-0 lg:pr-0" : "",
+                  // Mobile 2-col: right border on left-column items (0 and 2)
+                  i === 0 || i === 2 ? "border-r border-[#E2DDD8]" : "",
+                  // Mobile: top border + spacing on row-2 items; reset on desktop
+                  i >= 2 ? "border-t border-[#E2DDD8] lg:border-t-0 mt-8 pt-8 lg:mt-0 lg:pt-0" : "",
+                  // Desktop: left border on items 1, 2, 3
+                  i > 0 ? "lg:border-l lg:border-[#E2DDD8]" : "",
+                ].filter(Boolean).join(" ")}
               >
                 <span
                   style={{
@@ -237,7 +246,7 @@ export default function AboutPage() {
             25 Years
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-0 border-t border-[#E2DDD8]">
-            {timeline.map((item, i) => (
+            {timeline.map((item) => (
               <div
                 key={item.year}
                 className="py-8 pr-8 border-b lg:border-b-0 lg:border-r border-[#E2DDD8] last:border-0"
