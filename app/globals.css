@@ -19,7 +19,7 @@
   --text-primary: #111111;
   --text-body: #2C2C2C;
   --text-secondary: #5A5A5A;
-  --text-muted: #8C8C8C;
+  --text-muted: #767676; /* bumped from #8C8C8C — WCAG AA requires 4.5:1 on white */
   --text-light: #FFFFFF;
   --text-light-secondary: rgba(255,255,255,0.7);
   --border-color: #E2DDD8;
