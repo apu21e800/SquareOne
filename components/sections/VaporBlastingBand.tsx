@@ -115,8 +115,8 @@ export default function VaporBlastingBand() {
           >
             <div className="relative aspect-[4/5] overflow-hidden bg-[#0A0C0F] border border-white/10">
               <Image
-                src="/images/products/durashield/durashield-1.jpg"
-                alt="Vapor blasting surface preparation"
+                src="/images/services/vapor-blasting/hero.jpg"
+                alt="Square One vapor blasting — mobile surface preparation across BC"
                 fill
                 sizes="(min-width: 1024px) 45vw, 100vw"
                 className="object-cover"
