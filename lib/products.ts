@@ -10,6 +10,10 @@ export interface Product {
   image: string
   galleryImages: string[]
   serviceSlug: string
+  /** Manufacturer/brand logo shown in the product hero */
+  logoImage?: string
+  /** Colour palette swatch tile — shown in a dedicated Colours section */
+  colorPaletteImage?: string
 }
 
 export const products: Product[] = [
@@ -34,6 +38,7 @@ export const products: Product[] = [
     image: "/images/products/streetprint/streetprint-1.jpg",
     galleryImages: ["/images/products/streetprint/streetprint-1.jpg"],
     serviceSlug: "stamped-asphalt",
+    logoImage: "/images/S1_update_v2/Old%20Square%20One%20Web%20Assets/Product%20Pages/StreetPrint/StreetPrint.png",
   },
   {
     slug: "streetbond",
@@ -60,6 +65,8 @@ export const products: Product[] = [
       "/images/products/streetbond/streetbond-multicolour-geometric-plaza-01.jpg",
     ],
     serviceSlug: "decorative-coatings",
+    logoImage: "/images/S1_update_v2/Old%20Square%20One%20Web%20Assets/Product%20Pages/StreetBond/StreetBond.png",
+    colorPaletteImage: "/images/S1_update_v2/logos/streetbond/streetbond-color%20tile-vector.svg",
   },
   {
     slug: "trafficpatterns",
@@ -82,6 +89,7 @@ export const products: Product[] = [
     image: "/images/products/traffic-patterns/trafficpatterns-1.jpg",
     galleryImages: ["/images/products/traffic-patterns/trafficpatterns-1.jpg"],
     serviceSlug: "preformed-thermoplastic",
+    logoImage: "/images/S1_update_v2/Old%20Square%20One%20Web%20Assets/Product%20Pages/TrafficPatterns/TrafficPatterns%20Logo.png",
   },
   {
     slug: "trafficpatterns-xd",
@@ -103,6 +111,7 @@ export const products: Product[] = [
     image: "/images/products/traffic-patterns-xd/trafficpatterns-xd-1.jpg",
     galleryImages: ["/images/products/traffic-patterns-xd/trafficpatterns-xd-1.jpg"],
     serviceSlug: "preformed-thermoplastic",
+    logoImage: "/images/S1_update_v2/Old%20Square%20One%20Web%20Assets/Product%20Pages/TrafficPatternsXD/traffic-patterns-xd.png",
   },
   {
     slug: "decomark",
@@ -124,6 +133,7 @@ export const products: Product[] = [
     image: "/images/products/decomark/decomark-1.jpg",
     galleryImages: ["/images/products/decomark/decomark-1.jpg"],
     serviceSlug: "preformed-thermoplastic",
+    logoImage: "/images/S1_update_v2/Old%20Square%20One%20Web%20Assets/Product%20Pages/DecoMark/DecoMark.png",
   },
   {
     slug: "durashield",
@@ -169,6 +179,7 @@ export const products: Product[] = [
     image: "/images/products/duratherm/duratherm-1.jpg",
     galleryImages: ["/images/products/duratherm/duratherm-1.jpg"],
     serviceSlug: "preformed-thermoplastic",
+    logoImage: "/images/S1_update_v2/Old%20Square%20One%20Web%20Assets/Product%20Pages/DuraTherm/DuraTherm%20logo%401x.png",
   },
   {
     slug: "mmax",
@@ -219,6 +230,7 @@ export const products: Product[] = [
       "/images/products/premark/roadway-turn-arrows-pavement-marking-01.jpg",
     ],
     serviceSlug: "preformed-thermoplastic",
+    logoImage: "/images/S1_update_v2/Old%20Square%20One%20Web%20Assets/Product%20Pages/PreMark/PreMark.png",
   },
 ]
 
