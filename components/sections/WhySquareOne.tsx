@@ -4,7 +4,7 @@ import Image from "next/image"
 import { motion } from "framer-motion"
 
 const differentiators = [
-  { text: "BC’s only HUB Surface Systems certified applicator" },
+  { text: "BC's only HUB Surface Systems certified applicator" },
   { text: "25 years of installs from Metro Vancouver to Victoria" },
   { text: "Free site visit, written quote in 48 hours" },
   { text: "Snowplow-safe surfaces built for BC winters" },
@@ -97,12 +97,12 @@ export default function WhySquareOne() {
           </div>
         </div>
 
-        {/* Right — full-height photo */}
+        {/* Right — full-height photo: municipal roundabout (distinct from DrivewaysBand) */}
         <div className="relative min-h-[400px] lg:min-h-0">
           <Image
             fill
-            src="/images/applications/private-driveways/estate-herringbone-gated-driveway-01.jpg"
-            alt="Premium stamped asphalt herringbone driveway, BC"
+            src="/images/products/streetbond/streetbond-red-roundabout-mountains-01.jpg"
+            alt="StreetBond decorative coating on a BC municipal roundabout"
             className="object-cover"
             sizes="(max-width: 1024px) 100vw, 50vw"
           />
