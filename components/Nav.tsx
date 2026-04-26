@@ -5,17 +5,16 @@ import Link from "next/link"
 import Image from "next/image"
 import { motion, AnimatePresence, type Variants, type Transition } from "framer-motion"
 
-// ─── Data ──────────────────────────────────────────────────
+// ─── Data ───────────────────────────────────────────────────────
 
 interface ProductItem { label: string; href: string }
 interface ProductColumn { category: string; items: ProductItem[] }
 
 const productColumns: ProductColumn[] = [
   {
-    category: "Stamped Asphalt",
+    category: "Stamped Asphalt & Concrete",
     items: [
       { label: "StreetPrint", href: "/products/streetprint" },
-      { label: "TrafficPatterns XD", href: "/products/trafficpatternsxd" },
     ],
   },
   {
@@ -30,6 +29,7 @@ const productColumns: ProductColumn[] = [
   {
     category: "Thermoplastic",
     items: [
+      { label: "TrafficPatterns XD", href: "/products/trafficpatternsxd" },
       { label: "TrafficPatterns", href: "/products/trafficpatterns" },
       { label: "DecoMark", href: "/products/decomark" },
       { label: "DuraTherm", href: "/products/duratherm" },
@@ -54,7 +54,7 @@ const vaporItems = [
   { label: "BC-Wide Coverage", desc: "Lower Mainland to Vancouver Island" },
 ]
 
-// ─── Animation ───────────────────────────────────────────────
+// ─── Animation ────────────────────────────────────────────────────────
 
 const panelVariants: Variants = {
   hidden: { opacity: 0, y: -8 },
@@ -69,7 +69,7 @@ const ArrowRight = () => (
   </svg>
 )
 
-// ─── Products Panel ─────────────────────────────────────────────
+// ─── Products Panel ───────────────────────────────────────────────────────────────
 
 function ProductsPanel({ onClose }: { onClose: () => void }) {
   return (
@@ -141,7 +141,7 @@ function ProductsPanel({ onClose }: { onClose: () => void }) {
   )
 }
 
-// ─── Services Panel ─────────────────────────────────────────────
+// ─── Services Panel ───────────────────────────────────────────────────────────────
 
 function ServicesPanel({ onClose }: { onClose: () => void }) {
   return (
@@ -203,7 +203,7 @@ function ServicesPanel({ onClose }: { onClose: () => void }) {
   )
 }
 
-// ─── Vapor Blasting Panel (dark industrial) ───────────────────────────
+// ─── Vapor Blasting Panel (dark industrial) ───────────────────────────────────────
 
 function VaporBlastingPanel({ onClose }: { onClose: () => void }) {
   return (
@@ -274,7 +274,7 @@ function VaporBlastingPanel({ onClose }: { onClose: () => void }) {
   )
 }
 
-// ─── Mobile Accordion ──────────────────────────────────────────────
+// ─── Mobile Accordion ───────────────────────────────────────────────────────────
 
 function MobileAccordion({ label, children }: { label: string; children: React.ReactNode }) {
   const [open, setOpen] = useState(false)
@@ -307,7 +307,7 @@ function MobileAccordion({ label, children }: { label: string; children: React.R
   )
 }
 
-// ─── Nav ──────────────────────────────────────────────────────────
+// ─── Nav ───────────────────────────────────────────────────────────────────────────────
 
 type ActivePanel = "products" | "services" | "vapor" | null
 
