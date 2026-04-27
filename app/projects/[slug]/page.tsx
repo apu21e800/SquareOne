@@ -130,7 +130,7 @@ export default async function ProjectPage({ params }: Props) {
                     { label: "Location", value: project.city },
                   ].map((detail) => (
                     <div key={detail.label} className="flex justify-between text-sm border-b border-[#F2EFE9] pb-3 gap-3">
-                      <span className="text-[#999]">{detail.label}</span>
+                      <span style={{ color: "#767676" }}>{detail.label}</span>
                       <span className="font-semibold text-[#333333] text-right">{detail.value}</span>
                     </div>
                   ))}
@@ -178,7 +178,7 @@ export default async function ProjectPage({ params }: Props) {
                     </div>
                     <div className="p-5">
                       <h3 className="font-black text-sm text-[#333333] group-hover:text-[#D66620] transition-colors mb-1">{p.title}</h3>
-                      <p className="text-xs text-[#999]">{p.city}</p>
+                      <p className="text-xs" style={{ color: "#767676" }}>{p.city}</p>
                     </div>
                   </Link>
                 )

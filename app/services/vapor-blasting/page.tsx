@@ -58,7 +58,7 @@ export default function VaporBlastingPage() {
               Mobile Vapor Blasting · BC
             </p>
             <h1 className="text-5xl sm:text-6xl md:text-7xl font-black text-white leading-[1.04] mb-6">
-              Clean Surface.<br />Clear Results.
+              Clean Surface.{" "}Clear Results.
             </h1>
             <p className="text-white/80 text-lg leading-relaxed mb-10 max-w-lg">
               Surface prep done right — before the beauty begins. We bring controlled, dustless vapor blasting directly to your job site. No silica hazard. No mess. Just a clean surface ready for what comes next.
