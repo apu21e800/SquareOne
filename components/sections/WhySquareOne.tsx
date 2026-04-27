@@ -65,7 +65,7 @@ export default function WhySquareOne() {
               }}
             >
               Why crews choose{" "}
-              <em style={{ fontStyle: "italic", fontWeight: 700, color: "#C8601A" }}>Square One.</em>
+              <span style={{ color: "#C8601A" }}>Square One.</span>
             </h2>
             <p className="text-[15px] text-[#5A5A5A] leading-relaxed max-w-md mb-10">
               We do one thing for a living. Municipal stress-tests become your
@@ -97,7 +97,7 @@ export default function WhySquareOne() {
           </div>
         </div>
 
-        {/* Right — full-height photo (waterfront promenade — distinct from hero slides) */}
+        {/* Right — full-height photo */}
         <div className="relative min-h-[400px] lg:min-h-0">
           <Image
             fill

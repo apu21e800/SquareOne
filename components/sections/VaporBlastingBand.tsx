@@ -61,9 +61,7 @@ export default function VaporBlastingBand() {
               }}
             >
               Surface prep,{" "}
-              <em style={{ fontStyle: "italic", fontWeight: 700, color: "#E8895A" }}>
-                done right.
-              </em>
+              <span style={{ color: "#E8895A" }}>done right.</span>
             </h2>
             <p className="text-[15px] lg:text-base leading-relaxed text-white/70 mt-7 max-w-lg">
               Mobile vapor blasting across BC — water-controlled, no harsh chemicals, faster than mechanical
@@ -90,7 +88,7 @@ export default function VaporBlastingBand() {
             <div className="mt-10 flex flex-wrap gap-3">
               <Link
                 href="/services/vapor-blasting"
-                className="group inline-flex items-center gap-2 bg-white text-[#111111] px-6 py-3.5 text-sm font-semibold hover:bg-[#F6F4F0] transition-colors"
+                className="group inline-flex items-center gap-2 bg-white text-[#111111] px-6 py-3.5 text-sm font-semibold hover:bg-[#F6F4F0] transition-colors rounded-lg"
               >
                 Vapor Blasting Spec
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
@@ -99,7 +97,7 @@ export default function VaporBlastingBand() {
               </Link>
               <Link
                 href="/contact"
-                className="inline-flex items-center gap-2 border border-white/30 text-white px-6 py-3.5 text-sm font-semibold hover:border-white hover:bg-white/5 transition-colors"
+                className="inline-flex items-center gap-2 border border-white/30 text-white px-6 py-3.5 text-sm font-semibold hover:border-white hover:bg-white/5 transition-colors rounded-lg"
               >
                 Request a Site Visit
               </Link>

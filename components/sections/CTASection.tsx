@@ -47,9 +47,7 @@ export default function CTASection() {
           }}
         >
           Your Surface Is Ready.{" "}
-          <em style={{ fontStyle: "italic", fontWeight: 700, color: "#E8895A" }}>
-            Let&apos;s Talk.
-          </em>
+          <span style={{ color: "#E8895A" }}>Let&apos;s Talk.</span>
         </h2>
 
         {/* Body */}
@@ -61,7 +59,7 @@ export default function CTASection() {
         <div className="mt-10 flex justify-center flex-wrap gap-3">
           <Link
             href="/contact"
-            className="group inline-flex items-center gap-2 text-white px-8 py-4 text-[13px] font-bold tracking-[0.02em] uppercase transition-colors"
+            className="group inline-flex items-center gap-2 text-white px-8 py-4 text-[13px] font-bold tracking-[0.02em] uppercase transition-colors rounded-lg"
             style={{
               background: "#C8601A",
               boxShadow: "0 4px 28px rgba(200,96,26,0.40)",
@@ -76,7 +74,7 @@ export default function CTASection() {
           </Link>
           <a
             href="tel:+16044669902"
-            className="inline-flex items-center gap-2 border text-white px-8 py-4 text-[13px] font-bold tracking-[0.02em] uppercase transition-all hover:bg-white/10"
+            className="inline-flex items-center gap-2 border text-white px-8 py-4 text-[13px] font-bold tracking-[0.02em] uppercase transition-all hover:bg-white/10 rounded-lg"
             style={{ borderColor: "rgba(255,255,255,0.25)" }}
           >
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">

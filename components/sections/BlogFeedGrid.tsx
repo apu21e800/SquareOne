@@ -34,7 +34,7 @@ export default function BlogFeedGrid({ posts }: { posts: BlogPostMeta[] }) {
             }}
           >
             The Work,{" "}
-            <em style={{ fontStyle: "italic", fontWeight: 700, color: "#C8601A" }}>Documented.</em>
+            <span style={{ color: "#C8601A" }}>Documented.</span>
           </h2>
         </motion.div>
 
@@ -58,7 +58,7 @@ export default function BlogFeedGrid({ posts }: { posts: BlogPostMeta[] }) {
                     src={post.featured_image || "/images/og-image.jpg"}
                     alt={post.title}
                   />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/8 transition-colors duration-300" />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/[0.08] transition-colors duration-300" />
                 </div>
 
                 {/* Content — minimal, below image */}
@@ -93,7 +93,7 @@ export default function BlogFeedGrid({ posts }: { posts: BlogPostMeta[] }) {
         <div className="mt-16 flex justify-center">
           <Link
             href="/blog"
-            className="inline-flex items-center gap-2 border border-[#111111] hover:bg-[#111111] hover:text-white text-[#111111] px-7 py-4 text-[13px] font-bold tracking-[0.02em] uppercase transition-all duration-200"
+            className="inline-flex items-center gap-2 border border-[#111111] hover:bg-[#111111] hover:text-white text-[#111111] px-7 py-4 text-[13px] font-bold tracking-[0.02em] uppercase transition-all duration-200 rounded-lg"
           >
             All Field Notes
             <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true">

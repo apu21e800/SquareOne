@@ -13,7 +13,7 @@ const SLIDES = [
     eyebrow: "Municipal & Civic",
     h1a: "Where streets become",
     h1b: "civic landmarks.",
-    body: "Decorative crosswalks, roundabouts, and plazas that define community identity — and last 20+ years in BC’s climate.",
+    body: "Decorative crosswalks, roundabouts, and plazas that define community identity — and last 20+ years in BC's climate.",
     cta1: { label: "See Civic Projects", href: "/projects" },
     cta2: { label: "Request Spec Sheet", href: "/contact" },
   },
@@ -37,7 +37,7 @@ const SLIDES = [
     eyebrow: "Roads & Transit",
     h1a: "Infrastructure that",
     h1b: "moves communities.",
-    body: "Bus lanes, bike corridors, and transit plazas. Vision Zero–compliant, AODA-ready, and engineered for BC’s traffic demands.",
+    body: "Bus lanes, bike corridors, and transit plazas. Vision Zero–compliant, AODA-ready, and engineered for BC's traffic demands.",
     cta1: { label: "Road Projects", href: "/projects" },
     cta2: { label: "Contact Us", href: "/contact" },
   },
@@ -69,8 +69,9 @@ export default function HeroSlideshow() {
       style={{ minHeight: "88vh", maxHeight: "960px" }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
+      aria-label="Hero image slideshow"
     >
-      {/* ─── Background images — cross-fade on slide change ─── */}
+      {/* ── Background images — cross-fade ────────────────────────────── */}
       {SLIDES.map((slide, i) => (
         <div
           key={slide.id}
@@ -88,29 +89,40 @@ export default function HeroSlideshow() {
         </div>
       ))}
 
-      {/* ─── Gradient overlays ─── */}
+      {/* ── Gradient overlays ────────────────────────────────── */}
+      {/* Main vertical vignette */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           zIndex: 2,
           background:
-            "linear-gradient(180deg, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.04) 28%, rgba(0,0,0,0.52) 62%, rgba(0,0,0,0.88) 100%)",
+            "linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.05) 25%, rgba(0,0,0,0.55) 60%, rgba(0,0,0,0.92) 100%)",
         }}
       />
+      {/* Horizontal vignette — desktop */}
       <div
         className="absolute inset-0 pointer-events-none hidden lg:block"
         style={{
           zIndex: 2,
           background:
-            "linear-gradient(90deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.18) 45%, rgba(0,0,0,0) 68%)",
+            "linear-gradient(90deg, rgba(0,0,0,0.60) 0%, rgba(0,0,0,0.20) 45%, rgba(0,0,0,0) 68%)",
+        }}
+      />
+      {/* Orange atmospheric bloom — bottom-left warm glow */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          zIndex: 2,
+          background:
+            "radial-gradient(ellipse at 0% 100%, rgba(200,96,26,0.22) 0%, transparent 52%)",
         }}
       />
 
-      {/* ─── Chevron arrows ─── */}
+      {/* ── Chevron arrows ──────────────────────────────────── */}
       <button
         onClick={prev}
         aria-label="Previous slide"
-        className="absolute left-4 lg:left-7 z-30 w-10 h-10 flex items-center justify-center bg-black/25 border border-white/20 hover:bg-black/50 hover:border-white/55 transition-all backdrop-blur-sm"
+        className="absolute left-4 lg:left-7 z-30 w-10 h-10 flex items-center justify-center bg-black/25 border border-white/20 hover:bg-black/50 hover:border-white/55 transition-all backdrop-blur-sm rounded-lg"
         style={{ top: "50%", transform: "translateY(-50%)" }}
       >
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -120,7 +132,7 @@ export default function HeroSlideshow() {
       <button
         onClick={next}
         aria-label="Next slide"
-        className="absolute right-4 lg:right-7 z-30 w-10 h-10 flex items-center justify-center bg-black/25 border border-white/20 hover:bg-black/50 hover:border-white/55 transition-all backdrop-blur-sm"
+        className="absolute right-4 lg:right-7 z-30 w-10 h-10 flex items-center justify-center bg-black/25 border border-white/20 hover:bg-black/50 hover:border-white/55 transition-all backdrop-blur-sm rounded-lg"
         style={{ top: "50%", transform: "translateY(-50%)" }}
       >
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -128,31 +140,32 @@ export default function HeroSlideshow() {
         </svg>
       </button>
 
-      {/* ─── Bottom content zone ─── */}
+      {/* ── Bottom content zone ──────────────────────────────── */}
       <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col">
 
         {/* Main text + CTAs */}
-        <div className="px-6 lg:px-10 pb-5 lg:pb-7 pt-6">
+        <div className="max-w-[1400px] mx-auto w-full px-6 lg:px-10 pb-5 lg:pb-7 pt-6">
           <p className="text-[10px] uppercase tracking-[0.22em] text-[#E8895A] font-bold mb-5 flex items-center gap-3">
             <span className="inline-block w-8 h-px bg-[#C8601A]" />
-            {s.eyebrow} ·{" "}BC Since 2000
+            {s.eyebrow}
           </p>
 
+          {/* H1 — no italics, second line in bold orange */}
           <h1
-            className="max-w-[680px]"
+            className="max-w-[760px]"
             style={{
-              fontSize: "clamp(2.8rem, 5vw, 4.8rem)",
+              fontSize: "clamp(3.5rem, 7vw, 7rem)",
               fontWeight: 800,
-              lineHeight: 0.93,
+              lineHeight: 0.92,
               letterSpacing: "-0.045em",
               color: "white",
             }}
           >
             {s.h1a}
             <br />
-            <em style={{ fontStyle: "italic", fontWeight: 500, color: "#E8895A" }}>
+            <span style={{ color: "#C8601A" }}>
               {s.h1b}
-            </em>
+            </span>
           </h1>
 
           <p className="text-white/75 text-[15px] lg:text-base max-w-[520px] mt-5 leading-relaxed">
@@ -162,7 +175,7 @@ export default function HeroSlideshow() {
           <div className="mt-7 flex flex-wrap gap-3 items-center">
             <Link
               href={s.cta1.href}
-              className="group inline-flex items-center gap-2 bg-[#C8601A] text-white px-6 py-3.5 text-[13px] font-bold tracking-[0.02em] hover:bg-[#A84F15] transition-colors"
+              className="group inline-flex items-center gap-2 bg-[#C8601A] text-white px-6 py-3.5 text-[13px] font-bold tracking-[0.02em] hover:bg-[#A84F15] transition-colors rounded-lg"
               style={{ boxShadow: "0 4px 20px rgba(200,96,26,0.35)" }}
             >
               {s.cta1.label}
@@ -175,7 +188,7 @@ export default function HeroSlideshow() {
             </Link>
             <Link
               href={s.cta2.href}
-              className="inline-flex items-center gap-2 border border-white/25 text-white px-6 py-3.5 text-[13px] font-bold hover:border-white/60 hover:bg-white/[0.08] transition-all"
+              className="inline-flex items-center gap-2 border border-white/25 text-white px-6 py-3.5 text-[13px] font-bold hover:border-white/60 hover:bg-white/[0.08] transition-all rounded-lg"
             >
               {s.cta2.label}
             </Link>
@@ -203,13 +216,14 @@ export default function HeroSlideshow() {
           </div>
         </div>
 
-        {/* ─── Bottom thumbnail strip ─── */}
+        {/* ── Bottom thumbnail strip ────────────────────────────── */}
         <div className="grid grid-cols-3">
           {SLIDES.map((slide, i) => (
             <button
               key={slide.id}
               onClick={() => goTo(i)}
               aria-label={`View ${slide.label}`}
+              aria-current={i === active ? "true" : undefined}
               className="relative overflow-hidden group cursor-pointer"
               style={{ height: "80px" }}
             >
@@ -229,9 +243,9 @@ export default function HeroSlideshow() {
                   opacity: i === active ? 0.65 : 1,
                 }}
               />
-              {/* Active orange bar */}
+              {/* Active orange bar — top */}
               <div
-                className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#C8601A] origin-left"
+                className="absolute top-0 left-0 right-0 h-[3px] bg-[#C8601A] origin-left"
                 style={{
                   transform: i === active ? "scaleX(1)" : "scaleX(0)",
                   transition: "transform 0.4s ease",
@@ -239,17 +253,19 @@ export default function HeroSlideshow() {
               />
               {/* Tile separator */}
               <div className="absolute inset-y-0 right-0 w-px bg-black/30" />
-              {/* Label */}
-              <span
-                className="absolute bottom-2.5 left-3 text-[10px] font-bold uppercase tracking-[0.12em]"
-                style={{
-                  color: i === active ? "#E8895A" : "rgba(255,255,255,0.82)",
-                  transition: "color 0.3s ease",
-                  textShadow: "0 1px 4px rgba(0,0,0,0.6)",
-                }}
-              >
-                {slide.label}
-              </span>
+              {/* Label — centered */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span
+                  className="text-[10px] font-bold uppercase tracking-[0.12em] text-center px-2"
+                  style={{
+                    color: i === active ? "#E8895A" : "rgba(255,255,255,0.78)",
+                    transition: "color 0.3s ease",
+                    textShadow: "0 1px 4px rgba(0,0,0,0.6)",
+                  }}
+                >
+                  {slide.label}
+                </span>
+              </div>
             </button>
           ))}
         </div>

@@ -51,9 +51,7 @@ export default function ProjectsPreview() {
               }}
             >
               Transforming BC,{" "}
-              <em style={{ fontStyle: "italic", fontWeight: 700, color: "#C8601A" }}>
-                one surface at a time.
-              </em>
+              <span style={{ color: "#C8601A" }}>one surface at a time.</span>
             </h2>
           </div>
           <Link
@@ -94,7 +92,7 @@ export default function ProjectsPreview() {
                   background: "linear-gradient(180deg, rgba(20,22,26,0) 35%, rgba(20,22,26,0.80) 100%)",
                 }}
               />
-              <span className="absolute top-5 left-5 inline-flex items-center gap-2 bg-[#C8601A] text-white text-[10px] uppercase tracking-[0.22em] font-bold px-3 py-1.5">
+              <span className="absolute top-5 left-5 inline-flex items-center gap-2 bg-[#C8601A] text-white text-[10px] uppercase tracking-[0.22em] font-bold px-3 py-1.5 rounded">
                 <span className="w-1.5 h-1.5 bg-white rounded-full" />
                 Featured {featuredLabel}
               </span>

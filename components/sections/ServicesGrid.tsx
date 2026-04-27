@@ -42,9 +42,7 @@ export default function ServicesGrid() {
               }}
             >
               Four services.{" "}
-              <em style={{ fontStyle: "italic", fontWeight: 700, color: "#C8601A" }}>
-                One specialist team.
-              </em>
+              <span style={{ color: "#C8601A" }}>One specialist team.</span>
             </h2>
           </div>
           <p className="text-[15px] leading-relaxed text-[#5A5A5A] max-w-md lg:justify-self-end">
@@ -105,7 +103,7 @@ export default function ServicesGrid() {
                   >
                     {service.name}
                   </h3>
-                  <p className="text-white/68 text-[13px] leading-relaxed mt-2">
+                  <p className="text-white/70 text-[13px] leading-relaxed mt-2">
                     {service.tagline}
                   </p>
                   <span className="text-[12px] font-semibold text-[#E8895A] mt-5 flex items-center gap-1.5 group-hover:gap-2.5 transition-all duration-300">

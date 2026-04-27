@@ -18,7 +18,7 @@ export default function DrivewaysBand() {
           sizes="(min-width: 1024px) 50vw, 100vw"
           className="object-cover"
         />
-        <div className="absolute left-5 bottom-5 lg:left-8 lg:bottom-8 bg-white/90 backdrop-blur-sm px-4 py-3 max-w-[280px]">
+        <div className="absolute left-5 bottom-5 lg:left-8 lg:bottom-8 bg-white/90 backdrop-blur-sm px-4 py-3 max-w-[280px] rounded-lg">
           <p className="text-[10px] uppercase tracking-[0.22em] text-[#C8601A] font-bold mb-1">Featured Driveway</p>
           <p className="text-[13px] text-[#111111] font-semibold leading-snug">Coastal estate · Bowen Island</p>
           <p className="text-[12px] text-[#5A5A5A] mt-0.5">StreetPrint herringbone, custom border</p>
@@ -47,7 +47,7 @@ export default function DrivewaysBand() {
           }}
         >
           Your driveway.{" "}
-          <em style={{ fontStyle: "italic", fontWeight: 700, color: "#C8601A" }}>Reimagined.</em>
+          <span style={{ color: "#C8601A" }}>Reimagined.</span>
         </h2>
         <p className="text-[15px] leading-relaxed text-[#2C2C2C] mt-6 max-w-md">
           From stamped asphalt that echoes the architecture of your home to vapor-blasted surfaces ready for a
@@ -67,7 +67,7 @@ export default function DrivewaysBand() {
         <div className="mt-10 flex flex-wrap gap-3">
           <Link
             href="/applications/private-driveways"
-            className="group inline-flex items-center gap-2 bg-[#C8601A] text-white px-6 py-3.5 text-sm font-semibold hover:bg-[#A84F15] transition-colors"
+            className="group inline-flex items-center gap-2 bg-[#C8601A] text-white px-6 py-3.5 text-sm font-semibold hover:bg-[#A84F15] transition-colors rounded-lg"
           >
             See Driveway Projects
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
@@ -76,7 +76,7 @@ export default function DrivewaysBand() {
           </Link>
           <Link
             href="/contact"
-            className="inline-flex items-center gap-2 border border-[#C8601A] text-[#C8601A] px-6 py-3.5 text-sm font-semibold hover:bg-[#C8601A]/5 transition-colors"
+            className="inline-flex items-center gap-2 border border-[#C8601A] text-[#C8601A] px-6 py-3.5 text-sm font-semibold hover:bg-[#C8601A]/5 transition-colors rounded-lg"
           >
             Get a Quote
           </Link>
