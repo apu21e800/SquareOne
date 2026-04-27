@@ -48,7 +48,8 @@ export const services: Service[] = [
       "Retroreflective options",
       "Fast installation",
     ],
-    imageUrl: "/images/services/stamped-asphalt/hero.jpg",
+    // Downtown Mission streetscape — confirmed Square One project
+    imageUrl: "https://squareonepaving.com/wp-content/uploads/2025/04/mission-bc-streetscape.jpg",
   },
   {
     slug: "vapor-blasting",
@@ -130,7 +131,8 @@ export const services: Service[] = [
       "Eco-friendly water-based options",
       "Cost-effective for large areas",
     ],
-    imageUrl: "/images/services/decorative-coatings/hero.jpg",
+    // Joyce SkyTrain public art install — confirmed Square One project
+    imageUrl: "https://squareonepaving.com/wp-content/uploads/2025/07/Photo-2025-07-07-11-54-41-AM-1024x677.jpg",
   },
   {
     slug: "preformed-thermoplastic",
@@ -169,7 +171,8 @@ export const services: Service[] = [
       "Long service life (7+ years)",
       "No spray drift or overspray",
     ],
-    imageUrl: "/images/services/preformed-thermoplastic/hero.jpg",
+    // UBC & Musqueam crosswalk — confirmed Square One project
+    imageUrl: "https://squareonepaving.com/wp-content/uploads/2024/11/IMG_5995-scaled.jpeg",
   },
 ]
 

@@ -89,13 +89,13 @@ export default function HeroSlideshow() {
         </div>
       ))}
 
-      {/* ── Gradient overlays ─────────────────────────── */}
+      {/* ── Gradient overlays — lighter than before ──────────── */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           zIndex: 2,
           background:
-            "linear-gradient(180deg, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.04) 20%, rgba(0,0,0,0.60) 55%, rgba(0,0,0,0.98) 100%)",
+            "linear-gradient(180deg, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.02) 22%, rgba(0,0,0,0.50) 58%, rgba(0,0,0,0.90) 100%)",
         }}
       />
       <div
@@ -103,7 +103,7 @@ export default function HeroSlideshow() {
         style={{
           zIndex: 2,
           background:
-            "linear-gradient(95deg, rgba(0,0,0,0.84) 0%, rgba(0,0,0,0.44) 30%, rgba(0,0,0,0.10) 55%, rgba(0,0,0,0) 72%)",
+            "linear-gradient(95deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.38) 28%, rgba(0,0,0,0.08) 52%, rgba(0,0,0,0) 70%)",
         }}
       />
       <div
@@ -111,7 +111,7 @@ export default function HeroSlideshow() {
         style={{
           zIndex: 2,
           background:
-            "radial-gradient(ellipse at 0% 110%, rgba(200,96,26,0.32) 0%, transparent 50%)",
+            "radial-gradient(ellipse at 0% 110%, rgba(200,96,26,0.28) 0%, transparent 48%)",
         }}
       />
 
@@ -119,7 +119,7 @@ export default function HeroSlideshow() {
       <button
         onClick={prev}
         aria-label="Previous slide"
-        className="absolute left-4 lg:left-8 z-30 w-11 h-11 flex items-center justify-center bg-black/25 border border-white/15 hover:bg-black/55 hover:border-white/45 transition-all backdrop-blur-sm rounded-lg"
+        className="absolute left-4 lg:left-8 z-30 w-11 h-11 flex items-center justify-center bg-black/20 border border-white/15 hover:bg-black/45 hover:border-white/40 transition-all backdrop-blur-sm rounded-lg"
         style={{ top: "50%", transform: "translateY(-50%)" }}
       >
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -129,7 +129,7 @@ export default function HeroSlideshow() {
       <button
         onClick={next}
         aria-label="Next slide"
-        className="absolute right-4 lg:right-8 z-30 w-11 h-11 flex items-center justify-center bg-black/25 border border-white/15 hover:bg-black/55 hover:border-white/45 transition-all backdrop-blur-sm rounded-lg"
+        className="absolute right-4 lg:right-8 z-30 w-11 h-11 flex items-center justify-center bg-black/20 border border-white/15 hover:bg-black/45 hover:border-white/40 transition-all backdrop-blur-sm rounded-lg"
         style={{ top: "50%", transform: "translateY(-50%)" }}
       >
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -137,7 +137,7 @@ export default function HeroSlideshow() {
         </svg>
       </button>
 
-      {/* ── Right-edge slide counter (desktop only) ───── */}
+      {/* ── Right-edge vertical progress bars (desktop) ──── */}
       <div
         className="hidden lg:flex absolute right-8 z-20 flex-col items-center gap-3"
         style={{ top: "50%", transform: "translateY(-50%)" }}
@@ -149,9 +149,9 @@ export default function HeroSlideshow() {
             aria-label={`Slide ${i + 1}`}
             style={{
               width: "2px",
-              height: i === active ? "38px" : "14px",
+              height: i === active ? "36px" : "12px",
               borderRadius: "1px",
-              background: i === active ? "#C8601A" : "rgba(255,255,255,0.26)",
+              background: i === active ? "#C8601A" : "rgba(255,255,255,0.30)",
               transition: "all 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
               border: "none",
               padding: 0,
@@ -163,25 +163,25 @@ export default function HeroSlideshow() {
 
       {/* ── Bottom content zone ───────────────────────── */}
       <div className="absolute inset-x-0 bottom-0 z-10">
-        <div className="max-w-[1400px] mx-auto w-full px-6 lg:px-10 pb-14 lg:pb-20">
+        <div className="max-w-[1400px] mx-auto w-full px-6 lg:px-10 pb-12 lg:pb-16">
 
           {/* Eyebrow */}
           <p
-            className="text-[10px] uppercase tracking-[0.24em] font-bold mb-5 flex items-center gap-3"
+            className="text-[10px] uppercase tracking-[0.24em] font-bold mb-4 flex items-center gap-3"
             style={{ color: "#E8895A" }}
           >
             <span className="inline-block w-7 h-px" style={{ background: "#C8601A" }} />
             {s.eyebrow}
           </p>
 
-          {/* H1 */}
+          {/* H1 — toned down from 6.5rem to 5rem max */}
           <h1
-            className="max-w-[820px]"
+            className="max-w-[720px]"
             style={{
-              fontSize: "clamp(3.2rem, 5.5vw, 6.5rem)",
+              fontSize: "clamp(2.6rem, 4vw, 5rem)",
               fontWeight: 800,
               lineHeight: 1.0,
-              letterSpacing: "-0.045em",
+              letterSpacing: "-0.042em",
               color: "white",
             }}
           >
@@ -191,18 +191,18 @@ export default function HeroSlideshow() {
 
           {/* Body */}
           <p
-            className="max-w-[500px] mt-5 leading-relaxed"
-            style={{ fontSize: "clamp(13px, 1.1vw, 15px)", color: "rgba(255,255,255,0.62)" }}
+            className="max-w-[480px] mt-4 leading-relaxed"
+            style={{ fontSize: "clamp(13px, 1.1vw, 15px)", color: "rgba(255,255,255,0.65)" }}
           >
             {s.body}
           </p>
 
           {/* CTAs */}
-          <div className="mt-8 flex flex-wrap gap-3 items-center">
+          <div className="mt-7 flex flex-wrap gap-3 items-center">
             <Link
               href={s.cta1.href}
-              className="group inline-flex items-center gap-2 bg-[#C8601A] text-white px-7 py-3.5 text-[13px] font-bold tracking-[0.02em] hover:bg-[#A84F15] transition-colors rounded-lg"
-              style={{ boxShadow: "0 4px 24px rgba(200,96,26,0.42)" }}
+              className="group inline-flex items-center gap-2 bg-[#C8601A] text-white px-6 py-3 text-[13px] font-bold tracking-[0.02em] hover:bg-[#A84F15] transition-colors rounded-lg"
+              style={{ boxShadow: "0 4px 20px rgba(200,96,26,0.40)" }}
             >
               {s.cta1.label}
               <svg
@@ -214,7 +214,7 @@ export default function HeroSlideshow() {
             </Link>
             <Link
               href={s.cta2.href}
-              className="inline-flex items-center gap-2 border border-white/22 text-white px-7 py-3.5 text-[13px] font-bold hover:border-white/55 hover:bg-white/[0.08] transition-all rounded-lg"
+              className="inline-flex items-center gap-2 border border-white/22 text-white px-6 py-3 text-[13px] font-bold hover:border-white/50 hover:bg-white/[0.08] transition-all rounded-lg"
             >
               {s.cta2.label}
             </Link>
@@ -227,7 +227,7 @@ export default function HeroSlideshow() {
                   onClick={() => goTo(i)}
                   aria-label={`Go to slide ${i + 1}`}
                   style={{
-                    width: i === active ? "22px" : "6px",
+                    width: i === active ? "20px" : "6px",
                     height: "6px",
                     borderRadius: "3px",
                     background: i === active ? "#C8601A" : "rgba(255,255,255,0.32)",
@@ -242,7 +242,7 @@ export default function HeroSlideshow() {
           </div>
         </div>
 
-        {/* ── Slim label strip (replaces photo thumbnail grid) ── */}
+        {/* ── Slim label strip ─────────────────────────── */}
         <div
           className="grid grid-cols-3"
           style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}
@@ -253,13 +253,12 @@ export default function HeroSlideshow() {
               onClick={() => goTo(i)}
               aria-label={`View ${slide.label}`}
               aria-current={i === active ? "true" : undefined}
-              className="relative flex items-center justify-center py-4 cursor-pointer transition-colors"
+              className="relative flex items-center justify-center py-3.5 cursor-pointer transition-colors"
               style={{
-                background: i === active ? "rgba(200,96,26,0.12)" : "rgba(0,0,0,0.52)",
+                background: i === active ? "rgba(200,96,26,0.10)" : "rgba(0,0,0,0.40)",
                 backdropFilter: "blur(6px)",
               }}
             >
-              {/* Active top bar */}
               <div
                 className="absolute top-0 left-0 right-0 h-[2px]"
                 style={{
@@ -268,7 +267,6 @@ export default function HeroSlideshow() {
                   transition: "opacity 0.3s ease",
                 }}
               />
-              {/* Column separator */}
               <div
                 className="absolute inset-y-0 right-0 w-px"
                 style={{ background: "rgba(255,255,255,0.07)" }}
@@ -277,7 +275,7 @@ export default function HeroSlideshow() {
                 <span
                   className="text-[9px] font-black uppercase tracking-[0.20em]"
                   style={{
-                    color: i === active ? "#E8895A" : "rgba(255,255,255,0.32)",
+                    color: i === active ? "#E8895A" : "rgba(255,255,255,0.30)",
                     transition: "color 0.3s",
                   }}
                 >
@@ -286,7 +284,7 @@ export default function HeroSlideshow() {
                 <span
                   className="text-[9px] font-semibold uppercase tracking-[0.13em] hidden sm:block"
                   style={{
-                    color: i === active ? "rgba(255,255,255,0.88)" : "rgba(255,255,255,0.38)",
+                    color: i === active ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0.35)",
                     transition: "color 0.3s",
                   }}
                 >

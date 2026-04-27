@@ -42,7 +42,7 @@ export default function WhySquareOne() {
       className="relative overflow-hidden"
       style={{ background: "#111111" }}
     >
-      {/* 2-col split ─────────────────────────────────── */}
+      {/* 2-col split */}
       <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[680px]">
 
         {/* Left — text content */}
@@ -63,7 +63,7 @@ export default function WhySquareOne() {
             <h2
               className="mb-5"
               style={{
-                fontSize: "clamp(2rem, 4vw, 3.25rem)",
+                fontSize: "clamp(2rem, 3.8vw, 3.25rem)",
                 fontWeight: 800,
                 lineHeight: 0.97,
                 letterSpacing: "-0.04em",
@@ -113,12 +113,12 @@ export default function WhySquareOne() {
           </div>
         </div>
 
-        {/* Right — full-height photo, bleeds edge-to-edge */}
+        {/* Right — confirmed Square One project photo, BC west coast */}
         <div className="relative min-h-[420px] lg:min-h-0">
           <Image
             fill
-            src="/images/products/streetbond/streetbond-red-waterfront-promenade-01.jpg"
-            alt="StreetBond decorative coating on a BC waterfront promenade"
+            src="https://squareonepaving.com/wp-content/uploads/2024/11/GPTempDownload-1-scaled-e1731616674862-1024x621.jpg"
+            alt="Langley Events Centre — StreetBond public art install by Square One"
             className="object-cover"
             sizes="(max-width: 1024px) 100vw, 50vw"
           />
@@ -136,10 +136,21 @@ export default function WhySquareOne() {
               background: "linear-gradient(to top, rgba(17,17,17,0.55), transparent)",
             }}
           />
+          {/* Project caption */}
+          <div
+            className="absolute bottom-5 right-5 px-3 py-1.5 text-[9px] uppercase tracking-[0.18em] font-semibold rounded"
+            style={{
+              background: "rgba(0,0,0,0.55)",
+              backdropFilter: "blur(6px)",
+              color: "rgba(255,255,255,0.60)",
+            }}
+          >
+            Langley Events Centre · 2024
+          </div>
         </div>
       </div>
 
-      {/* Trusted clients marquee ─────────────────────── */}
+      {/* Trusted clients marquee */}
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
