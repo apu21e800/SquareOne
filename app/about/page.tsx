@@ -104,8 +104,7 @@ export default function AboutPage() {
                   lineHeight: 1.0,
                 }}
               >
-                BC&apos;s only certified HUB
-                <br />Surface Systems applicator.
+                BC&apos;s only certified HUB{" "}Surface Systems applicator.
               </h2>
 
               <div className="space-y-5 text-[15px] text-[#5A5A5A] leading-relaxed">
@@ -295,7 +294,7 @@ export default function AboutPage() {
                 className="text-[#111111] mb-3"
                 style={{ fontWeight: 800, fontSize: "1.1rem", letterSpacing: "-0.02em" }}
               >
-                BC's only certified applicator for HUB Surface Systems
+                BC’s only certified applicator for HUB Surface Systems
               </h3>
               <p className="text-[14px] text-[#5A5A5A] leading-relaxed mb-5">
                 StreetPrint, StreetBond, TrafficPatterns, and DecoMark are HUB
