@@ -80,32 +80,25 @@ const applications = [
   },
 ]
 
-const tagColor: Record<string, string> = {
-  Residential: "rgba(80,160,80,0.75)",
-  Municipal:   "rgba(80,120,200,0.75)",
-  Commercial:  "rgba(180,130,60,0.75)",
-  Prep:        "rgba(140,80,180,0.75)",
+// WCAG AA-safe on white backgrounds
+const tagStyle: Record<string, { color: string; bg: string }> = {
+  Residential: { color: "#2D6A2D", bg: "rgba(45,106,45,0.08)" },
+  Municipal:   { color: "#1A55A8", bg: "rgba(26,85,168,0.08)" },
+  Commercial:  { color: "#8B5000", bg: "rgba(139,80,0,0.08)" },
+  Prep:        { color: "#6B2FA0", bg: "rgba(107,47,160,0.08)" },
 }
 
 export default function ApplicationsSection() {
   return (
     <section
       className="relative overflow-hidden"
-      style={{ background: "#0A0C10" }}
+      style={{ background: "#FFFFFF" }}
     >
-      {/* Radial bloom */}
+      {/* Top accent bar */}
       <div
         aria-hidden
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse at 80% 50%, rgba(200,96,26,0.07) 0%, transparent 60%)",
-        }}
-      />
-      {/* Top hairline */}
-      <div
         className="absolute top-0 inset-x-0 h-px"
-        style={{ background: "rgba(255,255,255,0.06)" }}
+        style={{ background: "#E8E4DE" }}
       />
 
       <div className="relative max-w-[1400px] mx-auto px-6 lg:px-10 py-24 lg:py-32">
@@ -120,7 +113,7 @@ export default function ApplicationsSection() {
           >
             <p
               className="text-[11px] uppercase tracking-[0.18em] font-semibold mb-4 flex items-center gap-3"
-              style={{ color: "#E8895A" }}
+              style={{ color: "#C8601A" }}
             >
               <span
                 className="inline-block w-8 h-px"
@@ -134,7 +127,7 @@ export default function ApplicationsSection() {
                 fontWeight: 800,
                 lineHeight: 0.97,
                 letterSpacing: "-0.04em",
-                color: "white",
+                color: "#111111",
               }}
             >
               Every surface,{" "}
@@ -147,14 +140,14 @@ export default function ApplicationsSection() {
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.7, ease: easeOut, delay: 0.1 }}
             className="text-sm leading-relaxed max-w-xs lg:text-right"
-            style={{ color: "rgba(255,255,255,0.42)" }}
+            style={{ color: "#767676" }}
           >
             From private driveways to municipal transit corridors — every paved surface in BC.
           </motion.p>
         </div>
 
         {/* Editorial index list */}
-        <div style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
+        <div style={{ borderTop: "1px solid #E8E4DE" }}>
           {applications.map((app, i) => (
             <motion.div
               key={app.label}
@@ -166,12 +159,12 @@ export default function ApplicationsSection() {
               <Link
                 href={app.href}
                 className="group flex items-center gap-4 lg:gap-8 py-5 transition-all"
-                style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}
+                style={{ borderBottom: "1px solid #E8E4DE" }}
               >
                 {/* Number */}
                 <span
                   className="flex-shrink-0 text-[11px] font-black tabular-nums"
-                  style={{ color: "rgba(200,96,26,0.70)", letterSpacing: "0.04em", minWidth: "24px" }}
+                  style={{ color: "#C8601A", letterSpacing: "0.04em", minWidth: "24px" }}
                 >
                   {String(i + 1).padStart(2, "0")}
                 </span>
@@ -180,9 +173,8 @@ export default function ApplicationsSection() {
                 <span
                   className="hidden sm:block flex-shrink-0 text-[9px] font-bold uppercase tracking-[0.18em] px-2.5 py-1 rounded"
                   style={{
-                    color: tagColor[app.tag],
-                    background: `${tagColor[app.tag].replace("0.75", "0.10")}
-`,
+                    color: tagStyle[app.tag]?.color ?? "#5A5A5A",
+                    background: tagStyle[app.tag]?.bg ?? "rgba(0,0,0,0.05)",
                     minWidth: "90px",
                     textAlign: "center",
                   }}
@@ -192,20 +184,20 @@ export default function ApplicationsSection() {
 
                 {/* Title */}
                 <h3
-                  className="flex-shrink-0 font-bold transition-colors duration-200 group-hover:text-[#E8895A]"
+                  className="flex-shrink-0 font-bold transition-colors duration-200 group-hover:text-[#C8601A]"
                   style={{
                     fontSize: "clamp(0.95rem, 1.4vw, 1.15rem)",
                     letterSpacing: "-0.015em",
-                    color: "rgba(255,255,255,0.88)",
+                    color: "#111111",
                   }}
                 >
                   {app.label}
                 </h3>
 
-                {/* Description — desktop only, truncated */}
+                {/* Description — desktop only */}
                 <p
                   className="hidden lg:block flex-1 text-[13px] truncate"
-                  style={{ color: "rgba(255,255,255,0.32)" }}
+                  style={{ color: "#767676" }}
                 >
                   {app.desc}
                 </p>
@@ -217,8 +209,7 @@ export default function ApplicationsSection() {
                   viewBox="0 0 14 14"
                   fill="none"
                   aria-hidden="true"
-                  className="flex-shrink-0 ml-auto transition-all duration-200 translate-x-0 group-hover:translate-x-1"
-                  style={{ color: "rgba(200,96,26,0)" }}
+                  className="flex-shrink-0 ml-auto transition-all duration-200 group-hover:translate-x-1"
                 >
                   <path
                     d="M2 7h10M8 3l4 4-4 4"
@@ -230,7 +221,7 @@ export default function ApplicationsSection() {
                   />
                   <path
                     d="M2 7h10M8 3l4 4-4 4"
-                    stroke="rgba(255,255,255,0.20)"
+                    stroke="#C8C4BC"
                     strokeWidth="1.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -249,18 +240,18 @@ export default function ApplicationsSection() {
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.6, ease: easeOut, delay: 0.2 }}
           className="mt-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5"
-          style={{ borderTop: "1px solid rgba(255,255,255,0.07)", paddingTop: "2.5rem" }}
+          style={{ borderTop: "1px solid #E8E4DE", paddingTop: "2.5rem" }}
         >
-          <p className="text-sm" style={{ color: "rgba(255,255,255,0.40)" }}>
+          <p className="text-sm" style={{ color: "#5A5A5A" }}>
             Not sure what your project needs?{" "}
-            <span style={{ color: "rgba(255,255,255,0.72)", fontWeight: 600 }}>
+            <span style={{ color: "#111111", fontWeight: 600 }}>
               We offer free site consultations across BC.
             </span>
           </p>
           <Link
             href="/contact"
             className="flex-shrink-0 inline-flex items-center gap-2 bg-[#C8601A] text-white px-7 py-3.5 text-[13px] font-bold tracking-[0.02em] hover:bg-[#A84F15] transition-colors rounded-lg"
-            style={{ boxShadow: "0 4px 20px rgba(200,96,26,0.30)" }}
+            style={{ boxShadow: "0 4px 20px rgba(200,96,26,0.22)" }}
           >
             Get a Free Quote
             <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true">

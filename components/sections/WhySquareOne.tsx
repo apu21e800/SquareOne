@@ -4,7 +4,7 @@ import Image from "next/image"
 import { motion } from "framer-motion"
 
 const differentiators = [
-  { text: "BC’s only HUB Surface Systems certified applicator" },
+  { text: "BC's only HUB Surface Systems certified applicator" },
   { text: "25 years of installs from Metro Vancouver to Victoria" },
   { text: "Free site visit, written quote in 48 hours" },
   { text: "Snowplow-safe surfaces built for BC winters" },
@@ -40,7 +40,7 @@ export default function WhySquareOne() {
   return (
     <section
       className="relative overflow-hidden"
-      style={{ background: "#111111" }}
+      style={{ background: "#F8F6F2" }}
     >
       {/* 2-col split */}
       <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[680px]">
@@ -55,7 +55,7 @@ export default function WhySquareOne() {
           >
             <p
               className="text-[11px] uppercase tracking-[0.18em] font-semibold mb-5 flex items-center gap-3"
-              style={{ color: "#E8895A" }}
+              style={{ color: "#C8601A" }}
             >
               <span className="inline-block w-8 h-px" style={{ background: "#C8601A" }} />
               Why Square One
@@ -67,7 +67,7 @@ export default function WhySquareOne() {
                 fontWeight: 800,
                 lineHeight: 0.97,
                 letterSpacing: "-0.04em",
-                color: "white",
+                color: "#111111",
               }}
             >
               Why crews choose{" "}
@@ -75,7 +75,7 @@ export default function WhySquareOne() {
             </h2>
             <p
               className="text-[15px] leading-relaxed max-w-md mb-10"
-              style={{ color: "rgba(255,255,255,0.52)" }}
+              style={{ color: "#5A5A5A" }}
             >
               We do one thing for a living. Municipal stress-tests become your
               driveway&apos;s baseline. That&apos;s the Square One standard.
@@ -85,7 +85,7 @@ export default function WhySquareOne() {
           {/* 5 differentiators */}
           <div
             className="space-y-0"
-            style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}
+            style={{ borderTop: "1px solid #E2DDD8" }}
           >
             {differentiators.map((item, i) => (
               <motion.div
@@ -95,7 +95,7 @@ export default function WhySquareOne() {
                 viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.6, ease: easeOut, delay: i * 0.07 }}
                 className="flex items-center gap-4 py-4 group"
-                style={{ borderBottom: "1px solid rgba(255,255,255,0.08)" }}
+                style={{ borderBottom: "1px solid #E2DDD8" }}
               >
                 <span
                   className="flex-shrink-0 w-5 h-px group-hover:w-8 transition-all duration-300"
@@ -104,7 +104,7 @@ export default function WhySquareOne() {
                 />
                 <span
                   className="text-[14px] font-medium leading-snug"
-                  style={{ color: "rgba(255,255,255,0.78)" }}
+                  style={{ color: "#2C2C2C" }}
                 >
                   {item.text}
                 </span>
@@ -113,7 +113,7 @@ export default function WhySquareOne() {
           </div>
         </div>
 
-        {/* Right — confirmed Square One project photo, BC west coast */}
+        {/* Right — project photo, no dark overlays — let it breathe */}
         <div className="relative min-h-[420px] lg:min-h-0">
           <Image
             fill
@@ -122,27 +122,14 @@ export default function WhySquareOne() {
             className="object-cover"
             sizes="(max-width: 1024px) 100vw, 50vw"
           />
-          {/* Left-edge blend into dark panel */}
-          <div
-            className="absolute inset-y-0 left-0 w-20 hidden lg:block"
-            style={{
-              background: "linear-gradient(to right, #111111, transparent)",
-            }}
-          />
-          {/* Subtle bottom scrim */}
-          <div
-            className="absolute inset-x-0 bottom-0 h-28"
-            style={{
-              background: "linear-gradient(to top, rgba(17,17,17,0.55), transparent)",
-            }}
-          />
-          {/* Project caption */}
+          {/* Project caption — light pill */}
           <div
             className="absolute bottom-5 right-5 px-3 py-1.5 text-[9px] uppercase tracking-[0.18em] font-semibold rounded"
             style={{
-              background: "rgba(0,0,0,0.55)",
-              backdropFilter: "blur(6px)",
-              color: "rgba(255,255,255,0.60)",
+              background: "rgba(255,255,255,0.90)",
+              backdropFilter: "blur(8px)",
+              color: "#5A5A5A",
+              border: "1px solid rgba(0,0,0,0.08)",
             }}
           >
             Langley Events Centre · 2024
@@ -157,11 +144,11 @@ export default function WhySquareOne() {
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.8, ease: easeOut }}
         className="py-10"
-        style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
+        style={{ borderTop: "1px solid #E2DDD8" }}
       >
         <p
           className="text-[10px] uppercase tracking-[0.22em] font-semibold text-center mb-6"
-          style={{ color: "rgba(255,255,255,0.26)" }}
+          style={{ color: "#767676" }}
         >
           Trusted across BC
         </p>
@@ -171,12 +158,12 @@ export default function WhySquareOne() {
               <span
                 key={i}
                 className="flex items-center whitespace-nowrap px-5 text-sm font-medium tracking-tight"
-                style={{ color: "rgba(255,255,255,0.42)" }}
+                style={{ color: "#5A5A5A" }}
               >
                 {name}
                 <span
-                  className="mx-5 w-1 h-1 rounded-full opacity-55"
-                  style={{ background: "#C8601A" }}
+                  className="mx-5 w-1 h-1 rounded-full"
+                  style={{ background: "#C8601A", opacity: 0.5 }}
                 />
               </span>
             ))}
