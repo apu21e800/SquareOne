@@ -14,7 +14,6 @@ export default function ProjectsPreview() {
 
   if (!hero) return null
 
-  // Derive a readable badge from the project's own data rather than hardcoding
   const featuredLabel = hero.application || hero.service || "Featured"
 
   return (
@@ -70,7 +69,7 @@ export default function ProjectsPreview() {
 
         {/* Asymmetric grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
-          {/* HERO */}
+          {/* HERO card — full-bleed, 2-col wide, 2-row tall */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -80,7 +79,7 @@ export default function ProjectsPreview() {
           >
             <Link
               href={`/projects/${hero.slug}`}
-              className="group block relative aspect-[4/3] lg:aspect-auto lg:h-full min-h-[420px] overflow-hidden bg-[#F6F4F0] border border-[#E2DDD8]"
+              className="group block relative aspect-[4/3] lg:aspect-auto lg:h-full min-h-[420px] overflow-hidden"
             >
               <Image
                 src={hero.imageUrl}
@@ -92,7 +91,7 @@ export default function ProjectsPreview() {
               <div
                 className="absolute inset-0 pointer-events-none"
                 style={{
-                  background: "linear-gradient(180deg, rgba(20,22,26,0) 35%, rgba(20,22,26,0.78) 100%)",
+                  background: "linear-gradient(180deg, rgba(20,22,26,0) 35%, rgba(20,22,26,0.80) 100%)",
                 }}
               />
               <span className="absolute top-5 left-5 inline-flex items-center gap-2 bg-[#C8601A] text-white text-[10px] uppercase tracking-[0.22em] font-bold px-3 py-1.5">
@@ -115,7 +114,7 @@ export default function ProjectsPreview() {
                 >
                   {hero.title}
                 </h3>
-                <p className="text-white/80 text-sm leading-relaxed mt-3 max-w-lg line-clamp-3">
+                <p className="text-white/75 text-sm leading-relaxed mt-3 max-w-lg line-clamp-3">
                   {hero.excerpt}
                 </p>
                 <span
@@ -126,7 +125,7 @@ export default function ProjectsPreview() {
             </Link>
           </motion.div>
 
-          {/* Standard cards */}
+          {/* Standard cards — full-bleed, text overlaid on photo */}
           {grid.map((p, i) => (
             <motion.div
               key={p.slug}
@@ -137,32 +136,39 @@ export default function ProjectsPreview() {
             >
               <Link
                 href={`/projects/${p.slug}`}
-                className="group block relative bg-white border border-[#E2DDD8] hover:shadow-[0_4px_16px_rgba(0,0,0,0.10)] hover:-translate-y-1 transition-all duration-300"
+                className="group block relative overflow-hidden aspect-[4/3]"
               >
-                <div className="relative aspect-[4/3] overflow-hidden bg-[#EDE9E3]">
-                  <Image
-                    src={p.imageUrl}
-                    alt={p.title}
-                    fill
-                    sizes="(min-width: 1024px) 25vw, 50vw"
-                    className="object-cover transition-transform duration-700 group-hover:scale-[1.05]"
-                  />
-                </div>
-                <div className="p-4">
-                  <p className="text-[9px] uppercase tracking-[0.22em] text-[#C8601A] font-semibold mb-2">
+                <Image
+                  src={p.imageUrl}
+                  alt={p.title}
+                  fill
+                  sizes="(min-width: 1024px) 25vw, 50vw"
+                  className="object-cover transition-transform duration-700 group-hover:scale-[1.05]"
+                />
+                {/* Dark gradient for text readability */}
+                <div
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    background: "linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.72) 100%)",
+                  }}
+                />
+                {/* Orange bottom reveal */}
+                <span
+                  aria-hidden
+                  className="absolute left-0 right-0 bottom-0 h-[3px] bg-[#C8601A] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"
+                />
+                {/* Text overlay */}
+                <div className="absolute inset-x-0 bottom-0 p-4">
+                  <p className="text-[9px] uppercase tracking-[0.22em] text-[#E8895A] font-semibold mb-1.5">
                     {p.application}
                   </p>
-                  <h4 className="text-[#111111] text-[14.5px] font-semibold leading-tight tracking-tight">
+                  <h4 className="text-white text-[14px] font-semibold leading-tight tracking-tight">
                     {p.title}
                   </h4>
-                  <p className="text-[#5A5A5A] text-[11px] uppercase tracking-[0.12em] mt-1.5">
+                  <p className="text-white/60 text-[11px] uppercase tracking-[0.12em] mt-1">
                     {p.city}
                   </p>
                 </div>
-                <span
-                  aria-hidden
-                  className="absolute left-0 right-0 bottom-0 h-[2px] bg-[#C8601A] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"
-                />
               </Link>
             </motion.div>
           ))}

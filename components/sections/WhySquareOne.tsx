@@ -40,7 +40,7 @@ export default function WhySquareOne() {
   return (
     <section className="relative bg-[#F6F4F0] overflow-hidden">
 
-      {/* 2-col Tesla split */}
+      {/* 2-col split — left text / right full-bleed photo */}
       <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[640px]">
 
         {/* Left — text content */}
@@ -97,12 +97,12 @@ export default function WhySquareOne() {
           </div>
         </div>
 
-        {/* Right — full-height photo: municipal roundabout (distinct from DrivewaysBand) */}
+        {/* Right — full-height photo (waterfront promenade — distinct from hero slides) */}
         <div className="relative min-h-[400px] lg:min-h-0">
           <Image
             fill
-            src="/images/products/streetbond/streetbond-red-roundabout-mountains-01.jpg"
-            alt="StreetBond decorative coating on a BC municipal roundabout"
+            src="/images/products/streetbond/streetbond-red-waterfront-promenade-01.jpg"
+            alt="StreetBond decorative coating on a BC waterfront promenade"
             className="object-cover"
             sizes="(max-width: 1024px) 100vw, 50vw"
           />
@@ -122,7 +122,7 @@ export default function WhySquareOne() {
         transition={{ duration: 0.8, ease: easeOut }}
         className="border-t border-[#E2DDD8] py-10"
       >
-        <p className="text-[10px] uppercase tracking-[0.22em] text-[#8C8C8C] font-semibold text-center mb-6">
+        <p className="text-[10px] uppercase tracking-[0.22em] text-[#767676] font-semibold text-center mb-6">
           Trusted across BC
         </p>
         <div className="ticker-mask overflow-hidden">
