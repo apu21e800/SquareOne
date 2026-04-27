@@ -33,7 +33,7 @@ export default function ProjectsPage() {
   return (
     <main style={{ background: "#F6F4F0", minHeight: "100vh" }}>
 
-      {/* ── Page header ────────────────────────────────────────────── */}
+      {/* ── Page header ────────────────────────────────────── */}
       <section className="relative bg-white border-b border-[#E2DDD8] pt-28 pb-16 px-6 sm:px-8">
         <div
           className="absolute left-6 lg:left-10 top-0 w-16 h-[3px]"
@@ -64,7 +64,7 @@ export default function ProjectsPage() {
             </div>
             <Link href="/contact" className="flex-shrink-0">
               <span
-                className="inline-flex items-center gap-2 px-7 py-4 text-sm font-bold tracking-[0.02em] text-white transition-all hover:brightness-110"
+                className="inline-flex items-center gap-2 px-7 py-4 text-sm font-bold tracking-[0.02em] text-white transition-all hover:brightness-110 rounded-lg"
                 style={{ background: "linear-gradient(135deg, #C8601A 0%, #E8895A 100%)", boxShadow: "0 4px 20px rgba(200,96,26,0.25)" }}
               >
                 Start a Project
@@ -77,7 +77,7 @@ export default function ProjectsPage() {
         </div>
       </section>
 
-      {/* ── Featured projects strip ─────────────────────────────────── */}
+      {/* ── Featured projects strip ───────────────────────────── */}
       {featured.length > 0 && (
         <section className="bg-white border-b border-[#E2DDD8] px-6 sm:px-8 py-12">
           <div className="max-w-[1500px] mx-auto">
@@ -100,11 +100,12 @@ export default function ProjectsPage() {
                       alt={`${p.title} — ${p.city}, BC`}
                       className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                       sizes="(max-width: 768px) 100vw, 50vw"
+                      style={{ objectPosition: "50% 65%" }}
                     />
-                    <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(17,17,17,0.80) 0%, rgba(17,17,17,0.20) 50%, transparent 100%)" }} />
+                    <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(17,17,17,0.82) 0%, rgba(17,17,17,0.25) 50%, transparent 100%)" }} />
                     <div className="absolute inset-x-0 bottom-0 p-7">
                       <span
-                        className="text-[9px] font-bold uppercase tracking-[0.18em] px-2.5 py-1 text-white mb-3 inline-block"
+                        className="text-[9px] font-bold uppercase tracking-[0.18em] px-2.5 py-1 text-white mb-3 inline-block rounded"
                         style={{ background: "rgba(200,96,26,0.90)" }}
                       >
                         {p.service}
@@ -128,7 +129,7 @@ export default function ProjectsPage() {
         </section>
       )}
 
-      {/* ── Filters ────────────────────────────────────────────────── */}
+      {/* ── Filters ──────────────────────────────────────── */}
       <div
         className="sticky top-[68px] z-30 px-6 sm:px-8 py-4"
         style={{ background: "rgba(246,244,240,0.97)", backdropFilter: "blur(10px)", borderBottom: "1px solid #E2DDD8" }}
@@ -140,7 +141,7 @@ export default function ProjectsPage() {
               <button
                 key={s}
                 onClick={() => setServiceFilter(s)}
-                className="text-[11px] font-bold px-3.5 py-1.5 whitespace-nowrap transition-all flex-shrink-0 uppercase tracking-[0.08em]"
+                className="text-[11px] font-bold px-3.5 py-1.5 whitespace-nowrap transition-all flex-shrink-0 uppercase tracking-[0.08em] rounded"
                 style={{
                   background: serviceFilter === s ? "#111111" : "white",
                   color: serviceFilter === s ? "white" : "#5A5A5A",
@@ -158,7 +159,7 @@ export default function ProjectsPage() {
             <span className="text-[10px] uppercase tracking-[0.18em] font-bold flex-shrink-0" style={{ color: "#8C8C8C" }}>Type</span>
             <button
               onClick={() => setAppFilter("All")}
-              className="text-[11px] font-bold px-3.5 py-1.5 whitespace-nowrap transition-all flex-shrink-0 uppercase tracking-[0.08em]"
+              className="text-[11px] font-bold px-3.5 py-1.5 whitespace-nowrap transition-all flex-shrink-0 uppercase tracking-[0.08em] rounded"
               style={{
                 background: appFilter === "All" ? "#C8601A" : "white",
                 color: appFilter === "All" ? "white" : "#5A5A5A",
@@ -171,7 +172,7 @@ export default function ProjectsPage() {
               <button
                 key={a}
                 onClick={() => setAppFilter(a)}
-                className="text-[11px] font-bold px-3.5 py-1.5 whitespace-nowrap transition-all flex-shrink-0 uppercase tracking-[0.08em]"
+                className="text-[11px] font-bold px-3.5 py-1.5 whitespace-nowrap transition-all flex-shrink-0 uppercase tracking-[0.08em] rounded"
                 style={{
                   background: appFilter === a ? "#C8601A" : "white",
                   color: appFilter === a ? "white" : "#5A5A5A",
@@ -189,7 +190,7 @@ export default function ProjectsPage() {
         </div>
       </div>
 
-      {/* ── Grid ───────────────────────────────────────────────────── */}
+      {/* ── Grid ─────────────────────────────────────────── */}
       <div className="max-w-[1500px] mx-auto px-6 sm:px-8 py-12">
         <AnimatePresence mode="popLayout">
           <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -205,21 +206,22 @@ export default function ProjectsPage() {
                 >
                   <Link
                     href={`/projects/${project.slug}`}
-                    className="group block overflow-hidden bg-white border border-[#E2DDD8] transition-all duration-300 hover:border-[#C8601A]/30 hover:shadow-[0_8px_40px_rgba(0,0,0,0.10)] hover:-translate-y-1"
+                    className="group block overflow-hidden bg-white border border-[#E2DDD8] transition-all duration-300 hover:border-[#C8601A]/30 hover:shadow-[0_8px_40px_rgba(0,0,0,0.10)] hover:-translate-y-1 rounded-lg"
                   >
                     {/* Image */}
-                    <div className="relative overflow-hidden" style={{ aspectRatio: "4/3" }}>
+                    <div className="relative overflow-hidden rounded-t-lg" style={{ aspectRatio: "4/3" }}>
                       <Image
                         src={imgSrc}
                         alt={`${project.title} — ${project.city}, BC`}
                         fill
                         className="object-cover transition-transform duration-700 group-hover:scale-[1.06]"
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        style={{ objectPosition: "50% 65%" }}
                       />
-                      <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(17,17,17,0.62) 0%, transparent 55%)" }} />
+                      <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(17,17,17,0.55) 0%, transparent 50%)" }} />
                       <div className="absolute bottom-3 left-3">
                         <span
-                          className="text-[9px] font-bold uppercase tracking-[0.12em] px-2.5 py-1 text-white"
+                          className="text-[9px] font-bold uppercase tracking-[0.12em] px-2.5 py-1 text-white rounded"
                           style={{ background: "rgba(200,96,26,0.92)" }}
                         >
                           {project.service}
@@ -227,7 +229,7 @@ export default function ProjectsPage() {
                       </div>
                       {project.featured && (
                         <div className="absolute top-3 right-3">
-                          <span className="text-[9px] font-bold uppercase tracking-[0.1em] px-2 py-1 bg-white/15 backdrop-blur-sm text-white border border-white/20">
+                          <span className="text-[9px] font-bold uppercase tracking-[0.1em] px-2 py-1 bg-white/15 backdrop-blur-sm text-white border border-white/20 rounded">
                             Featured
                           </span>
                         </div>
@@ -238,7 +240,7 @@ export default function ProjectsPage() {
                     <div className="p-5">
                       <div className="flex items-center gap-2 mb-3">
                         <span
-                          className="text-[9px] font-bold uppercase tracking-[0.12em] px-2.5 py-1"
+                          className="text-[9px] font-bold uppercase tracking-[0.12em] px-2.5 py-1 rounded"
                           style={{ background: "#F6F4F0", color: "#5A5A5A", border: "1px solid #E2DDD8" }}
                         >
                           {project.application}
@@ -289,13 +291,17 @@ export default function ProjectsPage() {
         )}
       </div>
 
-      {/* ── CTA ──────────────────────────────────────────────────── */}
+      {/* ── CTA ────────────────────────────────────────── */}
       <section className="relative py-28 px-6 sm:px-8" style={{ background: "#1C2026" }}>
         <div
           className="absolute left-6 lg:left-10 top-0 w-16 h-[3px]"
           style={{ background: "linear-gradient(to right, #C8601A, #E8895A)" }}
         />
-        <div className="max-w-3xl mx-auto text-center">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: "radial-gradient(ellipse at 50% 0%, rgba(200,96,26,0.12) 0%, transparent 65%)" }}
+        />
+        <div className="relative max-w-3xl mx-auto text-center">
           <div className="flex items-center justify-center gap-3 mb-5">
             <div className="w-8 h-px" style={{ background: "#E8895A" }} />
             <p className="font-semibold uppercase" style={{ fontSize: "11px", letterSpacing: "0.18em", color: "#E8895A" }}>Work With Us</p>
@@ -305,17 +311,16 @@ export default function ProjectsPage() {
             style={{ fontSize: "clamp(2rem, 3.5vw, 3.5rem)", fontWeight: 800, color: "white", letterSpacing: "-0.04em", lineHeight: 0.95 }}
             className="mb-7"
           >
-            Ready to start
-            <br />
-            <em style={{ fontStyle: "italic", fontWeight: 700, color: "#E8895A" }}>your project?</em>
+            Ready to start{" "}
+            <span style={{ color: "#E8895A" }}>your project?</span>
           </h2>
           <p className="text-[17px] mb-12" style={{ color: "rgba(255,255,255,0.55)" }}>
-            Free consultation and quote for your BC surface project — no obligation.
+            Free site visit and written quote for your BC surface project — no obligation.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/contact">
               <span
-                className="inline-flex items-center gap-2 px-10 py-4 text-sm font-bold tracking-[0.04em] uppercase text-white transition-all hover:brightness-110"
+                className="inline-flex items-center gap-2 px-10 py-4 text-sm font-bold tracking-[0.04em] uppercase text-white transition-all hover:brightness-110 rounded-lg"
                 style={{ background: "linear-gradient(135deg, #C8601A 0%, #E8895A 100%)", boxShadow: "0 4px 24px rgba(200,96,26,0.35)" }}
               >
                 Request a Free Quote
@@ -323,7 +328,7 @@ export default function ProjectsPage() {
             </Link>
             <a href="tel:6043098212">
               <span
-                className="inline-flex items-center gap-2 px-10 py-4 text-sm font-bold tracking-[0.04em] uppercase transition-all hover:bg-white/10"
+                className="inline-flex items-center gap-2 px-10 py-4 text-sm font-bold tracking-[0.04em] uppercase transition-all hover:bg-white/10 rounded-lg"
                 style={{ border: "1px solid rgba(255,255,255,0.18)", color: "rgba(255,255,255,0.75)" }}
               >
                 604-309-8212
