@@ -33,7 +33,7 @@ export default function ProjectsPage() {
   return (
     <main style={{ background: "#F6F4F0", minHeight: "100vh" }}>
 
-      {/* ── Page header ────────────────────────────────────── */}
+      {/* ── Page header ────────────────────────────────────────── */}
       <section className="relative bg-white border-b border-[#E2DDD8] pt-28 pb-16 px-6 sm:px-8">
         <div
           className="absolute left-6 lg:left-10 top-0 w-16 h-[3px]"
@@ -77,13 +77,13 @@ export default function ProjectsPage() {
         </div>
       </section>
 
-      {/* ── Featured projects strip ───────────────────────────── */}
+      {/* ── Featured projects strip ─────────────────────────────────────── */}
       {featured.length > 0 && (
         <section className="bg-white border-b border-[#E2DDD8] px-6 sm:px-8 py-12">
           <div className="max-w-[1500px] mx-auto">
             <div className="flex items-center gap-3 mb-6">
               <div className="w-6 h-px" style={{ background: "#C8601A" }} />
-              <p className="font-bold uppercase" style={{ fontSize: "10px", letterSpacing: "0.22em", color: "#8C8C8C" }}>Featured Projects</p>
+              <p className="font-bold uppercase" style={{ fontSize: "10px", letterSpacing: "0.22em", color: "#767676" }}>Featured Projects</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {featured.map((p) => {
@@ -129,14 +129,14 @@ export default function ProjectsPage() {
         </section>
       )}
 
-      {/* ── Filters ──────────────────────────────────────── */}
+      {/* ── Filters ────────────────────────────────────────────── */}
       <div
         className="sticky top-[68px] z-30 px-6 sm:px-8 py-4"
         style={{ background: "rgba(246,244,240,0.97)", backdropFilter: "blur(10px)", borderBottom: "1px solid #E2DDD8" }}
       >
         <div className="max-w-[1500px] mx-auto flex flex-wrap items-center gap-4">
           <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
-            <span className="text-[10px] uppercase tracking-[0.18em] font-bold flex-shrink-0" style={{ color: "#8C8C8C" }}>Service</span>
+            <span className="text-[10px] uppercase tracking-[0.18em] font-bold flex-shrink-0" style={{ color: "#767676" }}>Service</span>
             {SERVICES.map((s) => (
               <button
                 key={s}
@@ -156,7 +156,7 @@ export default function ProjectsPage() {
           <div className="hidden sm:block w-px h-4 bg-[#E2DDD8]" />
 
           <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
-            <span className="text-[10px] uppercase tracking-[0.18em] font-bold flex-shrink-0" style={{ color: "#8C8C8C" }}>Type</span>
+            <span className="text-[10px] uppercase tracking-[0.18em] font-bold flex-shrink-0" style={{ color: "#767676" }}>Type</span>
             <button
               onClick={() => setAppFilter("All")}
               className="text-[11px] font-bold px-3.5 py-1.5 whitespace-nowrap transition-all flex-shrink-0 uppercase tracking-[0.08em] rounded"
@@ -184,13 +184,13 @@ export default function ProjectsPage() {
             ))}
           </div>
 
-          <span className="ml-auto text-[11px] font-bold flex-shrink-0" style={{ color: "#8C8C8C" }}>
+          <span className="ml-auto text-[11px] font-bold flex-shrink-0" style={{ color: "#767676" }}>
             {filtered.length} project{filtered.length !== 1 ? "s" : ""}
           </span>
         </div>
       </div>
 
-      {/* ── Grid ─────────────────────────────────────────── */}
+      {/* ── Grid ─────────────────────────────────────────────── */}
       <div className="max-w-[1500px] mx-auto px-6 sm:px-8 py-12">
         <AnimatePresence mode="popLayout">
           <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -245,7 +245,7 @@ export default function ProjectsPage() {
                         >
                           {project.application}
                         </span>
-                        <span className="text-[11px] font-semibold" style={{ color: "#8C8C8C" }}>
+                        <span className="text-[11px] font-semibold" style={{ color: "#767676" }}>
                           {project.city}{project.year ? ` · ${project.year}` : ""}
                         </span>
                       </div>
@@ -291,7 +291,7 @@ export default function ProjectsPage() {
         )}
       </div>
 
-      {/* ── CTA ────────────────────────────────────────── */}
+      {/* ── CTA ────────────────────────────────────────────── */}
       <section className="relative py-28 px-6 sm:px-8" style={{ background: "#1C2026" }}>
         <div
           className="absolute left-6 lg:left-10 top-0 w-16 h-[3px]"

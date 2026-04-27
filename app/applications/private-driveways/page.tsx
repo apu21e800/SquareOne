@@ -91,7 +91,7 @@ export default function PrivateDrivewaysPage() {
             Residential Decorative Paving
           </p>
           <h1 className="text-5xl sm:text-6xl md:text-7xl font-black text-white leading-[1.04] mb-6 max-w-2xl">
-            Your Driveway.<br />Reimagined.
+            Your Driveway.{" "}Reimagined.
           </h1>
           <p className="text-white/70 text-lg max-w-lg mb-10 leading-relaxed">
             Premium decorative paving for BC homeowners. Custom colours, textures, and patterns — installed by BC&apos;s most experienced HUB applicator.

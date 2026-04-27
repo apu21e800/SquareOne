@@ -88,7 +88,7 @@ export default async function BlogPostPage({ params }: Props) {
 
       <main style={{ background: "#F6F4F0" }}>
 
-        {/* ── Hero image ──────────────────────────────────────────── */}
+        {/* ── Hero image ────────────────────────────────────────────────────── */}
         {post.featured_image && (
           <div className="relative w-full overflow-hidden" style={{ height: "clamp(280px, 55vh, 580px)" }}>
             <div
@@ -136,11 +136,11 @@ export default async function BlogPostPage({ params }: Props) {
           </div>
         )}
 
-        {/* ── Article body ─────────────────────────────────────────── */}
+        {/* ── Article body ────────────────────────────────────────────────── */}
         <div className="max-w-[720px] mx-auto px-6 sm:px-8 py-12">
 
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-xs mb-8" style={{ color: "#8C8C8C" }}>
+          <nav className="flex items-center gap-2 text-xs mb-8" style={{ color: "#767676" }}>
             <Link href="/" className="hover:text-[#C8601A] transition-colors">Home</Link>
             <span>›</span>
             <Link href="/blog" className="hover:text-[#C8601A] transition-colors">Blog</Link>
@@ -158,11 +158,11 @@ export default async function BlogPostPage({ params }: Props) {
                 {post.author}
               </span>
             )}
-            <span className="text-sm" style={{ color: "#8C8C8C" }}>
+            <span className="text-sm" style={{ color: "#767676" }}>
               {formatDate(post.date)}
             </span>
             {post.content && (
-              <span className="text-sm" style={{ color: "#8C8C8C" }}>
+              <span className="text-sm" style={{ color: "#767676" }}>
                 {estimateReadTime(post.content)} min read
               </span>
             )}
@@ -171,7 +171,7 @@ export default async function BlogPostPage({ params }: Props) {
                 {post.tags.slice(0, 4).map((tag) => (
                   <span
                     key={tag}
-                    className="text-xs px-2.5 py-1 font-medium"
+                    className="text-xs px-2.5 py-1 font-medium rounded"
                     style={{ background: "white", color: "#5A5A5A", border: "1px solid #E2DDD8" }}
                   >
                     {tag}
@@ -194,7 +194,7 @@ export default async function BlogPostPage({ params }: Props) {
               "--tw-prose-hr": "#E2DDD8",
               "--tw-prose-quotes": "#111111",
               "--tw-prose-quote-borders": "#C8601A",
-              "--tw-prose-captions": "#8C8C8C",
+              "--tw-prose-captions": "#767676",
               "--tw-prose-code": "#111111",
               "--tw-prose-pre-code": "#F6F4F0",
               "--tw-prose-pre-bg": "#1C2026",
@@ -219,7 +219,7 @@ export default async function BlogPostPage({ params }: Props) {
             </p>
             <Link href="/contact">
               <span
-                className="inline-block px-7 py-3 text-sm font-bold text-white uppercase tracking-[0.08em] transition-all hover:brightness-110"
+                className="inline-block px-7 py-3 text-sm font-bold text-white uppercase tracking-[0.08em] transition-all hover:brightness-110 rounded-lg"
                 style={{ background: "linear-gradient(135deg, #C8601A 0%, #E8895A 100%)" }}
               >
                 Request a Quote →
@@ -236,7 +236,7 @@ export default async function BlogPostPage({ params }: Props) {
               ← Back to Blog
             </Link>
             <div className="flex items-center gap-4">
-              <span className="text-xs uppercase tracking-wider" style={{ color: "#8C8C8C" }}>Share</span>
+              <span className="text-xs uppercase tracking-wider" style={{ color: "#767676" }}>Share</span>
               <a
                 href={`https://www.linkedin.com/sharing/share-offsite/?url=https://squareonepaving.com/blog/${slug}`}
                 target="_blank"
