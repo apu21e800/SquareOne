@@ -43,7 +43,7 @@ export default function BlogFilterClient({ posts }: Props) {
           <button
             key={cat}
             onClick={() => setActiveCategory(cat)}
-            className="text-xs font-semibold px-4 py-2 whitespace-nowrap transition-all"
+            className="text-xs font-semibold px-4 py-2 rounded whitespace-nowrap transition-all"
             style={{
               background: activeCategory === cat ? "#C8601A" : "white",
               color: activeCategory === cat ? "white" : "#5A5A5A",
@@ -62,7 +62,7 @@ export default function BlogFilterClient({ posts }: Props) {
           </p>
         ) : (
           <>
-            {/* ── Featured post ─────────────────────────────────────── */}
+            {/* ── Featured post ───────────────────────────────────── */}
             {featured && (
               <Link href={`/blog/${featured.slug}`} className="group block mb-14">
                 <div
@@ -109,7 +109,7 @@ export default function BlogFilterClient({ posts }: Props) {
                       {featured.description}
                     </p>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm" style={{ color: "#8C8C8C" }}>
+                      <span className="text-sm" style={{ color: "#767676" }}>
                         {formatDate(featured.date)}
                       </span>
                       <span className="text-sm font-semibold" style={{ color: "#C8601A" }}>
@@ -121,7 +121,7 @@ export default function BlogFilterClient({ posts }: Props) {
               </Link>
             )}
 
-            {/* ── Remaining posts grid ──────────────────────────────── */}
+            {/* ── Remaining posts grid ─────────────────────────────── */}
             {rest.length > 0 && (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {rest.map((post) => (
@@ -175,7 +175,7 @@ export default function BlogFilterClient({ posts }: Props) {
                         {post.description}
                       </p>
                       <div className="flex items-center justify-between pt-4" style={{ borderTop: "1px solid #EDEBE7" }}>
-                        <span className="text-xs" style={{ color: "#8C8C8C" }}>
+                        <span className="text-xs" style={{ color: "#767676" }}>
                           {formatDate(post.date)}
                         </span>
                         <span
