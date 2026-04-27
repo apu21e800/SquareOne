@@ -51,19 +51,8 @@ export default function Hero() {
                 letterSpacing: "-0.045em",
               }}
             >
-              From crosswalks
-              <br />
-              to driveways —
-              <br />
-              <em
-                style={{
-                  fontStyle: "italic",
-                  fontWeight: 500,
-                  color: "#C8601A",
-                }}
-              >
-                built to last.
-              </em>
+              From crosswalks to driveways —{" "}
+              <span style={{ color: "#C8601A" }}>built to last.</span>
             </h1>
 
             <p className="text-base lg:text-[17px] text-[#2C2C2C] max-w-xl mt-8 leading-relaxed">
@@ -74,7 +63,7 @@ export default function Hero() {
             <div className="mt-10 flex flex-wrap gap-3">
               <Link
                 href="/contact"
-                className="group inline-flex items-center gap-2 bg-[#C8601A] text-white px-7 py-4 text-[13px] font-bold tracking-[0.02em] hover:bg-[#A84F15] transition-colors"
+                className="group inline-flex items-center gap-2 rounded-lg bg-[#C8601A] text-white px-7 py-4 text-[13px] font-bold tracking-[0.02em] hover:bg-[#A84F15] transition-colors"
                 style={{ boxShadow: "0 4px 24px rgba(200,96,26,0.30)" }}
               >
                 Request a Quote
@@ -84,7 +73,7 @@ export default function Hero() {
               </Link>
               <Link
                 href="/projects"
-                className="inline-flex items-center gap-2 border border-[#111111]/20 text-[#111111] px-7 py-4 text-[13px] font-bold hover:border-[#111111]/50 hover:bg-white/50 transition-all"
+                className="inline-flex items-center gap-2 rounded-lg border border-[#111111]/20 text-[#111111] px-7 py-4 text-[13px] font-bold hover:border-[#111111]/50 hover:bg-white/50 transition-all"
               >
                 See Our Work
               </Link>

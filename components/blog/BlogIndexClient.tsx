@@ -76,7 +76,7 @@ export default function BlogIndexClient({ posts }: Props) {
                   color: "#0A0C10",
                 }}
               >
-                Field<br />Notes.
+                Field{" "}Notes.
               </h1>
               <p
                 style={{
@@ -99,7 +99,7 @@ export default function BlogIndexClient({ posts }: Props) {
                   fontWeight: 700,
                   letterSpacing: "0.2em",
                   textTransform: "uppercase",
-                  color: "#8C8C8C",
+                  color: "#767676",
                   marginBottom: "10px",
                 }}
               >
@@ -119,6 +119,7 @@ export default function BlogIndexClient({ posts }: Props) {
                     color: "white",
                     background: "linear-gradient(135deg, #C8601A 0%, #E8895A 100%)",
                     boxShadow: "0 4px 20px rgba(200,96,26,0.25)",
+                    borderRadius: "8px",
                   }}
                 >
                   Get a Quote
@@ -151,7 +152,7 @@ export default function BlogIndexClient({ posts }: Props) {
                     textTransform: "uppercase",
                     whiteSpace: "nowrap",
                     flexShrink: 0,
-                    color: isActive ? "#0A0C10" : "#8C8C8C",
+                    color: isActive ? "#0A0C10" : "#767676",
                     background: "none",
                     border: "none",
                     borderBottom: `2px solid ${isActive ? "#C8601A" : "transparent"}`,
@@ -188,6 +189,7 @@ export default function BlogIndexClient({ posts }: Props) {
                 color: "white",
                 background: "#C8601A",
                 border: "none",
+                borderRadius: "8px",
                 cursor: "pointer",
               }}
             >
@@ -247,7 +249,7 @@ export default function BlogIndexClient({ posts }: Props) {
               marginBottom: "1.75rem",
             }}
           >
-            Get a Free<br />Consultation
+            Get a Free{" "}Consultation
           </h2>
           <p
             style={{
@@ -275,6 +277,7 @@ export default function BlogIndexClient({ posts }: Props) {
                 color: "white",
                 background: "linear-gradient(135deg, #C8601A 0%, #E8895A 100%)",
                 boxShadow: "0 4px 24px rgba(200,96,26,0.35)",
+                borderRadius: "8px",
               }}
             >
               Contact Us &rarr;
@@ -436,7 +439,7 @@ function FeaturedCard({ post }: { post: BlogPostMeta }) {
               <p style={{ fontSize: "13px", fontWeight: 600, color: "#0A0C10", lineHeight: 1.3 }}>
                 {post.author || "Square One Paving"}
               </p>
-              <p style={{ fontSize: "12px", color: "#8C8C8C", marginTop: "2px" }}>
+              <p style={{ fontSize: "12px", color: "#767676", marginTop: "2px" }}>
                 {formatDate(post.date)}&nbsp;&middot;&nbsp;{readTime(post.description)}
               </p>
             </div>
@@ -583,7 +586,7 @@ function PostCard({ post }: { post: BlogPostMeta }) {
             <p style={{ fontSize: "12px", fontWeight: 600, color: "#0A0C10", lineHeight: 1.3 }}>
               {post.author || "Square One Paving"}
             </p>
-            <p style={{ fontSize: "11px", color: "#8C8C8C", marginTop: "1px" }}>
+            <p style={{ fontSize: "11px", color: "#767676", marginTop: "1px" }}>
               {formatDate(post.date)}&nbsp;&middot;&nbsp;{readTime(post.description)}
             </p>
           </div>
