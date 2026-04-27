@@ -9,8 +9,6 @@ const SLIDES = [
     id: "municipal",
     label: "Crosswalks & Civic",
     bgImage: "/images/products/streetbond/streetbond-red-roundabout-mountains-01.jpg",
-    thumbImage: "/images/products/streetbond/streetbond-crosswalk-perspective-01.jpg",
-    // Pull down to show the red roundabout surface, not sky
     bgPosition: "50% 70%",
     eyebrow: "Municipal & Civic",
     h1a: "Where streets become",
@@ -23,7 +21,6 @@ const SLIDES = [
     id: "driveways",
     label: "Driveways & Residential",
     bgImage: "/images/applications/private-driveways/estate-herringbone-gated-driveway-01.jpg",
-    thumbImage: "/images/products/streetbond/streetbond-driveway.jpg",
     bgPosition: "50% 50%",
     eyebrow: "Driveways & Residential",
     h1a: "Curb appeal that",
@@ -36,7 +33,6 @@ const SLIDES = [
     id: "transit",
     label: "Roads & Transit",
     bgImage: "/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg",
-    thumbImage: "/images/products/streetbond/streetbond-red-brick-pattern-waterfront-01.jpg",
     bgPosition: "50% 55%",
     eyebrow: "Roads & Transit",
     h1a: "Infrastructure that",
@@ -69,16 +65,16 @@ export default function HeroSlideshow() {
   return (
     <section
       className="relative w-full overflow-hidden bg-[#111]"
-      style={{ minHeight: "90vh", maxHeight: "1000px" }}
+      style={{ minHeight: "100svh" }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       aria-label="Hero image slideshow"
     >
-      {/* ── Background images ────────────────────────────────── */}
+      {/* ── Background images ─────────────────────────── */}
       {SLIDES.map((slide, i) => (
         <div
           key={slide.id}
-          className="absolute inset-0 transition-opacity duration-700 ease-in-out"
+          className="absolute inset-0 transition-opacity duration-1000 ease-in-out"
           style={{ opacity: i === active ? 1 : 0, zIndex: 1 }}
         >
           <Image
@@ -93,40 +89,37 @@ export default function HeroSlideshow() {
         </div>
       ))}
 
-      {/* ── Gradient overlays ───────────────────────────────── */}
-      {/* Heavy base scrim — locks the bottom into near-black */}
+      {/* ── Gradient overlays ─────────────────────────── */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           zIndex: 2,
           background:
-            "linear-gradient(180deg, rgba(0,0,0,0.30) 0%, rgba(0,0,0,0.08) 22%, rgba(0,0,0,0.65) 58%, rgba(0,0,0,0.97) 100%)",
+            "linear-gradient(180deg, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.04) 20%, rgba(0,0,0,0.60) 55%, rgba(0,0,0,0.98) 100%)",
         }}
       />
-      {/* Left-side vignette for text legibility on wide screens */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           zIndex: 2,
           background:
-            "linear-gradient(95deg, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.45) 28%, rgba(0,0,0,0.12) 52%, rgba(0,0,0,0) 70%)",
+            "linear-gradient(95deg, rgba(0,0,0,0.84) 0%, rgba(0,0,0,0.44) 30%, rgba(0,0,0,0.10) 55%, rgba(0,0,0,0) 72%)",
         }}
       />
-      {/* Orange atmospheric bloom — bottom-left */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           zIndex: 2,
           background:
-            "radial-gradient(ellipse at 0% 105%, rgba(200,96,26,0.28) 0%, transparent 48%)",
+            "radial-gradient(ellipse at 0% 110%, rgba(200,96,26,0.32) 0%, transparent 50%)",
         }}
       />
 
-      {/* ── Prev / Next arrows ──────────────────────────────── */}
+      {/* ── Prev / Next arrows ────────────────────────── */}
       <button
         onClick={prev}
         aria-label="Previous slide"
-        className="absolute left-4 lg:left-7 z-30 w-10 h-10 flex items-center justify-center bg-black/30 border border-white/20 hover:bg-black/55 hover:border-white/50 transition-all backdrop-blur-sm rounded-lg"
+        className="absolute left-4 lg:left-8 z-30 w-11 h-11 flex items-center justify-center bg-black/25 border border-white/15 hover:bg-black/55 hover:border-white/45 transition-all backdrop-blur-sm rounded-lg"
         style={{ top: "50%", transform: "translateY(-50%)" }}
       >
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -136,7 +129,7 @@ export default function HeroSlideshow() {
       <button
         onClick={next}
         aria-label="Next slide"
-        className="absolute right-4 lg:right-7 z-30 w-10 h-10 flex items-center justify-center bg-black/30 border border-white/20 hover:bg-black/55 hover:border-white/50 transition-all backdrop-blur-sm rounded-lg"
+        className="absolute right-4 lg:right-8 z-30 w-11 h-11 flex items-center justify-center bg-black/25 border border-white/15 hover:bg-black/55 hover:border-white/45 transition-all backdrop-blur-sm rounded-lg"
         style={{ top: "50%", transform: "translateY(-50%)" }}
       >
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -144,24 +137,51 @@ export default function HeroSlideshow() {
         </svg>
       </button>
 
-      {/* ── Bottom content zone ──────────────────────────────── */}
-      <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col">
-        <div className="max-w-[1400px] mx-auto w-full px-6 lg:px-10 pb-6 lg:pb-8">
+      {/* ── Right-edge slide counter (desktop only) ───── */}
+      <div
+        className="hidden lg:flex absolute right-8 z-20 flex-col items-center gap-3"
+        style={{ top: "50%", transform: "translateY(-50%)" }}
+      >
+        {SLIDES.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => goTo(i)}
+            aria-label={`Slide ${i + 1}`}
+            style={{
+              width: "2px",
+              height: i === active ? "38px" : "14px",
+              borderRadius: "1px",
+              background: i === active ? "#C8601A" : "rgba(255,255,255,0.26)",
+              transition: "all 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
+              border: "none",
+              padding: 0,
+              cursor: "pointer",
+            }}
+          />
+        ))}
+      </div>
+
+      {/* ── Bottom content zone ───────────────────────── */}
+      <div className="absolute inset-x-0 bottom-0 z-10">
+        <div className="max-w-[1400px] mx-auto w-full px-6 lg:px-10 pb-14 lg:pb-20">
 
           {/* Eyebrow */}
-          <p className="text-[10px] uppercase tracking-[0.24em] font-bold mb-4 flex items-center gap-3" style={{ color: "#E8895A" }}>
+          <p
+            className="text-[10px] uppercase tracking-[0.24em] font-bold mb-5 flex items-center gap-3"
+            style={{ color: "#E8895A" }}
+          >
             <span className="inline-block w-7 h-px" style={{ background: "#C8601A" }} />
             {s.eyebrow}
           </p>
 
-          {/* H1 — inline flow, no forced <br />, orange second phrase same weight */}
+          {/* H1 */}
           <h1
-            className="max-w-[680px]"
+            className="max-w-[820px]"
             style={{
-              fontSize: "clamp(2.6rem, 3.5vw, 4.5rem)",
+              fontSize: "clamp(3.2rem, 5.5vw, 6.5rem)",
               fontWeight: 800,
-              lineHeight: 1.06,
-              letterSpacing: "-0.04em",
+              lineHeight: 1.0,
+              letterSpacing: "-0.045em",
               color: "white",
             }}
           >
@@ -171,18 +191,18 @@ export default function HeroSlideshow() {
 
           {/* Body */}
           <p
-            className="text-white/72 max-w-[480px] mt-4 leading-relaxed"
-            style={{ fontSize: "clamp(13px, 1.1vw, 15px)" }}
+            className="max-w-[500px] mt-5 leading-relaxed"
+            style={{ fontSize: "clamp(13px, 1.1vw, 15px)", color: "rgba(255,255,255,0.62)" }}
           >
             {s.body}
           </p>
 
-          {/* CTAs + dots */}
-          <div className="mt-6 flex flex-wrap gap-3 items-center">
+          {/* CTAs */}
+          <div className="mt-8 flex flex-wrap gap-3 items-center">
             <Link
               href={s.cta1.href}
-              className="group inline-flex items-center gap-2 bg-[#C8601A] text-white px-6 py-3 text-[13px] font-bold tracking-[0.02em] hover:bg-[#A84F15] transition-colors rounded-lg"
-              style={{ boxShadow: "0 4px 18px rgba(200,96,26,0.38)" }}
+              className="group inline-flex items-center gap-2 bg-[#C8601A] text-white px-7 py-3.5 text-[13px] font-bold tracking-[0.02em] hover:bg-[#A84F15] transition-colors rounded-lg"
+              style={{ boxShadow: "0 4px 24px rgba(200,96,26,0.42)" }}
             >
               {s.cta1.label}
               <svg
@@ -194,13 +214,13 @@ export default function HeroSlideshow() {
             </Link>
             <Link
               href={s.cta2.href}
-              className="inline-flex items-center gap-2 border border-white/22 text-white px-6 py-3 text-[13px] font-bold hover:border-white/55 hover:bg-white/[0.08] transition-all rounded-lg"
+              className="inline-flex items-center gap-2 border border-white/22 text-white px-7 py-3.5 text-[13px] font-bold hover:border-white/55 hover:bg-white/[0.08] transition-all rounded-lg"
             >
               {s.cta2.label}
             </Link>
 
-            {/* Indicator dots */}
-            <div className="ml-auto hidden lg:flex items-center gap-2">
+            {/* Dot indicators — mobile only */}
+            <div className="ml-auto lg:hidden flex items-center gap-2">
               {SLIDES.map((_, i) => (
                 <button
                   key={i}
@@ -222,53 +242,52 @@ export default function HeroSlideshow() {
           </div>
         </div>
 
-        {/* ── Thumbnail strip ───────────────────────────────── */}
-        <div className="grid grid-cols-3">
+        {/* ── Slim label strip (replaces photo thumbnail grid) ── */}
+        <div
+          className="grid grid-cols-3"
+          style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}
+        >
           {SLIDES.map((slide, i) => (
             <button
               key={slide.id}
               onClick={() => goTo(i)}
               aria-label={`View ${slide.label}`}
               aria-current={i === active ? "true" : undefined}
-              className="relative overflow-hidden group cursor-pointer"
-              style={{ height: "72px" }}
+              className="relative flex items-center justify-center py-4 cursor-pointer transition-colors"
+              style={{
+                background: i === active ? "rgba(200,96,26,0.12)" : "rgba(0,0,0,0.52)",
+                backdropFilter: "blur(6px)",
+              }}
             >
-              <Image
-                src={slide.thumbImage}
-                alt={slide.label}
-                fill
-                sizes="33vw"
-                className="object-cover transition-transform duration-500 group-hover:scale-[1.05]"
-                style={{ objectPosition: "50% 60%" }}
-              />
-              {/* Scrim */}
+              {/* Active top bar */}
               <div
-                className="absolute inset-0"
+                className="absolute top-0 left-0 right-0 h-[2px]"
                 style={{
-                  background: i === active
-                    ? "rgba(0,0,0,0.35)"
-                    : "rgba(0,0,0,0.58)",
-                  transition: "background 0.3s ease",
+                  background: "#C8601A",
+                  opacity: i === active ? 1 : 0,
+                  transition: "opacity 0.3s ease",
                 }}
               />
-              {/* Active orange top bar */}
+              {/* Column separator */}
               <div
-                className="absolute top-0 left-0 right-0 h-[3px] bg-[#C8601A] origin-left"
-                style={{
-                  transform: i === active ? "scaleX(1)" : "scaleX(0)",
-                  transition: "transform 0.4s ease",
-                }}
+                className="absolute inset-y-0 right-0 w-px"
+                style={{ background: "rgba(255,255,255,0.07)" }}
               />
-              {/* Tile separator */}
-              <div className="absolute inset-y-0 right-0 w-px" style={{ background: "rgba(0,0,0,0.35)" }} />
-              {/* Label */}
-              <div className="absolute inset-0 flex items-center justify-center">
+              <div className="flex items-center gap-2">
                 <span
-                  className="text-[9px] font-bold uppercase tracking-[0.14em] text-center px-2"
+                  className="text-[9px] font-black uppercase tracking-[0.20em]"
                   style={{
-                    color: i === active ? "#F0B28A" : "rgba(255,255,255,0.70)",
-                    transition: "color 0.3s ease",
-                    textShadow: "0 1px 3px rgba(0,0,0,0.7)",
+                    color: i === active ? "#E8895A" : "rgba(255,255,255,0.32)",
+                    transition: "color 0.3s",
+                  }}
+                >
+                  0{i + 1}
+                </span>
+                <span
+                  className="text-[9px] font-semibold uppercase tracking-[0.13em] hidden sm:block"
+                  style={{
+                    color: i === active ? "rgba(255,255,255,0.88)" : "rgba(255,255,255,0.38)",
+                    transition: "color 0.3s",
                   }}
                 >
                   {slide.label}
