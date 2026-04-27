@@ -14,7 +14,6 @@ const projectTypes = [
   "Other / Not Sure",
 ]
 
-// Underline-style field — luxury brand form treatment
 const field = "w-full pb-3 border-b border-[#E2DDD8] bg-transparent text-[14px] text-[#111111] placeholder-[#C0BAB3] focus:border-[#C8601A] focus:outline-none transition-colors duration-200"
 const label = "block text-[10px] font-bold text-[#767676] uppercase tracking-[0.18em] mb-2"
 
@@ -46,7 +45,7 @@ export default function ContactPage() {
             }}
           >
             Let&apos;s{" "}
-            <em style={{ fontStyle: "italic", color: "#C8601A" }}>Talk.</em>
+            <span style={{ color: "#C8601A" }}>Talk.</span>
           </h1>
           <p className="text-[16px] mt-5 max-w-lg leading-relaxed text-[#5A5A5A]">
             Free site visit. Written quote in 48 hours. We serve Metro Vancouver
@@ -159,7 +158,7 @@ export default function ContactPage() {
           <div>
             {submitted ? (
               <div className="flex flex-col items-start py-16">
-                <div className="w-12 h-12 flex items-center justify-center mb-6" style={{ background: "rgba(200,96,26,0.08)" }}>
+                <div className="w-12 h-12 flex items-center justify-center mb-6 rounded-lg" style={{ background: "rgba(200,96,26,0.08)" }}>
                   <svg className="w-5 h-5" fill="none" stroke="#C8601A" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                   </svg>
@@ -266,14 +265,14 @@ export default function ContactPage() {
                   <input type="text" name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
 
                   {error && (
-                    <p className="text-sm text-red-600 bg-red-50 border border-red-200 px-4 py-3">{error}</p>
+                    <p className="text-sm text-red-600 bg-red-50 border border-red-200 px-4 py-3 rounded">{error}</p>
                   )}
 
                   <div className="pt-2">
                     <button
                       type="submit"
                       disabled={loading}
-                      className="group inline-flex items-center gap-2 bg-[#C8601A] hover:bg-[#A84F15] text-white px-8 py-4 text-[13px] font-bold tracking-[0.02em] uppercase transition-colors disabled:opacity-60"
+                      className="group inline-flex items-center gap-2 bg-[#C8601A] hover:bg-[#A84F15] text-white px-8 py-4 text-[13px] font-bold tracking-[0.02em] uppercase transition-colors disabled:opacity-60 rounded-lg"
                       style={{ boxShadow: "0 4px 24px rgba(200,96,26,0.25)" }}
                     >
                       {loading ? "Sending…" : "Send Project Details"}

@@ -67,7 +67,6 @@ export default function AboutPage() {
             <span className="inline-block w-8 h-px" style={{ background: "#C8601A" }} />
             About Square One
           </p>
-          {/* H1 — color in style prop: global CSS h1{color:#111} beats className="text-white" */}
           <h1
             style={{
               fontSize: "clamp(2.8rem, 6vw, 5rem)",
@@ -79,9 +78,7 @@ export default function AboutPage() {
             }}
           >
             BC&apos;s Surface{" "}
-            <em style={{ fontStyle: "italic", fontWeight: 700, color: "#E8895A" }}>
-              Specialists
-            </em>{" "}
+            <span style={{ color: "#E8895A" }}>Specialists</span>{" "}
             Since 2000.
           </h1>
         </div>
@@ -198,11 +195,6 @@ export default function AboutPage() {
       {/* ── 4 stats — white bg ── */}
       <section className="bg-white border-b border-[#E2DDD8]">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-14 lg:py-16">
-          {/*
-            Explicit per-cell borders instead of divide-x:
-            divide-x on a 2-col mobile grid bleeds border-left onto the
-            first item of row 2, which sits flush at the row's left edge.
-          */}
           <div className="grid grid-cols-2 lg:grid-cols-4">
             {stats.map((s, i) => (
               <div
@@ -211,11 +203,8 @@ export default function AboutPage() {
                   "flex flex-col items-start px-8 lg:px-12",
                   i === 0 ? "pl-0 lg:pl-0" : "",
                   i === stats.length - 1 ? "pr-0 lg:pr-0" : "",
-                  // Mobile 2-col: right border on left-column items (0 and 2)
                   i === 0 || i === 2 ? "border-r border-[#E2DDD8]" : "",
-                  // Mobile: top border + spacing on row-2 items; reset on desktop
                   i >= 2 ? "border-t border-[#E2DDD8] lg:border-t-0 mt-8 pt-8 lg:mt-0 lg:pt-0" : "",
-                  // Desktop: left border on items 1, 2, 3
                   i > 0 ? "lg:border-l lg:border-[#E2DDD8]" : "",
                 ].filter(Boolean).join(" ")}
               >
@@ -289,7 +278,7 @@ export default function AboutPage() {
                 {["Greater Vancouver", "Fraser Valley", "Sunshine Coast", "Vancouver Island", "Gulf Islands"].map((tag) => (
                   <span
                     key={tag}
-                    className="text-[12px] font-semibold px-3 py-1.5 border border-[#E2DDD8] text-[#5A5A5A]"
+                    className="text-[12px] font-semibold px-3 py-1.5 border border-[#E2DDD8] text-[#5A5A5A] rounded"
                   >
                     {tag}
                   </span>
@@ -316,7 +305,7 @@ export default function AboutPage() {
               </p>
               <Link
                 href="/contact"
-                className="inline-flex items-center gap-2 bg-[#C8601A] hover:bg-[#A84F15] text-white px-6 py-3 text-[13px] font-bold tracking-[0.02em] uppercase transition-colors"
+                className="inline-flex items-center gap-2 bg-[#C8601A] hover:bg-[#A84F15] text-white px-6 py-3 text-[13px] font-bold tracking-[0.02em] uppercase transition-colors rounded-lg"
               >
                 Work With Us
                 <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true">
@@ -351,15 +340,14 @@ export default function AboutPage() {
                   color: "white",
                 }}
               >
-                Your surface is ready.
-                <br />
-                <em style={{ fontStyle: "italic", fontWeight: 700, color: "#E8895A" }}>Let&apos;s talk.</em>
+                Your surface is ready.{" "}
+                <span style={{ color: "#E8895A" }}>Let&apos;s talk.</span>
               </h2>
             </div>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
                 href="/contact"
-                className="inline-flex items-center gap-2 bg-[#C8601A] hover:bg-[#A84F15] text-white px-8 py-4 text-[13px] font-bold tracking-[0.02em] uppercase transition-colors whitespace-nowrap"
+                className="inline-flex items-center gap-2 bg-[#C8601A] hover:bg-[#A84F15] text-white px-8 py-4 text-[13px] font-bold tracking-[0.02em] uppercase transition-colors whitespace-nowrap rounded-lg"
                 style={{ boxShadow: "0 4px 20px rgba(200,96,26,0.35)" }}
               >
                 Request a Quote
@@ -369,7 +357,7 @@ export default function AboutPage() {
               </Link>
               <Link
                 href="/projects"
-                className="inline-flex items-center gap-2 px-8 py-4 text-[13px] font-bold tracking-[0.02em] uppercase transition-all hover:bg-white/10 whitespace-nowrap"
+                className="inline-flex items-center gap-2 px-8 py-4 text-[13px] font-bold tracking-[0.02em] uppercase transition-all hover:bg-white/10 whitespace-nowrap rounded-lg"
                 style={{ border: "1px solid rgba(255,255,255,0.20)", color: "rgba(255,255,255,0.75)" }}
               >
                 View Our Work

@@ -105,7 +105,6 @@ export default function DriveywaysPage() {
             <span className="inline-block w-8 h-px" style={{ background: "#C8601A" }} />
             Residential Driveways · Vancouver & Vancouver Island
           </p>
-          {/* H1 — color in style prop: global CSS h1{color:#111} beats className="text-white" */}
           <h1
             className="mb-8"
             style={{
@@ -118,9 +117,7 @@ export default function DriveywaysPage() {
             }}
           >
             Driveways that earn{" "}
-            <em style={{ fontStyle: "italic", fontWeight: 700, color: "#E8895A" }}>
-              a second look.
-            </em>
+            <span style={{ color: "#E8895A" }}>a second look.</span>
           </h1>
           <p
             className="text-white/70 mb-10"
@@ -132,7 +129,7 @@ export default function DriveywaysPage() {
           <div className="flex flex-col sm:flex-row gap-4">
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 bg-[#C8601A] hover:bg-[#A84F15] text-white px-8 py-4 text-[13px] font-bold tracking-[0.06em] uppercase transition-colors"
+              className="inline-flex items-center gap-2 bg-[#C8601A] hover:bg-[#A84F15] text-white px-8 py-4 text-[13px] font-bold tracking-[0.06em] uppercase transition-colors rounded-lg"
               style={{ boxShadow: "0 4px 20px rgba(200,96,26,0.35)" }}
             >
               Request a Free Quote
@@ -142,7 +139,7 @@ export default function DriveywaysPage() {
             </Link>
             <Link
               href="/projects"
-              className="inline-flex items-center gap-2 px-8 py-4 text-[13px] font-bold tracking-[0.06em] uppercase transition-all hover:bg-white/10"
+              className="inline-flex items-center gap-2 px-8 py-4 text-[13px] font-bold tracking-[0.06em] uppercase transition-all hover:bg-white/10 rounded-lg"
               style={{ border: "1px solid rgba(255,255,255,0.22)", color: "rgba(255,255,255,0.80)" }}
             >
               See Driveway Projects
@@ -356,7 +353,7 @@ export default function DriveywaysPage() {
                 {["Penetrating rejuvenator", "Extends life 3–5 years", "Restores oxidized asphalt", "Pairs with StreetPrint"].map((t) => (
                   <span
                     key={t}
-                    className="text-[12px] font-semibold px-3 py-1.5 text-[#5A5A5A]"
+                    className="text-[12px] font-semibold px-3 py-1.5 text-[#5A5A5A] rounded"
                     style={{ border: "1px solid #E2DDD8" }}
                   >
                     {t}
@@ -366,7 +363,7 @@ export default function DriveywaysPage() {
             </div>
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 bg-[#C8601A] hover:bg-[#A84F15] text-white px-7 py-4 text-[13px] font-bold tracking-[0.06em] uppercase transition-colors whitespace-nowrap"
+              className="inline-flex items-center gap-2 bg-[#C8601A] hover:bg-[#A84F15] text-white px-7 py-4 text-[13px] font-bold tracking-[0.06em] uppercase transition-colors whitespace-nowrap rounded-lg"
             >
               Ask About DuraShield
             </Link>
@@ -478,7 +475,7 @@ export default function DriveywaysPage() {
             {galleryImages.map((img, i) => (
               <div
                 key={i}
-                className={`relative overflow-hidden bg-[#EDE9E3] group ${
+                className={`relative overflow-hidden bg-[#EDE9E3] group rounded ${
                   i === 0 ? "md:col-span-2 md:row-span-2" : ""
                 }`}
                 style={{ aspectRatio: i === 0 ? "1/1" : "4/3" }}
@@ -537,7 +534,7 @@ export default function DriveywaysPage() {
             {regions.map((r) => (
               <div
                 key={r.name}
-                className="bg-white p-4 text-center hover:border-[#C8601A]/40 transition-colors"
+                className="bg-white p-4 text-center hover:border-[#C8601A]/40 transition-colors rounded"
                 style={{ border: "1px solid #E2DDD8" }}
               >
                 <p className="font-bold text-[#111111] text-[13px]">{r.name}</p>
@@ -635,11 +632,8 @@ export default function DriveywaysPage() {
                   color: "white",
                 }}
               >
-                Your surface is ready.
-                <br />
-                <em style={{ fontStyle: "italic", fontWeight: 700, color: "#E8895A" }}>
-                  Let&apos;s talk.
-                </em>
+                Your surface is ready.{" "}
+                <span style={{ color: "#E8895A" }}>Let&apos;s talk.</span>
               </h2>
               <p
                 className="mt-6"
@@ -651,7 +645,7 @@ export default function DriveywaysPage() {
             <div className="flex flex-col sm:flex-row lg:flex-col gap-4">
               <Link
                 href="/contact"
-                className="inline-flex items-center gap-2 bg-[#C8601A] hover:bg-[#A84F15] text-white px-8 py-4 text-[13px] font-bold tracking-[0.06em] uppercase transition-colors whitespace-nowrap"
+                className="inline-flex items-center gap-2 bg-[#C8601A] hover:bg-[#A84F15] text-white px-8 py-4 text-[13px] font-bold tracking-[0.06em] uppercase transition-colors whitespace-nowrap rounded-lg"
                 style={{ boxShadow: "0 4px 20px rgba(200,96,26,0.35)" }}
               >
                 Request a Quote
@@ -661,7 +655,7 @@ export default function DriveywaysPage() {
               </Link>
               <a
                 href="tel:+16044669902"
-                className="inline-flex items-center gap-2 px-8 py-4 text-[13px] font-bold tracking-[0.06em] uppercase transition-all hover:bg-white/10 whitespace-nowrap"
+                className="inline-flex items-center gap-2 px-8 py-4 text-[13px] font-bold tracking-[0.06em] uppercase transition-all hover:bg-white/10 whitespace-nowrap rounded-lg"
                 style={{ border: "1px solid rgba(255,255,255,0.20)", color: "rgba(255,255,255,0.75)" }}
               >
                 Call 604 466 9902

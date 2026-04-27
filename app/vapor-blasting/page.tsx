@@ -124,7 +124,8 @@ export default function VaporBlastingPage() {
                   color: "white",
                 }}
               >
-                Surface restoration<br />done right.
+                Surface restoration{" "}
+                <span style={{ color: "#E8895A" }}>done right.</span>
               </h1>
 
               <p
@@ -139,7 +140,7 @@ export default function VaporBlastingPage() {
               <div className="flex flex-col sm:flex-row gap-3">
                 <Link href="#quote">
                   <span
-                    className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-bold tracking-[0.04em] text-white transition-all hover:brightness-110"
+                    className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-bold tracking-[0.04em] text-white transition-all hover:brightness-110 rounded-lg"
                     style={{ background: "linear-gradient(135deg, #C8601A 0%, #E8895A 100%)" }}
                   >
                     Request a Vapor Blast <Arrow />
@@ -147,7 +148,7 @@ export default function VaporBlastingPage() {
                 </Link>
                 <a href="#process">
                   <span
-                    className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-bold tracking-[0.04em] transition-all hover:bg-white/10"
+                    className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-bold tracking-[0.04em] transition-all hover:bg-white/10 rounded-lg"
                     style={{ border: "1px solid rgba(255,255,255,0.18)", color: "rgba(255,255,255,0.65)" }}
                   >
                     See the process
@@ -218,7 +219,7 @@ export default function VaporBlastingPage() {
               </p>
 
               {/* Comparison table */}
-              <div className="overflow-x-auto" style={{ border: "1px solid #E2DDD8" }}>
+              <div className="overflow-x-auto rounded-lg" style={{ border: "1px solid #E2DDD8" }}>
                 <table className="w-full text-sm">
                   <thead>
                     <tr style={{ background: "#0A0C10" }}>
@@ -298,7 +299,7 @@ export default function VaporBlastingPage() {
           </p>
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
             <h2 style={{ fontWeight: 800, fontSize: "clamp(2rem, 4vw, 3.5rem)", letterSpacing: "-0.04em", lineHeight: 0.95, color: "#111111" }}>
-              Four steps.<br />Documented every time.
+              Four steps. Documented every time.
             </h2>
             <p style={{ color: "#5A5A5A", maxWidth: "380px", lineHeight: 1.6 }}>
               Every job ships with a pre-blast assessment, mid-job inspection photos, and a
@@ -361,7 +362,7 @@ export default function VaporBlastingPage() {
             {results.map((result) => (
               <div
                 key={result.location}
-                className="p-6 transition-all"
+                className="p-6 transition-all rounded-lg"
                 style={{ border: "1px solid rgba(255,255,255,0.10)" }}
               >
                 <p
@@ -380,7 +381,7 @@ export default function VaporBlastingPage() {
                   {result.specs.map((spec) => (
                     <span
                       key={spec}
-                      className="text-[10px] font-semibold px-2.5 py-1"
+                      className="text-[10px] font-semibold px-2.5 py-1 rounded"
                       style={{
                         background: "rgba(255,255,255,0.06)",
                         color: "rgba(255,255,255,0.45)",
@@ -501,7 +502,7 @@ export default function VaporBlastingPage() {
             <form
               action="/api/contact"
               method="POST"
-              className="p-10"
+              className="p-10 rounded-lg"
               style={{ background: "white", border: "1px solid #E2DDD8" }}
             >
               <input type="hidden" name="formType" value="vapor-blasting" />
@@ -516,7 +517,7 @@ export default function VaporBlastingPage() {
                   <input
                     name="name" type="text" required
                     placeholder="Your name"
-                    className="w-full px-4 py-3 text-sm outline-none transition-colors"
+                    className="w-full px-4 py-3 text-sm outline-none transition-colors rounded"
                     style={{ border: "1px solid #E2DDD8" }}
                   />
                 </div>
@@ -530,7 +531,7 @@ export default function VaporBlastingPage() {
                   <input
                     name="phone" type="tel" required
                     placeholder="604-xxx-xxxx"
-                    className="w-full px-4 py-3 text-sm outline-none transition-colors"
+                    className="w-full px-4 py-3 text-sm outline-none transition-colors rounded"
                     style={{ border: "1px solid #E2DDD8" }}
                   />
                 </div>
@@ -545,7 +546,7 @@ export default function VaporBlastingPage() {
                 <input
                   name="email" type="email" required
                   placeholder="you@company.com"
-                  className="w-full px-4 py-3 text-sm outline-none transition-colors"
+                  className="w-full px-4 py-3 text-sm outline-none transition-colors rounded"
                   style={{ border: "1px solid #E2DDD8" }}
                 />
               </div>
@@ -559,7 +560,7 @@ export default function VaporBlastingPage() {
                   </label>
                   <select
                     name="projectType" required
-                    className="w-full px-4 py-3 text-sm outline-none transition-colors bg-white"
+                    className="w-full px-4 py-3 text-sm outline-none transition-colors bg-white rounded"
                     style={{ border: "1px solid #E2DDD8" }}
                   >
                     <option value="">Select project type</option>
@@ -582,7 +583,7 @@ export default function VaporBlastingPage() {
                   <input
                     name="city" type="text" required
                     placeholder="Nanaimo, Victoria, Kelowna…"
-                    className="w-full px-4 py-3 text-sm outline-none transition-colors"
+                    className="w-full px-4 py-3 text-sm outline-none transition-colors rounded"
                     style={{ border: "1px solid #E2DDD8" }}
                   />
                 </div>
@@ -597,13 +598,13 @@ export default function VaporBlastingPage() {
                 <textarea
                   name="message" rows={4}
                   placeholder="Surface area, substrate type, current condition, any access constraints…"
-                  className="w-full px-4 py-3 text-sm outline-none transition-colors resize-none"
+                  className="w-full px-4 py-3 text-sm outline-none transition-colors resize-none rounded"
                   style={{ border: "1px solid #E2DDD8" }}
                 />
               </div>
               <button
                 type="submit"
-                className="w-full py-4 text-sm font-bold tracking-[0.08em] uppercase text-white transition-all hover:brightness-110"
+                className="w-full py-4 text-sm font-bold tracking-[0.08em] uppercase text-white transition-all hover:brightness-110 rounded-lg"
                 style={{ background: "linear-gradient(135deg, #C8601A 0%, #E8895A 100%)" }}
               >
                 Get a Vapor Blasting Quote →
