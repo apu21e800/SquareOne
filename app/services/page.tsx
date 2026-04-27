@@ -86,9 +86,7 @@ export default function ServicesPage() {
               color: "#111111",
             }}
           >
-            Decorative Pavement
-            <br />
-            <em style={{ fontStyle: "italic", fontWeight: 700, color: "#C8601A" }}>Services.</em>
+            Decorative Pavement{" "}<span style={{ color: "#C8601A" }}>Services.</span>
           </h1>
           <p className="text-[17px] mt-6 max-w-xl leading-relaxed" style={{ color: "#5A5A5A" }}>
             BC&apos;s decorative pavement studio since 2000. From stamped asphalt crosswalks to mobile
@@ -120,7 +118,7 @@ export default function ServicesPage() {
                       </span>
                       {service.featured && (
                         <span
-                          className="font-bold uppercase px-2.5 py-1"
+                          className="font-bold uppercase px-2.5 py-1 rounded"
                           style={{
                             fontSize: "9px",
                             letterSpacing: "0.18em",
@@ -155,7 +153,7 @@ export default function ServicesPage() {
                       {service.applications.map((app) => (
                         <span
                           key={app}
-                          className="font-bold uppercase"
+                          className="font-bold uppercase rounded"
                           style={{
                             fontSize: "9px",
                             letterSpacing: "0.14em",
@@ -232,15 +230,13 @@ export default function ServicesPage() {
                   color: "white",
                 }}
               >
-                Tell us about
-                <br />
-                <em style={{ fontStyle: "italic", fontWeight: 700, color: "#E8895A" }}>your project.</em>
+                Tell us about{" "}<span style={{ color: "#E8895A" }}>your project.</span>
               </h2>
             </div>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link href="/contact">
                 <span
-                  className="inline-flex items-center gap-2 px-10 py-4 text-sm font-bold tracking-[0.04em] uppercase text-white transition-all hover:brightness-110 whitespace-nowrap"
+                  className="inline-flex items-center gap-2 px-10 py-4 text-sm font-bold tracking-[0.04em] uppercase text-white transition-all hover:brightness-110 whitespace-nowrap rounded-lg"
                   style={{ background: "linear-gradient(135deg, #C8601A 0%, #E8895A 100%)" }}
                 >
                   Get a Free Consultation
@@ -248,7 +244,7 @@ export default function ServicesPage() {
               </Link>
               <a href="tel:6043098212">
                 <span
-                  className="inline-flex items-center gap-2 px-10 py-4 text-sm font-bold tracking-[0.04em] uppercase transition-all hover:bg-white/10 whitespace-nowrap"
+                  className="inline-flex items-center gap-2 px-10 py-4 text-sm font-bold tracking-[0.04em] uppercase transition-all hover:bg-white/10 whitespace-nowrap rounded-lg"
                   style={{ border: "1px solid rgba(255,255,255,0.18)", color: "rgba(255,255,255,0.75)" }}
                 >
                   604-309-8212

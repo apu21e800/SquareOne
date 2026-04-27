@@ -57,7 +57,7 @@ export default function BlogPage() {
             </div>
             <Link href="/contact">
               <span
-                className="inline-block px-7 py-3.5 text-sm font-semibold tracking-wide text-white transition-all hover:brightness-110"
+                className="inline-block px-7 py-3.5 text-sm font-semibold tracking-wide text-white transition-all hover:brightness-110 rounded-lg"
                 style={{
                   background: "linear-gradient(135deg, #C8601A 0%, #E8895A 100%)",
                 }}
@@ -95,7 +95,7 @@ export default function BlogPage() {
           </p>
           <Link href="/contact">
             <span
-              className="inline-block px-10 py-4 text-sm font-semibold tracking-wide text-white transition-all hover:brightness-110"
+              className="inline-block px-10 py-4 text-sm font-semibold tracking-wide text-white transition-all hover:brightness-110 rounded-lg"
               style={{
                 background: "linear-gradient(135deg, #C8601A 0%, #E8895A 100%)",
               }}
