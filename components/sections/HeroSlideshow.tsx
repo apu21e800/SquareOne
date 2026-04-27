@@ -13,7 +13,7 @@ const SLIDES = [
     eyebrow: "Municipal & Civic",
     h1a: "Where streets become",
     h1b: "civic landmarks.",
-    body: "Decorative crosswalks, roundabouts, and plazas that define community identity — and last 20+ years in BC's climate.",
+    body: "Decorative crosswalks, roundabouts, and plazas that define community identity — and last 20+ years in BC’s climate.",
     cta1: { label: "See Civic Projects", href: "/projects" },
     cta2: { label: "Request Spec Sheet", href: "/contact" },
   },
@@ -37,7 +37,7 @@ const SLIDES = [
     eyebrow: "Roads & Transit",
     h1a: "Infrastructure that",
     h1b: "moves communities.",
-    body: "Bus lanes, bike corridors, and transit plazas. Vision Zero–compliant, AODA-ready, and engineered for BC's traffic demands.",
+    body: "Bus lanes, bike corridors, and transit plazas. Vision Zero–compliant, AODA-ready, and engineered for BC’s traffic demands.",
     cta1: { label: "Road Projects", href: "/projects" },
     cta2: { label: "Contact Us", href: "/contact" },
   },
@@ -54,7 +54,6 @@ export default function HeroSlideshow() {
   const prev = useCallback(() => goTo(active - 1), [active, goTo])
   const next = useCallback(() => goTo(active + 1), [active, goTo])
 
-  // Auto-advance — functional setState avoids stale closure
   useEffect(() => {
     if (paused) return
     const t = setInterval(() => setActive((a) => (a + 1) % SLIDES.length), 6000)
@@ -71,7 +70,7 @@ export default function HeroSlideshow() {
       onMouseLeave={() => setPaused(false)}
       aria-label="Hero image slideshow"
     >
-      {/* ── Background images — cross-fade ────────────────────────────── */}
+      {/* ── Background images — cross-fade ──────────────────────────── */}
       {SLIDES.map((slide, i) => (
         <div
           key={slide.id}
@@ -85,27 +84,28 @@ export default function HeroSlideshow() {
             priority={i === 0}
             sizes="100vw"
             className="object-cover"
+            style={{ objectPosition: "50% 65%" }}
           />
         </div>
       ))}
 
-      {/* ── Gradient overlays ────────────────────────────────── */}
-      {/* Main vertical vignette */}
+      {/* ── Gradient overlays ───────────────────────────────── */}
+      {/* Main vertical vignette — deeper blacks to anchor the bottom */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
           zIndex: 2,
           background:
-            "linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.05) 25%, rgba(0,0,0,0.55) 60%, rgba(0,0,0,0.92) 100%)",
+            "linear-gradient(180deg, rgba(0,0,0,0.22) 0%, rgba(0,0,0,0.06) 28%, rgba(0,0,0,0.62) 62%, rgba(0,0,0,0.96) 100%)",
         }}
       />
-      {/* Horizontal vignette — desktop */}
+      {/* Horizontal vignette — extends further right on wide displays */}
       <div
-        className="absolute inset-0 pointer-events-none hidden lg:block"
+        className="absolute inset-0 pointer-events-none"
         style={{
           zIndex: 2,
           background:
-            "linear-gradient(90deg, rgba(0,0,0,0.60) 0%, rgba(0,0,0,0.20) 45%, rgba(0,0,0,0) 68%)",
+            "linear-gradient(90deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.40) 30%, rgba(0,0,0,0.15) 55%, rgba(0,0,0,0.04) 72%, rgba(0,0,0,0) 85%)",
         }}
       />
       {/* Orange atmospheric bloom — bottom-left warm glow */}
@@ -114,11 +114,11 @@ export default function HeroSlideshow() {
         style={{
           zIndex: 2,
           background:
-            "radial-gradient(ellipse at 0% 100%, rgba(200,96,26,0.22) 0%, transparent 52%)",
+            "radial-gradient(ellipse at 0% 100%, rgba(200,96,26,0.24) 0%, transparent 50%)",
         }}
       />
 
-      {/* ── Chevron arrows ──────────────────────────────────── */}
+      {/* ── Chevron arrows ────────────────────────────────── */}
       <button
         onClick={prev}
         aria-label="Previous slide"
@@ -140,19 +140,18 @@ export default function HeroSlideshow() {
         </svg>
       </button>
 
-      {/* ── Bottom content zone ──────────────────────────────── */}
+      {/* ── Bottom content zone ─────────────────────────────── */}
       <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col">
 
-        {/* Main text + CTAs */}
         <div className="max-w-[1400px] mx-auto w-full px-6 lg:px-10 pb-5 lg:pb-7 pt-6">
           <p className="text-[10px] uppercase tracking-[0.22em] text-[#E8895A] font-bold mb-5 flex items-center gap-3">
             <span className="inline-block w-8 h-px bg-[#C8601A]" />
             {s.eyebrow}
           </p>
 
-          {/* H1 — no italics, second line in bold orange */}
+          {/* H1 — no italics, second line in bold orange, same weight 800 */}
           <h1
-            className="max-w-[760px]"
+            className="max-w-[820px]"
             style={{
               fontSize: "clamp(3.5rem, 7vw, 7rem)",
               fontWeight: 800,
@@ -168,7 +167,10 @@ export default function HeroSlideshow() {
             </span>
           </h1>
 
-          <p className="text-white/75 text-[15px] lg:text-base max-w-[520px] mt-5 leading-relaxed">
+          <p
+            className="text-white/75 max-w-[520px] mt-5 leading-relaxed"
+            style={{ fontSize: "clamp(14px, 1.2vw, 16px)" }}
+          >
             {s.body}
           </p>
 
@@ -216,7 +218,7 @@ export default function HeroSlideshow() {
           </div>
         </div>
 
-        {/* ── Bottom thumbnail strip ────────────────────────────── */}
+        {/* ── Bottom thumbnail strip ──────────────────────────── */}
         <div className="grid grid-cols-3">
           {SLIDES.map((slide, i) => (
             <button
@@ -233,14 +235,15 @@ export default function HeroSlideshow() {
                 fill
                 sizes="33vw"
                 className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                style={{ objectPosition: "50% 60%" }}
               />
               {/* Darkening overlay */}
               <div
                 className="absolute inset-0 transition-opacity duration-300"
                 style={{
                   background:
-                    "linear-gradient(180deg, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.62) 100%)",
-                  opacity: i === active ? 0.65 : 1,
+                    "linear-gradient(180deg, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.65) 100%)",
+                  opacity: i === active ? 0.7 : 1,
                 }}
               />
               {/* Active orange bar — top */}
