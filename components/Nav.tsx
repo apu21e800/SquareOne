@@ -81,7 +81,7 @@ function ProductsPanel({ onClose }: { onClose: () => void }) {
       <div className="max-w-[1500px] mx-auto px-8 py-10">
         <div className="grid grid-cols-[1fr_360px] gap-14">
           <div>
-            <p className="text-[10px] uppercase tracking-[0.22em] text-[#8C8C8C] font-bold mb-7">Product Lines</p>
+            <p className="text-[10px] uppercase tracking-[0.22em] font-bold mb-7" style={{ color: "#767676" }}>Product Lines</p>
             <div className="grid grid-cols-3 gap-10">
               {productColumns.map((col) => (
                 <div key={col.category}>
@@ -153,7 +153,7 @@ function ServicesPanel({ onClose }: { onClose: () => void }) {
       <div className="max-w-[1500px] mx-auto px-8 py-10">
         <div className="grid grid-cols-[1fr_360px] gap-14">
           <div>
-            <p className="text-[10px] uppercase tracking-[0.22em] text-[#8C8C8C] font-bold mb-7">What We Do</p>
+            <p className="text-[10px] uppercase tracking-[0.22em] font-bold mb-7" style={{ color: "#767676" }}>What We Do</p>
             <div className="grid grid-cols-2 gap-2">
               {serviceItems.map((item) => (
                 <Link key={item.href} href={item.href} onClick={onClose}

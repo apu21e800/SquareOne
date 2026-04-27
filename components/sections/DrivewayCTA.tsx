@@ -27,7 +27,7 @@ export default function DrivewayCTA() {
               Residential &amp; Strata
             </p>
             <h2 className="text-4xl sm:text-5xl font-black text-[#333333] leading-[1.05] mb-5">
-              Decorative Driveways<br />
+              Decorative Driveways{" "}
               <span className="text-[#D66620]">Done Right.</span>
             </h2>
             <p className="text-[#626262] text-lg leading-relaxed mb-8 max-w-md">

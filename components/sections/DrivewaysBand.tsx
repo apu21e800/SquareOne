@@ -81,7 +81,7 @@ export default function DrivewaysBand() {
             Get a Quote
           </Link>
         </div>
-        <p className="mt-7 text-[11px] uppercase tracking-[0.18em] text-[#8C8C8C] font-medium">
+        <p className="mt-7 text-[11px] uppercase tracking-[0.18em] font-medium" style={{ color: "#767676" }}>
           <span aria-label="Five stars">★★★★★</span> &nbsp; Metro Vancouver · Victoria · Vancouver Island
         </p>
       </div>

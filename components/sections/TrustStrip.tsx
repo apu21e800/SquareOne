@@ -35,7 +35,7 @@ export default function TrustStrip() {
             </div>
             <div>
               <p className="text-[#1A1A1A] text-sm font-bold leading-tight">Square One Paving</p>
-              <p className="text-[#888] text-[11px] leading-none mt-0.5">BC&apos;s Leading Decorative Pavement Installer</p>
+              <p className="text-[11px] leading-none mt-0.5" style={{ color: "#767676" }}>BC&apos;s Leading Decorative Pavement Installer</p>
             </div>
           </div>
 

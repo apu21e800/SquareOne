@@ -5,19 +5,19 @@
 const testimonials = [
   {
     quote:
-      "Square One transformed our strata’s parkade entrance into something we’re genuinely proud of. The StreetPrint work held through two winters without any cracking.",
+      "Square One transformed our strata's parkade entrance into something we're genuinely proud of. The StreetPrint work held through two winters without any cracking.",
     name: "D. Mackenzie",
     context: "Strata Council President, Burnaby BC",
   },
   {
     quote:
-      "Jan’s team was precise, professional, and finished two days ahead of schedule. The municipal inspector complimented the thermoplastic quality on day one.",
+      "Jan's team was precise, professional, and finished two days ahead of schedule. The municipal inspector complimented the thermoplastic quality on day one.",
     name: "R. Sharma",
     context: "City of Surrey, Public Works Coordinator",
   },
   {
     quote:
-      "We’ve used Square One on three commercial properties now. Their vapor blasting prep work alone is worth it — the coatings adhere perfectly every time.",
+      "We've used Square One on three commercial properties now. Their vapor blasting prep work alone is worth it — the coatings adhere perfectly every time.",
     name: "M. Vandenberg",
     context: "Commercial Property Manager, Victoria BC",
   },
@@ -45,7 +45,7 @@ export default function Testimonials() {
               }}
             >
               Proven across{" "}
-              <em style={{ fontStyle: "italic", fontWeight: 700, color: "#C8601A" }}>BC.</em>
+              <span style={{ color: "#C8601A" }}>BC.</span>
             </h2>
             {/* Google rating strip */}
             <div className="flex items-center gap-2.5 pb-1">
@@ -76,7 +76,7 @@ export default function Testimonials() {
               </p>
               <div className="w-6 h-px bg-[#E2DDD8] mb-4" />
               <p className="text-[#111111] text-sm font-semibold">{t.name}</p>
-              <p className="text-[#8C8C8C] text-[11px] tracking-[0.12em] uppercase mt-1">{t.context}</p>
+              <p className="text-[11px] tracking-[0.12em] uppercase mt-1" style={{ color: "#767676" }}>{t.context}</p>
             </div>
           ))}
         </div>
@@ -87,7 +87,7 @@ export default function Testimonials() {
             href="https://g.page/r/squareonepaving/review"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 border border-[#111111] hover:bg-[#111111] hover:text-white text-[#111111] px-7 py-4 text-[13px] font-bold tracking-[0.02em] uppercase transition-all duration-200"
+            className="inline-flex items-center gap-2 border border-[#111111] hover:bg-[#111111] hover:text-white text-[#111111] px-7 py-4 text-[13px] font-bold tracking-[0.02em] uppercase transition-all duration-200 rounded-lg"
           >
             See All Reviews
             <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true">
