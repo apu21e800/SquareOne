@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import Hero from "@/components/sections/Hero"
+import HeroSlideshow from "@/components/sections/HeroSlideshow"
 import StatsBar from "@/components/sections/StatsBar"
 import WhySquareOne from "@/components/sections/WhySquareOne"
 import ServicesGrid from "@/components/sections/ServicesGrid"
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <main>
-      <Hero />
+      <HeroSlideshow />
       <StatsBar />
       <WhySquareOne />
       <ServicesGrid />
