@@ -13,37 +13,23 @@ const sections = [
   },
   {
     heading: "2. Use of the Site",
-    body: `You may use this Site for lawful purposes only. You agree not to:
-
-- Use the Site in any way that violates applicable federal, provincial, or local laws
-- Transmit unsolicited commercial communications (spam)
-- Attempt to gain unauthorized access to any portion of the Site or its related systems
-- Use automated tools to scrape, crawl, or extract data from the Site without written permission
-- Reproduce, republish, or redistribute any content without prior written consent`,
+    body: `You may use this Site for lawful purposes only. You agree not to:\n\n- Use the Site in any way that violates applicable federal, provincial, or local laws\n- Transmit unsolicited commercial communications (spam)\n- Attempt to gain unauthorized access to any portion of the Site or its related systems\n- Use automated tools to scrape, crawl, or extract data from the Site without written permission\n- Reproduce, republish, or redistribute any content without prior written consent`,
   },
   {
     heading: "3. Intellectual Property",
-    body: `All content on this Site — including text, images, service descriptions, logos, graphics, and design — is the property of Square One Paving or its licensors and is protected by Canadian and international copyright law.
-
-Product names including TrafficPatterns, StreetPrint, StreetBond, DecoMark, DuraTherm, and other referenced product systems may be trademarks of their respective owners. Nothing on this Site grants any license or right to use any trademark without prior written permission.`,
+    body: `All content on this Site — including text, images, service descriptions, logos, graphics, and design — is the property of Square One Paving or its licensors and is protected by Canadian and international copyright law.\n\nProduct names including TrafficPatterns, StreetPrint, StreetBond, DecoMark, DuraTherm, and other referenced product systems may be trademarks of their respective owners. Nothing on this Site grants any license or right to use any trademark without prior written permission.`,
   },
   {
     heading: "4. Service Information",
-    body: `Service descriptions, performance data, and application guidelines are provided for general information purposes. Actual performance may vary based on site conditions, climate, substrate type, application method, and maintenance practices.
-
-Square One Paving recommends consulting with our team before specifying services for any project.`,
+    body: `Service descriptions, performance data, and application guidelines are provided for general information purposes. Actual performance may vary based on site conditions, climate, substrate type, application method, and maintenance practices.\n\nSquare One Paving recommends consulting with our team before specifying services for any project.`,
   },
   {
     heading: "5. Disclaimer of Warranties",
-    body: `This Site and its content are provided "as is" without warranty of any kind, express or implied, including but not limited to warranties of merchantability, fitness for a particular purpose, or non-infringement.
-
-Square One Paving does not warrant that the Site will be error-free, uninterrupted, or free of viruses or other harmful components.`,
+    body: `This Site and its content are provided "as is" without warranty of any kind, express or implied, including but not limited to warranties of merchantability, fitness for a particular purpose, or non-infringement.\n\nSquare One Paving does not warrant that the Site will be error-free, uninterrupted, or free of viruses or other harmful components.`,
   },
   {
     heading: "6. Limitation of Liability",
-    body: `To the maximum extent permitted by applicable law, Square One Paving shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising out of or related to your use of this Site.
-
-Our total liability for any claim arising out of or relating to these Terms shall not exceed one hundred Canadian dollars (CAD $100).`,
+    body: `To the maximum extent permitted by applicable law, Square One Paving shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising out of or related to your use of this Site.\n\nOur total liability for any claim arising out of or relating to these Terms shall not exceed one hundred Canadian dollars (CAD $100).`,
   },
   {
     heading: "7. Links to Third-Party Sites",
@@ -51,17 +37,11 @@ Our total liability for any claim arising out of or relating to these Terms shal
   },
   {
     heading: "8. Governing Law",
-    body: `These Terms of Use are governed by the laws of the Province of British Columbia and the federal laws of Canada applicable therein, without regard to conflict of law principles.
-
-Any dispute arising out of or relating to these Terms shall be subject to the exclusive jurisdiction of the courts of British Columbia, Canada.`,
+    body: `These Terms of Use are governed by the laws of the Province of British Columbia and the federal laws of Canada applicable therein, without regard to conflict of law principles.\n\nAny dispute arising out of or relating to these Terms shall be subject to the exclusive jurisdiction of the courts of British Columbia, Canada.`,
   },
   {
     heading: "9. Contact",
-    body: `Questions about these Terms of Use may be directed to:
-
-Square One Paving
-Ladysmith, British Columbia
-info@squareonepaving.com | 604-309-8212`,
+    body: `Questions about these Terms of Use may be directed to:\n\nSquare One Paving\nLadysmith, British Columbia\ninfo@squareonepaving.com | 604-309-8212`,
   },
 ]
 
@@ -75,9 +55,9 @@ export default function TermsPage() {
         <h1 className="text-4xl sm:text-5xl font-bold text-[#2D2D2D] mb-3">
           Terms of Use
         </h1>
-        <p className="text-sm text-[#8B8680] mb-12">Last updated: March 2026</p>
+        <p className="text-sm text-[#626262] mb-12">Last updated: March 2026</p>
 
-        <p className="text-[#8B8680] leading-relaxed mb-12">
+        <p className="text-[#626262] leading-relaxed mb-12">
           Please read these Terms of Use carefully before using
           squareonepaving.com, operated by Square One Paving. These terms govern
           your access to and use of the Site.
@@ -92,7 +72,7 @@ export default function TermsPage() {
               <h2 className="text-xl font-bold text-[#2D2D2D] mb-4">
                 {section.heading}
               </h2>
-              <p className="text-sm text-[#8B8680] leading-relaxed whitespace-pre-line">
+              <p className="text-sm text-[#626262] leading-relaxed whitespace-pre-line">
                 {section.body}
               </p>
             </div>
