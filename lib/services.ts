@@ -126,7 +126,7 @@ export const services: Service[] = [
       "Eco-friendly water-based options",
       "Cost-effective for large areas",
     ],
-    imageUrl: "/images/products/streetbond/streetbond-red-waterfront-promenade-01.jpg",
+    imageUrl: "/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg",
   },
   {
     slug: "vapor-blasting",
