@@ -58,9 +58,10 @@ export const products: Product[] = [
       "Works on asphalt and concrete",
     ],
     applications: ["Bike Lanes", "Bus Priority Corridors", "Decorative Driveways", "Sports Courts", "Plazas", "School Zones", "Parking Lots"],
-    image: "/images/products/streetbond/streetbond-red-roundabout-mountains-01.jpg",
+    image: "/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg",
     galleryImages: [
-      "/images/products/streetbond/streetbond-red-roundabout-mountains-01.jpg",
+      "/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg",
+      "/images/products/streetbond/streetbond-multicolour-plaza-green-circles-01.jpg",
       "/images/products/streetbond/streetbond-driveway.jpg",
       "/images/products/streetbond/streetbond-multicolour-geometric-plaza-01.jpg",
     ],

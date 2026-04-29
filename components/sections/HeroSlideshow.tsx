@@ -8,8 +8,8 @@ const SLIDES = [
   {
     id: "municipal",
     label: "Crosswalks & Civic",
-    bgImage: "/images/products/streetbond/streetbond-red-roundabout-mountains-01.jpg",
-    bgPosition: "50% 70%",
+    bgImage: "/images/products/streetbond/streetbond-multicolour-plaza-green-circles-01.jpg",
+    bgPosition: "50% 50%",
     eyebrow: "Municipal & Civic",
     h1a: "Where streets become",
     h1b: "civic landmarks.",
@@ -70,7 +70,6 @@ export default function HeroSlideshow() {
       onMouseLeave={() => setPaused(false)}
       aria-label="Hero image slideshow"
     >
-      {/* ── Background images ─────────────────────────── */}
       {SLIDES.map((slide, i) => (
         <div
           key={slide.id}
@@ -89,7 +88,6 @@ export default function HeroSlideshow() {
         </div>
       ))}
 
-      {/* ── Gradient overlays — lighter than before ──────────── */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -115,7 +113,6 @@ export default function HeroSlideshow() {
         }}
       />
 
-      {/* ── Prev / Next arrows ────────────────────────── */}
       <button
         onClick={prev}
         aria-label="Previous slide"
@@ -137,7 +134,6 @@ export default function HeroSlideshow() {
         </svg>
       </button>
 
-      {/* ── Right-edge vertical progress bars (desktop) ──── */}
       <div
         className="hidden lg:flex absolute right-8 z-20 flex-col items-center gap-3"
         style={{ top: "50%", transform: "translateY(-50%)" }}
@@ -161,11 +157,8 @@ export default function HeroSlideshow() {
         ))}
       </div>
 
-      {/* ── Bottom content zone ───────────────────────── */}
       <div className="absolute inset-x-0 bottom-0 z-10">
         <div className="max-w-[1400px] mx-auto w-full px-6 lg:px-10 pb-12 lg:pb-16">
-
-          {/* Eyebrow */}
           <p
             className="text-[10px] uppercase tracking-[0.24em] font-bold mb-4 flex items-center gap-3"
             style={{ color: "#E8895A" }}
@@ -174,7 +167,6 @@ export default function HeroSlideshow() {
             {s.eyebrow}
           </p>
 
-          {/* H1 — toned down from 6.5rem to 5rem max */}
           <h1
             className="max-w-[720px]"
             style={{
@@ -189,7 +181,6 @@ export default function HeroSlideshow() {
             <span style={{ color: "#C8601A" }}>{s.h1b}</span>
           </h1>
 
-          {/* Body */}
           <p
             className="max-w-[480px] mt-4 leading-relaxed"
             style={{ fontSize: "clamp(13px, 1.1vw, 15px)", color: "rgba(255,255,255,0.65)" }}
@@ -197,7 +188,6 @@ export default function HeroSlideshow() {
             {s.body}
           </p>
 
-          {/* CTAs */}
           <div className="mt-7 flex flex-wrap gap-3 items-center">
             <Link
               href={s.cta1.href}
@@ -219,7 +209,6 @@ export default function HeroSlideshow() {
               {s.cta2.label}
             </Link>
 
-            {/* Dot indicators — mobile only */}
             <div className="ml-auto lg:hidden flex items-center gap-2">
               {SLIDES.map((_, i) => (
                 <button
@@ -242,7 +231,6 @@ export default function HeroSlideshow() {
           </div>
         </div>
 
-        {/* ── Slim label strip ─────────────────────────── */}
         <div
           className="grid grid-cols-3"
           style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}
