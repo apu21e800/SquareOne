@@ -11,7 +11,7 @@ export interface Project {
 }
 
 export const projects: Project[] = [
-  // ── Featured commercial case studies ────────────────────────────────────────
+  // ── Featured commercial case studies ──────────────────────────────────
 
   {
     title: "UBC & Musqueam Crosswalk",
@@ -23,7 +23,7 @@ export const projects: Project[] = [
     featured: true,
     excerpt:
       "Collaborative crosswalk at University Boulevard and Wesbrook Mall — UBC and Musqueam crests woven together in TrafficPatterns, acknowledging the campus stands on unceded Musqueam territory.",
-    imageUrl: "https://squareonepaving.com/wp-content/uploads/2024/11/IMG_5995-scaled.jpeg",
+    imageUrl: "/images/products/streetbond/streetbond-coloured-plaza-art-mural-01.jpg",
   },
   {
     title: "Joyce SkyTrain Station Public Art",
@@ -35,7 +35,7 @@ export const projects: Project[] = [
     featured: true,
     excerpt:
       "StreetBond colour coating across the concourse at Joyce SkyTrain Station, installed for TransLink. Public art by Renée Van Halm, installed during overnight non-revenue windows.",
-    imageUrl: "https://squareonepaving.com/wp-content/uploads/2025/07/Photo-2025-07-07-11-54-41-AM-1024x677.jpg",
+    imageUrl: "/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg",
   },
   {
     title: "Langley Events Centre — Circle of Life",
@@ -47,7 +47,7 @@ export const projects: Project[] = [
     featured: true,
     excerpt:
       "Circular motif by Drew and Elinor Atkins of Spring Salmon Studio, installed in StreetBond across the forecourt at Langley Events Centre. Indigenous public art at civic scale.",
-    imageUrl: "https://squareonepaving.com/wp-content/uploads/2024/11/GPTempDownload-1-scaled-e1731616674862-1024x621.jpg",
+    imageUrl: "/images/products/streetbond/streetbond-multicolour-plaza-green-circles-01.jpg",
   },
   {
     title: "Brighouse Station — TrafficPatternsXD",
@@ -59,7 +59,7 @@ export const projects: Project[] = [
     featured: true,
     excerpt:
       "TrafficPatternsXD install across pedestrian transition zones at Brighouse SkyTrain Station on No. 3 Road, Richmond. Heavy-duty thermoplastic for the Canada Line terminus.",
-    imageUrl: "https://squareonepaving.com/wp-content/uploads/2025/07/502639628_1112360040926014.jpg",
+    imageUrl: "/images/applications/bus-bike-lanes/red-bus-lane-tpxd-crosswalk-station-01.jpg",
   },
   {
     title: "Every Child Matters — New Westminster",
@@ -71,7 +71,7 @@ export const projects: Project[] = [
     featured: true,
     excerpt:
       "Every Child Matters pavement art for the National Day for Truth and Reconciliation. Design by Charliss Santos, installed in TrafficPatterns. Funded by Orange Shirt Society and Spirit of Children Society.",
-    imageUrl: "https://squareonepaving.com/wp-content/uploads/2023/09/every-child-matters-new-westminster.jpg",
+    imageUrl: "/images/products/streetbond/streetbond-compass-rose-decorative-asphalt-01.jpg",
   },
   {
     title: "Agnes Greenway — Rain Pierre",
@@ -83,7 +83,7 @@ export const projects: Project[] = [
     featured: true,
     excerpt:
       "Pavement art along the Agnes Greenway, adjacent to École Qayqayt. Design by Rain Pierre of Katzie First Nation, installed in TrafficPatterns.",
-    imageUrl: "https://squareonepaving.com/wp-content/uploads/2023/06/agnes-greenway-new-westminster.jpg",
+    imageUrl: "/images/applications/parks-paths/eagle-mural-courtyard-aerial-01.jpg",
   },
   {
     title: "South Langford Elementary",
@@ -95,7 +95,7 @@ export const projects: Project[] = [
     featured: true,
     excerpt:
       "DecoMark and TrafficPatterns install at South Langford Elementary, completed ahead of the September 2025 opening. Pavement branding, crosswalks, and safety markings for a new Island school.",
-    imageUrl: "https://squareonepaving.com/wp-content/uploads/2025/09/south-langford-elementary.jpg",
+    imageUrl: "/images/products/streetbond/streetbond-blue-schoolyard-pattern-01.jpg",
   },
   {
     title: "Little Italy Crosswalks — Commercial Drive",
@@ -107,7 +107,7 @@ export const projects: Project[] = [
     featured: true,
     excerpt:
       "TrafficPatterns crosswalks in green, white, and red — Italian flag colours rendered into the intersections of Commercial Drive for the City of Vancouver.",
-    imageUrl: "https://squareonepaving.com/wp-content/uploads/2024/08/little-italy-vancouver-crosswalks.jpg",
+    imageUrl: "/images/products/streetbond/streetbond-multicolour-grid-texture-detail-01.jpg",
   },
   {
     title: "Keswick Water Park — StreetBond 150 Recoat",
@@ -119,7 +119,7 @@ export const projects: Project[] = [
     featured: true,
     excerpt:
       "StreetBond 150 recoat at Keswick Water Park ahead of the 2024 season. Colour-matched refresh of the spray-pad surface for the City of Burnaby.",
-    imageUrl: "https://squareonepaving.com/wp-content/uploads/2024/06/keswick-waterpark-burnaby.jpg",
+    imageUrl: "/images/products/streetbond/streetbond-multicolour-splash-pad-01.jpg",
   },
   {
     title: "Downtown Mission — Streetscape",
@@ -131,10 +131,10 @@ export const projects: Project[] = [
     featured: true,
     excerpt:
       "StreetPrint stamped asphalt and StreetBond 150 in Pewter across downtown Mission's pedestrian crossings and decorative surfaces. Part of the District's downtown renewal program.",
-    imageUrl: "https://squareonepaving.com/wp-content/uploads/2025/04/mission-bc-streetscape.jpg",
+    imageUrl: "/images/products/streetbond/streetbond-stamped-pattern-wide-01.jpg",
   },
 
-  // ── Residential & Strata ────────────────────────────────────────────────────
+  // ── Residential & Strata ──────────────────────────────────────────────
 
   {
     title: "Bowen Island Residential Driveway",
@@ -187,7 +187,7 @@ export const projects: Project[] = [
     imageUrl: "/images/applications/crosswalks/crosswalk-1.jpg",
   },
 
-  // ── Transit & Bike Infrastructure ───────────────────────────────────────────
+  // ── Transit & Bike Infrastructure ──────────────────────────────────────
 
   {
     title: "BC Transit Priority Lane — Victoria",
@@ -223,7 +223,7 @@ export const projects: Project[] = [
     imageUrl: "/images/products/streetbond/streetbond-crosswalk-perspective-01.jpg",
   },
 
-  // ── Parking & Surface Prep ──────────────────────────────────────────────────
+  // ── Parking & Surface Prep ───────────────────────────────────────────────
 
   {
     title: "Westshore Parking Markings — Langford",
