@@ -93,7 +93,7 @@ export default async function BlogPostPage({ params }: Props) {
           <div className="relative w-full overflow-hidden" style={{ height: "clamp(280px, 55vh, 580px)" }}>
             <div
               className="absolute left-6 lg:left-10 top-0 w-16 h-[3px] z-10"
-              style={{ background: "linear-gradient(to right, #C8601A, #E8895A)" }}
+              style={{ background: "linear-gradient(to right, #F26430, #FF8A5C)" }}
             />
             <Image
               src={post.featured_image}
@@ -111,10 +111,10 @@ export default async function BlogPostPage({ params }: Props) {
             <div className="absolute bottom-0 left-0 right-0 px-6 sm:px-10 pb-10" style={{ maxWidth: "960px" }}>
               {post.category && (
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-6 h-px" style={{ background: "#E8895A" }} />
+                  <div className="w-6 h-px" style={{ background: "#FF8A5C" }} />
                   <p
                     className="font-semibold uppercase"
-                    style={{ fontSize: "11px", letterSpacing: "0.18em", color: "#E8895A" }}
+                    style={{ fontSize: "11px", letterSpacing: "0.18em", color: "#FF8A5C" }}
                   >
                     {post.category}
                   </p>
@@ -141,9 +141,9 @@ export default async function BlogPostPage({ params }: Props) {
 
           {/* Breadcrumb */}
           <nav className="flex items-center gap-2 text-xs mb-8" style={{ color: "#767676" }}>
-            <Link href="/" className="hover:text-[#C8601A] transition-colors">Home</Link>
+            <Link href="/" className="hover:text-[#F26430] transition-colors">Home</Link>
             <span>›</span>
-            <Link href="/blog" className="hover:text-[#C8601A] transition-colors">Blog</Link>
+            <Link href="/blog" className="hover:text-[#F26430] transition-colors">Blog</Link>
             <span>›</span>
             <span style={{ color: "#2C2C2C" }}>{post.title}</span>
           </nav>
@@ -187,13 +187,13 @@ export default async function BlogPostPage({ params }: Props) {
             style={{
               "--tw-prose-body": "#2C2C2C",
               "--tw-prose-headings": "#111111",
-              "--tw-prose-links": "#C8601A",
+              "--tw-prose-links": "#F26430",
               "--tw-prose-bold": "#111111",
               "--tw-prose-counters": "#5A5A5A",
-              "--tw-prose-bullets": "#C8601A",
+              "--tw-prose-bullets": "#F26430",
               "--tw-prose-hr": "#E2DDD8",
               "--tw-prose-quotes": "#111111",
-              "--tw-prose-quote-borders": "#C8601A",
+              "--tw-prose-quote-borders": "#F26430",
               "--tw-prose-captions": "#767676",
               "--tw-prose-code": "#111111",
               "--tw-prose-pre-code": "#F6F4F0",
@@ -208,11 +208,11 @@ export default async function BlogPostPage({ params }: Props) {
           {/* Mid-article CTA */}
           <div
             className="my-14 p-8"
-            style={{ background: "white", borderLeft: "3px solid #C8601A" }}
+            style={{ background: "white", borderLeft: "3px solid #F26430" }}
           >
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-6 h-px" style={{ background: "#C8601A" }} />
-              <p className="font-semibold uppercase" style={{ fontSize: "11px", letterSpacing: "0.18em", color: "#C8601A" }}>Working on a similar project?</p>
+              <div className="w-6 h-px" style={{ background: "#F26430" }} />
+              <p className="font-semibold uppercase" style={{ fontSize: "11px", letterSpacing: "0.18em", color: "#F26430" }}>Working on a similar project?</p>
             </div>
             <p className="text-base mb-5" style={{ color: "#5A5A5A" }}>
               We serve the Lower Mainland and Vancouver Island. Free site visit, written quote within 48 hours.
@@ -220,7 +220,7 @@ export default async function BlogPostPage({ params }: Props) {
             <Link href="/contact">
               <span
                 className="inline-block px-7 py-3 text-sm font-bold text-white uppercase tracking-[0.08em] transition-all hover:brightness-110 rounded-lg"
-                style={{ background: "linear-gradient(135deg, #C8601A 0%, #E8895A 100%)" }}
+                style={{ background: "linear-gradient(135deg, #F26430 0%, #FF8A5C 100%)" }}
               >
                 Request a Quote →
               </span>
@@ -232,7 +232,7 @@ export default async function BlogPostPage({ params }: Props) {
             className="flex items-center justify-between pt-8"
             style={{ borderTop: "1px solid #E2DDD8" }}
           >
-            <Link href="/blog" className="text-sm font-medium transition-colors hover:text-[#C8601A]" style={{ color: "#5A5A5A" }}>
+            <Link href="/blog" className="text-sm font-medium transition-colors hover:text-[#F26430]" style={{ color: "#5A5A5A" }}>
               ← Back to Blog
             </Link>
             <div className="flex items-center gap-4">
@@ -241,7 +241,7 @@ export default async function BlogPostPage({ params }: Props) {
                 href={`https://www.linkedin.com/sharing/share-offsite/?url=https://squareonepaving.com/blog/${slug}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs font-semibold transition-colors hover:text-[#C8601A]"
+                className="text-xs font-semibold transition-colors hover:text-[#F26430]"
                 style={{ color: "#5A5A5A" }}
               >
                 LinkedIn
@@ -250,7 +250,7 @@ export default async function BlogPostPage({ params }: Props) {
                 href={`https://www.facebook.com/sharer/sharer.php?u=https://squareonepaving.com/blog/${slug}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs font-semibold transition-colors hover:text-[#C8601A]"
+                className="text-xs font-semibold transition-colors hover:text-[#F26430]"
                 style={{ color: "#5A5A5A" }}
               >
                 Facebook
