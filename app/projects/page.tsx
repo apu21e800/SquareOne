@@ -5,16 +5,25 @@ import Image from "next/image"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
 import { projects } from "@/lib/projects"
+import Container from "@/components/ui/Container"
 
 const serviceFallback: Record<string, string> = {
   "Stamped Asphalt":         "/images/applications/private-driveways/estate-herringbone-gated-driveway-01.jpg",
-  "Decorative Coatings":     "/images/applications/bus-bike-lanes/red-bus-lane-long-perspective-01.jpg",
-  "Preformed Thermoplastic": "/images/products/traffic-patterns/trafficpatterns-1.jpg",
-  "Vapor Blasting":          "/images/products/durashield/durashield-1.jpg",
+  "Decorative Coatings":     "/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg",
+  "Preformed Thermoplastic": "/images/products/streetbond/streetbond-crosswalk-perspective-01.jpg",
+  "Vapor Blasting":          "/images/products/streetbond/streetbond-cobble-macro-surface-01.jpg",
 }
 
 const SERVICES = ["All", "Stamped Asphalt", "Decorative Coatings", "Preformed Thermoplastic", "Vapor Blasting"]
 const APP_TYPES = [...new Set(projects.map((p) => p.application))]
+
+function ArrowRight() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">
+      <path d="M1 7H13M13 7L7.5 1.5M13 7L7.5 12.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="square" />
+    </svg>
+  )
+}
 
 export default function ProjectsPage() {
   const [serviceFilter, setServiceFilter] = useState("All")
@@ -28,314 +37,179 @@ export default function ProjectsPage() {
     })
   }, [serviceFilter, appFilter])
 
-  const featured = useMemo(() => projects.filter((p) => p.featured).slice(0, 2), [])
-
   return (
-    <main style={{ background: "#F6F4F0", minHeight: "100vh" }}>
-
-      {/* ── Page header ────────────────────────────────────────── */}
-      <section className="relative bg-white border-b border-[#E2DDD8] pt-28 pb-16 px-6 sm:px-8">
-        <div
-          className="absolute left-6 lg:left-10 top-0 w-16 h-[3px]"
-          style={{ background: "linear-gradient(to right, #C8601A, #E8895A)" }}
-        />
-        <div className="max-w-[1500px] mx-auto">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
-            <div>
-              <div className="flex items-center gap-3 mb-5">
-                <div className="w-8 h-px" style={{ background: "#C8601A" }} />
-                <p className="font-semibold uppercase" style={{ fontSize: "11px", letterSpacing: "0.18em", color: "#C8601A" }}>Our Work</p>
-              </div>
-              <h1
-                style={{
-                  fontSize: "clamp(3rem, 6vw, 6rem)",
-                  fontWeight: 800,
-                  letterSpacing: "-0.05em",
-                  lineHeight: 0.9,
-                  color: "#111111",
-                }}
-              >
-                Projects
-              </h1>
-              <p className="text-[17px] mt-5 max-w-xl leading-relaxed" style={{ color: "#5A5A5A" }}>
-                Decorative pavement across British Columbia — from Vancouver&apos;s transit corridors
-                to Vancouver Island driveways and mountain-town civic plazas.
-              </p>
-            </div>
-            <Link href="/contact" className="flex-shrink-0">
-              <span
-                className="inline-flex items-center gap-2 px-7 py-4 text-sm font-bold tracking-[0.02em] text-white transition-all hover:brightness-110 rounded-lg"
-                style={{ background: "linear-gradient(135deg, #C8601A 0%, #E8895A 100%)", boxShadow: "0 4px 20px rgba(200,96,26,0.25)" }}
-              >
-                Start a Project
-                <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
-                  <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </span>
-            </Link>
-          </div>
+    <main className="bg-white min-h-screen">
+      <section className="relative bg-[#0A0A0A] overflow-hidden pt-32 pb-16 lg:pt-40 lg:pb-20">
+        <div className="absolute inset-0">
+          <Image src="/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg" alt="" aria-hidden fill sizes="100vw" className="object-cover opacity-30" />
         </div>
+        <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-[rgba(10,10,10,0.85)] via-[rgba(10,10,10,0.75)] to-[rgba(10,10,10,0.95)]" />
+        <div aria-hidden className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse 80% 50% at 50% 30%, rgba(242,100,48,0.10) 0%, transparent 60%)" }} />
+
+        <Container className="relative">
+          <div className="flex items-center gap-3 mb-7">
+            <span className="block w-1.5 h-1.5 rounded-full bg-[#F26430] pulse-dot" />
+            <span className="text-[11px] uppercase tracking-[0.28em] text-[#FF8A5C] font-bold">Selected Work</span>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 lg:gap-16 items-end">
+            <h1 className="text-white display-h max-w-3xl" style={{ fontSize: "clamp(2.5rem, 6vw, 5.5rem)" }}>
+              Projects across<br />
+              <span className="italic font-extralight text-white/95">British</span> <span className="text-[#F26430]">Columbia.</span>
+            </h1>
+            <div className="lg:max-w-md lg:pb-3">
+              <p className="text-white/70 text-[15px] lg:text-base leading-[1.7] font-light mb-6">
+                Decorative pavement installations from downtown Vancouver to Vancouver Island &mdash; municipal corridors, public art, transit hubs, residential estates, and surface restoration.
+              </p>
+              <Link href="/contact" className="group inline-flex items-center gap-3 bg-white text-[#0A0A0A] px-7 py-3.5 font-semibold text-[12px] tracking-[0.04em] uppercase rounded-none hover:bg-[#F26430] hover:text-white transition-colors duration-300">
+                Start a Project<ArrowRight />
+              </Link>
+            </div>
+          </div>
+        </Container>
       </section>
 
-      {/* ── Featured projects strip ─────────────────────────────────────── */}
-      {featured.length > 0 && (
-        <section className="bg-white border-b border-[#E2DDD8] px-6 sm:px-8 py-12">
-          <div className="max-w-[1500px] mx-auto">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-6 h-px" style={{ background: "#C8601A" }} />
-              <p className="font-bold uppercase" style={{ fontSize: "10px", letterSpacing: "0.22em", color: "#767676" }}>Featured Projects</p>
+      <div className="sticky top-[68px] z-30 bg-white/95 backdrop-blur-md border-b border-[#E2DDD8]">
+        <Container>
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-3 py-5">
+            <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
+              <span className="text-[10px] uppercase tracking-[0.22em] text-[#F26430] font-bold flex-shrink-0">Service</span>
+              {SERVICES.map((s) => (
+                <button key={s} onClick={() => setServiceFilter(s)}
+                  className={`text-[11.5px] font-semibold tracking-[0.04em] uppercase px-3.5 py-1.5 whitespace-nowrap transition-all flex-shrink-0 border ${
+                    serviceFilter === s
+                      ? "bg-[#F26430] text-white border-[#F26430]"
+                      : "bg-white text-[#5A5A5A] border-[#E2DDD8] hover:border-[#F26430]/40 hover:text-[#0A0A0A]"
+                  }`}>
+                  {s}
+                </button>
+              ))}
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {featured.map((p) => {
-                const img = p.imageUrl || serviceFallback[p.service] || serviceFallback["Stamped Asphalt"]
+
+            <div className="hidden sm:block w-px h-5 bg-[#E2DDD8]" />
+
+            <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
+              <span className="text-[10px] uppercase tracking-[0.22em] text-[#8C8C8C] font-bold flex-shrink-0">Type</span>
+              <button onClick={() => setAppFilter("All")}
+                className={`text-[11.5px] font-semibold tracking-[0.04em] uppercase px-3.5 py-1.5 whitespace-nowrap transition-all flex-shrink-0 border ${
+                  appFilter === "All"
+                    ? "bg-[#0A0A0A] text-white border-[#0A0A0A]"
+                    : "bg-white text-[#5A5A5A] border-[#E2DDD8] hover:border-[#0A0A0A]/40 hover:text-[#0A0A0A]"
+                }`}>
+                All
+              </button>
+              {APP_TYPES.map((a) => (
+                <button key={a} onClick={() => setAppFilter(a)}
+                  className={`text-[11.5px] font-semibold tracking-[0.04em] uppercase px-3.5 py-1.5 whitespace-nowrap transition-all flex-shrink-0 border ${
+                    appFilter === a
+                      ? "bg-[#0A0A0A] text-white border-[#0A0A0A]"
+                      : "bg-white text-[#5A5A5A] border-[#E2DDD8] hover:border-[#0A0A0A]/40 hover:text-[#0A0A0A]"
+                  }`}>
+                  {a}
+                </button>
+              ))}
+            </div>
+
+            <span className="ml-auto text-[11.5px] uppercase tracking-[0.18em] text-[#8C8C8C] font-medium flex-shrink-0">
+              {filtered.length} project{filtered.length !== 1 ? "s" : ""}
+            </span>
+          </div>
+        </Container>
+      </div>
+
+      <Container>
+        <div className="py-12 lg:py-16">
+          <AnimatePresence mode="popLayout">
+            <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
+              {filtered.map((project, i) => {
+                const imgSrc = project.imageUrl || serviceFallback[project.service] || serviceFallback["Stamped Asphalt"]
                 return (
-                  <Link
-                    key={p.slug}
-                    href={`/projects/${p.slug}`}
-                    className="group relative overflow-hidden block"
-                    style={{ aspectRatio: "16/9" }}
-                  >
-                    <Image
-                      fill src={img}
-                      alt={`${p.title} — ${p.city}, BC`}
-                      className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                      style={{ objectPosition: "50% 65%" }}
-                    />
-                    <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(17,17,17,0.82) 0%, rgba(17,17,17,0.25) 50%, transparent 100%)" }} />
-                    <div className="absolute inset-x-0 bottom-0 p-7">
-                      <span
-                        className="text-[9px] font-bold uppercase tracking-[0.18em] px-2.5 py-1 text-white mb-3 inline-block rounded"
-                        style={{ background: "rgba(200,96,26,0.90)" }}
-                      >
-                        {p.service}
-                      </span>
-                      <h3
-                        className="text-white font-black mt-1 group-hover:text-[#E8895A] transition-colors"
-                        style={{ fontSize: "clamp(1.2rem, 2vw, 1.6rem)", letterSpacing: "-0.03em", lineHeight: 1.1 }}
-                      >
-                        {p.title}
-                      </h3>
-                      <p className="text-white/60 text-sm mt-1.5">{p.city}{p.year ? ` · ${p.year}` : ""}</p>
-                    </div>
-                    <div className="absolute top-5 right-5 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-white/80">View →</span>
-                    </div>
-                  </Link>
+                  <motion.div key={project.slug} layout initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.97 }} transition={{ duration: 0.3, delay: Math.min(i * 0.03, 0.4), ease: [0.22, 1, 0.36, 1] }}>
+                    <Link href={`/projects/${project.slug}`} className="group block bg-white border border-[#E2DDD8] overflow-hidden transition-all duration-300 hover:-translate-y-0.5 hover:border-[#F26430]/40 hover:shadow-[0_12px_32px_rgba(0,0,0,0.08)]">
+                      <div className="relative aspect-[3/2] overflow-hidden bg-[#0A0A0A]">
+                        <Image src={imgSrc} alt={`${project.title} — ${project.city}`} fill className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" />
+                        <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[rgba(10,10,10,0.55)] via-transparent to-transparent" />
+                        <div className="absolute top-4 left-4 flex items-center gap-2 bg-[rgba(10,10,10,0.65)] backdrop-blur-md px-3 py-1.5">
+                          <span className="block w-1 h-1 rounded-full bg-[#F26430]" />
+                          <span className="text-[10px] uppercase tracking-[0.22em] text-white font-semibold">{project.service}</span>
+                        </div>
+                        {project.featured && (
+                          <div className="absolute top-4 right-4 flex items-center gap-1.5 bg-[#F26430] px-2.5 py-1">
+                            <span className="text-[9.5px] uppercase tracking-[0.22em] text-white font-bold">Featured</span>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="p-6">
+                        <div className="flex items-center gap-2 mb-3 text-[10.5px] uppercase tracking-[0.18em] text-[#8C8C8C] font-medium">
+                          <span>{project.application}</span>
+                          <span className="text-[#E2DDD8]">/</span>
+                          <span>{project.city}</span>
+                          {project.year && (
+                            <>
+                              <span className="text-[#E2DDD8]">/</span>
+                              <span>{project.year}</span>
+                            </>
+                          )}
+                        </div>
+                        <h3 className="text-[#0A0A0A] font-semibold text-[17px] leading-[1.25] tracking-[-0.005em] mb-3 group-hover:text-[#F26430] transition-colors duration-300">
+                          {project.title}
+                        </h3>
+                        <p className="text-[#5A5A5A] text-[13.5px] leading-[1.6] line-clamp-2 font-light">
+                          {project.excerpt}
+                        </p>
+                        <span className="mt-5 inline-flex items-center gap-2 text-[#F26430] text-[10.5px] uppercase tracking-[0.22em] font-bold">
+                          View Project<ArrowRight />
+                        </span>
+                      </div>
+                    </Link>
+                  </motion.div>
                 )
               })}
+            </motion.div>
+          </AnimatePresence>
+
+          {filtered.length === 0 && (
+            <div className="py-24 text-center">
+              <p className="text-[#5A5A5A] text-[15px] font-light">No projects match this filter.</p>
+              <button onClick={() => { setServiceFilter("All"); setAppFilter("All") }} className="mt-5 inline-flex items-center gap-2 text-[#F26430] text-[12px] uppercase tracking-[0.18em] font-bold border-b-2 border-[#F26430] pb-1.5 hover:gap-3 transition-all">
+                Clear filters<ArrowRight />
+              </button>
+            </div>
+          )}
+        </div>
+      </Container>
+
+      <section className="relative bg-[#0A0A0A] py-24 lg:py-32 overflow-hidden">
+        <div className="absolute inset-0">
+          <Image src="/images/applications/private-driveways/estate-herringbone-gated-driveway-01.jpg" alt="" aria-hidden fill sizes="100vw" className="object-cover opacity-25" />
+        </div>
+        <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-[rgba(10,10,10,0.92)] via-[rgba(10,10,10,0.85)] to-[rgba(10,10,10,0.95)]" />
+        <div aria-hidden className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at center, rgba(242,100,48,0.14) 0%, transparent 65%)" }} />
+
+        <Container className="relative">
+          <div className="max-w-2xl mx-auto text-center">
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <span className="block w-8 h-[1px] bg-[#F26430]/60" />
+              <p className="text-[11px] uppercase tracking-[0.32em] text-[#FF8A5C] font-bold">Work With Us</p>
+              <span className="block w-8 h-[1px] bg-[#F26430]/60" />
+            </div>
+            <h2 className="text-white display-h" style={{ fontSize: "clamp(2.25rem, 5vw, 4rem)" }}>
+              Ready to start<br />
+              <span className="italic font-extralight">your project?</span>
+            </h2>
+            <p className="text-white/70 mt-7 text-[15.5px] lg:text-base leading-[1.7] font-light max-w-lg mx-auto">
+              Free site walk and quote for your BC surface project &mdash; no obligation. Most quotes are back to you within 48 hours of the visit.
+            </p>
+            <div className="mt-10 flex flex-wrap justify-center gap-3">
+              <Link href="/contact" className="group inline-flex items-center gap-3 bg-white text-[#0A0A0A] px-8 py-4 font-semibold text-[12.5px] tracking-[0.04em] uppercase rounded-none hover:bg-[#F26430] hover:text-white transition-colors duration-300">
+                Request a Quote<ArrowRight />
+              </Link>
+              <a href="tel:+16043098212" className="border border-white/25 text-white px-8 py-4 font-medium text-[12.5px] tracking-[0.04em] uppercase rounded-none hover:bg-white hover:text-[#0A0A0A] hover:border-white transition-colors duration-300">
+                604-309-8212
+              </a>
             </div>
           </div>
-        </section>
-      )}
-
-      {/* ── Filters ────────────────────────────────────────────── */}
-      <div
-        className="sticky top-[68px] z-30 px-6 sm:px-8 py-4"
-        style={{ background: "rgba(246,244,240,0.97)", backdropFilter: "blur(10px)", borderBottom: "1px solid #E2DDD8" }}
-      >
-        <div className="max-w-[1500px] mx-auto flex flex-wrap items-center gap-4">
-          <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
-            <span className="text-[10px] uppercase tracking-[0.18em] font-bold flex-shrink-0" style={{ color: "#767676" }}>Service</span>
-            {SERVICES.map((s) => (
-              <button
-                key={s}
-                onClick={() => setServiceFilter(s)}
-                className="text-[11px] font-bold px-3.5 py-1.5 whitespace-nowrap transition-all flex-shrink-0 uppercase tracking-[0.08em] rounded"
-                style={{
-                  background: serviceFilter === s ? "#111111" : "white",
-                  color: serviceFilter === s ? "white" : "#5A5A5A",
-                  border: serviceFilter === s ? "1px solid #111111" : "1px solid #E2DDD8",
-                }}
-              >
-                {s}
-              </button>
-            ))}
-          </div>
-
-          <div className="hidden sm:block w-px h-4 bg-[#E2DDD8]" />
-
-          <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
-            <span className="text-[10px] uppercase tracking-[0.18em] font-bold flex-shrink-0" style={{ color: "#767676" }}>Type</span>
-            <button
-              onClick={() => setAppFilter("All")}
-              className="text-[11px] font-bold px-3.5 py-1.5 whitespace-nowrap transition-all flex-shrink-0 uppercase tracking-[0.08em] rounded"
-              style={{
-                background: appFilter === "All" ? "#C8601A" : "white",
-                color: appFilter === "All" ? "white" : "#5A5A5A",
-                border: appFilter === "All" ? "1px solid #C8601A" : "1px solid #E2DDD8",
-              }}
-            >
-              All
-            </button>
-            {APP_TYPES.map((a) => (
-              <button
-                key={a}
-                onClick={() => setAppFilter(a)}
-                className="text-[11px] font-bold px-3.5 py-1.5 whitespace-nowrap transition-all flex-shrink-0 uppercase tracking-[0.08em] rounded"
-                style={{
-                  background: appFilter === a ? "#C8601A" : "white",
-                  color: appFilter === a ? "white" : "#5A5A5A",
-                  border: appFilter === a ? "1px solid #C8601A" : "1px solid #E2DDD8",
-                }}
-              >
-                {a}
-              </button>
-            ))}
-          </div>
-
-          <span className="ml-auto text-[11px] font-bold flex-shrink-0" style={{ color: "#767676" }}>
-            {filtered.length} project{filtered.length !== 1 ? "s" : ""}
-          </span>
-        </div>
-      </div>
-
-      {/* ── Grid ─────────────────────────────────────────────── */}
-      <div className="max-w-[1500px] mx-auto px-6 sm:px-8 py-12">
-        <AnimatePresence mode="popLayout">
-          <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filtered.map((project, i) => {
-              const imgSrc = project.imageUrl || serviceFallback[project.service] || serviceFallback["Stamped Asphalt"]
-              return (
-                <motion.div
-                  key={project.slug} layout
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.97 }}
-                  transition={{ duration: 0.25, delay: Math.min(i * 0.04, 0.3) }}
-                >
-                  <Link
-                    href={`/projects/${project.slug}`}
-                    className="group block overflow-hidden bg-white border border-[#E2DDD8] transition-all duration-300 hover:border-[#C8601A]/30 hover:shadow-[0_8px_40px_rgba(0,0,0,0.10)] hover:-translate-y-1 rounded-lg"
-                  >
-                    {/* Image */}
-                    <div className="relative overflow-hidden rounded-t-lg" style={{ aspectRatio: "4/3" }}>
-                      <Image
-                        src={imgSrc}
-                        alt={`${project.title} — ${project.city}, BC`}
-                        fill
-                        className="object-cover transition-transform duration-700 group-hover:scale-[1.06]"
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        style={{ objectPosition: "50% 65%" }}
-                      />
-                      <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(17,17,17,0.55) 0%, transparent 50%)" }} />
-                      <div className="absolute bottom-3 left-3">
-                        <span
-                          className="text-[9px] font-bold uppercase tracking-[0.12em] px-2.5 py-1 text-white rounded"
-                          style={{ background: "rgba(200,96,26,0.92)" }}
-                        >
-                          {project.service}
-                        </span>
-                      </div>
-                      {project.featured && (
-                        <div className="absolute top-3 right-3">
-                          <span className="text-[9px] font-bold uppercase tracking-[0.1em] px-2 py-1 bg-white/15 backdrop-blur-sm text-white border border-white/20 rounded">
-                            Featured
-                          </span>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Body */}
-                    <div className="p-5">
-                      <div className="flex items-center gap-2 mb-3">
-                        <span
-                          className="text-[9px] font-bold uppercase tracking-[0.12em] px-2.5 py-1 rounded"
-                          style={{ background: "#F6F4F0", color: "#5A5A5A", border: "1px solid #E2DDD8" }}
-                        >
-                          {project.application}
-                        </span>
-                        <span className="text-[11px] font-semibold" style={{ color: "#767676" }}>
-                          {project.city}{project.year ? ` · ${project.year}` : ""}
-                        </span>
-                      </div>
-                      <h3
-                        className="mb-2 leading-snug transition-colors duration-200 group-hover:text-[#C8601A]"
-                        style={{ fontSize: "1.05rem", fontWeight: 700, color: "#111111", letterSpacing: "-0.02em" }}
-                      >
-                        {project.title}
-                      </h3>
-                      <p className="text-[13px] leading-relaxed line-clamp-2" style={{ color: "#5A5A5A" }}>
-                        {project.excerpt}
-                      </p>
-                      <div className="flex items-center gap-1.5 mt-4">
-                        <span
-                          className="text-[10px] font-bold uppercase tracking-[0.16em] transition-all duration-200 group-hover:tracking-[0.22em]"
-                          style={{ color: "#C8601A" }}
-                        >
-                          View Project
-                        </span>
-                        <svg width="12" height="12" viewBox="0 0 14 14" fill="none" className="text-[#C8601A] transition-transform group-hover:translate-x-0.5">
-                          <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      </div>
-                    </div>
-                  </Link>
-                </motion.div>
-              )
-            })}
-          </motion.div>
-        </AnimatePresence>
-
-        {filtered.length === 0 && (
-          <div className="py-32 text-center">
-            <p className="text-lg font-semibold" style={{ color: "#5A5A5A" }}>No projects match this filter.</p>
-            <button
-              onClick={() => { setServiceFilter("All"); setAppFilter("All") }}
-              className="mt-5 text-sm font-bold uppercase tracking-[0.12em] hover:underline"
-              style={{ color: "#C8601A" }}
-            >
-              Clear all filters
-            </button>
-          </div>
-        )}
-      </div>
-
-      {/* ── CTA ────────────────────────────────────────────── */}
-      <section className="relative py-28 px-6 sm:px-8" style={{ background: "#1C2026" }}>
-        <div
-          className="absolute left-6 lg:left-10 top-0 w-16 h-[3px]"
-          style={{ background: "linear-gradient(to right, #C8601A, #E8895A)" }}
-        />
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ background: "radial-gradient(ellipse at 50% 0%, rgba(200,96,26,0.12) 0%, transparent 65%)" }}
-        />
-        <div className="relative max-w-3xl mx-auto text-center">
-          <div className="flex items-center justify-center gap-3 mb-5">
-            <div className="w-8 h-px" style={{ background: "#E8895A" }} />
-            <p className="font-semibold uppercase" style={{ fontSize: "11px", letterSpacing: "0.18em", color: "#E8895A" }}>Work With Us</p>
-            <div className="w-8 h-px" style={{ background: "#E8895A" }} />
-          </div>
-          <h2
-            style={{ fontSize: "clamp(2rem, 3.5vw, 3.5rem)", fontWeight: 800, color: "white", letterSpacing: "-0.04em", lineHeight: 0.95 }}
-            className="mb-7"
-          >
-            Ready to start{" "}
-            <span style={{ color: "#E8895A" }}>your project?</span>
-          </h2>
-          <p className="text-[17px] mb-12" style={{ color: "rgba(255,255,255,0.55)" }}>
-            Free site visit and written quote for your BC surface project — no obligation.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/contact">
-              <span
-                className="inline-flex items-center gap-2 px-10 py-4 text-sm font-bold tracking-[0.04em] uppercase text-white transition-all hover:brightness-110 rounded-lg"
-                style={{ background: "linear-gradient(135deg, #C8601A 0%, #E8895A 100%)", boxShadow: "0 4px 24px rgba(200,96,26,0.35)" }}
-              >
-                Request a Free Quote
-              </span>
-            </Link>
-            <a href="tel:6043098212">
-              <span
-                className="inline-flex items-center gap-2 px-10 py-4 text-sm font-bold tracking-[0.04em] uppercase transition-all hover:bg-white/10 rounded-lg"
-                style={{ border: "1px solid rgba(255,255,255,0.18)", color: "rgba(255,255,255,0.75)" }}
-              >
-                604-309-8212
-              </span>
-            </a>
-          </div>
-        </div>
+        </Container>
       </section>
     </main>
   )

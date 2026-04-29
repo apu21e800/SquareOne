@@ -1,7 +1,8 @@
 import type { Metadata } from "next"
-import HeroSlideshow from "@/components/sections/HeroSlideshow"
+import Hero from "@/components/sections/Hero"
 import StatsBar from "@/components/sections/StatsBar"
 import WhySquareOne from "@/components/sections/WhySquareOne"
+import ProcessBand from "@/components/sections/ProcessBand"
 import ServicesGrid from "@/components/sections/ServicesGrid"
 import ProjectsPreview from "@/components/sections/ProjectsPreview"
 import DrivewaysBand from "@/components/sections/DrivewaysBand"
@@ -46,9 +47,10 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <main>
-      <HeroSlideshow />
+      <Hero />
       <StatsBar />
       <WhySquareOne />
+      <ProcessBand />
       <ServicesGrid />
       <ProjectsPreview />
       <DrivewaysBand />
