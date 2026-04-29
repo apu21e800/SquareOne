@@ -11,7 +11,7 @@ export interface Project {
 }
 
 export const projects: Project[] = [
-  // ── Featured commercial case studies ──────────────────────────────────
+  // ── Featured commercial case studies ──────────────────────
 
   {
     title: "UBC & Musqueam Crosswalk",
@@ -23,7 +23,7 @@ export const projects: Project[] = [
     featured: true,
     excerpt:
       "Collaborative crosswalk at University Boulevard and Wesbrook Mall — UBC and Musqueam crests woven together in TrafficPatterns, acknowledging the campus stands on unceded Musqueam territory.",
-    imageUrl: "/images/products/streetbond/streetbond-coloured-plaza-art-mural-01.jpg",
+    imageUrl: "/images/S1_update_v2/photos/Featured image options/UBC-crosswalk-3-300dpi.jpg",
   },
   {
     title: "Joyce SkyTrain Station Public Art",
@@ -134,7 +134,7 @@ export const projects: Project[] = [
     imageUrl: "/images/products/streetbond/streetbond-stamped-pattern-wide-01.jpg",
   },
 
-  // ── Residential & Strata ──────────────────────────────────────────────
+  // ── Residential & Strata ──────────────────────────────
 
   {
     title: "Bowen Island Residential Driveway",
@@ -187,7 +187,7 @@ export const projects: Project[] = [
     imageUrl: "/images/applications/crosswalks/crosswalk-1.jpg",
   },
 
-  // ── Transit & Bike Infrastructure ──────────────────────────────────────
+  // ── Transit & Bike Infrastructure ────────────────────────
 
   {
     title: "BC Transit Priority Lane — Victoria",
@@ -223,7 +223,7 @@ export const projects: Project[] = [
     imageUrl: "/images/products/streetbond/streetbond-crosswalk-perspective-01.jpg",
   },
 
-  // ── Parking & Surface Prep ───────────────────────────────────────────────
+  // ── Parking & Surface Prep ─────────────────────────────────
 
   {
     title: "Westshore Parking Markings — Langford",
