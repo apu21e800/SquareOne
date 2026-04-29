@@ -58,7 +58,7 @@ const applications = [
     title: "Vapor Blasting",
     tag: "All Surfaces",
     desc: "Restore any surface to bare condition before coating or repair. No silica dust, no substrate damage — mobile vapor blasting anywhere in BC.",
-    image: "/images/products/streetbond/streetbond-red-brick-pattern-waterfront-01.jpg",
+    image: "/images/products/streetbond/streetbond-cobble-macro-surface-01.jpg",
     alt: "Clean surface ready for decorative coating",
     cta: "Learn About Vapor Blasting",
     href: "/services/vapor-blasting",
