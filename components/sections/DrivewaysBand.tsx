@@ -6,153 +6,84 @@ import { motion } from "framer-motion"
 
 const easeOut: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
-/**
- * DrivewaysBand — magazine-style 50/50 split.
- * Photo left at full saturation (no overlay), cream content panel right.
- * Premium residential showcase — let the herringbone pattern sell itself.
- */
+function ArrowRight() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">
+      <path d="M1 7H13M13 7L7.5 1.5M13 7L7.5 12.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="square" />
+    </svg>
+  )
+}
+
 export default function DrivewaysBand() {
   return (
-    <section
-      className="relative overflow-hidden"
-      style={{ background: "#F6F4F0" }}
-    >
-      <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[700px]">
-
-        {/* Left — full-bleed photo, no overlays */}
-        <div className="relative min-h-[380px] lg:min-h-0">
+    <section className="overflow-hidden">
+      <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[640px]">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 1.0, ease: easeOut }}
+          className="relative h-[420px] lg:h-auto group overflow-hidden"
+        >
           <Image
             src="/images/applications/private-driveways/estate-herringbone-gated-driveway-01.jpg"
-            alt="Stamped asphalt driveway with herringbone pattern"
+            alt="Estate herringbone gated driveway by Square One Paving"
             fill
+            className="object-cover transition-transform duration-[1500ms] ease-out group-hover:scale-105"
             sizes="(max-width: 1024px) 100vw, 50vw"
-            className="object-cover"
-            style={{ objectPosition: "50% 45%" }}
           />
-        </div>
+          <div aria-hidden className="absolute inset-0 lg:hidden bg-gradient-to-t from-[rgba(15,17,21,0.5)] via-transparent to-transparent" />
+          <div className="absolute top-6 left-6 flex items-center gap-2 bg-[rgba(15,17,21,0.65)] backdrop-blur-md px-3.5 py-2">
+            <span className="block w-1.5 h-1.5 rounded-full bg-[#F26430]" />
+            <span className="text-[10px] uppercase tracking-[0.22em] text-white font-semibold">Premium Residential</span>
+          </div>
+        </motion.div>
 
-        {/* Right — cream content panel */}
-        <div className="relative flex flex-col justify-center px-8 lg:px-16 xl:px-20 py-24 lg:py-32">
-          {/* Orange top accent bar */}
-          <span
-            aria-hidden
-            className="absolute top-0 right-0 left-0 lg:left-auto w-full lg:w-20 h-[3px]"
-            style={{ background: "linear-gradient(90deg, #C8601A 0%, #E8895A 100%)" }}
-          />
+        <div className="relative bg-[#F6F4F0] p-10 lg:p-20 flex flex-col justify-center overflow-hidden">
+          <div className="absolute -top-32 -right-32 w-[500px] h-[500px] pointer-events-none" style={{ background: "radial-gradient(circle, rgba(242,100,48,0.06) 0%, transparent 70%)" }} aria-hidden />
+          <div aria-hidden className="absolute left-10 lg:left-20 top-10 lg:top-20 bottom-10 lg:bottom-20 w-[1px] bg-gradient-to-b from-transparent via-[#F26430]/30 to-transparent hidden lg:block" />
 
           <motion.div
             initial={{ y: 24, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
-            viewport={{ once: true, amount: 0.2 }}
+            viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.8, ease: easeOut }}
+            className="relative z-10 max-w-md lg:pl-8"
           >
-            <p
-              className="text-[10px] uppercase tracking-[0.24em] font-bold mb-5 flex items-center gap-3"
-              style={{ color: "#C8601A" }}
-            >
-              <span className="inline-block w-7 h-px" style={{ background: "#C8601A" }} />
-              Premium Residential
-            </p>
+            <span className="text-[10px] uppercase tracking-[0.28em] text-[#F26430] font-semibold mb-5 block">Driveways &amp; Estates</span>
 
-            <h2
-              className="max-w-lg"
-              style={{
-                fontSize: "clamp(2.4rem, 4.5vw, 4rem)",
-                fontWeight: 800,
-                lineHeight: 0.97,
-                letterSpacing: "-0.045em",
-                color: "#111111",
-              }}
-            >
-              Your driveway.{" "}
-              <span style={{ color: "#C8601A" }}>Reimagined.</span>
+            <h2 className="font-light text-[#0A0A0A] leading-[0.98] tracking-[-0.03em] mb-6" style={{ fontSize: "clamp(2.25rem, 4vw, 3.25rem)" }}>
+              Your driveway.<br />
+              <span className="italic font-extralight">Reimagined.</span>
             </h2>
 
-            <p
-              className="text-[15px] leading-relaxed mt-6 max-w-md"
-              style={{ color: "#5A5A5A" }}
-            >
-              From stamped asphalt that echoes the architecture of your home to
-              vapor-blasted surfaces ready for a fresh coat — municipal-grade
-              precision, residential scale.
+            <p className="text-[#2C2C2C] leading-[1.7] text-[15px] font-light">
+              From stamped asphalt that echoes the architecture of your home to vapor-blasted surfaces ready for fresh coating &mdash; we bring the same municipal-grade precision to residential projects across Metro Vancouver and Vancouver Island.
             </p>
+
+            <div className="mt-8 grid grid-cols-3 gap-4 pb-8 border-b border-[#E2DDD8]">
+              {[
+                { value: "8+", label: "year service life" },
+                { value: "60%", label: "cost vs. concrete pavers" },
+                { value: "1 wk", label: "typical install" },
+              ].map((s) => (
+                <div key={s.label}>
+                  <div className="text-[#0A0A0A] font-light leading-none text-[clamp(1.5rem,3vw,2rem)] tracking-[-0.02em]">{s.value}</div>
+                  <div className="text-[10.5px] uppercase tracking-[0.14em] text-[#5A5A5A] mt-1.5">{s.label}</div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link href="/driveways" className="group bg-[#0A0A0A] text-white px-7 py-3.5 rounded-none font-semibold text-[12.5px] uppercase tracking-[0.02em] hover:bg-[#F26430] transition-colors duration-300 inline-flex items-center gap-3">
+                See Driveway Projects<ArrowRight />
+              </Link>
+              <Link href="/contact" className="border border-[#0A0A0A]/30 text-[#0A0A0A] px-7 py-3.5 rounded-none font-medium text-[12.5px] uppercase tracking-[0.02em] hover:bg-[#0A0A0A] hover:text-white transition-colors duration-300">
+                Get a Quote
+              </Link>
+            </div>
+            <p className="mt-6 text-[11px] tracking-[0.04em] text-[#8C8C8C]">★★★★★ &nbsp;Metro Vancouver · Victoria · Vancouver Island</p>
           </motion.div>
-
-          {/* Spec bullets */}
-          <motion.ul
-            initial={{ y: 16, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.7, ease: easeOut, delay: 0.10 }}
-            className="mt-8 grid grid-cols-2 gap-x-8 gap-y-3 max-w-md"
-            style={{ borderTop: "1px solid #E2DDD8", paddingTop: "1.5rem" }}
-          >
-            {[
-              "ASTM D3939 slip-resistant",
-              "20+ year service life",
-              "Snowplow safe",
-              "Custom patterns + colour",
-            ].map((spec) => (
-              <li
-                key={spec}
-                className="text-[12.5px] flex items-start gap-2"
-                style={{ color: "#2C2C2C" }}
-              >
-                <span
-                  aria-hidden
-                  className="inline-block w-1 h-1 mt-2 flex-shrink-0 rounded-full"
-                  style={{ background: "#C8601A" }}
-                />
-                {spec}
-              </li>
-            ))}
-          </motion.ul>
-
-          {/* CTAs */}
-          <motion.div
-            initial={{ y: 16, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.7, ease: easeOut, delay: 0.17 }}
-            className="mt-10 flex flex-wrap gap-3"
-          >
-            <Link
-              href="/applications/private-driveways"
-              className="group inline-flex items-center gap-2 bg-[#C8601A] text-white px-7 py-3.5 text-sm font-semibold hover:bg-[#A84F15] transition-colors rounded-lg"
-              style={{ boxShadow: "0 4px 20px rgba(200,96,26,0.25)" }}
-            >
-              See Driveway Projects
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <path
-                  d="M2 7h10M8 3l4 4-4 4"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </Link>
-            <Link
-              href="/contact"
-              className="inline-flex items-center gap-2 border text-[#111111] px-7 py-3.5 text-sm font-semibold hover:bg-[#111111] hover:text-white transition-all rounded-lg"
-              style={{ borderColor: "#C8C4BC" }}
-            >
-              Get a Quote
-            </Link>
-          </motion.div>
-
-          {/* Caption */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.8, ease: easeOut, delay: 0.24 }}
-            className="mt-7 text-[10px] uppercase tracking-[0.2em]"
-            style={{ color: "#767676" }}
-          >
-            <span aria-label="Five stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-            &nbsp;&nbsp;Metro Vancouver · Victoria · Vancouver Island
-          </motion.p>
         </div>
       </div>
     </section>

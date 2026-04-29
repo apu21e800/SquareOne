@@ -4,165 +4,69 @@ import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import type { BlogPostMeta } from "@/lib/blog"
+import Container from "@/components/ui/Container"
 
 const easeOut: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
 export default function BlogFeedGrid({ posts }: { posts: BlogPostMeta[] }) {
   return (
-    <section
-      className="relative overflow-hidden"
-      style={{ background: "#FAFAF8" }}
-    >
-      {/* Top separator */}
-      <div
-        aria-hidden
-        className="absolute top-0 inset-x-0 h-px"
-        style={{ background: "#E8E4DE" }}
-      />
-
-      <div className="relative max-w-[1400px] mx-auto px-6 lg:px-10 py-24 lg:py-32">
-
-        {/* Header */}
+    <section className="bg-white py-20 lg:py-28">
+      <Container>
         <motion.div
           initial={{ y: 20, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.6, ease: easeOut }}
-          className="mb-14 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6"
+          className="mb-12 flex flex-wrap gap-4 justify-between items-end"
         >
           <div>
-            <p
-              className="text-[11px] uppercase tracking-[0.18em] font-semibold mb-4 flex items-center gap-3"
-              style={{ color: "#C8601A" }}
-            >
-              <span
-                className="inline-block w-8 h-px"
-                style={{ background: "#C8601A" }}
-              />
-              From the Field
-            </p>
-            <h2
-              style={{
-                fontSize: "clamp(2rem, 4vw, 3.25rem)",
-                fontWeight: 800,
-                lineHeight: 0.97,
-                letterSpacing: "-0.04em",
-                color: "#111111",
-              }}
-            >
-              The Work,{" "}
-              <span style={{ color: "#C8601A" }}>Documented.</span>
-            </h2>
+            <p className="text-[11px] uppercase tracking-[0.15em] text-[#F26430] font-semibold mb-3">From the Field</p>
+            <h2 className="text-[clamp(2rem,4vw,2.5rem)] font-light text-[#111111] leading-tight tracking-[-0.02em]">Case studies &amp; insights.</h2>
           </div>
-          <Link
-            href="/blog"
-            className="self-start lg:self-end inline-flex items-center gap-2 text-[13px] font-bold uppercase tracking-[0.06em] hover:gap-3 transition-all"
-            style={{ color: "#C8601A" }}
-          >
-            All Field Notes
-            <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-              <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
+          <Link href="/blog" className="hover-underline text-[#F26430] text-sm font-semibold whitespace-nowrap">
+            All Posts &rarr;
           </Link>
         </motion.div>
 
-        {/* 3-col cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {posts.map((post, i) => (
             <motion.div
               key={post.slug}
-              initial={{ y: 24, opacity: 0 }}
+              initial={{ y: 20, opacity: 0 }}
               whileInView={{ y: 0, opacity: 1 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.7, ease: easeOut, delay: i * 0.08 }}
             >
-              <Link href={`/blog/${post.slug}`} className="group block">
-                {/* Card wrapper with elevation */}
-                <div
-                  className="bg-white rounded-xl overflow-hidden transition-all duration-300 group-hover:-translate-y-1"
-                  style={{
-                    boxShadow: "0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04)",
-                  }}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.boxShadow =
-                      "0 4px 16px rgba(0,0,0,0.10), 0 1px 3px rgba(0,0,0,0.06)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.boxShadow =
-                      "0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04)")
-                  }
-                >
-                  {/* Image */}
-                  <div className="relative aspect-[3/2] overflow-hidden">
-                    <Image
-                      fill
-                      sizes="(max-width: 1024px) 100vw, 33vw"
-                      className="object-cover group-hover:scale-[1.04] transition-transform duration-700 ease-out"
-                      src={post.featured_image || "/images/og-image.jpg"}
-                      alt={post.title}
-                    />
-                    {/* Orange bottom reveal on hover */}
-                    <span
-                      aria-hidden
-                      className="absolute left-0 right-0 bottom-0 h-[3px] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"
-                      style={{ background: "#C8601A" }}
-                    />
-                  </div>
-
-                  {/* Content */}
-                  <div className="px-6 pt-5 pb-6">
-                    {post.category && (
-                      <span
-                        className="text-[10px] uppercase tracking-[0.16em] font-semibold mb-2.5 block"
-                        style={{ color: "#C8601A" }}
-                      >
-                        {post.category}
-                      </span>
-                    )}
-                    <h3
-                      className="font-bold leading-tight tracking-tight line-clamp-2 mb-2"
-                      style={{
-                        fontSize: "clamp(1rem, 1.6vw, 1.1rem)",
-                        letterSpacing: "-0.015em",
-                        color: "#111111",
-                      }}
-                    >
-                      {post.title}
-                    </h3>
-                    <p
-                      className="text-[13px] leading-relaxed line-clamp-2"
-                      style={{ color: "#767676" }}
-                    >
-                      {post.description}
-                    </p>
-                    <span
-                      className="text-[12px] font-semibold mt-4 inline-flex items-center gap-1.5 group-hover:gap-2.5 transition-all duration-200"
-                      style={{ color: "#C8601A" }}
-                    >
-                      Read more
-                      <svg
-                        width="11"
-                        height="11"
-                        viewBox="0 0 14 14"
-                        fill="none"
-                        aria-hidden="true"
-                      >
-                        <path
-                          d="M2 7h10M8 3l4 4-4 4"
-                          stroke="currentColor"
-                          strokeWidth="1.6"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
+              <Link href={`/blog/${post.slug}`} className="group block rounded-none transition-all duration-300 hover:-translate-y-1">
+                <div className="relative aspect-[3/2] overflow-hidden rounded-none border border-[#E2DDD8] group-hover:border-[#F26430] transition-colors duration-300">
+                  {post.category && (
+                    <span className="absolute top-4 left-4 z-10 text-[10px] uppercase tracking-[0.18em] font-semibold bg-[#111111] text-white px-3 py-1.5">
+                      {post.category}
                     </span>
-                  </div>
+                  )}
+                  <Image
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 33vw"
+                    className="object-cover rounded-none group-hover:scale-105 transition-transform duration-700 ease-out"
+                    src={post.featured_image || "/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg"}
+                    alt={post.title}
+                  />
+                </div>
+                <div className="pt-5">
+                  <h3 className="font-semibold text-[#111111] text-lg leading-tight line-clamp-2">{post.title}</h3>
+                  <p className="text-sm text-[#5A5A5A] mt-2 line-clamp-2">{post.description}</p>
+                  <span className="hover-underline text-[#F26430] text-sm font-semibold mt-4 inline-flex items-center gap-1">
+                    Read case study
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                      <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </span>
                 </div>
               </Link>
             </motion.div>
           ))}
         </div>
-      </div>
+      </Container>
     </section>
   )
 }

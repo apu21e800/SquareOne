@@ -1,148 +1,71 @@
-"use client"
-
 import Image from "next/image"
 import Link from "next/link"
-import { motion } from "framer-motion"
 
-/**
- * VaporBlastingBand — dark industrial sub-brand callout.
- * Dark #0F1216 background. Brand-within-a-brand treatment.
- * H2 at 800 weight to match hero energy.
- */
-export default function VaporBlastingBand() {
-  const specs = [
-    { num: "0",     unit: "chemicals",  label: "Water + abrasive only" },
-    { num: "1.2k",  unit: "PSI",        label: "Variable system pressure" },
-    { num: "8+",    unit: "surfaces",   label: "Concrete, steel, brick, marine" },
-    { num: "BC",    unit: "wide",       label: "Mobile across the province" },
-  ]
+const features: string[] = [
+  "Concrete & stone restoration",
+  "Pre-coating preparation",
+  "Industrial equipment cleaning",
+  "Heritage surface work",
+  "Patio & hardscape refresh",
+  "Automotive & marine",
+]
 
+function ArrowRight() {
   return (
-    <section
-      id="vapor-blasting"
-      className="relative bg-[#0F1216] text-[#F6F4F0] overflow-hidden"
-      style={{ fontFeatureSettings: '"ss01", "tnum"' }}
-    >
-      <div
-        aria-hidden
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(900px 500px at 88% 18%, rgba(232,137,90,0.16), transparent 60%), linear-gradient(180deg, rgba(255,255,255,0.025), transparent 30%)",
-        }}
-      />
-      <div className="absolute left-6 lg:left-10 top-8 z-10 flex items-center gap-3 text-[10px] uppercase font-bold tracking-[0.28em] text-white/55">
-        <span className="inline-block w-6 h-px bg-[#C8601A]" />
-        SquareOne
-        <span className="text-[#E8895A] tracking-[0.22em]"> / S1 — Industrial Division </span>
-      </div>
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">
+      <path d="M1 7H13M13 7L7.5 1.5M13 7L7.5 12.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="square" />
+    </svg>
+  )
+}
 
-      <div className="relative max-w-[1400px] mx-auto px-6 lg:px-10 pt-32 pb-24 lg:pt-40 lg:pb-32">
-        <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_1fr] gap-12 lg:gap-20 items-center">
-          {/* Left: copy */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.6, ease: [0.2, 0.7, 0.2, 1] }}
-          >
-            <p className="text-[10px] uppercase tracking-[0.28em] text-[#E8895A] font-bold mb-6">
-              S1 / 04 — Vapor Blasting
-            </p>
-            {/* H2 — color in style prop: global CSS h2{color:#111} beats className="text-white" */}
-            <h2
-              style={{
-                fontSize: "clamp(2.5rem, 5vw, 4.5rem)",
-                fontWeight: 800,
-                lineHeight: 0.97,
-                letterSpacing: "-0.045em",
-                textWrap: "balance",
-                color: "white",
-              }}
-            >
-              Surface prep,{" "}
-              <span style={{ color: "#E8895A" }}>done right.</span>
-            </h2>
-            <p className="text-[15px] lg:text-base leading-relaxed text-white/70 mt-7 max-w-lg">
-              Mobile vapor blasting across BC — water-controlled, no harsh chemicals, faster than mechanical
-              grinding. The same crew that installs your decorative surfaces preps them properly first.
-            </p>
-            <div className="mt-10 grid grid-cols-2 gap-y-7 gap-x-8 max-w-lg border-t border-white/10 pt-8">
-              {specs.map((s) => (
-                <div key={s.label} className="flex flex-col">
-                  <div className="flex items-baseline gap-1.5">
-                    <span
-                      className="text-white leading-none"
-                      style={{ fontSize: "2rem", fontWeight: 800, letterSpacing: "-0.045em" }}
-                    >
-                      {s.num}
-                    </span>
-                    <span className="text-[10px] uppercase tracking-[0.22em] text-[#E8895A] font-semibold">
-                      {s.unit}
-                    </span>
-                  </div>
-                  <span className="text-[12px] text-white/55 mt-2 leading-snug">{s.label}</span>
-                </div>
-              ))}
-            </div>
-            <div className="mt-10 flex flex-wrap gap-3">
-              <Link
-                href="/services/vapor-blasting"
-                className="group inline-flex items-center gap-2 bg-white text-[#111111] px-6 py-3.5 text-sm font-semibold hover:bg-[#F6F4F0] transition-colors rounded-lg"
-              >
-                Vapor Blasting Spec
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </Link>
-              <Link
-                href="/contact"
-                className="inline-flex items-center gap-2 border border-white/30 text-white px-6 py-3.5 text-sm font-semibold hover:border-white hover:bg-white/5 transition-colors rounded-lg"
-              >
-                Request a Site Visit
-              </Link>
-            </div>
-          </motion.div>
+export default function VaporBlastingBand() {
+  return (
+    <section className="relative w-full grid grid-cols-1 md:grid-cols-[42%_58%] bg-[#0F1115] overflow-hidden">
+      <div aria-hidden className="absolute inset-0 pointer-events-none opacity-60" style={{ background: "radial-gradient(ellipse at 0% 50%, rgba(242,100,48,0.08) 0%, transparent 50%)" }} />
 
-          {/* Right: image */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.97 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.7, delay: 0.1, ease: [0.2, 0.7, 0.2, 1] }}
-            className="relative"
-          >
-            <div className="relative aspect-[4/5] overflow-hidden bg-[#0A0C0F] border border-white/10">
-              <Image
-                src="/images/services/vapor-blasting/hero.jpg"
-                alt="Square One vapor blasting — mobile surface preparation across BC"
-                fill
-                sizes="(min-width: 1024px) 45vw, 100vw"
-                className="object-cover"
-              />
-              <div
-                aria-hidden
-                className="absolute inset-0 pointer-events-none mix-blend-multiply"
-                style={{
-                  background: "linear-gradient(180deg, rgba(15,18,22,0.0) 0%, rgba(15,18,22,0.4) 100%)",
-                }}
-              />
-              {(["top-3 left-3", "top-3 right-3", "bottom-3 left-3", "bottom-3 right-3"] as const).map((pos) => (
-                <span key={pos} aria-hidden className={`absolute ${pos} w-3 h-3 border border-[#E8895A] opacity-70`} />
-              ))}
-              <div className="absolute inset-x-0 bottom-0 px-5 py-3 bg-black/55 backdrop-blur-sm border-t border-white/10 flex items-center justify-between text-[10px] uppercase tracking-[0.2em]">
-                <span className="text-white/60">Highway 1 · Lower Mainland</span>
-                <span className="text-[#E8895A] font-semibold">REC · 2023</span>
-              </div>
-            </div>
-          </motion.div>
+      <div className="relative bg-transparent px-8 py-20 md:px-12 md:py-24 lg:px-20 lg:py-28 flex flex-col justify-center order-2 md:order-1">
+        <div className="flex items-center gap-3 mb-6">
+          <span className="block w-1.5 h-1.5 rounded-full bg-[#F26430]" />
+          <span className="text-[11px] font-semibold tracking-[0.28em] uppercase text-[#FF8A5C]">Exclusive Capability</span>
         </div>
+
+        <h2 className="text-white font-light leading-[0.98] tracking-[-0.03em] mb-7" style={{ fontSize: "clamp(2.25rem, 4vw, 3.5rem)" }}>
+          Surface restoration<br />
+          <span className="italic font-extralight">nobody else in BC</span><br />
+          does better.
+        </h2>
+
+        <p className="text-white/65 text-[15px] leading-[1.7] mb-10 max-w-md font-light">
+          Vapor blasting uses a pressurised mix of water and fine abrasive media to clean and restore surfaces with zero heat stress. The result: factory-fresh texture with no media embedment. We brought this technology to BC because preparation is as important as installation.
+        </p>
+
+        <ul className="grid grid-cols-2 gap-x-6 gap-y-3 mb-12 text-[13px] text-white/80">
+          {features.map((f) => (
+            <li key={f} className="flex items-start gap-2.5">
+              <span className="text-[#F26430] flex-shrink-0 mt-0.5" aria-hidden>
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                  <path d="M2 6.5L4.5 9L10 3.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </span>
+              <span>{f}</span>
+            </li>
+          ))}
+        </ul>
+
+        <Link href="/vapor-blasting">
+          <span className="group inline-flex items-center gap-3 border border-white/25 text-white px-8 py-4 font-semibold text-[12.5px] tracking-[0.18em] uppercase transition-all duration-300 hover:border-white hover:bg-white hover:text-[#0A0A0A]">
+            Learn About Vapor Blasting<ArrowRight />
+          </span>
+        </Link>
       </div>
 
-      <div className="relative border-t border-white/10">
-        <div className="max-w-[1400px] mx-auto px-6 lg:px-10 py-5 flex items-center justify-between text-[10px] uppercase tracking-[0.22em] text-white/40">
-          <span>Mobile · Lower Mainland · Vancouver Island</span>
-          <span>S1-IND / Rev. 04.26</span>
+      <div className="relative aspect-[4/3] md:aspect-auto md:min-h-[640px] order-1 md:order-2 overflow-hidden">
+        <Image src="/images/services/vapor-blasting/hero.jpg" alt="Vapor blasting surface restoration by Square One Paving" fill className="object-cover" sizes="(max-width: 768px) 100vw, 60vw" />
+        <div aria-hidden className="absolute inset-0 pointer-events-none bg-gradient-to-l from-transparent via-transparent to-[rgba(15,17,21,0.50)] hidden md:block" />
+        <div aria-hidden className="absolute inset-0 pointer-events-none bg-gradient-to-t from-[rgba(15,17,21,0.40)] to-transparent md:hidden" />
+        <div className="absolute bottom-6 right-6 flex items-center gap-2 bg-[rgba(15,17,21,0.65)] backdrop-blur-md px-3.5 py-2">
+          <span className="block w-1.5 h-1.5 rounded-full bg-[#F26430]" />
+          <span className="text-[10px] uppercase tracking-[0.22em] text-white font-semibold">Mobile across BC</span>
         </div>
       </div>
     </section>

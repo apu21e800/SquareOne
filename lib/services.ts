@@ -48,8 +48,7 @@ export const services: Service[] = [
       "Retroreflective options",
       "Fast installation",
     ],
-    // Downtown Mission streetscape — confirmed Square One project
-    imageUrl: "https://squareonepaving.com/wp-content/uploads/2025/04/mission-bc-streetscape.jpg",
+    imageUrl: "/images/applications/private-driveways/estate-herringbone-gated-driveway-01.jpg",
   },
   {
     slug: "vapor-blasting",
@@ -131,8 +130,7 @@ export const services: Service[] = [
       "Eco-friendly water-based options",
       "Cost-effective for large areas",
     ],
-    // Joyce SkyTrain public art install — confirmed Square One project
-    imageUrl: "https://squareonepaving.com/wp-content/uploads/2025/07/Photo-2025-07-07-11-54-41-AM-1024x677.jpg",
+    imageUrl: "/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg",
   },
   {
     slug: "preformed-thermoplastic",
@@ -171,8 +169,7 @@ export const services: Service[] = [
       "Long service life (7+ years)",
       "No spray drift or overspray",
     ],
-    // UBC & Musqueam crosswalk — confirmed Square One project
-    imageUrl: "https://squareonepaving.com/wp-content/uploads/2024/11/IMG_5995-scaled.jpeg",
+    imageUrl: "/images/products/premark/premark-arrows-installation-intersection-01.jpg",
   },
 ]
 

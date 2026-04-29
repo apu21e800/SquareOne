@@ -1,222 +1,118 @@
 "use client"
 
+import { services } from "@/lib/services"
 import Image from "next/image"
 import Link from "next/link"
 import { motion } from "framer-motion"
-import { services } from "@/lib/services"
+import Container from "@/components/ui/Container"
 
-// ─── Per-service category labels (Tesla "Midsize SUV" treatment) ───────────────
-const CATEGORY: Record<string, string> = {
-  "stamped-asphalt":         "Surface Treatment",
-  "decorative-coatings":     "Colour + Safety",
-  "preformed-thermoplastic": "Precision Markings",
-  "vapor-blasting":          "Surface Prep",
-}
+const easeOut: [number, number, number, number] = [0.22, 1, 0.36, 1]
 
 function ArrowRight() {
   return (
-    <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-      <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">
+      <path d="M2 8h12M9 3l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   )
 }
 
-const easeOut: [number, number, number, number] = [0.22, 1, 0.36, 1]
-
 export default function ServicesGrid() {
-  const order = [
-    "stamped-asphalt",
-    "decorative-coatings",
-    "preformed-thermoplastic",
-    "vapor-blasting",
-  ]
-  const ordered = order
-    .map((slug) => services.find((s) => s.slug === slug))
-    .filter((s): s is NonNullable<typeof s> => Boolean(s))
+  const [lead, ...rest] = services
 
   return (
-    <section className="bg-white relative">
-      {/* Top accent bar */}
-      <span
-        aria-hidden
-        className="absolute left-6 lg:left-10 top-0 w-16 h-[3px]"
-        style={{ background: "linear-gradient(90deg, #C8601A 0%, #E8895A 100%)" }}
-      />
+    <section className="bg-white section-padding relative overflow-hidden">
+      <div aria-hidden className="absolute -top-40 left-1/2 -translate-x-1/2 w-[900px] h-[400px] pointer-events-none opacity-50" style={{ background: "radial-gradient(ellipse, rgba(242,100,48,0.05) 0%, transparent 70%)" }} />
 
-      {/* Section header */}
-      <div className="max-w-[1500px] mx-auto px-6 lg:px-10 pt-20 lg:pt-28">
-        <div className="flex items-end justify-between gap-8 mb-10">
+      <Container>
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.7, ease: easeOut }}
+          className="mb-14 lg:mb-20 grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-8 lg:gap-16 items-end"
+        >
           <div>
-            <p className="text-[11px] uppercase tracking-[0.18em] text-[#C8601A] font-semibold mb-5 flex items-center gap-3">
-              <span className="inline-block w-8 h-px bg-[#C8601A]" />
-              What We Do
-            </p>
-            <h2
-              className="text-[#111111]"
-              style={{
-                fontSize: "clamp(2rem, 3.5vw, 3rem)",
-                fontWeight: 800,
-                lineHeight: 0.97,
-                letterSpacing: "-0.04em",
-                textWrap: "balance",
-              }}
-            >
-              Four services.{" "}
-              <span style={{ color: "#C8601A" }}>One specialist team.</span>
+            <div className="flex items-center gap-3 mb-5">
+              <span className="block w-1.5 h-1.5 rounded-full bg-[#F26430]" />
+              <p className="text-[11px] uppercase tracking-[0.28em] text-[#F26430] font-semibold">What We Do</p>
+            </div>
+            <h2 className="text-[clamp(2.25rem,4.5vw,3.5rem)] font-light text-[#0A0A0A] leading-[0.98] tracking-[-0.03em]">
+              Four services.<br />
+              <span className="italic font-extralight">One specialist team.</span>
             </h2>
           </div>
-          <Link
-            href="/services"
-            className="hidden md:inline-flex items-center gap-2 text-[13px] font-bold uppercase tracking-[0.08em] text-[#C8601A] hover:gap-3 transition-all flex-shrink-0 self-end pb-1"
-          >
-            All Services <ArrowRight />
-          </Link>
-        </div>
-      </div>
+          <p className="text-[#5A5A5A] max-w-md leading-[1.7] text-[15px] lg:text-base font-light lg:mb-2">
+            We install the surfaces that define BC communities — from municipal crosswalks and transit corridors to estate driveways and public plazas. No subcontractors. No compromise.
+          </p>
+        </motion.div>
 
-      {/* ── Horizontal card row — landscape cards ─────────────────────────── */}
-      <div
-        className="flex gap-4 pl-6 lg:pl-10 pr-6 pb-20 lg:pb-28 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-        style={{ scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch" }}
-      >
-        {ordered.map((service, i) => (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
           <motion.div
-            key={service.slug}
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.65, delay: i * 0.08, ease: easeOut }}
-            className="flex-shrink-0"
-            style={{
-              scrollSnapAlign: "start",
-              width: "clamp(300px, 42vw, 620px)",
-            }}
+            initial={{ y: 24, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.9, ease: easeOut }}
+            className="lg:col-span-7"
           >
-            <Link
-              href={`/services/${service.slug}`}
-              className="group relative block w-full overflow-hidden"
-              style={{ aspectRatio: "4 / 3", borderRadius: "16px" }}
-            >
-              {/* Full-bleed landscape photography */}
-              <Image
-                src={service.imageUrl}
-                alt={service.name}
-                fill
-                sizes="(min-width: 1024px) 42vw, 90vw"
-                className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-              />
-
-              {/* Cinematic gradient */}
-              <div
-                className="absolute inset-0 pointer-events-none"
-                style={{
-                  background:
-                    "linear-gradient(180deg, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.06) 35%, rgba(0,0,0,0.78) 100%)",
-                }}
-              />
-
-              {/* Category label — top-left */}
-              <p
-                className="absolute top-5 left-5 text-white/80 text-[10px] font-semibold uppercase tracking-[0.22em]"
-                style={{ textShadow: "0 1px 8px rgba(0,0,0,0.5)" }}
-              >
-                {CATEGORY[service.slug] ?? "Service"}
-              </p>
-
-              {/* Orange top-edge reveal on hover */}
-              <div
-                className="absolute top-0 inset-x-0 h-[3px] bg-[#C8601A] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"
-                style={{ borderRadius: "16px 16px 0 0" }}
-              />
-
-              {/* Bottom content block */}
-              <div className="absolute inset-x-0 bottom-0 p-6">
-                {/* Counter */}
-                <span className="text-[#E8895A] text-[10px] font-black uppercase tracking-[0.28em] mb-2 block">
-                  0{i + 1}&nbsp;/&nbsp;0{ordered.length}
-                </span>
-
-                {/* Service name */}
-                <h3
-                  className="text-white font-black leading-none mb-2"
-                  style={{
-                    fontSize: "clamp(1.35rem, 2.2vw, 1.75rem)",
-                    letterSpacing: "-0.03em",
-                  }}
-                >
-                  {service.name}
-                </h3>
-
-                {/* Tagline */}
-                <p className="text-white/58 text-[12px] leading-snug mb-5 max-w-[300px]">
-                  {service.tagline}
-                </p>
-
-                {/* Dual CTAs */}
-                <div className="flex items-center gap-2.5">
-                  <span
-                    className="inline-flex items-center gap-2 text-white text-[11px] font-bold uppercase tracking-[0.08em] px-4 py-2 transition-all hover:brightness-110 whitespace-nowrap"
-                    style={{
-                      background: "linear-gradient(135deg, #C8601A 0%, #E8895A 100%)",
-                      borderRadius: "7px",
-                      boxShadow: "0 2px 10px rgba(200,96,26,0.35)",
-                    }}
-                  >
-                    Explore
-                    <ArrowRight />
-                  </span>
-                  <span
-                    className="inline-flex items-center text-white/88 text-[11px] font-semibold px-4 py-2 transition-all hover:bg-white/10 whitespace-nowrap"
-                    style={{
-                      border: "1px solid rgba(255,255,255,0.26)",
-                      borderRadius: "7px",
-                    }}
-                  >
-                    Learn More
+            <Link href={`/services/${lead.slug}`} className="group block relative overflow-hidden rounded-none bg-[#0F1115]">
+              <div className="relative aspect-[16/10] lg:aspect-[16/11] w-full overflow-hidden">
+                <Image fill sizes="(max-width: 1024px) 100vw, 60vw" className="object-cover transition-transform duration-1000 ease-out group-hover:scale-105" src={lead.imageUrl} alt={lead.name} priority />
+                <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[rgba(15,17,21,0.92)] via-[rgba(15,17,21,0.35)] to-[rgba(15,17,21,0.10)]" />
+                <div className="absolute top-6 left-6 flex items-center gap-2">
+                  <span className="block w-1.5 h-1.5 rounded-full bg-[#F26430]" />
+                  <span className="text-[10px] uppercase tracking-[0.28em] text-white/85 font-semibold">Flagship Service · 01</span>
+                </div>
+                <div className="absolute bottom-0 left-0 right-0 p-7 lg:p-10">
+                  <h3 className="text-white font-light leading-[0.98] tracking-[-0.02em] text-[clamp(2rem,4vw,3rem)] mb-3">{lead.name}</h3>
+                  <p className="text-white/75 text-[15px] lg:text-base leading-[1.6] max-w-md font-light">{lead.tagline}</p>
+                  <span className="mt-6 inline-flex items-center gap-3 text-white text-[13px] uppercase tracking-[0.18em] font-semibold border-b border-white/30 pb-2 group-hover:border-[#F26430] group-hover:text-[#FF8A5C] transition-colors duration-300">
+                    Explore service<ArrowRight />
                   </span>
                 </div>
               </div>
             </Link>
           </motion.div>
-        ))}
 
-        {/* ── Trailing "All Services" card ──────────────────────────────── */}
+          <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-4 lg:gap-4">
+            {rest.map((service, i) => (
+              <motion.div
+                key={service.slug}
+                initial={{ y: 24, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.7, ease: easeOut, delay: 0.1 + i * 0.08 }}
+              >
+                <Link
+                  href={`/services/${service.slug}`}
+                  className="group flex items-stretch gap-0 bg-white border border-[#E2DDD8] hover:border-[#F26430]/40 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] overflow-hidden h-full"
+                >
+                  <div className="relative w-[40%] sm:w-full lg:w-[42%] aspect-square sm:aspect-[3/2] lg:aspect-auto overflow-hidden flex-shrink-0">
+                    <Image fill sizes="(max-width: 640px) 40vw, (max-width: 1024px) 33vw, 25vw" className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" src={service.imageUrl || "/images/applications/crosswalks/crosswalk-1.jpg"} alt={service.name} />
+                  </div>
+                  <div className="flex-1 p-5 lg:p-6 flex flex-col justify-center min-w-0">
+                    <span className="text-[10px] uppercase tracking-[0.22em] text-[#8C8C8C] font-semibold mb-2">0{i + 2}</span>
+                    <h3 className="font-semibold text-[15px] lg:text-base text-[#0A0A0A] leading-tight group-hover:text-[#F26430] transition-colors duration-300">{service.name}</h3>
+                    <p className="text-[13px] text-[#5A5A5A] mt-2 leading-[1.55] line-clamp-2 font-light">{service.tagline}</p>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.55, delay: 0.38, ease: easeOut }}
-          className="flex-shrink-0"
-          style={{
-            scrollSnapAlign: "start",
-            width: "clamp(140px, 12vw, 180px)",
-            aspectRatio: "4 / 3",
-          }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.8, ease: easeOut, delay: 0.3 }}
+          className="mt-12 lg:mt-16 pt-8 border-t border-[#E2DDD8] flex flex-wrap items-center justify-between gap-4"
         >
-          <Link
-            href="/services"
-            className="group flex flex-col items-center justify-center text-center w-full h-full"
-            style={{
-              borderRadius: "16px",
-              background: "#F6F4F0",
-              border: "1.5px solid #E2DDD8",
-            }}
-          >
-            <div
-              className="w-10 h-10 rounded-full flex items-center justify-center mb-3 transition-all duration-300 group-hover:bg-[#C8601A] group-hover:scale-110"
-              style={{ background: "#E2DDD8", color: "#C8601A" }}
-            >
-              <span className="group-hover:text-white transition-colors">
-                <ArrowRight />
-              </span>
-            </div>
-            <p className="text-[#111111] font-bold text-[13px] tracking-tight leading-snug">All{"\n"}Services</p>
-            <p className="text-[#767676] text-[10px] mt-1.5 leading-snug">
-              View everything<br />we do
-            </p>
+          <p className="text-[13px] text-[#5A5A5A] font-light">Not sure which service fits your project?</p>
+          <Link href="/contact" className="group inline-flex items-center gap-3 text-[#0A0A0A] text-[13px] uppercase tracking-[0.18em] font-semibold border-b-2 border-[#F26430] pb-1.5 hover:gap-4 transition-all">
+            Talk to a specialist<ArrowRight />
           </Link>
         </motion.div>
-      </div>
+      </Container>
     </section>
   )
 }
