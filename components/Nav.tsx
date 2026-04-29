@@ -333,7 +333,7 @@ export default function Nav() {
 
       <AnimatePresence>
         {mobileOpen && (
-          <motion.div key="mobile-menu" className="lg:hidden fixed inset-0 z-[70] bg-white flex flex-col"
+          <motion.div key="mobile-menu" className="lg:hidden fixed inset-0 w-full h-full z-[70] bg-white flex flex-col overflow-hidden"
             initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }}
             transition={{ duration: 0.22, ease: "easeOut" }} aria-modal="true" role="dialog" aria-label="Navigation menu">
 
@@ -360,8 +360,12 @@ export default function Nav() {
                     ))}
                   </div>
                 ))}
-                <div className="px-6 py-3 border-t border-[#EDEBE7] mt-2">
-                  <Link href="/products" onClick={closeAll} className="text-sm font-semibold text-[#F26430] hover:underline">View All Products &rarr;</Link>
+                <div className="px-6 py-3 border-t border-[#EDEBE7] mt-2 space-y-2">
+                  <div className="flex items-center gap-5 flex-wrap">
+                    <Link href="/products" onClick={closeAll} className="text-sm font-semibold text-[#F26430] hover:underline">View All Products &rarr;</Link>
+                    <Link href="/products" onClick={closeAll} className="text-sm font-semibold text-[#5A5A5A] hover:text-[#F26430] hover:underline">Download Spec Sheets &rarr;</Link>
+                  </div>
+                  <p className="text-[11px] text-[#8C8C8C] tracking-[0.04em]">Authorized HUB Surface Systems Applicator</p>
                 </div>
               </MobileAccordion>
 
@@ -375,8 +379,9 @@ export default function Nav() {
                     </Link>
                   ))}
                 </div>
-                <div className="px-6 py-3 border-t border-[#EDEBE7] mt-1">
+                <div className="px-6 py-3 border-t border-[#EDEBE7] mt-1 space-y-1.5">
                   <Link href="/contact" onClick={closeAll} className="text-sm font-semibold text-[#F26430] hover:underline">Book a Site Visit &rarr;</Link>
+                  <p className="text-[11px] text-[#8C8C8C] tracking-[0.04em]">25 years &middot; 51+ BC communities &middot; Mobile across BC</p>
                 </div>
               </MobileAccordion>
 
