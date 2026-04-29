@@ -3,16 +3,10 @@ import Link from "next/link"
 import Image from "next/image"
 import { projects, getProjectBySlug } from "@/lib/projects"
 import type { Metadata } from "next"
+import Container from "@/components/ui/Container"
 
 interface Props {
   params: Promise<{ slug: string }>
-}
-
-const serviceImageMap: Record<string, string> = {
-  "Stamped Asphalt": "/images/products/streetprint/streetprint-1.jpg",
-  "Decorative Coatings": "/images/products/streetbond/streetbond-1.jpg",
-  "Preformed Thermoplastic": "/images/products/traffic-patterns/trafficpatterns-1.jpg",
-  "Vapor Blasting": "/images/products/streetbond/streetbond-1.jpg",
 }
 
 const serviceSlugMap: Record<string, string> = {
@@ -33,7 +27,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${project.title} | Square One Paving BC`,
     description: project.excerpt,
+    alternates: { canonical: `https://squareonepaving.ca/projects/${slug}` },
+    openGraph: {
+      title: `${project.title} | Square One Paving BC`,
+      description: project.excerpt,
+      images: project.imageUrl ? [project.imageUrl] : undefined,
+    },
   }
+}
+
+function ArrowRight() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">
+      <path d="M1 7H13M13 7L7.5 1.5M13 7L7.5 12.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="square" />
+    </svg>
+  )
 }
 
 export default async function ProjectPage({ params }: Props) {
@@ -44,173 +52,238 @@ export default async function ProjectPage({ params }: Props) {
     notFound()
   }
 
-  const heroImage = serviceImageMap[project.service] ?? "/images/products/streetprint/streetprint-1.jpg"
+  const heroImage = project.imageUrl || "/images/applications/private-driveways/estate-herringbone-gated-driveway-01.jpg"
   const serviceSlug = serviceSlugMap[project.service] ?? "stamped-asphalt"
 
-  const relatedProjects = projects
-    .filter(
-      (p) =>
-        p.slug !== slug &&
-        (p.service === project.service || p.application === project.application)
-    )
-    .slice(0, 3)
+  // Related projects — same service or application, but with DIFFERENT images so the row is varied.
+  const relatedPool = projects.filter(
+    (p) => p.slug !== slug && (p.service === project.service || p.application === project.application)
+  )
+  const seenImages = new Set<string>()
+  const relatedProjects: typeof projects = []
+  for (const p of relatedPool) {
+    if (!seenImages.has(p.imageUrl)) {
+      seenImages.add(p.imageUrl)
+      relatedProjects.push(p)
+      if (relatedProjects.length === 3) break
+    }
+  }
+  // If we still have fewer than 3 (small pool), top up with any other featured projects with unique imagery.
+  if (relatedProjects.length < 3) {
+    for (const p of projects) {
+      if (p.slug === slug) continue
+      if (seenImages.has(p.imageUrl)) continue
+      seenImages.add(p.imageUrl)
+      relatedProjects.push(p)
+      if (relatedProjects.length === 3) break
+    }
+  }
 
   return (
-    <main className="bg-[#FAFAFA]">
+    <main className="bg-white">
 
-      {/* Hero */}
-      <section className="relative min-h-[55vh] flex items-end overflow-hidden">
-        <div className="absolute inset-0 z-0">
+      {/* ── Hero — cinematic, uses the project's actual image ─────────────── */}
+      <section className="relative min-h-[68vh] lg:min-h-[78vh] flex items-end overflow-hidden bg-[#0A0A0A]">
+        <div className="absolute inset-0">
           <Image
             src={heroImage}
             alt={project.title}
             fill
-            className="object-cover"
             priority
             sizes="100vw"
+            className="object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10" />
+          <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-[rgba(10,10,10,0.45)] via-[rgba(10,10,10,0.30)] to-[rgba(10,10,10,0.95)]" />
+          <div aria-hidden className="absolute inset-0 bg-gradient-to-r from-[rgba(10,10,10,0.55)] via-transparent to-[rgba(10,10,10,0.20)]" />
         </div>
 
-        <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-12 pb-16 pt-36 w-full">
-          <Link href="/projects" className="text-white/60 hover:text-white text-sm transition-colors mb-4 inline-block">
-            &#8592; All Projects
+        <Container className="relative z-10 w-full pt-32 pb-20 lg:pb-28">
+          <Link href="/projects" className="group inline-flex items-center gap-2 text-white/70 hover:text-white text-[12px] uppercase tracking-[0.18em] font-semibold transition-colors mb-7">
+            <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true" className="transition-transform group-hover:-translate-x-1">
+              <path d="M13 7H1M1 7L6.5 1.5M1 7L6.5 12.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="square" />
+            </svg>
+            All Projects
           </Link>
-          <div className="flex gap-2 mb-4">
-            <span className="bg-[#D66620] text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded">
-              {project.service}
-            </span>
-            <span className="bg-white/20 text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded">
-              {project.application}
-            </span>
+
+          <div className="flex items-center gap-3 mb-7 flex-wrap">
+            <span className="block w-1.5 h-1.5 rounded-full bg-[#F26430] pulse-dot" />
+            <span className="text-[11px] uppercase tracking-[0.28em] text-[#FF8A5C] font-bold">{project.service}</span>
+            <span className="hidden sm:block w-px h-3 bg-white/20" />
+            <span className="text-[10.5px] uppercase tracking-[0.18em] text-white/60 font-semibold">{project.application}</span>
+            {project.year && (
+              <>
+                <span className="hidden sm:block w-px h-3 bg-white/20" />
+                <span className="text-[10.5px] uppercase tracking-[0.18em] text-white/60 font-semibold">{project.year}</span>
+              </>
+            )}
           </div>
-          <h1 className="text-4xl sm:text-5xl font-black text-white leading-tight mb-3 max-w-3xl">
+
+          <h1 className="text-white display-h max-w-4xl" style={{ fontSize: "clamp(2.25rem, 5.5vw, 4.5rem)" }}>
             {project.title}
           </h1>
-          <p className="text-white/80">{project.city}</p>
-        </div>
+          <p className="text-white/75 mt-6 text-[15px] lg:text-base font-light tracking-[-0.005em]">{project.city}</p>
+        </Container>
       </section>
 
-      {/* Content */}
-      <section className="py-16 px-6 sm:px-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+      {/* ── Body ─────────────────────────────────────────────────────────── */}
+      <section className="bg-white py-16 lg:py-24">
+        <Container>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16">
 
-            {/* Main content */}
+            {/* Main column */}
             <div className="lg:col-span-2">
-              <h2 className="text-2xl font-black text-[#333333] mb-5">Project Overview</h2>
-              <p className="text-[#626262] leading-relaxed mb-12 text-base">{project.excerpt}</p>
+              <p className="text-[10.5px] uppercase tracking-[0.28em] text-[#F26430] font-bold mb-4">Project Overview</p>
+              <h2 className="text-[#0A0A0A] display-h mb-7" style={{ fontSize: "clamp(1.75rem, 3vw, 2.25rem)" }}>
+                The brief, in detail.
+              </h2>
+              <p className="text-[#2C2C2C] leading-[1.8] text-[15.5px] font-light max-w-2xl">
+                {project.excerpt}
+              </p>
 
-              {/* Gallery */}
-              <h2 className="text-2xl font-black text-[#333333] mb-6">Gallery</h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                {[1, 2, 3, 4, 5, 6].map((n) => (
-                  <div key={n} className="relative aspect-square rounded-xl overflow-hidden bg-[#F2EFE9]">
-                    <Image
-                      src={heroImage}
-                      alt={`${project.title} photo ${n}`}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width:640px) 50vw, 33vw"
-                    />
-                    <div className="absolute inset-0 bg-black/10" />
+              {/* Single hero image as the lead visual instead of a duplicate gallery */}
+              <div className="mt-12 lg:mt-16 relative aspect-[16/10] overflow-hidden bg-[#F6F4F0]">
+                <Image
+                  src={heroImage}
+                  alt={`${project.title} — surface system installation`}
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 66vw"
+                  className="object-cover"
+                />
+              </div>
+              <p className="mt-3 text-[11.5px] uppercase tracking-[0.18em] text-[#8C8C8C] font-semibold">
+                {project.title} &middot; {project.city}
+              </p>
+
+              {/* Quick facts strip */}
+              <div className="mt-12 lg:mt-16 grid grid-cols-1 sm:grid-cols-3 gap-0 border-t border-[#E2DDD8]">
+                {[
+                  { label: "Service", value: project.service },
+                  { label: "Application", value: project.application },
+                  { label: "Location", value: project.city },
+                ].map((d, i) => (
+                  <div key={d.label} className={`p-6 lg:p-7 border-b border-[#E2DDD8] ${i < 2 ? "sm:border-r border-[#E2DDD8]" : ""}`}>
+                    <p className="text-[10.5px] uppercase tracking-[0.28em] text-[#F26430] font-bold mb-2.5">{d.label}</p>
+                    <p className="text-[#0A0A0A] font-semibold text-[15px] leading-[1.4] tracking-[-0.005em]">{d.value}</p>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Sidebar */}
-            <div>
-              <div className="bg-white rounded-2xl border border-[#E8E4DE] p-7 sticky top-24">
-                <h3 className="font-black text-base text-[#333333] mb-5">Project Details</h3>
-                <div className="space-y-3 mb-7">
+            <aside>
+              <div className="bg-[#F6F4F0] border-l-2 border-[#F26430] p-7 lg:p-8 lg:sticky lg:top-28">
+                <p className="text-[10.5px] uppercase tracking-[0.28em] text-[#F26430] font-bold mb-5">Project Details</p>
+                <div className="space-y-4 mb-7">
                   {[
                     { label: "Service", value: project.service },
                     { label: "Application", value: project.application },
                     { label: "Location", value: project.city },
-                  ].map((detail) => (
-                    <div key={detail.label} className="flex justify-between text-sm border-b border-[#F2EFE9] pb-3 gap-3">
-                      <span style={{ color: "#767676" }}>{detail.label}</span>
-                      <span className="font-semibold text-[#333333] text-right">{detail.value}</span>
+                    ...(project.year ? [{ label: "Year", value: project.year }] : []),
+                  ].map((d) => (
+                    <div key={d.label} className="flex justify-between gap-3 text-[13px] border-b border-[#E2DDD8] pb-3 last:border-b-0">
+                      <span className="text-[#8C8C8C] font-medium tracking-[0.02em]">{d.label}</span>
+                      <span className="font-semibold text-[#0A0A0A] text-right tracking-[-0.005em]">{d.value}</span>
                     </div>
                   ))}
                 </div>
 
                 <Link
                   href={`/services/${serviceSlug}`}
-                  className="block w-full text-center font-bold py-3.5 rounded-lg text-sm bg-[#D66620] hover:bg-[#C05A18] text-white transition-colors uppercase tracking-wider mb-3"
+                  className="group block w-full text-center font-semibold py-3.5 text-[12px] tracking-[0.18em] uppercase bg-[#0A0A0A] hover:bg-[#F26430] text-white transition-colors mb-3 inline-flex items-center justify-center gap-3"
                 >
-                  View {project.service}
+                  View {project.service}<ArrowRight />
                 </Link>
                 <Link
                   href="/contact"
-                  className="block w-full text-center font-semibold py-3.5 rounded-lg text-sm border border-[#E8E4DE] text-[#333333] hover:border-[#D66620]/50 hover:text-[#D66620] transition-colors"
+                  className="block w-full text-center font-semibold py-3.5 text-[12px] tracking-[0.18em] uppercase border border-[#0A0A0A] text-[#0A0A0A] hover:bg-[#0A0A0A] hover:text-white transition-colors"
                 >
                   Request a Quote
                 </Link>
               </div>
-            </div>
+            </aside>
           </div>
-        </div>
+        </Container>
       </section>
 
-      {/* Related Projects */}
+      {/* ── Related Projects ─────────────────────────────────────────────── */}
       {relatedProjects.length > 0 && (
-        <section className="py-16 px-6 sm:px-8 bg-white border-t border-[#E8E4DE]">
-          <div className="max-w-6xl mx-auto">
-            <p className="text-[#D66620] text-xs uppercase tracking-[0.22em] font-semibold mb-3">Similar Work</p>
-            <h2 className="text-2xl font-black text-[#333333] mb-8">Related Projects</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {relatedProjects.map((p) => {
-                const img = serviceImageMap[p.service] ?? heroImage
-                return (
-                  <Link
-                    key={p.slug}
-                    href={`/projects/${p.slug}`}
-                    className="group bg-[#F2EFE9] rounded-xl overflow-hidden border border-[#E8E4DE] hover:border-[#D66620]/40 hover:shadow-lg transition-all"
-                  >
-                    <div className="relative h-40 overflow-hidden">
-                      <Image src={img} alt={p.title} fill className="object-cover group-hover:scale-105 transition-transform duration-500" sizes="33vw" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                      <span className="absolute bottom-2 left-2 bg-[#D66620] text-white text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded">
-                        {p.service}
-                      </span>
-                    </div>
-                    <div className="p-5">
-                      <h3 className="font-black text-sm text-[#333333] group-hover:text-[#D66620] transition-colors mb-1">{p.title}</h3>
-                      <p className="text-xs" style={{ color: "#767676" }}>{p.city}</p>
-                    </div>
-                  </Link>
-                )
-              })}
+        <section className="bg-[#F6F4F0] py-20 lg:py-24 border-t border-[#E2DDD8]">
+          <Container>
+            <div className="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-6 lg:gap-12 items-end mb-12">
+              <div>
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="block w-1.5 h-1.5 rounded-full bg-[#F26430]" />
+                  <p className="text-[11px] uppercase tracking-[0.28em] text-[#F26430] font-semibold">Similar Work</p>
+                </div>
+                <h2 className="text-[#0A0A0A] display-h" style={{ fontSize: "clamp(1.9rem, 3.5vw, 2.75rem)" }}>
+                  Related projects.
+                </h2>
+              </div>
+              <Link href="/projects" className="group inline-flex items-center gap-3 text-[#0A0A0A] text-[12px] uppercase tracking-[0.18em] font-semibold border-b border-[#0A0A0A] pb-1.5 hover:gap-4 transition-all self-end justify-self-start lg:justify-self-end">
+                See all projects<ArrowRight />
+              </Link>
             </div>
-          </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6">
+              {relatedProjects.map((p) => (
+                <Link
+                  key={p.slug}
+                  href={`/projects/${p.slug}`}
+                  className="group bg-white border border-[#E2DDD8] hover:border-[#F26430]/40 hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)] hover:-translate-y-0.5 transition-all duration-500 overflow-hidden"
+                >
+                  <div className="relative aspect-[4/3] overflow-hidden">
+                    <Image
+                      src={p.imageUrl || "/images/applications/private-driveways/estate-herringbone-gated-driveway-01.jpg"}
+                      alt={p.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                    />
+                    <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[rgba(10,10,10,0.55)] via-transparent to-transparent" />
+                    <div className="absolute top-4 left-4 flex items-center gap-2 bg-[rgba(10,10,10,0.65)] backdrop-blur-md px-3 py-1.5">
+                      <span className="block w-1 h-1 rounded-full bg-[#F26430]" />
+                      <span className="text-[10px] uppercase tracking-[0.22em] text-white font-semibold">{p.service}</span>
+                    </div>
+                  </div>
+                  <div className="p-5 lg:p-6">
+                    <h3 className="font-semibold text-[#0A0A0A] text-[15.5px] leading-[1.3] tracking-[-0.005em] group-hover:text-[#F26430] transition-colors mb-2">
+                      {p.title}
+                    </h3>
+                    <p className="text-[12.5px] text-[#5A5A5A] font-light">{p.city}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </Container>
         </section>
       )}
 
-      {/* CTA */}
-      <section className="py-20 px-6 sm:px-8 bg-[#32373C]">
-        <div className="max-w-3xl mx-auto text-center">
-          <p className="text-[#F0A04B] text-xs uppercase tracking-[0.22em] font-semibold mb-5">Start Your Project</p>
-          <h2 className="text-3xl sm:text-4xl font-black text-white mb-5">
-            Ready to Transform Your Surface?
-          </h2>
-          <p className="text-white/75 mb-10">
-            Free consultation and quote for your BC surface project.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/contact">
-              <span className="inline-block bg-[#D66620] hover:bg-[#C05A18] text-white px-10 py-4 rounded-lg font-bold text-sm uppercase tracking-wider transition-colors">
-                Request a Free Quote
-              </span>
-            </Link>
-            <a href="tel:6043098212">
-              <span className="inline-block border border-white/25 text-white hover:bg-white/10 px-10 py-4 rounded-lg font-semibold text-sm transition-colors">
+      {/* ── CTA ──────────────────────────────────────────────────────────── */}
+      <section className="relative bg-[#0A0A0A] py-20 lg:py-28 overflow-hidden">
+        <div aria-hidden className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at center, rgba(242,100,48,0.14) 0%, transparent 65%)" }} />
+        <Container className="relative">
+          <div className="max-w-2xl">
+            <div className="flex items-center gap-3 mb-6">
+              <span className="block w-1.5 h-1.5 rounded-full bg-[#F26430] pulse-dot" />
+              <p className="text-[11px] uppercase tracking-[0.28em] text-[#FF8A5C] font-bold">Start Your Project</p>
+            </div>
+            <h2 className="text-white display-h mb-7" style={{ fontSize: "clamp(2rem, 4vw, 3.25rem)" }}>
+              Ready to transform<br />
+              <span className="italic font-extralight">a surface?</span>
+            </h2>
+            <p className="text-white/75 text-[15.5px] leading-[1.7] mb-9 max-w-xl font-light">
+              Free consultation and quote across BC. Tell us what you&apos;re working with &mdash; we&apos;ll come back the same week with the right specification.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <Link href="/contact" className="group bg-white text-[#0A0A0A] px-9 py-4 font-semibold text-[12.5px] tracking-[0.04em] uppercase rounded-none hover:bg-[#F26430] hover:text-white transition-colors duration-300 inline-flex items-center gap-3">
+                Request a Quote<ArrowRight />
+              </Link>
+              <a href="tel:6043098212" className="group border border-white/30 text-white px-9 py-4 font-medium text-[12.5px] tracking-[0.04em] uppercase rounded-none hover:bg-white hover:text-[#0A0A0A] transition-colors duration-300 inline-flex items-center gap-3">
                 604-309-8212
-              </span>
-            </a>
+              </a>
+            </div>
           </div>
-        </div>
+        </Container>
       </section>
     </main>
   )
