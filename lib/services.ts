@@ -130,7 +130,7 @@ export const services: Service[] = [
       "Eco-friendly water-based options",
       "Cost-effective for large areas",
     ],
-    imageUrl: "/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg",
+    imageUrl: "/images/products/streetbond/streetbond-red-waterfront-promenade-01.jpg",
   },
   {
     slug: "preformed-thermoplastic",
@@ -169,7 +169,7 @@ export const services: Service[] = [
       "Long service life (7+ years)",
       "No spray drift or overspray",
     ],
-    imageUrl: "/images/products/premark/premark-arrows-installation-intersection-01.jpg",
+    imageUrl: "/images/applications/crosswalks/crosswalk-1.jpg",
   },
 ]
 
