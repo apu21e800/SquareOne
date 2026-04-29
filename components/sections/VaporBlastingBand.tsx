@@ -36,7 +36,7 @@ export default function VaporBlastingBand() {
           does better.
         </h2>
 
-        <p className="text-white/70 text-[15px] leading-[1.7] mb-10 max-w-md font-light">
+        <p className="text-white/70 text-[15px] leading-[1.7] mb-10 max-w-md font-normal">
           Vapor blasting uses a pressurised mix of water and fine abrasive media to clean and restore surfaces with
           zero heat stress. The result: factory-fresh texture with no media embedment. We brought this technology to BC
           because preparation is as important as installation.
@@ -64,8 +64,8 @@ export default function VaporBlastingBand() {
 
       <div className="relative aspect-[4/3] md:aspect-auto md:min-h-[680px] order-1 md:order-2 overflow-hidden">
         <Image
-          src="/images/services/vapor-blasting/hero.jpg"
-          alt="Vapor blasting at Granville Island — Square One Paving"
+          src="/images/products/streetbond/streetbond-cobble-macro-surface-01.jpg"
+          alt="Surface preparation — Square One Paving"
           fill
           className="object-cover"
           sizes="(max-width: 768px) 100vw, 60vw"
@@ -75,7 +75,7 @@ export default function VaporBlastingBand() {
 
         <div className="absolute bottom-6 right-6 flex items-center gap-2 bg-[rgba(10,10,10,0.65)] backdrop-blur-md px-3.5 py-2">
           <span className="block w-1.5 h-1.5 rounded-full bg-[#F26430]" />
-          <span className="text-[10px] uppercase tracking-[0.22em] text-white font-semibold">Granville Island, BC</span>
+          <span className="text-[10px] uppercase tracking-[0.22em] text-white font-semibold">Vancouver, BC</span>
         </div>
 
         <div className="absolute top-6 right-6 hidden md:flex items-center gap-2 bg-[rgba(10,10,10,0.65)] backdrop-blur-md px-3.5 py-2">

@@ -2,7 +2,6 @@
 @plugin "@tailwindcss/typography";
 
 :root {
-  /* ─── Brand — Premium Vivid Orange ─────────────────── */
   --color-orange: #F26430;
   --color-orange-hover: #D85016;
   --color-orange-deep: #B53D0E;
@@ -48,38 +47,38 @@
   --shadow-cta-hover: 0 8px 32px rgba(242,100,48,0.45);
 }
 
-/* ────────────────────────────────────────────────────────── */
-/* Base — wrapped in @layer so utilities can override */
-/* ────────────────────────────────────────────────────────── */
 @layer base {
   body {
     background-color: var(--bg-primary);
     color: var(--text-body);
-    font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-family: var(--font-poppins), var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     font-size: 16px;
     line-height: 1.7;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 
   html { scroll-behavior: smooth; }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-family: var(--font-poppins), var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     color: inherit;
-    letter-spacing: -0.02em;
-    line-height: 1.1;
+    letter-spacing: -0.025em;
+    line-height: 1.08;
   }
 
-  h1 { font-size: clamp(3rem, 5.5vw, 5.5rem); font-weight: 300; }
-  h2 { font-size: clamp(1.9rem, 3vw, 3rem); font-weight: 300; }
-  h3 { font-size: clamp(1.1rem, 1.5vw, 1.35rem); font-weight: 600; line-height: 1.3; letter-spacing: -0.01em; }
-  h4 { font-weight: 600; line-height: 1.3; }
-  h5, h6 { font-weight: 600; line-height: 1.3; }
+  h1 { font-size: clamp(3rem, 5.5vw, 5.5rem); font-weight: 400; }
+  h2 { font-size: clamp(1.9rem, 3vw, 3rem); font-weight: 400; }
+  h3 { font-size: clamp(1.1rem, 1.5vw, 1.35rem); font-weight: 600; line-height: 1.3; letter-spacing: -0.015em; }
+  h4 { font-weight: 600; line-height: 1.3; letter-spacing: -0.01em; }
+  h5, h6 { font-weight: 600; line-height: 1.3; letter-spacing: -0.01em; }
 
   p { line-height: 1.75; }
 }
+
+.font-poppins { font-family: var(--font-poppins), var(--font-inter), sans-serif; }
 
 .eyebrow {
   font-size: 11px;
@@ -166,9 +165,13 @@
 }
 
 .display-h {
+  font-weight: 300;
+  letter-spacing: -0.038em;
+  line-height: 0.96;
+}
+.display-h em, .display-h .italic {
   font-weight: 200;
-  letter-spacing: -0.04em;
-  line-height: 0.92;
+  letter-spacing: -0.045em;
 }
 
 @keyframes shimmer {

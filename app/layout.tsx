@@ -1,14 +1,23 @@
 import type { Metadata } from "next"
-import { Inter } from 'next/font/google'
+import { Poppins, Inter } from 'next/font/google'
 import "./globals.css"
 import Nav from "@/components/Nav"
 import Footer from "@/components/Footer"
-import StickyBar from "@/components/StickyBar"
 
+// Primary brand font — matches the wordmark
+const poppins = Poppins({
+  subsets: ['latin'],
+  variable: '--font-poppins',
+  weight: ['200', '300', '400', '500', '600', '700', '800'],
+  display: 'swap',
+})
+
+// Inter retained as fallback for body if needed
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
-  weight: ['300', '400', '500', '600', '700', '800'],
+  weight: ['300', '400', '500', '600', '700'],
+  display: 'swap',
 })
 
 export const metadata: Metadata = {
@@ -26,10 +35,6 @@ export const metadata: Metadata = {
     "preformed thermoplastic BC",
     "vapor blasting Lower Mainland",
     "pavement applicator BC",
-    "crosswalk installation BC",
-    "bike lane coatings Vancouver",
-    "surface preparation BC",
-    "BC paving contractor",
   ],
   openGraph: {
     type: "website",
@@ -38,43 +43,27 @@ export const metadata: Metadata = {
     siteName: "Square One Paving",
     title: "Square One Paving | BC's Decorative Pavement Specialists since 2000",
     description:
-      "BC's trusted decorative pavement applicators since 2000. Stamped asphalt, decorative coatings, preformed thermoplastic, and vapor blasting for municipalities, developers, and contractors across BC.",
+      "BC's trusted decorative pavement applicators since 2000.",
     images: [
-      {
-        url: "/images/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Square One Paving",
-      },
+      { url: "/images/og-image.jpg", width: 1200, height: 630, alt: "Square One Paving" },
     ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Square One Paving | BC's Decorative Pavement Specialists since 2000",
-    description:
-      "BC's trusted decorative pavement applicators since 2000. Stamped asphalt, decorative coatings, preformed thermoplastic, and vapor blasting for municipalities, developers, and contractors across BC.",
+    description: "BC's trusted decorative pavement applicators since 2000.",
   },
-  alternates: {
-    canonical: "https://squareonepaving.ca",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
+  alternates: { canonical: "https://squareonepaving.ca" },
+  robots: { index: true, follow: true },
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable}`}>
-      <body className="antialiased">
+    <html lang="en" className={`${poppins.variable} ${inter.variable}`}>
+      <body className="antialiased font-poppins">
         <Nav />
         {children}
         <Footer />
-        <StickyBar />
       </body>
     </html>
   )
