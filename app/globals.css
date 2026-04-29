@@ -51,7 +51,7 @@
   body {
     background-color: var(--bg-primary);
     color: var(--text-body);
-    font-family: var(--font-poppins), var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-family: var(--font-inter), var(--font-poppins), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     font-size: 16px;
     line-height: 1.7;
     overflow-x: hidden;
@@ -63,14 +63,14 @@
   html { scroll-behavior: smooth; }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-poppins), var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-family: var(--font-inter), var(--font-poppins), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     color: inherit;
-    letter-spacing: -0.025em;
+    letter-spacing: -0.022em;
     line-height: 1.08;
   }
 
-  h1 { font-size: clamp(3rem, 5.5vw, 5.5rem); font-weight: 400; }
-  h2 { font-size: clamp(1.9rem, 3vw, 3rem); font-weight: 400; }
+  h1 { font-size: clamp(3rem, 5.5vw, 5.5rem); font-weight: 300; }
+  h2 { font-size: clamp(1.9rem, 3vw, 3rem); font-weight: 300; }
   h3 { font-size: clamp(1.1rem, 1.5vw, 1.35rem); font-weight: 600; line-height: 1.3; letter-spacing: -0.015em; }
   h4 { font-weight: 600; line-height: 1.3; letter-spacing: -0.01em; }
   h5, h6 { font-weight: 600; line-height: 1.3; letter-spacing: -0.01em; }
@@ -165,13 +165,13 @@
 }
 
 .display-h {
-  font-weight: 300;
-  letter-spacing: -0.038em;
-  line-height: 0.96;
+  font-weight: 200;
+  letter-spacing: -0.04em;
+  line-height: 0.94;
 }
 .display-h em, .display-h .italic {
-  font-weight: 200;
-  letter-spacing: -0.045em;
+  font-weight: 100;
+  letter-spacing: -0.05em;
 }
 
 @keyframes shimmer {

@@ -3,6 +3,8 @@ import { Poppins, Inter } from 'next/font/google'
 import "./globals.css"
 import Nav from "@/components/Nav"
 import Footer from "@/components/Footer"
+import StructuredData from "@/components/StructuredData"
+import MobileStickyCTA from "@/components/MobileStickyCTA"
 
 // Primary brand font — matches the wordmark
 const poppins = Poppins({
@@ -60,10 +62,12 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${poppins.variable} ${inter.variable}`}>
-      <body className="antialiased font-poppins">
+      <body className="antialiased">
+        <StructuredData />
         <Nav />
         {children}
         <Footer />
+        <MobileStickyCTA />
       </body>
     </html>
   )
