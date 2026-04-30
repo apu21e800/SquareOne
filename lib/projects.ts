@@ -11,7 +11,7 @@ export interface Project {
 }
 
 export const projects: Project[] = [
-  // ── Featured commercial case studies ──────────────────────
+  // ── Featured commercial case studies ──────────────────────────────────
 
   {
     title: "UBC & Musqueam Crosswalk",
@@ -59,7 +59,7 @@ export const projects: Project[] = [
     featured: true,
     excerpt:
       "TrafficPatternsXD install across pedestrian transition zones at Brighouse SkyTrain Station on No. 3 Road, Richmond. Heavy-duty thermoplastic for the Canada Line terminus.",
-    imageUrl: "/images/applications/bus-bike-lanes/red-bus-lane-tpxd-crosswalk-station-01.jpg",
+    imageUrl: "/images/S1_update_v2/photos/Featured image options/IMG_3178-scaled-e1590114559108.jpeg",
   },
   {
     title: "Every Child Matters — New Westminster",
@@ -134,7 +134,7 @@ export const projects: Project[] = [
     imageUrl: "/images/products/streetbond/streetbond-stamped-pattern-wide-01.jpg",
   },
 
-  // ── Residential & Strata ──────────────────────────────
+  // ── Residential & Strata ──────────────────────────────────────────────
 
   {
     title: "Bowen Island Residential Driveway",
@@ -187,7 +187,7 @@ export const projects: Project[] = [
     imageUrl: "/images/applications/crosswalks/crosswalk-1.jpg",
   },
 
-  // ── Transit & Bike Infrastructure ────────────────────────
+  // ── Transit & Bike Infrastructure ──────────────────────────────────────
 
   {
     title: "BC Transit Priority Lane — Victoria",
@@ -223,7 +223,7 @@ export const projects: Project[] = [
     imageUrl: "/images/products/streetbond/streetbond-crosswalk-perspective-01.jpg",
   },
 
-  // ── Parking & Surface Prep ─────────────────────────────────
+  // ── Parking & Surface Prep ───────────────────────────────────────────────
 
   {
     title: "Westshore Parking Markings — Langford",
