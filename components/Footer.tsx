@@ -136,11 +136,11 @@ export default function Footer() {
             <Link href="/terms" className="hover:text-white/70 transition-colors">Terms</Link>
           </div>
           <div className="flex items-center gap-2.5 text-white/45 text-[11px] tracking-[0.04em]">
-            <svg viewBox="0 0 20 10" style={{ width: 28, height: 14, display: 'inline-block', flexShrink: 0 }} aria-hidden="true">
-              <rect x="0" y="0" width="5" height="10" fill="#D80621" />
-              <rect x="5" y="0" width="10" height="10" fill="#FFFFFF" />
-              <rect x="15" y="0" width="5" height="10" fill="#D80621" />
-              <path d="M10 1.5 L10.6 3.5 L12.5 3.5 L11.1 4.6 L11.6 6.5 L10 5.4 L8.4 6.5 L8.9 4.6 L7.5 3.5 L9.4 3.5 Z" fill="#D80621" />
+            <svg viewBox="0 0 32 16" style={{ width: 30, height: 15, display: 'inline-block', flexShrink: 0 }} aria-hidden="true">
+              <rect x="0" y="0" width="8" height="16" fill="#D80621" />
+              <rect x="8" y="0" width="16" height="16" fill="#FFFFFF" />
+              <rect x="24" y="0" width="8" height="16" fill="#D80621" />
+              <path d="M16 3.2 L16.55 5.4 L18.25 4.95 L17.55 6.55 L19 7.55 L17.4 8.05 L17.85 9.65 L16.5 8.55 L16 10.7 L15.5 8.55 L14.15 9.65 L14.6 8.05 L13 7.55 L14.45 6.55 L13.75 4.95 L15.45 5.4 Z" fill="#D80621" />
             </svg>
             <span className="uppercase">Proudly Canadian &middot; Serving BC since 2000</span>
           </div>

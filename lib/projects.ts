@@ -23,7 +23,7 @@ export const projects: Project[] = [
     featured: true,
     excerpt:
       "Collaborative crosswalk at University Boulevard and Wesbrook Mall — UBC and Musqueam crests woven together in TrafficPatterns, acknowledging the campus stands on unceded Musqueam territory.",
-    imageUrl: "/images/products/streetbond/streetbond-coloured-plaza-art-mural-01.jpg",
+    imageUrl: "/images/S1_update_v2/photos/Featured image options/UBC-crosswalk-3-300dpi.jpg",
   },
   {
     title: "Joyce SkyTrain Station Public Art",
@@ -59,7 +59,7 @@ export const projects: Project[] = [
     featured: true,
     excerpt:
       "TrafficPatternsXD install across pedestrian transition zones at Brighouse SkyTrain Station on No. 3 Road, Richmond. Heavy-duty thermoplastic for the Canada Line terminus.",
-    imageUrl: "/images/applications/bus-bike-lanes/red-bus-lane-tpxd-crosswalk-station-01.jpg",
+    imageUrl: "/images/S1_update_v2/photos/Featured image options/IMG_3178-scaled-e1590114559108.jpeg",
   },
   {
     title: "Every Child Matters — New Westminster",

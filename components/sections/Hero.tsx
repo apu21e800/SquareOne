@@ -8,11 +8,11 @@ import Container from "@/components/ui/Container"
 
 const heroSlides: { src: string; alt: string; eyebrow: string; tag: string; locale: string }[] = [
   {
-    src: "/images/products/streetbond/streetbond-red-waterfront-promenade-01.jpg",
-    alt: "Memorial Park decorative crosswalk — Square One Paving",
-    eyebrow: "Streetscapes",
-    tag: "White Rock, BC",
-    locale: "Memorial Park, BC waterfront",
+    src: "/images/S1_update_v2/photos/Featured image options/UBC-crosswalk-3-300dpi.jpg",
+    alt: "UBC × Musqueam crosswalk by Square One Paving",
+    eyebrow: "Indigenous Public Art",
+    tag: "Vancouver, BC",
+    locale: "UBC × Musqueam Crosswalk, TrafficPatterns",
   },
   {
     src: "/images/applications/private-driveways/estate-herringbone-gated-driveway-01.jpg",
@@ -29,18 +29,18 @@ const heroSlides: { src: string; alt: string; eyebrow: string; tag: string; loca
     locale: "Coloured cycling corridor",
   },
   {
-    src: "/images/products/streetbond/streetbond-red-roundabout-mountains-01.jpg",
-    alt: "Decorative red brick roundabout by Square One Paving",
-    eyebrow: "Municipal Roundabouts",
-    tag: "Vancouver Island",
-    locale: "Heritage stone roundabout",
+    src: "/images/products/streetbond/streetbond-multicolour-plaza-green-circles-01.jpg",
+    alt: "Langley Events Centre — Circle of Life public art by Square One Paving",
+    eyebrow: "Civic Public Art",
+    tag: "Langley, BC",
+    locale: "Langley Events Centre — Circle of Life",
   },
   {
     src: "/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg",
     alt: "StreetBond multicolour transit plaza at dusk — Square One Paving",
     eyebrow: "Transit & Public Realm",
     tag: "Metro Vancouver",
-    locale: "SkyTrain plaza, multi-colour StreetBond",
+    locale: "Joyce SkyTrain Plaza, multi-colour StreetBond",
   },
 ]
 

@@ -8,8 +8,8 @@ const SLIDES = [
   {
     id: "municipal",
     label: "Crosswalks & Civic",
-    bgImage: "/images/products/streetbond/streetbond-red-roundabout-mountains-01.jpg",
-    bgPosition: "50% 70%",
+    bgImage: "/images/products/streetbond/streetbond-multicolour-plaza-green-circles-01.jpg",
+    bgPosition: "50% 50%",
     eyebrow: "Municipal & Civic",
     h1a: "Where streets become",
     h1b: "civic landmarks.",

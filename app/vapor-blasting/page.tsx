@@ -108,7 +108,7 @@ export default function VaporBlastingPage() {
         <div className="max-w-[1500px] mx-auto px-6 sm:px-10 lg:px-16 pb-20 pt-24 w-full">
           <p
             className="mb-8 font-bold uppercase"
-            style={{ fontSize: "10px", letterSpacing: "0.28em", color: "#E8895A" }}
+            style={{ fontSize: "10px", letterSpacing: "0.28em", color: "#FF8A5C" }}
           >
             Mobile Vapor Blasting · British Columbia
           </p>
@@ -125,7 +125,7 @@ export default function VaporBlastingPage() {
                 }}
               >
                 Surface restoration{" "}
-                <span style={{ color: "#E8895A" }}>done right.</span>
+                <span style={{ color: "#FF8A5C" }}>done right.</span>
               </h1>
 
               <p
@@ -141,7 +141,7 @@ export default function VaporBlastingPage() {
                 <Link href="#quote">
                   <span
                     className="inline-flex items-center gap-2 px-7 py-3.5 text-sm font-bold tracking-[0.04em] text-white transition-all hover:brightness-110 rounded-lg"
-                    style={{ background: "linear-gradient(135deg, #C8601A 0%, #E8895A 100%)" }}
+                    style={{ background: "linear-gradient(135deg, #F26430 0%, #FF8A5C 100%)" }}
                   >
                     Request a Vapor Blast <Arrow />
                   </span>
@@ -187,7 +187,7 @@ export default function VaporBlastingPage() {
         <div className="max-w-[1500px] mx-auto px-6 sm:px-10 lg:px-16">
           <p
             className="font-bold uppercase mb-6"
-            style={{ fontSize: "10px", letterSpacing: "0.28em", color: "#C8601A" }}
+            style={{ fontSize: "10px", letterSpacing: "0.28em", color: "#F26430" }}
           >
             What is Vapor Blasting
           </p>
@@ -224,7 +224,7 @@ export default function VaporBlastingPage() {
                   <thead>
                     <tr style={{ background: "#0A0C10" }}>
                       <th className="text-left px-5 py-4" style={{ fontSize: "10px", letterSpacing: "0.14em", fontWeight: 700, color: "rgba(255,255,255,0.45)", textTransform: "uppercase" }}>Attribute</th>
-                      <th className="px-5 py-4 text-center" style={{ fontSize: "10px", letterSpacing: "0.14em", fontWeight: 700, color: "#E8895A", textTransform: "uppercase" }}>Vapor Blasting</th>
+                      <th className="px-5 py-4 text-center" style={{ fontSize: "10px", letterSpacing: "0.14em", fontWeight: 700, color: "#FF8A5C", textTransform: "uppercase" }}>Vapor Blasting</th>
                       <th className="px-5 py-4 text-center" style={{ fontSize: "10px", letterSpacing: "0.14em", fontWeight: 700, color: "rgba(255,255,255,0.45)", textTransform: "uppercase" }}>Sandblasting</th>
                       <th className="px-5 py-4 text-center" style={{ fontSize: "10px", letterSpacing: "0.14em", fontWeight: 700, color: "rgba(255,255,255,0.45)", textTransform: "uppercase" }}>Grinding</th>
                     </tr>
@@ -251,7 +251,7 @@ export default function VaporBlastingPage() {
         <div className="max-w-[1500px] mx-auto px-6 sm:px-10 lg:px-16">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
             <div>
-              <p className="font-bold uppercase mb-4" style={{ fontSize: "10px", letterSpacing: "0.28em", color: "#C8601A" }}>
+              <p className="font-bold uppercase mb-4" style={{ fontSize: "10px", letterSpacing: "0.28em", color: "#F26430" }}>
                 Applications
               </p>
               <h2 style={{ fontWeight: 800, fontSize: "clamp(2rem, 4vw, 3.5rem)", letterSpacing: "-0.04em", lineHeight: 0.95, color: "#111111" }}>
@@ -271,8 +271,8 @@ export default function VaporBlastingPage() {
                 style={{ background: "white" }}
               >
                 <p
-                  className="font-black mb-4 group-hover:text-[#E8895A]"
-                  style={{ fontSize: "11px", letterSpacing: "0.20em", color: "#C8601A" }}
+                  className="font-black mb-4 group-hover:text-[#FF8A5C]"
+                  style={{ fontSize: "11px", letterSpacing: "0.20em", color: "#F26430" }}
                 >
                   {app.num}
                 </p>
@@ -294,7 +294,7 @@ export default function VaporBlastingPage() {
       {/* ── Process ──────────────────────────────────────── */}
       <section id="process" className="py-28 bg-white" style={{ borderBottom: "1px solid #E2DDD8" }}>
         <div className="max-w-[1500px] mx-auto px-6 sm:px-10 lg:px-16">
-          <p className="font-bold uppercase mb-4" style={{ fontSize: "10px", letterSpacing: "0.28em", color: "#C8601A" }}>
+          <p className="font-bold uppercase mb-4" style={{ fontSize: "10px", letterSpacing: "0.28em", color: "#F26430" }}>
             Our Process
           </p>
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
@@ -346,7 +346,7 @@ export default function VaporBlastingPage() {
       {/* ── Results ──────────────────────────────────────── */}
       <section className="py-28" style={{ background: "#0A0C10", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
         <div className="max-w-[1500px] mx-auto px-6 sm:px-10 lg:px-16">
-          <p className="font-bold uppercase mb-4" style={{ fontSize: "10px", letterSpacing: "0.28em", color: "#E8895A" }}>
+          <p className="font-bold uppercase mb-4" style={{ fontSize: "10px", letterSpacing: "0.28em", color: "#FF8A5C" }}>
             Results
           </p>
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
@@ -367,7 +367,7 @@ export default function VaporBlastingPage() {
               >
                 <p
                   className="font-bold uppercase mb-3"
-                  style={{ fontSize: "9px", letterSpacing: "0.22em", color: "#E8895A" }}
+                  style={{ fontSize: "9px", letterSpacing: "0.22em", color: "#FF8A5C" }}
                 >
                   {result.location}
                 </p>
@@ -401,7 +401,7 @@ export default function VaporBlastingPage() {
       {/* ── Why SquareOne ───────────────────────────────── */}
       <section className="py-28 bg-white" style={{ borderBottom: "1px solid #E2DDD8" }}>
         <div className="max-w-[1500px] mx-auto px-6 sm:px-10 lg:px-16">
-          <p className="font-bold uppercase mb-4" style={{ fontSize: "10px", letterSpacing: "0.28em", color: "#C8601A" }}>
+          <p className="font-bold uppercase mb-4" style={{ fontSize: "10px", letterSpacing: "0.28em", color: "#F26430" }}>
             Why SquareOne
           </p>
           <h2
@@ -434,7 +434,7 @@ export default function VaporBlastingPage() {
                     fontSize: "clamp(2.5rem, 5vw, 4rem)",
                     letterSpacing: "-0.05em",
                     lineHeight: 1,
-                    color: "#C8601A",
+                    color: "#F26430",
                   }}
                 >
                   {item.stat}
@@ -464,7 +464,7 @@ export default function VaporBlastingPage() {
         <div className="max-w-[1500px] mx-auto px-6 sm:px-10 lg:px-16">
           <div className="grid lg:grid-cols-[480px_1fr] gap-20">
             <div>
-              <p className="font-bold uppercase mb-4" style={{ fontSize: "10px", letterSpacing: "0.28em", color: "#C8601A" }}>
+              <p className="font-bold uppercase mb-4" style={{ fontSize: "10px", letterSpacing: "0.28em", color: "#F26430" }}>
                 Get a Quote
               </p>
               <h2
@@ -492,7 +492,7 @@ export default function VaporBlastingPage() {
                   "Pre & post photo documentation",
                 ].map((item) => (
                   <li key={item} className="flex items-center gap-3 text-sm" style={{ color: "#4A4A4A" }}>
-                    <span style={{ color: "#C8601A", fontWeight: 900 }}>—</span>
+                    <span style={{ color: "#F26430", fontWeight: 900 }}>—</span>
                     {item}
                   </li>
                 ))}
@@ -512,7 +512,7 @@ export default function VaporBlastingPage() {
                     className="block mb-2"
                     style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.18em", color: "#767676", textTransform: "uppercase" }}
                   >
-                    Name <span style={{ color: "#C8601A" }}>*</span>
+                    Name <span style={{ color: "#F26430" }}>*</span>
                   </label>
                   <input
                     name="name" type="text" required
@@ -526,7 +526,7 @@ export default function VaporBlastingPage() {
                     className="block mb-2"
                     style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.18em", color: "#767676", textTransform: "uppercase" }}
                   >
-                    Phone <span style={{ color: "#C8601A" }}>*</span>
+                    Phone <span style={{ color: "#F26430" }}>*</span>
                   </label>
                   <input
                     name="phone" type="tel" required
@@ -541,7 +541,7 @@ export default function VaporBlastingPage() {
                   className="block mb-2"
                   style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.18em", color: "#767676", textTransform: "uppercase" }}
                 >
-                  Email <span style={{ color: "#C8601A" }}>*</span>
+                  Email <span style={{ color: "#F26430" }}>*</span>
                 </label>
                 <input
                   name="email" type="email" required
@@ -556,7 +556,7 @@ export default function VaporBlastingPage() {
                     className="block mb-2"
                     style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.18em", color: "#767676", textTransform: "uppercase" }}
                   >
-                    Project Type <span style={{ color: "#C8601A" }}>*</span>
+                    Project Type <span style={{ color: "#F26430" }}>*</span>
                   </label>
                   <select
                     name="projectType" required
@@ -578,7 +578,7 @@ export default function VaporBlastingPage() {
                     className="block mb-2"
                     style={{ fontSize: "10px", fontWeight: 700, letterSpacing: "0.18em", color: "#767676", textTransform: "uppercase" }}
                   >
-                    City <span style={{ color: "#C8601A" }}>*</span>
+                    City <span style={{ color: "#F26430" }}>*</span>
                   </label>
                   <input
                     name="city" type="text" required
@@ -605,7 +605,7 @@ export default function VaporBlastingPage() {
               <button
                 type="submit"
                 className="w-full py-4 text-sm font-bold tracking-[0.08em] uppercase text-white transition-all hover:brightness-110 rounded-lg"
-                style={{ background: "linear-gradient(135deg, #C8601A 0%, #E8895A 100%)" }}
+                style={{ background: "linear-gradient(135deg, #F26430 0%, #FF8A5C 100%)" }}
               >
                 Get a Vapor Blasting Quote →
               </button>

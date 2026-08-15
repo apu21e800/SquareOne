@@ -50,7 +50,7 @@ export default function AboutPage() {
     <main className="bg-white">
       <section className="relative min-h-[70vh] lg:min-h-[80vh] flex items-end overflow-hidden bg-[#0A0A0A]">
         <div className="absolute inset-0">
-          <Image src="/images/products/streetbond/streetbond-red-waterfront-promenade-01.jpg" alt="Square One Paving — BC waterfront streetscape" fill priority sizes="100vw" className="object-cover" />
+          <Image src="/images/S1_update_v2/photos/Featured image options/Cobblestone-stamped-asphalt-driveway-colose-up-at-Ellis-Point-Walkway-Victoria-BC-Canada.jpg" alt="Square One Paving — BC stamped-asphalt cobblestone substrate close-up, Victoria" fill priority sizes="100vw" className="object-cover" />
           <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-[rgba(10,10,10,0.55)] via-[rgba(10,10,10,0.45)] to-[rgba(10,10,10,0.92)]" />
           <div aria-hidden className="absolute inset-0" style={{ background: "radial-gradient(ellipse at center, transparent 35%, rgba(0,0,0,0.55) 100%)" }} />
         </div>
