@@ -86,14 +86,14 @@ export default function ContactPage() {
               {/* Direct contact */}
               <div className="space-y-3 pt-2 border-t border-[#E2DDD8]">
                 <a
-                  href="mailto:jan@squareonepaving.com"
+                  href="mailto:office@squareonepaving.com"
                   className="flex items-center gap-3 text-[14px] text-[#C8601A] hover:text-[#A84F15] font-medium transition-colors"
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
                     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
                     <polyline points="22,6 12,13 2,6"/>
                   </svg>
-                  jan@squareonepaving.com
+                  office@squareonepaving.com
                 </a>
                 <a
                   href="tel:+16044669902"
