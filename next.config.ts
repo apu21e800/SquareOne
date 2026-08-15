@@ -4,8 +4,8 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       // Products
-      { source: "/trafficpatternsxd", destination: "/products/traffic-patterns-xd", permanent: true },
-      { source: "/trafficpatterns", destination: "/products/traffic-patterns", permanent: true },
+      { source: "/trafficpatternsxd", destination: "/products/trafficpatterns-xd", permanent: true },
+      { source: "/trafficpatterns", destination: "/products/trafficpatterns", permanent: true },
       { source: "/streetprint", destination: "/products/streetprint", permanent: true },
       { source: "/streetbond", destination: "/products/streetbond", permanent: true },
       { source: "/streetbondsr", destination: "/products/streetbond", permanent: true },
@@ -123,7 +123,7 @@ const nextConfig: NextConfig = {
       { source: "/stamped-asphalt-decorative-crosswalks", destination: "/blog/stamped-asphalt-decorative-crosswalks", permanent: true },
       { source: "/enhanced-parking-lot-surfaces", destination: "/blog/enhanced-parking-lot-surfaces", permanent: true },
       // Footer/nav link variants
-      { source: "/traffic-patterns", destination: "/products/traffic-patterns", permanent: true },
+      { source: "/traffic-patterns", destination: "/products/trafficpatterns", permanent: true },
       // Other pages
       { source: "/case-studies", destination: "/projects", permanent: true },
       { source: "/featured-projects", destination: "/projects", permanent: true },
