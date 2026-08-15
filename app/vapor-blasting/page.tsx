@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     "wet blasting Vancouver Island",
     "surface restoration BC",
     "heritage building cleaning BC",
-    "mobile vapor blasting Ladysmith",
+    "mobile vapor blasting Vancouver Island",
     "industrial surface prep BC",
     "dustless blasting BC",
     "marine hull cleaning BC",
@@ -75,7 +75,7 @@ const whyStats = [
   {
     stat: "100% BC",
     label: "BC-based, on-site",
-    desc: "Two bases — Ladysmith on the Island, Kelowna in the Interior. Mobile rig dispatched same week. No subcontractors, ever.",
+    desc: "Based in Maple Ridge, with the mobile rig dispatched province-wide, usually same week. No subcontractors, ever.",
   },
   {
     stat: "51+",

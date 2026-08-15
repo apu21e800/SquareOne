@@ -113,12 +113,12 @@ export default function Footer() {
               </div>
               <div className="border-l border-[#F26430] pl-4">
                 <p className="text-white/40 text-[10px] uppercase tracking-[0.2em] mb-1.5 font-bold">Vancouver Island</p>
-                <p className="text-white/75">Ladysmith, BC</p>
+                <p className="text-white/75">Vancouver Island</p>
               </div>
               <div className="pt-2 space-y-1.5">
-                <a href="mailto:info@squareonepaving.ca" className="block text-white hover:text-[#FF8A5C] transition-colors text-[14px] font-medium">info@squareonepaving.ca</a>
+                <a href="mailto:office@squareonepaving.com" className="block text-white hover:text-[#FF8A5C] transition-colors text-[14px] font-medium">office@squareonepaving.com</a>
                 <div className="flex flex-wrap gap-x-3 gap-y-1 text-[13px]">
-                  <a href="tel:+16043098212" className="text-white/70 hover:text-white transition-colors">604-309-8212</a>
+                  <a href="tel:+16043098212" className="text-white/70 hover:text-white transition-colors">604-466-9902</a>
                   <span className="text-white/25">/</span>
                   <a href="tel:+18776098200" className="text-white/70 hover:text-white transition-colors">1-877-609-8200</a>
                 </div>

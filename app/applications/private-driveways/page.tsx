@@ -226,7 +226,7 @@ export default function PrivateDrivewaysPage() {
             </Link>
             <a href="tel:6043098212">
               <span className="inline-block border border-white/25 text-white hover:bg-white/10 px-10 py-4 rounded-lg font-semibold text-sm transition-colors">
-                604-309-8212
+                604-466-9902
               </span>
             </a>
           </div>

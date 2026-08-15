@@ -247,7 +247,7 @@ export default function ServicesPage() {
                   className="inline-flex items-center gap-2 px-10 py-4 text-sm font-bold tracking-[0.04em] uppercase transition-all hover:bg-white/10 whitespace-nowrap rounded-lg"
                   style={{ border: "1px solid rgba(255,255,255,0.18)", color: "rgba(255,255,255,0.75)" }}
                 >
-                  604-309-8212
+                  604-466-9902
                 </span>
               </a>
             </div>
