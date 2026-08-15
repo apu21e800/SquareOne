@@ -41,7 +41,7 @@ const sections = [
   },
   {
     heading: "9. Contact",
-    body: `Questions about these Terms of Use may be directed to:\n\nSquare One Paving\nLadysmith, British Columbia\ninfo@squareonepaving.com | 604-309-8212`,
+    body: `Questions about these Terms of Use may be directed to:\n\nSquare One Paving\nMaple Ridge, British Columbia\noffice@squareonepaving.com | 604-466-9902`,
   },
 ]
 

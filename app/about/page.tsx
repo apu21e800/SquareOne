@@ -88,7 +88,7 @@ export default function AboutPage() {
               <div className="space-y-5 text-[#2C2C2C] leading-[1.75] text-[15.5px] font-light">
                 <p>Square One Paving was founded with a simple thesis: BC communities deserve better than fading paint and cracking concrete. Too often, municipalities and developers were defaulting to generic surfacing that didn&apos;t survive the first wet winter.</p>
                 <p>Over twenty-five years we&apos;ve built a portfolio around four professional decorative pavement systems &mdash; stamped asphalt, decorative coatings, preformed thermoplastic, and vapor blasting. Each system is engineered for Canadian conditions and backed by manufacturer warranties.</p>
-                <p>Today Square One operates from Maple Ridge and Ladysmith, serving every municipality and authority south of Prince George. TransLink, BC Transit, UBC, the cities, the school districts, the strata councils, the families. The mobile vapor blasting unit goes wherever the surface is.</p>
+                <p>Today Square One operates from Maple Ridge, with crews serving every municipality and authority south of Prince George. TransLink, BC Transit, UBC, the cities, the school districts, the strata councils, the families. The mobile vapor blasting unit goes wherever the surface is.</p>
               </div>
               <div className="mt-12">
                 <p className="text-[10.5px] uppercase tracking-[0.28em] text-[#F26430] font-bold mb-6">Milestones</p>
@@ -233,14 +233,14 @@ export default function AboutPage() {
                 </div>
                 <div className="border-l border-[#F26430] pl-4">
                   <p className="text-white/40 text-[10px] uppercase tracking-[0.22em] mb-1.5 font-semibold">Vancouver Island</p>
-                  <p className="text-white/85">Ladysmith, BC</p>
+                  <p className="text-white/85">Vancouver Island</p>
                 </div>
                 <div className="pt-2">
-                  <a href="mailto:info@squareonepaving.ca" className="block text-white hover:text-[#FF8A5C] transition-colors font-medium">
-                    info@squareonepaving.ca
+                  <a href="mailto:office@squareonepaving.com" className="block text-white hover:text-[#FF8A5C] transition-colors font-medium">
+                    office@squareonepaving.com
                   </a>
                   <a href="tel:+16043098212" className="block text-white/75 hover:text-white transition-colors text-[13.5px] mt-1.5">
-                    604-309-8212
+                    604-466-9902
                   </a>
                 </div>
               </div>

@@ -35,6 +35,12 @@ const ORG_BASE = {
       postalCode: "V2X 3P2",
       addressCountry: "CA",
     },
+    {
+      "@type": "PostalAddress",
+      addressLocality: "Ladysmith",
+      addressRegion: "BC",
+      addressCountry: "CA",
+    },
   ],
   sameAs: [
     "https://facebook.com/squareonepaving",

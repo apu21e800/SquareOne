@@ -213,7 +213,7 @@ export default function ApplicationsPage() {
             </Link>
             <a href="tel:6043098212">
               <span className="inline-block border border-[#E8E4DE] text-[#626262] hover:border-[#D66620] hover:text-[#D66620] px-10 py-4 rounded-lg font-semibold text-sm transition-colors">
-                604-309-8212
+                604-466-9902
               </span>
             </a>
           </div>

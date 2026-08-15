@@ -204,7 +204,7 @@ export default function VaporBlastingServicePage() {
                   Request a Site Walk<ArrowRight />
                 </Link>
                 <a href="tel:6043098212" className="group border border-white/30 text-white px-9 py-4 font-medium text-[12.5px] tracking-[0.04em] uppercase rounded-none hover:bg-white hover:text-[#0A0A0A] transition-colors duration-300 inline-flex items-center gap-3">
-                  604-309-8212
+                  604-466-9902
                 </a>
               </div>
             </div>
@@ -514,10 +514,10 @@ export default function VaporBlastingServicePage() {
                 Request a Quote<ArrowRight />
               </Link>
               <a href="tel:6043098212" className="group border border-white/30 text-white px-9 py-4 font-medium text-[12.5px] tracking-[0.04em] uppercase rounded-none hover:bg-white hover:text-[#0A0A0A] transition-colors duration-300 inline-flex items-center gap-3">
-                604-309-8212
+                604-466-9902
               </a>
-              <a href="mailto:info@squareonepaving.ca" className="group border border-white/15 text-white/80 px-9 py-4 font-medium text-[12.5px] tracking-[0.04em] uppercase rounded-none hover:border-white/40 hover:text-white transition-colors duration-300 inline-flex items-center gap-3">
-                info@squareonepaving.ca
+              <a href="mailto:office@squareonepaving.com" className="group border border-white/15 text-white/80 px-9 py-4 font-medium text-[12.5px] tracking-[0.04em] uppercase rounded-none hover:border-white/40 hover:text-white transition-colors duration-300 inline-flex items-center gap-3">
+                office@squareonepaving.com
               </a>
             </div>
           </div>

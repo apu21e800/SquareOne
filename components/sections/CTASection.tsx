@@ -77,7 +77,7 @@ export default function CTASection() {
             <div className="mt-9 pt-7 border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
               <span className="text-white/45 text-[10.5px] uppercase tracking-[0.22em] font-semibold">Or call us directly</span>
               <a href="tel:+16043098212" className="text-white text-[15px] font-semibold tracking-[-0.005em] hover:text-[#FF8A5C] transition-colors">
-                604-309-8212
+                604-466-9902
               </a>
             </div>
           </motion.div>

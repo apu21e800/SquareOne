@@ -205,7 +205,7 @@ export default function ProjectsPage() {
                 Request a Quote<ArrowRight />
               </Link>
               <a href="tel:+16043098212" className="border border-white/25 text-white px-8 py-4 font-medium text-[12.5px] tracking-[0.04em] uppercase rounded-none hover:bg-white hover:text-[#0A0A0A] hover:border-white transition-colors duration-300">
-                604-309-8212
+                604-466-9902
               </a>
             </div>
           </div>

@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Client
 Square One Paving — BC's trusted decorative pavement studio since 2000.
 Independent BC pavement specialists serving the Lower Mainland and Vancouver Island.
-- Office: Ladysmith, BC (info@squareonepaving.ca / 604-309-8212)
+- Office: Ladysmith, BC (office@squareonepaving.com / 604-466-9902)
 
 ## What They Do
 Stamped asphalt, decorative coatings, preformed thermoplastic, and vapor blasting
@@ -35,7 +35,7 @@ for municipalities, developers, and contractors across BC.
 ## Environment Variables
 Copy .env.local.example → .env.local and fill in:
 - RESEND_API_KEY — from resend.com (required for contact form)
-- CONTACT_EMAIL — receiving address (defaults to info@squareonepaving.ca)
+- CONTACT_EMAIL — receiving address (defaults to office@squareonepaving.com)
 - NEXT_PUBLIC_SITE_URL — public site URL for sitemap/OG tags (defaults to https://squareonepaving.ca)
 
 ## Architecture
