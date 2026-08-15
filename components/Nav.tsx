@@ -298,6 +298,7 @@ export default function Nav() {
               {([
                 { label: "Projects", href: "/projects" },
                 { label: "Driveways", href: "/driveways" },
+                { label: "Resources", href: "/resources" },
                 { label: "Blog", href: "/blog" },
                 { label: "About", href: "/about" },
                 { label: "Contact", href: "/contact" },
@@ -374,7 +375,7 @@ export default function Nav() {
                 <div className="px-6 py-3 border-t border-[#EDEBE7] mt-2 space-y-2">
                   <div className="flex items-center gap-5 flex-wrap">
                     <Link href="/products" onClick={closeAll} className="text-sm font-semibold text-[#F26430] hover:underline">View All Products &rarr;</Link>
-                    <Link href="/products" onClick={closeAll} className="text-sm font-semibold text-[#5A5A5A] hover:text-[#F26430] hover:underline">Download Spec Sheets &rarr;</Link>
+                    <Link href="/resources" onClick={closeAll} className="text-sm font-semibold text-[#5A5A5A] hover:text-[#F26430] hover:underline">Download Spec Sheets &rarr;</Link>
                   </div>
                   <p className="text-[11px] text-[#8C8C8C] tracking-[0.04em]">Authorized HUB Surface Systems Applicator</p>
                 </div>
@@ -399,6 +400,7 @@ export default function Nav() {
               {([
                 { label: "Projects", href: "/projects" },
                 { label: "Driveways", href: "/driveways" },
+                { label: "Resources", href: "/resources" },
                 { label: "Blog", href: "/blog" },
                 { label: "About", href: "/about" },
                 { label: "Contact", href: "/contact" },
