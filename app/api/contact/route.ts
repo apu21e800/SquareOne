@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { Resend } from "resend"
 
-const TO_EMAIL = process.env.CONTACT_EMAIL ?? "jan@squareonepaving.com"
+const TO_EMAIL = process.env.CONTACT_EMAIL ?? "office@squareonepaving.com"
 
 interface ContactPayload {
   formType: "contact"
