@@ -224,7 +224,7 @@ export default function PrivateDrivewaysPage() {
                 Book Free Consultation
               </span>
             </Link>
-            <a href="tel:6043098212">
+            <a href="tel:6044669902">
               <span className="inline-block border border-white/25 text-white hover:bg-white/10 px-10 py-4 rounded-lg font-semibold text-sm transition-colors">
                 604-466-9902
               </span>

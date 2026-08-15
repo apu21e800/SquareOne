@@ -36,7 +36,7 @@ export default function MobileStickyCTA() {
     >
       <div className="grid grid-cols-2 gap-0">
         <a
-          href="tel:+16043098212"
+          href="tel:+16044669902"
           className="flex items-center justify-center gap-2 py-4 text-white text-[12px] font-semibold tracking-[0.06em] uppercase border-r border-white/10 active:bg-white/5"
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
