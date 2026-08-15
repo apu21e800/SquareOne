@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { resourceGroups, resourceCount } from "@/lib/resources";
 
 export const metadata: Metadata = {
-  title: "Specifications & Technical Documents | Square One Paving",
+  title: "Specifications & Technical Documents",
   description:
     "Spec sheets, colour cards, SDS and design guides for StreetPrint, StreetBond, TrafficPatterns, DecoMark, DuraTherm and PreMark.",
 };
