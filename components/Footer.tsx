@@ -118,7 +118,7 @@ export default function Footer() {
               <div className="pt-2 space-y-1.5">
                 <a href="mailto:office@squareonepaving.com" className="block text-white hover:text-[#FF8A5C] transition-colors text-[14px] font-medium">office@squareonepaving.com</a>
                 <div className="flex flex-wrap gap-x-3 gap-y-1 text-[13px]">
-                  <a href="tel:+16043098212" className="text-white/70 hover:text-white transition-colors">604-466-9902</a>
+                  <a href="tel:+16044669902" className="text-white/70 hover:text-white transition-colors">604-466-9902</a>
                   <span className="text-white/25">/</span>
                   <a href="tel:+18776098200" className="text-white/70 hover:text-white transition-colors">1-877-609-8200</a>
                 </div>
