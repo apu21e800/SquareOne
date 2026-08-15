@@ -239,7 +239,7 @@ export default function AboutPage() {
                   <a href="mailto:office@squareonepaving.com" className="block text-white hover:text-[#FF8A5C] transition-colors font-medium">
                     office@squareonepaving.com
                   </a>
-                  <a href="tel:+16043098212" className="block text-white/75 hover:text-white transition-colors text-[13.5px] mt-1.5">
+                  <a href="tel:+16044669902" className="block text-white/75 hover:text-white transition-colors text-[13.5px] mt-1.5">
                     604-466-9902
                   </a>
                 </div>

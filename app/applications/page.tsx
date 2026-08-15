@@ -211,7 +211,7 @@ export default function ApplicationsPage() {
                 Get a Free Quote
               </span>
             </Link>
-            <a href="tel:6043098212">
+            <a href="tel:6044669902">
               <span className="inline-block border border-[#E8E4DE] text-[#626262] hover:border-[#D66620] hover:text-[#D66620] px-10 py-4 rounded-lg font-semibold text-sm transition-colors">
                 604-466-9902
               </span>

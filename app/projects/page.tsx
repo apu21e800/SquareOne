@@ -204,7 +204,7 @@ export default function ProjectsPage() {
               <Link href="/contact" className="group inline-flex items-center gap-3 bg-white text-[#0A0A0A] px-8 py-4 font-semibold text-[12.5px] tracking-[0.04em] uppercase rounded-none hover:bg-[#F26430] hover:text-white transition-colors duration-300">
                 Request a Quote<ArrowRight />
               </Link>
-              <a href="tel:+16043098212" className="border border-white/25 text-white px-8 py-4 font-medium text-[12.5px] tracking-[0.04em] uppercase rounded-none hover:bg-white hover:text-[#0A0A0A] hover:border-white transition-colors duration-300">
+              <a href="tel:+16044669902" className="border border-white/25 text-white px-8 py-4 font-medium text-[12.5px] tracking-[0.04em] uppercase rounded-none hover:bg-white hover:text-[#0A0A0A] hover:border-white transition-colors duration-300">
                 604-466-9902
               </a>
             </div>
