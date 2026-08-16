@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     template: "%s | Square One Paving",
   },
   description:
-    "BC's trusted decorative pavement applicators since 2000. Stamped asphalt, decorative coatings, preformed thermoplastic, and vapor blasting for municipalities, developers, and contractors across BC.",
+    "BC's trusted decorative pavement applicators since 2000. Stamped asphalt, decorative coatings, preformed thermoplastic, and vapour blasting for municipalities, developers, and contractors across BC.",
   keywords: [
     "decorative pavement BC",
     "stamped asphalt Vancouver",

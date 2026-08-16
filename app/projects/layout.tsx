@@ -3,7 +3,7 @@ import type { Metadata } from "next"
 export const metadata: Metadata = {
   title: "Projects | Stamped Asphalt & Decorative Pavement Portfolio | Square One Paving",
   description:
-    "Explore completed decorative pavement projects across BC — stamped asphalt driveways, StreetPrint crosswalks, StreetBond coatings, and vapor blasting. Metro Vancouver, Vancouver Island, and beyond.",
+    "Explore completed decorative pavement projects across BC — stamped asphalt driveways, StreetPrint crosswalks, StreetBond coatings, and vapour blasting. Metro Vancouver, Vancouver Island, and beyond.",
   keywords: [
     "pavement projects Vancouver",
     "stamped asphalt projects BC",
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Projects | Stamped Asphalt & Decorative Pavement Portfolio | Square One Paving",
     description:
-      "Completed decorative pavement projects across BC — stamped asphalt driveways, StreetPrint crosswalks, StreetBond coatings, and vapor blasting.",
+      "Completed decorative pavement projects across BC — stamped asphalt driveways, StreetPrint crosswalks, StreetBond coatings, and vapour blasting.",
   },
 }
 
