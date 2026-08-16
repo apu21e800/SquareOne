@@ -2,8 +2,10 @@ import { notFound } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
 import { Metadata } from "next"
+import type { CSSProperties } from "react"
 import { MDXRemote } from "next-mdx-remote/rsc"
 import { getAllPosts, getPostBySlug } from "@/lib/blog"
+import type { BlogPost, BlogPostMeta } from "@/lib/blog"
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -50,11 +52,109 @@ function estimateReadTime(content: string) {
   return Math.max(2, Math.ceil(words / 200))
 }
 
+/**
+ * Photo caption — the reference reads "Richmond · TrafficPatternsXD · 2019".
+ * Frontmatter carries category and date, so the caption is category + year.
+ * Returns "" when there is nothing honest to say, in which case the scrim is
+ * dropped too: .scrim exists for caption legibility, never for decoration.
+ */
+function captionFor(post: Pick<BlogPostMeta, "category" | "date">): string {
+  const year = post.date ? new Date(post.date).getFullYear() : Number.NaN
+  return [post.category, Number.isFinite(year) ? String(year) : ""]
+    .filter(Boolean)
+    .join(" · ")
+}
+
+/** Same category scores highest, then shared tags, then recency. */
+function relatedPosts(current: BlogPost, limit = 2): BlogPostMeta[] {
+  const currentTags = new Set((current.tags ?? []).map((tag) => tag.toLowerCase()))
+  const currentCategory = current.category?.toLowerCase() ?? ""
+
+  return getAllPosts()
+    .filter((post) => post.slug !== current.slug)
+    .map((post) => {
+      let score = 0
+      if (currentCategory && post.category?.toLowerCase() === currentCategory) score += 3
+      for (const tag of post.tags ?? []) {
+        if (currentTags.has(tag.toLowerCase())) score += 1
+      }
+      return { post, score }
+    })
+    .sort(
+      (a, b) =>
+        b.score - a.score ||
+        new Date(b.post.date).getTime() - new Date(a.post.date).getTime()
+    )
+    .slice(0, limit)
+    .map((entry) => entry.post)
+}
+
+/**
+ * Prose colours come from v2 tokens. The typography plugin owns the element
+ * selectors, so the type scale has to be restated inside `prose-*` modifiers
+ * below — it is the one place the base layer cannot reach.
+ */
+type CSSVars = CSSProperties & Record<string, string>
+
+const proseTokens: CSSVars = {
+  "--tw-prose-body": "var(--ink-body)",
+  "--tw-prose-headings": "var(--ink)",
+  "--tw-prose-lead": "var(--ink-body)",
+  "--tw-prose-links": "var(--ink)",
+  "--tw-prose-bold": "var(--ink)",
+  "--tw-prose-counters": "var(--ink-muted)",
+  "--tw-prose-bullets": "var(--hairline-strong)",
+  "--tw-prose-hr": "var(--hairline)",
+  "--tw-prose-quotes": "var(--ink)",
+  "--tw-prose-quote-borders": "var(--ink)",
+  "--tw-prose-captions": "var(--ink-muted)",
+  "--tw-prose-code": "var(--ink)",
+  "--tw-prose-pre-code": "var(--ink)",
+  "--tw-prose-pre-bg": "var(--surface-stone)",
+  "--tw-prose-th-borders": "var(--hairline)",
+  "--tw-prose-td-borders": "var(--hairline)",
+}
+
+const proseClass = [
+  "prose max-w-none text-[17px]",
+  // Body
+  "prose-p:text-[17px] prose-p:leading-[1.75] prose-p:[text-wrap:pretty]",
+  "prose-li:text-[17px] prose-li:leading-[1.6] prose-li:my-[6px]",
+  "prose-strong:font-semibold",
+  // Headings — v2 display scale
+  "prose-h2:mt-14 prose-h2:mb-5 prose-h2:text-[clamp(1.75rem,3vw,2.75rem)]",
+  "prose-h2:font-light prose-h2:tracking-[-0.03em] prose-h2:leading-[1.06]",
+  "prose-h3:mt-14 prose-h3:mb-4 prose-h3:text-[1.25rem] prose-h3:font-semibold",
+  "prose-h3:tracking-[-0.015em] prose-h3:leading-[1.4]",
+  "prose-h4:mt-10 prose-h4:mb-3 prose-h4:text-[1rem] prose-h4:font-semibold",
+  "prose-h4:tracking-[-0.01em]",
+  // Links — ink at rest, deep orange on hover, so body copy spends no accent
+  "prose-a:font-medium prose-a:underline prose-a:underline-offset-[3px]",
+  "prose-a:decoration-[color:var(--hairline-strong)]",
+  "[&_a:hover]:text-[color:var(--accent-deep)]",
+  "[&_a:hover]:decoration-[color:var(--accent-deep)]",
+  // Pull quote — 2px ink rule, no italics, no smart quotes
+  "prose-blockquote:my-12 prose-blockquote:border-l-2 prose-blockquote:pl-7",
+  "prose-blockquote:not-italic prose-blockquote:font-light",
+  "[&_blockquote_p]:text-[23px] [&_blockquote_p]:leading-[1.5]",
+  "[&_blockquote_p]:tracking-[-0.01em] [&_blockquote_p]:text-[color:var(--ink)]",
+  "[&_blockquote_p]:before:content-none [&_blockquote_p]:after:content-none",
+  // Everything else
+  "prose-img:rounded-[2px] prose-figcaption:text-[13px]",
+  "prose-hr:border-[color:var(--hairline)] prose-hr:my-14",
+  "prose-code:font-normal prose-pre:rounded-[2px]",
+  "prose-th:border-[color:var(--hairline)] prose-td:border-[color:var(--hairline)]",
+].join(" ")
+
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params
   const post = getPostBySlug(slug)
 
   if (!post) notFound()
+
+  const related = relatedPosts(post)
+  const heroCaption = captionFor(post)
+  const shareUrl = `https://squareonepaving.com/blog/${slug}`
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -86,179 +186,183 @@ export default async function BlogPostPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <main style={{ background: "#F6F4F0" }}>
-
-        {/* ── Hero image ────────────────────────────────────────────────────── */}
-        {post.featured_image && (
-          <div className="relative w-full overflow-hidden" style={{ height: "clamp(280px, 55vh, 580px)" }}>
-            <div
-              className="absolute left-6 lg:left-10 top-0 w-16 h-[3px] z-10"
-              style={{ background: "linear-gradient(to right, #F26430, #FF8A5C)" }}
-            />
-            <Image
-              src={post.featured_image}
-              alt={post.title}
-              fill
-              className="object-cover"
-              priority
-              sizes="100vw"
-            />
-            <div
-              className="absolute inset-0"
-              style={{ background: "linear-gradient(to top, rgba(17,17,17,0.82) 0%, rgba(17,17,17,0.25) 55%, transparent 100%)" }}
-            />
-            {/* Title overlay */}
-            <div className="absolute bottom-0 left-0 right-0 px-6 sm:px-10 pb-10" style={{ maxWidth: "960px" }}>
-              {post.category && (
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-6 h-px" style={{ background: "#FF8A5C" }} />
-                  <p
-                    className="font-semibold uppercase"
-                    style={{ fontSize: "11px", letterSpacing: "0.18em", color: "#FF8A5C" }}
-                  >
-                    {post.category}
-                  </p>
-                </div>
-              )}
-              <h1
-                style={{
-                  fontSize: "clamp(1.8rem, 4vw, 3.25rem)",
-                  fontWeight: 800,
-                  letterSpacing: "-0.045em",
-                  color: "white",
-                  lineHeight: 0.95,
-                  maxWidth: "800px",
-                }}
-              >
-                {post.title}
-              </h1>
-            </div>
-          </div>
-        )}
-
-        {/* ── Article body ────────────────────────────────────────────────── */}
-        <div className="max-w-[720px] mx-auto px-6 sm:px-8 py-12">
-
-          {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-xs mb-8" style={{ color: "#767676" }}>
-            <Link href="/" className="hover:text-[#F26430] transition-colors">Home</Link>
-            <span>›</span>
-            <Link href="/blog" className="hover:text-[#F26430] transition-colors">Blog</Link>
-            <span>›</span>
-            <span style={{ color: "#2C2C2C" }}>{post.title}</span>
+      <main className="bg-[color:var(--surface)]">
+        <article
+          className="
+            mx-auto w-full max-w-[calc(68ch_+_80px)] px-10 pt-24 pb-28 text-[17px]
+            max-[700px]:px-6 max-[700px]:pt-[88px] max-[700px]:pb-16
+          "
+        >
+          {/* ── Breadcrumb ──────────────────────────────────────────────── */}
+          <nav
+            aria-label="Breadcrumb"
+            className="flex flex-wrap items-center gap-2 text-[13px] text-[color:var(--ink-muted)]"
+          >
+            <Link href="/" className="text-[color:var(--ink-muted)] hover:text-[color:var(--accent-deep)]">
+              Home
+            </Link>
+            <span aria-hidden="true">/</span>
+            <Link href="/blog" className="text-[color:var(--ink-muted)] hover:text-[color:var(--accent-deep)]">
+              Journal
+            </Link>
+            <span aria-hidden="true">/</span>
+            <span className="text-[color:var(--ink)]">{post.title}</span>
           </nav>
 
-          {/* Meta strip */}
-          <div
-            className="flex flex-wrap items-center gap-x-6 gap-y-2 mb-10 pb-8"
-            style={{ borderBottom: "1px solid #E2DDD8" }}
-          >
-            {post.author && (
-              <span className="text-sm font-medium" style={{ color: "#2C2C2C" }}>
-                {post.author}
-              </span>
-            )}
-            <span className="text-sm" style={{ color: "#767676" }}>
-              {formatDate(post.date)}
-            </span>
-            {post.content && (
-              <span className="text-sm" style={{ color: "#767676" }}>
-                {estimateReadTime(post.content)} min read
-              </span>
-            )}
-            {post.tags && post.tags.length > 0 && (
-              <div className="flex flex-wrap gap-1.5 ml-auto">
-                {post.tags.slice(0, 4).map((tag) => (
+          {/* ── Title block ─────────────────────────────────────────────── */}
+          {post.category && (
+            <div className="mt-8">
+              <span className="tag">{post.category}</span>
+            </div>
+          )}
+
+          <h1 className={`stop ${post.category ? "mt-6" : "mt-8"} [text-wrap:balance]`}>
+            {post.title}
+          </h1>
+
+          <div className="mt-[18px] text-[14px] text-[color:var(--ink-muted)]">
+            By {post.author || "Square One Paving"}
+            {post.date && <> &middot; {formatDate(post.date)}</>}
+            {post.content && <> &middot; {estimateReadTime(post.content)} min read</>}
+          </div>
+
+          {/* ── Lede photograph ─────────────────────────────────────────── */}
+          {post.featured_image && (
+            <figure className="relative mt-12 aspect-[16/9] overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)]">
+              <Image
+                src={post.featured_image}
+                alt={post.title}
+                fill
+                priority
+                sizes="(max-width: 700px) 100vw, 640px"
+                className="object-cover"
+              />
+              {heroCaption && (
+                <>
+                  <div aria-hidden="true" className="scrim scrim-light" />
+                  <figcaption className="caption">{heroCaption}</figcaption>
+                </>
+              )}
+            </figure>
+          )}
+
+          {/* ── Article body ────────────────────────────────────────────── */}
+          <div className={`mt-12 ${proseClass}`} style={proseTokens}>
+            <MDXRemote source={post.content} />
+          </div>
+
+          {/* ── Quiet conversion panel ──────────────────────────────────── */}
+          <aside className="card-panel mt-16">
+            <div className="eyebrow">Planning something similar?</div>
+            <p className="mt-4 text-[16px] leading-[1.6] text-[color:var(--ink-body)]">
+              We work across the Lower Mainland and Vancouver Island. Free site visit,
+              written quote within 48 hours.
+            </p>
+            <Link href="/contact" className="btn-primary mt-7 self-start">
+              Request a quote
+            </Link>
+          </aside>
+
+          {/* ── Filed under ─────────────────────────────────────────────── */}
+          {post.tags && post.tags.length > 0 && (
+            <div className="mt-14 border-t border-[color:var(--hairline)] pt-7">
+              <div className="label">Filed under</div>
+              <div className="mt-4 flex flex-wrap gap-[10px]">
+                {post.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="text-xs px-2.5 py-1 font-medium rounded"
-                    style={{ background: "white", color: "#5A5A5A", border: "1px solid #E2DDD8" }}
+                    className="rounded-[2px] border border-[color:var(--hairline)] px-3 py-[6px] text-[13px] font-medium text-[color:var(--ink-muted)]"
                   >
                     {tag}
                   </span>
                 ))}
               </div>
-            )}
-          </div>
-
-          {/* MDX prose */}
-          <div
-            className="prose max-w-none"
-            style={{
-              "--tw-prose-body": "#2C2C2C",
-              "--tw-prose-headings": "#111111",
-              "--tw-prose-links": "#F26430",
-              "--tw-prose-bold": "#111111",
-              "--tw-prose-counters": "#5A5A5A",
-              "--tw-prose-bullets": "#F26430",
-              "--tw-prose-hr": "#E2DDD8",
-              "--tw-prose-quotes": "#111111",
-              "--tw-prose-quote-borders": "#F26430",
-              "--tw-prose-captions": "#767676",
-              "--tw-prose-code": "#111111",
-              "--tw-prose-pre-code": "#F6F4F0",
-              "--tw-prose-pre-bg": "#1C2026",
-              fontSize: "1.1rem",
-              lineHeight: "1.8",
-            } as React.CSSProperties}
-          >
-            <MDXRemote source={post.content} />
-          </div>
-
-          {/* Mid-article CTA */}
-          <div
-            className="my-14 p-8"
-            style={{ background: "white", borderLeft: "3px solid #F26430" }}
-          >
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-6 h-px" style={{ background: "#F26430" }} />
-              <p className="font-semibold uppercase" style={{ fontSize: "11px", letterSpacing: "0.18em", color: "#F26430" }}>Working on a similar project?</p>
             </div>
-            <p className="text-base mb-5" style={{ color: "#5A5A5A" }}>
-              We serve the Lower Mainland and Vancouver Island. Free site visit, written quote within 48 hours.
-            </p>
-            <Link href="/contact">
-              <span
-                className="inline-block px-7 py-3 text-sm font-bold text-white uppercase tracking-[0.08em] transition-all hover:brightness-110 rounded-lg"
-                style={{ background: "linear-gradient(135deg, #F26430 0%, #FF8A5C 100%)" }}
-              >
-                Request a Quote →
-              </span>
-            </Link>
-          </div>
+          )}
 
-          {/* Footer nav */}
-          <div
-            className="flex items-center justify-between pt-8"
-            style={{ borderTop: "1px solid #E2DDD8" }}
-          >
-            <Link href="/blog" className="text-sm font-medium transition-colors hover:text-[#F26430]" style={{ color: "#5A5A5A" }}>
-              ← Back to Blog
+          {/* ── Related notes ───────────────────────────────────────────── */}
+          {related.length > 0 && (
+            <section className="mt-14">
+              <h2>Related notes</h2>
+
+              <div className="mt-8 grid grid-cols-2 gap-6 max-[700px]:grid-cols-1 max-[700px]:gap-10">
+                {related.map((entry) => (
+                  <RelatedNote key={entry.slug} post={entry} />
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* ── Foot of article ─────────────────────────────────────────── */}
+          <div className="mt-14 flex flex-wrap items-center justify-between gap-5 border-t border-[color:var(--hairline)] pt-7">
+            <Link href="/blog" className="arrow-link">
+              &larr; Back to Journal
             </Link>
-            <div className="flex items-center gap-4">
-              <span className="text-xs uppercase tracking-wider" style={{ color: "#767676" }}>Share</span>
+
+            <div className="flex items-center gap-5">
+              <span className="label">Share</span>
               <a
-                href={`https://www.linkedin.com/sharing/share-offsite/?url=https://squareonepaving.com/blog/${slug}`}
+                href={`https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs font-semibold transition-colors hover:text-[#F26430]"
-                style={{ color: "#5A5A5A" }}
+                className="text-[13px] font-semibold text-[color:var(--ink-muted)] hover:text-[color:var(--accent-deep)]"
               >
                 LinkedIn
               </a>
               <a
-                href={`https://www.facebook.com/sharer/sharer.php?u=https://squareonepaving.com/blog/${slug}`}
+                href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs font-semibold transition-colors hover:text-[#F26430]"
-                style={{ color: "#5A5A5A" }}
+                className="text-[13px] font-semibold text-[color:var(--ink-muted)] hover:text-[color:var(--accent-deep)]"
               >
                 Facebook
               </a>
             </div>
           </div>
-        </div>
+        </article>
       </main>
     </>
+  )
+}
+
+/* ── Related note card ─────────────────────────────────────────────────── */
+
+function RelatedNote({ post }: { post: BlogPostMeta }) {
+  const caption = captionFor(post)
+
+  return (
+    <Link href={`/blog/${post.slug}`} className="card block">
+      <div className="relative aspect-[16/10] overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)]">
+        {post.featured_image && (
+          <Image
+            src={post.featured_image}
+            alt={post.title}
+            fill
+            sizes="(max-width: 700px) 100vw, 300px"
+            className="object-cover"
+          />
+        )}
+        {post.featured_image && caption && (
+          <>
+            <div aria-hidden="true" className="scrim scrim-light" />
+            <div className="caption">{caption}</div>
+          </>
+        )}
+      </div>
+
+      {post.category && (
+        <div className="mt-4">
+          <span className="tag">{post.category}</span>
+        </div>
+      )}
+
+      <h3 className="mt-3 [text-wrap:pretty]">{post.title}</h3>
+
+      {post.date && (
+        <div className="mt-2 text-[13px] text-[color:var(--ink-muted)]">
+          {formatDate(post.date)}
+        </div>
+      )}
+    </Link>
   )
 }
