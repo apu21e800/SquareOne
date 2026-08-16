@@ -1,415 +1,465 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { motion, AnimatePresence, type Variants, type Transition } from "framer-motion"
+import { usePathname } from "next/navigation"
+import { AnimatePresence, motion, type Transition } from "framer-motion"
+import { products, type Product } from "@/lib/products"
+import { services, type Service } from "@/lib/services"
 
-interface ProductItem { label: string; href: string; tag?: string }
-interface ProductColumn { category: string; items: ProductItem[]; accent: string }
+/* ------------------------------------------------------------------
+   Data — derived from lib/, never duplicated.
+   ------------------------------------------------------------------ */
 
-const productColumns: ProductColumn[] = [
-  {
-    category: "Stamped Asphalt",
-    accent: "01",
-    items: [
-      { label: "StreetPrint", href: "/products/streetprint", tag: "Imprint System" },
-      { label: "TrafficPatterns XD", href: "/products/trafficpatternsxd", tag: "Heavy Traffic" },
-    ],
-  },
-  {
-    category: "Decorative Coatings",
-    accent: "02",
-    items: [
-      { label: "StreetBond", href: "/products/streetbond", tag: "Flagship" },
-      { label: "StreetBondSR", href: "/products/streetbondsr", tag: "Solar Reflective" },
-      { label: "MMAX", href: "/products/mmax", tag: "Bus Lanes" },
-      { label: "DuraShield", href: "/products/durashield", tag: "Sealcoat" },
-    ],
-  },
-  {
-    category: "Thermoplastic",
-    accent: "03",
-    items: [
-      { label: "TrafficPatterns", href: "/products/trafficpatterns", tag: "Inset Marking" },
-      { label: "DecoMark", href: "/products/decomark", tag: "Custom Graphics" },
-      { label: "DuraTherm", href: "/products/duratherm", tag: "Premium" },
-      { label: "PreMark", href: "/products/premark", tag: "MUTCD Compliant" },
-    ],
-  },
-]
+type MenuKey = "services" | "products"
 
-interface ServiceItem { label: string; href: string; description: string; eyebrow: string }
+const PRODUCT_CATEGORIES = [
+  "Stamped Asphalt",
+  "Decorative Coatings",
+  "Thermoplastic",
+  "Surface Protection",
+] as const
 
-const serviceItems: ServiceItem[] = [
-  { label: "Stamped Asphalt", href: "/services/stamped-asphalt", description: "Custom patterns, slip-resistant, 8+ year life", eyebrow: "01" },
-  { label: "Decorative Coatings", href: "/services/decorative-coatings", description: "StreetBond systems for parks, plazas, transit", eyebrow: "02" },
-  { label: "Preformed Thermoplastic", href: "/services/preformed-thermoplastic", description: "High-visibility markings that last", eyebrow: "03" },
-  { label: "Vapor Blasting", href: "/services/vapor-blasting", description: "Surface prep & removal, no chemicals", eyebrow: "04" },
-]
-
-const panelVariants: Variants = {
-  hidden: { opacity: 0, y: -8 },
-  visible: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -8 },
+/** Short nav-only descriptor. Falls back to the product tagline. */
+const PRODUCT_DESCRIPTOR: Record<string, string> = {
+  streetprint: "Patterned hot asphalt pavers",
+  streetbond: "Water-based colour coating",
+  mmax: "MMA coating for high wear",
+  trafficpatterns: "Preformed pattern sheets",
+  "trafficpatterns-xd": "Heavy-duty intersections",
+  duratherm: "Inlaid textured surfaces",
+  decomark: "Shapes, symbols, graphics",
+  premark: "Standard legends and bars",
+  durashield: "Clear protective seal",
 }
 
-const panelTransitionIn: Transition = { duration: 0.25, ease: [0.22, 1, 0.36, 1] }
+interface ProductColumn {
+  category: (typeof PRODUCT_CATEGORIES)[number]
+  items: Product[]
+}
 
-const ArrowRight = () => (
-  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">
-    <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-)
+const productColumns: ProductColumn[] = PRODUCT_CATEGORIES.map((category) => ({
+  category,
+  items: products.filter((p) => p.category === category),
+}))
 
-function ProductsPanel({ onClose }: { onClose: () => void }) {
+const SERVICE_ORDER = [
+  "stamped-asphalt",
+  "decorative-coatings",
+  "preformed-thermoplastic",
+  "vapor-blasting",
+]
+
+/** Canadian English in prose; slugs and routes stay untouched. */
+const SERVICE_LABEL: Record<string, string> = {
+  "stamped-asphalt": "Stamped asphalt",
+  "decorative-coatings": "Decorative coatings",
+  "preformed-thermoplastic": "Preformed thermoplastic",
+  "vapor-blasting": "Vapour blasting",
+}
+
+const serviceLinks: Service[] = SERVICE_ORDER.map((slug) =>
+  services.find((s) => s.slug === slug),
+).filter((s): s is Service => s !== undefined)
+
+interface PrimaryLink {
+  label: string
+  href: string
+  match: string[]
+  menu?: MenuKey
+}
+
+const PRIMARY_LINKS: PrimaryLink[] = [
+  { label: "Services", href: "/services", match: ["/services", "/vapor-blasting"], menu: "services" },
+  { label: "Products", href: "/products", match: ["/products"], menu: "products" },
+  { label: "Applications", href: "/applications", match: ["/applications", "/driveways"] },
+  { label: "Projects", href: "/projects", match: ["/projects"] },
+  { label: "Journal", href: "/blog", match: ["/blog"] },
+  { label: "About", href: "/about", match: ["/about"] },
+]
+
+/** Mobile drawer keeps every route the desktop bar reaches, including the
+    two that live inside the mega menu on desktop. */
+const DRAWER_LINKS: { label: string; href: string }[] = [
+  { label: "Services", href: "/services" },
+  { label: "Products", href: "/products" },
+  { label: "Applications", href: "/applications" },
+  { label: "Driveways", href: "/driveways" },
+  { label: "Projects", href: "/projects" },
+  { label: "Journal", href: "/blog" },
+  { label: "Resources", href: "/resources" },
+  { label: "About", href: "/about" },
+]
+
+const FEATURE_IMAGE = "/images/applications/private-driveways/estate-herringbone-gated-driveway-01.jpg"
+
+const HAIRLINE = "#E7E3DC"
+
+const panelTransition: Transition = { duration: 0.16, ease: "easeOut" }
+
+/* ------------------------------------------------------------------
+   Sub-components
+   ------------------------------------------------------------------ */
+
+function Wordmark({ onClick }: { onClick?: () => void }) {
   return (
-    <motion.div variants={panelVariants} initial="hidden" animate="visible" exit="exit" transition={panelTransitionIn}
-      className="absolute top-full left-0 right-0 bg-white border-b border-[#E2DDD8] shadow-[0_24px_64px_rgba(0,0,0,0.10)]">
-      <div className="max-w-[1400px] mx-auto px-6 sm:px-10 py-10">
-        <div className="grid grid-cols-[1fr_400px] gap-12">
-          <div className="grid grid-cols-3 gap-10">
-            {productColumns.map((col) => (
-              <div key={col.category}>
-                <div className="flex items-center gap-2.5 mb-5 pb-3 border-b border-[#E2DDD8]">
-                  <span className="text-[10px] uppercase tracking-[0.22em] text-[#F26430] font-bold">{col.accent}</span>
-                  <span className="text-[10.5px] uppercase tracking-[0.16em] text-[#0A0A0A] font-semibold">{col.category}</span>
-                </div>
-                <ul className="space-y-1">
-                  {col.items.map((item) => (
-                    <li key={item.href}>
-                      <Link href={item.href} onClick={onClose}
-                        className="group/item flex items-center justify-between min-h-[44px] px-3 -mx-3 text-[13.5px] font-semibold tracking-[0.005em] text-[#0A0A0A] hover:text-[#F26430] hover:bg-[#F6F4F0] rounded-sm transition-all">
-                        <span>{item.label}</span>
-                        {item.tag && (
-                          <span className="text-[9.5px] uppercase tracking-[0.18em] text-[#8C8C8C] group-hover/item:text-[#F26430] transition-colors font-medium">
-                            {item.tag}
-                          </span>
-                        )}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
+    <Link
+      href="/"
+      onClick={onClick}
+      aria-label="Square One Paving — home"
+      className="flex shrink-0 items-center gap-3"
+    >
+      <span
+        aria-hidden="true"
+        className="flex h-7 w-7 items-center justify-center rounded-[2px] bg-[#14181D] text-[11px] font-semibold tracking-[0.02em] text-white"
+      >
+        S1
+      </span>
+      <span className="text-[15px] font-semibold text-[#14161A]">Square One Paving</span>
+    </Link>
+  )
+}
 
-          <Link href="/products/streetbond" onClick={onClose} className="group relative bg-[#0F1115] overflow-hidden block">
-            <div className="relative aspect-[4/3.2]">
-              <Image fill src="/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg"
-                alt="StreetBond at transit plaza" className="object-cover transition-transform duration-1000 ease-out group-hover:scale-105" sizes="400px" />
-              <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[rgba(15,17,21,0.96)] via-[rgba(15,17,21,0.40)] to-transparent" />
-              <div className="absolute top-5 left-5 flex items-center gap-2">
-                <span className="block w-1.5 h-1.5 rounded-full bg-[#F26430] pulse-dot" />
-                <span className="text-[10px] uppercase tracking-[0.28em] text-white font-semibold">Most Specified</span>
-              </div>
-              <div className="absolute bottom-0 left-0 right-0 p-6">
-                <h4 className="text-white font-light text-2xl tracking-[-0.02em] leading-tight mb-2">StreetBond by HUB</h4>
-                <p className="text-white/70 text-[13px] leading-[1.6] mb-4 font-light max-w-[280px]">
-                  Our most-installed decorative coating &mdash; proven on BC transit corridors, cycle lanes, and urban plazas.
-                </p>
-                <span className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] font-semibold text-white border-b border-white/40 pb-1.5 group-hover:border-[#F26430] group-hover:text-[#FF8A5C] transition-all">
-                  Explore StreetBond<ArrowRight />
-                </span>
-              </div>
-            </div>
-          </Link>
-        </div>
-
-        <div className="mt-10 pt-6 border-t border-[#E2DDD8] flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-8">
-            <Link href="/products" onClick={onClose} className="group inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.18em] font-semibold text-[#0A0A0A] hover:text-[#F26430] transition-colors">
-              View All Products<ArrowRight />
-            </Link>
-            <Link href="/products" onClick={onClose} className="group inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.18em] font-semibold text-[#5A5A5A] hover:text-[#F26430] transition-colors">
-              Download Spec Sheets<ArrowRight />
-            </Link>
-          </div>
-          <p className="text-[11px] text-[#8C8C8C] tracking-[0.04em]">
-            Authorized HUB Surface Systems Applicator
-          </p>
-        </div>
-      </div>
+function ServicesDropdown({ onNavigate }: { onNavigate: () => void }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 4 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 4 }}
+      transition={panelTransition}
+      className="absolute top-full left-[-24px] z-[60] w-[288px] rounded-[2px] border border-[#E7E3DC] bg-white py-[10px]"
+    >
+      {serviceLinks.map((service) => (
+        <Link
+          key={service.slug}
+          href={`/services/${service.slug}`}
+          onClick={onNavigate}
+          className="block px-6 py-[10px] text-[15px] font-semibold hover:bg-[#FAF8F5]"
+        >
+          {SERVICE_LABEL[service.slug] ?? service.name}
+        </Link>
+      ))}
     </motion.div>
   )
 }
 
-function ServicesPanel({ onClose }: { onClose: () => void }) {
-  return (
-    <motion.div variants={panelVariants} initial="hidden" animate="visible" exit="exit" transition={panelTransitionIn}
-      className="absolute top-full left-0 right-0 bg-white border-b border-[#E2DDD8] shadow-[0_24px_64px_rgba(0,0,0,0.10)]">
-      <div className="max-w-[1400px] mx-auto px-6 sm:px-10 py-10">
-        <div className="grid grid-cols-[1fr_400px] gap-12">
-          <div className="grid grid-cols-2 gap-3">
-            {serviceItems.map((item) => (
-              <Link key={item.href} href={item.href} onClick={onClose}
-                className="group relative flex flex-col justify-between min-h-[120px] p-5 border border-[#E2DDD8] hover:border-[#F26430]/50 hover:bg-[#FAF7F4] transition-all">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-[10px] uppercase tracking-[0.28em] text-[#F26430] font-bold">{item.eyebrow}</span>
-                  <span className="opacity-0 group-hover:opacity-100 transition-opacity"><ArrowRight /></span>
-                </div>
-                <div>
-                  <h4 className="text-[15px] font-semibold tracking-[-0.005em] text-[#0A0A0A] group-hover:text-[#F26430] transition-colors mb-1.5">{item.label}</h4>
-                  <p className="text-[12.5px] text-[#5A5A5A] leading-[1.5] font-light">{item.description}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
-
-          <Link href="/services/stamped-asphalt" onClick={onClose} className="group relative bg-[#0F1115] overflow-hidden block">
-            <div className="relative aspect-[4/3.2]">
-              <Image fill src="/images/applications/private-driveways/estate-herringbone-gated-driveway-01.jpg"
-                alt="Stamped asphalt estate driveway" className="object-cover transition-transform duration-1000 ease-out group-hover:scale-105" sizes="400px" />
-              <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[rgba(15,17,21,0.96)] via-[rgba(15,17,21,0.30)] to-transparent" />
-              <div className="absolute top-5 left-5 flex items-center gap-2">
-                <span className="block w-1.5 h-1.5 rounded-full bg-[#F26430] pulse-dot" />
-                <span className="text-[10px] uppercase tracking-[0.28em] text-white font-semibold">Flagship Service</span>
-              </div>
-              <div className="absolute bottom-0 left-0 right-0 p-6">
-                <h4 className="text-white font-light text-2xl tracking-[-0.02em] leading-tight mb-2">Stamped Asphalt</h4>
-                <p className="text-white/70 text-[13px] leading-[1.6] mb-4 font-light max-w-[280px]">
-                  Custom patterns, slip-resistant, 8+ year life. Our foundational service for driveways, crosswalks, and plazas.
-                </p>
-                <span className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] font-semibold text-white border-b border-white/40 pb-1.5 group-hover:border-[#F26430] group-hover:text-[#FF8A5C] transition-all">
-                  See stamped asphalt<ArrowRight />
-                </span>
-              </div>
-            </div>
-          </Link>
-        </div>
-
-        <div className="mt-10 pt-6 border-t border-[#E2DDD8] flex flex-wrap items-center justify-between gap-4">
-          <Link href="/contact" onClick={onClose} className="group inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.18em] font-semibold text-[#0A0A0A] hover:text-[#F26430] transition-colors">
-            Book a Site Visit<ArrowRight />
-          </Link>
-          <p className="text-[11px] text-[#8C8C8C] tracking-[0.04em]">25 years &middot; 51+ BC communities &middot; Mobile across BC</p>
-        </div>
-      </div>
-    </motion.div>
-  )
+interface ProductsMegaProps {
+  onNavigate: () => void
+  onMouseEnter: () => void
+  onMouseLeave: () => void
 }
 
-interface MobileAccordionProps { label: string; children: React.ReactNode }
-
-function MobileAccordion({ label, children }: MobileAccordionProps) {
-  const [open, setOpen] = useState(false)
+function ProductsMega({ onNavigate, onMouseEnter, onMouseLeave }: ProductsMegaProps) {
   return (
-    <div className="border-b border-[#EDEBE7]">
-      <button onClick={() => setOpen(!open)}
-        className="flex items-center justify-between w-full min-h-[56px] px-6 text-[17px] font-medium text-[#2C2C2C] hover:text-[#F26430] transition-colors"
-        aria-expanded={open}>
-        <span>{label}</span>
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-          className={`transition-transform duration-200 ${open ? "rotate-180" : ""}`} aria-hidden="true">
-          <path d="M1 4L6 9L11 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </button>
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.div key="accordion-content" initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2, ease: "easeInOut" }} className="overflow-hidden">
-            <div className="pb-2">{children}</div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  )
-}
-
-type ActivePanel = "products" | "services" | null
-
-export default function Nav() {
-  const [activePanel, setActivePanel] = useState<ActivePanel>(null)
-  const [scrolled, setScrolled] = useState(false)
-  const [mobileOpen, setMobileOpen] = useState(false)
-  const navRef = useRef<HTMLElement>(null)
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 10)
-    handleScroll()
-    window.addEventListener("scroll", handleScroll, { passive: true })
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
-
-  useEffect(() => {
-    document.body.style.overflow = mobileOpen ? "hidden" : ""
-    return () => { document.body.style.overflow = "" }
-  }, [mobileOpen])
-
-  useEffect(() => {
-    if (!activePanel) return
-    const handleClickOutside = (e: MouseEvent) => {
-      if (navRef.current && !navRef.current.contains(e.target as Node)) setActivePanel(null)
-    }
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [activePanel])
-
-  useEffect(() => {
-    if (!activePanel && !mobileOpen) return
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") { setActivePanel(null); setMobileOpen(false) }
-    }
-    document.addEventListener("keydown", handleKey)
-    return () => document.removeEventListener("keydown", handleKey)
-  }, [activePanel, mobileOpen])
-
-  const closeAll = () => { setActivePanel(null); setMobileOpen(false) }
-  const togglePanel = (panel: ActivePanel) => { setActivePanel((prev) => (prev === panel ? null : panel)) }
-
-  const chevronDown = (
-    <svg width="11" height="11" viewBox="0 0 11 11" fill="none" aria-hidden="true" className="inline-block ml-1.5 flex-shrink-0">
-      <path d="M1 3.5L5.5 8L10 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  )
-
-  return (
-    <>
-      <nav ref={navRef}
-        className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ${scrolled ? "bg-white/95 backdrop-blur-md border-b border-[#E2DDD8] shadow-[0_2px_24px_rgba(0,0,0,0.04)]" : "bg-white/80 backdrop-blur-sm"}`}>
-        <div className="max-w-[1400px] mx-auto px-5 sm:px-8">
-          <div className="flex items-center justify-between h-[68px]">
-            <Link href="/" onClick={closeAll} className="flex-shrink-0 inline-flex items-center group" aria-label="Square One Paving — home">
-              <Image
-                src="/images/logo/SquareOne-wordmark-dark.svg"
-                alt="Square One Paving"
-                width={200}
-                height={32}
-                className="h-7 lg:h-8 w-auto"
-                priority
-              />
-            </Link>
-
-            <div className="hidden lg:flex items-center gap-0">
-              <button onClick={() => togglePanel("products")}
-                className={`flex items-center px-4 py-2 text-[13px] font-semibold tracking-[0.005em] transition-colors ${activePanel === "products" ? "text-[#F26430]" : "text-[#0A0A0A] hover:text-[#F26430]"}`}
-                aria-expanded={activePanel === "products"} aria-haspopup="true">
-                Products
-                <span className={`transition-transform duration-200 ${activePanel === "products" ? "rotate-180" : ""}`}>{chevronDown}</span>
-              </button>
-
-              <button onClick={() => togglePanel("services")}
-                className={`flex items-center px-4 py-2 text-[13px] font-semibold tracking-[0.005em] transition-colors ${activePanel === "services" ? "text-[#F26430]" : "text-[#0A0A0A] hover:text-[#F26430]"}`}
-                aria-expanded={activePanel === "services"} aria-haspopup="true">
-                Services
-                <span className={`transition-transform duration-200 ${activePanel === "services" ? "rotate-180" : ""}`}>{chevronDown}</span>
-              </button>
-
-              {([
-                { label: "Projects", href: "/projects" },
-                { label: "Driveways", href: "/driveways" },
-                { label: "Resources", href: "/resources" },
-                { label: "Blog", href: "/blog" },
-                { label: "About", href: "/about" },
-                { label: "Contact", href: "/contact" },
-              ] as const).map((link) => (
-                <Link key={link.href} href={link.href} onClick={closeAll}
-                  className="px-4 py-2 text-[13px] font-semibold tracking-[0.005em] text-[#0A0A0A] hover:text-[#F26430] transition-colors">
-                  {link.label}
+    <motion.div
+      initial={{ opacity: 0, y: 4 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 4 }}
+      transition={panelTransition}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      className="fixed top-[72px] right-0 left-0 z-40 hidden border-t border-b border-[#E7E3DC] bg-white min-[821px]:block"
+    >
+      <div
+        className="mx-auto grid max-w-[1280px] gap-8 px-10 pt-8 pb-[30px]"
+        style={{ gridTemplateColumns: "repeat(4, 1fr) 1.25fr" }}
+      >
+        {productColumns.map((column) => (
+          <div key={column.category}>
+            {/* .label, not .eyebrow — four squares here would blow the
+                three-orange-elements budget, and the reference uses a bare
+                label in the mega menu. */}
+            <div className="label">{column.category}</div>
+            <div className="mt-[18px] flex flex-col gap-3">
+              {column.items.map((product) => (
+                <Link
+                  key={product.slug}
+                  href={`/products/${product.slug}`}
+                  onClick={onNavigate}
+                  className="block text-[15px] font-semibold"
+                >
+                  {product.name}
+                  <span className="mt-[3px] block text-[13px] leading-[1.5] font-normal text-[#767B82]">
+                    {PRODUCT_DESCRIPTOR[product.slug] ?? product.tagline}
+                  </span>
                 </Link>
               ))}
             </div>
+          </div>
+        ))}
 
-            <div className="flex items-center gap-3">
-              <Link href="/contact" onClick={closeAll} className="hidden lg:inline-flex">
-                <span className="group inline-flex items-center gap-2 bg-[#0A0A0A] text-white px-5 py-2.5 text-[12.5px] font-semibold tracking-[0.04em] uppercase rounded-none transition-all hover:bg-[#F26430] hover:shadow-[0_8px_24px_rgba(242,100,48,0.30)]">
-                  Get a Quote<ArrowRight />
-                </span>
-              </Link>
-
-              <button onClick={() => setMobileOpen(!mobileOpen)} className="lg:hidden relative w-11 h-11 flex items-center justify-center"
-                aria-label={mobileOpen ? "Close menu" : "Open menu"} aria-expanded={mobileOpen}>
-                <span className="absolute block h-[2px] w-6 bg-[#0A0A0A] transition-all duration-300"
-                  style={{ transform: mobileOpen ? "translateY(0) rotate(45deg)" : "translateY(-4px)" }} />
-                <span className="absolute block h-[2px] w-6 bg-[#0A0A0A] transition-all duration-300"
-                  style={{ transform: mobileOpen ? "translateY(0) rotate(-45deg)" : "translateY(4px)" }} />
-              </button>
-            </div>
+        <div className="border-l border-[#E7E3DC] pl-8">
+          <Link
+            href="/driveways"
+            onClick={onNavigate}
+            className="relative block aspect-[16/10] overflow-hidden rounded-[2px] bg-[#E4DDD1]"
+          >
+            <Image
+              src={FEATURE_IMAGE}
+              alt="Herringbone StreetPrint driveway at a gated estate"
+              fill
+              sizes="300px"
+              className="object-cover object-[center_70%]"
+            />
+            <span aria-hidden="true" className="scrim scrim-light" />
+            <span className="caption">StreetPrint herringbone driveway</span>
+          </Link>
+          <div className="mt-[18px] flex flex-col gap-[10px]">
+            <Link href="/products" onClick={onNavigate} className="arrow-link">
+              All products <span>&rarr;</span>
+            </Link>
+            <Link href="/resources" onClick={onNavigate} className="arrow-link">
+              Technical documents <span>&rarr;</span>
+            </Link>
           </div>
         </div>
+      </div>
+    </motion.div>
+  )
+}
 
-        <AnimatePresence>{activePanel === "products" && <ProductsPanel key="products-panel" onClose={closeAll} />}</AnimatePresence>
-        <AnimatePresence>{activePanel === "services" && <ServicesPanel key="services-panel" onClose={closeAll} />}</AnimatePresence>
+function MobileDrawer({ onClose }: { onClose: () => void }) {
+  return (
+    <motion.div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Navigation menu"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.18, ease: "easeOut" }}
+      className="fixed inset-0 z-[300] flex flex-col bg-white min-[821px]:hidden"
+    >
+      <div className="flex h-[72px] shrink-0 items-center justify-between border-b border-[#E7E3DC] px-6">
+        <Wordmark onClick={onClose} />
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Close menu"
+          className="px-3 py-2 text-[28px] leading-none font-light text-[#14161A]"
+        >
+          &times;
+        </button>
+      </div>
+
+      <nav aria-label="Mobile" className="flex-1 overflow-auto px-6 pt-2">
+        {DRAWER_LINKS.map((link) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            onClick={onClose}
+            className="block border-b border-[#E7E3DC] py-[22px] text-[26px] leading-tight font-light tracking-[-0.02em] text-[#14161A]"
+          >
+            {link.label}
+          </Link>
+        ))}
       </nav>
 
+      <Link
+        href="/contact"
+        onClick={onClose}
+        className="flex h-16 shrink-0 items-center justify-center bg-[#F26430] text-[16px] font-semibold text-white transition-colors hover:bg-[#D8511F] hover:text-white"
+      >
+        Request a quote
+      </Link>
+    </motion.div>
+  )
+}
+
+/* ------------------------------------------------------------------
+   Nav
+   ------------------------------------------------------------------ */
+
+export default function Nav() {
+  const pathname = usePathname()
+  const [scrolled, setScrolled] = useState(false)
+  const [menu, setMenu] = useState<MenuKey | null>(null)
+  const [drawerOpen, setDrawerOpen] = useState(false)
+  const rootRef = useRef<HTMLDivElement>(null)
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const clearCloseTimer = useCallback(() => {
+    if (closeTimer.current) {
+      clearTimeout(closeTimer.current)
+      closeTimer.current = null
+    }
+  }, [])
+
+  const openMenu = useCallback(
+    (key: MenuKey) => {
+      clearCloseTimer()
+      setMenu(key)
+    },
+    [clearCloseTimer],
+  )
+
+  const closeMenu = useCallback(() => {
+    clearCloseTimer()
+    setMenu(null)
+  }, [clearCloseTimer])
+
+  const scheduleClose = useCallback(() => {
+    clearCloseTimer()
+    closeTimer.current = setTimeout(() => setMenu(null), 140)
+  }, [clearCloseTimer])
+
+  const hoverOpen = useCallback(
+    (key: MenuKey) => {
+      if (window.matchMedia("(hover: hover)").matches) openMenu(key)
+    },
+    [openMenu],
+  )
+
+  const toggleMenu = useCallback(
+    (key: MenuKey) => {
+      clearCloseTimer()
+      setMenu((prev) => (prev === key ? null : key))
+    },
+    [clearCloseTimer],
+  )
+
+  const closeAll = useCallback(() => {
+    clearCloseTimer()
+    setMenu(null)
+    setDrawerOpen(false)
+  }, [clearCloseTimer])
+
+  // Bar goes opaque past 24px
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24)
+    onScroll()
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [])
+
+  // Lock body scroll while the drawer is open
+  useEffect(() => {
+    document.body.style.overflow = drawerOpen ? "hidden" : ""
+    return () => {
+      document.body.style.overflow = ""
+    }
+  }, [drawerOpen])
+
+  // Escape closes both
+  useEffect(() => {
+    if (!menu && !drawerOpen) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeAll()
+    }
+    document.addEventListener("keydown", onKey)
+    return () => document.removeEventListener("keydown", onKey)
+  }, [menu, drawerOpen, closeAll])
+
+  // Outside click closes the dropdown
+  useEffect(() => {
+    if (!menu) return
+    const onDocClick = (e: MouseEvent) => {
+      if (rootRef.current && !rootRef.current.contains(e.target as Node)) closeMenu()
+    }
+    document.addEventListener("mousedown", onDocClick)
+    return () => document.removeEventListener("mousedown", onDocClick)
+  }, [menu, closeMenu])
+
+  useEffect(() => clearCloseTimer, [clearCloseTimer])
+
+  const isActive = (link: PrimaryLink) =>
+    link.match.some((base) => pathname === base || pathname.startsWith(`${base}/`))
+
+  return (
+    <div ref={rootRef}>
+      <header
+        className="fixed top-0 right-0 left-0 z-50"
+        style={{
+          background: scrolled ? "rgba(255,255,255,0.92)" : "rgba(255,255,255,0)",
+          backdropFilter: scrolled ? "blur(8px)" : "none",
+          WebkitBackdropFilter: scrolled ? "blur(8px)" : "none",
+          borderBottom: `1px solid ${scrolled ? HAIRLINE : "rgba(231,227,220,0)"}`,
+          transition: "background 0.25s ease, border-color 0.25s ease",
+        }}
+      >
+        <div className="container-1280 flex h-[72px] min-w-0 items-center gap-x-6">
+          <Wordmark onClick={closeAll} />
+
+          <nav
+            aria-label="Primary"
+            className="ml-auto hidden items-center gap-8 min-[821px]:flex"
+          >
+            {PRIMARY_LINKS.map((link) => {
+              const menuKey = link.menu
+              const linkClass = `nav-link${isActive(link) ? " nav-link-active" : ""}`
+
+              if (!menuKey) {
+                return (
+                  <Link key={link.href} href={link.href} onClick={closeAll} className={linkClass}>
+                    {link.label}
+                  </Link>
+                )
+              }
+
+              return (
+                <div
+                  key={link.href}
+                  className="relative flex h-[72px] items-center"
+                  onMouseEnter={() => hoverOpen(menuKey)}
+                  onMouseLeave={scheduleClose}
+                >
+                  <Link
+                    href={link.href}
+                    aria-haspopup="true"
+                    aria-expanded={menu === menuKey}
+                    onClick={(e) => {
+                      e.preventDefault()
+                      toggleMenu(menuKey)
+                    }}
+                    className={linkClass}
+                  >
+                    {link.label}
+                  </Link>
+                  {menuKey === "services" && (
+                    <AnimatePresence>
+                      {menu === "services" && <ServicesDropdown onNavigate={closeAll} />}
+                    </AnimatePresence>
+                  )}
+                </div>
+              )
+            })}
+          </nav>
+
+          <Link
+            href="/contact"
+            onClick={closeAll}
+            className="ml-10 hidden shrink-0 rounded-[2px] border border-[#14161A] px-[19px] py-[10px] text-[14px] font-semibold text-[#14161A] transition-colors hover:bg-[#14161A] hover:text-white min-[821px]:inline-block"
+          >
+            Request a quote
+          </Link>
+
+          <button
+            type="button"
+            onClick={() => setDrawerOpen(true)}
+            aria-label="Open menu"
+            aria-expanded={drawerOpen}
+            className="ml-auto flex h-11 w-11 flex-col items-center justify-center gap-[5px] min-[821px]:hidden"
+          >
+            <span aria-hidden="true" className="block h-[1.5px] w-[22px] bg-[#14161A]" />
+            <span aria-hidden="true" className="block h-[1.5px] w-[22px] bg-[#14161A]" />
+          </button>
+        </div>
+      </header>
+
       <AnimatePresence>
-        {mobileOpen && (
-          <motion.div key="mobile-menu" className="lg:hidden fixed inset-0 w-full h-full z-[70] bg-white flex flex-col overflow-hidden"
-            initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }}
-            transition={{ duration: 0.22, ease: "easeOut" }} aria-modal="true" role="dialog" aria-label="Navigation menu">
-
-            <div className="flex items-center justify-between px-5 h-[68px] border-b border-[#E2DDD8] flex-shrink-0">
-              <Link href="/" onClick={closeAll} className="inline-flex items-center">
-                <Image src="/images/logo/SquareOne-wordmark-dark.svg" alt="Square One Paving" width={170} height={28} className="h-7 w-auto" />
-              </Link>
-              <button onClick={() => setMobileOpen(false)} className="relative w-11 h-11 flex items-center justify-center hover:bg-[#F6F4F0] transition-colors" aria-label="Close menu">
-                <span className="absolute block h-[2px] w-6 bg-[#0A0A0A] transition-all duration-300" style={{ transform: "translateY(0) rotate(45deg)" }} />
-                <span className="absolute block h-[2px] w-6 bg-[#0A0A0A] transition-all duration-300" style={{ transform: "translateY(0) rotate(-45deg)" }} />
-              </button>
-            </div>
-
-            <div className="flex-1 overflow-y-auto overscroll-contain pb-12">
-              <MobileAccordion label="Products">
-                {productColumns.map((col) => (
-                  <div key={col.category} className="px-6 pt-3 pb-1">
-                    <p className="text-[10px] uppercase tracking-[0.18em] text-[#F26430] font-bold mb-1">{col.category}</p>
-                    {col.items.map((item) => (
-                      <Link key={item.href} href={item.href} onClick={closeAll}
-                        className="flex items-center min-h-[48px] pl-2 text-[15px] font-medium text-[#2C2C2C] hover:text-[#F26430] transition-colors border-l-2 border-transparent hover:border-[#F26430]">
-                        {item.label}
-                      </Link>
-                    ))}
-                  </div>
-                ))}
-                <div className="px-6 py-3 border-t border-[#EDEBE7] mt-2 space-y-2">
-                  <div className="flex items-center gap-5 flex-wrap">
-                    <Link href="/products" onClick={closeAll} className="text-sm font-semibold text-[#F26430] hover:underline">View All Products &rarr;</Link>
-                    <Link href="/resources" onClick={closeAll} className="text-sm font-semibold text-[#5A5A5A] hover:text-[#F26430] hover:underline">Download Spec Sheets &rarr;</Link>
-                  </div>
-                  <p className="text-[11px] text-[#8C8C8C] tracking-[0.04em]">Authorized HUB Surface Systems Applicator</p>
-                </div>
-              </MobileAccordion>
-
-              <MobileAccordion label="Services">
-                <div className="px-6 py-2 space-y-0.5">
-                  {serviceItems.map((item) => (
-                    <Link key={item.href} href={item.href} onClick={closeAll}
-                      className="flex flex-col min-h-[56px] justify-center pl-2 py-2 border-l-2 border-transparent hover:border-[#F26430] hover:bg-[#F6F4F0] transition-all">
-                      <span className="text-[15px] font-medium text-[#2C2C2C] hover:text-[#F26430]">{item.label}</span>
-                      <span className="text-xs text-[#5A5A5A]">{item.description}</span>
-                    </Link>
-                  ))}
-                </div>
-                <div className="px-6 py-3 border-t border-[#EDEBE7] mt-1 space-y-1.5">
-                  <Link href="/contact" onClick={closeAll} className="text-sm font-semibold text-[#F26430] hover:underline">Book a Site Visit &rarr;</Link>
-                  <p className="text-[11px] text-[#8C8C8C] tracking-[0.04em]">25 years &middot; 51+ BC communities &middot; Mobile across BC</p>
-                </div>
-              </MobileAccordion>
-
-              {([
-                { label: "Projects", href: "/projects" },
-                { label: "Driveways", href: "/driveways" },
-                { label: "Resources", href: "/resources" },
-                { label: "Blog", href: "/blog" },
-                { label: "About", href: "/about" },
-                { label: "Contact", href: "/contact" },
-              ] as const).map((link) => (
-                <Link key={link.href} href={link.href} onClick={closeAll}
-                  className="flex items-center min-h-[56px] px-6 text-[17px] font-medium text-[#2C2C2C] border-b border-[#EDEBE7] hover:text-[#F26430] transition-colors">
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-
-            <div className="flex-shrink-0 border-t border-[#E2DDD8] bg-white">
-              <Link href="/contact" onClick={closeAll}
-                className="block bg-[#0A0A0A] text-white text-center py-4 text-sm font-semibold tracking-[0.1em] uppercase transition-all hover:bg-[#F26430]">
-                Get a Quote &rarr;
-              </Link>
-            </div>
-          </motion.div>
+        {menu === "products" && (
+          <ProductsMega
+            onNavigate={closeAll}
+            onMouseEnter={() => openMenu("products")}
+            onMouseLeave={scheduleClose}
+          />
         )}
       </AnimatePresence>
-    </>
+
+      <AnimatePresence>
+        {drawerOpen && <MobileDrawer onClose={closeAll} />}
+      </AnimatePresence>
+    </div>
   )
 }
