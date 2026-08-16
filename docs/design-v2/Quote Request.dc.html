@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FAF8F5;color:#3D4147;font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#14161A;text-decoration:none}
+a:hover{color:#D8511F}
+input::placeholder,textarea::placeholder{color:#9AA0A7}
+@media (max-width: 700px){
+[data-mq~="section"]{padding:56px 0 !important}
+[data-mq~="container"]{padding:0 24px !important}
+[data-mq~="grid-2"]{grid-template-columns:1fr !important;gap:64px !important}
+}
+a[data-arrow] span{display:inline-block;transition:transform 0.2s}a[data-arrow]:hover span{transform:translateX(4px)}
+[data-card]{transition:transform 0.25s, box-shadow 0.25s}[data-card]:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(20,22,26,0.08)}
+[data-card] img{transition:transform 0.4s ease}[data-card]:hover img{transform:scale(1.02)}
+[data-card] [data-zoom]{transition:transform 0.4s ease}[data-card]:hover [data-zoom]{transform:scale(1.02)}
+</style>
+</helmet>
+
+<dc-import name="Site Nav" active="" hint-size="100%,72px" style="position:sticky;top:0;z-index:120"></dc-import>
+
+<section data-mq="section" data-screen-label="Quote form" style="background:#FAF8F5;padding:96px 0 128px">
+  <div data-mq="container" style="max-width:1280px;margin:0 auto;padding:0 40px">
+    <h1 data-mq="h1" style="margin:0;font-size:clamp(3rem, 5vw, 4.5rem);font-weight:300;letter-spacing:-0.035em;line-height:0.98;color:#14161A">Request a quote<span aria-hidden="true" style="display:inline-block;width:6px;height:6px;background:#F26430;border-radius:1px;margin-left:14px"></span></h1>
+    <p style="margin:20px 0 0;font-size:18px;line-height:1.6;color:#3D4147;max-width:56ch;text-wrap:pretty">Tell us what you are building and where. Drawings help, but a rough description is enough to start.</p>
+    <div data-mq="grid-2" style="display:grid;grid-template-columns:minmax(0, 560px) 1fr;gap:112px;margin-top:40px;align-items:start">
+      <form id="quote-form" onSubmit="{{ handleSubmit }}" style="display:flex;flex-direction:column;gap:24px;margin:0">
+        <div>
+          <label for="q-name" style="display:block;font-size:14px;font-weight:600;color:#14161A;margin-bottom:8px">Name</label>
+          <input id="q-name" name="name" type="text" placeholder="Jordan Bell" style="display:block;width:100%;box-sizing:border-box;background:#FFFFFF;border:1px solid {{ nameBc }};border-radius:2px;padding:13px 14px;font-size:15px;font-family:inherit;color:#14161A;transition:border-color 0.15s, box-shadow 0.15s" style-focus="border-color:#14161A;box-shadow:0 0 0 3px rgba(20, 22, 26, 0.08);outline:none">
+          <sc-if value="{{ nameErr }}" hint-placeholder-val="{{ false }}"><div style="margin-top:7px;font-size:13px;color:#B04432">Please add your name.</div></sc-if>
+        </div>
+        <div>
+          <label for="q-org" style="display:block;font-size:14px;font-weight:600;color:#14161A;margin-bottom:8px">Organization</label>
+          <input id="q-org" name="organization" type="text" placeholder="City of Coquitlam" style="display:block;width:100%;box-sizing:border-box;background:#FFFFFF;border:1px solid #E7E3DC;border-radius:2px;padding:13px 14px;font-size:15px;font-family:inherit;color:#14161A;transition:border-color 0.15s, box-shadow 0.15s" style-focus="border-color:#14161A;box-shadow:0 0 0 3px rgba(20, 22, 26, 0.08);outline:none">
+        </div>
+        <div>
+          <label for="q-email" style="display:block;font-size:14px;font-weight:600;color:#14161A;margin-bottom:8px">Email</label>
+          <input id="q-email" name="email" type="email" placeholder="j.bell@coquitlam.ca" style="display:block;width:100%;box-sizing:border-box;background:#FFFFFF;border:1px solid {{ emailBc }};border-radius:2px;padding:13px 14px;font-size:15px;font-family:inherit;color:#14161A;transition:border-color 0.15s, box-shadow 0.15s" style-focus="border-color:#14161A;box-shadow:0 0 0 3px rgba(20, 22, 26, 0.08);outline:none">
+          <sc-if value="{{ emailErr }}" hint-placeholder-val="{{ false }}"><div style="margin-top:7px;font-size:13px;color:#B04432">Please add a valid email address.</div></sc-if>
+        </div>
+        <div>
+          <label for="q-phone" style="display:block;font-size:14px;font-weight:600;color:#14161A;margin-bottom:8px">Phone</label>
+          <input id="q-phone" name="phone" type="tel" placeholder="604 555 0142" style="display:block;width:100%;box-sizing:border-box;background:#FFFFFF;border:1px solid #E7E3DC;border-radius:2px;padding:13px 14px;font-size:15px;font-family:inherit;color:#14161A;transition:border-color 0.15s, box-shadow 0.15s" style-focus="border-color:#14161A;box-shadow:0 0 0 3px rgba(20, 22, 26, 0.08);outline:none">
+        </div>
+        <div>
+          <label for="q-subject" style="display:block;font-size:14px;font-weight:600;color:#14161A;margin-bottom:8px">Subject</label>
+          <select id="q-subject" name="subject" style="display:block;width:100%;box-sizing:border-box;background:#FFFFFF;border:1px solid #E7E3DC;border-radius:2px;padding:13px 14px;font-size:15px;font-family:inherit;color:#14161A;transition:border-color 0.15s, box-shadow 0.15s" style-focus="border-color:#14161A;box-shadow:0 0 0 3px rgba(20, 22, 26, 0.08);outline:none">
+            <option>New Business Inquiry</option>
+            <option>General Inquiry</option>
+            <option>Media Inquiry</option>
+          </select>
+        </div>
+        <div>
+          <label for="q-location" style="display:block;font-size:14px;font-weight:600;color:#14161A;margin-bottom:8px">Project location</label>
+          <input id="q-location" name="location" type="text" placeholder="Como Lake Ave at Gatensbury St, Coquitlam" style="display:block;width:100%;box-sizing:border-box;background:#FFFFFF;border:1px solid #E7E3DC;border-radius:2px;padding:13px 14px;font-size:15px;font-family:inherit;color:#14161A;transition:border-color 0.15s, box-shadow 0.15s" style-focus="border-color:#14161A;box-shadow:0 0 0 3px rgba(20, 22, 26, 0.08);outline:none">
+        </div>
+        <div>
+          <label for="q-scope" style="display:block;font-size:14px;font-weight:600;color:#14161A;margin-bottom:8px">Scope</label>
+          <textarea id="q-scope" name="scope" rows="5" placeholder="Two decorative crosswalks and a plaza recoat, roughly 400 m&sup2;. Drawings available." style="display:block;width:100%;box-sizing:border-box;background:#FFFFFF;border:1px solid {{ scopeBc }};border-radius:2px;padding:13px 14px;font-size:15px;font-family:inherit;line-height:1.55;color:#14161A;resize:vertical;transition:border-color 0.15s, box-shadow 0.15s" style-focus="border-color:#14161A;box-shadow:0 0 0 3px rgba(20, 22, 26, 0.08);outline:none"></textarea>
+          <sc-if value="{{ scopeErr }}" hint-placeholder-val="{{ false }}"><div style="margin-top:7px;font-size:13px;color:#B04432">Tell us a little about the scope.</div></sc-if>
+        </div>
+        <div>
+          <label for="q-timeline" style="display:block;font-size:14px;font-weight:600;color:#14161A;margin-bottom:8px">Timeline</label>
+          <input id="q-timeline" name="timeline" type="text" placeholder="Summer 2027 construction window" style="display:block;width:100%;box-sizing:border-box;background:#FFFFFF;border:1px solid #E7E3DC;border-radius:2px;padding:13px 14px;font-size:15px;font-family:inherit;color:#14161A;transition:border-color 0.15s, box-shadow 0.15s" style-focus="border-color:#14161A;box-shadow:0 0 0 3px rgba(20, 22, 26, 0.08);outline:none">
+        </div>
+        <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:20px;margin-top:12px">
+          <button type="submit" style="background:#F26430;color:#FFFFFF;font-size:15px;font-weight:600;font-family:inherit;padding:15px 30px;border:none;border-radius:2px;cursor:pointer;transition:background 0.15s" style-hover="background:#D8511F">Send request</button>
+          <span style="font-size:15px;color:#767B82">or call <a href="tel:+16046126209" style="color:#3D4147;font-weight:500" style-hover="color:#14161A">604-612-6209</a></span>
+        </div>
+        </sc-if>
+        <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:12px;border:1px solid #E7E3DC;border-radius:2px;background:#FFFFFF;padding:18px 20px">
+          <div style="font-size:15px;font-weight:600;color:#14161A">Received &mdash; we reply within one business day.</div>
+          <div style="margin-top:4px;font-size:14px;line-height:1.55;color:#3D4147">We will be in touch to arrange a site walk.</div>
+        </div>
+        </sc-if>
+      </form>
+      <aside>
+        <div style="border-bottom:1px solid #E7E3DC;padding-bottom:24px">
+          <div style="font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82">Office</div>
+          <div style="margin-top:10px;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">505&ndash;20800 Lougheed Highway</div>
+          <div style="margin-top:4px;font-size:14px;color:#767B82">Maple Ridge, BC V2X 3P2</div>
+        </div>
+        <div style="border-bottom:1px solid #E7E3DC;padding:24px 0">
+          <div style="font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82">Phone</div>
+          <div style="display:flex;flex-direction:column;gap:10px;margin-top:12px">
+            <div style="display:flex;justify-content:space-between;gap:16px"><span style="font-size:14px;color:#767B82">Lower Mainland</span><a href="tel:+16046126209" style="font-size:15px;font-weight:500;color:#14161A" style-hover="color:#D8511F">604-612-6209</a></div>
+            <div style="display:flex;justify-content:space-between;gap:16px"><span style="font-size:14px;color:#767B82">Vancouver Island</span><a href="tel:+12503910270" style="font-size:15px;font-weight:500;color:#14161A" style-hover="color:#D8511F">250-391-0270</a></div>
+            <div style="display:flex;justify-content:space-between;gap:16px"><span style="font-size:14px;color:#767B82">Toll-free</span><a href="tel:+18773910270" style="font-size:15px;font-weight:500;color:#14161A" style-hover="color:#D8511F">1-877-391-0270</a></div>
+          </div>
+        </div>
+        <div style="border-bottom:1px solid #E7E3DC;padding:24px 0">
+          <div style="font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82">Email</div>
+          <a href="mailto:office@squareonepaving.com" style="display:inline-block;margin-top:10px;font-size:15px;font-weight:500;color:#14161A" style-hover="color:#D8511F">office@squareonepaving.com</a>
+        </div>
+        <div style="border-bottom:1px solid #E7E3DC;padding:24px 0">
+          <div style="font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82">Response</div>
+          <div style="margin-top:10px;font-size:15px;line-height:1.6;color:#3D4147;max-width:36ch">We reply within one business day, and we walk the site before we quote it.</div>
+        </div>
+        <p style="margin:24px 0 0;font-size:14px;line-height:1.6;color:#767B82;max-width:34ch">Proudly serving communities across British Columbia since 2000.</p>
+        <p style="margin:12px 0 0;font-size:13px;color:#9AA0A7">BBB Accredited Business</p>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<dc-import name="Site Close" hide-cta="{{ true }}" hint-size="100%,700px"></dc-import>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  componentDidMount() { const go = () => import('./site.js').then(m => m.init()); go(); setTimeout(go, 900); }
+  state = { sent: false, errors: {} };
+  renderVals() {
+    const er = this.state.errors;
+    return {
+      sent: this.state.sent,
+      notSent: !this.state.sent,
+      nameBc: er.name ? '#B04432' : '#E7E3DC', nameErr: !!er.name,
+      emailBc: er.email ? '#B04432' : '#E7E3DC', emailErr: !!er.email,
+      scopeBc: er.scope ? '#B04432' : '#E7E3DC', scopeErr: !!er.scope,
+      handleSubmit: (e) => {
+        e.preventDefault();
+        const el = e.target.elements;
+        const errors = {};
+        if (!el.name.value.trim()) errors.name = 1;
+        if (!/^\S+@\S+\.\S+$/.test(el.email.value.trim())) errors.email = 1;
+        if (!el.scope.value.trim()) errors.scope = 1;
+        if (Object.keys(errors).length) { this.setState({ errors }); return; }
+        this.setState({ sent: true, errors: {} });
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

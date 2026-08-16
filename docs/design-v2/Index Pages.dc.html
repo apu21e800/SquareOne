@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#EAE7E1;color:#3D4147;font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#14161A;text-decoration:none}
+a:hover{color:#D8511F}
+a[data-arrow] span{display:inline-block;transition:transform 0.2s}a[data-arrow]:hover span{transform:translateX(4px)}
+[data-card]{transition:transform 0.25s, box-shadow 0.25s}[data-card]:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(20,22,26,0.08)}
+[data-card] img{transition:transform 0.4s ease}[data-card]:hover img{transform:scale(1.02)}
+[data-card] [data-zoom]{transition:transform 0.4s ease}[data-card]:hover [data-zoom]{transform:scale(1.02)}
+</style>
+</helmet>
+
+<dc-import name="Site Nav" hint-size="100%,72px" style="position:sticky;top:0;z-index:120"></dc-import>
+
+<section data-no-reveal style="padding:48px;display:flex;flex-wrap:wrap;gap:56px;align-items:flex-start">
+
+  <div>
+    <div style="font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82;margin-bottom:16px">/products &middot; 1440</div>
+    <div id="products" data-screen-label="Products index" style="position:relative;overflow:hidden;scroll-margin-top:88px;width:1440px;background:#FFFFFF;border:1px solid #DDD9D1;padding:96px 80px 112px;box-sizing:border-box">
+      <div aria-hidden="true" style="position:absolute;top:40px;right:32px;font-size:10rem;font-weight:200;line-height:1;letter-spacing:-0.04em;color:#F1EEE9;pointer-events:none;user-select:none">01</div>
+      <div style="display:flex;align-items:center;gap:10px;font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82"><span style="width:6px;height:6px;background:#F26430;border-radius:1px;flex-shrink:0"></span>Products</div>
+      <h2 style="margin:20px 0 0;font-size:clamp(3rem, 5vw, 4.5rem);font-weight:300;letter-spacing:-0.035em;line-height:0.98;color:#14161A">Nine systems, four categories</h2>
+      <p style="margin:20px 0 0;font-size:18px;line-height:1.6;color:#3D4147;max-width:56ch;text-wrap:pretty">Every system we install, from pattern to protection. If it is not listed here, we do not install it.</p>
+      <div style="display:flex;flex-direction:column;gap:64px;margin-top:40px">
+        <div>
+          <div style="font-size:12px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82;border-bottom:1px solid #E7E3DC;padding-bottom:14px">Stamped Asphalt</div>
+          <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:24px;margin-top:28px">
+            <div data-card style="display:flex;flex-direction:column;background:#FAF8F5;border:1px solid #E7E3DC;border-radius:2px;padding:28px;min-height:200px">
+              <span style="align-self:flex-start;background:#F1EEE9;color:#3D4147;font-size:12px;font-weight:600;letter-spacing:0.04em;padding:5px 10px;border-radius:2px">Stamped Asphalt</span>
+              <h3 style="margin:18px 0 0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">StreetPrint</h3>
+              <p style="margin:8px 0 0;font-size:15px;line-height:1.55;color:#3D4147">Patterned hot asphalt with the look of unit pavers.</p>
+              <a data-arrow href="Driveways Landing.dc.html" style="margin-top:auto;padding-top:24px;font-size:14px;font-weight:600;color:#14161A" style-hover="color:#D8511F">Explore system <span>&rarr;</span></a>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82;border-bottom:1px solid #E7E3DC;padding-bottom:14px">Decorative Coatings</div>
+          <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:24px;margin-top:28px">
+            <div data-card style="display:flex;flex-direction:column;background:#FAF8F5;border:1px solid #E7E3DC;border-radius:2px;padding:28px;min-height:200px">
+              <span style="align-self:flex-start;background:#F1EEE9;color:#3D4147;font-size:12px;font-weight:600;letter-spacing:0.04em;padding:5px 10px;border-radius:2px">Decorative Coatings</span>
+              <h3 style="margin:18px 0 0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">StreetBond</h3>
+              <p style="margin:8px 0 0;font-size:15px;line-height:1.55;color:#3D4147">Water-based pavement coating in standard and custom colours.</p>
+              <a data-arrow href="Product Detail StreetBond.dc.html" style="margin-top:auto;padding-top:24px;font-size:14px;font-weight:600;color:#14161A" style-hover="color:#D8511F">Explore system <span>&rarr;</span></a>
+            </div>
+            <div data-card style="display:flex;flex-direction:column;background:#FAF8F5;border:1px solid #E7E3DC;border-radius:2px;padding:28px;min-height:200px">
+              <span style="align-self:flex-start;background:#F1EEE9;color:#3D4147;font-size:12px;font-weight:600;letter-spacing:0.04em;padding:5px 10px;border-radius:2px">Decorative Coatings</span>
+              <h3 style="margin:18px 0 0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">MMAX</h3>
+              <p style="margin:8px 0 0;font-size:15px;line-height:1.55;color:#3D4147">MMA coating for high-wear areas and fast return to service.</p>
+              <a data-arrow href="Product Detail StreetBond.dc.html" style="margin-top:auto;padding-top:24px;font-size:14px;font-weight:600;color:#14161A" style-hover="color:#D8511F">Explore system <span>&rarr;</span></a>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82;border-bottom:1px solid #E7E3DC;padding-bottom:14px">Thermoplastic</div>
+          <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:24px;margin-top:28px">
+            <div data-card style="display:flex;flex-direction:column;background:#FAF8F5;border:1px solid #E7E3DC;border-radius:2px;padding:28px;min-height:200px">
+              <span style="align-self:flex-start;background:#F1EEE9;color:#3D4147;font-size:12px;font-weight:600;letter-spacing:0.04em;padding:5px 10px;border-radius:2px">Thermoplastic</span>
+              <h3 style="margin:18px 0 0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">TrafficPatterns</h3>
+              <p style="margin:8px 0 0;font-size:15px;line-height:1.55;color:#3D4147">Preformed pattern sheets, heat-fused to asphalt.</p>
+              <a data-arrow href="Service Detail Preformed Thermoplastic.dc.html" style="margin-top:auto;padding-top:24px;font-size:14px;font-weight:600;color:#14161A" style-hover="color:#D8511F">Explore system <span>&rarr;</span></a>
+            </div>
+            <div data-card style="display:flex;flex-direction:column;background:#FAF8F5;border:1px solid #E7E3DC;border-radius:2px;padding:28px;min-height:200px">
+              <span style="align-self:flex-start;background:#F1EEE9;color:#3D4147;font-size:12px;font-weight:600;letter-spacing:0.04em;padding:5px 10px;border-radius:2px">Thermoplastic</span>
+              <h3 style="margin:18px 0 0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">TrafficPatternsXD</h3>
+              <p style="margin:8px 0 0;font-size:15px;line-height:1.55;color:#3D4147">Heavier-duty pattern system for intersections and plazas.</p>
+              <a data-arrow href="Service Detail Preformed Thermoplastic.dc.html" style="margin-top:auto;padding-top:24px;font-size:14px;font-weight:600;color:#14161A" style-hover="color:#D8511F">Explore system <span>&rarr;</span></a>
+            </div>
+            <div data-card style="display:flex;flex-direction:column;background:#FAF8F5;border:1px solid #E7E3DC;border-radius:2px;padding:28px;min-height:200px">
+              <span style="align-self:flex-start;background:#F1EEE9;color:#3D4147;font-size:12px;font-weight:600;letter-spacing:0.04em;padding:5px 10px;border-radius:2px">Thermoplastic</span>
+              <h3 style="margin:18px 0 0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">DecoMark</h3>
+              <p style="margin:8px 0 0;font-size:15px;line-height:1.55;color:#3D4147">Preformed shapes, symbols and custom graphics.</p>
+              <a data-arrow href="Service Detail Preformed Thermoplastic.dc.html" style="margin-top:auto;padding-top:24px;font-size:14px;font-weight:600;color:#14161A" style-hover="color:#D8511F">Explore system <span>&rarr;</span></a>
+            </div>
+            <div data-card style="display:flex;flex-direction:column;background:#FAF8F5;border:1px solid #E7E3DC;border-radius:2px;padding:28px;min-height:200px">
+              <span style="align-self:flex-start;background:#F1EEE9;color:#3D4147;font-size:12px;font-weight:600;letter-spacing:0.04em;padding:5px 10px;border-radius:2px">Thermoplastic</span>
+              <h3 style="margin:18px 0 0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">DuraTherm</h3>
+              <p style="margin:8px 0 0;font-size:15px;line-height:1.55;color:#3D4147">Inlaid thermoplastic for textured decorative surfaces.</p>
+              <a data-arrow href="Service Detail Preformed Thermoplastic.dc.html" style="margin-top:auto;padding-top:24px;font-size:14px;font-weight:600;color:#14161A" style-hover="color:#D8511F">Explore system <span>&rarr;</span></a>
+            </div>
+            <div data-card style="display:flex;flex-direction:column;background:#FAF8F5;border:1px solid #E7E3DC;border-radius:2px;padding:28px;min-height:200px">
+              <span style="align-self:flex-start;background:#F1EEE9;color:#3D4147;font-size:12px;font-weight:600;letter-spacing:0.04em;padding:5px 10px;border-radius:2px">Thermoplastic</span>
+              <h3 style="margin:18px 0 0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">PreMark</h3>
+              <p style="margin:8px 0 0;font-size:15px;line-height:1.55;color:#3D4147">Standard legends, arrows and crossing bars.</p>
+              <a data-arrow href="Service Detail Preformed Thermoplastic.dc.html" style="margin-top:auto;padding-top:24px;font-size:14px;font-weight:600;color:#14161A" style-hover="color:#D8511F">Explore system <span>&rarr;</span></a>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82;border-bottom:1px solid #E7E3DC;padding-bottom:14px">Surface Protection</div>
+          <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:24px;margin-top:28px">
+            <div data-card style="display:flex;flex-direction:column;background:#FAF8F5;border:1px solid #E7E3DC;border-radius:2px;padding:28px;min-height:200px">
+              <span style="align-self:flex-start;background:#F1EEE9;color:#3D4147;font-size:12px;font-weight:600;letter-spacing:0.04em;padding:5px 10px;border-radius:2px">Surface Protection</span>
+              <h3 style="margin:18px 0 0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">DuraShield</h3>
+              <p style="margin:8px 0 0;font-size:15px;line-height:1.55;color:#3D4147">Clear protective seal for coated and bare pavement.</p>
+              <a data-arrow href="Product Detail StreetBond.dc.html" style="margin-top:auto;padding-top:24px;font-size:14px;font-weight:600;color:#14161A" style-hover="color:#D8511F">Explore system <span>&rarr;</span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div style="font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82;margin-bottom:16px">/applications &middot; 1440</div>
+    <div id="applications" data-screen-label="Applications index" style="position:relative;overflow:hidden;scroll-margin-top:88px;width:1440px;background:#FAF8F5;border:1px solid #DDD9D1;padding:96px 80px 112px;box-sizing:border-box">
+      <div aria-hidden="true" style="position:absolute;top:40px;right:32px;font-size:10rem;font-weight:200;line-height:1;letter-spacing:-0.04em;color:#F1EEE9;pointer-events:none;user-select:none">02</div>
+      <div style="display:flex;align-items:center;gap:10px;font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82"><span style="width:6px;height:6px;background:#F26430;border-radius:1px;flex-shrink:0"></span>Applications</div>
+      <h2 style="margin:20px 0 0;font-size:clamp(3rem, 5vw, 4.5rem);font-weight:300;letter-spacing:-0.035em;line-height:0.98;color:#14161A">Where these systems are specified</h2>
+      <p style="margin:20px 0 0;font-size:18px;line-height:1.6;color:#3D4147;max-width:56ch;text-wrap:pretty">Seven common placements, each with its own products, prep and tolerances.</p>
+      <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:24px;margin-top:40px">
+        <div data-card style="display:flex;flex-direction:column;background:#FFFFFF;border:1px solid #E7E3DC;border-radius:2px;padding:28px;min-height:170px">
+          <h3 style="margin:0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">Crosswalks</h3>
+          <p style="margin:8px 0 0;font-size:15px;line-height:1.55;color:#767B82">Decorative and high-visibility crossings in thermoplastic or stamped asphalt.</p>
+          <a data-arrow href="Application Detail School Zones.dc.html" style="margin-top:auto;padding-top:20px;font-size:14px;font-weight:600;color:#14161A" style-hover="color:#D8511F">Explore <span>&rarr;</span></a>
+        </div>
+        <div data-card style="display:flex;flex-direction:column;background:#FFFFFF;border:1px solid #E7E3DC;border-radius:2px;padding:28px;min-height:170px">
+          <h3 style="margin:0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">Bus &amp; bike lanes</h3>
+          <p style="margin:8px 0 0;font-size:15px;line-height:1.55;color:#767B82">Red and green priority lane surfacing that holds its colour under traffic.</p>
+          <a data-arrow href="Application Detail School Zones.dc.html" style="margin-top:auto;padding-top:20px;font-size:14px;font-weight:600;color:#14161A" style-hover="color:#D8511F">Explore <span>&rarr;</span></a>
+        </div>
+        <div data-card style="display:flex;flex-direction:column;background:#FFFFFF;border:1px solid #E7E3DC;border-radius:2px;padding:28px;min-height:170px">
+          <h3 style="margin:0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">Parking lots</h3>
+          <p style="margin:8px 0 0;font-size:15px;line-height:1.55;color:#767B82">Coatings and markings that bring order to large paved sites.</p>
+          <a data-arrow href="Application Detail School Zones.dc.html" style="margin-top:auto;padding-top:20px;font-size:14px;font-weight:600;color:#14161A" style-hover="color:#D8511F">Explore <span>&rarr;</span></a>
+        </div>
+        <div data-card style="display:flex;flex-direction:column;background:#FFFFFF;border:1px solid #E7E3DC;border-radius:2px;padding:28px;min-height:170px">
+          <h3 style="margin:0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">Driveways</h3>
+          <p style="margin:8px 0 0;font-size:15px;line-height:1.55;color:#767B82">Stamped asphalt drives patterned and coloured to suit the house.</p>
+          <a data-arrow href="Driveways Landing.dc.html" style="margin-top:auto;padding-top:20px;font-size:14px;font-weight:600;color:#14161A" style-hover="color:#D8511F">Explore <span>&rarr;</span></a>
+        </div>
+        <div data-card style="display:flex;flex-direction:column;background:#FFFFFF;border:1px solid #E7E3DC;border-radius:2px;padding:28px;min-height:170px">
+          <h3 style="margin:0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">School zones</h3>
+          <p style="margin:8px 0 0;font-size:15px;line-height:1.55;color:#767B82">Slip-resistant, high-visibility markings for pedestrian priority areas.</p>
+          <a data-arrow href="Application Detail School Zones.dc.html" style="margin-top:auto;padding-top:20px;font-size:14px;font-weight:600;color:#14161A" style-hover="color:#D8511F">Explore <span>&rarr;</span></a>
+        </div>
+        <div data-card style="display:flex;flex-direction:column;background:#FFFFFF;border:1px solid #E7E3DC;border-radius:2px;padding:28px;min-height:170px">
+          <h3 style="margin:0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">Public spaces</h3>
+          <p style="margin:8px 0 0;font-size:15px;line-height:1.55;color:#767B82">Plazas, greenways and park paths with pattern and colour underfoot.</p>
+          <a data-arrow href="Application Detail School Zones.dc.html" style="margin-top:auto;padding-top:20px;font-size:14px;font-weight:600;color:#14161A" style-hover="color:#D8511F">Explore <span>&rarr;</span></a>
+        </div>
+        <div data-card style="display:flex;flex-direction:column;background:#FFFFFF;border:1px solid #E7E3DC;border-radius:2px;padding:28px;min-height:170px">
+          <h3 style="margin:0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">Surface prep</h3>
+          <p style="margin:8px 0 0;font-size:15px;line-height:1.55;color:#767B82">Vapour blasting that cleans and profiles pavement before coating.</p>
+          <a data-arrow href="Vapor Blasting Landing.dc.html" style="margin-top:auto;padding-top:20px;font-size:14px;font-weight:600;color:#14161A" style-hover="color:#D8511F">Explore <span>&rarr;</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div style="font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82;margin-bottom:16px">/projects &middot; 1440</div>
+    <div id="projects" data-screen-label="Projects index" style="position:relative;overflow:hidden;scroll-margin-top:88px;width:1440px;background:#FFFFFF;border:1px solid #DDD9D1;padding:96px 80px 112px;box-sizing:border-box">
+      <div aria-hidden="true" style="position:absolute;top:40px;right:32px;font-size:10rem;font-weight:200;line-height:1;letter-spacing:-0.04em;color:#F1EEE9;pointer-events:none;user-select:none">03</div>
+      <div style="display:flex;align-items:center;gap:10px;font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82"><span style="width:6px;height:6px;background:#F26430;border-radius:1px;flex-shrink:0"></span>Projects</div>
+      <h2 style="margin:20px 0 0;font-size:clamp(3rem, 5vw, 4.5rem);font-weight:300;letter-spacing:-0.035em;line-height:0.98;color:#14161A">Twenty-one projects across BC</h2>
+      <p style="margin:20px 0 0;font-size:18px;line-height:1.6;color:#3D4147;max-width:56ch;text-wrap:pretty">Municipal, institutional and residential work from the Lower Mainland to Vancouver Island, 2000 to today.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:40px">
+        <sc-for list="{{ filters }}" as="f" hint-placeholder-count="5">
+          <button onClick="{{ f.pick }}" style="{{ f.style }}">{{ f.label }}</button>
+        </sc-for>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:24px;margin-top:40px;transition:opacity 0.2s;opacity:{{ gridO }}">
+        <sc-for list="{{ visibleProjects }}" as="p" hint-placeholder-count="6">
+          <div data-card style="position:relative;aspect-ratio:4/3;border-radius:2px;overflow:hidden;background:#E7E0D3">
+            <div data-zoom style="position:absolute;inset:0;{{ p.surf }}"></div>
+            <div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%222%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22/%3E%3C/svg%3E');opacity:0.04;pointer-events:none"></div>
+            <a href="{{ p.href }}" aria-label="{{ p.title }}" style="position:absolute;inset:0;z-index:2"></a>
+            <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(20, 24, 29, 0.72), rgba(20, 24, 29, 0) 52%);pointer-events:none"></div>
+            <div style="position:absolute;left:24px;right:24px;bottom:20px;pointer-events:none">
+              <div style="font-size:16px;font-weight:600;color:#FFFFFF">{{ p.title }}</div>
+              <div style="margin-top:4px;font-size:13px;color:rgba(255, 255, 255, 0.78)">{{ p.sub }}</div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div style="font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82;margin-bottom:16px">/journal &middot; 1440</div>
+    <div id="journal" data-screen-label="Journal index" style="position:relative;overflow:hidden;scroll-margin-top:88px;width:1440px;background:#FFFFFF;border:1px solid #DDD9D1;padding:96px 80px 112px;box-sizing:border-box">
+      <div aria-hidden="true" style="position:absolute;top:40px;right:32px;font-size:10rem;font-weight:200;line-height:1;letter-spacing:-0.04em;color:#F1EEE9;pointer-events:none;user-select:none">04</div>
+      <div style="display:flex;align-items:center;gap:10px;font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82"><span style="width:6px;height:6px;background:#F26430;border-radius:1px;flex-shrink:0"></span>Journal</div>
+      <h2 style="margin:20px 0 0;font-size:clamp(3rem, 5vw, 4.5rem);font-weight:300;letter-spacing:-0.035em;line-height:0.98;color:#14161A">Field notes</h2>
+      <p style="margin:20px 0 0;font-size:18px;line-height:1.6;color:#3D4147;max-width:56ch;text-wrap:pretty">Notes from the crews and the estimating desk: materials, methods and what holds up.</p>
+      <div style="display:grid;grid-template-columns:7fr 5fr;gap:48px;margin-top:40px;border:1px solid #E7E3DC;border-radius:2px;background:#FAF8F5">
+        <div style="position:relative;aspect-ratio:16/10;overflow:hidden;background:#E7E0D3">
+          <div style="position:absolute;inset:0;background-color:#A8523A;background-image:radial-gradient(circle at 118% 118%, #383D44 0%, #383D44 42%, rgba(0, 0, 0, 0) 42.5%),repeating-linear-gradient(15deg, rgba(237, 232, 225, 0.12) 0px, rgba(237, 232, 225, 0.12) 2px, rgba(0, 0, 0, 0) 2px, rgba(0, 0, 0, 0) 24px),linear-gradient(180deg, #B25A40 0%, #94462E 100%)"></div>
+          <div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%222%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22/%3E%3C/svg%3E');opacity:0.04;pointer-events:none"></div>
+          <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(20, 24, 29, 0.55), rgba(20, 24, 29, 0) 38%);pointer-events:none"></div>
+          <div style="position:absolute;left:16px;bottom:12px;font-size:12px;font-weight:600;letter-spacing:0.02em;color:#FFFFFF">Langley &middot; TrafficPatternsXD &middot; 2025</div>
+        </div>
+        <div style="display:flex;flex-direction:column;justify-content:center;padding:40px 48px 40px 0">
+          <div><span style="display:inline-block;background:#F1EEE9;color:#5B6167;font-size:12px;font-weight:600;letter-spacing:0.04em;padding:5px 10px;border-radius:2px">Technical</span></div>
+          <h3 style="margin:20px 0 0;font-size:28px;font-weight:600;letter-spacing:-0.015em;line-height:1.25;color:#14161A;text-wrap:pretty">What roundabout aprons ask of a surface</h3>
+          <p style="margin:14px 0 0;font-size:16px;line-height:1.6;color:#3D4147;max-width:48ch">Aprons take slow, heavy, turning loads all day. What that does to a surface, and which systems hold up under it.</p>
+          <div style="margin-top:16px;font-size:13px;color:#767B82">July 14, 2026</div>
+          <a data-arrow href="Journal Post Brighouse.dc.html" style="margin-top:24px;font-size:14px;font-weight:600;color:#14161A" style-hover="color:#D8511F">Read <span>&rarr;</span></a>
+        </div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:24px;margin-top:40px;font-size:14px">
+        <sc-for list="{{ jfilters }}" as="jf" hint-placeholder-count="4">
+          <button onClick="{{ jf.pick }}" style="{{ jf.style }}">{{ jf.label }}</button>
+        </sc-for>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:24px;margin-top:32px;transition:opacity 0.2s;opacity:{{ jGridO }}">
+        <sc-for list="{{ visiblePosts }}" as="jp" hint-placeholder-count="3">
+          <div data-card style="position:relative">
+            <a href="Journal Post Brighouse.dc.html" aria-label="{{ jp.title }}" style="position:absolute;inset:0;z-index:2"></a>
+            <div style="position:relative;aspect-ratio:16/10;border-radius:2px;overflow:hidden;background:#E7E0D3">
+              <div data-zoom style="position:absolute;inset:0;{{ jp.surf }}"></div>
+              <div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%222%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22/%3E%3C/svg%3E');opacity:0.04;pointer-events:none"></div>
+              <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(20, 24, 29, 0.55), rgba(20, 24, 29, 0) 38%);pointer-events:none"></div>
+              <div style="position:absolute;left:16px;bottom:12px;font-size:12px;font-weight:600;letter-spacing:0.02em;color:#FFFFFF">{{ jp.cap }}</div>
+            </div>
+            <div style="margin-top:20px"><span style="display:inline-block;background:#F1EEE9;color:#5B6167;font-size:12px;font-weight:600;letter-spacing:0.04em;padding:5px 10px;border-radius:2px">{{ jp.chip }}</span></div>
+            <h3 style="margin:14px 0 0;font-size:1.25rem;font-weight:600;line-height:1.4;letter-spacing:-0.015em;color:#14161A;text-wrap:pretty">{{ jp.title }}</h3>
+            <div style="margin-top:10px;font-size:13px;color:#767B82">{{ jp.date }}</div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display:flex;justify-content:flex-end;border-top:1px solid #E7E3DC;margin-top:40px;padding-top:24px">
+        <a data-arrow href="#journal" style="font-size:14px;font-weight:600;color:#14161A" style-hover="color:#D8511F">Older <span>&rarr;</span></a>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  componentDidMount() { const go = () => import('./site.js').then(m => m.init()); go(); setTimeout(go, 900); }
+  state = { filter: 'all', jfilter: 'all', gridO: '1', jGridO: '1' };
+  surf = {
+    XWALK: 'background-color:#383D44;background-image:repeating-linear-gradient(90deg, rgba(237, 232, 225, 0.85) 0px, rgba(237, 232, 225, 0.85) 34px, rgba(237, 232, 225, 0) 34px, rgba(237, 232, 225, 0) 78px),linear-gradient(180deg, #454A52 0%, #31363D 100%)',
+    BOND: 'background-color:#E7E1D6;background-image:repeating-linear-gradient(0deg, rgba(120, 108, 90, 0.16) 0px, rgba(120, 108, 90, 0.16) 2px, rgba(255, 255, 255, 0) 2px, rgba(255, 255, 255, 0) 36px),repeating-linear-gradient(90deg, rgba(120, 108, 90, 0.10) 0px, rgba(120, 108, 90, 0.10) 2px, rgba(255, 255, 255, 0) 2px, rgba(255, 255, 255, 0) 80px),linear-gradient(180deg, #EDE8E1 0%, #DDD6CA 100%)',
+    HERR: 'background-color:#E4DDD1;background-image:repeating-linear-gradient(45deg, #E9E3D8 0px, #E9E3D8 26px, #D9D2C7 26px, #D9D2C7 28px, #E1DACE 28px, #E1DACE 54px, #D9D2C7 54px, #D9D2C7 56px),repeating-linear-gradient(-45deg, rgba(120, 108, 90, 0.10) 0px, rgba(120, 108, 90, 0.10) 2px, rgba(255, 255, 255, 0) 2px, rgba(255, 255, 255, 0) 28px)',
+    SPLASH: 'background-color:#7FA6A4;background-image:radial-gradient(circle at 30% 35%, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 40%),repeating-radial-gradient(circle at 30% 35%, rgba(38, 66, 64, 0.12) 0px, rgba(38, 66, 64, 0.12) 3px, rgba(255, 255, 255, 0) 3px, rgba(255, 255, 255, 0) 90px),linear-gradient(180deg, #8AB0AC 0%, #6E9694 100%)',
+    ART: 'background-color:#B98A4E;background-image:repeating-radial-gradient(circle at 70% 30%, rgba(255, 255, 255, 0.10) 0px, rgba(255, 255, 255, 0.10) 4px, rgba(0, 0, 0, 0) 4px, rgba(0, 0, 0, 0) 60px),linear-gradient(160deg, #C29455 0%, #9C7440 100%)',
+    RINGS: 'background-color:#8A5A3B;background-image:repeating-radial-gradient(circle at 50% 55%, rgba(237, 232, 225, 0.20) 0px, rgba(237, 232, 225, 0.20) 3px, rgba(0, 0, 0, 0) 3px, rgba(0, 0, 0, 0) 46px),radial-gradient(circle at 50% 55%, #A06A44 0%, #7C4E31 70%)',
+    GREEN: 'background-color:#5F7D52;background-image:linear-gradient(90deg, #3E434A 0%, #3E434A 12%, rgba(0, 0, 0, 0) 12%, rgba(0, 0, 0, 0) 88%, #3E434A 88%, #3E434A 100%),repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.06) 0px, rgba(255, 255, 255, 0.06) 2px, rgba(0, 0, 0, 0) 2px, rgba(0, 0, 0, 0) 52px),linear-gradient(180deg, #66854F 0%, #4F6B41 100%)',
+    RED: 'background-color:#9E3B2F;background-image:linear-gradient(90deg, rgba(237, 232, 225, 0.85) 0%, rgba(237, 232, 225, 0.85) 3%, rgba(0, 0, 0, 0) 3%, rgba(0, 0, 0, 0) 97%, rgba(237, 232, 225, 0.85) 97%, rgba(237, 232, 225, 0.85) 100%),repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.05) 0px, rgba(0, 0, 0, 0.05) 2px, rgba(0, 0, 0, 0) 2px, rgba(0, 0, 0, 0) 44px),linear-gradient(180deg, #A84335 0%, #8C3226 100%)',
+    APRON: 'background-color:#A8523A;background-image:radial-gradient(circle at 118% 118%, #383D44 0%, #383D44 42%, rgba(0, 0, 0, 0) 42.5%),repeating-linear-gradient(15deg, rgba(237, 232, 225, 0.12) 0px, rgba(237, 232, 225, 0.12) 2px, rgba(0, 0, 0, 0) 2px, rgba(0, 0, 0, 0) 24px),linear-gradient(180deg, #B25A40 0%, #94462E 100%)',
+    RBW: 'background-color:#3E434A;background-image:linear-gradient(0deg, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.12)),linear-gradient(90deg, #A84335 0%, #A84335 16%, #C08A3E 16%, #C08A3E 33%, #C2B04C 33%, #C2B04C 50%, #5F7D52 50%, #5F7D52 66%, #4E6E8C 66%, #4E6E8C 83%, #6B5A80 83%, #6B5A80 100%)',
+    CONC: 'background-color:#C9C4BB;background-image:radial-gradient(circle at 25% 30%, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0) 50%),repeating-linear-gradient(90deg, rgba(90, 84, 74, 0.08) 0px, rgba(90, 84, 74, 0.08) 2px, rgba(255, 255, 255, 0) 2px, rgba(255, 255, 255, 0) 120px),linear-gradient(180deg, #CFCAC2 0%, #BDB7AD 100%)'
+  };
+  projects = [
+    { s: 'XWALK', href: 'Project Detail UBC Musqueam.dc.html', title: 'UBC × Musqueam Crosswalk', sub: 'Vancouver · DuraTherm · 2023', cat: 'thermo' },
+    { s: 'BOND', href: 'Journal Post Brighouse.dc.html', title: 'Brighouse Station', sub: 'Richmond · TrafficPatternsXD · 2019', cat: 'thermo' },
+    { s: 'SPLASH', href: 'Project Detail UBC Musqueam.dc.html', title: 'Keswick Water Park', sub: 'Burnaby · StreetBond · 2024', cat: 'coatings' },
+    { s: 'ART', href: 'Project Detail UBC Musqueam.dc.html', title: 'Joyce SkyTrain Public Art', sub: 'Vancouver · StreetBond Art · 2022', cat: 'coatings' },
+    { s: 'RINGS', href: 'Project Detail UBC Musqueam.dc.html', title: 'Langley Events Centre — Circle of Life', sub: 'Langley · DuraTherm · 2021', cat: 'thermo' },
+    { s: 'GREEN', href: 'Project Detail UBC Musqueam.dc.html', title: 'Agnes Greenway', sub: 'New Westminster · StreetBond · 2020', cat: 'coatings' },
+    { s: 'RED', href: 'Project Detail UBC Musqueam.dc.html', title: 'Lonsdale Quay Bus Exchange', sub: 'North Vancouver · MMAX Red · 2024', cat: 'coatings' },
+    { s: 'XWALK', href: 'Project Detail UBC Musqueam.dc.html', title: 'Wesbrook Village Crossings', sub: 'Vancouver · TrafficPatterns · 2018', cat: 'thermo' },
+    { s: 'APRON', href: 'Project Detail UBC Musqueam.dc.html', title: 'Bear Mountain Parkway Roundabout', sub: 'Langford · StreetPrint Apron · 2022', cat: 'stamped' },
+    { s: 'SPLASH', href: 'Project Detail UBC Musqueam.dc.html', title: 'Departure Bay Ferry Plaza', sub: 'Nanaimo · StreetBond · 2021', cat: 'coatings' },
+    { s: 'XWALK', href: 'Project Detail UBC Musqueam.dc.html', title: 'Willow Street School Zone', sub: 'Chemainus · PreMark · 2023', cat: 'thermo' },
+    { s: 'GREEN', href: 'Project Detail UBC Musqueam.dc.html', title: 'Uptown Bike Network', sub: 'Victoria · StreetBond Green · 2023', cat: 'coatings' },
+    { s: 'BOND', href: 'Project Detail UBC Musqueam.dc.html', title: 'Haney Wharf Promenade', sub: 'Maple Ridge · DuraTherm · 2020', cat: 'thermo' },
+    { s: 'HERR', href: 'Project Detail UBC Musqueam.dc.html', title: 'Guildford Town Centre Lot', sub: 'Surrey · DecoMark · 2019', cat: 'thermo' },
+    { s: 'BOND', href: 'Project Detail UBC Musqueam.dc.html', title: 'Steveston Village Crosswalks', sub: 'Richmond · DuraTherm · 2022', cat: 'thermo' },
+    { s: 'HERR', href: 'Project Detail UBC Musqueam.dc.html', title: 'Royal Columbian Hospital Entry', sub: 'New Westminster · StreetPrint · 2021', cat: 'stamped' },
+    { s: 'SPLASH', href: 'Project Detail UBC Musqueam.dc.html', title: 'Transfer Beach Playground Loop', sub: 'Ladysmith · StreetBond · 2019', cat: 'coatings' },
+    { s: 'RBW', href: 'Project Detail UBC Musqueam.dc.html', title: 'Fifth Street Rainbow Crossing', sub: 'Courtenay · Preformed thermoplastic · 2023', cat: 'thermo' },
+    { s: 'BOND', href: 'Project Detail UBC Musqueam.dc.html', title: 'Metrotown Station Plaza', sub: 'Burnaby · TrafficPatternsXD · 2020', cat: 'thermo' },
+    { s: 'HERR', href: 'Project Detail UBC Musqueam.dc.html', title: 'Fort Langley Heritage Lanes', sub: 'Langley · StreetPrint · 2018', cat: 'stamped' },
+    { s: 'CONC', href: 'Project Detail UBC Musqueam.dc.html', title: 'Comox Valley Parkade Deck', sub: 'Courtenay · Vapour blasting + DuraShield · 2024', cat: 'vapour' }
+  ];
+  filterDefs = [
+    { key: 'all', label: 'All' },
+    { key: 'stamped', label: 'Stamped asphalt' },
+    { key: 'coatings', label: 'Coatings' },
+    { key: 'thermo', label: 'Thermoplastic' },
+    { key: 'vapour', label: 'Vapour blasting' }
+  ];
+  posts = [
+    { s: 'BOND', chip: 'Guides', cat: 'guides', title: 'Stamped asphalt vs concrete pavers for BC driveways', date: 'May 27, 2026', cap: 'Saanich · StreetPrint · 2021' },
+    { s: 'RED', chip: 'Transit', cat: 'transit', title: 'How BC transit priority lanes stay red', date: 'March 9, 2026', cap: 'Vancouver · MMAX Red · 2024' },
+    { s: 'CONC', chip: 'Guides', cat: 'guides', title: 'What a site walk tells us that drawings do not', date: 'January 12, 2026', cap: 'Cowichan Valley · Site assessment · 2026' },
+    { s: 'GREEN', chip: 'Technical', cat: 'technical', title: 'Winter maintenance on coated pavement', date: 'November 18, 2025', cap: 'North Vancouver · StreetBond · 2025' }
+  ];
+  jfilterDefs = [
+    { key: 'all', label: 'All' },
+    { key: 'technical', label: 'Technical' },
+    { key: 'guides', label: 'Guides' },
+    { key: 'transit', label: 'Transit' }
+  ];
+  fade(stateKey, oKey, value) {
+    if (this.state[stateKey] === value) return;
+    this.setState({ [oKey]: '0' });
+    setTimeout(() => this.setState({ [stateKey]: value, [oKey]: '1' }), 200);
+  }
+  renderVals() {
+    const base = 'padding:9px 16px;border-radius:2px;font-size:14px;cursor:pointer;font-family:inherit;transition:border-color 0.15s;';
+    const active = base + 'background:#14161A;border:1px solid #14161A;color:#FFFFFF;font-weight:600';
+    const ghost = base + 'background:transparent;border:1px solid #E7E3DC;color:#767B82;font-weight:500';
+    const tbase = 'background:none;border:none;padding:0 0 2px;font-family:inherit;font-size:14px;cursor:pointer;border-bottom:2px solid ';
+    return {
+      filters: this.filterDefs.map((f) => ({
+        label: f.label,
+        style: this.state.filter === f.key ? active : ghost,
+        pick: () => this.fade('filter', 'gridO', f.key)
+      })),
+      visibleProjects: (this.state.filter === 'all' ? this.projects : this.projects.filter((p) => p.cat === this.state.filter)).map((p) => ({ ...p, surf: this.surf[p.s] })),
+      gridO: this.state.gridO,
+      jfilters: this.jfilterDefs.map((f) => ({
+        label: f.label,
+        style: this.state.jfilter === f.key ? tbase + '#14161A;color:#14161A;font-weight:600' : tbase + 'transparent;color:#767B82;font-weight:500',
+        pick: () => this.fade('jfilter', 'jGridO', f.key)
+      })),
+      visiblePosts: (this.state.jfilter === 'all' ? this.posts : this.posts.filter((p) => p.cat === this.state.jfilter)).map((p) => ({ ...p, surf: this.surf[p.s] })),
+      jGridO: this.state.jGridO
+    };
+  }
+}
+</script>
+</body>
+</html>

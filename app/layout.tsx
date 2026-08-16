@@ -1,24 +1,17 @@
 import type { Metadata } from "next"
-import { Poppins, Inter } from 'next/font/google'
+import { Inter } from 'next/font/google'
 import "./globals.css"
 import Nav from "@/components/Nav"
 import Footer from "@/components/Footer"
 import StructuredData from "@/components/StructuredData"
 import MobileStickyCTA from "@/components/MobileStickyCTA"
 
-// Primary brand font — matches the wordmark
-const poppins = Poppins({
-  subsets: ['latin'],
-  variable: '--font-poppins',
-  weight: ['200', '300', '400', '500', '600', '700', '800'],
-  display: 'swap',
-})
-
-// Inter retained as fallback for body if needed
+// Single typeface for the whole system — 200 for display numerals,
+// 300 for headlines, 400–700 for UI and body.
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
-  weight: ['300', '400', '500', '600', '700'],
+  weight: ['200', '300', '400', '500', '600', '700'],
   display: 'swap',
 })
 
@@ -61,7 +54,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${poppins.variable} ${inter.variable}`}>
+    <html lang="en" className={inter.variable}>
       <body className="antialiased">
         <StructuredData />
         <Nav />

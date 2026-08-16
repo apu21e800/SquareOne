@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FFFFFF;color:#3D4147;font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+a{color:#14161A;text-decoration:none}
+a:hover{color:#D8511F}
+@media (max-width: 700px){
+[data-mq~="section"]{padding:56px 0 !important}
+[data-mq~="container"]{padding:0 24px !important}
+[data-mq~="hero"]{grid-template-columns:1fr !important;min-height:0 !important}
+[data-mq~="hero-text"]{padding:72px 24px 56px !important}
+[data-mq~="hero-lede"]{font-size:17px !important}
+[data-mq~="hero-img"]{aspect-ratio:4 / 3 !important}
+[data-mq~="stats"]{grid-template-columns:repeat(2, 1fr) !important;gap:36px 24px !important}
+[data-mq~="num"]{font-size:48px !important}
+[data-mq~="grid-cards"]{grid-template-columns:1fr !important}
+[data-mq~="grid-apps"]{grid-template-columns:1fr !important;gap:40px !important}
+[data-mq~="quote"]{font-size:22px !important}
+[data-mq~="ghost"]{display:none !important}
+}
+a[data-arrow] span{display:inline-block;transition:transform 0.2s}a[data-arrow]:hover span{transform:translateX(4px)}
+[data-card]{transition:transform 0.25s, box-shadow 0.25s}[data-card]:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(20,22,26,0.08)}
+[data-card] img{transition:transform 0.4s ease}[data-card]:hover img{transform:scale(1.02)}
+[data-card] [data-zoom]{transition:transform 0.4s ease}[data-card]:hover [data-zoom]{transform:scale(1.02)}
+</style>
+</helmet>
+
+<dc-import name="Site Nav" hint-size="100%,72px" style="position:sticky;top:0;z-index:120"></dc-import>
+
+<section data-mq="hero" data-screen-label="Hero" style="position:relative;overflow:hidden;background:#FFFFFF;display:grid;grid-template-columns:55fr 45fr;min-height:620px">
+  <div data-mq="hero-text" style="position:relative;display:flex;align-items:center;padding:96px 72px 96px max(calc((100vw - 1280px) / 2), 40px)">
+    <div aria-hidden="true" data-mq="ghost" style="position:absolute;top:96px;right:8px;z-index:0;font-size:10rem;font-weight:200;line-height:1;letter-spacing:-0.04em;color:#F1EEE9;pointer-events:none;user-select:none">01</div>
+    <div style="position:relative;z-index:1">
+      <div style="display:flex;align-items:center;gap:10px;font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82"><span style="width:6px;height:6px;background:#F26430;border-radius:1px;flex-shrink:0"></span>BC&#8217;s decorative pavement studio &middot; Since 2000</div>
+      <h1 data-mq="hero-h1" style="margin:28px 0 0;font-size:clamp(3rem, 5vw, 4.5rem);font-weight:300;letter-spacing:-0.035em;line-height:0.98;color:#14161A;text-wrap:pretty">Surfaces that define a place<span aria-hidden="true" style="display:inline-block;width:6px;height:6px;background:#F26430;border-radius:1px;margin-left:16px"></span></h1>
+      <p data-mq="hero-lede" style="margin:28px 0 0;font-size:19px;line-height:1.65;color:#3D4147;max-width:56ch;text-wrap:pretty">Stamped asphalt, decorative coatings and preformed thermoplastic, installed by the same crews across 51 British Columbia communities.</p>
+      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:44px">
+        <a href="Quote Request.dc.html" style="display:inline-block;background:#F26430;color:#FFFFFF;font-size:15px;font-weight:600;padding:15px 30px;border-radius:2px;transition:background 0.15s" style-hover="background:#D8511F;color:#FFFFFF">Request a quote</a>
+        <a href="#work" style="display:inline-block;border:1px solid #E7E3DC;color:#14161A;font-size:15px;font-weight:600;padding:14px 29px;border-radius:2px;transition:border-color 0.15s" style-hover="border-color:#A9A297;color:#14161A">See our work</a>
+      </div>
+    </div>
+  </div>
+  <div data-mq="hero-img" style="position:relative;background-color:#E4DDD1;min-width:0;overflow:hidden">
+    <div style="position:absolute;inset:0;background-color:#E4DDD1;background-image:repeating-linear-gradient(45deg, #E9E3D8 0px, #E9E3D8 26px, #D9D2C7 26px, #D9D2C7 28px, #E1DACE 28px, #E1DACE 54px, #D9D2C7 54px, #D9D2C7 56px),repeating-linear-gradient(-45deg, rgba(120, 108, 90, 0.10) 0px, rgba(120, 108, 90, 0.10) 2px, rgba(255, 255, 255, 0) 2px, rgba(255, 255, 255, 0) 28px)"></div>
+    <div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%222%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22/%3E%3C/svg%3E');opacity:0.04;pointer-events:none"></div>
+    <img data-photo src="https://www.squareonepaving.com/wp-content/uploads/2021/05/West-Vancouver-Driveway-Herringbone.jpg" alt="Herringbone StreetPrint driveway in West Vancouver" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 70%">
+    <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(20, 24, 29, 0.55), rgba(20, 24, 29, 0) 34%);pointer-events:none"></div>
+    <div style="position:absolute;left:20px;bottom:16px;font-size:12px;font-weight:600;letter-spacing:0.02em;color:#FFFFFF">West Vancouver &middot; StreetPrint Herringbone &middot; 2021</div>
+  </div>
+</section>
+
+<section data-mq="section" data-screen-label="Stats" style="position:relative;overflow:hidden;background:#FAF8F5;border-top:1px solid #E7E3DC;border-bottom:1px solid #E7E3DC;padding:96px 0">
+  <div aria-hidden="true" data-mq="ghost" style="position:absolute;top:48px;right:24px;z-index:0;font-size:10rem;font-weight:200;line-height:1;letter-spacing:-0.04em;color:#F1EEE9;pointer-events:none;user-select:none">02</div>
+  <div data-mq="container stats" style="position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:repeat(4, 1fr);gap:40px">
+    <div style="border-left:2px solid #14161A;padding-left:28px">
+      <div data-mq="num" style="font-size:64px;font-weight:200;line-height:1;letter-spacing:-0.04em;color:#14161A" data-count="51">51</div>
+      <div style="margin-top:14px;font-size:15px;color:#767B82">BC communities served</div>
+    </div>
+    <div style="border-left:2px solid #14161A;padding-left:28px">
+      <div data-mq="num" style="font-size:64px;font-weight:200;line-height:1;letter-spacing:-0.04em;color:#14161A" data-count="25">25</div>
+      <div style="margin-top:14px;font-size:15px;color:#767B82">years in operation</div>
+    </div>
+    <div style="border-left:2px solid #14161A;padding-left:28px">
+      <div data-mq="num" style="font-size:64px;font-weight:200;line-height:1;letter-spacing:-0.04em;color:#14161A" data-count="4">4</div>
+      <div style="margin-top:14px;font-size:15px;color:#767B82">specialist services</div>
+    </div>
+    <div style="border-left:2px solid #14161A;padding-left:28px">
+      <div data-mq="num" style="font-size:64px;font-weight:200;line-height:1;letter-spacing:-0.04em;color:#14161A" data-count="2">2</div>
+      <div style="margin-top:14px;font-size:15px;color:#767B82">service regions</div>
+    </div>
+  </div>
+</section>
+
+<section data-mq="section" data-screen-label="Services" id="services" style="position:relative;overflow:hidden;background:#FFFFFF;padding:96px 0">
+  <div aria-hidden="true" data-mq="ghost" style="position:absolute;top:48px;right:24px;z-index:0;font-size:10rem;font-weight:200;line-height:1;letter-spacing:-0.04em;color:#F1EEE9;pointer-events:none;user-select:none">03</div>
+  <div data-mq="container" style="position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:0 40px">
+    <div style="display:flex;align-items:center;gap:10px;font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82"><span style="width:6px;height:6px;background:#F26430;border-radius:1px;flex-shrink:0"></span>What we do</div>
+    <h2 data-mq="h2" style="margin:20px 0 0;font-size:clamp(1.75rem, 3vw, 2.75rem);font-weight:300;letter-spacing:-0.03em;line-height:1.06;color:#14161A">Four services, one standard</h2>
+    <div data-mq="grid-cards" style="display:grid;grid-template-columns:repeat(4, 1fr);gap:24px;margin-top:40px">
+      <div data-card style="display:flex;flex-direction:column;background:#FAF8F5;border:1px solid #E7E3DC;border-radius:2px;padding:32px 28px">
+        <div style="font-size:13px;font-weight:600;letter-spacing:0.08em;color:#767B82">01</div>
+        <h3 data-mq="card-title" style="margin:24px 0 0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">Stamped asphalt</h3>
+        <p style="margin:10px 0 0;font-size:15px;line-height:1.55;color:#3D4147">StreetPrint patterns pressed into hot asphalt, finished with StreetBond colour.</p>
+        <a data-arrow href="Driveways Landing.dc.html" style="margin-top:auto;padding-top:28px;font-size:14px;font-weight:600;color:#14161A" style-hover="color:#D8511F">Explore <span>&rarr;</span></a>
+      </div>
+      <div data-card style="display:flex;flex-direction:column;background:#FAF8F5;border:1px solid #E7E3DC;border-radius:2px;padding:32px 28px">
+        <div style="font-size:13px;font-weight:600;letter-spacing:0.08em;color:#767B82">02</div>
+        <h3 data-mq="card-title" style="margin:24px 0 0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">Decorative coatings</h3>
+        <p style="margin:10px 0 0;font-size:15px;line-height:1.55;color:#3D4147">StreetBond, MMAX and DuraShield systems that colour and protect pavement.</p>
+        <a data-arrow href="Product Detail StreetBond.dc.html" style="margin-top:auto;padding-top:28px;font-size:14px;font-weight:600;color:#14161A" style-hover="color:#D8511F">Explore <span>&rarr;</span></a>
+      </div>
+      <div data-card style="display:flex;flex-direction:column;background:#FAF8F5;border:1px solid #E7E3DC;border-radius:2px;padding:32px 28px">
+        <div style="font-size:13px;font-weight:600;letter-spacing:0.08em;color:#767B82">03</div>
+        <h3 data-mq="card-title" style="margin:24px 0 0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">Preformed thermoplastic</h3>
+        <p style="margin:10px 0 0;font-size:15px;line-height:1.55;color:#3D4147">TrafficPatterns, DecoMark, DuraTherm and PreMark, heat-fused to the road.</p>
+        <a data-arrow href="Service Detail Preformed Thermoplastic.dc.html" style="margin-top:auto;padding-top:28px;font-size:14px;font-weight:600;color:#14161A" style-hover="color:#D8511F">Explore <span>&rarr;</span></a>
+      </div>
+      <div data-card style="display:flex;flex-direction:column;background:#FAF8F5;border:1px solid #E7E3DC;border-radius:2px;padding:32px 28px">
+        <div style="font-size:13px;font-weight:600;letter-spacing:0.08em;color:#767B82">04</div>
+        <h3 data-mq="card-title" style="margin:24px 0 0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">Vapour blasting</h3>
+        <p style="margin:10px 0 0;font-size:15px;line-height:1.55;color:#3D4147">Low-dust surface preparation for coatings, concrete and masonry.</p>
+        <a data-arrow href="Vapor Blasting Landing.dc.html" style="margin-top:auto;padding-top:28px;font-size:14px;font-weight:600;color:#14161A" style-hover="color:#D8511F">Explore <span>&rarr;</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section data-mq="section" data-screen-label="Selected projects" id="work" style="position:relative;overflow:hidden;background:#FFFFFF;border-top:1px solid #E7E3DC;padding:96px 0">
+  <div aria-hidden="true" data-mq="ghost" style="position:absolute;top:48px;right:24px;z-index:0;font-size:10rem;font-weight:200;line-height:1;letter-spacing:-0.04em;color:#F1EEE9;pointer-events:none;user-select:none">04</div>
+  <div data-mq="container" style="position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:0 40px">
+    <div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:24px">
+      <h2 data-mq="h2" style="margin:0;font-size:clamp(1.75rem, 3vw, 2.75rem);font-weight:300;letter-spacing:-0.03em;line-height:1.06;color:#14161A">Selected work</h2>
+      <a data-arrow href="Index Pages.dc.html#projects" style="font-size:15px;font-weight:600;color:#14161A;white-space:nowrap" style-hover="color:#D8511F">All 21 projects <span>&rarr;</span></a>
+    </div>
+    <div data-mq="grid-cards" style="display:grid;grid-template-columns:repeat(3, 1fr);gap:24px;margin-top:40px">
+      <div data-card style="position:relative;aspect-ratio:4/3;border-radius:2px;overflow:hidden;background:#E7E0D3">
+        <div data-zoom style="position:absolute;inset:0;background-color:#383D44;background-image:repeating-linear-gradient(90deg, rgba(237, 232, 225, 0.85) 0px, rgba(237, 232, 225, 0.85) 34px, rgba(237, 232, 225, 0) 34px, rgba(237, 232, 225, 0) 78px),linear-gradient(180deg, #454A52 0%, #31363D 100%)"></div><div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%222%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22/%3E%3C/svg%3E');opacity:0.04;pointer-events:none"></div><a href="Project Detail UBC Musqueam.dc.html" aria-label="UBC Musqueam Crosswalk" style="position:absolute;inset:0;z-index:2"></a>
+        <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(20, 24, 29, 0.72), rgba(20, 24, 29, 0) 52%);pointer-events:none"></div>
+        <div style="position:absolute;left:24px;right:24px;bottom:20px;pointer-events:none">
+          <div style="font-size:16px;font-weight:600;color:#FFFFFF">UBC &times; Musqueam Crosswalk</div>
+          <div style="margin-top:4px;font-size:13px;color:rgba(255, 255, 255, 0.78)">Vancouver &middot; DuraTherm &middot; 2023</div>
+        </div>
+      </div>
+      <div data-card style="position:relative;aspect-ratio:4/3;border-radius:2px;overflow:hidden;background:#E7E0D3">
+        <div data-zoom style="position:absolute;inset:0;background-color:#E7E1D6;background-image:repeating-linear-gradient(0deg, rgba(120, 108, 90, 0.16) 0px, rgba(120, 108, 90, 0.16) 2px, rgba(255, 255, 255, 0) 2px, rgba(255, 255, 255, 0) 36px),repeating-linear-gradient(90deg, rgba(120, 108, 90, 0.10) 0px, rgba(120, 108, 90, 0.10) 2px, rgba(255, 255, 255, 0) 2px, rgba(255, 255, 255, 0) 80px),linear-gradient(180deg, #EDE8E1 0%, #DDD6CA 100%)"></div><div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%222%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22/%3E%3C/svg%3E');opacity:0.04;pointer-events:none"></div><a href="Journal Post Brighouse.dc.html" aria-label="Brighouse Station" style="position:absolute;inset:0;z-index:2"></a>
+        <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(20, 24, 29, 0.72), rgba(20, 24, 29, 0) 52%);pointer-events:none"></div>
+        <div style="position:absolute;left:24px;right:24px;bottom:20px;pointer-events:none">
+          <div style="font-size:16px;font-weight:600;color:#FFFFFF">Brighouse Station</div>
+          <div style="margin-top:4px;font-size:13px;color:rgba(255, 255, 255, 0.78)">Richmond &middot; TrafficPatternsXD &middot; 2019</div>
+        </div>
+      </div>
+      <div data-card style="position:relative;aspect-ratio:4/3;border-radius:2px;overflow:hidden;background:#E7E0D3">
+        <div data-zoom style="position:absolute;inset:0;background-color:#7FA6A4;background-image:radial-gradient(circle at 30% 35%, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 40%),repeating-radial-gradient(circle at 30% 35%, rgba(38, 66, 64, 0.12) 0px, rgba(38, 66, 64, 0.12) 3px, rgba(255, 255, 255, 0) 3px, rgba(255, 255, 255, 0) 90px),linear-gradient(180deg, #8AB0AC 0%, #6E9694 100%)"></div><div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%222%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22/%3E%3C/svg%3E');opacity:0.04;pointer-events:none"></div><a href="Index Pages.dc.html#projects" aria-label="Keswick Water Park" style="position:absolute;inset:0;z-index:2"></a>
+        <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(20, 24, 29, 0.72), rgba(20, 24, 29, 0) 52%);pointer-events:none"></div>
+        <div style="position:absolute;left:24px;right:24px;bottom:20px;pointer-events:none">
+          <div style="font-size:16px;font-weight:600;color:#FFFFFF">Keswick Water Park</div>
+          <div style="margin-top:4px;font-size:13px;color:rgba(255, 255, 255, 0.78)">Burnaby &middot; StreetBond &middot; 2024</div>
+        </div>
+      </div>
+      <div data-card style="position:relative;aspect-ratio:4/3;border-radius:2px;overflow:hidden;background:#E7E0D3">
+        <div data-zoom style="position:absolute;inset:0;background-color:#B98A4E;background-image:repeating-radial-gradient(circle at 70% 30%, rgba(255, 255, 255, 0.10) 0px, rgba(255, 255, 255, 0.10) 4px, rgba(0, 0, 0, 0) 4px, rgba(0, 0, 0, 0) 60px),linear-gradient(160deg, #C29455 0%, #9C7440 100%)"></div><div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%222%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22/%3E%3C/svg%3E');opacity:0.04;pointer-events:none"></div><a href="Index Pages.dc.html#projects" aria-label="Joyce SkyTrain Public Art" style="position:absolute;inset:0;z-index:2"></a>
+        <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(20, 24, 29, 0.72), rgba(20, 24, 29, 0) 52%);pointer-events:none"></div>
+        <div style="position:absolute;left:24px;right:24px;bottom:20px;pointer-events:none">
+          <div style="font-size:16px;font-weight:600;color:#FFFFFF">Joyce SkyTrain Public Art</div>
+          <div style="margin-top:4px;font-size:13px;color:rgba(255, 255, 255, 0.78)">Vancouver &middot; StreetBond Art &middot; 2022</div>
+        </div>
+      </div>
+      <div data-card style="position:relative;aspect-ratio:4/3;border-radius:2px;overflow:hidden;background:#E7E0D3">
+        <div data-zoom style="position:absolute;inset:0;background-color:#8A5A3B;background-image:repeating-radial-gradient(circle at 50% 55%, rgba(237, 232, 225, 0.20) 0px, rgba(237, 232, 225, 0.20) 3px, rgba(0, 0, 0, 0) 3px, rgba(0, 0, 0, 0) 46px),radial-gradient(circle at 50% 55%, #A06A44 0%, #7C4E31 70%)"></div><div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%222%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22/%3E%3C/svg%3E');opacity:0.04;pointer-events:none"></div><a href="Index Pages.dc.html#projects" aria-label="Langley Events Centre Circle of Life" style="position:absolute;inset:0;z-index:2"></a>
+        <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(20, 24, 29, 0.72), rgba(20, 24, 29, 0) 52%);pointer-events:none"></div>
+        <div style="position:absolute;left:24px;right:24px;bottom:20px;pointer-events:none">
+          <div style="font-size:16px;font-weight:600;color:#FFFFFF">Langley Events Centre &mdash; Circle of Life</div>
+          <div style="margin-top:4px;font-size:13px;color:rgba(255, 255, 255, 0.78)">Langley &middot; DuraTherm &middot; 2021</div>
+        </div>
+      </div>
+      <div data-card style="position:relative;aspect-ratio:4/3;border-radius:2px;overflow:hidden;background:#E7E0D3">
+        <div data-zoom style="position:absolute;inset:0;background-color:#5F7D52;background-image:linear-gradient(90deg, #3E434A 0%, #3E434A 12%, rgba(0, 0, 0, 0) 12%, rgba(0, 0, 0, 0) 88%, #3E434A 88%, #3E434A 100%),repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.06) 0px, rgba(255, 255, 255, 0.06) 2px, rgba(0, 0, 0, 0) 2px, rgba(0, 0, 0, 0) 52px),linear-gradient(180deg, #66854F 0%, #4F6B41 100%)"></div><div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%222%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22/%3E%3C/svg%3E');opacity:0.04;pointer-events:none"></div><a href="Index Pages.dc.html#projects" aria-label="Agnes Greenway" style="position:absolute;inset:0;z-index:2"></a>
+        <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(20, 24, 29, 0.72), rgba(20, 24, 29, 0) 52%);pointer-events:none"></div>
+        <div style="position:absolute;left:24px;right:24px;bottom:20px;pointer-events:none">
+          <div style="font-size:16px;font-weight:600;color:#FFFFFF">Agnes Greenway</div>
+          <div style="margin-top:4px;font-size:13px;color:rgba(255, 255, 255, 0.78)">New Westminster &middot; StreetBond &middot; 2020</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section data-mq="section" data-screen-label="Applications" style="position:relative;overflow:hidden;background:#FAF8F5;border-top:1px solid #E7E3DC;border-bottom:1px solid #E7E3DC;padding:96px 0">
+  <div aria-hidden="true" data-mq="ghost" style="position:absolute;top:48px;right:24px;z-index:0;font-size:10rem;font-weight:200;line-height:1;letter-spacing:-0.04em;color:#F1EEE9;pointer-events:none;user-select:none">05</div>
+  <div data-mq="container" style="position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:0 40px">
+    <div style="display:flex;align-items:center;gap:10px;font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82"><span style="width:6px;height:6px;background:#F26430;border-radius:1px;flex-shrink:0"></span>Applications</div>
+    <h2 data-mq="h2" style="margin:20px 0 0;font-size:clamp(1.75rem, 3vw, 2.75rem);font-weight:300;letter-spacing:-0.03em;line-height:1.06;color:#14161A;text-wrap:pretty">Where these systems are specified</h2>
+    <div data-mq="grid-apps" style="display:grid;grid-template-columns:repeat(4, 1fr);gap:56px 40px;margin-top:40px">
+      <div>
+        <h3 style="margin:0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">Crosswalks</h3>
+        <p style="margin:8px 0 0;font-size:15px;line-height:1.55;color:#767B82">Decorative and high-visibility crossings in thermoplastic or stamped asphalt.</p>
+      </div>
+      <div>
+        <h3 style="margin:0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">Bus &amp; bike lanes</h3>
+        <p style="margin:8px 0 0;font-size:15px;line-height:1.55;color:#767B82">Red and green priority lane surfacing that holds its colour under traffic.</p>
+      </div>
+      <div>
+        <h3 style="margin:0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">Parking lots</h3>
+        <p style="margin:8px 0 0;font-size:15px;line-height:1.55;color:#767B82">Coatings and markings that bring order to large paved sites.</p>
+      </div>
+      <div>
+        <h3 style="margin:0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">Driveways</h3>
+        <p style="margin:8px 0 0;font-size:15px;line-height:1.55;color:#767B82">Stamped asphalt drives patterned and coloured to suit the house.</p>
+      </div>
+      <div>
+        <h3 style="margin:0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">School zones</h3>
+        <p style="margin:8px 0 0;font-size:15px;line-height:1.55;color:#767B82">Slip-resistant, high-visibility markings for pedestrian priority areas.</p>
+      </div>
+      <div>
+        <h3 style="margin:0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">Public spaces</h3>
+        <p style="margin:8px 0 0;font-size:15px;line-height:1.55;color:#767B82">Plazas, greenways and park paths with pattern and colour underfoot.</p>
+      </div>
+      <div>
+        <h3 style="margin:0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">Surface prep</h3>
+        <p style="margin:8px 0 0;font-size:15px;line-height:1.55;color:#767B82">Vapour blasting that cleans and profiles pavement before coating.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<sc-if value="{{ showTrust }}" hint-placeholder-val="{{ true }}">
+<section data-mq="section" data-screen-label="Trust strip" style="position:relative;overflow:hidden;background:#FFFFFF;padding:96px 0">
+  <div aria-hidden="true" data-mq="ghost" style="position:absolute;top:48px;right:24px;z-index:0;font-size:10rem;font-weight:200;line-height:1;letter-spacing:-0.04em;color:#F1EEE9;pointer-events:none;user-select:none">06</div>
+  <div data-mq="container" style="position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:0 40px">
+    <div style="display:flex;align-items:center;gap:10px;font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82"><span style="width:6px;height:6px;background:#F26430;border-radius:1px;flex-shrink:0"></span>Selected clients</div>
+    <div style="display:flex;flex-wrap:wrap;gap:16px 48px;margin-top:28px">
+      <span style="font-size:15px;font-weight:500;color:#767B82">City of Vancouver</span>
+      <span style="font-size:15px;font-weight:500;color:#767B82">TransLink</span>
+      <span style="font-size:15px;font-weight:500;color:#767B82">UBC</span>
+      <span style="font-size:15px;font-weight:500;color:#767B82">City of Burnaby</span>
+      <span style="font-size:15px;font-weight:500;color:#767B82">City of Richmond</span>
+      <span style="font-size:15px;font-weight:500;color:#767B82">District of Maple Ridge</span>
+    </div>
+    <blockquote style="margin:56px 0 0;padding:0">
+      <p data-mq="quote" style="margin:0;font-size:26px;font-weight:300;line-height:1.45;letter-spacing:-0.01em;color:#14161A;max-width:44ch;text-wrap:pretty">&#8220;Two night closures, and the crossing was open by morning both times. Five winters on, the colour still reads from a block away.&#8221;<span aria-hidden="true" style="display:inline-block;width:6px;height:6px;background:#F26430;border-radius:1px;margin-left:12px"></span></p>
+      <footer style="margin-top:20px;font-size:14px;color:#767B82">Capital works engineer, Metro Vancouver municipality</footer>
+    </blockquote>
+  </div>
+</section>
+</sc-if>
+
+<sc-if value="{{ showJournal }}" hint-placeholder-val="{{ true }}">
+<section data-mq="section" data-screen-label="Journal" id="journal" style="position:relative;overflow:hidden;background:#FAF8F5;border-top:1px solid #E7E3DC;padding:96px 0">
+  <div aria-hidden="true" data-mq="ghost" style="position:absolute;top:48px;right:24px;z-index:0;font-size:10rem;font-weight:200;line-height:1;letter-spacing:-0.04em;color:#F1EEE9;pointer-events:none;user-select:none">07</div>
+  <div data-mq="container" style="position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:0 40px">
+    <h2 data-mq="h2" style="margin:0;font-size:clamp(1.75rem, 3vw, 2.75rem);font-weight:300;letter-spacing:-0.03em;line-height:1.06;color:#14161A">Field notes</h2>
+    <div data-mq="grid-cards" style="display:grid;grid-template-columns:repeat(3, 1fr);gap:24px;margin-top:40px">
+      <div data-card style="position:relative">
+        <a href="Index Pages.dc.html#journal" aria-label="What roundabout aprons ask of a surface" style="position:absolute;inset:0;z-index:2"></a>
+        <div style="position:relative;aspect-ratio:16/10;border-radius:2px;overflow:hidden;background:#E7E0D3">
+          <div data-zoom style="position:absolute;inset:0;background-color:#A8523A;background-image:radial-gradient(circle at 118% 118%, #383D44 0%, #383D44 42%, rgba(0, 0, 0, 0) 42.5%),repeating-linear-gradient(15deg, rgba(237, 232, 225, 0.12) 0px, rgba(237, 232, 225, 0.12) 2px, rgba(0, 0, 0, 0) 2px, rgba(0, 0, 0, 0) 24px),linear-gradient(180deg, #B25A40 0%, #94462E 100%)"></div><div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%222%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22/%3E%3C/svg%3E');opacity:0.04;pointer-events:none"></div>
+          <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(20, 24, 29, 0.55), rgba(20, 24, 29, 0) 38%);pointer-events:none"></div>
+          <div style="position:absolute;left:16px;bottom:12px;font-size:12px;font-weight:600;letter-spacing:0.02em;color:#FFFFFF">Langley &middot; TrafficPatternsXD &middot; 2025</div>
+        </div>
+        <div style="margin-top:24px"><span style="display:inline-block;background:#F1EEE9;color:#5B6167;font-size:12px;font-weight:600;letter-spacing:0.04em;padding:5px 10px;border-radius:2px">Technical</span></div>
+        <h3 style="margin:14px 0 0;font-size:1.25rem;font-weight:600;line-height:1.4;letter-spacing:-0.015em;color:#14161A;text-wrap:pretty">What roundabout aprons ask of a surface</h3>
+        <div style="margin-top:10px;font-size:13px;color:#767B82">July 14, 2026</div>
+      </div>
+      <div data-card style="position:relative">
+        <a href="Index Pages.dc.html#journal" aria-label="Stamped asphalt vs concrete pavers for BC driveways" style="position:absolute;inset:0;z-index:2"></a>
+        <div style="position:relative;aspect-ratio:16/10;border-radius:2px;overflow:hidden;background:#E7E0D3">
+          <div data-zoom style="position:absolute;inset:0;background-color:#E7E1D6;background-image:repeating-linear-gradient(0deg, rgba(120, 108, 90, 0.16) 0px, rgba(120, 108, 90, 0.16) 2px, rgba(255, 255, 255, 0) 2px, rgba(255, 255, 255, 0) 36px),repeating-linear-gradient(90deg, rgba(120, 108, 90, 0.10) 0px, rgba(120, 108, 90, 0.10) 2px, rgba(255, 255, 255, 0) 2px, rgba(255, 255, 255, 0) 80px),linear-gradient(180deg, #EDE8E1 0%, #DDD6CA 100%)"></div><div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%222%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22/%3E%3C/svg%3E');opacity:0.04;pointer-events:none"></div><img data-photo data-zoom src="https://www.squareonepaving.com/wp-content/uploads/2021/04/StreetPrint-%E2%80%94-Stamped-Asphalt-Decorative-Driveway-West-Saanich-BC.jpg" alt="Stamped asphalt driveway, Saanich" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 70%">
+          <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(20, 24, 29, 0.55), rgba(20, 24, 29, 0) 38%);pointer-events:none"></div>
+          <div style="position:absolute;left:16px;bottom:12px;font-size:12px;font-weight:600;letter-spacing:0.02em;color:#FFFFFF">Saanich &middot; StreetPrint &middot; 2021</div>
+        </div>
+        <div style="margin-top:24px"><span style="display:inline-block;background:#F1EEE9;color:#5B6167;font-size:12px;font-weight:600;letter-spacing:0.04em;padding:5px 10px;border-radius:2px">Guides</span></div>
+        <h3 style="margin:14px 0 0;font-size:1.25rem;font-weight:600;line-height:1.4;letter-spacing:-0.015em;color:#14161A;text-wrap:pretty">Stamped asphalt vs concrete pavers for BC driveways</h3>
+        <div style="margin-top:10px;font-size:13px;color:#767B82">May 27, 2026</div>
+      </div>
+      <div data-card style="position:relative">
+        <a href="Index Pages.dc.html#journal" aria-label="How BC transit priority lanes stay red" style="position:absolute;inset:0;z-index:2"></a>
+        <div style="position:relative;aspect-ratio:16/10;border-radius:2px;overflow:hidden;background:#E7E0D3">
+          <div data-zoom style="position:absolute;inset:0;background-color:#9E3B2F;background-image:linear-gradient(90deg, rgba(237, 232, 225, 0.85) 0%, rgba(237, 232, 225, 0.85) 3%, rgba(0, 0, 0, 0) 3%, rgba(0, 0, 0, 0) 97%, rgba(237, 232, 225, 0.85) 97%, rgba(237, 232, 225, 0.85) 100%),repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.05) 0px, rgba(0, 0, 0, 0.05) 2px, rgba(0, 0, 0, 0) 2px, rgba(0, 0, 0, 0) 44px),linear-gradient(180deg, #A84335 0%, #8C3226 100%)"></div><div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%222%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22/%3E%3C/svg%3E');opacity:0.04;pointer-events:none"></div>
+          <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(20, 24, 29, 0.55), rgba(20, 24, 29, 0) 38%);pointer-events:none"></div>
+          <div style="position:absolute;left:16px;bottom:12px;font-size:12px;font-weight:600;letter-spacing:0.02em;color:#FFFFFF">Vancouver &middot; MMAX Red &middot; 2024</div>
+        </div>
+        <div style="margin-top:24px"><span style="display:inline-block;background:#F1EEE9;color:#5B6167;font-size:12px;font-weight:600;letter-spacing:0.04em;padding:5px 10px;border-radius:2px">Transit</span></div>
+        <h3 style="margin:14px 0 0;font-size:1.25rem;font-weight:600;line-height:1.4;letter-spacing:-0.015em;color:#14161A;text-wrap:pretty">How BC transit priority lanes stay red</h3>
+        <div style="margin-top:10px;font-size:13px;color:#767B82">March 9, 2026</div>
+      </div>
+    </div>
+  </div>
+</section>
+</sc-if>
+
+<dc-import name="Site Close" index="08" hint-size="100%,1100px"></dc-import>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;showTrust&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Sections&quot;},
+  &quot;showJournal&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Sections&quot;}
+}">
+class Component extends DCLogic {
+  componentDidMount() {
+    const go = () => import('./site.js').then(m => m.init());
+    go(); setTimeout(go, 900);
+  }
+  renderVals() {
+    return {
+      showTrust: this.props.showTrust ?? true,
+      showJournal: this.props.showJournal ?? true,
+    };
+  }
+}
+</script>
+</body>
+</html>

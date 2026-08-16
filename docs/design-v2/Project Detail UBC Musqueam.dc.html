@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FFFFFF;color:#3D4147;font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#14161A;text-decoration:none}
+a:hover{color:#D8511F}
+@media (max-width: 700px){
+[data-mq~="section"]{padding:56px 0 !important}
+[data-mq~="container"]{padding:0 24px !important}
+[data-mq~="grid-cards"]{grid-template-columns:1fr !important}
+[data-mq~="grid-2"]{grid-template-columns:1fr !important;gap:48px !important}
+[data-mq~="facts"]{grid-template-columns:1fr 1fr !important;gap:28px 24px !important}
+[data-mq~="ctarow"]{flex-direction:column !important}
+}
+a[data-arrow] span{display:inline-block;transition:transform 0.2s}a[data-arrow]:hover span{transform:translateX(4px)}
+[data-card]{transition:transform 0.25s, box-shadow 0.25s}[data-card]:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(20,22,26,0.08)}
+[data-card] img{transition:transform 0.4s ease}[data-card]:hover img{transform:scale(1.02)}
+[data-card] [data-zoom]{transition:transform 0.4s ease}[data-card]:hover [data-zoom]{transform:scale(1.02)}
+</style>
+</helmet>
+
+<dc-import name="Site Nav" active="Projects" hint-size="100%,72px" style="position:sticky;top:0;z-index:120"></dc-import>
+
+<section data-screen-label="Project header" style="background:#FFFFFF;padding:96px 0 0">
+  <div data-mq="container" style="max-width:1280px;margin:0 auto;padding:0 40px">
+    <div style="display:flex;align-items:center;gap:10px;font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82"><span style="width:6px;height:6px;background:#F26430;border-radius:1px;flex-shrink:0"></span>Projects</div>
+    <h1 id="project-h1" style="margin:28px 0 0;font-size:clamp(3rem, 5vw, 4.5rem);font-weight:300;letter-spacing:-0.035em;line-height:0.98;color:#14161A;max-width:24ch;text-wrap:balance">UBC &times; Musqueam Crosswalk<span aria-hidden="true" style="display:inline-block;width:6px;height:6px;background:#F26430;border-radius:1px;margin-left:14px"></span></h1>
+  </div>
+  <div data-lbx data-cap="UBC &times; Musqueam Crosswalk &mdash; Vancouver &middot; DecoMark &middot; 2023" style="position:relative;aspect-ratio:21/9;background:#383D44;margin-top:40px;overflow:hidden">
+    <div style="position:absolute;inset:0;background-color:#383D44;background-image:repeating-linear-gradient(90deg, rgba(237, 232, 225, 0.85) 0px, rgba(237, 232, 225, 0.85) 34px, rgba(237, 232, 225, 0) 34px, rgba(237, 232, 225, 0) 78px),linear-gradient(180deg, #454A52 0%, #31363D 100%)"></div>
+    <div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%222%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22/%3E%3C/svg%3E');opacity:0.04;pointer-events:none"></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(20, 24, 29, 0.55), rgba(20, 24, 29, 0) 38%);pointer-events:none"></div>
+    <div style="position:absolute;left:16px;bottom:12px;font-size:12px;font-weight:600;letter-spacing:0.02em;color:#FFFFFF;pointer-events:none">Vancouver &middot; DecoMark &middot; 2023</div>
+  </div>
+  <div data-mq="container" style="max-width:1280px;margin:0 auto;padding:0 40px">
+    <div data-mq="facts" style="display:grid;grid-template-columns:repeat(4, 1fr);gap:40px;padding:48px 0 88px;border-bottom:1px solid #E7E3DC">
+      <div style="border-top:1px solid #E7E3DC;padding-top:16px">
+        <div style="font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82">Municipality</div>
+        <div style="margin-top:8px;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">Vancouver &middot; UBC campus</div>
+      </div>
+      <div style="border-top:1px solid #E7E3DC;padding-top:16px">
+        <div style="font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82">Year</div>
+        <div style="margin-top:8px;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">2023</div>
+      </div>
+      <div style="border-top:1px solid #E7E3DC;padding-top:16px">
+        <div style="font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82">Service</div>
+        <div style="margin-top:8px;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">Preformed thermoplastic</div>
+      </div>
+      <div style="border-top:1px solid #E7E3DC;padding-top:16px">
+        <div style="font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82">Products used</div>
+        <div style="margin-top:8px;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">DecoMark custom graphics</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section data-mq="section" data-screen-label="Narrative" style="background:#FFFFFF;padding:96px 0 112px">
+  <div data-mq="container" style="max-width:1280px;margin:0 auto;padding:0 40px">
+    <div style="max-width:60ch">
+      <p style="margin:0;font-size:17px;line-height:1.75;color:#3D4147;text-wrap:pretty">The brief asked for a pedestrian crossing that carries a Musqueam artwork at road scale, at a campus intersection on a bus route that could not stay closed for long. The line work had to survive translation from the artists&#8217; files to a surface driven over thousands of times a day.</p>
+      <p style="margin:24px 0 0;font-size:17px;line-height:1.75;color:#3D4147;text-wrap:pretty">We reproduced the design in DecoMark preformed thermoplastic, cut off-site to the supplied artwork and laid out panel by panel on the closed intersection. The full crossing was heat-fused into the asphalt over two night closures, and buses were running over it by each morning.</p>
+      <p style="margin:24px 0 0;font-size:17px;line-height:1.75;color:#3D4147;text-wrap:pretty">Three years of buses, bikes and Vancouver rain later, the crossing reads as installed. One panel was replaced after a utility cut in 2025; the patch is not visible from the curb.</p>
+    </div>
+  </div>
+</section>
+
+<sc-if value="{{ showGallery }}" hint-placeholder-val="{{ true }}">
+<section data-mq="section" data-screen-label="Gallery" style="background:#FAF8F5;border-top:1px solid #E7E3DC;border-bottom:1px solid #E7E3DC;padding:96px 0">
+  <div data-mq="container" style="max-width:1280px;margin:0 auto;padding:0 40px">
+    <div data-mq="grid-cards" style="display:grid;grid-template-columns:repeat(3, 1fr);gap:24px">
+      <div>
+        <div data-lbx data-cap="Vancouver &middot; DecoMark &middot; 2023" style="position:relative;aspect-ratio:4/3;border-radius:2px;overflow:hidden;background:#E7E0D3">
+          <div style="position:absolute;inset:0;background-color:#22262B;background-image:repeating-linear-gradient(90deg, rgba(237, 232, 225, 0.35) 0px, rgba(237, 232, 225, 0.35) 34px, rgba(237, 232, 225, 0) 34px, rgba(237, 232, 225, 0) 78px),radial-gradient(circle at 70% 20%, rgba(242, 200, 120, 0.20) 0%, rgba(0, 0, 0, 0) 40%),linear-gradient(180deg, #2A2E34 0%, #1C2025 100%)"></div>
+          <div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%222%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22/%3E%3C/svg%3E');opacity:0.04;pointer-events:none"></div>
+          <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(20, 24, 29, 0.55), rgba(20, 24, 29, 0) 38%);pointer-events:none"></div>
+          <div style="position:absolute;left:16px;bottom:12px;font-size:12px;font-weight:600;letter-spacing:0.02em;color:#FFFFFF;pointer-events:none">Vancouver &middot; DecoMark &middot; 2023</div>
+        </div>
+        <div style="margin-top:12px;font-size:13px;color:#767B82">Panels fused over the first night closure</div>
+      </div>
+      <div>
+        <div data-lbx data-cap="Vancouver &middot; DecoMark &middot; 2023" style="position:relative;aspect-ratio:4/3;border-radius:2px;overflow:hidden;background:#E7E0D3">
+          <div style="position:absolute;inset:0;background-color:#E7E1D6;background-image:repeating-linear-gradient(0deg, rgba(120, 108, 90, 0.16) 0px, rgba(120, 108, 90, 0.16) 2px, rgba(255, 255, 255, 0) 2px, rgba(255, 255, 255, 0) 36px),repeating-linear-gradient(90deg, rgba(120, 108, 90, 0.10) 0px, rgba(120, 108, 90, 0.10) 2px, rgba(255, 255, 255, 0) 2px, rgba(255, 255, 255, 0) 80px),linear-gradient(180deg, #EDE8E1 0%, #DDD6CA 100%)"></div>
+          <div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%222%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22/%3E%3C/svg%3E');opacity:0.04;pointer-events:none"></div>
+          <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(20, 24, 29, 0.55), rgba(20, 24, 29, 0) 38%);pointer-events:none"></div>
+          <div style="position:absolute;left:16px;bottom:12px;font-size:12px;font-weight:600;letter-spacing:0.02em;color:#FFFFFF;pointer-events:none">Vancouver &middot; DecoMark &middot; 2023</div>
+        </div>
+        <div style="margin-top:12px;font-size:13px;color:#767B82">Dry layout against the artists&#8217; files</div>
+      </div>
+      <div>
+        <div data-lbx data-cap="Vancouver &middot; DecoMark &middot; 2023" style="position:relative;aspect-ratio:4/3;border-radius:2px;overflow:hidden;background:#E7E0D3">
+          <div style="position:absolute;inset:0;background-color:#383D44;background-image:repeating-linear-gradient(90deg, rgba(237, 232, 225, 0.85) 0px, rgba(237, 232, 225, 0.85) 34px, rgba(237, 232, 225, 0) 34px, rgba(237, 232, 225, 0) 78px),linear-gradient(180deg, #454A52 0%, #31363D 100%)"></div>
+          <div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%222%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22/%3E%3C/svg%3E');opacity:0.04;pointer-events:none"></div>
+          <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(20, 24, 29, 0.55), rgba(20, 24, 29, 0) 38%);pointer-events:none"></div>
+          <div style="position:absolute;left:16px;bottom:12px;font-size:12px;font-weight:600;letter-spacing:0.02em;color:#FFFFFF;pointer-events:none">Vancouver &middot; DecoMark &middot; 2023</div>
+        </div>
+        <div style="margin-top:12px;font-size:13px;color:#767B82">The finished crossing, open to traffic</div>
+      </div>
+    </div>
+  </div>
+</section>
+</sc-if>
+
+<sc-if value="{{ showMore }}" hint-placeholder-val="{{ true }}">
+<section data-mq="section" data-screen-label="More projects" style="background:#FFFFFF;padding:96px 0">
+  <div data-mq="container" style="max-width:1280px;margin:0 auto;padding:0 40px">
+    <div style="display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:24px">
+      <h2 data-mq="h2" style="margin:0;font-size:clamp(1.75rem, 3vw, 2.75rem);font-weight:300;letter-spacing:-0.03em;line-height:1.06;color:#14161A">More projects</h2>
+      <a data-arrow href="Index Pages.dc.html#projects" style="font-size:15px;font-weight:600;color:#14161A;white-space:nowrap" style-hover="color:#D8511F">All 21 projects <span>&rarr;</span></a>
+    </div>
+    <div data-mq="grid-2" style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:40px">
+      <div data-card style="position:relative;aspect-ratio:16/9;border-radius:2px;overflow:hidden;background:#E7E0D3">
+        <div data-zoom style="position:absolute;inset:0;background-color:#3E434A;background-image:linear-gradient(0deg, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.12)),linear-gradient(90deg, #A84335 0%, #A84335 16%, #C08A3E 16%, #C08A3E 33%, #C2B04C 33%, #C2B04C 50%, #5F7D52 50%, #5F7D52 66%, #4E6E8C 66%, #4E6E8C 83%, #6B5A80 83%, #6B5A80 100%)"></div><div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%222%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22/%3E%3C/svg%3E');opacity:0.04;pointer-events:none"></div><a href="Index Pages.dc.html#projects" aria-label="Fifth Street Rainbow Crossing" style="position:absolute;inset:0;z-index:2"></a>
+        <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(20, 24, 29, 0.72), rgba(20, 24, 29, 0) 52%);pointer-events:none"></div>
+        <div style="position:absolute;left:24px;right:24px;bottom:20px;pointer-events:none">
+          <div style="font-size:16px;font-weight:600;color:#FFFFFF">Fifth Street Rainbow Crossing</div>
+          <div style="margin-top:4px;font-size:13px;color:rgba(255, 255, 255, 0.78)">Courtenay &middot; Preformed thermoplastic &middot; 2023</div>
+        </div>
+      </div>
+      <div data-card style="position:relative;aspect-ratio:16/9;border-radius:2px;overflow:hidden;background:#E7E0D3">
+        <div data-zoom style="position:absolute;inset:0;background-color:#383D44;background-image:repeating-linear-gradient(90deg, rgba(237, 232, 225, 0.85) 0px, rgba(237, 232, 225, 0.85) 34px, rgba(237, 232, 225, 0) 34px, rgba(237, 232, 225, 0) 78px),linear-gradient(180deg, #454A52 0%, #31363D 100%)"></div><div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%222%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22/%3E%3C/svg%3E');opacity:0.04;pointer-events:none"></div><a href="Index Pages.dc.html#projects" aria-label="Wesbrook Village Crossings" style="position:absolute;inset:0;z-index:2"></a>
+        <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(20, 24, 29, 0.72), rgba(20, 24, 29, 0) 52%);pointer-events:none"></div>
+        <div style="position:absolute;left:24px;right:24px;bottom:20px;pointer-events:none">
+          <div style="font-size:16px;font-weight:600;color:#FFFFFF">Wesbrook Village Crossings</div>
+          <div style="margin-top:4px;font-size:13px;color:rgba(255, 255, 255, 0.78)">Vancouver &middot; TrafficPatterns &middot; 2018</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</sc-if>
+
+<dc-import name="Site Close" hint-size="100%,1100px"></dc-import>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;showGallery&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Sections&quot;},
+  &quot;showMore&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Sections&quot;}
+}">
+class Component extends DCLogic {
+  componentDidMount() {
+    const go = () => import('./site.js').then(m => m.init());
+    go(); setTimeout(go, 900);
+
+    const h1 = document.getElementById('project-h1');
+    if (!h1) return;
+    const size = () => {
+      const n = (h1.textContent || '').trim().length;
+      h1.style.fontSize = n <= 28 ? 'clamp(3rem, 5vw, 4.5rem)' : n <= 130 ? 'clamp(2rem, 3.4vw, 3rem)' : 'clamp(1.5rem, 2.4vw, 2.25rem)';
+    };
+    size();
+    this._mo = new MutationObserver(size);
+    this._mo.observe(h1, { characterData: true, childList: true, subtree: true });
+  }
+  componentWillUnmount() { if (this._mo) this._mo.disconnect(); }
+  renderVals() {
+    return {
+      showGallery: this.props.showGallery ?? true,
+      showMore: this.props.showMore ?? true,
+    };
+  }
+}
+</script>
+</body>
+</html>
