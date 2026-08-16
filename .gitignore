@@ -44,3 +44,11 @@ next-env.d.ts
 .env*.local
 .superpowers/
 .claude/worktrees/
+
+# Image staging queue — contents never committed, never served.
+# The README is kept so the folder structure survives a clone.
+/_image-queue/*
+!/_image-queue/README.md
+!/_image-queue/*/
+/_image-queue/*/*
+!/_image-queue/*/.gitkeep
