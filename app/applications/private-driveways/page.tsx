@@ -2,6 +2,8 @@ import Image from "next/image"
 import Link from "next/link"
 import { Metadata } from "next"
 
+import { heroFor } from "@/lib/gallery"
+
 export const metadata: Metadata = {
   title: "Decorative Driveways BC | Stamped Asphalt & StreetBond Coatings",
   description: "Transform your BC driveway with decorative stamped asphalt or StreetBond coatings. Premium residential paving by Square One — Lower Mainland & Vancouver Island.",
@@ -9,40 +11,39 @@ export const metadata: Metadata = {
 
 const benefits = [
   {
-    title: "Curb Appeal That Lasts",
+    title: "Curb appeal that lasts",
     desc: "Custom patterns, rich colours, and textures that elevate your home's exterior from the street.",
-    icon: "◈",
   },
   {
-    title: "20+ Year Service Life",
+    title: "20+ year service life",
     desc: "Our systems are engineered for BC's wet winters and dry summers — sealed and protected against wear.",
-    icon: "◉",
   },
   {
-    title: "Increases Property Value",
+    title: "Increases property value",
     desc: "A premium driveway is one of the highest-ROI exterior upgrades for BC homeowners.",
-    icon: "◧",
   },
 ]
 
 const products = [
   {
-    name: "StreetBond Coatings",
+    name: "StreetBond coatings",
     desc: "Rich, uniform colour in dozens of tones — from warm terracotta to charcoal grey. Applied over existing asphalt. Fast, affordable, beautiful.",
     image: "/images/products/streetbond/streetbond-1.jpg",
+    alt: "StreetBond coated residential driveway",
   },
   {
-    name: "StreetPrint Stamped Asphalt",
+    name: "StreetPrint stamped asphalt",
     desc: "Brick, cobblestone, and slate patterns stamped directly into asphalt. The premium choice for homeowners who want maximum visual impact.",
     image: "/images/products/streetprint/streetprint-1.jpg",
+    alt: "StreetPrint stamped asphalt driveway in a brick pattern",
   },
 ]
 
 const process = [
-  { num: "01", title: "Free Consultation", desc: "We visit your property, assess your existing surface, and walk you through colour and pattern options." },
-  { num: "02", title: "Custom Design", desc: "We help you choose the right product, pattern, and colour to complement your home's architecture." },
-  { num: "03", title: "Professional Installation", desc: "Our certified crew installs your new driveway surface — typically in a single day with minimal disruption." },
-  { num: "04", title: "The Reveal", desc: "Your new driveway is sealed, cleaned, and ready. The transformation is immediate." },
+  { num: "01", title: "Free consultation", desc: "We visit your property, assess your existing surface, and walk you through colour and pattern options." },
+  { num: "02", title: "Custom design", desc: "We help you choose the right product, pattern, and colour to complement your home's architecture." },
+  { num: "03", title: "Professional installation", desc: "Our certified crew installs your new driveway surface — typically in a single day with minimal disruption." },
+  { num: "04", title: "The reveal", desc: "Your new driveway is sealed, cleaned, and ready. The transformation is immediate." },
 ]
 
 const faqs = [
@@ -68,167 +69,185 @@ const faqs = [
   },
 ]
 
+const credentials = [
+  "Trusted by BC homeowners since 2000",
+  "Certified decorative pavement installers",
+  "Lower Mainland & Vancouver Island",
+  "Free consultations",
+]
+
+/**
+ * Application detail — docs/design-v2/Application Detail School Zones.dc.html.
+ *
+ *   Header    eyebrow + h1 + lede + CTAs + one photograph   white
+ *   Why       3-up, hairline-topped                         warm, hairline top + bottom
+ *   Systems   2-up photo cards                              white
+ *   Process   4-up numbered steps                           warm, hairline top + bottom
+ *   FAQ       hairline rows + credential row                white
+ *   Close     slate — rendered once by app/layout.tsx (Footer)
+ *
+ * The close is the page's ONLY dark region. Nothing above it may go slate.
+ * Orange budget in the header viewport: eyebrow square, full stop, primary
+ * button. Nothing else on this page is accent-coloured.
+ */
 export default function PrivateDrivewaysPage() {
+  // Filesystem first (public/images/applications/private-driveways/), curated
+  // shot as the fallback — drop a photo in the folder and it leads the page.
+  const heroFallback = "/images/applications/private-driveways/estate-herringbone-gated-driveway-01.jpg"
+  const heroSrc = heroFor("applications", "private-driveways", heroFallback) ?? heroFallback
+
   return (
-    <main className="bg-[#FAFAFA]">
+    <main>
+      {/* ── Header ───────────────────────────────────────────────────────── */}
+      <section className="bg-[color:var(--surface)] pt-[calc(var(--bar-h)+var(--section-y))] pb-[var(--section-y)] max-[700px]:pt-[calc(var(--bar-h)+var(--section-y-sm))] max-[700px]:pb-[var(--section-y-sm)]">
+        <div className="container-1280">
+          <p className="eyebrow">Applications &middot; Residential</p>
 
-      {/* Hero */}
-      <section className="relative w-full min-h-[75vh] flex items-end overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/images/products/streetbond/streetbond-1.jpg"
-            alt="Decorative StreetBond driveway"
-            fill
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#D66620]/15 to-transparent" />
-        </div>
+          <h1 className="stop mt-7 max-w-[16ch]">Your driveway, reimagined</h1>
 
-        <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-12 pb-20 pt-40 w-full">
-          <p className="text-[#F0A04B] text-xs uppercase tracking-[0.25em] font-semibold mb-5">
-            Residential Decorative Paving
+          <p className="mt-6 max-w-[56ch] text-[19px] leading-[1.65] text-[color:var(--ink-body)] [text-wrap:pretty] max-[700px]:text-[17px]">
+            Premium decorative paving for BC homeowners. Custom colours, textures, and patterns —
+            installed by BC&apos;s most experienced HUB applicator.
           </p>
-          <h1 className="text-5xl sm:text-6xl md:text-7xl font-black text-white leading-[1.04] mb-6 max-w-2xl">
-            Your Driveway.{" "}Reimagined.
-          </h1>
-          <p className="text-white/70 text-lg max-w-lg mb-10 leading-relaxed">
-            Premium decorative paving for BC homeowners. Custom colours, textures, and patterns — installed by BC&apos;s most experienced HUB applicator.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Link href="/contact">
-              <span className="inline-block bg-[#D66620] hover:bg-[#C05A18] text-white px-8 py-4 rounded-lg font-bold text-sm uppercase tracking-wider transition-colors">
-                Get a Free Consultation
-              </span>
+
+          <div className="mt-11 flex flex-wrap items-center gap-[14px]">
+            <Link href="/contact" className="btn-primary">
+              Book a consultation
             </Link>
-            <Link href="/projects">
-              <span className="inline-block border border-white/35 text-white hover:bg-white/10 px-8 py-4 rounded-lg font-semibold text-sm transition-colors">
-                See Our Work
-              </span>
+            <Link href="/projects" className="btn-secondary">
+              See our work
             </Link>
+          </div>
+
+          <div className="relative mt-16 aspect-[21/9] overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)] max-[700px]:mt-10 max-[700px]:aspect-[4/3]">
+            <Image
+              src={heroSrc}
+              alt="Decorative stamped asphalt driveway installed by Square One Paving"
+              fill
+              priority
+              sizes="(max-width: 1280px) 100vw, 1200px"
+              className="object-cover"
+            />
           </div>
         </div>
       </section>
 
-      {/* Benefits */}
-      <section className="w-full py-20 bg-white">
-        <div className="max-w-6xl mx-auto px-6 sm:px-8">
-          <div className="text-center mb-14">
-            <p className="text-[#D66620] text-xs uppercase tracking-[0.22em] font-semibold mb-3">Why Upgrade</p>
-            <h2 className="text-4xl sm:text-5xl font-black text-[#333333]">Why BC Homeowners Choose Us</h2>
-          </div>
-          <div className="grid sm:grid-cols-3 gap-8">
+      {/* ── Why ──────────────────────────────────────────────────────────── */}
+      <section className="section border-t border-b border-[color:var(--hairline)] bg-[color:var(--surface-warm)]">
+        <div className="container-1280">
+          <h2>Why BC homeowners choose us</h2>
+
+          <div className="mt-10 grid grid-cols-1 gap-10 min-[701px]:grid-cols-3">
             {benefits.map((b) => (
-              <div key={b.title} className="text-center">
-                <span className="text-3xl text-[#D66620] block mb-4">{b.icon}</span>
-                <h3 className="text-lg font-black text-[#333333] mb-3">{b.title}</h3>
-                <p className="text-[#626262] text-sm leading-relaxed">{b.desc}</p>
+              <div key={b.title} className="border-t border-[color:var(--hairline)] pt-6">
+                <h3>{b.title}</h3>
+                <p className="mt-[10px] max-w-[44ch] text-[15px] leading-[1.65] text-[color:var(--ink-body)]">
+                  {b.desc}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Products */}
-      <section className="w-full py-24 bg-[#F2EFE9]">
-        <div className="max-w-6xl mx-auto px-6 sm:px-8">
-          <div className="mb-14">
-            <p className="text-[#D66620] text-xs uppercase tracking-[0.22em] font-semibold mb-3">Our Systems</p>
-            <h2 className="text-4xl sm:text-5xl font-black text-[#333333]">Choose Your Style</h2>
-            <div className="mt-4 h-px bg-gradient-to-r from-[#D66620]/40 to-transparent" />
-          </div>
-          <div className="grid lg:grid-cols-2 gap-8">
+      {/* ── Systems ──────────────────────────────────────────────────────── */}
+      <section className="section bg-[color:var(--surface)]">
+        <div className="container-1280">
+          <h2>Choose your style</h2>
+
+          <p className="mt-5 max-w-[56ch] text-[17px] leading-[1.6] text-[color:var(--ink-body)] [text-wrap:pretty]">
+            Two systems, both installed over sound existing asphalt. We bring sample boards to the
+            site visit so you can see them against your own siding and stone.
+          </p>
+
+          <div className="mt-10 grid grid-cols-1 gap-6 min-[701px]:grid-cols-2">
             {products.map((p) => (
-              <div key={p.name} className="bg-white rounded-2xl overflow-hidden border border-[#E8E4DE] hover:shadow-xl transition-all">
-                <div className="relative aspect-[16/9] overflow-hidden">
-                  <Image src={p.image} alt={p.name} fill className="object-cover hover:scale-105 transition-transform duration-300" sizes="(max-width:1024px) 100vw, 50vw" />
+              <Link
+                key={p.name}
+                href="/contact"
+                className="card group flex flex-col rounded-[2px] border border-[color:var(--hairline)] bg-[color:var(--surface-warm)] p-5"
+              >
+                <div className="relative aspect-[16/9] overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)]">
+                  <Image
+                    src={p.image}
+                    alt={p.alt}
+                    fill
+                    sizes="(max-width: 700px) 100vw, (max-width: 1280px) 50vw, 610px"
+                    className="object-cover"
+                  />
                 </div>
-                <div className="p-7">
-                  <h3 className="text-xl font-black text-[#333333] mb-3">{p.name}</h3>
-                  <p className="text-[#626262] text-sm leading-relaxed mb-5">{p.desc}</p>
-                  <Link href="/contact">
-                    <span className="text-[#D66620] text-xs font-bold uppercase tracking-widest hover:text-[#C05A18] transition-colors">
-                      Get a Quote for This System →
-                    </span>
-                  </Link>
-                </div>
-              </div>
+
+                <h3 className="mt-6">{p.name}</h3>
+
+                <p className="mt-[10px] text-[15px] leading-[1.55] text-[color:var(--ink-body)]">
+                  {p.desc}
+                </p>
+
+                <span className="arrow-link mt-auto pt-7">
+                  Request a quote for this system{" "}
+                  <span aria-hidden="true" className="group-hover:translate-x-1">
+                    &rarr;
+                  </span>
+                </span>
+              </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Process */}
-      <section className="w-full py-24 bg-white">
-        <div className="max-w-6xl mx-auto px-6 sm:px-8">
-          <div className="text-center mb-16">
-            <p className="text-[#D66620] text-xs uppercase tracking-[0.22em] font-semibold mb-3">Our Process</p>
-            <h2 className="text-4xl sm:text-5xl font-black text-[#333333]">From Consultation to Reveal</h2>
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      {/* ── Process ──────────────────────────────────────────────────────── */}
+      <section className="section border-t border-b border-[color:var(--hairline)] bg-[color:var(--surface-warm)]">
+        <div className="container-1280">
+          <h2>From consultation to reveal</h2>
+
+          <div className="mt-10 grid grid-cols-1 gap-10 border-t border-[color:var(--hairline)] min-[701px]:grid-cols-4 min-[701px]:gap-12">
             {process.map((step) => (
-              <div key={step.num}>
-                <div className="text-5xl font-black text-[#D66620]/15 leading-none mb-2">{step.num}</div>
-                <div className="w-6 h-1 bg-[#D66620] rounded mb-4" />
-                <h3 className="text-base font-black text-[#333333] mb-2">{step.title}</h3>
-                <p className="text-[#626262] text-sm leading-relaxed">{step.desc}</p>
+              <div key={step.num} className="pt-7">
+                <div className="text-[13px] font-semibold tracking-[0.08em] text-[color:var(--ink-muted)]">
+                  {step.num}
+                </div>
+                <h3 className="mt-4">{step.title}</h3>
+                <p className="mt-[10px] max-w-[44ch] text-[15px] leading-[1.65] text-[color:var(--ink-body)]">
+                  {step.desc}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Trust strip */}
-      <div className="bg-[#D66620] py-5">
-        <div className="max-w-5xl mx-auto px-6 flex flex-wrap justify-center gap-x-10 gap-y-2">
-          {["Trusted by BC Homeowners Since 2000", "Certified Decorative Pavement Installers", "Lower Mainland & Vancouver Island", "Free Consultations"].map((t) => (
-            <span key={t} className="text-white text-xs font-semibold uppercase tracking-wider">✓ {t}</span>
-          ))}
-        </div>
-      </div>
+      {/* ── FAQ ──────────────────────────────────────────────────────────── */}
+      <section className="section bg-[color:var(--surface)]">
+        <div className="container-1280">
+          <h2>Questions we hear</h2>
 
-      {/* FAQ */}
-      <section className="w-full py-24 bg-[#F2EFE9]">
-        <div className="max-w-3xl mx-auto px-6 sm:px-8">
-          <div className="text-center mb-14">
-            <p className="text-[#D66620] text-xs uppercase tracking-[0.22em] font-semibold mb-3">Common Questions</p>
-            <h2 className="text-4xl font-black text-[#333333]">FAQ</h2>
-          </div>
-          <div className="space-y-4">
+          <div className="mt-10 max-w-[760px] border-t border-[color:var(--hairline)]">
             {faqs.map((faq) => (
-              <details key={faq.q} className="group bg-white rounded-xl border border-[#E8E4DE] overflow-hidden">
-                <summary className="flex items-center justify-between px-6 py-5 cursor-pointer font-semibold text-[#333333] text-sm list-none hover:text-[#D66620] transition-colors">
-                  {faq.q}
-                  <span className="text-[#D66620] font-bold text-lg ml-4 group-open:rotate-45 transition-transform inline-block">+</span>
+              <details key={faq.q} className="group border-b border-[color:var(--hairline)]">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-[22px] [&::-webkit-details-marker]:hidden">
+                  <h3 className="transition-colors group-hover:text-[color:var(--accent-deep)]">
+                    {faq.q}
+                  </h3>
+                  <span
+                    aria-hidden="true"
+                    className="inline-block flex-shrink-0 text-[22px] leading-none font-light text-[color:var(--ink-muted)] transition-transform duration-200 group-open:rotate-45"
+                  >
+                    +
+                  </span>
                 </summary>
-                <div className="px-6 pb-5">
-                  <p className="text-[#626262] text-sm leading-relaxed">{faq.a}</p>
-                </div>
+                <p className="max-w-[60ch] pt-0 pr-10 pb-6 text-[15px] leading-[1.65] text-[color:var(--ink-body)]">
+                  {faq.a}
+                </p>
               </details>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* CTA */}
-      <section className="relative w-full py-24 bg-[#32373C]">
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#D66620] via-[#F0A04B] to-transparent" />
-        <div className="max-w-3xl mx-auto px-6 text-center">
-          <p className="text-[#F0A04B] text-xs uppercase tracking-[0.22em] font-semibold mb-5">Ready to Transform Your Driveway?</p>
-          <h2 className="text-4xl sm:text-5xl font-black text-white mb-6">Get a Free Driveway Consultation</h2>
-          <p className="text-white/75 text-lg mb-10">We&apos;ll come to your property, walk through the options, and give you a detailed quote — no pressure, no obligation.</p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/contact">
-              <span className="inline-block bg-[#D66620] hover:bg-[#C05A18] text-white px-10 py-4 rounded-lg font-bold text-sm uppercase tracking-wider transition-colors">
-                Book Free Consultation
+          <div className="mt-14 flex flex-wrap gap-x-10 gap-y-3 border-t border-[color:var(--hairline)] pt-6">
+            {credentials.map((c) => (
+              <span key={c} className="text-[13px] font-medium text-[color:var(--ink-muted)]">
+                {c}
               </span>
-            </Link>
-            <a href="tel:6044669902">
-              <span className="inline-block border border-white/25 text-white hover:bg-white/10 px-10 py-4 rounded-lg font-semibold text-sm transition-colors">
-                604-466-9902
-              </span>
-            </a>
+            ))}
           </div>
         </div>
       </section>
