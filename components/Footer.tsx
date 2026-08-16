@@ -1,6 +1,4 @@
 import Link from "next/link"
-import Image from "next/image"
-import Container from "@/components/ui/Container"
 
 const socials = [
   { label: "Facebook", href: "https://www.facebook.com/squareonepaving/", path: "M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5 3.66 9.13 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.89 3.77-3.89 1.09 0 2.24.19 2.24.19v2.47h-1.26c-1.24 0-1.63.78-1.63 1.57v1.88h2.78l-.45 2.91h-2.33V22c4.78-.81 8.44-4.94 8.44-9.94z" },
@@ -9,143 +7,258 @@ const socials = [
   { label: "YouTube", href: "https://www.youtube.com/channel/UCBDvB4vgdahH67BmP6FeccQ", path: "M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.4 31.4 0 0 0 0 12a31.4 31.4 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1c.4-1.9.5-3.8.5-5.8a31.4 31.4 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z" },
 ]
 
-export default function Footer() {
+interface FooterLink {
+  label: string
+  href: string
+}
+
+const serviceLinks: FooterLink[] = [
+  { label: "Stamped asphalt", href: "/services/stamped-asphalt" },
+  { label: "Decorative coatings", href: "/services/decorative-coatings" },
+  { label: "Preformed thermoplastic", href: "/services/preformed-thermoplastic" },
+  { label: "Vapour blasting", href: "/services/vapor-blasting" },
+  { label: "Driveways", href: "/driveways" },
+  { label: "All services", href: "/services" },
+]
+
+const productLinks: FooterLink[] = [
+  { label: "StreetPrint", href: "/products/streetprint" },
+  { label: "TrafficPatterns", href: "/products/trafficpatterns" },
+  { label: "TrafficPatterns XD", href: "/products/trafficpatternsxd" },
+  { label: "DecoMark", href: "/products/decomark" },
+  { label: "StreetBond", href: "/products/streetbond" },
+  { label: "All products", href: "/products" },
+]
+
+const studioLinks: FooterLink[] = [
+  { label: "About", href: "/about" },
+  { label: "Projects", href: "/projects" },
+  { label: "Journal", href: "/blog" },
+  { label: "Resources", href: "/resources" },
+  { label: "Contact", href: "/contact" },
+]
+
+const hairline = "var(--hairline-slate)"
+
+function ColumnHeading({ children }: { children: React.ReactNode }) {
   return (
-    <footer className="relative bg-[#0A0A0A] pb-10 overflow-hidden">
-      <div className="h-[2px] w-full" style={{ background: "linear-gradient(90deg, transparent 0%, #F26430 20%, #FF8A5C 50%, #F26430 80%, transparent 100%)" }} />
+    <div className="label label-on-slate">
+      {children}
+    </div>
+  )
+}
 
-      <div aria-hidden className="absolute -top-32 -right-32 w-[600px] h-[600px] pointer-events-none opacity-60"
-        style={{ background: "radial-gradient(circle, rgba(242,100,48,0.10) 0%, transparent 70%)" }} />
+function LinkColumn({ heading, links }: { heading: string; links: FooterLink[] }) {
+  return (
+    <div>
+      <ColumnHeading>{heading}</ColumnHeading>
+      <div className="mt-5 flex flex-col gap-3">
+        {links.map((link) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            className="text-[15px] text-[#C6CBD1] transition-colors hover:text-white"
+          >
+            {link.label}
+          </Link>
+        ))}
+      </div>
+    </div>
+  )
+}
 
-      <Container>
-        <div className="pt-20 pb-12 border-b border-white/8">
-          <div className="grid grid-cols-1 lg:grid-cols-[auto_1fr_auto] items-end gap-8 lg:gap-16">
-            <Link href="/" className="inline-flex items-center group" aria-label="Square One Paving — home">
-              <Image src="/images/logo/SquareOne-wordmark-white.svg" alt="Square One Paving"
-                width={200} height={32} className="h-7 lg:h-8 w-auto opacity-90 group-hover:opacity-100 transition-opacity" priority />
+function ContactRow({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <div className="text-[12px] text-[#8A9098]">{label}</div>
+      {children}
+    </div>
+  )
+}
+
+export default function Footer() {
+  const year = new Date().getFullYear()
+
+  return (
+    <div className="bg-[color:var(--surface-slate)]">
+      {/* ---- Closing CTA — the single dark close for every page ---- */}
+      <section className="section text-center">
+        <div className="container-1280">
+          <p className="eyebrow eyebrow-center text-[#9BA1A9]">Start a project</p>
+
+          <h2 className="mx-auto mt-6 max-w-[20ch] text-white">
+            Let&rsquo;s build something worth looking at
+          </h2>
+
+          <p className="mx-auto mt-5 max-w-[52ch] text-[17px] leading-[1.65] text-[#9BA1A9]">
+            Send drawings, a site address, or a rough description. We will walk the site before
+            we quote it.
+          </p>
+
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-6">
+            <Link href="/contact" className="btn-on-slate">
+              Request a quote
             </Link>
-            <p className="text-white/60 text-[15px] lg:text-base leading-[1.7] font-normal max-w-md lg:pl-8">
-              BC&apos;s decorative pavement studio. Since 2000 we&apos;ve installed the surfaces that
-              define communities &mdash; municipal corridors, premium residences, and everything between.
-            </p>
-            <div className="flex items-center gap-3">
-              <span className="text-[10px] uppercase tracking-[0.28em] text-white/40 font-semibold">Follow</span>
-              <div className="flex gap-2">
+            <span className="text-[15px] text-[#8A9098]">
+              or call{" "}
+              <a
+                href="tel:+16044669902"
+                className="font-medium text-[#C6CBD1] transition-colors hover:text-white"
+              >
+                604-466-9902
+              </a>
+            </span>
+          </div>
+        </div>
+      </section>
+
+      {/* ---- Footer proper ---- */}
+      <footer
+        className="border-t px-6 pt-14 min-[701px]:px-10 min-[701px]:pt-20"
+        style={{ borderColor: hairline }}
+      >
+        <div className="mx-auto max-w-[1280px]">
+          <div className="grid grid-cols-2 gap-10 min-[701px]:grid-cols-3 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1.2fr] lg:gap-12">
+            {/* Brand */}
+            <div className="col-span-2 min-[701px]:col-span-1">
+              <Link
+                href="/"
+                className="flex items-center gap-3"
+                aria-label="Square One Paving — home"
+              >
+                <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-[2px] bg-white text-[11px] font-semibold text-[#14181D]">
+                  S1
+                </span>
+                <span className="text-[15px] font-semibold text-white">Square One Paving</span>
+              </Link>
+
+              <p className="mt-[18px] max-w-[30ch] text-[14px] leading-[1.6] text-[#8A9098]">
+                BC&rsquo;s decorative pavement studio since 2000. Based in Maple Ridge, serving
+                the Lower Mainland and Vancouver Island.
+              </p>
+
+              <div className="-ml-[11px] mt-5 flex items-center gap-0.5">
                 {socials.map((s) => (
-                  <a key={s.label} href={s.href} aria-label={s.label} target="_blank" rel="noopener noreferrer"
-                    className="w-9 h-9 flex items-center justify-center text-white/55 hover:text-white border border-white/12 hover:border-[#F26430] hover:bg-[#F26430]/10 transition-all rounded-none">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={s.path} /></svg>
+                  <a
+                    key={s.label}
+                    href={s.href}
+                    aria-label={s.label}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex h-9 w-9 items-center justify-center text-[#8A9098] transition-colors hover:text-white"
+                  >
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                      <path d={s.path} />
+                    </svg>
                   </a>
                 ))}
               </div>
             </div>
+
+            <LinkColumn heading="Services" links={serviceLinks} />
+            <LinkColumn heading="Products" links={productLinks} />
+            <LinkColumn heading="Studio" links={studioLinks} />
+
+            {/* Contact */}
+            <div>
+              <ColumnHeading>Contact</ColumnHeading>
+              <div className="mt-5 flex flex-col gap-[14px]">
+                <ContactRow label="Office">
+                  <address className="mt-[3px] text-[15px] not-italic leading-[1.5] text-[#C6CBD1]">
+                    505&ndash;20800 Lougheed Highway
+                    <br />
+                    Maple Ridge, BC V2X 3P2
+                  </address>
+                </ContactRow>
+
+                <ContactRow label="Lower Mainland">
+                  <a
+                    href="tel:+16044669902"
+                    className="mt-[3px] block text-[15px] text-[#C6CBD1] transition-colors hover:text-white"
+                  >
+                    604-466-9902
+                  </a>
+                </ContactRow>
+
+                <ContactRow label="Vancouver Island">
+                  <a
+                    href="tel:+12503910270"
+                    className="mt-[3px] block text-[15px] text-[#C6CBD1] transition-colors hover:text-white"
+                  >
+                    250-391-0270
+                  </a>
+                </ContactRow>
+
+                <ContactRow label="Toll-free">
+                  <a
+                    href="tel:+18776098200"
+                    className="mt-[3px] block text-[15px] text-[#C6CBD1] transition-colors hover:text-white"
+                  >
+                    1-877-609-8200
+                  </a>
+                </ContactRow>
+
+                <ContactRow label="Email">
+                  <a
+                    href="mailto:office@squareonepaving.com"
+                    className="mt-[3px] block text-[15px] text-[#C6CBD1] transition-colors hover:text-white"
+                  >
+                    office@squareonepaving.com
+                  </a>
+                </ContactRow>
+              </div>
+            </div>
+          </div>
+
+          <p className="mt-14 text-[13px] leading-[1.8] text-[#7E848C] min-[701px]:mt-[72px]">
+            Lower Mainland &mdash; Vancouver, Burnaby, Richmond, Surrey, Langley, Maple Ridge
+            &middot; Vancouver Island &mdash; Victoria, Nanaimo, Courtenay
+          </p>
+
+          <div
+            className="mt-7 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-t py-6"
+            style={{ borderColor: hairline }}
+          >
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] text-[#7E848C]">
+              <span>&copy; {year} Square One Paving</span>
+              <span>BBB Accredited Business</span>
+              <span className="flex items-center gap-2">
+                <svg
+                  viewBox="0 0 32 16"
+                  width="18"
+                  height="9"
+                  aria-hidden="true"
+                  className="flex-shrink-0"
+                >
+                  <rect x="0" y="0" width="8" height="16" fill="#D80621" />
+                  <rect x="8" y="0" width="16" height="16" fill="#FFFFFF" />
+                  <rect x="24" y="0" width="8" height="16" fill="#D80621" />
+                  <path
+                    d="M16 3.2 L16.55 5.4 L18.25 4.95 L17.55 6.55 L19 7.55 L17.4 8.05 L17.85 9.65 L16.5 8.55 L16 10.7 L15.5 8.55 L14.15 9.65 L14.6 8.05 L13 7.55 L14.45 6.55 L13.75 4.95 L15.45 5.4 Z"
+                    fill="#D80621"
+                  />
+                </svg>
+                Proudly Canadian
+              </span>
+            </div>
+
+            <div className="flex gap-6">
+              <Link
+                href="/privacy"
+                className="text-[13px] text-[#7E848C] transition-colors hover:text-white"
+              >
+                Privacy
+              </Link>
+              <Link
+                href="/terms"
+                className="text-[13px] text-[#7E848C] transition-colors hover:text-white"
+              >
+                Terms
+              </Link>
+            </div>
           </div>
         </div>
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-10 lg:gap-12 py-12">
-          <div>
-            <h4 className="text-white text-[10.5px] uppercase tracking-[0.28em] font-bold mb-6 flex items-center gap-2">
-              <span className="block w-1.5 h-1.5 bg-[#F26430] rounded-full" /> Services
-            </h4>
-            <ul className="space-y-3">
-              {[
-                { label: 'Stamped Asphalt & Concrete', href: '/services/stamped-asphalt' },
-                { label: 'Preformed Thermoplastic', href: '/services/preformed-thermoplastic' },
-                { label: 'Decorative Coatings', href: '/services/decorative-coatings' },
-                { label: 'Vapor Blasting', href: '/services/vapor-blasting' },
-                { label: 'All Services', href: '/services' },
-              ].map(link => (
-                <li key={link.href}>
-                  <Link href={link.href} className="text-white/60 hover:text-white text-[14px] transition-colors inline-block">{link.label}</Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-white text-[10.5px] uppercase tracking-[0.28em] font-bold mb-6 flex items-center gap-2">
-              <span className="block w-1.5 h-1.5 bg-[#F26430] rounded-full" /> Products
-            </h4>
-            <ul className="space-y-3">
-              {[
-                { label: 'StreetPrint', href: '/products/streetprint' },
-                { label: 'TrafficPatterns', href: '/products/trafficpatterns' },
-                { label: 'TrafficPatterns XD', href: '/products/trafficpatternsxd' },
-                { label: 'DecoMark', href: '/products/decomark' },
-                { label: 'StreetBond', href: '/products/streetbond' },
-                { label: 'All Products', href: '/products' },
-              ].map(link => (
-                <li key={link.href}>
-                  <Link href={link.href} className="text-white/60 hover:text-white text-[14px] transition-colors inline-block">{link.label}</Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-white text-[10.5px] uppercase tracking-[0.28em] font-bold mb-6 flex items-center gap-2">
-              <span className="block w-1.5 h-1.5 bg-[#F26430] rounded-full" /> Company
-            </h4>
-            <ul className="space-y-3">
-              {[
-                { label: 'Projects', href: '/projects' },
-                { label: 'Driveways', href: '/driveways' },
-                { label: 'About', href: '/about' },
-                { label: 'Blog', href: '/blog' },
-                { label: 'Contact', href: '/contact' },
-              ].map(link => (
-                <li key={link.href}>
-                  <Link href={link.href} className="text-white/60 hover:text-white text-[14px] transition-colors inline-block">{link.label}</Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-white text-[10.5px] uppercase tracking-[0.28em] font-bold mb-6 flex items-center gap-2">
-              <span className="block w-1.5 h-1.5 bg-[#F26430] rounded-full" /> Visit
-            </h4>
-            <address className="not-italic space-y-5 text-[14px] leading-relaxed">
-              <div className="border-l border-[#F26430] pl-4">
-                <p className="text-white/40 text-[10px] uppercase tracking-[0.2em] mb-1.5 font-bold">Metro Vancouver</p>
-                <p className="text-white/75">505 &ndash; 20800 Lougheed Hwy</p>
-                <p className="text-white/75">Maple Ridge, BC V2X 3P2</p>
-              </div>
-              <div className="border-l border-[#F26430] pl-4">
-                <p className="text-white/40 text-[10px] uppercase tracking-[0.2em] mb-1.5 font-bold">Vancouver Island</p>
-                <p className="text-white/75">Vancouver Island</p>
-              </div>
-              <div className="pt-2 space-y-1.5">
-                <a href="mailto:office@squareonepaving.com" className="block text-white hover:text-[#FF8A5C] transition-colors text-[14px] font-medium">office@squareonepaving.com</a>
-                <div className="flex flex-wrap gap-x-3 gap-y-1 text-[13px]">
-                  <a href="tel:+16044669902" className="text-white/70 hover:text-white transition-colors">604-466-9902</a>
-                  <span className="text-white/25">/</span>
-                  <a href="tel:+18776098200" className="text-white/70 hover:text-white transition-colors">1-877-609-8200</a>
-                </div>
-              </div>
-            </address>
-          </div>
-        </div>
-
-        <div className="border-t border-white/8 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-3 text-white/40 text-[12px]">
-            <span>&copy; {new Date().getFullYear()} Square One Paving Ltd.</span>
-            <span className="text-white/20">&middot;</span>
-            <Link href="/privacy" className="hover:text-white/70 transition-colors">Privacy</Link>
-            <span className="text-white/20">&middot;</span>
-            <Link href="/terms" className="hover:text-white/70 transition-colors">Terms</Link>
-          </div>
-          <div className="flex items-center gap-2.5 text-white/45 text-[11px] tracking-[0.04em]">
-            <svg viewBox="0 0 32 16" style={{ width: 30, height: 15, display: 'inline-block', flexShrink: 0 }} aria-hidden="true">
-              <rect x="0" y="0" width="8" height="16" fill="#D80621" />
-              <rect x="8" y="0" width="16" height="16" fill="#FFFFFF" />
-              <rect x="24" y="0" width="8" height="16" fill="#D80621" />
-              <path d="M16 3.2 L16.55 5.4 L18.25 4.95 L17.55 6.55 L19 7.55 L17.4 8.05 L17.85 9.65 L16.5 8.55 L16 10.7 L15.5 8.55 L14.15 9.65 L14.6 8.05 L13 7.55 L14.45 6.55 L13.75 4.95 L15.45 5.4 Z" fill="#D80621" />
-            </svg>
-            <span className="uppercase">Proudly Canadian &middot; Serving BC since 2000</span>
-          </div>
-        </div>
-      </Container>
-    </footer>
+      </footer>
+    </div>
   )
 }
