@@ -20,9 +20,6 @@ export default function Hero() {
           max-[700px]:pt-[72px] max-[700px]:pr-6 max-[700px]:pb-14 max-[700px]:pl-6
         "
       >
-        <div aria-hidden="true" className="ghost-index top-24 right-2">
-          01
-        </div>
 
         <div className="relative z-[1]">
           <div className="eyebrow">BC&rsquo;s decorative pavement studio &middot; Since 2000</div>

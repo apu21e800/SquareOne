@@ -8,9 +8,6 @@ const stats: { number: string; label: string }[] = [
 export default function StatsBar() {
   return (
     <section className="section relative overflow-hidden border-y border-hairline bg-surface-warm">
-      <div aria-hidden="true" className="ghost-index">
-        02
-      </div>
 
       <div className="container-1280 relative z-[1] grid grid-cols-4 gap-10 max-[700px]:grid-cols-2 max-[700px]:gap-x-6 max-[700px]:gap-y-9">
         {stats.map((stat) => (

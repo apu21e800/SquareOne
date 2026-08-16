@@ -54,9 +54,6 @@ export default function ApplicationsSection() {
         borderBottom: "1px solid var(--hairline)",
       }}
     >
-      <div aria-hidden="true" className="ghost-index">
-        05
-      </div>
 
       <div className="container-1280 relative z-[1]">
         <p className="eyebrow">Applications</p>

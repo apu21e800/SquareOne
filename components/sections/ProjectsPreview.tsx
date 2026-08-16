@@ -16,9 +16,6 @@ export default function ProjectsPreview() {
       id="work"
       className="section relative overflow-hidden border-t border-[color:var(--hairline)] bg-[color:var(--surface)]"
     >
-      <div aria-hidden className="ghost-index">
-        04
-      </div>
 
       <div className="container-1280 relative z-[1]">
         <div className="flex flex-wrap items-baseline justify-between gap-6">
