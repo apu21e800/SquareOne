@@ -1,8 +1,11 @@
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
-import { products, getProductBySlug } from "@/lib/products"
+import type { ReactNode } from "react"
 import type { Metadata } from "next"
+
+import { products, getProductBySlug } from "@/lib/products"
+import { galleryWithFallback } from "@/lib/gallery"
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -22,11 +25,54 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-const categoryColour: Record<string, string> = {
-  "Stamped Asphalt":    "bg-amber-50 text-amber-700 border-amber-200",
-  "Decorative Coatings":"bg-orange-50 text-orange-700 border-orange-200",
-  "Thermoplastic":      "bg-stone-50 text-stone-600 border-stone-200",
-  "Surface Protection": "bg-teal-50 text-teal-700 border-teal-200",
+/**
+ * Product detail — docs/design-v2/Product Detail StreetBond.dc.html
+ *
+ *   Header      white   tag, wordmark, name, lede, CTAs
+ *   Plate       —       full-bleed hero photograph
+ *   Overview    band    full description
+ *   Benefits    band    hairline list
+ *   Where used  band    applications
+ *   Colours     band    palette chart (only where one exists)
+ *   Gallery     band    folder-first imagery
+ *   Related     band    same service, other systems
+ *
+ * The slate close belongs to components/Footer.tsx — this page stays light
+ * end to end.
+ */
+
+const GALLERY_LIMIT = 9
+
+type BandTone = "white" | "warm"
+
+type BandKey = "overview" | "benefits" | "applications" | "colours" | "gallery" | "related"
+
+/**
+ * Bands alternate white / warm in document order. Optional bands drop out of
+ * the sequence rather than out of the alternation, so two sections never share
+ * a surface no matter which of them a given product renders.
+ */
+function Band({
+  tone,
+  id,
+  children,
+}: {
+  tone: BandTone
+  id?: string
+  children: ReactNode
+}) {
+  return (
+    <section
+      id={id}
+      className={
+        tone === "warm"
+          ? "section border-y border-hairline bg-surface-warm"
+          : "section bg-surface"
+      }
+    >
+      <div className="container-1280">{children}</div>
+    </section>
+  )
 }
 
 export default async function ProductPage({ params }: Props) {
@@ -34,167 +80,208 @@ export default async function ProductPage({ params }: Props) {
   const product = getProductBySlug(slug)
   if (!product) notFound()
 
-  const related = products.filter(
-    (p) => p.slug !== slug && p.serviceSlug === product.serviceSlug
-  ).slice(0, 3)
+  const related = products
+    .filter((p) => p.slug !== slug && p.serviceSlug === product.serviceSlug)
+    .slice(0, 3)
+
+  // A dropped-in public/images/products/<slug>/ folder wins; the curated array
+  // in lib/products.ts is the fallback. The hero photograph is already on the
+  // page as the plate, so it does not repeat in the grid.
+  const gallery = galleryWithFallback("products", slug, product.galleryImages ?? [])
+    .filter((src) => src !== product.image)
+    .slice(0, GALLERY_LIMIT)
+
+  const bands: BandKey[] = ["overview", "benefits", "applications"]
+  if (product.colorPaletteImage) bands.push("colours")
+  if (gallery.length > 0) bands.push("gallery")
+  if (related.length > 0) bands.push("related")
+
+  const toneOf = (key: BandKey): BandTone =>
+    bands.indexOf(key) % 2 === 0 ? "white" : "warm"
+
+  const relatedTone = toneOf("related")
 
   return (
-    <main className="bg-[#FAFAFA]">
-
-      {/* Hero */}
-      <section className="relative min-h-[52vh] flex items-end overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <Image
-            src={product.image}
-            alt={product.name}
-            fill
-            className="object-cover"
-            priority
-            sizes="100vw"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/5" />
-        </div>
-        <div className="relative z-10 max-w-6xl mx-auto px-6 sm:px-12 pb-14 pt-36 w-full">
-          <Link href="/products" className="text-white/60 hover:text-white text-sm transition-colors mb-4 inline-block">
-            ← All Products
+    <main className="bg-surface">
+      {/* ── Header ─────────────────────────────────────────────── */}
+      <section className="section bg-surface pt-[calc(var(--bar-h)+4rem)] pb-14 max-[700px]:pt-[calc(var(--bar-h)+2rem)]">
+        <div className="container-1280">
+          <Link
+            href="/products"
+            className="text-[13px] font-medium text-ink-muted transition-colors hover:text-ink"
+          >
+            &larr;&nbsp;All products
           </Link>
-          <span className={`inline-block text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded border mb-3 ${categoryColour[product.category]}`}>
-            {product.category}
-          </span>
+
+          <div className="mt-7 flex flex-wrap items-center gap-[14px]">
+            <span className="tag">{product.category}</span>
+            <span className="text-[13px] text-ink-muted">
+              Installed by Square One since 2000
+            </span>
+          </div>
+
           {product.logoImage && (
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={product.logoImage}
-              alt={`${product.name} logo`}
-              className="h-10 sm:h-12 w-auto object-contain mb-4 drop-shadow-lg"
+              alt={`${product.name} wordmark`}
+              className="mt-8 h-9 w-auto object-contain max-[700px]:h-8"
             />
           )}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-white leading-tight mb-3 max-w-2xl">
-            {product.name}
-          </h1>
-          <p className="text-white/70 text-lg max-w-xl">{product.tagline}</p>
-        </div>
-      </section>
 
-      {/* Description */}
-      <section className="py-16 px-6 sm:px-8 bg-white">
-        <div className="max-w-4xl mx-auto">
-          <p className="text-[#626262] text-base leading-relaxed">{product.fullDescription}</p>
-        </div>
-      </section>
+          <h1 className="stop mt-8 max-w-[24ch] [text-wrap:balance]">{product.name}</h1>
 
-      {/* Benefits + Applications */}
-      <section className="py-16 px-6 sm:px-8 bg-[#F2EFE9]">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
-          <div>
-            <p className="text-[10px] font-bold text-[#D66620] uppercase tracking-[0.2em] mb-4">Key Benefits</p>
-            <ul className="space-y-3">
-              {product.keyBenefits.map((b) => (
-                <li key={b} className="flex items-start gap-2.5 text-sm text-[#333333]">
-                  <span className="text-[#D66620] font-bold mt-0.5 flex-shrink-0">✓</span>
-                  {b}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <p className="text-[10px] font-bold text-[#D66620] uppercase tracking-[0.2em] mb-4">Applications</p>
-            <div className="flex flex-wrap gap-2">
-              {product.applications.map((a) => (
-                <span key={a} className="text-sm px-3 py-1.5 rounded-lg bg-white border border-[#E8E4DE] text-[#626262] font-medium">
-                  {a}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Colour palette */}
-      {product.colorPaletteImage && (
-        <section className="py-16 px-6 sm:px-8 bg-white border-t border-[#E8E4DE]">
-          <div className="max-w-6xl mx-auto">
-            <p className="text-[10px] font-bold text-[#D66620] uppercase tracking-[0.2em] mb-2">Colours Available</p>
-            <h2 className="text-2xl font-black text-[#333333] mb-8">50+ Standard Colours + Custom Matching</h2>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={product.colorPaletteImage}
-              alt="StreetBond colour palette"
-              className="w-full max-w-4xl rounded-xl shadow-md"
-            />
-            <p className="mt-5 text-sm text-[#626262] max-w-2xl">
-              Standard colours are available for immediate specification. Custom colour matching is available for project-specific requirements — contact us with a colour reference and we will match it.
-            </p>
-          </div>
-        </section>
-      )}
-
-      {/* Gallery */}
-      {product.galleryImages.length > 1 && (
-        <section className="py-16 px-6 sm:px-8 bg-white">
-          <div className="max-w-6xl mx-auto">
-            <p className="text-[10px] font-bold text-[#D66620] uppercase tracking-[0.2em] mb-6">Gallery</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-              {product.galleryImages.map((img, i) => (
-                <div key={i} className="relative aspect-[4/3] rounded-xl overflow-hidden bg-[#F2EFE9]">
-                  <Image src={img} alt={`${product.name} ${i + 1}`} fill className="object-cover" sizes="33vw" />
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* CTA */}
-      <section className="py-20 px-6 sm:px-8 bg-[#32373C]">
-        <div className="max-w-3xl mx-auto text-center">
-          <p className="text-[#F0A04B] text-xs uppercase tracking-[0.22em] font-semibold mb-5">Ready to Specify?</p>
-          <h2 className="text-3xl sm:text-4xl font-black text-white mb-5">
-            Get a Free {product.name} Quote
-          </h2>
-          <p className="text-white/75 mb-10">
-            Tell us about your project and we&apos;ll recommend the right specification and installation approach.
+          <p className="mt-6 max-w-[56ch] text-[19px] leading-[1.65] text-ink-body [text-wrap:pretty] max-[700px]:text-[17px]">
+            {product.tagline}
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/contact">
-              <span className="inline-block bg-[#D66620] hover:bg-[#C05A18] text-white px-10 py-4 rounded-lg font-bold text-sm uppercase tracking-wider transition-colors">
-                Request a Quote
-              </span>
+
+          <div className="mt-10 flex flex-wrap items-center gap-[14px]">
+            <Link href="/contact" className="btn-primary">
+              Request a quote
             </Link>
-            <Link href={`/services/${product.serviceSlug}`}>
-              <span className="inline-block border border-white/25 text-white hover:bg-white/10 px-10 py-4 rounded-lg font-semibold text-sm transition-colors">
-                View Related Service
-              </span>
+            <Link href={`/services/${product.serviceSlug}`} className="btn-secondary">
+              See the service
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Related products */}
-      {related.length > 0 && (
-        <section className="py-16 px-6 sm:px-8 bg-white border-t border-[#E8E4DE]">
-          <div className="max-w-6xl mx-auto">
-            <p className="text-[#D66620] text-xs uppercase tracking-[0.22em] font-semibold mb-3">More Like This</p>
-            <h2 className="text-2xl font-black text-[#333333] mb-8">Related Products</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-              {related.map((p) => (
-                <Link
-                  key={p.slug}
-                  href={`/products/${p.slug}`}
-                  className="group bg-[#F2EFE9] rounded-xl border border-[#E8E4DE] overflow-hidden hover:border-[#D66620]/40 hover:shadow-lg transition-all"
-                >
-                  <div className="relative h-36 overflow-hidden">
-                    <Image src={p.image} alt={p.name} fill className="object-cover group-hover:scale-105 transition-transform duration-500" sizes="33vw" />
-                  </div>
-                  <div className="p-5">
-                    <h3 className="font-black text-sm text-[#333333] group-hover:text-[#D66620] transition-colors mb-1">{p.name}</h3>
-                    <p className="text-xs text-[#626262]">{p.tagline}</p>
-                  </div>
-                </Link>
-              ))}
+      {/* ── Plate — full bleed, no scrim (no caption to protect) ─ */}
+      <div className="relative aspect-[21/9] overflow-hidden bg-surface-stone max-[700px]:aspect-[4/3]">
+        <Image
+          src={product.image}
+          alt={`${product.name} installed by Square One Paving`}
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+        />
+      </div>
+
+      {/* ── Overview ───────────────────────────────────────────── */}
+      <Band tone={toneOf("overview")}>
+        <p className="max-w-[60ch] text-[17px] leading-[1.75] text-ink-body [text-wrap:pretty]">
+          {product.fullDescription}
+        </p>
+      </Band>
+
+      {/* ── Key benefits ───────────────────────────────────────── */}
+      <Band tone={toneOf("benefits")}>
+        <div className="eyebrow">Key benefits</div>
+
+        <ul className="mt-9 grid grid-cols-2 gap-x-16 max-[700px]:grid-cols-1 max-[700px]:gap-x-0">
+          {product.keyBenefits.map((benefit) => (
+            <li
+              key={benefit}
+              className="border-t border-hairline py-[18px] text-[16px] font-medium leading-[1.5] text-ink"
+            >
+              {benefit}
+            </li>
+          ))}
+        </ul>
+      </Band>
+
+      {/* ── Where it is specified ──────────────────────────────── */}
+      <Band tone={toneOf("applications")}>
+        <div className="eyebrow">Applications</div>
+
+        <h2 className="mt-5 max-w-[22ch]">Where {product.name} is specified</h2>
+
+        <div className="mt-10 grid grid-cols-3 gap-x-10 gap-y-8 max-[700px]:grid-cols-1">
+          {product.applications.map((application) => (
+            <div key={application} className="border-t border-hairline pt-4">
+              <h3>{application}</h3>
             </div>
+          ))}
+        </div>
+      </Band>
+
+      {/* ── Colours ────────────────────────────────────────────── */}
+      {product.colorPaletteImage && (
+        <Band tone={toneOf("colours")}>
+          <div className="eyebrow">Colours</div>
+
+          <h2 className="mt-5 max-w-[24ch]">Standard colours, plus custom matching</h2>
+
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={product.colorPaletteImage}
+            alt={`${product.name} colour chart`}
+            className="mt-10 w-full max-w-[880px] rounded-[2px] border border-hairline bg-white"
+          />
+
+          <p className="mt-6 max-w-[56ch] text-[15px] leading-[1.6] text-ink-body">
+            Standard colours can be specified straight off the chart. For anything outside it,
+            send us a colour reference and we will match it.
+          </p>
+        </Band>
+      )}
+
+      {/* ── Gallery ────────────────────────────────────────────── */}
+      {gallery.length > 0 && (
+        <Band tone={toneOf("gallery")} id="gallery">
+          <div className="flex flex-wrap items-baseline justify-between gap-6">
+            <h2>{product.name} in place</h2>
+            <Link href="/projects" className="arrow-link whitespace-nowrap">
+              See our projects <span aria-hidden="true">&rarr;</span>
+            </Link>
           </div>
-        </section>
+
+          <div className="mt-10 grid grid-cols-3 gap-6 max-[700px]:grid-cols-1">
+            {gallery.map((src, i) => (
+              <div
+                key={src}
+                className="relative aspect-[4/3] overflow-hidden rounded-[2px] bg-surface-stone"
+              >
+                <Image
+                  src={src}
+                  alt={`${product.name} installation ${i + 1}`}
+                  fill
+                  sizes="(max-width: 700px) 100vw, (max-width: 1280px) 33vw, 411px"
+                  className="object-cover"
+                />
+              </div>
+            ))}
+          </div>
+        </Band>
+      )}
+
+      {/* ── Related systems ────────────────────────────────────── */}
+      {related.length > 0 && (
+        <Band tone={relatedTone}>
+          <h2>Related systems</h2>
+
+          <div
+            className={`mt-10 grid gap-6 max-[700px]:grid-cols-1 ${
+              related.length >= 3 ? "grid-cols-3" : "grid-cols-2"
+            }`}
+          >
+            {related.map((p) => (
+              <article
+                key={p.slug}
+                className={`card card-panel min-h-[190px] ${
+                  relatedTone === "warm" ? "bg-surface" : ""
+                }`}
+              >
+                <div className="label">{p.category}</div>
+
+                <h3 className="mt-[18px]">{p.name}</h3>
+
+                <p className="mt-2 max-w-[52ch] text-[15px] leading-[1.55] text-ink-body">
+                  {p.tagline}
+                </p>
+
+                <Link
+                  href={`/products/${p.slug}`}
+                  className="arrow-link mt-auto pt-6"
+                  aria-label={`Explore ${p.name}`}
+                >
+                  Explore <span aria-hidden="true">&rarr;</span>
+                </Link>
+              </article>
+            ))}
+          </div>
+        </Band>
       )}
     </main>
   )
