@@ -56,8 +56,8 @@ export default function BlogFilterClient({ posts }: Props) {
   const rest = filtered.slice(1)
 
   return (
-    {/* Section shell, background and container come from app/blog/page.tsx —
-        this is a child, not a section of its own. */}
+    // Section shell, background and container come from app/blog/page.tsx —
+    // this is a child, not a section of its own.
     <>
       <div>
         {/* ── Filter tabs ─────────────────────────────────────────────── */}
