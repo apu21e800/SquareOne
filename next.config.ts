@@ -1,6 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // lib/gallery.ts reads public/images at BUILD time, which made Next trace the
+  // whole public/ tree (images + PDFs) into every serverless function that
+  // touches it — 364MB, over Vercel's 250MB limit, so deploys failed outright.
+  // Static assets are served by the CDN, never from the function bundle, and
+  // every gallery consumer is prerendered, so excluding this is safe.
+  outputFileTracingExcludes: {
+    "**/*": ["public/**"],
+  },
   async redirects() {
     return [
       // Products
