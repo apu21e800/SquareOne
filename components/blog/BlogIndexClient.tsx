@@ -5,7 +5,19 @@ import Link from "next/link"
 import Image from "next/image"
 import type { BlogPostMeta } from "@/lib/blog"
 
-const CATEGORIES = ["All", "Municipal", "Driveways", "Vapor Blasting", "Public Art", "Case Studies"]
+/**
+ * `label` is display copy (Canadian English, sentence case); `match` is the
+ * original filter token and must not change — it is what post categories and
+ * tags are tested against.
+ */
+const CATEGORIES: ReadonlyArray<{ label: string; match: string }> = [
+  { label: "All", match: "All" },
+  { label: "Municipal", match: "Municipal" },
+  { label: "Driveways", match: "Driveways" },
+  { label: "Vapour blasting", match: "Vapour Blasting" },
+  { label: "Public art", match: "Public Art" },
+  { label: "Case studies", match: "Case Studies" },
+]
 
 function readTime(text: string) {
   const words = (text ?? "").trim().split(/\s+/).filter(Boolean).length
@@ -16,7 +28,7 @@ function readTime(text: string) {
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString("en-CA", {
     year: "numeric",
-    month: "short",
+    month: "long",
     day: "numeric",
   })
 }
@@ -25,6 +37,14 @@ function matchesCategory(post: BlogPostMeta, cat: string) {
   if (cat === "All") return true
   const haystack = [post.category, ...(post.tags ?? [])].join(" ").toLowerCase()
   return haystack.includes(cat.toLowerCase())
+}
+
+/** Photo caption — category and year, the only location data frontmatter carries. */
+function captionFor(post: BlogPostMeta): string {
+  const year = post.date ? new Date(post.date).getFullYear() : Number.NaN
+  return [post.category, Number.isFinite(year) ? String(year) : ""]
+    .filter(Boolean)
+    .join(" · ")
 }
 
 interface Props {
@@ -43,245 +63,100 @@ export default function BlogIndexClient({ posts }: Props) {
   const rest = filtered.slice(1)
 
   return (
-    <main style={{ background: "#F6F4F0", minHeight: "100vh" }}>
+    <main className="bg-[color:var(--surface)]">
+      {/* ── Masthead ──────────────────────────────────────────────────── */}
+      <section className="section relative overflow-hidden pt-32 max-[700px]:pt-24">
 
-      {/* ── Editorial page header with integrated filter tabs ──────────── */}
-      <section style={{ background: "white", borderBottom: "1px solid #E2DDD8" }}>
-        <div style={{ maxWidth: "1440px", margin: "0 auto", padding: "0 2rem" }}>
+        <div className="container-1280 relative z-[1]">
+          <div className="eyebrow">Journal</div>
 
-          {/* Header content */}
-          <div
-            className="flex flex-col md:flex-row md:items-end md:justify-between gap-8"
-            style={{ paddingTop: "7rem", paddingBottom: "2.5rem" }}
-          >
-            <div>
-              <p
-                style={{
-                  fontSize: "10px",
-                  fontWeight: 700,
-                  letterSpacing: "0.2em",
-                  textTransform: "uppercase",
-                  color: "#C8601A",
-                  marginBottom: "1.25rem",
-                }}
-              >
-                From the Field
-              </p>
-              <h1
-                style={{
-                  fontSize: "clamp(3.2rem, 6.5vw, 7rem)",
-                  fontWeight: 800,
-                  letterSpacing: "-0.05em",
-                  lineHeight: 0.88,
-                  color: "#0A0C10",
-                }}
-              >
-                Field{" "}Notes.
-              </h1>
-              <p
-                style={{
-                  fontSize: "17px",
-                  marginTop: "1.5rem",
-                  maxWidth: "40ch",
-                  lineHeight: 1.65,
-                  color: "#5A5A5A",
-                }}
-              >
-                Project stories, product deep-dives, and real talk from the
-                crew behind BC&apos;s best decorative paving work.
-              </p>
-            </div>
+          <h1 className="stop mt-5">Field notes</h1>
 
-            <div style={{ flexShrink: 0 }} className="md:text-right">
-              <p
-                style={{
-                  fontSize: "10px",
-                  fontWeight: 700,
-                  letterSpacing: "0.2em",
-                  textTransform: "uppercase",
-                  color: "#767676",
-                  marginBottom: "10px",
-                }}
-              >
-                {filtered.length} {filtered.length === 1 ? "Article" : "Articles"}
-              </p>
-              <Link href="/contact">
-                <span
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: "8px",
-                    padding: "14px 28px",
-                    fontSize: "13px",
-                    fontWeight: 700,
-                    letterSpacing: "0.04em",
-                    textTransform: "uppercase",
-                    color: "white",
-                    background: "linear-gradient(135deg, #C8601A 0%, #E8895A 100%)",
-                    boxShadow: "0 4px 20px rgba(200,96,26,0.25)",
-                    borderRadius: "8px",
-                  }}
-                >
-                  Get a Quote
-                </span>
-              </Link>
-            </div>
+          <p className="mt-5 max-w-[56ch] text-[18px] leading-[1.6] text-[color:var(--ink-body)] [text-wrap:pretty]">
+            Notes from the crews and the estimating desk: materials, methods and what
+            holds up.
+          </p>
+
+          <div className="mt-10 text-[13px] text-[color:var(--ink-muted)]">
+            {filtered.length} {filtered.length === 1 ? "note" : "notes"}
           </div>
 
-          {/* Filter tabs — sit on the header's bottom border */}
+          {/* Filter tabs */}
           <div
-            style={{
-              display: "flex",
-              borderTop: "1px solid #E2DDD8",
-              overflowX: "auto",
-              scrollbarWidth: "none",
-              msOverflowStyle: "none",
-            }}
+            role="group"
+            aria-label="Filter journal by topic"
+            className="mt-4 flex flex-wrap gap-x-6 gap-y-3 border-b border-[color:var(--hairline)] pb-4"
           >
             {CATEGORIES.map((cat) => {
-              const isActive = active === cat
+              const isActive = active === cat.match
               return (
                 <button
-                  key={cat}
-                  onClick={() => setActive(cat)}
-                  style={{
-                    padding: "14px 20px",
-                    fontSize: "11px",
-                    fontWeight: 700,
-                    letterSpacing: "0.12em",
-                    textTransform: "uppercase",
-                    whiteSpace: "nowrap",
-                    flexShrink: 0,
-                    color: isActive ? "#0A0C10" : "#767676",
-                    background: "none",
-                    border: "none",
-                    borderBottom: `2px solid ${isActive ? "#C8601A" : "transparent"}`,
-                    cursor: "pointer",
-                    transition: "color 0.15s ease, border-color 0.15s ease",
-                  }}
+                  key={cat.match}
+                  type="button"
+                  aria-pressed={isActive}
+                  onClick={() => setActive(cat.match)}
+                  className={`
+                    cursor-pointer border-b-2 pb-[2px] text-[14px] transition-colors
+                    ${
+                      isActive
+                        ? "border-[color:var(--ink)] font-semibold text-[color:var(--ink)]"
+                        : "border-transparent font-medium text-[color:var(--ink-muted)] hover:text-[color:var(--ink)]"
+                    }
+                  `}
                 >
-                  {cat}
+                  {cat.label}
                 </button>
               )
             })}
           </div>
+
+          {/* ── Posts ───────────────────────────────────────────────────── */}
+          {filtered.length === 0 ? (
+            <div className="py-20 text-center">
+              <p className="text-[18px] text-[color:var(--ink)]">Nothing filed here yet</p>
+              <p className="mt-2 text-[15px] text-[color:var(--ink-body)]">
+                No notes under this topic — check back soon.
+              </p>
+              <button
+                type="button"
+                onClick={() => setActive("All")}
+                className="btn-secondary mt-7 cursor-pointer"
+              >
+                Show all notes
+              </button>
+            </div>
+          ) : (
+            <>
+              {featured && <FeaturedCard post={featured} />}
+
+              {rest.length > 0 && (
+                <div className="mt-10 grid grid-cols-3 gap-6 max-[1000px]:grid-cols-2 max-[700px]:grid-cols-1 max-[700px]:gap-10">
+                  {rest.map((post) => (
+                    <PostCard key={post.slug} post={post} />
+                  ))}
+                </div>
+              )}
+            </>
+          )}
         </div>
       </section>
 
-      {/* ── Posts ────────────────────────────────────────────────────────── */}
-      <div style={{ maxWidth: "1440px", margin: "0 auto", padding: "0 2rem 96px" }}>
-        {filtered.length === 0 ? (
-          <div style={{ textAlign: "center", padding: "96px 0" }}>
-            <p style={{ fontSize: "1.125rem", fontWeight: 600, color: "#0A0C10", marginBottom: "8px" }}>
-              Nothing here yet
-            </p>
-            <p style={{ fontSize: "15px", color: "#5A5A5A", marginBottom: "28px" }}>
-              No posts in this category — check back soon.
-            </p>
-            <button
-              onClick={() => setActive("All")}
-              style={{
-                padding: "12px 28px",
-                fontSize: "12px",
-                fontWeight: 700,
-                letterSpacing: "0.06em",
-                textTransform: "uppercase",
-                color: "white",
-                background: "#C8601A",
-                border: "none",
-                borderRadius: "8px",
-                cursor: "pointer",
-              }}
-            >
-              Show All Posts
-            </button>
-          </div>
-        ) : (
-          <>
-            {/* Featured post */}
-            {featured && (
-              <div style={{ marginBottom: "1px" }}>
-                <FeaturedCard post={featured} />
-              </div>
-            )}
+      {/* ── Close ─────────────────────────────────────────────────────────
+          Warm, not slate. The single dark close on every page is the site
+          footer, rendered by app/layout.tsx. */}
+      <section className="section border-t border-[color:var(--hairline)] bg-[color:var(--surface-warm)]">
+        <div className="container-1280 max-w-[720px] text-center">
+          <div className="eyebrow eyebrow-center">Start a project</div>
 
-            {/* Gap-grid: 1px background colour bleeds through as dividers */}
-            {rest.length > 0 && (
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
-                  gap: "1px",
-                  background: "#E2DDD8",
-                }}
-              >
-                {rest.map((post) => (
-                  <PostCard key={post.slug} post={post} />
-                ))}
-              </div>
-            )}
-          </>
-        )}
-      </div>
+          <h2 className="mt-5">Free site visit, written quote</h2>
 
-      {/* ── CTA ──────────────────────────────────────────────────────────── */}
-      <section style={{ background: "#0A0C10", padding: "96px 2rem" }}>
-        <div style={{ maxWidth: "860px", margin: "0 auto", textAlign: "center" }}>
-          <p
-            style={{
-              fontSize: "10px",
-              fontWeight: 700,
-              letterSpacing: "0.2em",
-              textTransform: "uppercase",
-              color: "#E8895A",
-              marginBottom: "1.5rem",
-            }}
-          >
-            Ready to Start a Project?
+          <p className="mx-auto mt-5 max-w-[48ch] text-[17px] leading-[1.65] text-[color:var(--ink-body)]">
+            We work across the Lower Mainland and Vancouver Island. Tell us what the
+            surface has to do and we will tell you what it takes.
           </p>
-          <h2
-            style={{
-              fontSize: "clamp(2.25rem, 4vw, 4rem)",
-              fontWeight: 800,
-              letterSpacing: "-0.045em",
-              lineHeight: 0.93,
-              color: "white",
-              marginBottom: "1.75rem",
-            }}
-          >
-            Get a Free{" "}Consultation
-          </h2>
-          <p
-            style={{
-              fontSize: "17px",
-              color: "rgba(255,255,255,0.5)",
-              maxWidth: "42ch",
-              margin: "0 auto 3rem",
-              lineHeight: 1.65,
-            }}
-          >
-            We serve the Lower Mainland and Vancouver Island.
-            Free site visits, no pressure quotes.
-          </p>
-          <Link href="/contact">
-            <span
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "10px",
-                padding: "16px 40px",
-                fontSize: "12px",
-                fontWeight: 700,
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                color: "white",
-                background: "linear-gradient(135deg, #C8601A 0%, #E8895A 100%)",
-                boxShadow: "0 4px 24px rgba(200,96,26,0.35)",
-                borderRadius: "8px",
-              }}
-            >
-              Contact Us &rarr;
-            </span>
+
+          <Link href="/contact" className="btn-primary mt-9">
+            Request a quote
           </Link>
         </div>
       </section>
@@ -289,320 +164,111 @@ export default function BlogIndexClient({ posts }: Props) {
   )
 }
 
-// ────────────────────────────────────────────────────────────────────────────
-// Featured card — full-width, 2-column with large image
-// ────────────────────────────────────────────────────────────────────────────
+/* ── Featured note ───────────────────────────────────────────────────────── */
 
 function FeaturedCard({ post }: { post: BlogPostMeta }) {
+  const caption = captionFor(post)
+
   return (
-    <Link href={`/blog/${post.slug}`} className="group" style={{ display: "block" }}>
-      <div
-        className="grid grid-cols-1 lg:grid-cols-2"
-        style={{
-          background: "white",
-          transition: "box-shadow 0.25s ease",
-        }}
-        onMouseEnter={(e) => {
-          ;(e.currentTarget as HTMLElement).style.boxShadow = "0 12px 48px rgba(0,0,0,0.10)"
-        }}
-        onMouseLeave={(e) => {
-          ;(e.currentTarget as HTMLElement).style.boxShadow = "none"
-        }}
-      >
-        {/* Image */}
-        {post.featured_image ? (
-          <div
-            style={{
-              position: "relative",
-              overflow: "hidden",
-              minHeight: "360px",
-            }}
-          >
-            <Image
-              src={post.featured_image}
-              alt={post.title}
-              fill
-              className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              priority
-            />
-            <div
-              style={{
-                position: "absolute",
-                top: "16px",
-                left: "16px",
-                padding: "6px 12px",
-                background: "#C8601A",
-                fontSize: "10px",
-                fontWeight: 700,
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-                color: "white",
-              }}
-            >
-              Featured
-            </div>
-          </div>
-        ) : (
-          /* Colour block when no image */
-          <div
-            style={{
-              background: "#0A0C10",
-              minHeight: "360px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              position: "relative",
-            }}
-          >
-            <span
-              style={{
-                fontSize: "clamp(4rem, 8vw, 8rem)",
-                fontWeight: 800,
-                letterSpacing: "-0.05em",
-                color: "rgba(255,255,255,0.06)",
-              }}
-            >
-              01
-            </span>
-            <div
-              style={{
-                position: "absolute",
-                top: "16px",
-                left: "16px",
-                padding: "6px 12px",
-                background: "#C8601A",
-                fontSize: "10px",
-                fontWeight: 700,
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-                color: "white",
-              }}
-            >
-              Featured
-            </div>
+    <Link
+      href={`/blog/${post.slug}`}
+      className="card group mt-10 grid grid-cols-[7fr_5fr] items-stretch overflow-hidden rounded-[2px] border border-[color:var(--hairline)] bg-[color:var(--surface-warm)] max-[820px]:grid-cols-1"
+    >
+      <div className="relative aspect-[16/10] overflow-hidden bg-[color:var(--surface-stone)]">
+        {post.featured_image && (
+          <Image
+            src={post.featured_image}
+            alt={post.title}
+            fill
+            priority
+            sizes="(max-width: 820px) 100vw, 700px"
+            className="object-cover"
+          />
+        )}
+        {post.featured_image && caption && (
+          <>
+            <div aria-hidden="true" className="scrim scrim-light" />
+            <div className="caption">{caption}</div>
+          </>
+        )}
+      </div>
+
+      <div className="flex flex-col justify-center px-12 py-10 max-[820px]:px-7 max-[820px]:py-8">
+        {post.category && (
+          <div>
+            <span className="tag">{post.category}</span>
           </div>
         )}
 
-        {/* Content */}
-        <div
-          className="flex flex-col justify-center"
-          style={{ padding: "clamp(2rem, 4vw, 4rem)" }}
-        >
-          {post.category && (
-            <p
-              style={{
-                fontSize: "10px",
-                fontWeight: 700,
-                letterSpacing: "0.16em",
-                textTransform: "uppercase",
-                color: "#C8601A",
-                marginBottom: "1rem",
-              }}
-            >
-              {post.category}
-            </p>
-          )}
-          <h2
-            className="transition-colors duration-200 group-hover:text-[#C8601A]"
-            style={{
-              fontSize: "clamp(1.7rem, 2.6vw, 2.6rem)",
-              fontWeight: 800,
-              letterSpacing: "-0.035em",
-              lineHeight: 1.08,
-              color: "#0A0C10",
-              marginBottom: "1.25rem",
-            }}
-          >
-            {post.title}
-          </h2>
-          <p
-            style={{
-              fontSize: "15px",
-              lineHeight: 1.7,
-              color: "#5A5A5A",
-              marginBottom: "2.5rem",
-            }}
-          >
-            {post.description}
-          </p>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              paddingTop: "20px",
-              borderTop: "1px solid #E2DDD8",
-            }}
-          >
-            <div>
-              <p style={{ fontSize: "13px", fontWeight: 600, color: "#0A0C10", lineHeight: 1.3 }}>
-                {post.author || "Square One Paving"}
-              </p>
-              <p style={{ fontSize: "12px", color: "#767676", marginTop: "2px" }}>
-                {formatDate(post.date)}&nbsp;&middot;&nbsp;{readTime(post.description)}
-              </p>
-            </div>
-            <span
-              style={{
-                fontSize: "13px",
-                fontWeight: 700,
-                color: "#C8601A",
-              }}
-            >
-              Read Article &rarr;
-            </span>
-          </div>
+        <h3 className="mt-5 text-[28px] leading-[1.25] [text-wrap:pretty] max-[820px]:text-[22px]">
+          {post.title}
+        </h3>
+
+        <p className="mt-[14px] max-w-[48ch] text-[16px] leading-[1.6] text-[color:var(--ink-body)]">
+          {post.description}
+        </p>
+
+        <div className="mt-4 text-[13px] text-[color:var(--ink-muted)]">
+          {post.author || "Square One Paving"}
+          {post.date && <> &middot; {formatDate(post.date)}</>}
+          {post.description && <> &middot; {readTime(post.description)}</>}
         </div>
+
+        <span className="arrow-link mt-6">
+          Read{" "}
+          <span
+            aria-hidden="true"
+            className="transition-transform duration-200 group-hover:translate-x-1"
+          >
+            &rarr;
+          </span>
+        </span>
       </div>
     </Link>
   )
 }
 
-// ────────────────────────────────────────────────────────────────────────────
-// Regular post card — lives inside the gap-grid
-// ────────────────────────────────────────────────────────────────────────────
+/* ── Grid note ───────────────────────────────────────────────────────────── */
 
 function PostCard({ post }: { post: BlogPostMeta }) {
+  const caption = captionFor(post)
+
   return (
-    <Link
-      href={`/blog/${post.slug}`}
-      className="group"
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        background: "white",
-        overflow: "hidden",
-        transition: "transform 0.2s ease, box-shadow 0.2s ease",
-        position: "relative",
-      }}
-      onMouseEnter={(e) => {
-        const el = e.currentTarget as HTMLElement
-        el.style.transform = "translateY(-2px)"
-        el.style.boxShadow = "0 8px 32px rgba(0,0,0,0.10)"
-        el.style.zIndex = "1"
-      }}
-      onMouseLeave={(e) => {
-        const el = e.currentTarget as HTMLElement
-        el.style.transform = "translateY(0)"
-        el.style.boxShadow = "none"
-        el.style.zIndex = "0"
-      }}
-    >
-      {/* Image */}
-      {post.featured_image && (
-        <div style={{ position: "relative", overflow: "hidden", aspectRatio: "16/9" }}>
+    <Link href={`/blog/${post.slug}`} className="card block">
+      <div className="relative aspect-[16/10] overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)]">
+        {post.featured_image && (
           <Image
             src={post.featured_image}
             alt={post.title}
             fill
-            className="object-cover transition-transform duration-700 group-hover:scale-[1.05]"
-            sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
+            sizes="(max-width: 700px) 100vw, (max-width: 1000px) 50vw, 400px"
+            className="object-cover"
           />
-          {post.category && (
-            <div style={{ position: "absolute", top: "12px", left: "12px" }}>
-              <span
-                style={{
-                  fontSize: "10px",
-                  fontWeight: 700,
-                  letterSpacing: "0.1em",
-                  textTransform: "uppercase",
-                  padding: "5px 10px",
-                  color: "white",
-                  background: "rgba(200,96,26,0.9)",
-                  backdropFilter: "blur(4px)",
-                }}
-              >
-                {post.category}
-              </span>
-            </div>
-          )}
+        )}
+        {post.featured_image && caption && (
+          <>
+            <div aria-hidden="true" className="scrim scrim-light" />
+            <div className="caption">{caption}</div>
+          </>
+        )}
+      </div>
+
+      {post.category && (
+        <div className="mt-5">
+          <span className="tag">{post.category}</span>
         </div>
       )}
 
-      {/* Body */}
-      <div
-        style={{
-          padding: "28px",
-          display: "flex",
-          flexDirection: "column",
-          flex: 1,
-        }}
-      >
-        {/* Category label when no image */}
-        {!post.featured_image && post.category && (
-          <p
-            style={{
-              fontSize: "10px",
-              fontWeight: 700,
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              color: "#C8601A",
-              marginBottom: "10px",
-            }}
-          >
-            {post.category}
-          </p>
-        )}
+      <h3 className="mt-[14px] [text-wrap:pretty]">{post.title}</h3>
 
-        <h3
-          className="transition-colors duration-200 group-hover:text-[#C8601A]"
-          style={{
-            fontSize: "1.05rem",
-            fontWeight: 700,
-            letterSpacing: "-0.02em",
-            lineHeight: 1.25,
-            color: "#0A0C10",
-            marginBottom: "10px",
-          }}
-        >
-          {post.title}
-        </h3>
+      <p className="mt-[10px] line-clamp-3 text-[15px] leading-[1.55] text-[color:var(--ink-body)]">
+        {post.description}
+      </p>
 
-        <p
-          className="line-clamp-3"
-          style={{
-            fontSize: "13px",
-            lineHeight: 1.65,
-            color: "#6B6B6B",
-            flex: 1,
-            marginBottom: "20px",
-          }}
-        >
-          {post.description}
-        </p>
-
-        {/* Footer row */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            paddingTop: "16px",
-            borderTop: "1px solid #EDEBE7",
-          }}
-        >
-          <div>
-            <p style={{ fontSize: "12px", fontWeight: 600, color: "#0A0C10", lineHeight: 1.3 }}>
-              {post.author || "Square One Paving"}
-            </p>
-            <p style={{ fontSize: "11px", color: "#767676", marginTop: "1px" }}>
-              {formatDate(post.date)}&nbsp;&middot;&nbsp;{readTime(post.description)}
-            </p>
-          </div>
-          <span
-            className="transition-all duration-200 group-hover:tracking-widest"
-            style={{
-              fontSize: "11px",
-              fontWeight: 700,
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              color: "#C8601A",
-            }}
-          >
-            Read &rarr;
-          </span>
-        </div>
+      <div className="mt-[10px] text-[13px] text-[color:var(--ink-muted)]">
+        {post.date && formatDate(post.date)}
+        {post.date && post.description && <> &middot; </>}
+        {post.description && readTime(post.description)}
       </div>
     </Link>
   )

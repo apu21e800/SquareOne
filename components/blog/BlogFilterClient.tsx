@@ -5,7 +5,19 @@ import Link from "next/link"
 import Image from "next/image"
 import type { BlogPostMeta } from "@/lib/blog"
 
-const CATEGORIES = ["All", "Municipal", "Driveways", "Vapor Blasting", "Public Art", "Case Studies"]
+/**
+ * `label` is display copy (Canadian English, sentence case); `match` is the
+ * original filter token and must not change — it is what the post categories
+ * and tags are tested against.
+ */
+const CATEGORIES: ReadonlyArray<{ label: string; match: string }> = [
+  { label: "All", match: "All" },
+  { label: "Municipal", match: "Municipal" },
+  { label: "Driveways", match: "Driveways" },
+  { label: "Vapour blasting", match: "Vapour Blasting" },
+  { label: "Public art", match: "Public Art" },
+  { label: "Case studies", match: "Case Studies" },
+]
 
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString("en-CA", {
@@ -13,6 +25,14 @@ function formatDate(dateStr: string) {
     month: "long",
     day: "numeric",
   })
+}
+
+/** Photo caption — category and year, the only location data frontmatter carries. */
+function captionFor(post: BlogPostMeta): string {
+  const year = post.date ? new Date(post.date).getFullYear() : Number.NaN
+  return [post.category, Number.isFinite(year) ? String(year) : ""]
+    .filter(Boolean)
+    .join(" · ")
 }
 
 interface Props {
@@ -36,157 +56,109 @@ export default function BlogFilterClient({ posts }: Props) {
   const rest = filtered.slice(1)
 
   return (
+    {/* Section shell, background and container come from app/blog/page.tsx —
+        this is a child, not a section of its own. */}
     <>
-      {/* Category filter tabs */}
-      <div className="flex flex-wrap gap-2 mt-8 overflow-x-auto scrollbar-hide pb-1">
-        {CATEGORIES.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setActiveCategory(cat)}
-            className="text-xs font-semibold px-4 py-2 rounded whitespace-nowrap transition-all"
-            style={{
-              background: activeCategory === cat ? "#C8601A" : "white",
-              color: activeCategory === cat ? "white" : "#5A5A5A",
-              border: activeCategory === cat ? "1px solid #C8601A" : "1px solid #E2DDD8",
-            }}
-          >
-            {cat}
-          </button>
-        ))}
-      </div>
+      <div>
+        {/* ── Filter tabs ─────────────────────────────────────────────── */}
+        <div
+          role="group"
+          aria-label="Filter journal by topic"
+          className="flex flex-wrap gap-x-6 gap-y-3 border-b border-[color:var(--hairline)] pb-4"
+        >
+          {CATEGORIES.map((cat) => {
+            const isActive = activeCategory === cat.match
+            return (
+              <button
+                key={cat.match}
+                type="button"
+                aria-pressed={isActive}
+                onClick={() => setActiveCategory(cat.match)}
+                className={`
+                  cursor-pointer border-b-2 pb-[2px] text-[14px] transition-colors
+                  ${
+                    isActive
+                      ? "border-[color:var(--ink)] font-semibold text-[color:var(--ink)]"
+                      : "border-transparent font-medium text-[color:var(--ink-muted)] hover:text-[color:var(--ink)]"
+                  }
+                `}
+              >
+                {cat.label}
+              </button>
+            )
+          })}
+        </div>
 
-      <div className="max-w-[1400px] mx-auto px-6 sm:px-8 py-14">
         {filtered.length === 0 ? (
-          <p style={{ color: "#5A5A5A" }} className="py-12 text-center">
-            No posts in this category yet — check back soon.
+          <p className="py-20 text-center text-[16px] text-[color:var(--ink-body)]">
+            No notes filed under this topic yet — check back soon.
           </p>
         ) : (
           <>
-            {/* ── Featured post ───────────────────────────────────── */}
+            {/* ── Featured note ───────────────────────────────────────── */}
             {featured && (
-              <Link href={`/blog/${featured.slug}`} className="group block mb-14">
-                <div
-                  className="grid grid-cols-1 lg:grid-cols-2 overflow-hidden transition-all duration-300"
-                  style={{
-                    background: "white",
-                    border: "1px solid #E2DDD8",
-                    boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.boxShadow = "0 8px 32px rgba(0,0,0,0.10)" }}
-                  onMouseLeave={(e) => { e.currentTarget.style.boxShadow = "0 1px 3px rgba(0,0,0,0.06)" }}
-                >
+              <Link
+                href={`/blog/${featured.slug}`}
+                className="card group mt-10 grid grid-cols-[7fr_5fr] items-stretch overflow-hidden rounded-[2px] border border-[color:var(--hairline)] bg-[color:var(--surface-warm)] max-[820px]:grid-cols-1"
+              >
+                <div className="relative aspect-[16/10] overflow-hidden bg-[color:var(--surface-stone)]">
                   {featured.featured_image && (
-                    <div className="relative overflow-hidden" style={{ minHeight: "340px" }}>
-                      <Image
-                        src={featured.featured_image}
-                        alt={featured.title}
-                        fill
-                        className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-                        sizes="(max-width: 1024px) 100vw, 50vw"
-                        priority
-                      />
-                      <div className="absolute top-4 left-4">
-                        <span
-                          className="text-[10px] font-bold uppercase tracking-[0.12em] px-3 py-1.5 text-white"
-                          style={{ background: "#C8601A" }}
-                        >
-                          Featured
-                        </span>
-                      </div>
+                    <Image
+                      src={featured.featured_image}
+                      alt={featured.title}
+                      fill
+                      priority
+                      sizes="(max-width: 820px) 100vw, 700px"
+                      className="object-cover"
+                    />
+                  )}
+                  {featured.featured_image && captionFor(featured) && (
+                    <>
+                      <div aria-hidden="true" className="scrim scrim-light" />
+                      <div className="caption">{captionFor(featured)}</div>
+                    </>
+                  )}
+                </div>
+
+                <div className="flex flex-col justify-center px-12 py-10 max-[820px]:px-7 max-[820px]:py-8">
+                  {featured.category && (
+                    <div>
+                      <span className="tag">{featured.category}</span>
                     </div>
                   )}
-                  <div className="flex flex-col justify-center p-10 lg:p-14">
-                    {featured.category && (
-                      <p className="eyebrow mb-4">{featured.category}</p>
-                    )}
-                    <h2
-                      className="mb-5 transition-colors duration-200 group-hover:text-[#C8601A]"
-                      style={{ fontSize: "clamp(1.6rem, 2.5vw, 2.25rem)", fontWeight: 300, letterSpacing: "-0.025em", color: "#111111", lineHeight: 1.15 }}
-                    >
-                      {featured.title}
-                    </h2>
-                    <p className="text-base leading-relaxed mb-8" style={{ color: "#5A5A5A" }}>
-                      {featured.description}
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm" style={{ color: "#767676" }}>
-                        {formatDate(featured.date)}
-                      </span>
-                      <span className="text-sm font-semibold" style={{ color: "#C8601A" }}>
-                        Read Article →
-                      </span>
+
+                  <h3 className="mt-5 text-[28px] leading-[1.25] [text-wrap:pretty] max-[820px]:text-[22px]">
+                    {featured.title}
+                  </h3>
+
+                  <p className="mt-[14px] max-w-[48ch] text-[16px] leading-[1.6] text-[color:var(--ink-body)]">
+                    {featured.description}
+                  </p>
+
+                  {featured.date && (
+                    <div className="mt-4 text-[13px] text-[color:var(--ink-muted)]">
+                      {formatDate(featured.date)}
                     </div>
-                  </div>
+                  )}
+
+                  <span className="arrow-link mt-6">
+                    Read{" "}
+                    <span
+                      aria-hidden="true"
+                      className="transition-transform duration-200 group-hover:translate-x-1"
+                    >
+                      &rarr;
+                    </span>
+                  </span>
                 </div>
               </Link>
             )}
 
-            {/* ── Remaining posts grid ─────────────────────────────── */}
+            {/* ── The rest ────────────────────────────────────────────── */}
             {rest.length > 0 && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="mt-10 grid grid-cols-3 gap-6 max-[1000px]:grid-cols-2 max-[700px]:grid-cols-1 max-[700px]:gap-10">
                 {rest.map((post) => (
-                  <Link
-                    key={post.slug}
-                    href={`/blog/${post.slug}`}
-                    className="group block overflow-hidden transition-all duration-250"
-                    style={{ background: "white", border: "1px solid #E2DDD8" }}
-                    onMouseEnter={(e) => {
-                      const el = e.currentTarget as HTMLElement
-                      el.style.borderColor = "rgba(200,96,26,0.4)"
-                      el.style.boxShadow = "0 8px 32px rgba(0,0,0,0.10)"
-                      el.style.transform = "translateY(-2px)"
-                    }}
-                    onMouseLeave={(e) => {
-                      const el = e.currentTarget as HTMLElement
-                      el.style.borderColor = "#E2DDD8"
-                      el.style.boxShadow = "none"
-                      el.style.transform = "translateY(0)"
-                    }}
-                  >
-                    {post.featured_image && (
-                      <div className="relative overflow-hidden" style={{ aspectRatio: "16/9" }}>
-                        <Image
-                          src={post.featured_image}
-                          alt={post.title}
-                          fill
-                          className="object-cover transition-transform duration-700 group-hover:scale-[1.05]"
-                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        />
-                        {post.category && (
-                          <div className="absolute top-3 left-3">
-                            <span
-                              className="text-[10px] font-bold uppercase tracking-[0.1em] px-2.5 py-1 text-white"
-                              style={{ background: "rgba(200,96,26,0.88)", backdropFilter: "blur(4px)" }}
-                            >
-                              {post.category}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                    <div className="p-6">
-                      <h3
-                        className="mb-3 leading-snug transition-colors duration-200 group-hover:text-[#C8601A]"
-                        style={{ fontSize: "1.05rem", fontWeight: 600, color: "#111111" }}
-                      >
-                        {post.title}
-                      </h3>
-                      <p className="text-sm leading-relaxed mb-5 line-clamp-3" style={{ color: "#5A5A5A" }}>
-                        {post.description}
-                      </p>
-                      <div className="flex items-center justify-between pt-4" style={{ borderTop: "1px solid #EDEBE7" }}>
-                        <span className="text-xs" style={{ color: "#767676" }}>
-                          {formatDate(post.date)}
-                        </span>
-                        <span
-                          className="text-xs font-bold uppercase tracking-widest transition-all duration-200 group-hover:tracking-[0.2em]"
-                          style={{ color: "#C8601A" }}
-                        >
-                          Read →
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
+                  <PostCard key={post.slug} post={post} />
                 ))}
               </div>
             )}
@@ -194,5 +166,49 @@ export default function BlogFilterClient({ posts }: Props) {
         )}
       </div>
     </>
+  )
+}
+
+function PostCard({ post }: { post: BlogPostMeta }) {
+  const caption = captionFor(post)
+
+  return (
+    <Link href={`/blog/${post.slug}`} className="card block">
+      <div className="relative aspect-[16/10] overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)]">
+        {post.featured_image && (
+          <Image
+            src={post.featured_image}
+            alt={post.title}
+            fill
+            sizes="(max-width: 700px) 100vw, (max-width: 1000px) 50vw, 400px"
+            className="object-cover"
+          />
+        )}
+        {post.featured_image && caption && (
+          <>
+            <div aria-hidden="true" className="scrim scrim-light" />
+            <div className="caption">{caption}</div>
+          </>
+        )}
+      </div>
+
+      {post.category && (
+        <div className="mt-5">
+          <span className="tag">{post.category}</span>
+        </div>
+      )}
+
+      <h3 className="mt-[14px] [text-wrap:pretty]">{post.title}</h3>
+
+      <p className="mt-[10px] line-clamp-3 text-[15px] leading-[1.55] text-[color:var(--ink-body)]">
+        {post.description}
+      </p>
+
+      {post.date && (
+        <div className="mt-[10px] text-[13px] text-[color:var(--ink-muted)]">
+          {formatDate(post.date)}
+        </div>
+      )}
+    </Link>
   )
 }
