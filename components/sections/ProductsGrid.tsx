@@ -60,72 +60,60 @@ const products = [
 
 export default function ProductsGrid() {
   return (
-    <section className="w-full py-20 bg-[#FAFAFA]">
-      <div className="max-w-6xl mx-auto px-6 sm:px-8">
-        {/* Section header */}
-        <div className="mb-14">
-          <p className="text-[#D66620] text-xs uppercase tracking-[0.2em] font-semibold mb-3">
-            Products We Apply
+    <section className="section border-t border-[color:var(--hairline)] bg-surface-warm">
+      <div className="container-1280">
+        <div className="eyebrow">Products we apply</div>
+
+        <div className="mt-5 grid grid-cols-1 items-end gap-6 min-[901px]:grid-cols-[auto_1fr] min-[901px]:gap-16">
+          <h2 className="stop">Our systems</h2>
+          <p className="max-w-[56ch] text-[19px] leading-[1.65] text-ink-body">
+            Industry-leading surface systems &mdash; specified by 500+ Canadian municipalities and
+            installed by our certified crews.
           </p>
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-            <h2 className="text-4xl sm:text-5xl font-black text-[#333333] leading-tight">
-              Our Systems
-            </h2>
-            <p className="text-[#626262] max-w-sm text-sm leading-relaxed">
-              Industry-leading surface systems — specified by 500+ Canadian municipalities and installed by our certified crews.
-            </p>
-          </div>
-          <div className="mt-6 h-px bg-gradient-to-r from-[#D66620]/40 to-transparent" />
         </div>
 
-        {/* Product grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div className="mt-10 grid grid-cols-1 gap-6 min-[701px]:grid-cols-2 min-[1101px]:grid-cols-3">
           {products.map((product) => (
             <Link
               key={product.slug}
               href={`/products/${product.slug}`}
-              className="group block bg-white rounded-xl overflow-hidden border border-[#E8E4DE] hover:border-[#D66620]/40 hover:shadow-lg transition-all duration-200"
+              className="card flex flex-col overflow-hidden rounded-[2px] border border-[color:var(--hairline)] bg-surface"
             >
-              {/* Product image */}
-              <div className="relative aspect-video bg-[#F2EFE9] overflow-hidden">
+              <div className="relative aspect-[16/10] overflow-hidden bg-surface-stone">
                 <Image
                   src={product.image}
                   alt={product.name}
                   fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-300"
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 400px"
+                  className="object-cover"
                 />
               </div>
 
-              {/* Card content */}
-              <div className="p-5">
-                <h3 className="text-lg font-bold text-[#333333] mb-1.5">
-                  {product.name}
-                </h3>
-                <p className="text-[#626262] text-sm leading-relaxed mb-4 line-clamp-2">
+              <div className="flex flex-1 flex-col p-7">
+                <h3>{product.name}</h3>
+
+                <p className="mt-[10px] text-[15px] leading-[1.55] text-ink-body">
                   {product.description}
                 </p>
-                <span className="text-[#D66620] text-xs font-bold uppercase tracking-widest group-hover:tracking-[0.2em] transition-all duration-200">
-                  Learn More →
+
+                <span className="arrow-link mt-auto pt-7">
+                  Learn more <span aria-hidden="true">&rarr;</span>
                 </span>
               </div>
             </Link>
           ))}
         </div>
 
-        {/* Credential trust signal */}
-        <div className="mt-14 pt-10 border-t border-[#E8E4DE] flex flex-col sm:flex-row items-center gap-6 justify-between">
-          <div className="flex items-center gap-4">
-            <div className="flex flex-col">
-              <span className="text-[#333333] text-sm font-bold">Manufacturer-Certified Installer</span>
-              <span className="text-[#626262] text-xs mt-0.5">Authorized Applicator — Western Canada</span>
+        <div className="mt-12 flex flex-wrap items-center justify-between gap-6 border-t border-[color:var(--hairline)] pt-10">
+          <div>
+            <div className="text-[15px] font-semibold text-ink">Manufacturer-certified installer</div>
+            <div className="mt-1 text-[15px] leading-[1.55] text-ink-muted">
+              Authorized applicator &mdash; Western Canada
             </div>
           </div>
-          <Link
-            href="/contact"
-            className="text-sm text-[#D66620] hover:text-[#C05A18] font-semibold transition-colors"
-          >
-            Request a Spec Sheet →
+
+          <Link href="/contact" className="arrow-link whitespace-nowrap">
+            Request a spec sheet <span aria-hidden="true">&rarr;</span>
           </Link>
         </div>
       </div>
