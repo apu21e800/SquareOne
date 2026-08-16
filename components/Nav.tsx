@@ -371,7 +371,10 @@ export default function Nav() {
       <header
         className="fixed top-0 right-0 left-0 z-50"
         style={{
-          background: scrolled ? "rgba(255,255,255,0.92)" : "rgba(255,255,255,0)",
+          // Fully opaque once scrolled. The reference's 0.92 wash let section
+          // text ghost through behind the nav links; the bar sits over
+          // photography and dense copy, so it has to be solid.
+          background: scrolled ? "#FFFFFF" : "rgba(255,255,255,0)",
           backdropFilter: scrolled ? "blur(8px)" : "none",
           WebkitBackdropFilter: scrolled ? "blur(8px)" : "none",
           borderBottom: `1px solid ${scrolled ? HAIRLINE : "rgba(231,227,220,0)"}`,
