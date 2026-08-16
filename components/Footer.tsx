@@ -102,10 +102,10 @@ export default function Footer() {
             <span className="text-[15px] text-[#8A9098]">
               or call{" "}
               <a
-                href="tel:+16044669902"
+                href="tel:+16046126209"
                 className="font-medium text-[#C6CBD1] transition-colors hover:text-white"
               >
-                604-466-9902
+                604-612-6209
               </a>
             </span>
           </div>
@@ -173,10 +173,10 @@ export default function Footer() {
 
                 <ContactRow label="Lower Mainland">
                   <a
-                    href="tel:+16044669902"
+                    href="tel:+16046126209"
                     className="mt-[3px] block text-[15px] text-[#C6CBD1] transition-colors hover:text-white"
                   >
-                    604-466-9902
+                    604-612-6209
                   </a>
                 </ContactRow>
 
@@ -191,10 +191,10 @@ export default function Footer() {
 
                 <ContactRow label="Toll-free">
                   <a
-                    href="tel:+18776098200"
+                    href="tel:+18773910270"
                     className="mt-[3px] block text-[15px] text-[#C6CBD1] transition-colors hover:text-white"
                   >
-                    1-877-609-8200
+                    1-877-391-0270
                   </a>
                 </ContactRow>
 

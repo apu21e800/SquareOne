@@ -3,6 +3,13 @@
 import Link from "next/link"
 import { useEffect, useState } from "react"
 
+/**
+ * Persistent conversion bar, revealed once the reader is past the fold.
+ *
+ * v2: flat slate, hairline top rule, 2px radius, no glow and no drop shadow.
+ * Height is deliberately bar-sized rather than section-sized — the one dark
+ * close on every page is the footer, and this must not compete with it.
+ */
 export default function StickyBar() {
   const [visible, setVisible] = useState(false)
 
@@ -24,43 +31,30 @@ export default function StickyBar() {
       aria-hidden={!visible}
     >
       <div
-        className="flex items-center gap-3 px-4 lg:px-8 py-3"
-        style={{
-          background: "#111111",
-          borderTop: "1px solid rgba(255,255,255,0.07)",
-          boxShadow: "0 -4px 24px rgba(0,0,0,0.25)",
-        }}
+        className="flex items-center gap-4 border-t bg-[color:var(--surface-slate)] px-6 py-[14px] min-[701px]:px-10"
+        style={{ borderColor: "var(--hairline-slate)" }}
       >
-        {/* Brand caption — desktop only */}
-        <p className="hidden lg:block flex-1 text-[10px] uppercase tracking-[0.22em] font-semibold text-white/30">
-          BC’s Decorative Pavement Specialists · Since 2000
+        {/* Brand caption — desktop only. .label, not .eyebrow: the orange
+            square belongs to the page, not to persistent chrome. */}
+        <p className="label label-on-slate hidden flex-1 lg:block">
+          BC&rsquo;s Decorative Pavement Specialists &middot; Since 2000
         </p>
 
-        {/* CTA buttons */}
-        <div className="flex items-center gap-2.5 w-full lg:w-auto">
-          {/* Ghost — Spec Sheet */}
+        <div className="flex w-full items-center gap-3 lg:w-auto">
           <Link
             href="/contact"
-            className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 border border-white/20 text-white px-5 py-2.5 text-[12px] font-bold tracking-[0.04em] hover:border-white/50 hover:bg-white/[0.06] transition-all whitespace-nowrap rounded-lg"
+            tabIndex={visible ? undefined : -1}
+            className="inline-flex flex-1 items-center justify-center whitespace-nowrap rounded-[2px] border border-white/20 px-5 py-[10px] text-[14px] font-semibold text-white transition-colors hover:border-white/50 hover:text-white lg:flex-none"
           >
-            <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-              <rect x="2" y="1" width="10" height="12" rx="1" stroke="currentColor" strokeWidth="1.4" />
-              <path d="M4.5 4.5h5M4.5 7h5M4.5 9.5h3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
-            </svg>
-            Request Spec Sheet
+            Request a spec sheet
           </Link>
 
-          {/* Orange filled — Book a Site Visit */}
           <Link
             href="/contact"
-            className="flex-1 lg:flex-none inline-flex items-center justify-center gap-2 bg-[#C8601A] text-white px-5 py-2.5 text-[12px] font-bold tracking-[0.04em] hover:bg-[#A84F15] transition-colors whitespace-nowrap rounded-lg"
-            style={{ boxShadow: "0 2px 14px rgba(200,96,26,0.35)" }}
+            tabIndex={visible ? undefined : -1}
+            className="inline-flex flex-1 items-center justify-center whitespace-nowrap rounded-[2px] bg-[color:var(--accent)] px-5 py-[10px] text-[14px] font-semibold text-white transition-colors hover:bg-[color:var(--accent-deep)] hover:text-white lg:flex-none"
           >
-            <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-              <circle cx="7" cy="7" r="5.5" stroke="currentColor" strokeWidth="1.4" />
-              <path d="M7 4v3.5l2 1.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            Book a Site Visit
+            Book a site visit
           </Link>
         </div>
       </div>
