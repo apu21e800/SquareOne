@@ -15,7 +15,7 @@ export default function DrivewaysBand() {
           <div className="min-[901px]:order-2 relative aspect-[4/3] overflow-hidden rounded-[2px] bg-surface-stone min-[901px]:aspect-auto min-[901px]:min-h-[560px]">
             <Image
               src="/images/applications/private-driveways/estate-herringbone-gated-driveway-01.jpg"
-              alt="Premium decorative driveway by Square One Paving"
+              alt="Decorative stamped asphalt driveway by Square One Paving"
               fill
               sizes="(max-width: 900px) 100vw, 50vw"
               className="object-cover"

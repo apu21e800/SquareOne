@@ -6,13 +6,13 @@ import { heroFor } from "@/lib/gallery"
 
 export const metadata: Metadata = {
   title: "Decorative Driveways BC | Stamped Asphalt & StreetBond Coatings",
-  description: "Transform your BC driveway with decorative stamped asphalt or StreetBond coatings. Premium residential paving by Square One — Lower Mainland & Vancouver Island.",
+  description: "Decorative stamped asphalt and StreetBond coatings, installed over your existing BC driveway by Square One — Lower Mainland & Vancouver Island.",
 }
 
 const benefits = [
   {
     title: "Curb appeal that lasts",
-    desc: "Custom patterns, rich colours, and textures that elevate your home's exterior from the street.",
+    desc: "Custom patterns, colours and textures, chosen against your own siding and stone.",
   },
   {
     title: "20+ year service life",
@@ -20,20 +20,20 @@ const benefits = [
   },
   {
     title: "Increases property value",
-    desc: "A premium driveway is one of the highest-ROI exterior upgrades for BC homeowners.",
+    desc: "A decorative driveway is one of the highest-return exterior upgrades a BC home can get.",
   },
 ]
 
 const products = [
   {
     name: "StreetBond coatings",
-    desc: "Rich, uniform colour in dozens of tones — from warm terracotta to charcoal grey. Applied over existing asphalt. Fast, affordable, beautiful.",
+    desc: "Rich, uniform colour in dozens of tones — from warm terracotta to charcoal grey. Applied over existing asphalt. Most jobs finished in days.",
     image: "/images/products/streetbond/streetbond-1.jpg",
     alt: "StreetBond coated residential driveway",
   },
   {
     name: "StreetPrint stamped asphalt",
-    desc: "Brick, cobblestone, and slate patterns stamped directly into asphalt. The premium choice for homeowners who want maximum visual impact.",
+    desc: "Brick, cobblestone, and slate patterns stamped directly into asphalt. For homeowners who want the full pattern-and-colour treatment.",
     image: "/images/products/streetprint/streetprint-1.jpg",
     alt: "StreetPrint stamped asphalt driveway in a brick pattern",
   },
@@ -43,13 +43,13 @@ const process = [
   { num: "01", title: "Free consultation", desc: "We visit your property, assess your existing surface, and walk you through colour and pattern options." },
   { num: "02", title: "Custom design", desc: "We help you choose the right product, pattern, and colour to complement your home's architecture." },
   { num: "03", title: "Professional installation", desc: "Our certified crew installs your new driveway surface — typically in a single day with minimal disruption." },
-  { num: "04", title: "The reveal", desc: "Your new driveway is sealed, cleaned, and ready. The transformation is immediate." },
+  { num: "04", title: "The reveal", desc: "Your new driveway is sealed, cleaned, and ready to drive on." },
 ]
 
 const faqs = [
   {
     q: "How much does a decorative driveway cost?",
-    a: "Pricing depends on the size of your driveway and the product you choose. StreetBond coatings start lower, while StreetPrint stamped asphalt is our premium option. We provide free, no-obligation quotes after a site visit.",
+    a: "Pricing depends on the size of your driveway and the product you choose. StreetBond coatings start lower, while StreetPrint stamped asphalt is the larger job. We provide free, no-obligation quotes after a site visit.",
   },
   {
     q: "How long does installation take?",
@@ -106,7 +106,7 @@ export default function PrivateDrivewaysPage() {
           <h1 className="stop mt-7 max-w-[16ch]">Your driveway, reimagined</h1>
 
           <p className="mt-6 max-w-[56ch] text-[19px] leading-[1.65] text-[color:var(--ink-body)] [text-wrap:pretty] max-[700px]:text-[17px]">
-            Premium decorative paving for BC homeowners. Custom colours, textures, and patterns —
+            Decorative paving for BC homeowners. Custom colours, textures and patterns —
             installed by BC&apos;s most experienced HUB applicator.
           </p>
 

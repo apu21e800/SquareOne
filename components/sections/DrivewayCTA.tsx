@@ -28,7 +28,7 @@ export default function DrivewayCTA() {
 
             <p className="mt-6 max-w-[56ch] text-[19px] leading-[1.65] text-ink-body">
               Square One is BC&apos;s most experienced decorative driveway installer. Stamped
-              asphalt and StreetBond coatings that transform your home&apos;s first impression
+              asphalt and StreetBond coatings over the driveway you already have
               &mdash; and hold up for decades.
             </p>
 

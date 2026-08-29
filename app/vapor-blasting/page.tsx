@@ -136,7 +136,7 @@ export default function VaporBlastingPage() {
           <div className="relative z-[1]">
             <p className="eyebrow">Mobile vapour blasting &middot; British Columbia</p>
 
-            <h1 className="stop mt-7">Surface restoration, done right</h1>
+            <h1 className="stop mt-7">Surface restoration, without the dust</h1>
 
             <p className="mt-7 max-w-[56ch] text-[19px] leading-[1.65] text-ink-body [text-wrap:pretty] max-[700px]:text-[17px]">
               Vapour blasting lifts rust, coatings and contamination without heat damage,
@@ -402,8 +402,8 @@ export default function VaporBlastingPage() {
 
             <p className="mt-8 text-[15px] text-ink-muted">
               Prefer to talk it through?{" "}
-              <a href="tel:+16046126209" className="font-semibold text-ink">
-                604-612-6209
+              <a href="tel:+16044669902" className="font-semibold text-ink">
+                604-466-9902
               </a>{" "}
               &middot;{" "}
               <a href="mailto:office@squareonepaving.com" className="font-semibold text-ink">

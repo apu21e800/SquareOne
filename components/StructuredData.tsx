@@ -9,7 +9,7 @@ const ORG_BASE = {
   logo: "https://squareonepaving.ca/images/logo/SquareOne-wordmark-dark.svg",
   image: "https://squareonepaving.ca/images/og-image.jpg",
   description: "BC's decorative pavement studio since 2000. Stamped asphalt, decorative coatings, preformed thermoplastic, and vapour blasting for municipalities, developers, and residential clients across British Columbia.",
-  telephone: "+1-604-612-6209",
+  telephone: "+1-604-466-9902",
   email: "office@squareonepaving.com",
   foundingDate: "2000",
   founder: { "@type": "Person", name: "Jan Stewart" },

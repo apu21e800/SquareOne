@@ -27,7 +27,7 @@ import { galleryWithFallback } from "@/lib/gallery"
 export const metadata: Metadata = {
   title: "Decorative Driveways BC | Stamped Asphalt & Coatings | Square One Paving",
   description:
-    "Transform your driveway with stamped asphalt, StreetBond coatings, or StreetPrint patterns. BC's most experienced decorative pavement installer. Free quotes — Lower Mainland & Vancouver Island.",
+    "Stamped asphalt, StreetBond coatings and StreetPrint patterns, installed over the driveway you already have. BC's most experienced decorative pavement installer. Free quotes — Lower Mainland & Vancouver Island.",
   keywords: [
     "decorative driveway BC",
     "stamped asphalt driveway Vancouver",
@@ -161,7 +161,7 @@ const systems: {
   {
     name: "StreetPrint stamped asphalt",
     note: "Most popular",
-    body: "StreetPrint transforms your existing asphalt into a rich decorative surface — brick, cobblestone, slate, and custom patterns — without excavating the base. Installed in place, in days.",
+    body: "StreetPrint imprints brick, cobblestone, slate and custom patterns into your existing asphalt — no excavation, no new base. Installed in place, in days.",
     specs: [
       "Applied over existing asphalt — no demolition",
       "Patterns: brick, cobblestone, slate, running bond",
@@ -252,7 +252,7 @@ export default function DriveywaysPage() {
             <h1 className="stop mt-7">Make an entrance</h1>
 
             <p className="mt-7 max-w-[56ch] text-[19px] leading-[1.65] text-ink-body [text-wrap:pretty] max-[700px]:text-[17px]">
-              The look of premium stone or pavers with the strength and performance of asphalt —
+              The look of stone or pavers, the wear of asphalt —
               imprinted and coated over the driveway you already have. No demolition, most jobs
               finished in days.
             </p>

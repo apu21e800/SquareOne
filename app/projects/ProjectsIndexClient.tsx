@@ -41,7 +41,7 @@ const serviceLabel: Record<string, string> = {
   "Stamped Asphalt": "Stamped asphalt",
   "Decorative Coatings": "Decorative coatings",
   "Preformed Thermoplastic": "Preformed thermoplastic",
-  "Vapor Blasting": "Vapour blasting",
+  "Vapour Blasting": "Vapour blasting",
 }
 
 function displayService(value: string): string {

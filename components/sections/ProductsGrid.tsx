@@ -5,7 +5,7 @@ const products = [
   {
     name: "StreetPrint",
     slug: "streetprint",
-    description: "Stamped asphalt that mimics brick, cobblestone, and custom patterns. Durable, beautiful, and functional.",
+    description: "Stamped asphalt in brick, cobblestone and custom patterns. Plow-safe and slip-resistant.",
     image: "/images/products/streetprint/streetprint-1.jpg",
   },
   {
@@ -41,7 +41,7 @@ const products = [
   {
     name: "DuraTherm",
     slug: "duratherm",
-    description: "Thermoplastic pavement marking with exceptional durability for road markings and zone delineation.",
+    description: "Preformed thermoplastic for road markings and zone delineation — down in hours, made to last.",
     image: "/images/products/duratherm/duratherm-1.jpg",
   },
   {
@@ -67,7 +67,7 @@ export default function ProductsGrid() {
         <div className="mt-5 grid grid-cols-1 items-end gap-6 min-[901px]:grid-cols-[auto_1fr] min-[901px]:gap-16">
           <h2 className="stop">Our systems</h2>
           <p className="max-w-[56ch] text-[19px] leading-[1.65] text-ink-body">
-            Industry-leading surface systems &mdash; specified by 500+ Canadian municipalities and
+            HUB surface systems &mdash; specified by 500+ Canadian municipalities and
             installed by our certified crews.
           </p>
         </div>

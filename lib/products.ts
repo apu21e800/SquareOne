@@ -23,9 +23,9 @@ export const products: Product[] = [
     tagline: "Stamped asphalt that looks like brick, cobblestone, or custom pattern.",
     category: "Stamped Asphalt",
     shortDescription:
-      "The industry standard for decorative stamped asphalt. StreetPrint transforms ordinary asphalt into beautiful, durable surfaces that mimic natural materials.",
+      "The industry standard for decorative stamped asphalt. StreetPrint imprints ordinary asphalt into patterned, durable surfaces that read as brick, cobble or slate.",
     fullDescription:
-      "StreetPrint is the world's leading decorative asphalt imprinting system. Using heated templates pressed into fresh asphalt, it creates realistic brick, cobblestone, slate, and custom patterns that are built into the asphalt itself — not painted on. The result is a surface that looks stunning and performs reliably in BC's demanding climate, from wet coastal winters to freeze-thaw cycles inland.",
+      "StreetPrint is the world's leading decorative asphalt imprinting system. Using heated templates pressed into fresh asphalt, it creates realistic brick, cobblestone, slate, and custom patterns that are built into the asphalt itself — not painted on. The surface holds its pattern and colour through wet coastal winters and freeze-thaw cycles inland.",
     keyBenefits: [
       "ASTM D3939 slip-resistant surface",
       "8+ year service life in BC conditions",

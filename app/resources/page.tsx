@@ -130,10 +130,10 @@ export default function ResourcesPage() {
             Writing a specification and need help matching a system to your
             traffic loading and substrate? Call{" "}
             <a
-              href="tel:+16046126209"
+              href="tel:+16044669902"
               className="font-semibold text-[color:var(--ink)]"
             >
-              604-612-6209
+              604-466-9902
             </a>{" "}
             or{" "}
             <Link

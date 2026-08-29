@@ -28,7 +28,7 @@ export default function CTASection() {
             <h2 className="stop mt-5">Let&apos;s build something worth looking at</h2>
 
             <p className="mt-6 max-w-[56ch] text-[19px] leading-[1.65] text-ink-body">
-              Whether it&apos;s a municipal crosswalk, a commercial plaza, or your home driveway
+              Municipal crosswalk, commercial plaza, or your own driveway
               &mdash; we bring 25 years of BC expertise to every square metre.
             </p>
 
@@ -44,10 +44,10 @@ export default function CTASection() {
             <div className="mt-10 flex flex-wrap items-center justify-between gap-3 border-t border-[color:var(--hairline)] pt-7">
               <span className="label">Or call us directly</span>
               <a
-                href="tel:+16046126209"
+                href="tel:+16044669902"
                 className="text-[17px] font-semibold tracking-[-0.01em] text-ink"
               >
-                604-612-6209
+                604-466-9902
               </a>
             </div>
           </div>

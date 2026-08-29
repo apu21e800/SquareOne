@@ -220,8 +220,8 @@ export default function ContactPage() {
                   </button>
                   <span className="text-[15px] text-ink-muted">
                     or call{" "}
-                    <a href="tel:+16046126209" className="font-medium text-ink-body">
-                      604-612-6209
+                    <a href="tel:+16044669902" className="font-medium text-ink-body">
+                      604-466-9902
                     </a>
                   </span>
                 </div>
@@ -240,7 +240,7 @@ export default function ContactPage() {
 
             <AsideBlock heading="Phone">
               <div className="mt-3 flex flex-col gap-[10px]">
-                <PhoneRow region="Lower Mainland" display="604-612-6209" href="tel:+16046126209" />
+                <PhoneRow region="Lower Mainland" display="604-466-9902" href="tel:+16044669902" />
                 <PhoneRow region="Vancouver Island" display="250-391-0270" href="tel:+12503910270" />
                 <PhoneRow region="Toll-free" display="1-877-391-0270" href="tel:+18773910270" />
               </div>

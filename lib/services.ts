@@ -17,7 +17,7 @@ export const services: Service[] = [
     name: "Stamped Asphalt",
     tagline: "Decorative asphalt that performs as good as it looks.",
     shortDescription:
-      "Transform asphalt surfaces with custom patterns and colours. Our stamped asphalt systems are ASTM slip-resistant and built to last 8+ years in BC conditions.",
+      "Pattern and colour worked into the asphalt you already have. Our stamped asphalt systems are ASTM slip-resistant and built to last 8+ years in BC conditions.",
     fullDescription:
       "Stamped asphalt is more than aesthetics — it's functional design that performs. Whether it's a vibrant crosswalk in downtown Vancouver or a subtle traffic pattern on Vancouver Island, our StreetPrint Imprinting System delivers precision, colour, and durability. Custom patterns, reflective options, and snowplow-safe surfaces make this the choice for municipalities and developers who demand both form and function.",
     productsIncluded: [
@@ -130,7 +130,7 @@ export const services: Service[] = [
   },
   {
     slug: "vapor-blasting",
-    name: "Vapor Blasting",
+    name: "Vapour Blasting",
     tagline: "Mobile surface restoration. Dustless. Done right.",
     shortDescription:
       "BC's mobile dustless abrasive blasting service. We restore — not just clean — pavement, brick, concrete, steel, and marine surfaces. No silica dust, no harsh chemicals, no surface scarring. Specified by BC municipalities since 2000.",

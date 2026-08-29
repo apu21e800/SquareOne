@@ -102,10 +102,10 @@ export default function Footer() {
             <span className="text-[15px] text-[#8A9098]">
               or call{" "}
               <a
-                href="tel:+16046126209"
+                href="tel:+16044669902"
                 className="font-medium text-[#C6CBD1] transition-colors hover:text-white"
               >
-                604-612-6209
+                604-466-9902
               </a>
             </span>
           </div>
@@ -173,10 +173,10 @@ export default function Footer() {
 
                 <ContactRow label="Lower Mainland">
                   <a
-                    href="tel:+16046126209"
+                    href="tel:+16044669902"
                     className="mt-[3px] block text-[15px] text-[#C6CBD1] transition-colors hover:text-white"
                   >
-                    604-612-6209
+                    604-466-9902
                   </a>
                 </ContactRow>
 

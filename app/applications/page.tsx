@@ -17,7 +17,7 @@ const applications = [
   {
     title: "Driveways",
     tag: "Residential",
-    desc: "Custom stamped asphalt and StreetBond coatings that transform your home entrance. 20+ patterns and colours — brick, cobblestone, slate, and more.",
+    desc: "Stamped asphalt and StreetBond coatings for the entrance you use every day. 20+ patterns and colours — brick, cobblestone, slate, and more.",
     image: "/images/applications/private-driveways/chilliwack-townhomes-brick-driveway-01.jpg",
     alt: "Decorative brick-pattern driveway at BC townhome complex",
     cta: "Explore driveways",

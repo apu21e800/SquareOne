@@ -239,18 +239,18 @@ export const projects: Project[] = [
   {
     title: "Highway 1 Marking Removal",
     slug: "highway-1-marking-removal",
-    service: "Vapor Blasting",
+    service: "Vapour Blasting",
     application: "Surface Prep",
     city: "Lower Mainland, BC",
     year: "2023",
     excerpt:
-      "Mobile vapor blasting for road-marking removal on Highway 1 ahead of a new lane configuration. No silica dust, no chemical runoff.",
+      "Mobile vapour blasting for road-marking removal on Highway 1 ahead of a new lane configuration. No silica dust, no chemical runoff.",
     imageUrl: "/images/products/durashield/durashield-1.jpg",
   },
   {
     title: "Whistler Village Plaza — Surface Restoration",
     slug: "whistler-plaza-refresh",
-    service: "Vapor Blasting",
+    service: "Vapour Blasting",
     application: "Surface Prep",
     city: "Whistler, BC",
     year: "2022",

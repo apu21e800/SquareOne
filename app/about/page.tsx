@@ -312,7 +312,7 @@ export default function AboutPage() {
                 505&ndash;20800 Lougheed Highway, V2X 3P2
               </p>
               <p className="mt-1.5 text-[15px] leading-[1.6] text-ink-muted">
-                <a href="tel:+16046126209">604-612-6209</a>
+                <a href="tel:+16044669902">604-466-9902</a>
                 {" · "}
                 <a href="tel:+18773910270">1-877-391-0270</a>
               </p>

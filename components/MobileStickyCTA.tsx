@@ -44,7 +44,7 @@ export default function MobileStickyCTA() {
     >
       <div className="grid grid-cols-2">
         <a
-          href="tel:+16046126209"
+          href="tel:+16044669902"
           tabIndex={visible ? undefined : -1}
           className="flex items-center justify-center gap-2 border-r py-[15px] text-[14px] font-semibold text-white active:bg-white/[0.06]"
           style={{ borderColor: "var(--hairline-slate)" }}

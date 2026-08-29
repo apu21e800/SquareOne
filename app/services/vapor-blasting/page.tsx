@@ -185,7 +185,7 @@ export default function VaporBlastingServicePage() {
           <div className="relative z-[1]">
             <p className="eyebrow">Service &middot; Mobile surface restoration</p>
 
-            <h1 className="stop mt-7">The cleanest way to restore a surface</h1>
+            <h1 className="stop mt-7">Restoration with water, not grit</h1>
 
             <p className="mt-7 max-w-[56ch] text-[19px] leading-[1.65] text-ink-body [text-wrap:pretty] max-[700px]:text-[17px]">
               Dustless abrasive blasting — water and recycled glass at calibrated pressure. We
@@ -197,8 +197,8 @@ export default function VaporBlastingServicePage() {
               <Link href="/contact" className="btn-primary">
                 Request a site walk
               </Link>
-              <a href="tel:+16046126209" className="btn-secondary">
-                604-612-6209
+              <a href="tel:+16044669902" className="btn-secondary">
+                604-466-9902
               </a>
             </div>
           </div>
@@ -486,8 +486,8 @@ export default function VaporBlastingServicePage() {
             <Link href="/contact" className="btn-primary">
               Request a quote
             </Link>
-            <a href="tel:+16046126209" className="btn-secondary">
-              604-612-6209
+            <a href="tel:+16044669902" className="btn-secondary">
+              604-466-9902
             </a>
           </div>
 
