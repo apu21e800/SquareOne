@@ -23,7 +23,7 @@ export const projects: Project[] = [
     featured: true,
     excerpt:
       "Collaborative crosswalk at University Boulevard and Wesbrook Mall — UBC and Musqueam crests woven together in TrafficPatterns, acknowledging the campus stands on unceded Musqueam territory.",
-    imageUrl: "/images/S1_update_v2/photos/Featured image options/UBC-crosswalk-3-300dpi.jpg",
+    imageUrl: "/images/projects/ubc-musqueam-crosswalk/ubc-musqueam-crosswalk-trafficpatterns-01.jpg",
   },
   {
     title: "Joyce SkyTrain Station Public Art",

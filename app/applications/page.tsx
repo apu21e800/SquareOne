@@ -1,5 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
+import IndexImageHero from "@/components/IndexImageHero"
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
@@ -86,26 +87,21 @@ export default function ApplicationsPage() {
   return (
     <main>
       {/* ── Page header ──────────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-[color:var(--surface)] pt-[calc(var(--bar-h)+var(--section-y))] pb-[var(--section-y)] max-[700px]:pt-[calc(var(--bar-h)+var(--section-y-sm))] max-[700px]:pb-[var(--section-y-sm)]">
-        <span aria-hidden="true" className="ghost-index top-[calc(var(--bar-h)+2rem)]">07</span>
-
-        <div className="container-1280 relative z-[1]">
-          <p className="eyebrow">Applications</p>
-
-          <h1 className="display-xl stop mt-7 max-w-[22ch]">Where these systems are specified</h1>
-
-          <p className="mt-6 max-w-[56ch] text-[19px] leading-[1.65] text-[color:var(--ink-body)] [text-wrap:pretty] max-[700px]:text-[17px]">
-            From residential driveways to commercial parking areas — decorative pavement systems
-            and vapour blasting, applied across British Columbia. Every surface, every scale.
-          </p>
-
-          <div className="mt-11">
-            <Link href="/contact" className="btn-primary">
-              Request a quote
-            </Link>
-          </div>
+      <IndexImageHero
+        src="/images/hero/white-rock-marine-drive-wave-crosswalk.jpg"
+        alt="Wave-motif decorative crosswalk on Marine Drive, White Rock"
+        eyebrow="Applications"
+        title="Where these systems are specified"
+        lede="From residential driveways to commercial parking areas — decorative pavement systems and vapour blasting, applied across British Columbia."
+        caption="White Rock · TrafficPatternsXD"
+        imagePosition="center 78%"
+      >
+        <div className="mt-9">
+          <Link href="/contact" className="btn-primary">
+            Request a quote
+          </Link>
         </div>
-      </section>
+      </IndexImageHero>
 
       {/* ── Application cards ────────────────────────────────────────────── */}
       <section className="section border-t border-b border-[color:var(--hairline)] bg-[color:var(--surface-warm)]">

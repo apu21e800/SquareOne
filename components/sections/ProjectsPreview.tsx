@@ -14,8 +14,6 @@ function cityName(city: string): string {
 const FEATURED_ORDER = [
   "ubc-musqueam-crosswalk", // cool — blues and greens
   "joyce-skytrain-art-installation", // warm — dusk plaza
-  "langley-events-centre-streetbond", // cool — green circles
-  "richmond-brighouse-translink", // warm — red thermoplastic
   "agnes-greenway-new-westminster", // cool — eagle mural
   "every-child-matters-new-westminster", // warm — orange motif
 ]
@@ -25,7 +23,7 @@ export default function ProjectsPreview() {
   const curated = FEATURED_ORDER.map((slug) =>
     featured.find((p) => p.slug === slug),
   ).filter((p): p is NonNullable<typeof p> => Boolean(p))
-  const featuredProjects = (curated.length === 6 ? curated : featured).slice(0, 6)
+  const featuredProjects = (curated.length === 4 ? curated : featured).slice(0, 4)
 
   return (
     <section
@@ -42,7 +40,7 @@ export default function ProjectsPreview() {
           </Link>
         </div>
 
-        <div data-reveal-group className="mt-10 grid grid-cols-1 gap-6 min-[701px]:grid-cols-3">
+        <div data-reveal-group className="mt-12 grid grid-cols-1 gap-8 min-[701px]:grid-cols-2">
           {featuredProjects.map((project) => {
             const src =
               heroFor("projects", project.slug, project.imageUrl) ?? project.imageUrl
@@ -62,17 +60,17 @@ export default function ProjectsPreview() {
                   src={src}
                   alt={project.title}
                   fill
-                  sizes="(max-width: 700px) 100vw, (max-width: 1280px) 33vw, 411px"
+                  sizes="(max-width: 700px) 100vw, (max-width: 1280px) 50vw, 616px"
                   className="object-cover"
                 />
 
                 <div aria-hidden className="scrim" />
 
-                <div className="pointer-events-none absolute bottom-5 left-6 right-6">
-                  <div className="text-[16px] font-semibold leading-[1.3] text-white">
+                <div className="pointer-events-none absolute bottom-6 left-7 right-7">
+                  <div className="text-[19px] font-semibold leading-[1.3] text-white">
                     {project.title}
                   </div>
-                  <div className="mt-1 text-[13px] leading-[1.4] text-[rgba(255,255,255,0.78)]">
+                  <div className="mt-2 text-[11px] font-semibold uppercase leading-[1.4] tracking-[0.12em] text-[rgba(255,255,255,0.78)]">
                     {meta}
                   </div>
                 </div>

@@ -1,5 +1,6 @@
 import Link from "next/link"
 import type { Metadata } from "next"
+import IndexImageHero from "@/components/IndexImageHero"
 
 import { products, type Product } from "@/lib/products"
 
@@ -50,22 +51,18 @@ export default function ProductsPage() {
 
   return (
     <main className="bg-[color:var(--surface)]">
-      <section className="relative overflow-hidden pt-[calc(var(--bar-h)_+_6rem)] pb-28 max-[700px]:pt-[calc(var(--bar-h)_+_3rem)] max-[700px]:pb-14">
-        <span aria-hidden="true" className="ghost-index top-[calc(var(--bar-h)+2rem)]">
-          {String(products.length).padStart(2, "0")}
-        </span>
+      <IndexImageHero
+        src="/images/projects/langley-events-centre-streetbond/langley-events-centre-streetbond-01.jpg"
+        alt="StreetBond Circle of Life installation at Langley Events Centre"
+        eyebrow="Products"
+        title="Nine systems, four categories"
+        lede="Every system we install, from pattern to protection. If it is not listed here, we do not install it."
+        caption="Langley Events Centre · StreetBond"
+      />
 
+      <section className="relative overflow-hidden pt-20 pb-28 max-[700px]:pt-12 max-[700px]:pb-14">
         <div className="container-1280 relative z-[1]">
-          <div className="eyebrow">Products</div>
-
-          <h1 className="display-xl stop mt-5">Nine systems, four categories</h1>
-
-          <p className="mt-5 max-w-[56ch] text-[19px] leading-[1.65] text-[color:var(--ink-body)] [text-wrap:pretty] max-[700px]:text-[17px]">
-            Every system we install, from pattern to protection. If it is not listed here, we
-            do not install it.
-          </p>
-
-          <div className="mt-10 flex flex-col gap-16">
+          <div className="flex flex-col gap-16">
             {groups.map((group) => (
               <section key={group.category}>
                 <h2 className="label border-b border-[color:var(--hairline)] pb-[14px]">

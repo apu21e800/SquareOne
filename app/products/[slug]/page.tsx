@@ -103,6 +103,28 @@ export default async function ProductPage({ params }: Props) {
 
   return (
     <main className="bg-surface">
+      {/* ── 60vh opener — the product on real ground (Rockstar Part 4) ─ */}
+      <section
+        data-nav-on-image
+        className="relative flex h-[60vh] min-h-[440px] items-end overflow-hidden bg-surface-slate"
+      >
+        <Image
+          src={product.image}
+          alt={`${product.name} installed by Square One Paving`}
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+        />
+        <div aria-hidden="true" className="scrim-rise" />
+        <div className="container-1280 relative z-[1] w-full pb-12">
+          <div className="eyebrow eyebrow-on-image">{product.category}</div>
+          <h1 className="display-xl stop mt-4 max-w-[16ch] text-white [text-wrap:balance]">
+            {product.name}
+          </h1>
+        </div>
+      </section>
+
       {/* ── Header ─────────────────────────────────────────────── */}
       <section className="section bg-surface pt-[calc(var(--bar-h)+4rem)] pb-14 max-[700px]:pt-[calc(var(--bar-h)+2rem)]">
         <div className="container-1280">
@@ -129,9 +151,7 @@ export default async function ProductPage({ params }: Props) {
             />
           )}
 
-          <h1 className="stop mt-8 max-w-[24ch] [text-wrap:balance]">{product.name}</h1>
-
-          <p className="mt-6 max-w-[56ch] text-[19px] leading-[1.65] text-ink-body [text-wrap:pretty] max-[700px]:text-[17px]">
+          <p className="mt-2 max-w-[56ch] text-[19px] leading-[1.65] text-ink-body [text-wrap:pretty] max-[700px]:text-[17px]">
             {product.tagline}
           </p>
 
@@ -146,17 +166,7 @@ export default async function ProductPage({ params }: Props) {
         </div>
       </section>
 
-      {/* ── Plate — full bleed, no scrim (no caption to protect) ─ */}
-      <div className="relative aspect-[21/9] overflow-hidden bg-surface-stone max-[700px]:aspect-[4/3]">
-        <Image
-          src={product.image}
-          alt={`${product.name} installed by Square One Paving`}
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
-        />
-      </div>
+
 
       {/* ── Overview ───────────────────────────────────────────── */}
       <Band tone={toneOf("overview")}>

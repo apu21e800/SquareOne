@@ -199,11 +199,21 @@ export default async function ProjectPage({ params }: Props) {
       {galleryRest.length > 0 && (
         <section className="section border-y border-[color:var(--hairline)] bg-[color:var(--surface-warm)]">
           <div className="container-1280">
-            <div className="grid grid-cols-3 gap-6 max-[700px]:grid-cols-1">
+            <div
+              className={`grid gap-6 max-[700px]:grid-cols-1 ${
+                galleryRest.length === 1
+                  ? "grid-cols-1"
+                  : galleryRest.length === 2 || galleryRest.length === 4
+                    ? "grid-cols-2"
+                    : "grid-cols-3"
+              }`}
+            >
               {galleryRest.map((src, i) => (
                 <div
                   key={src}
-                  className="thumb relative aspect-[4/3] overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)]"
+                  className={`thumb relative overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)] ${
+                    galleryRest.length === 1 ? "aspect-[21/9] max-[700px]:aspect-[4/3]" : "aspect-[4/3]"
+                  }`}
                 >
                   <Image
                     src={src}

@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 
 import { projects } from "@/lib/projects"
 import { heroFor } from "@/lib/gallery"
+import IndexImageHero from "@/components/IndexImageHero"
 import ProjectsIndexClient, { type ProjectCard } from "./ProjectsIndexClient"
 
 /**
@@ -52,22 +53,15 @@ export default function ProjectsPage() {
 
   return (
     <main className="bg-[color:var(--surface)]">
-      <section className="relative overflow-hidden pt-[calc(var(--bar-h)+var(--section-y))] max-[700px]:pt-[calc(var(--bar-h)+var(--section-y-sm))]">
-        <span aria-hidden="true" className="ghost-index top-[calc(var(--bar-h)+2rem)]">
-          {String(projects.length).padStart(2, "0")}
-        </span>
-
-        <div className="container-1280 relative z-[1]">
-          <p className="eyebrow">Projects</p>
-
-          <h1 className="display-xl stop mt-7 max-w-[18ch]">{projects.length} projects across BC</h1>
-
-          <p className="mt-6 max-w-[56ch] text-[19px] leading-[1.65] text-[color:var(--ink-body)] [text-wrap:pretty] max-[700px]:text-[17px]">
-            Municipal, institutional and residential work from the Lower Mainland to Vancouver
-            Island, 2000 to today.
-          </p>
-        </div>
-      </section>
+      <IndexImageHero
+        src="/images/projects/ubc-musqueam-crosswalk/ubc-musqueam-crosswalk-trafficpatterns-01.jpg"
+        alt="UBC and Musqueam crosswalk installed by Square One Paving"
+        eyebrow="Projects"
+        title={projects.length + " projects across BC"}
+        lede="Municipal, institutional and residential work from the Lower Mainland to Vancouver Island, 2000 to today."
+        caption="UBC · TrafficPatterns"
+        imagePosition="center 60%"
+      />
 
       <ProjectsIndexClient
         projects={cards}
