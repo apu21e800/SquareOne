@@ -14,7 +14,7 @@ const HERO_IMAGE = {
 
 export default function Hero() {
   return (
-    <section className="relative h-[92vh] min-h-[560px] overflow-hidden bg-surface-slate supports-[height:92svh]:h-[92svh]">
+    <section data-nav-on-image className="relative h-[92vh] min-h-[560px] overflow-hidden bg-surface-slate supports-[height:92svh]:h-[92svh]">
       <Image
         src={HERO_IMAGE.src}
         alt={HERO_IMAGE.alt}

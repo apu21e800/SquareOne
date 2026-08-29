@@ -5,6 +5,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { AnimatePresence, MotionConfig, motion, type Transition } from "framer-motion"
+import BrandMark from "@/components/BrandMark"
 import { products, type Product } from "@/lib/products"
 import { services, type Service } from "@/lib/services"
 
@@ -102,22 +103,15 @@ const panelTransition: Transition = { duration: 0.16, ease: "easeOut" }
    Sub-components
    ------------------------------------------------------------------ */
 
-function Wordmark({ onClick }: { onClick?: () => void }) {
+function Wordmark({ onClick, light = false }: { onClick?: () => void; light?: boolean }) {
   return (
     <Link
       href="/"
       onClick={onClick}
       aria-label="Square One Paving — home"
-      className="flex shrink-0 items-center gap-3"
+      className="flex shrink-0 items-center"
     >
-      <Image
-        src="/images/logo/SquareOne-wordmark-dark.png"
-        alt="Square One Paving"
-        width={630}
-        height={94}
-        priority
-        className="h-[30px] w-auto"
-      />
+      <BrandMark tone={light ? "light" : "dark"} />
     </Link>
   )
 }
@@ -275,6 +269,7 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
 export default function Nav() {
   const pathname = usePathname()
   const [scrolled, setScrolled] = useState(false)
+  const [onImage, setOnImage] = useState(false)
   const [menu, setMenu] = useState<MenuKey | null>(null)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
@@ -334,6 +329,13 @@ export default function Nav() {
     return () => window.removeEventListener("scroll", onScroll)
   }, [])
 
+  // Over-hero state: pages that open on a full-bleed photograph mark it
+  // with [data-nav-on-image]; the bar runs light until it gains its
+  // backdrop (Rockstar Pass Part 2).
+  useEffect(() => {
+    setOnImage(Boolean(document.querySelector("[data-nav-on-image]")))
+  }, [pathname])
+
   // Lock body scroll while the drawer is open
   useEffect(() => {
     document.body.style.overflow = drawerOpen ? "hidden" : ""
@@ -367,13 +369,16 @@ export default function Nav() {
   const isActive = (link: PrimaryLink) =>
     link.match.some((base) => pathname === base || pathname.startsWith(`${base}/`))
 
+  // Menus and the drawer sit on white, so the light treatment yields to them
+  const light = onImage && !scrolled && menu === null
+
   return (
     // reducedMotion="user": the CSS kill switch cannot stop framer's JS
     // animations, so the dropdown/drawer fades opt out here (MOVE 8).
     <MotionConfig reducedMotion="user">
     <div ref={rootRef}>
       <header
-        className="fixed top-0 right-0 left-0 z-50"
+        className={`fixed top-0 right-0 left-0 z-50${light ? " nav-light" : ""}`}
         style={{
           // Fully opaque once scrolled. The reference's 0.92 wash let section
           // text ghost through behind the nav links; the bar sits over
@@ -386,7 +391,7 @@ export default function Nav() {
         }}
       >
         <div className="container-1280 flex h-[72px] min-w-0 items-center gap-x-6">
-          <Wordmark onClick={closeAll} />
+          <Wordmark onClick={closeAll} light={light} />
 
           <nav
             aria-label="Primary"
@@ -436,7 +441,7 @@ export default function Nav() {
           <Link
             href="/contact"
             onClick={closeAll}
-            className="ml-10 hidden shrink-0 rounded-[2px] border border-[#14161A] px-[19px] py-[10px] text-[14px] font-semibold text-[#14161A] transition-colors hover:bg-[#14161A] hover:text-white min-[821px]:inline-block"
+            className="nav-cta ml-10 hidden shrink-0 rounded-[2px] border px-[19px] py-[11px] text-[12px] font-semibold tracking-[0.12em] uppercase transition-colors min-[821px]:inline-block"
           >
             Request a quote
           </Link>
@@ -448,8 +453,8 @@ export default function Nav() {
             aria-expanded={drawerOpen}
             className="ml-auto flex h-11 w-11 flex-col items-center justify-center gap-[5px] min-[821px]:hidden"
           >
-            <span aria-hidden="true" className="block h-[1.5px] w-[22px] bg-[#14161A]" />
-            <span aria-hidden="true" className="block h-[1.5px] w-[22px] bg-[#14161A]" />
+            <span aria-hidden="true" className="nav-burger-bar block h-[1.5px] w-[22px]" />
+            <span aria-hidden="true" className="nav-burger-bar block h-[1.5px] w-[22px]" />
           </button>
         </div>
       </header>

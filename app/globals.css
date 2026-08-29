@@ -435,6 +435,23 @@
   }
   .arrow-link:hover span { transform: translateX(4px); }
 
+  /* ---- Nav bar states (Rockstar Part 2) ----
+     Default: ink on the opaque/white bar. .nav-light runs while the bar
+     sits transparent over an opening photograph. */
+  .nav-cta {
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+  .nav-cta:hover { background: var(--ink); color: #FFFFFF; }
+  .nav-burger-bar { background: var(--ink); }
+
+  .nav-light .nav-link { color: rgba(255, 255, 255, 0.85); background-image: linear-gradient(#FFF, #FFF); }
+  .nav-light .nav-link:hover { color: #FFFFFF; }
+  .nav-light .nav-link-active { color: #FFFFFF; }
+  .nav-light .nav-cta { border-color: rgba(255, 255, 255, 0.55); color: #FFFFFF; }
+  .nav-light .nav-cta:hover { background: #FFFFFF; color: var(--ink); }
+  .nav-light .nav-burger-bar { background: #FFFFFF; }
+
   /* ---- Nav underline ---- */
 
   .nav-link {
