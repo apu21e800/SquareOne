@@ -21,9 +21,9 @@ const projectTypes = [
 /* Hairline-underline fields. Focus darkens the rule to ink; the global
    :focus-visible ring in globals.css stays in place for keyboard users. */
 const field =
-  "block w-full border-b border-hairline bg-transparent pb-[10px] text-[15px] leading-[1.55] text-ink transition-colors placeholder:text-[#9AA0A7] hover:border-[color:var(--hairline-strong)] focus:border-ink"
+  "block h-[52px] w-full rounded-[2px] border border-hairline bg-white px-4 text-[16px] leading-[1.55] text-ink transition-colors placeholder:text-[#9AA0A7] hover:border-[color:var(--hairline-strong)] focus:border-ink focus:outline-none"
 
-const label = "mb-2 block text-[14px] font-semibold text-ink"
+const label = "mb-[10px] block text-[12px] font-semibold uppercase tracking-[0.12em] text-ink"
 
 function Required() {
   return (
@@ -194,7 +194,7 @@ export default function ContactPage() {
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
                     placeholder="Two decorative crosswalks and a plaza recoat, roughly 400 m². Location and timeline help too."
-                    className={`${field} resize-y`}
+                    className={`${field} h-auto min-h-[140px] resize-y py-[14px]`}
                   />
                 </div>
 
@@ -214,7 +214,7 @@ export default function ContactPage() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="btn-primary cursor-pointer disabled:cursor-not-allowed disabled:opacity-60"
+                    className="btn-primary w-full cursor-pointer text-center disabled:cursor-not-allowed disabled:opacity-60 min-[701px]:w-auto"
                   >
                     {loading ? "Sending…" : "Send request"}
                   </button>
