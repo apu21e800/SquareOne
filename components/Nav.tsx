@@ -490,10 +490,10 @@ export default function Nav() {
           // Fully opaque once scrolled. The reference's 0.92 wash let section
           // text ghost through behind the nav links; the bar sits over
           // photography and dense copy, so it has to be solid.
-          background: scrolled ? "#FFFFFF" : "rgba(255,255,255,0)",
-          backdropFilter: scrolled ? "blur(8px)" : "none",
-          WebkitBackdropFilter: scrolled ? "blur(8px)" : "none",
-          borderBottom: `1px solid ${scrolled ? HAIRLINE : "rgba(231,227,220,0)"}`,
+          background: scrolled || menu ? "#FFFFFF" : "rgba(255,255,255,0)",
+          backdropFilter: scrolled || menu ? "blur(8px)" : "none",
+          WebkitBackdropFilter: scrolled || menu ? "blur(8px)" : "none",
+          borderBottom: `1px solid ${scrolled || menu ? HAIRLINE : "rgba(231,227,220,0)"}`,
           transition: "background 0.25s ease, border-color 0.25s ease",
         }}
       >

@@ -126,7 +126,7 @@ export default async function ProductPage({ params }: Props) {
       </section>
 
       {/* ── Header ─────────────────────────────────────────────── */}
-      <section className="section bg-surface pt-[calc(var(--bar-h)+4rem)] pb-14 max-[700px]:pt-[calc(var(--bar-h)+2rem)]">
+      <section className="section bg-surface pt-16 pb-14 max-[700px]:pt-10">
         <div className="container-1280">
           <Link
             href="/products"
