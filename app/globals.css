@@ -171,6 +171,7 @@
     background: var(--accent);
   }
   .eyebrow-center { justify-content: center; }
+  .eyebrow-on-image { color: rgba(255, 255, 255, 0.78); }
 
   /* Same treatment, no square. For repeated column headings (mega menu,
      footer) where one square per column would blow the orange budget. */
@@ -253,6 +254,19 @@
     transition: background 0.15s ease;
   }
   .btn-on-slate:hover { background: var(--surface-stone); color: var(--surface-slate); }
+
+  /* Hairline button for use over photography (full-bleed hero) */
+  .btn-on-image {
+    display: inline-block;
+    border: 1px solid rgba(255, 255, 255, 0.44);
+    color: #FFFFFF;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 14px 29px;
+    border-radius: var(--radius);
+    transition: border-color 0.15s ease;
+  }
+  .btn-on-image:hover { border-color: rgba(255, 255, 255, 0.9); color: #FFFFFF; }
 
   /* ---- Cards ---- */
 
@@ -342,6 +356,18 @@
   .scrim-light {
     background: linear-gradient(to top, rgba(20, 24, 29, 0.55), rgba(20, 24, 29, 0) 38%);
   }
+  /* Taller rise for a full-bleed hero with a headline block at its foot */
+  .scrim-rise {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      to top,
+      rgba(20, 24, 29, 0.82) 0%,
+      rgba(20, 24, 29, 0.42) 32%,
+      rgba(20, 24, 29, 0) 60%
+    );
+  }
 
   .caption {
     position: absolute;
@@ -352,6 +378,7 @@
     letter-spacing: 0.02em;
     color: #FFFFFF;
   }
+  .caption-right { left: auto; right: 20px; }
 
   /* ---- Tag pill ---- */
 

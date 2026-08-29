@@ -1,60 +1,60 @@
 import Image from "next/image"
 import Link from "next/link"
 
-/* Single still photograph — no ken-burns, no cross-fade, no autoplay.
-   Section 01 of docs/design-v2/Square One Homepage.dc.html */
+/* Full-bleed single-photograph hero — MOVE 1 of docs/SOUL-PASS.md.
+   The photograph is S1's own frame (not shared with hubss.com): the
+   TrafficPatternsXD crosswalk at the White Rock Pier approach, 2019.
+   Eyebrow → headline → CTAs over a rising slate scrim; caption bottom-right.
+   The 55/45 split layout this replaced lives on at /driveways. */
 const HERO_IMAGE = {
-  src: "/images/S1_update_v2/photos/Featured image options/UBC-crosswalk-3-300dpi.jpg",
-  alt: "UBC × Musqueam crosswalk by Square One Paving",
-  caption: "Vancouver · TrafficPatterns · 2025",
+  src: "/images/hero/white-rock-pier-crosswalk-trafficpatternsxd.jpg",
+  alt: "Red TrafficPatternsXD crosswalk leading to the White Rock Pier, Semiahmoo Bay at low tide beyond",
+  caption: "White Rock · TrafficPatternsXD · 2019",
 } as const
 
 export default function Hero() {
   return (
-    <section className="relative grid min-h-[620px] grid-cols-[55fr_45fr] overflow-hidden bg-[var(--surface)] max-[700px]:min-h-0 max-[700px]:grid-cols-1">
-      {/* ── Left cell ─────────────────────────────────────────── */}
-      <div
-        className="
-          relative flex items-center
-          pt-24 pb-24 pr-[72px] pl-[max(calc((100vw_-_1280px)/2),40px)]
-          max-[700px]:pt-[72px] max-[700px]:pr-6 max-[700px]:pb-14 max-[700px]:pl-6
-        "
-      >
+    <section className="relative h-[92vh] min-h-[560px] overflow-hidden bg-surface-slate supports-[height:92svh]:h-[92svh]">
+      <Image
+        src={HERO_IMAGE.src}
+        alt={HERO_IMAGE.alt}
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover [object-position:center_62%]"
+      />
 
-        <div className="relative z-[1]">
-          <div className="eyebrow">BC&rsquo;s decorative pavement studio &middot; Since 2000</div>
+      {/* Rising slate scrim — keeps the headline legible, lets the surface speak above it */}
+      <div aria-hidden="true" className="scrim-rise" />
 
-          <h1 className="stop mt-7">Surfaces that define a place</h1>
+      {/* ── Headline block, bottom-left ───────────────────────── */}
+      <div className="absolute inset-x-0 bottom-0 z-[1]">
+        <div className="container-1280 pb-[72px] max-[700px]:pb-16">
+          <div className="eyebrow eyebrow-on-image">
+            BC&rsquo;s decorative pavement studio &middot; Since 2000
+          </div>
 
-          <p className="mt-7 max-w-[56ch] text-[19px] leading-[1.65] text-[var(--ink-body)] [text-wrap:pretty] max-[700px]:text-[17px]">
-            Stamped asphalt, decorative coatings and preformed thermoplastic, installed by the
-            same crews across 51 British Columbia communities.
-          </p>
+          <h1 className="stop mt-6 max-w-[16ch] text-white">Surfaces that define a place</h1>
 
-          <div className="mt-11 flex flex-wrap items-center gap-[14px]">
+          <div className="mt-10 flex flex-wrap items-center gap-[14px]">
             <Link href="/contact" className="btn-primary">
               Request a quote
             </Link>
-            <Link href="/projects" className="btn-secondary">
+            <Link href="/projects" className="btn-on-image">
               See our work
             </Link>
           </div>
         </div>
       </div>
 
-      {/* ── Right cell ────────────────────────────────────────── */}
-      <div className="relative min-w-0 overflow-hidden bg-[var(--surface-stone)] max-[700px]:aspect-[4/3]">
-        <Image
-          src={HERO_IMAGE.src}
-          alt={HERO_IMAGE.alt}
-          fill
-          priority
-          sizes="(max-width: 700px) 100vw, 45vw"
-          className="object-cover [object-position:center_70%]"
-        />
-        <div aria-hidden="true" className="scrim scrim-light" />
-        <div className="caption">{HERO_IMAGE.caption}</div>
-      </div>
+      {/* ── Caption, bottom-right ─────────────────────────────── */}
+      <div className="caption caption-right z-[1] max-[700px]:hidden">{HERO_IMAGE.caption}</div>
+
+      {/* ── Quiet scroll cue ──────────────────────────────────── */}
+      <div
+        aria-hidden="true"
+        className="absolute bottom-0 left-1/2 z-[1] h-9 w-px -translate-x-1/2 bg-white/40 max-[900px]:hidden"
+      />
     </section>
   )
 }
