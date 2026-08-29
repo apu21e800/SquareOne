@@ -141,7 +141,7 @@ export default function AboutPage() {
                 <div className="relative aspect-[4/5] max-w-[320px] overflow-hidden rounded-[2px] border border-[color:var(--hairline)] bg-[color:var(--surface-stone)]">
                   <span
                     aria-hidden="true"
-                    className="absolute inset-0 flex items-center justify-center text-[64px] font-extralight tracking-[0.04em] text-[rgba(20,22,26,0.22)]"
+                    className="absolute inset-0 flex items-center justify-center text-[64px] font-semibold [font-family:var(--font-display)] tracking-[-0.01em] text-[rgba(20,22,26,0.22)]"
                   >
                     {person.initials}
                   </span>
@@ -196,7 +196,7 @@ export default function AboutPage() {
                       key={item.year}
                       className="grid grid-cols-[72px_1fr] items-baseline gap-6 border-b border-[color:var(--hairline)] py-4"
                     >
-                      <span className="text-[22px] font-extralight leading-none tracking-[-0.03em] text-ink">
+                      <span className="text-[22px] font-medium [font-family:var(--font-display)] leading-none tracking-[-0.01em] text-ink">
                         {item.year}
                       </span>
                       <span className="text-[15px] leading-[1.55] text-ink-body">{item.event}</span>
@@ -225,7 +225,7 @@ export default function AboutPage() {
                 <div className="label">Our mission</div>
 
                 <blockquote className="m-0 mt-5 p-0">
-                  <p className="m-0 text-[24px] font-light leading-[1.4] tracking-[-0.02em] text-ink [text-wrap:pretty] max-[700px]:text-[21px]">
+                  <p className="quote-display m-0 text-[24px] leading-[1.4] text-ink [text-wrap:pretty] max-[700px]:text-[21px]">
                     &ldquo;Build surfaces that perform as good as they look — and last.&rdquo;
                   </p>
                 </blockquote>

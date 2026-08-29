@@ -123,7 +123,7 @@ const proseClass = [
   "prose-strong:font-semibold",
   // Headings — v2 display scale
   "prose-h2:mt-14 prose-h2:mb-5 prose-h2:text-[clamp(1.75rem,3vw,2.75rem)]",
-  "prose-h2:font-light prose-h2:tracking-[-0.03em] prose-h2:leading-[1.06]",
+  "prose-h2:font-semibold prose-h2:tracking-[-0.008em] prose-h2:leading-[1.06]",
   "prose-h3:mt-14 prose-h3:mb-4 prose-h3:text-[1.25rem] prose-h3:font-semibold",
   "prose-h3:tracking-[-0.015em] prose-h3:leading-[1.4]",
   "prose-h4:mt-10 prose-h4:mb-3 prose-h4:text-[1rem] prose-h4:font-semibold",
@@ -135,7 +135,7 @@ const proseClass = [
   "[&_a:hover]:decoration-[color:var(--accent-deep)]",
   // Pull quote — 2px ink rule, no italics, no smart quotes
   "prose-blockquote:my-12 prose-blockquote:border-l-2 prose-blockquote:pl-7",
-  "prose-blockquote:not-italic prose-blockquote:font-light",
+  "prose-blockquote:not-italic prose-blockquote:font-medium",
   "[&_blockquote_p]:text-[23px] [&_blockquote_p]:leading-[1.5]",
   "[&_blockquote_p]:tracking-[-0.01em] [&_blockquote_p]:text-[color:var(--ink)]",
   "[&_blockquote_p]:before:content-none [&_blockquote_p]:after:content-none",

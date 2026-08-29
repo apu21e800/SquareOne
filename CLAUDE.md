@@ -16,6 +16,10 @@ for municipalities, developers, and contractors across BC.
 **Applications**: Crosswalks, Bus & Bike Lanes, Parking Lots, Driveways, School Zones, Public Spaces, Surface Prep
 
 ## Brand
+<!-- Type system AMENDED per client direction, 2026-08-28 (docs/ROCKSTAR-PASS.md):
+     Fraunces 600-640 for display/H1/H2; spaced-caps Inter 600 (0.12em) for
+     eyebrows/labels/buttons; Inter 450-500 body at 17px. Nothing below weight
+     400 (ghost numerals excepted). Do not revert to Inter-only. -->
 - Colors: Warm beige background (#F5F3F0), orange accent (#C85A3A), stone (#8B8680), charcoal (#2D2D2D)
 - Tone: Professional, practical, BC-focused
 - Positioning: "BC's Trusted Decorative Pavement Applicators" — quality work that lasts

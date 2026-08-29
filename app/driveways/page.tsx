@@ -498,7 +498,7 @@ export default function DriveywaysPage() {
                   </span>
                   <span
                     aria-hidden="true"
-                    className="flex-shrink-0 text-[22px] font-light leading-none text-ink-muted"
+                    className="flex-shrink-0 text-[22px] font-normal leading-none text-ink-muted"
                   >
                     <span className="group-open:hidden">+</span>
                     <span className="hidden group-open:inline">&minus;</span>

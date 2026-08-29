@@ -19,7 +19,7 @@ export default function Testimonials() {
     <section className="section bg-surface">
       <div className="container-1280">
         <blockquote className="m-0 p-0">
-          <p className="stop stop-tight m-0 max-w-[44ch] text-[26px] font-light leading-[1.45] tracking-[-0.01em] text-ink [text-wrap:pretty]">
+          <p className="quote-display stop stop-tight m-0 max-w-[44ch] text-[26px] leading-[1.45] text-ink [text-wrap:pretty]">
             &ldquo;{pullQuote.quote}&rdquo;
           </p>
           <footer className="mt-5 text-[14px] text-ink-muted">

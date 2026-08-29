@@ -238,7 +238,7 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
           type="button"
           onClick={onClose}
           aria-label="Close menu"
-          className="px-3 py-2 text-[28px] leading-none font-light text-[#14161A]"
+          className="px-3 py-2 text-[28px] leading-none font-normal text-[#14161A]"
         >
           &times;
         </button>
@@ -250,7 +250,7 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
             key={link.href}
             href={link.href}
             onClick={onClose}
-            className="block border-b border-[#E7E3DC] py-[22px] text-[26px] leading-tight font-light tracking-[-0.02em] text-[#14161A]"
+            className="block border-b border-[#E7E3DC] py-[22px] text-[26px] leading-tight font-medium tracking-[-0.02em] text-[#14161A]"
           >
             {link.label}
           </Link>

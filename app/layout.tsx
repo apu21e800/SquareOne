@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Inter } from 'next/font/google'
+import { Inter, Fraunces } from 'next/font/google'
 import "./globals.css"
 import Nav from "@/components/Nav"
 import Footer from "@/components/Footer"
@@ -7,12 +7,19 @@ import StructuredData from "@/components/StructuredData"
 import MobileStickyCTA from "@/components/MobileStickyCTA"
 import MotionBreath from "@/components/MotionBreath"
 
-// Single typeface for the whole system — 200 for display numerals,
-// 300 for headlines, 400–700 for UI and body.
+// Two-face system per the Rockstar Pass (canon §2.5 as amended, Aug 2026):
+// Fraunces 600–640 carries display/H1/H2; Inter variable carries body
+// (450–500) and every spaced-caps label at 600. Nothing renders below
+// weight 400 — the ghost numerals are the one sanctioned exception.
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
-  weight: ['200', '300', '400', '500', '600', '700'],
+  display: 'swap',
+})
+
+const fraunces = Fraunces({
+  subsets: ['latin'],
+  variable: '--font-fraunces',
   display: 'swap',
 })
 
@@ -55,7 +62,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={`${inter.variable} ${fraunces.variable}`}>
       <body className="antialiased">
         <StructuredData />
         <Nav />

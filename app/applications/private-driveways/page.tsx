@@ -231,7 +231,7 @@ export default function PrivateDrivewaysPage() {
                   </h3>
                   <span
                     aria-hidden="true"
-                    className="inline-block flex-shrink-0 text-[22px] leading-none font-light text-[color:var(--ink-muted)] transition-transform duration-200 group-open:rotate-45"
+                    className="inline-block flex-shrink-0 text-[22px] leading-none font-normal text-[color:var(--ink-muted)] transition-transform duration-200 group-open:rotate-45"
                   >
                     +
                   </span>

@@ -143,6 +143,13 @@ page.** No gradients, glows, shimmer, or decorative effects. Signature motif: a
 headlines. `#F26430` on white is ~3:1 contrast — fine for large/bold text and
 UI marks, **fails AA for body-size text**; never use it for small text.
 
+> **AMENDED per client direction, 2026-08-28 (docs/ROCKSTAR-PASS.md):**
+> "Inter only" no longer holds. Display/H1/H2 are **Fraunces (variable,
+> 600–640)**; eyebrows, labels and button text are **spaced-caps Inter 600
+> (0.12em)**; body is **Inter 450–500 at 17px**. Nothing renders below
+> weight 400 (ghost numerals excepted — texture, not text). Do not "fix"
+> the site back to Inter-only-300. Everything else in this section stands.
+
 ### 2.6 Voice
 
 Installer, not manufacturer. "We install HUB's StreetBond...", "our crews", "on
