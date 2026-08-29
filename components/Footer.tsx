@@ -1,3 +1,4 @@
+import Image from "next/image"
 import Link from "next/link"
 
 const socials = [
@@ -126,10 +127,13 @@ export default function Footer() {
                 className="flex items-center gap-3"
                 aria-label="Square One Paving — home"
               >
-                <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-[2px] bg-white text-[11px] font-semibold text-[#14181D]">
-                  S1
-                </span>
-                <span className="text-[15px] font-semibold text-white">Square One Paving</span>
+                <Image
+                  src="/images/logo/SquareOne-wordmark-white.png"
+                  alt="Square One Paving"
+                  width={484}
+                  height={66}
+                  className="h-[26px] w-auto"
+                />
               </Link>
 
               <p className="mt-[18px] max-w-[30ch] text-[14px] leading-[1.6] text-[#8A9098]">

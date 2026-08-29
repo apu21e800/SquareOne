@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-7.3 -86.3 300 300">
+  <!-- Square One Paving mark — extracted from the official wordmark vector
+       (public/images/logo/SquareOne-wordmark-dark.svg), lettering omitted. -->
+  <g>
+    <g transform="translate(81.587 29.839)">
+      <path d="M45.945,0,0,26.037,45.945,66.7,93.014,26.037Z" fill="#bb7034" stroke="#bb7034" stroke-miterlimit="10" stroke-width="6.627"/>
+    </g>
+    <path d="M16.619,0,37.655,20.1,0,40.859Z" transform="translate(22.432 31.245)" fill="#595959"/>
+    <path d="M-25.965,0-47,20.1-9.345,40.859Z" transform="translate(243.284 31.245)" fill="#595959"/>
+    <path d="M0,21.349,8.633,0H27.656L69.7,23.472l-41.726,23.8Z" transform="translate(44.064 0)" fill="#d8d8d8"/>
+    <path d="M-17.3,21.349-25.932,0H-44.955L-87,23.472l41.726,23.8Z" transform="translate(228.805 0)" fill="#d8d8d8"/>
+    <path d="M0,12.819,14.519,0,28.842,12.819Z" transform="translate(113.765 113.765)" fill="#595959"/>
+    <path d="M0,0H60.888L30.813,15.222Z" transform="translate(97.742 0)" fill="#d8d8d8"/>
+    <path d="M0,64.093,14.46,30.67,69.384,0l47.586,44.624L93.015,64.093Z" transform="translate(0 63.292)" fill="#595959"/>
+    <path d="M-29.031,64.093-43.491,30.67-98.414,0-146,44.624l23.954,19.469Z" transform="translate(285.402 63.292)" fill="#595959"/>
+  </g>
+</svg>

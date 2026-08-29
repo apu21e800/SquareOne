@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     description:
       "BC's trusted decorative pavement applicators since 2000.",
     images: [
-      { url: "/images/og-image.jpg", width: 1200, height: 630, alt: "Square One Paving" },
+      { url: "/images/og-image.png", width: 1200, height: 600, alt: "Square One Paving" },
     ],
   },
   twitter: {

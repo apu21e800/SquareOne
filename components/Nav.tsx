@@ -110,13 +110,14 @@ function Wordmark({ onClick }: { onClick?: () => void }) {
       aria-label="Square One Paving — home"
       className="flex shrink-0 items-center gap-3"
     >
-      <span
-        aria-hidden="true"
-        className="flex h-7 w-7 items-center justify-center rounded-[2px] bg-[#14181D] text-[11px] font-semibold tracking-[0.02em] text-white"
-      >
-        S1
-      </span>
-      <span className="text-[15px] font-semibold text-[#14161A]">Square One Paving</span>
+      <Image
+        src="/images/logo/SquareOne-wordmark-dark.png"
+        alt="Square One Paving"
+        width={630}
+        height={94}
+        priority
+        className="h-[30px] w-auto"
+      />
     </Link>
   )
 }

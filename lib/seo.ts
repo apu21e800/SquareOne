@@ -2,7 +2,7 @@ import type { Metadata }from "next"
 
 const BASE_URL = "https://squareonepaving.ca"
 const SITE_NAME = "Square One Paving"
-const DEFAULT_OG_IMAGE = "/images/og-image.jpg"
+const DEFAULT_OG_IMAGE = "/images/og-image.png"
 const TITLE_SUFFIX = "Square One Paving"
 
 const clampTitle = (str: string, max = 60) =>
@@ -41,7 +41,7 @@ export function buildMetadata({
       description: clampedDesc,
       url,
       siteName: SITE_NAME,
-      images: [{ url: imageUrl, width: 1200, height: 630, alt: title }],
+      images: [{ url: imageUrl, width: 1200, height: 600, alt: title }],
       type,
       ...(publishedTime ? { publishedTime } : {}),
     },
