@@ -93,11 +93,36 @@ const DRAWER_LINKS: { label: string; href: string }[] = [
   { label: "About", href: "/about" },
 ]
 
-const FEATURE_IMAGE = "/images/applications/private-driveways/estate-herringbone-gated-driveway-01.jpg"
+/** One featured frame per category — real installs, tall crops. */
+const CATEGORY_FEATURE: Record<
+  (typeof PRODUCT_CATEGORIES)[number],
+  { src: string; alt: string; caption: string }
+> = {
+  "Stamped Asphalt": {
+    src: "/images/products/streetprint/streetprint-victoria-ellis-point-walkway-01.jpg",
+    alt: "StreetPrint cobblestone walkway at Ellis Point, Victoria",
+    caption: "Ellis Point Walkway · Victoria",
+  },
+  "Decorative Coatings": {
+    src: "/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg",
+    alt: "StreetBond multicolour plaza at Joyce Station, Vancouver, at dusk",
+    caption: "Joyce Station · Vancouver",
+  },
+  "Thermoplastic": {
+    src: "/images/products/traffic-patterns-xd/trafficpatternsxd-victoria-dallas-road-crosswalk-01.jpg",
+    alt: "TrafficPatternsXD crosswalk on Dallas Road, Victoria",
+    caption: "Dallas Road · Victoria",
+  },
+  "Surface Protection": {
+    src: "/images/products/durashield/durashield-protected-asphalt-surface-01.jpg",
+    alt: "DuraShield-protected asphalt surface",
+    caption: "DuraShield · Surface protection",
+  },
+}
 
 const HAIRLINE = "#E7E3DC"
 
-const panelTransition: Transition = { duration: 0.16, ease: "easeOut" }
+const panelTransition: Transition = { duration: 0.15, ease: "easeOut" }
 
 /* ------------------------------------------------------------------
    Sub-components
@@ -146,68 +171,122 @@ interface ProductsMegaProps {
 }
 
 function ProductsMega({ onNavigate, onMouseEnter, onMouseLeave }: ProductsMegaProps) {
+  const [active, setActive] = useState<(typeof PRODUCT_CATEGORIES)[number]>(PRODUCT_CATEGORIES[0])
+  const panelRef = useRef<HTMLDivElement>(null)
+  const column = productColumns.find((c) => c.category === active) ?? productColumns[0]
+  const feature = CATEGORY_FEATURE[active]
+
+  // Arrow keys: up/down within a column, right into the product rows,
+  // left back to the category list (Rockstar Part 3).
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    const panel = panelRef.current
+    if (!panel) return
+    const cats = Array.from(panel.querySelectorAll<HTMLElement>("[data-mega-cat]"))
+    const items = Array.from(panel.querySelectorAll<HTMLElement>("[data-mega-item]"))
+    const el = document.activeElement as HTMLElement | null
+    if (!el) return
+    const inCats = cats.includes(el)
+    const inItems = items.includes(el)
+    if (!inCats && !inItems) return
+    const group = inCats ? cats : items
+    const i = group.indexOf(el)
+    if (e.key === "ArrowDown") { e.preventDefault(); group[Math.min(i + 1, group.length - 1)]?.focus() }
+    if (e.key === "ArrowUp") { e.preventDefault(); group[Math.max(i - 1, 0)]?.focus() }
+    if (e.key === "ArrowRight" && inCats) { e.preventDefault(); items[0]?.focus() }
+    if (e.key === "ArrowLeft" && inItems) { e.preventDefault(); cats.find((c) => c.dataset.megaCat === active)?.focus() }
+  }
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 4 }}
+      initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 4 }}
+      exit={{ opacity: 0, y: 6 }}
       transition={panelTransition}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       className="fixed top-[72px] right-0 left-0 z-40 hidden border-t border-b border-[#E7E3DC] bg-white min-[821px]:block"
     >
       <div
-        className="mx-auto grid max-w-[1280px] gap-8 px-10 pt-8 pb-[30px]"
-        style={{ gridTemplateColumns: "repeat(4, 1fr) 1.25fr" }}
+        ref={panelRef}
+        onKeyDown={onKeyDown}
+        className="mx-auto grid max-w-[1280px] grid-cols-8 gap-x-8 px-10 py-8"
       >
-        {productColumns.map((column) => (
-          <div key={column.category}>
-            {/* .label, not .eyebrow — four squares here would blow the
-                three-orange-elements budget, and the reference uses a bare
-                label in the mega menu. */}
-            <div className="label">{column.category}</div>
-            <div className="mt-[18px] flex flex-col gap-3">
-              {column.items.map((product) => (
-                <Link
-                  key={product.slug}
-                  href={`/products/${product.slug}`}
-                  onClick={onNavigate}
-                  className="block text-[15px] font-semibold"
-                >
-                  {product.name}
-                  <span className="mt-[3px] block text-[13px] leading-[1.5] font-normal text-[#767B82]">
-                    {PRODUCT_DESCRIPTOR[product.slug] ?? product.tagline}
-                  </span>
-                </Link>
-              ))}
-            </div>
-          </div>
-        ))}
+        {/* ── Cols 1–2: categories ──────────────────────────── */}
+        <div className="col-span-2 flex flex-col border-r border-[#E7E3DC] pr-8">
+          {productColumns.map((col) => (
+            <button
+              key={col.category}
+              type="button"
+              data-mega-cat={col.category}
+              onMouseEnter={() => setActive(col.category)}
+              onFocus={() => setActive(col.category)}
+              onClick={() => setActive(col.category)}
+              className={`flex items-baseline justify-between gap-4 rounded-[2px] px-3 py-[14px] text-left text-[12px] font-semibold tracking-[0.12em] uppercase transition-colors duration-150 ${
+                active === col.category
+                  ? "bg-[#FAF8F5] text-[#14161A]"
+                  : "text-[#767B82] hover:text-[#14161A]"
+              }`}
+            >
+              <span>{col.category}</span>
+              <span className="text-[11px] tracking-[0.08em] text-[#A9A297]">
+                {String(col.items.length).padStart(2, "0")}
+              </span>
+            </button>
+          ))}
+          <Link href="/products" onClick={onNavigate} className="arrow-link mt-auto px-3 pt-6">
+            All products <span>&rarr;</span>
+          </Link>
+        </div>
 
-        <div className="border-l border-[#E7E3DC] pl-8">
+        {/* ── Cols 3–6: products of the active category ─────── */}
+        <div className="col-span-4 flex flex-col gap-1">
+          {column.items.map((product) => (
+            <Link
+              key={product.slug}
+              href={`/products/${product.slug}`}
+              data-mega-item
+              onClick={onNavigate}
+              className="group flex items-center gap-4 rounded-[2px] px-3 py-2 transition-colors duration-150 hover:bg-[#FAF8F5]"
+            >
+              <span className="relative h-[56px] w-[56px] shrink-0 overflow-hidden rounded-[2px] bg-[#F1EEE9]">
+                <Image
+                  src={product.image}
+                  alt=""
+                  fill
+                  sizes="56px"
+                  className="object-cover"
+                />
+              </span>
+              <span className="min-w-0">
+                <span className="block text-[15px] font-semibold text-[#14161A]">
+                  {product.name}
+                </span>
+                <span className="mt-[2px] block truncate text-[13px] leading-[1.5] text-[#767B82]">
+                  {PRODUCT_DESCRIPTOR[product.slug] ?? product.tagline}
+                </span>
+              </span>
+            </Link>
+          ))}
+        </div>
+
+        {/* ── Cols 7–8: featured frame, changes per category ── */}
+        <div className="col-span-2">
           <Link
-            href="/driveways"
+            href="/projects"
             onClick={onNavigate}
-            className="relative block aspect-[16/10] overflow-hidden rounded-[2px] bg-[#E4DDD1]"
+            className="relative block h-full min-h-[280px] overflow-hidden rounded-[2px] bg-[#F1EEE9]"
           >
             <Image
-              src={FEATURE_IMAGE}
-              alt="Herringbone StreetPrint driveway at a gated estate"
+              key={feature.src}
+              src={feature.src}
+              alt={feature.alt}
               fill
-              sizes="300px"
-              className="object-cover object-[center_70%]"
+              sizes="320px"
+              className="object-cover"
             />
-            <span aria-hidden="true" className="scrim scrim-light" />
-            <span className="caption">StreetPrint herringbone driveway</span>
+            <span aria-hidden="true" className="scrim" />
+            <span className="caption">{feature.caption}</span>
           </Link>
-          <div className="mt-[18px] flex flex-col gap-[10px]">
-            <Link href="/products" onClick={onNavigate} className="arrow-link">
-              All products <span>&rarr;</span>
-            </Link>
-            <Link href="/resources" onClick={onNavigate} className="arrow-link">
-              Technical documents <span>&rarr;</span>
-            </Link>
-          </div>
         </div>
       </div>
     </motion.div>
@@ -238,23 +317,51 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
         </button>
       </div>
 
-      <nav aria-label="Mobile" className="flex-1 overflow-auto px-6 pt-2">
+      <nav aria-label="Mobile" className="flex-1 overflow-auto px-6 pt-2 pb-6">
         {DRAWER_LINKS.map((link) => (
           <Link
             key={link.href}
             href={link.href}
             onClick={onClose}
-            className="block border-b border-[#E7E3DC] py-[22px] text-[26px] leading-tight font-medium tracking-[-0.02em] text-[#14161A]"
+            className="block border-b border-[#E7E3DC] py-[18px] text-[24px] leading-tight font-medium tracking-[-0.02em] text-[#14161A]"
           >
             {link.label}
           </Link>
         ))}
+
+        <div className="label mt-9">Services</div>
+        <div className="mt-3 flex flex-col">
+          {serviceLinks.map((service) => (
+            <Link
+              key={service.slug}
+              href={`/services/${service.slug}`}
+              onClick={onClose}
+              className="py-[9px] text-[16px] font-medium text-[#3D4147]"
+            >
+              {SERVICE_LABEL[service.slug] ?? service.name}
+            </Link>
+          ))}
+        </div>
+
+        <div className="label mt-8">Products</div>
+        <div className="mt-3 grid grid-cols-2 gap-x-6">
+          {products.map((product) => (
+            <Link
+              key={product.slug}
+              href={`/products/${product.slug}`}
+              onClick={onClose}
+              className="py-[9px] text-[16px] font-medium text-[#3D4147]"
+            >
+              {product.name}
+            </Link>
+          ))}
+        </div>
       </nav>
 
       <Link
         href="/contact"
         onClick={onClose}
-        className="flex h-16 shrink-0 items-center justify-center bg-[#F26430] text-[16px] font-semibold text-white transition-colors hover:bg-[#D8511F] hover:text-white"
+        className="flex h-16 shrink-0 items-center justify-center bg-[#F26430] text-[13px] font-semibold tracking-[0.12em] uppercase text-white transition-colors hover:bg-[#D8511F] hover:text-white"
       >
         Request a quote
       </Link>
