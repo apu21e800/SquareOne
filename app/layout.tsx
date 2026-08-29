@@ -5,6 +5,7 @@ import Nav from "@/components/Nav"
 import Footer from "@/components/Footer"
 import StructuredData from "@/components/StructuredData"
 import MobileStickyCTA from "@/components/MobileStickyCTA"
+import MotionBreath from "@/components/MotionBreath"
 
 // Single typeface for the whole system — 200 for display numerals,
 // 300 for headlines, 400–700 for UI and body.
@@ -61,6 +62,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {children}
         <Footer />
         <MobileStickyCTA />
+        <MotionBreath />
       </body>
     </html>
   )

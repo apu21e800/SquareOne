@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
-import { AnimatePresence, motion, type Transition } from "framer-motion"
+import { AnimatePresence, MotionConfig, motion, type Transition } from "framer-motion"
 import { products, type Product } from "@/lib/products"
 import { services, type Service } from "@/lib/services"
 
@@ -367,6 +367,9 @@ export default function Nav() {
     link.match.some((base) => pathname === base || pathname.startsWith(`${base}/`))
 
   return (
+    // reducedMotion="user": the CSS kill switch cannot stop framer's JS
+    // animations, so the dropdown/drawer fades opt out here (MOVE 8).
+    <MotionConfig reducedMotion="user">
     <div ref={rootRef}>
       <header
         className="fixed top-0 right-0 left-0 z-50"
@@ -464,5 +467,6 @@ export default function Nav() {
         {drawerOpen && <MobileDrawer onClose={closeAll} />}
       </AnimatePresence>
     </div>
+    </MotionConfig>
   )
 }

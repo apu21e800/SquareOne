@@ -35,14 +35,14 @@ export default function ProjectsPreview() {
       <span aria-hidden="true" className="ghost-index">02</span>
 
       <div className="container-1280 relative z-[1]">
-        <div className="flex flex-wrap items-baseline justify-between gap-6">
+        <div data-reveal className="flex flex-wrap items-baseline justify-between gap-6">
           <h2>Selected work</h2>
           <Link href="/projects" className="arrow-link whitespace-nowrap">
             All {projects.length} projects <span>&rarr;</span>
           </Link>
         </div>
 
-        <div className="mt-10 grid grid-cols-1 gap-6 min-[701px]:grid-cols-3">
+        <div data-reveal-group className="mt-10 grid grid-cols-1 gap-6 min-[701px]:grid-cols-3">
           {featuredProjects.map((project) => {
             const src =
               heroFor("projects", project.slug, project.imageUrl) ?? project.imageUrl
@@ -55,6 +55,7 @@ export default function ProjectsPreview() {
               <Link
                 key={project.slug}
                 href={`/projects/${project.slug}`}
+                data-reveal
                 className="pattern-running-bond card relative block aspect-[4/3] overflow-hidden rounded-[2px]"
               >
                 <Image

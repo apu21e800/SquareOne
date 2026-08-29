@@ -20,7 +20,8 @@ export default function TrustStrip() {
       <span aria-hidden="true" className="ghost-index">04</span>
 
       <div className="container-1280 relative z-[1]">
-        <div className="eyebrow">Selected clients</div>
+        <div data-reveal>
+          <div className="eyebrow">Selected clients</div>
 
         <div className="mt-7 flex flex-wrap gap-x-12 gap-y-4">
           {selectedClients.map((client) => (
@@ -28,9 +29,10 @@ export default function TrustStrip() {
               {client}
             </span>
           ))}
+          </div>
         </div>
 
-        <blockquote className="mt-14 p-0">
+        <blockquote data-reveal className="mt-14 p-0">
           <p className="stop stop-tight m-0 max-w-[44ch] text-[26px] font-light leading-[1.45] tracking-[-0.01em] text-ink [text-wrap:pretty]">
             &ldquo;{pullQuote.quote}&rdquo;
           </p>

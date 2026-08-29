@@ -364,7 +364,20 @@
   }
   .card:hover img,
   .card:hover [data-zoom] {
-    transform: scale(1.02);
+    transform: scale(1.015);
+  }
+
+  /* ---- Motion as breath (SOUL-PASS MOVE 8) ----
+     Armed by components/MotionBreath.tsx for BELOW-fold content only;
+     server HTML ships fully visible, so nothing can stick mid-reveal. */
+  .reveal-armed {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .reveal-armed.reveal-in {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   .card-panel {
