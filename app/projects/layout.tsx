@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Projects | Stamped Asphalt & Decorative Pavement Portfolio | Square One Paving",
+  title: "Projects | Stamped Asphalt & Decorative Pavement Portfolio",
   description:
     "Explore completed decorative pavement projects across BC — stamped asphalt driveways, StreetPrint crosswalks, StreetBond coatings, and vapour blasting. Metro Vancouver, Vancouver Island, and beyond.",
   keywords: [

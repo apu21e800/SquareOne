@@ -1,5 +1,3 @@
-import { pullQuote } from "@/components/sections/Testimonials"
-
 /**
  * Section 06 — Selected clients + pull-quote.
  * Plain text names, no logos, no cards, no ticker.
@@ -32,14 +30,6 @@ export default function TrustStrip() {
           </div>
         </div>
 
-        <blockquote data-reveal className="mt-14 p-0">
-          <p className="quote-display stop stop-tight m-0 max-w-[44ch] text-[26px] leading-[1.45] text-ink [text-wrap:pretty]">
-            &ldquo;{pullQuote.quote}&rdquo;
-          </p>
-          <footer className="mt-5 text-[14px] text-ink-muted">
-            {pullQuote.attribution}
-          </footer>
-        </blockquote>
       </div>
     </section>
   )

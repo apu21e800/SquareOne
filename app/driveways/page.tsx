@@ -25,7 +25,7 @@ import type { Metadata } from "next"
 import { galleryWithFallback } from "@/lib/gallery"
 
 export const metadata: Metadata = {
-  title: "Decorative Driveways BC | Stamped Asphalt & Coatings | Square One Paving",
+  title: "Decorative Driveways BC | Stamped Asphalt & Coatings",
   description:
     "Stamped asphalt, StreetBond coatings and StreetPrint patterns, installed over the driveway you already have. BC's most experienced decorative pavement installer. Free quotes — Lower Mainland & Vancouver Island.",
   keywords: [

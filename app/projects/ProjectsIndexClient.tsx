@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react"
 import Image from "next/image"
+import ProjectCaption from "@/components/ui/ProjectCaption"
 import Link from "next/link"
 
 /**
@@ -152,14 +153,7 @@ export default function ProjectsIndexClient({
 
                   <div aria-hidden className="scrim" />
 
-                  <div className="pointer-events-none absolute right-6 bottom-5 left-6">
-                    <div className="text-[16px] leading-[1.3] font-semibold text-white">
-                      {project.title}
-                    </div>
-                    <div className="mt-1 text-[13px] leading-[1.4] text-[rgba(255,255,255,0.78)]">
-                      {meta}
-                    </div>
-                  </div>
+                  <ProjectCaption title={project.title} meta={meta} />
                 </Link>
               )
             })}

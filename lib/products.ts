@@ -48,7 +48,7 @@ export const products: Product[] = [
     shortDescription:
       "High-performance water-based coating system available in dozens of colours. Anti-skid, UV stable, and engineered for both municipal and residential applications.",
     fullDescription:
-      "StreetBond is a versatile coloured pavement surface treatment used across North America for bike lanes, bus priority corridors, decorative driveways, sports courts, and public plazas. The water-based formula is eco-friendly, and the anti-skid aggregate provides grip even in wet BC conditions. Retroreflective options support Vision Zero nighttime visibility requirements.",
+      "StreetBond is HUB's coloured pavement coating, specified across North America; we install it across BC for bike lanes, bus priority corridors, driveways, sports courts, and public plazas. The water-based formula keeps application simple, and the anti-skid aggregate holds grip through wet BC winters. Retroreflective options support Vision Zero nighttime visibility requirements.",
     keyBenefits: [
       "50+ standard colours + custom mixing",
       "Anti-skid aggregate for wet surfaces",

@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const product = getProductBySlug(slug)
   if (!product) return {}
   return {
-    title: `${product.name} | Square One Paving BC`,
+    title: `${product.name} | Pavement Systems BC`,
     description: product.shortDescription,
   }
 }

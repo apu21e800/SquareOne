@@ -8,7 +8,7 @@ import { useState } from "react"
    Eyebrows and button labels are spaced caps 600 in every direction —
    that part is the luxury signature regardless of the pick. */
 
-type DirectionKey = "A" | "B" | "C"
+type DirectionKey = "A" | "B" | "C" | "R1" | "R2" | "R3" | "R4"
 
 const DIRECTIONS: Record<
   DirectionKey,
@@ -23,6 +23,7 @@ const DIRECTIONS: Record<
     heroSize: string
     h2Size: string
     cardWeight: number
+    soft?: boolean
   }
 > = {
   A: {
@@ -61,6 +62,55 @@ const DIRECTIONS: Record<
     h2Size: "clamp(1.5rem, 2.6vw, 2.25rem)",
     cardWeight: 600,
   },
+  R1: {
+    tab: "R1 — Fraunces 680 / SOFT 100",
+    blurb: "The robust cut of the current default — sturdier, sign-painter confidence.",
+    family: "var(--tt-fraunces)",
+    displayWeight: 680,
+    displaySpacing: "-0.012em",
+    displayTransform: "none",
+    displayLineHeight: 1.02,
+    heroSize: "clamp(3.5rem, 6vw, 6rem)",
+    h2Size: "clamp(2rem, 3.5vw, 3rem)",
+    cardWeight: 640,
+    soft: true,
+  },
+  R2: {
+    tab: "R2 — Source Serif 700",
+    blurb: "Workhorse oldstyle serif at bold — quieter contrast, very solid.",
+    family: "var(--tt-source-serif)",
+    displayWeight: 700,
+    displaySpacing: "-0.012em",
+    displayTransform: "none",
+    displayLineHeight: 1.04,
+    heroSize: "clamp(3.5rem, 6vw, 6rem)",
+    h2Size: "clamp(2rem, 3.5vw, 3rem)",
+    cardWeight: 700,
+  },
+  R3: {
+    tab: "R3 — DM Serif Display",
+    blurb: "Single-cut display didone — heavy by design, high shine.",
+    family: "var(--tt-dm-serif)",
+    displayWeight: 400,
+    displaySpacing: "-0.005em",
+    displayTransform: "none",
+    displayLineHeight: 1.06,
+    heroSize: "clamp(3.5rem, 6vw, 6rem)",
+    h2Size: "clamp(2rem, 3.5vw, 3rem)",
+    cardWeight: 400,
+  },
+  R4: {
+    tab: "R4 — Young Serif",
+    blurb: "Rounded slab warmth — craft-bakery confidence, one weight.",
+    family: "var(--tt-young-serif)",
+    displayWeight: 400,
+    displaySpacing: "-0.005em",
+    displayTransform: "none",
+    displayLineHeight: 1.08,
+    heroSize: "clamp(3.25rem, 5.5vw, 5.5rem)",
+    h2Size: "clamp(1.9rem, 3.3vw, 2.8rem)",
+    cardWeight: 400,
+  },
 }
 
 const CAPS: React.CSSProperties = {
@@ -80,6 +130,7 @@ export default function TypeTestClient() {
     letterSpacing: d.displaySpacing,
     textTransform: d.displayTransform,
     lineHeight: d.displayLineHeight,
+    ...(d.soft ? { fontVariationSettings: '"SOFT" 100' } : {}),
   }
   const body: React.CSSProperties = {
     fontFamily: "var(--tt-inter)",
@@ -203,6 +254,7 @@ export default function TypeTestClient() {
                   style={{
                     fontFamily: d.family,
                     fontWeight: d.cardWeight,
+                    ...(d.soft ? { fontVariationSettings: '"SOFT" 100' } : {}),
                     letterSpacing: d.displayTransform === "uppercase" ? "0.07em" : d.displaySpacing,
                     textTransform: d.displayTransform,
                     fontSize: d.displayTransform === "uppercase" ? 17 : 22,

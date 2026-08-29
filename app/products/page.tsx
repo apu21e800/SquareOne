@@ -5,7 +5,7 @@ import IndexImageHero from "@/components/IndexImageHero"
 import { products, type Product } from "@/lib/products"
 
 export const metadata: Metadata = {
-  title: "Pavement Systems & Products | StreetPrint, StreetBond, MMAX | Square One Paving",
+  title: "Pavement Systems & Products | StreetPrint, StreetBond, MMAX",
   description:
     "Every material system Square One installs across BC — StreetPrint stamped asphalt, StreetBond decorative coatings, MMAX, TrafficPatterns thermoplastic, and DuraShield surface protection.",
   keywords: [

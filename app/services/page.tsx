@@ -4,7 +4,7 @@ import IndexImageHero from "@/components/IndexImageHero"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Decorative Pavement Services BC | Square One Paving",
+  title: "Decorative Pavement Services BC",
   description:
     "BC's trusted decorative pavement applicator. Stamped asphalt, decorative coatings, preformed thermoplastic, and vapour blasting services across the Lower Mainland and Vancouver Island.",
 }

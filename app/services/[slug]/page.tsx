@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation"
 import Link from "next/link"
+import ProjectCaption from "@/components/ui/ProjectCaption"
 import Image from "next/image"
 import type { Metadata } from "next"
 
@@ -54,7 +55,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const service = getServiceBySlug(slug)
   if (!service) return {}
   return {
-    title: `${service.name} | Square One Paving BC`,
+    title: `${service.name} | Decorative Pavement BC`,
     description: service.shortDescription,
   }
 }
@@ -196,14 +197,7 @@ export default async function ServicePage({ params }: Props) {
 
                     <div aria-hidden="true" className="scrim" />
 
-                    <div className="pointer-events-none absolute bottom-5 left-6 right-6">
-                      <div className="text-[16px] font-semibold leading-[1.3] text-white">
-                        {project.title}
-                      </div>
-                      <div className="mt-1 text-[13px] leading-[1.4] text-[rgba(255,255,255,0.78)]">
-                        {meta}
-                      </div>
-                    </div>
+                    <ProjectCaption title={project.title} meta={meta} />
                   </Link>
                 )
               })}

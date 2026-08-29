@@ -46,7 +46,7 @@ export const metadata: Metadata = {
  *   05 Field panorama           full-bleed photograph (breath 2 of 2)
  *   06 Selected work  #work     white, hairline top
  *   07 Applications             warm, contents-rows, hairline top + bottom
- *   08 Trust + one testimonial  white
+ *   08 Trust strip (real client names only)  white
  *   09 Field notes    #journal  warm, hairline top
  *   10 Site Close               slate — rendered once by app/layout.tsx (Footer)
  *

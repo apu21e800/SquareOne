@@ -3,7 +3,7 @@ import Link from "next/link"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "About Us | BC's Decorative Pavement Specialists Since 2000 | Square One Paving",
+  title: "About Us | BC's Decorative Pavement Specialists Since 2000",
   description:
     "Jan Stewart and the Square One team have been BC's go-to decorative pavement applicators since 2000 — HUB Surface Systems certified, serving Metro Vancouver, Fraser Valley, and Vancouver Island.",
   keywords: [
@@ -165,13 +165,14 @@ export default function AboutPage() {
             <div>
               <div className="eyebrow">Our story</div>
 
-              <h2 className="mt-5">One specialism, done deeply</h2>
+              <h2 className="mt-5">One trade, done properly</h2>
 
               <div className="mt-8 space-y-5 text-[16px] leading-[1.65] text-ink-body">
                 <p>
-                  Square One Paving was founded on a simple thesis: BC communities deserve better
-                  than fading paint and cracking concrete. Too often, municipalities and developers
-                  were defaulting to generic surfacing that didn&apos;t survive the first wet winter.
+                  Square One Paving started in 2000 doing one thing: decorative pavement, in BC,
+                  through BC weather. The first crosswalks and driveways we imprinted are still
+                  underfoot. What has not changed since is how the work gets done — the same
+                  crews walk the site, quote it, and stand behind it.
                 </p>
                 <p>
                   Over twenty-five years we&apos;ve built the practice around four decorative

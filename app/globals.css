@@ -46,7 +46,11 @@
   --shadow-rest:    0 1px 2px rgba(20, 22, 26, 0.04);
   --shadow-lift:    0 16px 40px rgba(20, 22, 26, 0.08);
 
-  /* Type — Rockstar Pass (canon §2.5 as amended): Fraunces carries display */
+  /* Type — Rockstar Pass (canon §2.5 as amended): Fraunces carries display
+     at wght 680 with the SOFT axis at 100 — sturdier, sign-painter confidence.
+     THE H1 RULE: pages that open on a full-bleed photograph use .display-xl
+     (clamp → 6rem); pages with a plain header use the h1 default
+     (clamp → 4.75rem). One or the other, never a third size. */
   --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
 
   /* Geometry */
@@ -100,7 +104,7 @@
   h1 {
     font-family: var(--font-display);
     font-size: clamp(3.25rem, 5vw, 4.75rem);
-    font-weight: 620;
+    font-weight: 680;
     letter-spacing: -0.012em;
     line-height: 1.02;
   }
@@ -108,7 +112,7 @@
   h2 {
     font-family: var(--font-display);
     font-size: clamp(2rem, 3.5vw, 3rem);
-    font-weight: 620;
+    font-weight: 680;
     letter-spacing: -0.008em;
     line-height: 1.06;
   }
@@ -137,6 +141,12 @@
   :focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
+  }
+
+  /* Every display voice carries the softened Fraunces cut */
+  h1, h2, .display-xl, .display-statement, .stat-num,
+  .quote-display, .prose blockquote, .prose h2, .prose h3 {
+    font-variation-settings: "SOFT" 100;
   }
 }
 
@@ -257,7 +267,7 @@
   .display-xl {
     font-family: var(--font-display);
     font-size: clamp(3.5rem, 6vw, 6rem);
-    font-weight: 620;
+    font-weight: 680;
     letter-spacing: -0.015em;
     line-height: 1.02;
   }
@@ -266,7 +276,7 @@
   .display-statement {
     font-family: var(--font-display);
     font-size: clamp(2.5rem, 4vw, 3.75rem);
-    font-weight: 600;
+    font-weight: 680;
     letter-spacing: -0.008em;
     line-height: 1.08;
   }
@@ -472,7 +482,7 @@
   .stat-num {
     font-family: var(--font-display);
     font-size: 64px;
-    font-weight: 600;
+    font-weight: 680;
     line-height: 1;
     letter-spacing: -0.02em;
     color: var(--ink);

@@ -1,4 +1,5 @@
 import Image from "next/image"
+import ProjectCaption from "@/components/ui/ProjectCaption"
 import Link from "next/link"
 import { getFeaturedProjects, projects } from "@/lib/projects"
 import { heroFor } from "@/lib/gallery"
@@ -66,14 +67,7 @@ export default function ProjectsPreview() {
 
                 <div aria-hidden className="scrim" />
 
-                <div className="pointer-events-none absolute bottom-6 left-7 right-7">
-                  <div className="text-[19px] font-semibold leading-[1.3] text-white">
-                    {project.title}
-                  </div>
-                  <div className="mt-2 text-[11px] font-semibold uppercase leading-[1.4] tracking-[0.12em] text-[rgba(255,255,255,0.78)]">
-                    {meta}
-                  </div>
-                </div>
+                <ProjectCaption large title={project.title} meta={meta} />
               </Link>
             )
           })}

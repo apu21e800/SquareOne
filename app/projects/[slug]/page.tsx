@@ -67,11 +67,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const project = getProjectBySlug(slug)
   if (!project) return {}
   return {
-    title: `${project.title} | Square One Paving BC`,
+    title: `${project.title} | Projects BC`,
     description: project.excerpt,
     alternates: { canonical: `https://squareonepaving.ca/projects/${slug}` },
     openGraph: {
-      title: `${project.title} | Square One Paving BC`,
+      title: `${project.title} | Square One Paving`,
       description: project.excerpt,
       images: project.imageUrl ? [project.imageUrl] : undefined,
     },

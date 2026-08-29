@@ -4,7 +4,7 @@ import { getAllPosts } from "@/lib/blog"
 import BlogFilterClient from "@/components/blog/BlogFilterClient"
 
 export const metadata: Metadata = {
-  title: "Field Notes | Decorative Pavement Guides & Project Stories | Square One Paving",
+  title: "Field Notes | Decorative Pavement Guides & Project Stories",
   description:
     "Project documentation, product deep-dives, and real-world case studies from BC's most experienced decorative pavement crew. StreetPrint, StreetBond, stamped asphalt, vapour blasting — all documented.",
   keywords: [

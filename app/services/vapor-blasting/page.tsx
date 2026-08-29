@@ -6,7 +6,7 @@ import { galleryWithFallback, heroFor } from "@/lib/gallery"
 
 // Route and slug keep the US spelling; display prose reads "vapour blasting".
 export const metadata: Metadata = {
-  title: "Mobile Surface Restoration BC | Dustless Vapour Blasting | Square One Paving",
+  title: "Mobile Surface Restoration BC | Dustless Vapour Blasting",
   description:
     "BC's mobile dustless abrasive blasting specialists. We restore — not just clean — pavement, brick, concrete, steel, and marine surfaces. No silica dust, no harsh chemicals, no surface scarring. Lower Mainland & Vancouver Island.",
   keywords: [

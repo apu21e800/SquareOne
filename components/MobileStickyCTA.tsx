@@ -71,7 +71,7 @@ export default function MobileStickyCTA() {
         <Link
           href="/contact"
           tabIndex={visible ? undefined : -1}
-          className="flex items-center justify-center bg-[color:var(--accent)] py-[15px] text-[14px] font-semibold text-white active:bg-[color:var(--accent-deep)]"
+          className="flex items-center justify-center bg-[color:var(--accent)] py-[16px] text-[12px] font-semibold uppercase tracking-[0.12em] text-white active:bg-[color:var(--accent-deep)]"
         >
           Request a quote
         </Link>
