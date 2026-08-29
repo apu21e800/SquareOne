@@ -25,7 +25,7 @@ const serviceLinks: FooterLink[] = [
 const productLinks: FooterLink[] = [
   { label: "StreetPrint", href: "/products/streetprint" },
   { label: "TrafficPatterns", href: "/products/trafficpatterns" },
-  { label: "TrafficPatterns XD", href: "/products/trafficpatternsxd" },
+  { label: "TrafficPatterns XD", href: "/products/trafficpatterns-xd" },
   { label: "DecoMark", href: "/products/decomark" },
   { label: "StreetBond", href: "/products/streetbond" },
   { label: "All products", href: "/products" },
