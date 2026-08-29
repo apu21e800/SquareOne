@@ -17,6 +17,7 @@ const selectedClients = [
 export default function TrustStrip() {
   return (
     <section className="section relative overflow-hidden bg-surface">
+      <span aria-hidden="true" className="ghost-index">04</span>
 
       <div className="container-1280 relative z-[1]">
         <div className="eyebrow">Selected clients</div>

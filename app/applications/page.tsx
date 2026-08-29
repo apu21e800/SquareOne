@@ -86,11 +86,13 @@ export default function ApplicationsPage() {
   return (
     <main>
       {/* ── Page header ──────────────────────────────────────────────────── */}
-      <section className="bg-[color:var(--surface)] pt-[calc(var(--bar-h)+var(--section-y))] pb-[var(--section-y)] max-[700px]:pt-[calc(var(--bar-h)+var(--section-y-sm))] max-[700px]:pb-[var(--section-y-sm)]">
-        <div className="container-1280">
+      <section className="relative overflow-hidden bg-[color:var(--surface)] pt-[calc(var(--bar-h)+var(--section-y))] pb-[var(--section-y)] max-[700px]:pt-[calc(var(--bar-h)+var(--section-y-sm))] max-[700px]:pb-[var(--section-y-sm)]">
+        <span aria-hidden="true" className="ghost-index top-[calc(var(--bar-h)+2rem)]">07</span>
+
+        <div className="container-1280 relative z-[1]">
           <p className="eyebrow">Applications</p>
 
-          <h1 className="stop mt-7 max-w-[22ch]">Where these systems are specified</h1>
+          <h1 className="display-xl stop mt-7 max-w-[22ch]">Where these systems are specified</h1>
 
           <p className="mt-6 max-w-[56ch] text-[19px] leading-[1.65] text-[color:var(--ink-body)] [text-wrap:pretty] max-[700px]:text-[17px]">
             From residential driveways to commercial parking areas — decorative pavement systems

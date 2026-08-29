@@ -245,6 +245,32 @@
   }
   .stop-tight::after { margin-left: 12px; }
 
+  /* ---- Type music (SOUL-PASS MOVE 4) ---- */
+
+  /* Page-opening display line — homepage hero and index page headers only */
+  .display-xl {
+    font-size: clamp(3.25rem, 5.5vw, 5.5rem);
+    font-weight: 300;
+    letter-spacing: -0.035em;
+    line-height: 0.98;
+  }
+
+  /* Journal pull quote — one treatment, a 2px orange left rule */
+  .prose blockquote {
+    margin-block: 2.5rem;
+    border-left: 2px solid var(--accent);
+    padding-left: 28px;
+    font-size: 1.75rem;
+    font-weight: 300;
+    line-height: 1.4;
+    letter-spacing: -0.015em;
+    font-style: normal;
+    color: var(--ink);
+  }
+  .prose blockquote p { margin: 0; font-size: inherit; }
+  .prose blockquote p::before,
+  .prose blockquote p::after { content: none; }
+
   /* ---- Ghost section numeral ---- */
 
   .ghost-index {

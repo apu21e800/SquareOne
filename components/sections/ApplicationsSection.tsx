@@ -55,6 +55,8 @@ export default function ApplicationsSection() {
       }}
     >
 
+      <span aria-hidden="true" className="ghost-index">03</span>
+
       <div className="container-1280 relative z-[1]">
         <p className="eyebrow">Applications</p>
 

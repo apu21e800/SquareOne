@@ -51,11 +51,14 @@ export default function ProductsPage() {
   return (
     <main className="bg-[color:var(--surface)]">
       <section className="relative overflow-hidden pt-[calc(var(--bar-h)_+_6rem)] pb-28 max-[700px]:pt-[calc(var(--bar-h)_+_3rem)] max-[700px]:pb-14">
+        <span aria-hidden="true" className="ghost-index top-[calc(var(--bar-h)+2rem)]">
+          {String(products.length).padStart(2, "0")}
+        </span>
 
         <div className="container-1280 relative z-[1]">
           <div className="eyebrow">Products</div>
 
-          <h1 className="stop mt-5">Nine systems, four categories</h1>
+          <h1 className="display-xl stop mt-5">Nine systems, four categories</h1>
 
           <p className="mt-5 max-w-[56ch] text-[19px] leading-[1.65] text-[color:var(--ink-body)] [text-wrap:pretty] max-[700px]:text-[17px]">
             Every system we install, from pattern to protection. If it is not listed here, we

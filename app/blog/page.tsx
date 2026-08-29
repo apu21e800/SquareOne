@@ -31,11 +31,14 @@ export default function BlogPage() {
     <main className="bg-[color:var(--surface)]">
       {/* ---- Header ---- */}
       <section className="relative overflow-hidden pt-[calc(var(--bar-h)_+_6rem)] pb-16 max-[700px]:pt-[calc(var(--bar-h)_+_3rem)] max-[700px]:pb-10">
+        <span aria-hidden="true" className="ghost-index top-[calc(var(--bar-h)+2rem)]">
+          {String(posts.length).padStart(2, "0")}
+        </span>
 
         <div className="container-1280 relative z-[1]">
           <div className="eyebrow">Journal</div>
 
-          <h1 className="stop mt-5">Field notes</h1>
+          <h1 className="display-xl stop mt-5">Field notes</h1>
 
           <p className="mt-5 max-w-[56ch] text-[19px] leading-[1.65] text-[color:var(--ink-body)] [text-wrap:pretty] max-[700px]:text-[17px]">
             Notes from the crews and the estimating desk: materials, methods, and what holds

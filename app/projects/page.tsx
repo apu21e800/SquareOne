@@ -52,11 +52,15 @@ export default function ProjectsPage() {
 
   return (
     <main className="bg-[color:var(--surface)]">
-      <section className="pt-[calc(var(--bar-h)+var(--section-y))] max-[700px]:pt-[calc(var(--bar-h)+var(--section-y-sm))]">
-        <div className="container-1280">
+      <section className="relative overflow-hidden pt-[calc(var(--bar-h)+var(--section-y))] max-[700px]:pt-[calc(var(--bar-h)+var(--section-y-sm))]">
+        <span aria-hidden="true" className="ghost-index top-[calc(var(--bar-h)+2rem)]">
+          {String(projects.length).padStart(2, "0")}
+        </span>
+
+        <div className="container-1280 relative z-[1]">
           <p className="eyebrow">Projects</p>
 
-          <h1 className="stop mt-7 max-w-[18ch]">{projects.length} projects across BC</h1>
+          <h1 className="display-xl stop mt-7 max-w-[18ch]">{projects.length} projects across BC</h1>
 
           <p className="mt-6 max-w-[56ch] text-[19px] leading-[1.65] text-[color:var(--ink-body)] [text-wrap:pretty] max-[700px]:text-[17px]">
             Municipal, institutional and residential work from the Lower Mainland to Vancouver

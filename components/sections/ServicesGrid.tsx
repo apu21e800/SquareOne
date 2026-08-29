@@ -16,6 +16,7 @@ const displayName: Record<string, string> = {
 export default function ServicesGrid() {
   return (
     <section id="services" className="section relative overflow-hidden bg-surface">
+      <span aria-hidden="true" className="ghost-index">01</span>
 
       <div className="container-1280 relative z-[1]">
         <div className="eyebrow">What we do</div>

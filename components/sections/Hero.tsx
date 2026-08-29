@@ -34,7 +34,9 @@ export default function Hero() {
             BC&rsquo;s decorative pavement studio &middot; Since 2000
           </div>
 
-          <h1 className="stop mt-6 max-w-[16ch] text-white">Surfaces that define a place</h1>
+          <h1 className="display-xl stop mt-6 max-w-[15ch] text-white [text-wrap:balance]">
+            Surfaces that define a place
+          </h1>
 
           <div className="mt-10 flex flex-wrap items-center gap-[14px]">
             <Link href="/contact" className="btn-primary">

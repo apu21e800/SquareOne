@@ -39,6 +39,7 @@ export default function BlogFeedGrid({ posts }: { posts: BlogPostMeta[] }) {
       id="journal"
       className="grain-paper section relative overflow-hidden border-t border-[color:var(--hairline)] bg-[color:var(--surface-warm)]"
     >
+      <span aria-hidden="true" className="ghost-index">05</span>
 
       <div className="container-1280 relative z-[1]">
         <h2>Field notes</h2>
