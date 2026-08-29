@@ -104,7 +104,7 @@ export default async function ServicePage({ params }: Props) {
             </Link>
           </div>
 
-          <div className="relative mt-14 aspect-[21/9] overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)] max-[700px]:mt-10 max-[700px]:aspect-[4/3]">
+          <div className="pattern-running-bond relative mt-14 aspect-[21/9] overflow-hidden rounded-[2px] max-[700px]:mt-10 max-[700px]:aspect-[4/3]">
             <Image
               src={heroSrc}
               alt={name}
@@ -184,7 +184,7 @@ export default async function ServicePage({ params }: Props) {
                   <Link
                     key={project.slug}
                     href={`/projects/${project.slug}`}
-                    className="card relative block aspect-[4/3] overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)]"
+                    className="pattern-running-bond card relative block aspect-[4/3] overflow-hidden rounded-[2px]"
                   >
                     <Image
                       src={src}
@@ -254,7 +254,7 @@ export default async function ServicePage({ params }: Props) {
                 <Link
                   key={other.slug}
                   href={`/services/${other.slug}`}
-                  className="card relative block aspect-[4/3] overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)]"
+                  className="pattern-herringbone card relative block aspect-[4/3] overflow-hidden rounded-[2px]"
                 >
                   <Image
                     src={src}

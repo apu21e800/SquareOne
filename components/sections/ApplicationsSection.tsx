@@ -47,7 +47,7 @@ const applications: Application[] = [
 export default function ApplicationsSection() {
   return (
     <section
-      className="section relative overflow-hidden"
+      className="grain-paper section relative overflow-hidden"
       style={{
         background: "var(--surface-warm)",
         borderTop: "1px solid var(--hairline)",

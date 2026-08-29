@@ -4,9 +4,13 @@
 /* ============================================================
    Square One v2 — design tokens
    Source: docs/design-v2/ (Square One Homepage, Site Nav, Site Close)
-   No gradients, glows, shimmers, ken-burns, grain, vignette,
-   sweeps, tickers, pulses or texture overlays. Flat surfaces,
-   one accent, hairline rules, 2px radius.
+   No gradients, glows, shimmers, ken-burns, vignette,
+   sweeps, tickers or pulses. Flat surfaces, one accent,
+   hairline rules, 2px radius.
+   One sanctioned exception (docs/SOUL-PASS.md MOVE 3): asphalt
+   grain at <=3% on paper bands only (.grain-paper), and pavement
+   patterns in stone tones on placeholder surfaces — wabi sabi,
+   never decoration on white, slate, or behind body text columns.
    ============================================================ */
 
 :root {
@@ -148,6 +152,50 @@
   }
   @media (max-width: 700px) {
     .section { padding-block: var(--section-y-sm); }
+  }
+
+  /* ---- Material (SOUL-PASS MOVE 3) ---- */
+
+  /* Asphalt grain — paper bands ONLY, never white/slate/body text columns */
+  .grain-paper { position: relative; }
+  .grain-paper::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.028;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='280'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='280' height='280' filter='url(%23g)'/%3E%3C/svg%3E");
+  }
+
+  /* Crafted pavement stand-ins for image surfaces that would otherwise
+     sit flat grey — stone tones, hairline-faint joints */
+  .pattern-herringbone {
+    background:
+      repeating-linear-gradient(45deg, transparent 0 14px, rgba(20, 22, 26, 0.045) 14px 15px),
+      repeating-linear-gradient(-45deg, transparent 0 14px, rgba(20, 22, 26, 0.035) 14px 15px),
+      var(--surface-stone);
+  }
+  .pattern-running-bond {
+    background:
+      repeating-linear-gradient(0deg, transparent 0 23px, rgba(20, 22, 26, 0.05) 23px 24px),
+      repeating-linear-gradient(90deg, transparent 0 47px, rgba(20, 22, 26, 0.038) 47px 48px),
+      var(--surface-stone);
+  }
+
+  /* Physical sample chip — swatch/pattern imagery in tight grids */
+  .chip {
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .chip-name {
+    margin-top: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-body);
   }
 
   /* ---- Signature: 6px orange square ---- */

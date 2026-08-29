@@ -38,7 +38,7 @@ export default function ProjectsPreview() {
               <Link
                 key={project.slug}
                 href={`/projects/${project.slug}`}
-                className="card relative block aspect-[4/3] overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)]"
+                className="pattern-running-bond card relative block aspect-[4/3] overflow-hidden rounded-[2px]"
               >
                 <Image
                   src={src}

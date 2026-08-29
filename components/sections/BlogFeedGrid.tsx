@@ -37,7 +37,7 @@ export default function BlogFeedGrid({ posts }: { posts: BlogPostMeta[] }) {
   return (
     <section
       id="journal"
-      className="section relative overflow-hidden border-t border-[color:var(--hairline)] bg-[color:var(--surface-warm)]"
+      className="grain-paper section relative overflow-hidden border-t border-[color:var(--hairline)] bg-[color:var(--surface-warm)]"
     >
 
       <div className="container-1280 relative z-[1]">
@@ -52,7 +52,7 @@ export default function BlogFeedGrid({ posts }: { posts: BlogPostMeta[] }) {
                 className="absolute inset-0 z-[2]"
               />
 
-              <div className="relative aspect-[16/10] overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)]">
+              <div className="pattern-running-bond relative aspect-[16/10] overflow-hidden rounded-[2px]">
                 <Image
                   src={post.featured_image || FALLBACK_IMAGE}
                   alt=""

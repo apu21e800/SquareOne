@@ -320,7 +320,7 @@ export default function DriveywaysPage() {
                     className="object-cover"
                   />
                 </div>
-                <div className="mt-[10px] text-[13px] font-semibold text-ink">{pattern.label}</div>
+                <div className="chip-name">{pattern.label}</div>
               </div>
             ))}
           </div>
@@ -330,10 +330,10 @@ export default function DriveywaysPage() {
               <div key={colour.name}>
                 <div
                   aria-hidden="true"
-                  className="h-[52px] rounded-[2px] border border-hairline"
+                  className="chip h-[52px]"
                   style={{ background: colour.hex }}
                 />
-                <div className="mt-[10px] text-[13px] text-ink-body">{colour.name}</div>
+                <div className="chip-name">{colour.name}</div>
               </div>
             ))}
           </div>
