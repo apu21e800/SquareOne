@@ -412,7 +412,8 @@ export default function VaporBlastingServicePage() {
                     sizes="(max-width: 700px) 100vw, (max-width: 1280px) 33vw, 411px"
                     className="object-cover"
                   />
-                </div>
+                  <div aria-hidden="true" className="scrim scrim-light" />
+                  </div>
               ))}
             </div>
           )}

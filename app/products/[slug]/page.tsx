@@ -231,7 +231,7 @@ export default async function ProductPage({ params }: Props) {
             {gallery.map((src, i) => (
               <div
                 key={src}
-                className="relative aspect-[4/3] overflow-hidden rounded-[2px] bg-surface-stone"
+                className="thumb relative aspect-[4/3] overflow-hidden rounded-[2px] bg-surface-stone"
               >
                 <Image
                   src={src}
@@ -240,7 +240,8 @@ export default async function ProductPage({ params }: Props) {
                   sizes="(max-width: 700px) 100vw, (max-width: 1280px) 33vw, 411px"
                   className="object-cover"
                 />
-              </div>
+                <div aria-hidden="true" className="scrim scrim-light" />
+                </div>
             ))}
           </div>
         </Band>

@@ -175,6 +175,7 @@ export default function PrivateDrivewaysPage() {
                     sizes="(max-width: 700px) 100vw, (max-width: 1280px) 50vw, 610px"
                     className="object-cover"
                   />
+                  <div aria-hidden="true" className="scrim scrim-light" />
                 </div>
 
                 <h3 className="mt-6">{p.name}</h3>

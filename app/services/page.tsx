@@ -109,6 +109,7 @@ export default function ServicesPage() {
                     sizes="(max-width: 900px) 100vw, (max-width: 1280px) 50vw, 616px"
                     className="object-cover"
                   />
+                  <div aria-hidden="true" className="scrim scrim-light" />
                 </div>
 
                 <div className="flex flex-1 flex-col p-8 max-[700px]:p-7">

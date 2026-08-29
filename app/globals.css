@@ -352,6 +352,12 @@
     transform: translateY(-4px);
     box-shadow: var(--shadow-lift);
   }
+  /* One grade (SOUL-PASS MOVE 5) — card/thumbnail imagery only, heroes untouched */
+  .card img,
+  .thumb img {
+    filter: contrast(1.02) saturate(0.95);
+  }
+
   .card img,
   .card [data-zoom] {
     transition: transform 0.4s ease;

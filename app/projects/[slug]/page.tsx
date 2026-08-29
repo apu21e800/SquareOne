@@ -203,7 +203,7 @@ export default async function ProjectPage({ params }: Props) {
               {galleryRest.map((src, i) => (
                 <div
                   key={src}
-                  className="relative aspect-[4/3] overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)]"
+                  className="thumb relative aspect-[4/3] overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)]"
                 >
                   <Image
                     src={src}
@@ -213,7 +213,8 @@ export default async function ProjectPage({ params }: Props) {
                     className="object-cover"
                   />
                   <div aria-hidden className="scrim scrim-light" />
-                  <div className="caption">{caption}</div>
+                  <div className="caption">{caption}  <div aria-hidden="true" className="scrim scrim-light" />
+                </div>
                 </div>
               ))}
             </div>

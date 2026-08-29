@@ -87,6 +87,7 @@ export default function ProductsGrid() {
                   sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 400px"
                   className="object-cover"
                 />
+                <div aria-hidden="true" className="scrim scrim-light" />
               </div>
 
               <div className="flex flex-1 flex-col p-7">

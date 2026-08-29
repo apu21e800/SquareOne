@@ -449,7 +449,8 @@ export default function DriveywaysPage() {
                   sizes="(max-width: 700px) 50vw, (max-width: 1280px) 25vw, 296px"
                   className="object-cover"
                 />
-              </div>
+                <div aria-hidden="true" className="scrim scrim-light" />
+                </div>
             ))}
           </div>
         </div>

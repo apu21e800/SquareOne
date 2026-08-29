@@ -8,8 +8,24 @@ function cityName(city: string): string {
   return city.split(",")[0].trim()
 }
 
+/* Curated order — adjacent cards alternate warm/cool dominance
+   (SOUL-PASS MOVE 5); slugs missing from the data fall through to
+   the default featured order. */
+const FEATURED_ORDER = [
+  "ubc-musqueam-crosswalk", // cool — blues and greens
+  "joyce-skytrain-art-installation", // warm — dusk plaza
+  "langley-events-centre-streetbond", // cool — green circles
+  "richmond-brighouse-translink", // warm — red thermoplastic
+  "agnes-greenway-new-westminster", // cool — eagle mural
+  "every-child-matters-new-westminster", // warm — orange motif
+]
+
 export default function ProjectsPreview() {
-  const featuredProjects = getFeaturedProjects().slice(0, 6)
+  const featured = getFeaturedProjects()
+  const curated = FEATURED_ORDER.map((slug) =>
+    featured.find((p) => p.slug === slug),
+  ).filter((p): p is NonNullable<typeof p> => Boolean(p))
+  const featuredProjects = (curated.length === 6 ? curated : featured).slice(0, 6)
 
   return (
     <section
