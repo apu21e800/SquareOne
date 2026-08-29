@@ -1,7 +1,9 @@
 import type { Metadata } from "next"
 import Hero from "@/components/sections/Hero"
 import StatsBar from "@/components/sections/StatsBar"
+import EditorialBand from "@/components/sections/EditorialBand"
 import ServicesGrid from "@/components/sections/ServicesGrid"
+import FieldPanorama from "@/components/sections/FieldPanorama"
 import ProjectsPreview from "@/components/sections/ProjectsPreview"
 import ApplicationsSection from "@/components/sections/ApplicationsSection"
 import TrustStrip from "@/components/sections/TrustStrip"
@@ -35,18 +37,21 @@ export const metadata: Metadata = {
 }
 
 /**
- * Homepage composition — docs/design-v2/Square One Homepage.dc.html
+ * Homepage composition — docs/SOUL-PASS.md MOVE 2 (density variance)
  *
- *   01 Hero                     white
- *   02 Stats                    warm, hairline top + bottom
- *   03 Services       #services white
- *   04 Selected work  #work     white, hairline top
- *   05 Applications             warm, hairline top + bottom
- *   06 Trust strip + pull quote white
- *   07 Field notes    #journal  warm, hairline top
- *   08 Site Close               slate — rendered once by app/layout.tsx (Footer)
+ *   01 Hero                     full-bleed photograph (breath 1 of 2)
+ *   02 Stats                    warm, TIGHT band, hairline top + bottom
+ *   03 Editorial statement      warm, one display line, generous air
+ *   04 Services       #services white, dense cards
+ *   05 Field panorama           full-bleed photograph (breath 2 of 2)
+ *   06 Selected work  #work     white, hairline top
+ *   07 Applications             warm, contents-rows, hairline top + bottom
+ *   08 Trust + one testimonial  white
+ *   09 Field notes    #journal  warm, hairline top
+ *   10 Site Close               slate — rendered once by app/layout.tsx (Footer)
  *
- * Section 08 is the page's ONLY dark region. Nothing above it may go slate.
+ * Two full-bleed breaths per page, never more. Section 10 is the page's
+ * ONLY dark region. Nothing above it may go slate.
  *
  * ServicesGrid and ProjectsPreview carry #services / #work on their own
  * <section>. BlogFeedGrid does not carry #journal, so the anchor lives here;
@@ -59,7 +64,11 @@ export default function Home() {
 
       <StatsBar />
 
+      <EditorialBand />
+
       <ServicesGrid />
+
+      <FieldPanorama />
 
       <ProjectsPreview />
 

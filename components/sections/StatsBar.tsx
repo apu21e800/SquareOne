@@ -7,7 +7,8 @@ const stats: { number: string; label: string }[] = [
 
 export default function StatsBar() {
   return (
-    <section className="section relative overflow-hidden border-y border-hairline bg-surface-warm">
+    // Tight band — deliberate density contrast against the full-bleed hero above
+    <section className="relative overflow-hidden border-y border-hairline bg-surface-warm py-16 max-[700px]:py-10">
 
       <div className="container-1280 relative z-[1] grid grid-cols-4 gap-10 max-[700px]:grid-cols-2 max-[700px]:gap-x-6 max-[700px]:gap-y-9">
         {stats.map((stat) => (
