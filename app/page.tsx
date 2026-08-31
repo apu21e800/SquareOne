@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import Hero from "@/components/sections/Hero"
 import StatsBar from "@/components/sections/StatsBar"
+import AudienceBand from "@/components/sections/AudienceBand"
 import EditorialBand from "@/components/sections/EditorialBand"
 import ServicesGrid from "@/components/sections/ServicesGrid"
 import FieldPanorama from "@/components/sections/FieldPanorama"
@@ -41,6 +42,7 @@ export const metadata: Metadata = {
  *
  *   01 Hero                     full-bleed photograph (breath 1 of 2)
  *   02 Stats                    warm, TIGHT band, hairline top + bottom
+ *   02b Audience band           white, three persona cards (hierarchy order)
  *   03 Editorial statement      warm, one display line, generous air
  *   04 Services       #services white, dense cards
  *   05 Field panorama           full-bleed photograph (breath 2 of 2)
@@ -63,6 +65,8 @@ export default function Home() {
       <Hero />
 
       <StatsBar />
+
+      <AudienceBand />
 
       <EditorialBand />
 
