@@ -1,8 +1,8 @@
 const stats: { number: string; label: string }[] = [
   { number: "51", label: "BC communities served" },
-  { number: "25", label: "years in operation" },
+  { number: "25", label: "years, same crews" },
   { number: "04", label: "specialist services" },
-  { number: "100", label: "percent BC owned and operated" },
+  { number: "100%", label: "BC owned and operated" },
 ]
 
 export default function StatsBar() {

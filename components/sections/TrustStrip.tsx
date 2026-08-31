@@ -21,7 +21,12 @@ export default function TrustStrip() {
         <div data-reveal>
           <div className="eyebrow">Selected clients</div>
 
-        <div className="mt-7 flex flex-wrap gap-x-12 gap-y-4">
+          <p className="mt-5 max-w-[54ch] text-[17px] leading-[1.65] text-ink-body">
+            Municipal work is won in open tenders and kept by holding up
+            through winters. These are some of the owners we install for.
+          </p>
+
+        <div className="mt-8 flex flex-wrap gap-x-12 gap-y-4">
           {selectedClients.map((client) => (
             <span key={client} className="text-[15px] font-medium text-ink-muted">
               {client}

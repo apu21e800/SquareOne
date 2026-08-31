@@ -57,10 +57,12 @@ export default function BrandMark({
   tone?: Tone
   size?: "nav" | "footer"
 }) {
-  const iconH = size === "footer" ? 40 : 34
+  // Lockup ratio: the icon sits a shade under 2x the cap height of the
+  // wordmark, with a 10px gutter — tight enough to read as one mark.
+  const iconH = size === "footer" ? 34 : 29
   const textSize = size === "footer" ? 17 : 15
   return (
-    <span className="flex items-center gap-3">
+    <span className="flex items-center gap-[10px]">
       <BrandIcon tone={tone} height={iconH} />
       <span
         className={tone === "light" ? "text-white" : "text-[#14161A]"}
