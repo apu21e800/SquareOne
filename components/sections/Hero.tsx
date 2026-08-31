@@ -26,8 +26,9 @@ export default function Hero() {
 
       {/* Rising slate scrim — keeps the headline legible, lets the surface speak above it */}
       <div aria-hidden="true" className="scrim-rise" />
+      <div aria-hidden="true" className="scrim-top" />
 
-      {/* ── Headline block, bottom-left ───────────────────────── */}
+      {/* ── Headline block, bottom-left ───────────────────── */}
       <div className="absolute inset-x-0 bottom-0 z-[1]">
         <div className="container-1280 pb-[72px] max-[700px]:pb-16">
           <div className="eyebrow eyebrow-on-image">
@@ -49,10 +50,10 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* ── Caption, bottom-right ─────────────────────────────── */}
+      {/* ── Caption, bottom-right ───────────────────────── */}
       <div className="caption caption-right z-[1] max-[700px]:hidden">{HERO_IMAGE.caption}</div>
 
-      {/* ── Quiet scroll cue ──────────────────────────────────── */}
+      {/* ── Quiet scroll cue ──────────────────────────── */}
       <div
         aria-hidden="true"
         className="absolute bottom-0 left-1/2 z-[1] h-9 w-px -translate-x-1/2 bg-white/40 max-[900px]:hidden"
