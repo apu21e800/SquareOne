@@ -72,7 +72,7 @@ interface PrimaryLink {
 }
 
 const PRIMARY_LINKS: PrimaryLink[] = [
-  { label: "Services", href: "/services", match: ["/services", "/vapor-blasting"], menu: "services" },
+  { label: "Services", href: "/services", match: ["/services"], menu: "services" },
   { label: "Products", href: "/products", match: ["/products"], menu: "products" },
   { label: "Applications", href: "/applications", match: ["/applications", "/driveways"], menu: "applications" },
   { label: "Projects", href: "/projects", match: ["/projects"] },
@@ -142,20 +142,15 @@ const SERVICE_TILES: { slug: string; note: string; src: string; alt: string }[] 
   },
   {
     slug: "vapor-blasting",
-    note: "Mobile surface restoration",
+    note: "Cleaning, priming, graffiti removal",
     src: "/images/services/vapor-blasting/granville-island-vapour-blasting-01.jpg",
     alt: "Square One crew vapour blasting at Granville Island",
   },
 ]
 
-/** Applications mega — a six-frame editorial strip, tall crops. */
+/** Applications mega — a six-frame editorial strip, tall crops.
+    Commercial-first hierarchy; driveways anchors the end of the strip. */
 const APPLICATION_TILES: { label: string; href: string; src: string; alt: string }[] = [
-  {
-    label: "Driveways",
-    href: "/driveways",
-    src: "/images/applications/private-driveways/orca-driveway-medallion-custom-01.jpg",
-    alt: "Custom orca medallion stamped into a Victoria driveway",
-  },
   {
     label: "Commercial spaces",
     href: "/applications",
@@ -185,6 +180,12 @@ const APPLICATION_TILES: { label: string; href: string; src: string; alt: string
     href: "/applications",
     src: "/images/applications/public-art/north-vancouver-whatever-the-weather-mia-weinberg-decomark-01.jpg",
     alt: "Whatever the Weather pavement artwork, North Vancouver",
+  },
+  {
+    label: "Driveways",
+    href: "/driveways",
+    src: "/images/applications/private-driveways/orca-driveway-medallion-custom-01.jpg",
+    alt: "Custom orca medallion stamped into a Victoria driveway",
   },
 ]
 
