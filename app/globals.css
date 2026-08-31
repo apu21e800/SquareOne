@@ -106,8 +106,8 @@
     font-family: var(--font-display);
     font-size: clamp(2.25rem, 3.6vw, 3.4rem);
     font-weight: 600;
-    letter-spacing: 0.08em;
-    line-height: 1.14;
+    letter-spacing: 0.065em;
+    line-height: 1.12;
     text-transform: uppercase;
   }
 
@@ -115,8 +115,8 @@
     font-family: var(--font-display);
     font-size: clamp(1.5rem, 2.6vw, 2.25rem);
     font-weight: 600;
-    letter-spacing: 0.08em;
-    line-height: 1.18;
+    letter-spacing: 0.075em;
+    line-height: 1.16;
     text-transform: uppercase;
   }
 
@@ -269,13 +269,15 @@
 
   /* ---- Type music (SOUL-PASS MOVE 4) ---- */
 
-  /* Page-opening display line — homepage hero and index page headers only */
+  /* Caps tracking TIGHTENS as size grows: 0.12em at 11px labels,
+     0.075em at H2, 0.065em at H1, 0.06em at hero scale — optical, not
+     mechanical. Leading tiers follow. */
   .display-xl {
     font-family: var(--font-display);
     font-size: clamp(2.5rem, 4.4vw, 4.25rem);
     font-weight: 600;
-    letter-spacing: 0.08em;
-    line-height: 1.14;
+    letter-spacing: 0.06em;
+    line-height: 1.1;
     text-transform: uppercase;
   }
 
@@ -284,8 +286,8 @@
     font-family: var(--font-display);
     font-size: clamp(1.875rem, 3vw, 2.75rem);
     font-weight: 600;
-    letter-spacing: 0.075em;
-    line-height: 1.2;
+    letter-spacing: 0.065em;
+    line-height: 1.18;
     text-transform: uppercase;
   }
 
