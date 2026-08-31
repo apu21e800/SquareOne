@@ -39,9 +39,14 @@ const ORG_BASE = {
       addressCountry: "CA",
     },
   ],
-  // sameAs: add the real social profile URLs when the owners confirm them.
-  // (The placeholder facebook/instagram/linkedin links were unverified and
-  // schema must never point at profiles we cannot confirm exist.)
+  // sameAs mirrors the footer's published social links exactly — schema
+  // may only point where the site itself points.
+  sameAs: [
+    "https://www.facebook.com/squareonepaving/",
+    "https://www.instagram.com/squareonepaving/",
+    "https://www.linkedin.com/company/square-one-paving-ltd/",
+    "https://www.youtube.com/channel/UCBDvB4vgdahH67BmP6FeccQ",
+  ],
   hasOfferCatalog: {
     "@type": "OfferCatalog",
     name: "Decorative Pavement Services",
