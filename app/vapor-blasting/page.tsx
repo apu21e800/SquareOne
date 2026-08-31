@@ -8,7 +8,7 @@ import { galleryWithFallback, heroFor } from "@/lib/gallery"
 export const metadata: Metadata = {
   title: "Vapour Blasting BC — Mobile Surface Restoration",
   description:
-    "BC's mobile vapour blasting specialists. Heritage stonework, industrial equipment, marine, and concrete — wet abrasive surface restoration without heat damage or surface scarring. Ladysmith & Kelowna.",
+    "BC's mobile vapour blasting specialists. Heritage stonework, industrial equipment, marine, and concrete — wet abrasive surface restoration without heat damage or surface scarring. Lower Mainland & Vancouver Island.",
   keywords: [
     "vapour blasting BC",
     "wet blasting Vancouver Island",
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     "dustless blasting BC",
     "marine hull cleaning BC",
   ],
-  alternates: { canonical: "https://squareonepaving.com/vapor-blasting" },
+  alternates: { canonical: "https://squareonepaving.ca/vapor-blasting" },
 }
 
 const HERO_FALLBACK = "/images/services/vapor-blasting/hero.jpg"

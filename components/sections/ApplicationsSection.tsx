@@ -8,38 +8,38 @@ type Application = {
 
 const applications: Application[] = [
   {
+    label: "Driveways",
+    desc: "Stamped asphalt drives for Victoria and Vancouver homes — patterned and coloured to suit the house.",
+    href: "/driveways",
+  },
+  {
+    label: "Commercial spaces",
+    desc: "Plazas, retail thresholds and parking lots that bring order and identity to large paved sites.",
+    href: "/applications",
+  },
+  {
     label: "Crosswalks",
     desc: "Decorative and high-visibility crossings in thermoplastic or stamped asphalt.",
-    href: "/contact",
+    href: "/applications",
   },
   {
     label: "Bus & bike lanes",
     desc: "Red and green priority lane surfacing that holds its colour under traffic.",
-    href: "/contact",
-  },
-  {
-    label: "Parking lots",
-    desc: "Coatings and markings that bring order to large paved sites.",
-    href: "/contact",
-  },
-  {
-    label: "Driveways",
-    desc: "Stamped asphalt drives patterned and coloured to suit the house.",
-    href: "/driveways",
-  },
-  {
-    label: "School zones",
-    desc: "Slip-resistant, high-visibility markings for pedestrian priority areas.",
-    href: "/contact",
+    href: "/applications",
   },
   {
     label: "Public spaces",
     desc: "Plazas, greenways and park paths with pattern and colour underfoot.",
-    href: "/contact",
+    href: "/applications",
   },
   {
-    label: "Surface prep",
-    desc: "Vapour blasting that cleans and profiles pavement before coating.",
+    label: "School zones",
+    desc: "Slip-resistant, high-visibility markings for pedestrian priority areas.",
+    href: "/applications",
+  },
+  {
+    label: "Vapour blasting",
+    desc: "Mobile wet-abrasive restoration for pavement, brick, concrete and steel — no dust, no scarring.",
     href: "/vapor-blasting",
   },
 ]
