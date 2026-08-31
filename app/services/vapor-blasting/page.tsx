@@ -2,38 +2,54 @@ import Link from "next/link"
 import Image from "next/image"
 import { Metadata } from "next"
 
-import { galleryWithFallback, heroFor } from "@/lib/gallery"
-
 // Route and slug keep the US spelling; display prose reads "vapour blasting".
+// This page is the ONLY vapour route — /vapor-blasting redirects here.
+// Positioning per the business hierarchy: vapour blasting is Square One's
+// extra service. Commercial and municipal paving leads the company; this
+// page sells the supporting trade on its own merits.
 export const metadata: Metadata = {
-  title: "Mobile Surface Restoration BC | Dustless Vapour Blasting",
+  title: "Vapour Blasting BC | Surface Cleaning, Priming & Graffiti Removal",
   description:
-    "BC's mobile dustless abrasive blasting specialists. We restore — not just clean — pavement, brick, concrete, steel, and marine surfaces. No silica dust, no harsh chemicals, no surface scarring. Lower Mainland & Vancouver Island.",
+    "Mobile dustless vapour blasting across BC — surface cleaning, priming, graffiti and mould removal on pavement, brick, concrete and steel. No silica dust, no harsh chemicals, no scarring. Lower Mainland & Vancouver Island.",
   keywords: [
     "vapour blasting BC",
     "dustless abrasive blasting Vancouver",
-    "mobile surface restoration BC",
     "graffiti removal Vancouver Island",
+    "mould removal exterior BC",
+    "surface priming coating prep BC",
+    "mobile surface restoration BC",
     "wet abrasive blasting BC",
-    "concrete surface prep BC",
     "heritage stone cleaning Victoria",
-    "industrial surface restoration BC",
   ],
   alternates: { canonical: "https://squareonepaving.ca/services/vapor-blasting" },
   openGraph: {
-    title: "Mobile Surface Restoration BC | Dustless Vapour Blasting",
+    title: "Vapour Blasting BC | Surface Cleaning, Priming & Graffiti Removal",
     description:
-      "Heritage stone, industrial steel, marine hulls, decks, pavement, graffiti — restored with water and recycled abrasive. Mobile across BC.",
+      "Graffiti off heritage brick, mould off commercial exteriors, coatings off steel — cleaned and primed with water and recycled abrasive. Mobile across BC.",
   },
 }
 
-const HERO_FALLBACK = "/images/services/vapor-blasting/hero.jpg"
+// ── Field records ──────────────────────────────────────────────────────────
+// The only vapour photography we hold is 524px archive material. It NEVER
+// runs at hero scale (the low-res rule) — it rides small, captioned and
+// honest instead. Replace these the day sharper originals arrive.
 
-/** Passed to lib/gallery so nothing 404s before the folder is populated. */
-const GALLERY_FALLBACK: readonly string[] = [
-  "/images/products/streetbond/streetbond-cobblestone-grey-closeup-01.jpg",
-  "/images/applications/parking-lots/laneway-red-streetbond-installation-01.jpg",
-  "/images/applications/parking-lots/rbc-royal-bank-brick-threshold-01.jpg",
+const fieldRecords = [
+  {
+    src: "/images/services/vapor-blasting/granville-island-vapour-blasting-01.jpg",
+    alt: "Square One crew vapour blasting brick at Granville Island, Vancouver",
+    caption: "Granville Island · brick",
+  },
+  {
+    src: "/images/services/vapor-blasting/parking-lot-vapour-blasting-01.jpg",
+    alt: "Vapour blasting a commercial parking lot surface",
+    caption: "Commercial parking lot",
+  },
+  {
+    src: "/images/services/vapor-blasting/walkway-vapour-blasting-01.jpg",
+    alt: "Public walkway during vapour blasting by Square One",
+    caption: "Public walkway",
+  },
 ]
 
 // ── Headline facts ─────────────────────────────────────────────────────────
@@ -41,16 +57,30 @@ const GALLERY_FALLBACK: readonly string[] = [
 type Fact = { number: string; label: string }
 
 const facts: Fact[] = [
-  { number: "< 5%", label: "airborne dust, against 100 percent for dry blasting" },
-  { number: "12", label: "substrate families restored, from limestone to steel" },
-  { number: "02", label: "operating bases — Lower Mainland and Vancouver Island" },
+  { number: "< 5%", label: "airborne dust, against 100 for dry blasting" },
+  { number: "0", label: "harsh chemicals — water and recycled glass only" },
+  { number: "2", label: "operating bases — Lower Mainland and Vancouver Island" },
 ]
 
-// ── Three-tier service offering ──────────────────────────────────────────────
+// ── Three-tier service offering — commercial leads, per the hierarchy ──────
 
 const tiers = [
   {
-    eyebrow: "01 · Residential",
+    eyebrow: "01 · Commercial & municipal",
+    title: "Storefronts, parkades, plazas",
+    body:
+      "Graffiti off heritage brick. Mould, moss, gum and grime off walkways, façades and building exteriors. Stripe and thermoplastic removal in parkades. Strata and HOA refresh work. Faster than grinding, cleaner than dry sandblasting — without closing your block to dust.",
+    bullets: [
+      "Graffiti removal",
+      "Mould, moss and gum",
+      "Stripe and marking removal",
+      "Storefront and façade refresh",
+      "Pre-coating prep at scale",
+    ],
+    tag: "Property managers · Cities",
+  },
+  {
+    eyebrow: "02 · Residential",
     title: "Driveways, decks and exteriors",
     body:
       "Oil-stained driveways, weathered patios, mossy walkways, wood deck stripping, pool-deck calcium, brick patios. The water-based system is gentle enough for heritage stonework yet aggressive enough to strip a decade of grime without scarring the substrate.",
@@ -61,28 +91,10 @@ const tiers = [
       "Brick and stone restoration",
       "Pre-recoat preparation",
     ],
-    image: "/images/products/streetbond/streetbond-cobble-macro-surface-01.jpg",
-    alt: "Cobble surface restoration close-up",
     tag: "Homeowners · Estates",
   },
   {
-    eyebrow: "02 · Commercial",
-    title: "Graffiti, storefronts, parkades",
-    body:
-      "Graffiti abatement on heritage brick. Storefront and façade refresh. Parking-lot stripe and thermoplastic removal. Strata and HOA work. Faster than mechanical grinding, cleaner than dry sandblasting — without closing your block to dust.",
-    bullets: [
-      "Graffiti abatement",
-      "Stripe and marking removal",
-      "Storefront restoration",
-      "Strata and HOA exteriors",
-      "Pre-coating prep at scale",
-    ],
-    image: "/images/applications/parking-lots/storage-facility-red-brick-apron-01.jpg",
-    alt: "Commercial brick threshold surface",
-    tag: "Property managers · Cities",
-  },
-  {
-    eyebrow: "03 · Industrial",
+    eyebrow: "03 · Industrial & marine",
     title: "Heavy machinery, marine, steel",
     body:
       "Mill scale, weld discolouration, oxidation. Hydraulic frames, pumps, tanks, structural steel. Marine hulls, decks, props, anchors. We restore the substrate to a pre-coating profile without warping or surface scarring — uniform satin finish, no heat damage.",
@@ -93,8 +105,6 @@ const tiers = [
       "Mill scale and rust removal",
       "Coating spec preparation",
     ],
-    image: "/images/products/streetbond/streetbond-cobble-texture-detail-01.jpg",
-    alt: "Industrial substrate detail",
     tag: "Marine · Manufacturing",
   },
 ]
@@ -166,14 +176,9 @@ const cities = [
 ]
 
 export default function VaporBlastingServicePage() {
-  const heroSrc = heroFor("services", "vapor-blasting", HERO_FALLBACK) ?? HERO_FALLBACK
-  const gallery = galleryWithFallback("services", "vapor-blasting", GALLERY_FALLBACK)
-    .filter((src) => src !== heroSrc)
-    .slice(0, 3)
-
   return (
     <main>
-      {/* ── Hero ─────────────────────────────────────────────── */}
+      {/* ── Hero — text-led; archive photos ride small and honest ── */}
       <section className="relative grid min-h-[620px] grid-cols-[55fr_45fr] overflow-hidden bg-surface max-[700px]:min-h-0 max-[700px]:grid-cols-1">
         <div
           className="
@@ -185,12 +190,18 @@ export default function VaporBlastingServicePage() {
           <div className="relative z-[1]">
             <p className="eyebrow">Service &middot; Mobile surface restoration</p>
 
-            <h1 className="stop mt-7">Restoration with water, not grit</h1>
+            <h1 className="stop mt-7">Clean it, prime it, bring it back</h1>
 
             <p className="mt-7 max-w-[56ch] text-[19px] leading-[1.65] text-ink-body [text-wrap:pretty] max-[700px]:text-[17px]">
-              Dustless abrasive blasting — water and recycled glass at calibrated pressure. We
-              strip decades of grime, graffiti, oxidation and coatings without silica dust,
-              surface scarring or harsh chemicals. Mobile across British Columbia since 2000.
+              Dustless vapour blasting — water and recycled glass at calibrated pressure. Graffiti
+              off heritage brick, mould and grime off commercial exteriors, coatings off steel,
+              decades of weather off driveways and decks. No silica dust, no harsh chemicals, no
+              surface scarring. Mobile across British Columbia.
+            </p>
+
+            <p className="mt-5 max-w-[56ch] text-[15px] leading-[1.6] text-ink-muted [text-wrap:pretty]">
+              It is also how we prep our own installs — the same rig cleans and primes pavement
+              for the coating systems Square One has placed across BC since 2000.
             </p>
 
             <div className="mt-11 flex flex-wrap items-center gap-[14px]">
@@ -204,17 +215,23 @@ export default function VaporBlastingServicePage() {
           </div>
         </div>
 
-        <div className="relative min-w-0 overflow-hidden bg-surface-stone max-[700px]:aspect-[4/3]">
-          <Image
-            src={heroSrc}
-            alt="Square One Paving mobile vapour blasting rig, British Columbia"
-            fill
-            priority
-            sizes="(max-width: 700px) 100vw, 45vw"
-            className="object-cover [object-position:center_60%]"
-          />
-          <div aria-hidden="true" className="scrim scrim-light" />
-          <div className="caption">Mobile rig &middot; Wet abrasive &middot; British Columbia</div>
+        <div className="relative flex min-w-0 flex-col justify-center gap-4 overflow-hidden border-l border-hairline bg-surface-stone px-10 py-10 max-[700px]:grid max-[700px]:grid-cols-3 max-[700px]:gap-2 max-[700px]:border-l-0 max-[700px]:border-t max-[700px]:px-6 max-[700px]:py-6">
+          {fieldRecords.map((record) => (
+            <div key={record.src} className="relative mx-auto w-full max-w-[440px]">
+              <div className="relative aspect-[5/3] overflow-hidden rounded-[2px]">
+                <Image
+                  src={record.src}
+                  alt={record.alt}
+                  fill
+                  sizes="(max-width: 700px) 33vw, 440px"
+                  className="object-cover"
+                />
+              </div>
+              <p className="mt-2 text-[12px] font-medium tracking-[0.06em] text-ink-muted max-[700px]:hidden">
+                {record.caption}
+              </p>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -230,66 +247,48 @@ export default function VaporBlastingServicePage() {
         </div>
       </section>
 
-      {/* ── What we restore — three tiers ────────────────────── */}
+      {/* ── What we restore — three tiers, text-led ──────────── */}
       <section className="section relative overflow-hidden bg-surface">
 
         <div className="container-1280 relative z-[1]">
           <p className="eyebrow">Three tiers, one method</p>
 
-          <h2 className="mt-5">What we restore, from driveway to drydock</h2>
+          <h2 className="mt-5">What we restore, from storefront to drydock</h2>
 
           <p className="mt-5 max-w-[56ch] text-[17px] leading-[1.6] text-ink-body [text-wrap:pretty]">
             Vapour blasting works on virtually every hard substrate. The difference between a
-            homeowner&apos;s patio and an industrial pump frame is the pressure setting and the
-            abrasive grade, not the underlying method.
+            parkade, a patio and an industrial pump frame is the pressure setting and the
+            abrasive grade — not the underlying method.
           </p>
 
-          <div className="mt-10 flex flex-col gap-6">
-            {tiers.map((tier, i) => (
+          <div className="mt-10 grid grid-cols-3 gap-6 max-[900px]:grid-cols-1">
+            {tiers.map((tier) => (
               <article
                 key={tier.eyebrow}
-                className="grid grid-cols-2 overflow-hidden rounded-[2px] border border-hairline bg-surface max-[900px]:grid-cols-1"
+                className="flex flex-col rounded-[2px] border border-hairline bg-surface p-8 max-[700px]:p-6"
               >
-                <div
-                  className={`relative min-h-[380px] overflow-hidden bg-surface-stone max-[900px]:min-h-0 max-[900px]:aspect-[4/3] ${
-                    i % 2 === 1 ? "min-[901px]:order-2" : ""
-                  }`}
-                >
-                  <Image
-                    src={tier.image}
-                    alt={tier.alt}
-                    fill
-                    sizes="(max-width: 900px) 100vw, 50vw"
-                    className="object-cover"
-                  />
-                  <div aria-hidden="true" className="scrim scrim-light" />
-                  <div className="caption">{tier.tag}</div>
-                </div>
+                <p className="label">{tier.eyebrow}</p>
 
-                <div
-                  className={`flex flex-col justify-center p-12 max-[700px]:p-6 ${
-                    i % 2 === 1 ? "min-[901px]:order-1" : ""
-                  }`}
-                >
-                  <p className="label">{tier.eyebrow}</p>
+                <h3 className="mt-4">{tier.title}</h3>
 
-                  <h3 className="mt-4">{tier.title}</h3>
+                <p className="mt-4 text-[15px] leading-[1.6] text-ink-body">
+                  {tier.body}
+                </p>
 
-                  <p className="mt-4 max-w-[56ch] text-[15px] leading-[1.6] text-ink-body">
-                    {tier.body}
-                  </p>
+                <ul className="mt-6 border-t border-hairline">
+                  {tier.bullets.map((bullet) => (
+                    <li
+                      key={bullet}
+                      className="border-b border-hairline py-[10px] text-[14px] leading-[1.5] text-ink-body"
+                    >
+                      {bullet}
+                    </li>
+                  ))}
+                </ul>
 
-                  <ul className="mt-7 grid grid-cols-2 gap-x-8 border-t border-hairline max-[700px]:grid-cols-1">
-                    {tier.bullets.map((bullet) => (
-                      <li
-                        key={bullet}
-                        className="border-b border-hairline py-[10px] text-[14px] leading-[1.5] text-ink-body"
-                      >
-                        {bullet}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                <p className="mt-auto pt-6 text-[12px] font-medium tracking-[0.08em] text-ink-muted">
+                  {tier.tag}
+                </p>
               </article>
             ))}
           </div>
@@ -384,44 +383,8 @@ export default function VaporBlastingServicePage() {
         </div>
       </section>
 
-      {/* ── Recent work ──────────────────────────────────────── */}
-      <section className="section relative overflow-hidden bg-surface">
-
-        <div className="container-1280 relative z-[1]">
-          <div className="flex flex-wrap items-baseline justify-between gap-6">
-            <div>
-              <p className="eyebrow">Recent work</p>
-              <h2 className="mt-5">Restored surfaces across BC</h2>
-            </div>
-            <Link href="/projects" className="arrow-link whitespace-nowrap">
-              All projects <span aria-hidden="true">&rarr;</span>
-            </Link>
-          </div>
-
-          {gallery.length > 0 && (
-            <div className="mt-10 grid grid-cols-3 gap-6 max-[700px]:grid-cols-1">
-              {gallery.map((src) => (
-                <div
-                  key={src}
-                  className="card relative aspect-[4/3] overflow-hidden rounded-[2px] bg-surface-stone"
-                >
-                  <Image
-                    src={src}
-                    alt="Surface restored by Square One Paving with vapour blasting"
-                    fill
-                    sizes="(max-width: 700px) 100vw, (max-width: 1280px) 33vw, 411px"
-                    className="object-cover"
-                  />
-                  <div aria-hidden="true" className="scrim scrim-light" />
-                  </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
-
       {/* ── Scope: substrates, compliance, service area ──────── */}
-      <section className="section relative overflow-hidden border-y border-hairline bg-surface-warm">
+      <section className="section relative overflow-hidden bg-surface">
 
         <div className="container-1280 relative z-[1]">
           <p className="eyebrow">Scope</p>
@@ -470,7 +433,7 @@ export default function VaporBlastingServicePage() {
       </section>
 
       {/* ── Close ────────────────────────────────────────────── */}
-      <section className="section bg-surface">
+      <section className="section border-t border-hairline bg-surface-warm">
         <div className="container-1280">
           <p className="eyebrow">Book a site walk</p>
 

@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next"
 import { services } from "@/lib/services"
 import { projects } from "@/lib/projects"
+import { products } from "@/lib/products"
+import { getAllPosts } from "@/lib/blog"
 
 const BASE_URL = "https://squareonepaving.com"
 
@@ -19,7 +21,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
+      url: `${BASE_URL}/products`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
+      url: `${BASE_URL}/applications`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
       url: `${BASE_URL}/projects`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/blog`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.8,
@@ -35,12 +55,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: "yearly",
       priority: 0.7,
-    },
-    {
-      url: `${BASE_URL}/vapor-blasting`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.9,
     },
     {
       url: `${BASE_URL}/driveways`,
@@ -75,6 +89,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.9,
   }))
 
+  const productRoutes: MetadataRoute.Sitemap = products.map((p) => ({
+    url: `${BASE_URL}/products/${p.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly",
+    priority: 0.8,
+  }))
+
   const projectRoutes: MetadataRoute.Sitemap = projects.map((p) => ({
     url: `${BASE_URL}/projects/${p.slug}`,
     lastModified: new Date(),
@@ -82,5 +103,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }))
 
-  return [...staticRoutes, ...serviceRoutes, ...projectRoutes]
+  const blogRoutes: MetadataRoute.Sitemap = getAllPosts().map((post) => ({
+    url: `${BASE_URL}/blog/${post.slug}`,
+    lastModified: post.date ? new Date(post.date) : new Date(),
+    changeFrequency: "yearly",
+    priority: 0.6,
+  }))
+
+  return [...staticRoutes, ...serviceRoutes, ...productRoutes, ...projectRoutes, ...blogRoutes]
 }
