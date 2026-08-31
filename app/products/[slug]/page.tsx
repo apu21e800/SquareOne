@@ -117,6 +117,7 @@ export default async function ProductPage({ params }: Props) {
           className="object-cover"
         />
         <div aria-hidden="true" className="scrim-rise" />
+        <div aria-hidden="true" className="scrim-top" />
         <div className="container-1280 relative z-[1] w-full pb-12">
           <div className="eyebrow eyebrow-on-image">{product.category}</div>
           <h1 className="display-xl stop mt-4 max-w-[16ch] text-white [text-wrap:balance]">
@@ -125,7 +126,7 @@ export default async function ProductPage({ params }: Props) {
         </div>
       </section>
 
-      {/* ── Header ─────────────────────────────────────────────── */}
+      {/* ── Header ─────────────────────────────────── */}
       <section className="section bg-surface pt-16 pb-14 max-[700px]:pt-10">
         <div className="container-1280">
           <Link
@@ -168,14 +169,14 @@ export default async function ProductPage({ params }: Props) {
 
 
 
-      {/* ── Overview ───────────────────────────────────────────── */}
+      {/* ── Overview ────────────────────────────────── */}
       <Band tone={toneOf("overview")}>
         <p className="max-w-[60ch] text-[17px] leading-[1.75] text-ink-body [text-wrap:pretty]">
           {product.fullDescription}
         </p>
       </Band>
 
-      {/* ── Key benefits ───────────────────────────────────────── */}
+      {/* ── Key benefits ─────────────────────────────── */}
       <Band tone={toneOf("benefits")}>
         <div className="eyebrow">Key benefits</div>
 
@@ -191,7 +192,7 @@ export default async function ProductPage({ params }: Props) {
         </ul>
       </Band>
 
-      {/* ── Where it is specified ──────────────────────────────── */}
+      {/* ── Where it is specified ──────────────────────── */}
       <Band tone={toneOf("applications")}>
         <div className="eyebrow">Applications</div>
 
@@ -206,7 +207,7 @@ export default async function ProductPage({ params }: Props) {
         </div>
       </Band>
 
-      {/* ── Colours ────────────────────────────────────────────── */}
+      {/* ── Colours ─────────────────────────────────── */}
       {product.colorPaletteImage && (
         <Band tone={toneOf("colours")}>
           <div className="eyebrow">Colours</div>
@@ -227,7 +228,7 @@ export default async function ProductPage({ params }: Props) {
         </Band>
       )}
 
-      {/* ── Gallery ────────────────────────────────────────────── */}
+      {/* ── Gallery ─────────────────────────────────── */}
       {gallery.length > 0 && (
         <Band tone={toneOf("gallery")} id="gallery">
           <div className="flex flex-wrap items-baseline justify-between gap-6">
@@ -257,7 +258,7 @@ export default async function ProductPage({ params }: Props) {
         </Band>
       )}
 
-      {/* ── Related systems ────────────────────────────────────── */}
+      {/* ── Related systems ──────────────────────────── */}
       {related.length > 0 && (
         <Band tone={relatedTone}>
           <h2>Related systems</h2>

@@ -462,17 +462,18 @@
      Default: ink on the opaque/white bar. .nav-light runs while the bar
      sits transparent over an opening photograph. */
   .nav-cta {
-    border-color: var(--ink);
-    color: var(--ink);
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #FFFFFF;
   }
-  .nav-cta:hover { background: var(--ink); color: #FFFFFF; }
+  .nav-cta:hover { background: var(--accent-deep); border-color: var(--accent-deep); color: #FFFFFF; }
   .nav-burger-bar { background: var(--ink); }
 
-  .nav-light .nav-link { color: rgba(255, 255, 255, 0.85); background-image: linear-gradient(#FFF, #FFF); }
+  .nav-light .nav-link { color: rgba(255, 255, 255, 0.96); background-image: linear-gradient(#FFF, #FFF); text-shadow: 0 1px 8px rgba(20, 24, 29, 0.35); }
   .nav-light .nav-link:hover { color: #FFFFFF; }
   .nav-light .nav-link-active { color: #FFFFFF; }
-  .nav-light .nav-cta { border-color: rgba(255, 255, 255, 0.55); color: #FFFFFF; }
-  .nav-light .nav-cta:hover { background: #FFFFFF; color: var(--ink); }
+  .nav-light .nav-cta { background: var(--accent); border-color: var(--accent); color: #FFFFFF; }
+  .nav-light .nav-cta:hover { background: var(--accent-deep); border-color: var(--accent-deep); color: #FFFFFF; }
   .nav-light .nav-burger-bar { background: #FFFFFF; }
 
   /* ---- Nav underline ---- */
@@ -523,6 +524,17 @@
   .scrim-light {
     background: linear-gradient(to top, rgba(20, 24, 29, 0.55), rgba(20, 24, 29, 0) 38%);
   }
+  /* Top settle — darkens the bar zone of a photo-opening band so the
+     light nav always reads, whatever the sky is doing. */
+  .scrim-top {
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    height: 140px;
+    pointer-events: none;
+    background: linear-gradient(to bottom, rgba(20, 24, 29, 0.55), rgba(20, 24, 29, 0) 100%);
+  }
+
   /* Taller rise for a full-bleed hero with a headline block at its foot */
   .scrim-rise {
     position: absolute;
