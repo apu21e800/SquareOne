@@ -348,6 +348,7 @@ function ProductsMega({ onNavigate, onMouseEnter, onMouseLeave }: ProductsMegaPr
   const panelRef = useRef<HTMLDivElement>(null)
   const column = productColumns.find((c) => c.category === active) ?? productColumns[0]
   const feature = CATEGORY_FEATURE[active]
+  const tileCount = column.items.length + (column.items.length < 3 ? 1 : 0)
 
   // Arrow keys: up/down within a column, right into the product rows,
   // left back to the category list (Rockstar Part 3).
@@ -413,7 +414,7 @@ function ProductsMega({ onNavigate, onMouseEnter, onMouseLeave }: ProductsMegaPr
 
         {/* ── Cols 3–8: the active category as large photo tiles ─ */}
         <div className="col-span-6">
-          <div className="grid grid-cols-3 gap-5">
+          <div className={`grid gap-5 ${tileCount <= 2 ? "grid-cols-2" : "grid-cols-3"}`}>
             {column.items.map((product) => (
               <MegaTile
                 key={product.slug}
