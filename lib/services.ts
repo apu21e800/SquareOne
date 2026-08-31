@@ -15,7 +15,7 @@ export const services: Service[] = [
   {
     slug: "stamped-asphalt",
     name: "Stamped Asphalt",
-    tagline: "Decorative asphalt that performs as good as it looks.",
+    tagline: "Brick, cobble and slate — pressed into the asphalt you already have.",
     shortDescription:
       "Pattern and colour worked into the asphalt you already have. Our stamped asphalt systems are ASTM slip-resistant and built to last 8+ years in BC conditions.",
     fullDescription:
@@ -53,7 +53,7 @@ export const services: Service[] = [
   {
     slug: "preformed-thermoplastic",
     name: "Preformed Thermoplastic",
-    tagline: "Precision markings. Fast deployment. Long life.",
+    tagline: "Crosswalks, symbols and street art, fused into the road.",
     shortDescription:
       "Custom thermoplastic markings and inset graphics for roads, parking lots, and commercial spaces. Our preformed system ensures precision every time — no spray overspray, no inconsistency.",
     fullDescription:
@@ -92,7 +92,7 @@ export const services: Service[] = [
   {
     slug: "decorative-coatings",
     name: "Decorative Coatings",
-    tagline: "Colour, contrast, and durability for asphalt and concrete.",
+    tagline: "Colour that holds under buses, bikes and BC winters.",
     shortDescription:
       "High-performance coatings that add colour and safety to any asphalt or concrete surface. From bike lanes to parking lots, our StreetBond SR system delivers both aesthetics and function.",
     fullDescription:
