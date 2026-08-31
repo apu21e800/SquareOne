@@ -6,7 +6,7 @@ import { Metadata } from "next"
 export const metadata: Metadata = {
   title: "Applications | Decorative Pavement Across BC",
   description:
-    "Decorative paving and vapour blasting for driveways, commercial spaces, crosswalks, bike lanes, parks and public art across BC. Square One Paving — Lower Mainland and Vancouver Island.",
+    "Decorative paving for crosswalks, commercial spaces, bike lanes, parks and public art across BC — plus residential driveways and vapour blasting. Square One Paving — Lower Mainland and Vancouver Island.",
   alternates: {
     canonical: "https://squareonepaving.ca/applications",
   },
@@ -24,16 +24,9 @@ type AppCard = {
   href: string
 }
 
+/* Card order is the business hierarchy: commercial and municipal work leads,
+   residential driveways follow, vapour blasting closes as the extra service. */
 const applications: AppCard[] = [
-  {
-    title: "Driveways",
-    tag: "Residential",
-    desc: "Stamped asphalt and StreetBond coatings for the entrance you use every day — brick, cobble and slate patterns for Victoria and Vancouver homes.",
-    image: "/images/applications/driveways/victoria-craigdarroch-castle-driveway-streetprint-01.jpg",
-    alt: "Stamped asphalt driveway at Craigdarroch Castle, Victoria",
-    cta: "Explore driveways",
-    href: "/driveways",
-  },
   {
     title: "Commercial spaces",
     tag: "Commercial",
@@ -98,13 +91,22 @@ const applications: AppCard[] = [
     href: "/projects",
   },
   {
+    title: "Driveways",
+    tag: "Residential",
+    desc: "Stamped asphalt and StreetBond coatings for the entrance you use every day — brick, cobble and slate patterns for Victoria and Vancouver homes.",
+    image: "/images/applications/driveways/victoria-craigdarroch-castle-driveway-streetprint-01.jpg",
+    alt: "Stamped asphalt driveway at Craigdarroch Castle, Victoria",
+    cta: "Explore driveways",
+    href: "/driveways",
+  },
+  {
     title: "Vapour blasting",
     tag: "All surfaces",
-    desc: "Mobile wet-abrasive restoration for pavement, brick, concrete and steel — no silica dust, no substrate damage.",
+    desc: "Surface cleaning, priming, graffiti and mould removal — mobile wet-abrasive restoration with no dust and no substrate damage.",
     image: "/images/services/vapor-blasting/walkway-vapour-blasting-01.jpg",
     alt: "Walkway during vapour blasting by Square One",
     cta: "Learn about vapour blasting",
-    href: "/vapor-blasting",
+    href: "/services/vapor-blasting",
   },
 ]
 
@@ -119,6 +121,8 @@ const credentials = [
 
 /**
  * Applications index — rebuilt in review round 1 (31 Aug 2026).
+ * Card order set to the business hierarchy in round 5: commercial first,
+ * driveways second-to-last as the residential anchor, vapour closes.
  *
  *   Header       IndexImageHero (h1 scale, top scrim — no nav collision)
  *   Listing      9 edge-to-edge photo cards, tag caption on image     warm
@@ -136,7 +140,7 @@ export default function ApplicationsPage() {
         alt="Wave-motif decorative crosswalk on Marine Drive, White Rock"
         eyebrow="Applications"
         title="Where the work lives"
-        lede="Driveways in Victoria, crosswalks in Vancouver, plazas, parks and parking lots everywhere between — the same systems, specified for the way BC actually uses its streets."
+        lede="Crosswalks in Vancouver, plazas and parking lots across the Lower Mainland, driveways in Victoria — the same systems, specified for the way BC actually uses its streets."
         caption="White Rock · TrafficPatternsXD"
         imagePosition="center 78%"
       >
