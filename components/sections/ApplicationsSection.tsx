@@ -6,12 +6,10 @@ type Application = {
   href: string
 }
 
+/* Row order is the business hierarchy: commercial and municipal work leads,
+   residential driveways follow, vapour blasting closes as the extra service.
+   Do not resort alphabetically or "by interest" — the order is intentional. */
 const applications: Application[] = [
-  {
-    label: "Driveways",
-    desc: "Stamped asphalt drives for Victoria and Vancouver homes — patterned and coloured to suit the house.",
-    href: "/driveways",
-  },
   {
     label: "Commercial spaces",
     desc: "Plazas, retail thresholds and parking lots that bring order and identity to large paved sites.",
@@ -38,9 +36,14 @@ const applications: Application[] = [
     href: "/applications",
   },
   {
+    label: "Driveways",
+    desc: "Stamped asphalt drives for Victoria and Vancouver homes — patterned and coloured to suit the house.",
+    href: "/driveways",
+  },
+  {
     label: "Vapour blasting",
-    desc: "Mobile wet-abrasive restoration for pavement, brick, concrete and steel — no dust, no scarring.",
-    href: "/vapor-blasting",
+    desc: "Surface cleaning, priming, graffiti and mould removal — mobile, dustless, no substrate damage.",
+    href: "/services/vapor-blasting",
   },
 ]
 

@@ -12,7 +12,7 @@ import BlogFeed from "@/components/sections/BlogFeed"
 export const metadata: Metadata = {
   title: "Decorative Pavement BC | Stamped Asphalt & Coatings | Square One Paving",
   description:
-    "BC's most experienced decorative pavement applicators since 2000 — stamped asphalt, StreetPrint, StreetBond, MMAX, and vapour blasting. Metro Vancouver, Fraser Valley, and Vancouver Island.",
+    "BC's most experienced decorative pavement applicators since 2000 — stamped asphalt, preformed thermoplastic and durable coatings for municipal streets, commercial sites and residential driveways. Metro Vancouver, Fraser Valley, and Vancouver Island.",
   keywords: [
     "decorative pavement BC",
     "decorative paving Vancouver",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Decorative Pavement BC | Stamped Asphalt & Coatings | Square One Paving",
     description:
-      "BC's most experienced decorative pavement applicators since 2000 — stamped asphalt, StreetPrint, StreetBond, MMAX, and vapour blasting.",
+      "BC's most experienced decorative pavement applicators since 2000 — municipal streets, commercial sites and residential driveways across the Lower Mainland and Vancouver Island.",
     images: [
       { url: "/images/og-image.png", width: 1200, height: 600, alt: "Square One Paving — BC Decorative Pavement Specialists" },
     ],
