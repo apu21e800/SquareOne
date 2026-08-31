@@ -133,6 +133,7 @@ const nextConfig: NextConfig = {
       // Footer/nav link variants
       { source: "/traffic-patterns", destination: "/products/trafficpatterns", permanent: true },
       // Other pages
+      { source: "/vapor-blasting", destination: "/services/vapor-blasting", permanent: true },
       { source: "/case-studies", destination: "/projects", permanent: true },
       { source: "/featured-projects", destination: "/projects", permanent: true },
       { source: "/documentation", destination: "/resources", permanent: true },
