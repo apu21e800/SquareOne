@@ -13,7 +13,7 @@ import { services, type Service } from "@/lib/services"
    Data — derived from lib/, never duplicated.
    ------------------------------------------------------------------ */
 
-type MenuKey = "services" | "products"
+type MenuKey = "services" | "products" | "applications"
 
 const PRODUCT_CATEGORIES = [
   "Stamped Asphalt",
@@ -74,7 +74,7 @@ interface PrimaryLink {
 const PRIMARY_LINKS: PrimaryLink[] = [
   { label: "Services", href: "/services", match: ["/services", "/vapor-blasting"], menu: "services" },
   { label: "Products", href: "/products", match: ["/products"], menu: "products" },
-  { label: "Applications", href: "/applications", match: ["/applications", "/driveways"] },
+  { label: "Applications", href: "/applications", match: ["/applications", "/driveways"], menu: "applications" },
   { label: "Projects", href: "/projects", match: ["/projects"] },
   { label: "Journal", href: "/blog", match: ["/blog"] },
   { label: "About", href: "/about", match: ["/about"] },
@@ -120,6 +120,74 @@ const CATEGORY_FEATURE: Record<
   },
 }
 
+/** Services mega — four photo tiles, one per service. */
+const SERVICE_TILES: { slug: string; note: string; src: string; alt: string }[] = [
+  {
+    slug: "stamped-asphalt",
+    note: "Patterns pressed into hot asphalt",
+    src: "/images/hero/granville-island-crosswalk-streetprint.jpg",
+    alt: "StreetPrint stamped asphalt crosswalk at Granville Island, Vancouver",
+  },
+  {
+    slug: "decorative-coatings",
+    note: "Colour that holds under traffic",
+    src: "/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg",
+    alt: "StreetBond multicolour plaza at Joyce Station, Vancouver",
+  },
+  {
+    slug: "preformed-thermoplastic",
+    note: "Crosswalks, symbols, civic art",
+    src: "/images/projects/ubc-musqueam-crosswalk/ubc-musqueam-crosswalk-trafficpatterns-01.jpg",
+    alt: "Musqueam crosswalk artwork at UBC, Vancouver",
+  },
+  {
+    slug: "vapor-blasting",
+    note: "Mobile surface restoration",
+    src: "/images/services/vapor-blasting/granville-island-vapour-blasting-01.jpg",
+    alt: "Square One crew vapour blasting at Granville Island",
+  },
+]
+
+/** Applications mega — a six-frame editorial strip, tall crops. */
+const APPLICATION_TILES: { label: string; href: string; src: string; alt: string }[] = [
+  {
+    label: "Driveways",
+    href: "/driveways",
+    src: "/images/applications/private-driveways/orca-driveway-medallion-custom-01.jpg",
+    alt: "Custom orca medallion stamped into a Victoria driveway",
+  },
+  {
+    label: "Commercial spaces",
+    href: "/applications",
+    src: "/images/applications/commercial-spaces/little-italy-aerial-colourful-intersection-01.jpg",
+    alt: "Little Italy intersection in Vancouver from above",
+  },
+  {
+    label: "Crosswalks",
+    href: "/applications",
+    src: "/images/projects/ubc-musqueam-crosswalk/ubc-musqueam-crosswalk-trafficpatterns-02.jpg",
+    alt: "Coast Salish crosswalk artwork at UBC",
+  },
+  {
+    label: "Bus & bike lanes",
+    href: "/applications",
+    src: "/images/products/premark/premark-north-vancouver-green-bike-lane-01.jpg",
+    alt: "Green PreMark bike lane in North Vancouver",
+  },
+  {
+    label: "Parks & paths",
+    href: "/applications",
+    src: "/images/applications/parks-paths/victoria-beacon-hill-park-streetprint-01.jpg",
+    alt: "Stamped asphalt path at Beacon Hill Park, Victoria",
+  },
+  {
+    label: "Public art",
+    href: "/applications",
+    src: "/images/applications/public-art/north-vancouver-whatever-the-weather-mia-weinberg-decomark-01.jpg",
+    alt: "Whatever the Weather pavement artwork, North Vancouver",
+  },
+]
+
 const HAIRLINE = "#E7E3DC"
 
 const panelTransition: Transition = { duration: 0.15, ease: "easeOut" }
@@ -141,25 +209,130 @@ function Wordmark({ onClick, light = false }: { onClick?: () => void; light?: bo
   )
 }
 
-function ServicesDropdown({ onNavigate }: { onNavigate: () => void }) {
+/** One photographic tile — the shared voice of all three menus. */
+function MegaTile({
+  href,
+  src,
+  alt,
+  name,
+  note,
+  aspect = "aspect-[16/10]",
+  onNavigate,
+}: {
+  href: string
+  src: string
+  alt: string
+  name: string
+  note?: string
+  aspect?: string
+  onNavigate: () => void
+}) {
+  return (
+    <Link
+      href={href}
+      onClick={onNavigate}
+      data-mega-item
+      className={`group relative block overflow-hidden rounded-[2px] bg-[#F1EEE9] ${aspect}`}
+    >
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        sizes="(max-width: 1280px) 33vw, 420px"
+        className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+      />
+      <span aria-hidden="true" className="scrim" />
+      <span className="absolute inset-x-0 bottom-0 p-4">
+        <span
+          className="block text-[13px] font-semibold tracking-[0.1em] uppercase text-white"
+          style={{ fontFamily: "var(--font-display)" }}
+        >
+          {name}
+        </span>
+        {note && <span className="mt-[3px] block text-[12px] leading-[1.45] text-white/75">{note}</span>}
+      </span>
+    </Link>
+  )
+}
+
+interface MegaPanelProps {
+  onNavigate: () => void
+  onMouseEnter: () => void
+  onMouseLeave: () => void
+}
+
+function ServicesMega({ onNavigate, onMouseEnter, onMouseLeave }: MegaPanelProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 4 }}
+      initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 4 }}
+      exit={{ opacity: 0, y: 6 }}
       transition={panelTransition}
-      className="absolute top-full left-[-24px] z-[60] w-[288px] rounded-[2px] border border-[#E7E3DC] bg-white py-[10px]"
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      className="fixed top-[72px] right-0 left-0 z-40 hidden border-t border-b border-[#E7E3DC] bg-white min-[821px]:block"
     >
-      {serviceLinks.map((service) => (
-        <Link
-          key={service.slug}
-          href={`/services/${service.slug}`}
-          onClick={onNavigate}
-          className="block px-6 py-[10px] text-[15px] font-semibold hover:bg-[#FAF8F5]"
-        >
-          {SERVICE_LABEL[service.slug] ?? service.name}
-        </Link>
-      ))}
+      <div className="mx-auto max-w-[1280px] px-10 py-8">
+        <div className="grid grid-cols-4 gap-5">
+          {SERVICE_TILES.map((tile) => (
+            <MegaTile
+              key={tile.slug}
+              href={`/services/${tile.slug}`}
+              src={tile.src}
+              alt={tile.alt}
+              name={SERVICE_LABEL[tile.slug] ?? tile.slug}
+              note={tile.note}
+              onNavigate={onNavigate}
+            />
+          ))}
+        </div>
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-[#E7E3DC] pt-5">
+          <Link href="/services" onClick={onNavigate} className="arrow-link">
+            All services <span>&rarr;</span>
+          </Link>
+          <Link href="/driveways" onClick={onNavigate} className="arrow-link">
+            Driveways for Victoria &amp; Vancouver homes <span>&rarr;</span>
+          </Link>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
+function ApplicationsMega({ onNavigate, onMouseEnter, onMouseLeave }: MegaPanelProps) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 6 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 6 }}
+      transition={panelTransition}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      className="fixed top-[72px] right-0 left-0 z-40 hidden border-t border-b border-[#E7E3DC] bg-white min-[821px]:block"
+    >
+      <div className="mx-auto max-w-[1280px] px-10 py-8">
+        <div className="grid grid-cols-6 gap-4">
+          {APPLICATION_TILES.map((tile) => (
+            <MegaTile
+              key={tile.label}
+              href={tile.href}
+              src={tile.src}
+              alt={tile.alt}
+              name={tile.label}
+              aspect="aspect-[3/4]"
+              onNavigate={onNavigate}
+            />
+          ))}
+        </div>
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-[#E7E3DC] pt-5">
+          <Link href="/applications" onClick={onNavigate} className="arrow-link">
+            All applications <span>&rarr;</span>
+          </Link>
+          <span className="text-[13px] text-[#767B82]">
+            Municipal, commercial and residential — across BC since 2000
+          </span>
+        </div>
+      </div>
     </motion.div>
   )
 }
@@ -211,7 +384,7 @@ function ProductsMega({ onNavigate, onMouseEnter, onMouseLeave }: ProductsMegaPr
         onKeyDown={onKeyDown}
         className="mx-auto grid max-w-[1280px] grid-cols-8 gap-x-8 px-10 py-8"
       >
-        {/* ── Cols 1–2: categories ──────────────────────────── */}
+        {/* ── Cols 1–2: categories ──────────────────── */}
         <div className="col-span-2 flex flex-col border-r border-[#E7E3DC] pr-8">
           {productColumns.map((col) => (
             <button
@@ -238,55 +411,31 @@ function ProductsMega({ onNavigate, onMouseEnter, onMouseLeave }: ProductsMegaPr
           </Link>
         </div>
 
-        {/* ── Cols 3–6: products of the active category ─────── */}
-        <div className="col-span-4 flex flex-col gap-1">
-          {column.items.map((product) => (
-            <Link
-              key={product.slug}
-              href={`/products/${product.slug}`}
-              data-mega-item
-              onClick={onNavigate}
-              className="group flex items-center gap-4 rounded-[2px] px-3 py-2 transition-colors duration-150 hover:bg-[#FAF8F5]"
-            >
-              <span className="relative h-[56px] w-[56px] shrink-0 overflow-hidden rounded-[2px] bg-[#F1EEE9]">
-                <Image
-                  src={product.image}
-                  alt=""
-                  fill
-                  sizes="56px"
-                  className="object-cover"
-                />
-              </span>
-              <span className="min-w-0">
-                <span className="block text-[15px] font-semibold text-[#14161A]">
-                  {product.name}
-                </span>
-                <span className="mt-[2px] block truncate text-[13px] leading-[1.5] text-[#767B82]">
-                  {PRODUCT_DESCRIPTOR[product.slug] ?? product.tagline}
-                </span>
-              </span>
-            </Link>
-          ))}
-        </div>
-
-        {/* ── Cols 7–8: featured frame, changes per category ── */}
-        <div className="col-span-2">
-          <Link
-            href="/projects"
-            onClick={onNavigate}
-            className="relative block h-full min-h-[280px] overflow-hidden rounded-[2px] bg-[#F1EEE9]"
-          >
-            <Image
-              key={feature.src}
-              src={feature.src}
-              alt={feature.alt}
-              fill
-              sizes="320px"
-              className="object-cover"
-            />
-            <span aria-hidden="true" className="scrim" />
-            <span className="caption">{feature.caption}</span>
-          </Link>
+        {/* ── Cols 3–8: the active category as large photo tiles ─ */}
+        <div className="col-span-6">
+          <div className="grid grid-cols-3 gap-5">
+            {column.items.map((product) => (
+              <MegaTile
+                key={product.slug}
+                href={`/products/${product.slug}`}
+                src={product.image}
+                alt={`${product.name} installed by Square One`}
+                name={product.name}
+                note={PRODUCT_DESCRIPTOR[product.slug] ?? product.tagline}
+                onNavigate={onNavigate}
+              />
+            ))}
+            {column.items.length < 3 && (
+              <MegaTile
+                href="/projects"
+                src={feature.src}
+                alt={feature.alt}
+                name="In the field"
+                note={feature.caption}
+                onNavigate={onNavigate}
+              />
+            )}
+          </div>
         </div>
       </div>
     </motion.div>
@@ -535,11 +684,6 @@ export default function Nav() {
                   >
                     {link.label}
                   </Link>
-                  {menuKey === "services" && (
-                    <AnimatePresence>
-                      {menu === "services" && <ServicesDropdown onNavigate={closeAll} />}
-                    </AnimatePresence>
-                  )}
                 </div>
               )
             })}
@@ -571,6 +715,26 @@ export default function Nav() {
           <ProductsMega
             onNavigate={closeAll}
             onMouseEnter={() => openMenu("products")}
+            onMouseLeave={scheduleClose}
+          />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {menu === "services" && (
+          <ServicesMega
+            onNavigate={closeAll}
+            onMouseEnter={() => openMenu("services")}
+            onMouseLeave={scheduleClose}
+          />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {menu === "applications" && (
+          <ApplicationsMega
+            onNavigate={closeAll}
+            onMouseEnter={() => openMenu("applications")}
             onMouseLeave={scheduleClose}
           />
         )}
