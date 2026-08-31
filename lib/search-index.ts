@@ -109,7 +109,8 @@ function imageEntries(): SearchEntry[] {
   if (fs.existsSync(appsRoot)) {
     for (const cat of fs.readdirSync(appsRoot)) {
       const dir = path.join(appsRoot, cat)
-      if (!fs.existsSync(dir) || !fs.statSync(dir).isDirectory() || cat === "generated") continue
+      // airports holds AirMark reference imagery — not an S1 offering, stays out
+      if (!fs.existsSync(dir) || !fs.statSync(dir).isDirectory() || cat === "generated" || cat === "airports") continue
       const isDriveway = cat === "driveways" || cat === "private-driveways"
       for (const file of listImages(dir)) {
         entries.push({
