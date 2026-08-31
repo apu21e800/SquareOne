@@ -143,12 +143,18 @@ page.** No gradients, glows, shimmer, or decorative effects. Signature motif: a
 headlines. `#F26430` on white is ~3:1 contrast — fine for large/bold text and
 UI marks, **fails AA for body-size text**; never use it for small text.
 
-> **AMENDED per client direction, 2026-08-28 (docs/ROCKSTAR-PASS.md):**
-> "Inter only" no longer holds. Display/H1/H2 are **Fraunces (variable,
-> 600–640)**; eyebrows, labels and button text are **spaced-caps Inter 600
-> (0.12em)**; body is **Inter 450–500 at 17px**. Nothing renders below
-> weight 400 (ghost numerals excepted — texture, not text). Do not "fix"
-> the site back to Inter-only-300. Everything else in this section stands.
+> **RE-AMENDED per client pick, 2026-08-31 (docs/FIRST-DRAFT-PASS.md) —
+> supersedes the 2026-08-28 Fraunces amendment.** The team chose direction C
+> on /type-test: display/H1/H2 are **Jost uppercase 600 at 0.08em tracking**
+> (the wordmark's Futura DNA — hero clamp → 4.25rem, H1 → 3.4rem, H2 →
+> 2.25rem); eyebrows, labels, buttons, nav, captions and stat numerals run
+> in the display face (caps system unchanged at 0.12em); body stays **Inter
+> 450–500 at 17px**; journal prose headings stay sentence case. Nothing
+> renders below weight 400 (ghost numerals excepted — texture, not text).
+> Do not "fix" the site back to Fraunces or to Inter-only-300. Sans
+> alternates for review sit on /type-test (S1–S4: Poppins, Mulish and
+> Nunito Sans as the Avenir register, Montserrat) — a future pick swaps
+> one next/font import + --font-display. Everything else here stands.
 
 ### 2.6 Voice
 
