@@ -128,10 +128,26 @@ built around PreMark / TrafficPatterns / DuraTherm — **no AirMark**.
 
 ### 2.4 Services and other pages — keep
 
-4 services, `/driveways`, the vapour-blasting pages (see §10.2 for the route
+4 services, `/driveways`, the vapour-blasting page (see §10.2 for the route
 spelling), `/about`, `/resources` (HUB PDF library, `lib/resources.ts`), the
 quote-request route, journal (51 posts), 21 projects. Proofread against §2.1;
 don't restructure.
+
+### 2.4a Business hierarchy (Vern, 30 Aug 2026 — canon, do not invert)
+
+1. **Commercial projects lead** — city, municipal and private commercial
+   work is what Square One is, and every index, mega menu, card grid and
+   meta description orders commercial/municipal content first.
+2. **Residential driveways second** — the Victoria & Vancouver homeowner
+   funnel (`/driveways`) is the second pillar, placed after the commercial
+   block, never before it.
+3. **Vapour blasting is the EXTRA service** — surface cleaning, priming
+   (pre-coating prep), graffiti removal, and commercial muck (mould, moss,
+   gum, grime). Its only route is `/services/vapor-blasting`;
+   `/vapor-blasting` 301s there (next.config). It closes lists, never
+   opens them, and never outranks the two pillars on the homepage.
+   All vapour photography on hand is 524px archive material — it rides
+   small and captioned ("field records"), NEVER at hero/full-bleed scale.
 
 ### 2.5 Brand tokens (v2 design system — already built; enforce, don't redesign)
 
@@ -681,12 +697,12 @@ must add: `ls ../hubss-website` — if it fails, stop and ask Vern to restart wi
 not begin Phase 1 without confirming it.
 
 **10.2 — The route is `vapor-blasting`, not `vapour-blasting`.**
-Two routes exist: `app/vapor-blasting/` and `app/services/vapor-blasting/` —
+Two routes existed: `app/vapor-blasting/` and `app/services/vapor-blasting/` —
 both American spelling. §2.6 mandates Canadian spelling. These conflict.
-Renaming is an SEO-visible URL change and §2.4 says don't restructure, so the
-resolution is: **keep the American URL slugs, use Canadian spelling in all
-visible copy** ("vapour blasting"), and put the question to Vern in the Phase 0
-report. Do not rename routes without an explicit `go` and a 301 pair.
+Resolved 31 Aug: **`/services/vapor-blasting` is the single vapour page;
+`/vapor-blasting` 301s to it (next.config + permanentRedirect stub). Keep the
+American URL slug, use Canadian spelling in all visible copy** ("vapour
+blasting"). Do not rename routes without an explicit `go` and a 301 pair.
 
 **10.3 — There is no `lint` script.** `package.json` defines only `dev`, `build`,
 `start`. The §5 phase protocol calls `npm run lint` at every gate and would fail
@@ -695,13 +711,11 @@ present, so the fix is one line in Phase 0 step 5:
 `"lint": "next lint"`. Add it, confirm it runs, and report the first clean or
 dirty result. `verify` and `verify:quick` arrive in Phase 1; `preflight` too.
 
-**10.4 — `public/docs/` holds 138 PDFs; `lib/resources.ts` registers 72.**
-Roughly 66 files are on disk and served but referenced by nothing. Phase 0
-step 7 must inventory `public/docs/` alongside the images: list registered vs
-orphaned, with sizes. Do not delete anything in Phase 0 — report it, and let
-Vern decide in Phase 3 whether the orphans are future StreetBondSR/HUB
-documents worth registering or dead weight worth removing. They also inflate
-every deployment.
+**10.4 — `public/docs/` holds 138 PDFs; `lib/resources.ts` registers 90.**
+As of 31 Aug the library registers 90 (TrafficPatternsXD, MMAX, DuraShield and
+StreetBondSR docs surfaced; AirMark's 6 stay out — not an S1 product). The
+remaining unregistered files need a Phase 3 decision: future documents worth
+registering or dead weight worth removing. They also inflate every deployment.
 
 **10.5 — Confirmed accurate, no action needed.** The following claims in this
 document were checked and are true: 13 instances of `604-612-6209` across 10
@@ -738,7 +752,9 @@ slurry runoff, heritage-safe) — phrase them as S1's experience, never cite HUB
 Photography: check reality first — a vapour-blasting hero was committed in the
 "Asset push" round, and the fresh `_incoming/` photos may include blasting work.
 Inventory before generating anything. Whatever the inventory misses is the
-primary legitimate use case for AI generation on this site.
+primary legitimate use case for AI generation on this site. (31 Aug: the four
+servable vapour files are all 524px archive material — §2.4a's small-and-
+captioned rule governs until sharper originals arrive.)
 
 **11.3 — AI image generation: where it is allowed and how it is marked.**
 Vern will generate images (his tools, his prompts — the build agent writes the
