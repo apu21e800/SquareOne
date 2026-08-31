@@ -57,6 +57,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${service.name} | Decorative Pavement BC`,
     description: service.shortDescription,
+    alternates: { canonical: `https://squareonepaving.ca/services/${service.slug}` },
   }
 }
 
@@ -80,7 +81,7 @@ export default async function ServicePage({ params }: Props) {
 
   return (
     <main>
-      {/* ── Service header ───────────────────────────────────────────── */}
+      {/* ── Service header ───────────────────────────────────── */}
       <section className="section bg-surface">
         <div className="container-1280">
           <div className="flex flex-wrap items-center gap-[14px]">
@@ -118,7 +119,7 @@ export default async function ServicePage({ params }: Props) {
         </div>
       </section>
 
-      {/* ── Overview ─────────────────────────────────────────────────── */}
+      {/* ── Overview ───────────────────────────────────────── */}
       <section className="section border-y border-[color:var(--hairline)] bg-surface-warm">
         <div className="container-1280">
           <div className="grid grid-cols-1 gap-10 min-[901px]:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] min-[901px]:gap-20">
@@ -134,7 +135,7 @@ export default async function ServicePage({ params }: Props) {
         </div>
       </section>
 
-      {/* ── Specification ────────────────────────────────────────────── */}
+      {/* ── Specification ────────────────────────────────────── */}
       <section className="section bg-surface">
         <div className="container-1280">
           <p className="eyebrow">Specification</p>
@@ -161,7 +162,7 @@ export default async function ServicePage({ params }: Props) {
         </div>
       </section>
 
-      {/* ── Recent work ──────────────────────────────────────────────── */}
+      {/* ── Recent work ──────────────────────────────────────── */}
       {relatedProjects.length > 0 && (
         <section className="section border-y border-[color:var(--hairline)] bg-surface-warm">
           <div className="container-1280">
@@ -206,7 +207,7 @@ export default async function ServicePage({ params }: Props) {
         </section>
       )}
 
-      {/* ── Products used ────────────────────────────────────────────── */}
+      {/* ── Products used ────────────────────────────────────── */}
       <section className="section bg-surface">
         <div className="container-1280">
           <div className="flex flex-wrap items-baseline justify-between gap-6">
@@ -229,7 +230,7 @@ export default async function ServicePage({ params }: Props) {
         </div>
       </section>
 
-      {/* ── More services ────────────────────────────────────────────── */}
+      {/* ── More services ────────────────────────────────────── */}
       <section className="section border-t border-[color:var(--hairline)] bg-surface-warm">
         <div className="container-1280">
           <div className="flex flex-wrap items-baseline justify-between gap-6">

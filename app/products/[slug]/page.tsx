@@ -22,6 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${product.name} | Pavement Systems BC`,
     description: product.shortDescription,
+    alternates: { canonical: `https://squareonepaving.ca/products/${product.slug}` },
   }
 }
 
@@ -207,7 +208,7 @@ export default async function ProductPage({ params }: Props) {
         </div>
       </Band>
 
-      {/* ── Colours ─────────────────────────────────── */}
+      {/* ── Colours ───────────────────────────────── */}
       {product.colorPaletteImage && (
         <Band tone={toneOf("colours")}>
           <div className="eyebrow">Colours</div>
@@ -228,7 +229,7 @@ export default async function ProductPage({ params }: Props) {
         </Band>
       )}
 
-      {/* ── Gallery ─────────────────────────────────── */}
+      {/* ── Gallery ───────────────────────────────── */}
       {gallery.length > 0 && (
         <Band tone={toneOf("gallery")} id="gallery">
           <div className="flex flex-wrap items-baseline justify-between gap-6">
