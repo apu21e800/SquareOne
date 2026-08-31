@@ -3,12 +3,14 @@
 import Image from "next/image"
 import { useState } from "react"
 
-/* Three directions, one switch. Sizes preview the Part-1b target scale:
-   hero clamp(3.5rem,6vw,6rem), H2 clamp(2rem,3.5vw,3rem), body Inter 460.
-   Eyebrows and button labels are spaced caps 600 in every direction —
-   that part is the luxury signature regardless of the pick. */
+/* Direction C (Jost spaced caps) is SELECTED and live sitewide, picked on
+   this page 31 Aug 2026. S1–S4 are the requested sans alternates (Poppins +
+   the Avenir-register cuts + Montserrat) rendered at the same scale for a
+   fair one-glance comparison. A/B and R1–R4 kept for the record. Real
+   Avenir is a licensed face — if S2/S3 wins and the true cut is wanted,
+   that is a font licence away (Adobe Fonts / Monotype). */
 
-type DirectionKey = "A" | "B" | "C" | "R1" | "R2" | "R3" | "R4"
+type DirectionKey = "A" | "B" | "C" | "S1" | "S2" | "S3" | "S4" | "R1" | "R2" | "R3" | "R4"
 
 const DIRECTIONS: Record<
   DirectionKey,
@@ -52,13 +54,61 @@ const DIRECTIONS: Record<
   },
   C: {
     tab: "C — Jost spaced caps",
-    blurb: "Uppercase 600, 0.08em tracking. The wordmark's Futura DNA, Tom Ford register.",
+    blurb: "SELECTED - live sitewide. Uppercase 600, 0.08em tracking. The wordmark's Futura DNA, Tom Ford register.",
     family: "var(--tt-jost)",
     displayWeight: 600,
     displaySpacing: "0.08em",
     displayTransform: "uppercase",
     displayLineHeight: 1.14,
     heroSize: "clamp(2.5rem, 4.4vw, 4.25rem)",
+    h2Size: "clamp(1.5rem, 2.6vw, 2.25rem)",
+    cardWeight: 600,
+  },
+  S1: {
+    tab: "S1 — Poppins",
+    blurb: "Geometric sans, rounder bowls than Jost — friendlier Futura energy.",
+    family: "var(--tt-poppins)",
+    displayWeight: 600,
+    displaySpacing: "0.07em",
+    displayTransform: "uppercase",
+    displayLineHeight: 1.14,
+    heroSize: "clamp(2.5rem, 4.4vw, 4.25rem)",
+    h2Size: "clamp(1.5rem, 2.6vw, 2.25rem)",
+    cardWeight: 600,
+  },
+  S2: {
+    tab: "S2 — Mulish (Avenir register)",
+    blurb: "The closest open cut to Avenir — humanist warmth under geometric caps.",
+    family: "var(--tt-mulish)",
+    displayWeight: 700,
+    displaySpacing: "0.08em",
+    displayTransform: "uppercase",
+    displayLineHeight: 1.14,
+    heroSize: "clamp(2.5rem, 4.4vw, 4.25rem)",
+    h2Size: "clamp(1.5rem, 2.6vw, 2.25rem)",
+    cardWeight: 700,
+  },
+  S3: {
+    tab: "S3 — Nunito Sans (Avenir Next register)",
+    blurb: "Soft-terminal sans in the Avenir Next spirit — calm, rounded, premium.",
+    family: "var(--tt-nunito)",
+    displayWeight: 700,
+    displaySpacing: "0.08em",
+    displayTransform: "uppercase",
+    displayLineHeight: 1.14,
+    heroSize: "clamp(2.5rem, 4.4vw, 4.25rem)",
+    h2Size: "clamp(1.5rem, 2.6vw, 2.25rem)",
+    cardWeight: 700,
+  },
+  S4: {
+    tab: "S4 — Montserrat",
+    blurb: "Urban geometric standard — wider caps, strong civic presence.",
+    family: "var(--tt-montserrat)",
+    displayWeight: 600,
+    displaySpacing: "0.06em",
+    displayTransform: "uppercase",
+    displayLineHeight: 1.14,
+    heroSize: "clamp(2.4rem, 4.2vw, 4rem)",
     h2Size: "clamp(1.5rem, 2.6vw, 2.25rem)",
     cardWeight: 600,
   },
@@ -121,7 +171,7 @@ const CAPS: React.CSSProperties = {
 }
 
 export default function TypeTestClient() {
-  const [dir, setDir] = useState<DirectionKey>("A")
+  const [dir, setDir] = useState<DirectionKey>("C")
   const d = DIRECTIONS[dir]
 
   const display: React.CSSProperties = {
@@ -141,7 +191,7 @@ export default function TypeTestClient() {
 
   return (
     <main style={{ fontFamily: "var(--tt-inter)", fontWeight: 450 }} className="bg-white text-[#3D4147]">
-      {/* ── Switcher ─────────────────────────────────────────── */}
+      {/* ── Switcher ─────────────────────────────────────── */}
       <div className="sticky top-0 z-50 border-b border-[#E7E3DC] bg-white/95 backdrop-blur-sm">
         <div className="container-1280 flex flex-wrap items-center gap-x-6 gap-y-2 py-4">
           <span style={{ ...CAPS, fontSize: 11 }} className="text-[#767B82]">
@@ -170,7 +220,7 @@ export default function TypeTestClient() {
         </div>
       </div>
 
-      {/* ── Specimen 1: the real hero ────────────────────────── */}
+      {/* ── Specimen 1: the real hero ────────────────────── */}
       <section className="relative h-[80vh] min-h-[520px] overflow-hidden bg-[#14181D]">
         <Image
           src="/images/hero/white-rock-pier-crosswalk-trafficpatternsxd.jpg"
@@ -212,7 +262,7 @@ export default function TypeTestClient() {
         </div>
       </section>
 
-      {/* ── Specimen 2: section header ───────────────────────── */}
+      {/* ── Specimen 2: section header ───────────────────── */}
       <section className="border-b border-[#E7E3DC] bg-[#FAF8F5] py-24">
         <div className="container-1280">
           <div style={{ ...CAPS, fontSize: 11 }} className="text-[#767B82]">
@@ -231,7 +281,7 @@ export default function TypeTestClient() {
         </div>
       </section>
 
-      {/* ── Specimen 3: product card ─────────────────────────── */}
+      {/* ── Specimen 3: product card ─────────────────────── */}
       <section className="bg-white py-24">
         <div className="container-1280">
           <div className="grid grid-cols-3 gap-6 max-[900px]:grid-cols-1">
