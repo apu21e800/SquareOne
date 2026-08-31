@@ -66,8 +66,16 @@ const WEBSITE = {
   name: "Square One Paving",
   description: "BC's decorative pavement specialists since 2000.",
   publisher: { "@id": "https://squareonepaving.ca/#organization" },
-  // No SearchAction: the site has no search endpoint, and schema must not
-  // advertise one that does not exist.
+  // SearchAction is real: /search?q= renders full grouped results over the
+  // build-time index (pages, systems, projects, documents, blog, imagery).
+  potentialAction: {
+    "@type": "SearchAction",
+    target: {
+      "@type": "EntryPoint",
+      urlTemplate: "https://squareonepaving.ca/search?q={search_term_string}",
+    },
+    "query-input": "required name=search_term_string",
+  },
 }
 
 export default function StructuredData() {
