@@ -264,6 +264,8 @@ interface MegaPanelProps {
 function ServicesMega({ onNavigate, onMouseEnter, onMouseLeave }: MegaPanelProps) {
   return (
     <motion.div
+      role="region"
+      aria-label="Services menu"
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 6 }}
@@ -302,6 +304,8 @@ function ServicesMega({ onNavigate, onMouseEnter, onMouseLeave }: MegaPanelProps
 function ApplicationsMega({ onNavigate, onMouseEnter, onMouseLeave }: MegaPanelProps) {
   return (
     <motion.div
+      role="region"
+      aria-label="Applications menu"
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 6 }}
@@ -372,6 +376,8 @@ function ProductsMega({ onNavigate, onMouseEnter, onMouseLeave }: ProductsMegaPr
 
   return (
     <motion.div
+      role="region"
+      aria-label="Products menu"
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 6 }}
@@ -678,12 +684,29 @@ export default function Nav() {
                     aria-haspopup="true"
                     aria-expanded={menu === menuKey}
                     onClick={(e) => {
+                      // Open panel + click again (or hover-open + click) =
+                      // go to the index page. Closed = open the panel.
+                      if (menu === menuKey) {
+                        closeAll()
+                        return
+                      }
                       e.preventDefault()
-                      toggleMenu(menuKey)
+                      openMenu(menuKey)
                     }}
-                    className={linkClass}
+                    className={`${linkClass} inline-flex items-center gap-[6px]`}
                   >
                     {link.label}
+                    <svg
+                      aria-hidden="true"
+                      width="8"
+                      height="5"
+                      viewBox="0 0 8 5"
+                      className={`shrink-0 transition-transform duration-150 ${
+                        menu === menuKey ? "rotate-180" : ""
+                      }`}
+                    >
+                      <path d="M1 1l3 3 3-3" stroke="currentColor" strokeWidth="1.5" fill="none" />
+                    </svg>
                   </Link>
                 </div>
               )
