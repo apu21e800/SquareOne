@@ -1,4 +1,7 @@
-// JSON-LD structured data for SEO — LocalBusiness, Organization, WebSite
+// JSON-LD structured data for SEO — PavingContractor + WebSite.
+// Honesty rules (S1-BUILD-PROMPT constitution): no invented ratings, no
+// phantom endpoints, no unverified profiles. AggregateRating returns only
+// when real, verifiable reviews exist.
 
 const ORG_BASE = {
   "@type": "PavingContractor",
@@ -36,11 +39,9 @@ const ORG_BASE = {
       addressCountry: "CA",
     },
   ],
-  sameAs: [
-    "https://facebook.com/squareonepaving",
-    "https://instagram.com/squareonepaving",
-    "https://linkedin.com/company/squareonepaving",
-  ],
+  // sameAs: add the real social profile URLs when the owners confirm them.
+  // (The placeholder facebook/instagram/linkedin links were unverified and
+  // schema must never point at profiles we cannot confirm exist.)
   hasOfferCatalog: {
     "@type": "OfferCatalog",
     name: "Decorative Pavement Services",
@@ -51,13 +52,6 @@ const ORG_BASE = {
       { "@type": "Offer", itemOffered: { "@type": "Service", name: "Vapour Blasting", description: "Mobile vapour blasting for surface preparation and graffiti removal." } },
     ],
   },
-  aggregateRating: {
-    "@type": "AggregateRating",
-    ratingValue: "5.0",
-    reviewCount: "47",
-    bestRating: "5",
-    worstRating: "1",
-  },
 }
 
 const WEBSITE = {
@@ -67,11 +61,8 @@ const WEBSITE = {
   name: "Square One Paving",
   description: "BC's decorative pavement specialists since 2000.",
   publisher: { "@id": "https://squareonepaving.ca/#organization" },
-  potentialAction: {
-    "@type": "SearchAction",
-    target: { "@type": "EntryPoint", urlTemplate: "https://squareonepaving.ca/blog?q={search_term_string}" },
-    "query-input": "required name=search_term_string",
-  },
+  // No SearchAction: the site has no search endpoint, and schema must not
+  // advertise one that does not exist.
 }
 
 export default function StructuredData() {

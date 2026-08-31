@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: post.title,
     description: post.description,
     alternates: {
-      canonical: `https://squareonepaving.com/blog/${slug}`,
+      canonical: `https://squareonepaving.ca/blog/${slug}`,
     },
     openGraph: {
       title: post.title,
@@ -154,7 +154,7 @@ export default async function BlogPostPage({ params }: Props) {
 
   const related = relatedPosts(post)
   const heroCaption = captionFor(post)
-  const shareUrl = `https://squareonepaving.com/blog/${slug}`
+  const shareUrl = `https://squareonepaving.ca/blog/${slug}`
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -171,11 +171,11 @@ export default async function BlogPostPage({ params }: Props) {
     publisher: {
       "@type": "Organization",
       name: "Square One Paving",
-      url: "https://squareonepaving.com",
+      url: "https://squareonepaving.ca",
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://squareonepaving.com/blog/${slug}`,
+      "@id": `https://squareonepaving.ca/blog/${slug}`,
     },
   }
 

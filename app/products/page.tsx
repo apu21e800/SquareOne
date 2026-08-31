@@ -55,7 +55,7 @@ export default function ProductsPage() {
         src="/images/projects/langley-events-centre-streetbond/langley-events-centre-streetbond-01.jpg"
         alt="StreetBond Circle of Life installation at Langley Events Centre"
         eyebrow="Products"
-        title="Nine systems, four categories"
+        title="The right system for the surface"
         lede="Every system we install, from pattern to protection. If it is not listed here, we do not install it."
         caption="Langley Events Centre · StreetBond"
       />

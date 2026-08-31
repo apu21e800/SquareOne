@@ -135,8 +135,8 @@ export default function ApplicationsPage() {
         src="/images/hero/white-rock-marine-drive-wave-crosswalk.jpg"
         alt="Wave-motif decorative crosswalk on Marine Drive, White Rock"
         eyebrow="Applications"
-        title="Where these systems are specified"
-        lede="From residential driveways to commercial parking areas — decorative pavement systems and vapour blasting, applied across British Columbia."
+        title="Where the work lives"
+        lede="Driveways in Victoria, crosswalks in Vancouver, plazas, parks and parking lots everywhere between — the same systems, specified for the way BC actually uses its streets."
         caption="White Rock · TrafficPatternsXD"
         imagePosition="center 78%"
       >
