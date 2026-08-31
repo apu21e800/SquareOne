@@ -138,7 +138,7 @@ export default function AboutPage() {
           <div className="mt-10 grid max-w-[880px] grid-cols-1 gap-12 min-[701px]:grid-cols-2 min-[701px]:gap-6">
             {people.map((person) => (
               <div key={person.name}>
-                <div className="relative aspect-[4/5] max-w-[320px] overflow-hidden rounded-[2px] border border-[color:var(--hairline)] bg-[color:var(--surface-stone)]">
+                <div className="pattern-herringbone relative aspect-[4/5] max-w-[320px] overflow-hidden rounded-[2px] border border-[color:var(--hairline)]">
                   <span
                     aria-hidden="true"
                     className="absolute inset-0 flex items-center justify-center text-[64px] font-semibold [font-family:var(--font-display)] tracking-[-0.01em] text-[rgba(20,22,26,0.22)]"
