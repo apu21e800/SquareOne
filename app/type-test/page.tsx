@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Fraunces, Playfair_Display, Jost, Inter, Source_Serif_4, DM_Serif_Display, Young_Serif } from "next/font/google"
+import { Fraunces, Playfair_Display, Jost, Inter, Source_Serif_4, DM_Serif_Display, Young_Serif, Poppins, Mulish, Nunito_Sans, Montserrat } from "next/font/google"
 import TypeTestClient from "./TypeTestClient"
 
 /* ROCKSTAR-PASS Part 1a — unlinked type lab. Three complete directions
@@ -14,15 +14,19 @@ const youngSerif = Young_Serif({ subsets: ["latin"], display: "swap", variable: 
 const playfair = Playfair_Display({ subsets: ["latin"], display: "swap", variable: "--tt-playfair" })
 const jost = Jost({ subsets: ["latin"], display: "swap", variable: "--tt-jost" })
 const interVar = Inter({ subsets: ["latin"], display: "swap", variable: "--tt-inter" })
+const poppins = Poppins({ subsets: ["latin"], display: "swap", variable: "--tt-poppins", weight: ["500", "600", "700"] })
+const mulish = Mulish({ subsets: ["latin"], display: "swap", variable: "--tt-mulish" })
+const nunitoSans = Nunito_Sans({ subsets: ["latin"], display: "swap", variable: "--tt-nunito" })
+const montserrat = Montserrat({ subsets: ["latin"], display: "swap", variable: "--tt-montserrat" })
 
 export const metadata: Metadata = {
-  title: "Type test — directions and robust cuts",
+  title: "Type test — direction C and sans alternates",
   robots: { index: false, follow: false },
 }
 
 export default function TypeTestPage() {
   return (
-    <div className={`${fraunces.variable} ${playfair.variable} ${jost.variable} ${interVar.variable} ${sourceSerif.variable} ${dmSerif.variable} ${youngSerif.variable}`}>
+    <div className={`${fraunces.variable} ${playfair.variable} ${jost.variable} ${interVar.variable} ${sourceSerif.variable} ${dmSerif.variable} ${youngSerif.variable} ${poppins.variable} ${mulish.variable} ${nunitoSans.variable} ${montserrat.variable}`}>
       <TypeTestClient />
     </div>
   )

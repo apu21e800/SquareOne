@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Inter, Fraunces } from 'next/font/google'
+import { Inter, Jost } from 'next/font/google'
 import "./globals.css"
 import Nav from "@/components/Nav"
 import Footer from "@/components/Footer"
@@ -7,21 +7,21 @@ import StructuredData from "@/components/StructuredData"
 import MobileStickyCTA from "@/components/MobileStickyCTA"
 import MotionBreath from "@/components/MotionBreath"
 
-// Two-face system per the Rockstar Pass (canon §2.5 as amended, Aug 2026):
-// Fraunces 600–640 carries display/H1/H2; Inter variable carries body
-// (450–500) and every spaced-caps label at 600. Nothing renders below
-// weight 400 — the ghost numerals are the one sanctioned exception.
+// Two-face system per the First-Draft Pass (canon §2.5 as amended, 31 Aug
+// 2026 — direction C, picked on /type-test): Jost spaced caps carries
+// display/H1/H2 at 600 with 0.08em tracking — the wordmark's Futura DNA.
+// Inter variable carries body (450–500). Nothing renders below weight 400 —
+// the ghost numerals are the one sanctioned exception.
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
   display: 'swap',
 })
 
-const fraunces = Fraunces({
+const jost = Jost({
   subsets: ['latin'],
-  variable: '--font-fraunces',
+  variable: '--font-jost',
   display: 'swap',
-  axes: ['SOFT'],
 })
 
 export const metadata: Metadata = {
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${fraunces.variable}`}>
+    <html lang="en" className={`${inter.variable} ${jost.variable}`}>
       <body className="antialiased">
         <StructuredData />
         <Nav />
