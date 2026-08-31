@@ -4,6 +4,7 @@ export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
     "Square One Paving privacy policy — how we collect, use, and protect your personal information under PIPEDA.",
+  alternates: { canonical: "https://squareonepaving.ca/privacy" },
 }
 
 const sections = [

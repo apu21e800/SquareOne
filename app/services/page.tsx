@@ -7,52 +7,54 @@ export const metadata: Metadata = {
   title: "Decorative Pavement Services BC",
   description:
     "BC's trusted decorative pavement applicator. Stamped asphalt, decorative coatings, preformed thermoplastic, and vapour blasting services across the Lower Mainland and Vancouver Island.",
+  alternates: { canonical: "https://squareonepaving.ca/services" },
 }
 
-/**
- * Display copy only. Slugs and image paths are unchanged — "vapor-blasting"
- * stays the route, "Vapour blasting" is what the card reads.
- */
+/* Card copy mirrors lib/services taglines (canon). Images are named, verified
+   BC installs — same voice as the homepage grid. Slugs and routes come from
+   lib/services untouched ("vapor-blasting" stays the route). No absolute
+   market claims ("BC's only") and no invented exclusivity badges: the honesty
+   constitution outranks the sales instinct. Vapour closes — extra service. */
 const services = [
   {
     num: "01",
     slug: "stamped-asphalt",
     name: "Stamped asphalt",
-    tagline: "Pattern, colour, and texture — built into the asphalt itself.",
+    tagline: "Brick, cobble and slate — pressed into the asphalt you already have.",
     desc: "Custom StreetPrint patterns for crosswalks, driveways, plazas, and roundabouts. Durable, slip-resistant, and designed for BC's climate.",
-    image: "/images/products/streetprint/streetprint-1.jpg",
+    image: "/images/products/streetprint/streetprint-victoria-ellis-point-walkway-01.jpg",
+    alt: "StreetPrint cobblestone walkway at Ellis Point, Victoria",
     applications: ["Crosswalks", "Roundabouts", "Driveways", "Commercial Entries"],
-    featured: false,
   },
   {
     num: "02",
     slug: "decorative-coatings",
     name: "Decorative coatings",
-    tagline: "Colour and safety for bike lanes, bus corridors, and parking lots.",
-    desc: "StreetBond coatings in dozens of colours — retroreflective, anti-skid, and UV stable. The go-to for Vision Zero infrastructure across BC.",
-    image: "/images/products/streetbond/streetbond-1.jpg",
+    tagline: "Colour that holds under buses, bikes and BC winters.",
+    desc: "StreetBond and MMAX coatings in dozens of colours — anti-skid, UV stable, and specified for Vision Zero infrastructure across BC.",
+    image: "/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg",
+    alt: "StreetBond multicolour plaza at Joyce Station, Vancouver, at dusk",
     applications: ["Bike Lanes", "Bus Rapid Transit", "Parking Lots", "School Zones"],
-    featured: false,
   },
   {
     num: "03",
     slug: "preformed-thermoplastic",
     name: "Preformed thermoplastic",
-    tagline: "Precision road markings with no spray drift, no inconsistency.",
+    tagline: "Crosswalks, symbols and street art, fused into the road.",
     desc: "TrafficPatterns and DecoMark preformed systems for crosswalk markings, custom logos, arrows, and zone graphics. Fast deployment, long service life.",
-    image: "/images/products/traffic-patterns/trafficpatterns-1.jpg",
+    image: "/images/projects/ubc-musqueam-crosswalk/ubc-musqueam-crosswalk-trafficpatterns-01.jpg",
+    alt: "Musqueam crosswalk artwork at UBC, Vancouver",
     applications: ["Crosswalk Markings", "School Zones", "Custom Logos", "Stop Bars"],
-    featured: false,
   },
   {
     num: "04",
     slug: "vapor-blasting",
     name: "Vapour blasting",
-    tagline: "Mobile surface prep — clean, safe, and environmentally responsible.",
-    desc: "BC's only mobile vapour blasting service. Graffiti removal, road marking removal, and surface prep without silica dust or harsh chemicals.",
-    image: "/images/products/streetbond/streetbond-1.jpg",
-    applications: ["Road Marking Removal", "Graffiti Removal", "Surface Prep", "Marine"],
-    featured: true,
+    tagline: "Mobile surface restoration. Dustless. Done right.",
+    desc: "Surface cleaning, priming, graffiti and mould removal — mobile across the Lower Mainland and Vancouver Island, with no silica dust and no harsh chemicals.",
+    image: "/images/services/vapor-blasting/granville-island-vapour-blasting-01.jpg",
+    alt: "Square One crew vapour blasting at Granville Island",
+    applications: ["Graffiti Removal", "Marking Removal", "Surface Prep", "Mould & Muck"],
   },
 ]
 
@@ -99,7 +101,7 @@ export default function ServicesPage() {
                 <div className="relative aspect-[16/10] overflow-hidden bg-[color:var(--surface-stone)]">
                   <Image
                     src={service.image}
-                    alt={`${service.name} — Square One Paving`}
+                    alt={service.alt}
                     fill
                     sizes="(max-width: 900px) 100vw, (max-width: 1280px) 50vw, 616px"
                     className="object-cover"
@@ -112,7 +114,6 @@ export default function ServicesPage() {
                     <span className="label">
                       {service.num} / {total}
                     </span>
-                    {service.featured && <span className="tag">Square One exclusive</span>}
                   </div>
 
                   <h3 className="mt-5">{service.name}</h3>

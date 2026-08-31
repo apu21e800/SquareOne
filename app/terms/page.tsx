@@ -4,6 +4,7 @@ export const metadata: Metadata = {
   title: "Terms of Use",
   description:
     "Terms of use for squareonepaving.com — governing law, intellectual property, and disclaimer of warranties.",
+  alternates: { canonical: "https://squareonepaving.ca/terms" },
 }
 
 const sections = [
