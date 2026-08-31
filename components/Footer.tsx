@@ -35,7 +35,7 @@ const productLinks: FooterLink[] = [
 const studioLinks: FooterLink[] = [
   { label: "About", href: "/about" },
   { label: "Projects", href: "/projects" },
-  { label: "Journal", href: "/blog" },
+  { label: "Blog", href: "/blog" },
   { label: "Resources", href: "/resources" },
   { label: "Contact", href: "/contact" },
 ]

@@ -34,7 +34,7 @@ export default function BlogPage() {
       <IndexImageHero
         src="/images/hero/bowen-island-polka-dot-walkway-streetbond.jpg"
         alt="Polka-dot StreetBond walkway along a road on Bowen Island"
-        eyebrow="Journal"
+        eyebrow="Blog"
         title="Field notes"
         lede="Notes from the crews and the estimating desk: materials, methods, and what holds up on BC pavement."
         caption="Bowen Island · StreetBond"

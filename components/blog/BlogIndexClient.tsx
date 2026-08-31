@@ -64,11 +64,11 @@ export default function BlogIndexClient({ posts }: Props) {
 
   return (
     <main className="bg-[color:var(--surface)]">
-      {/* ── Masthead ──────────────────────────────────────────────────── */}
+      {/* ── Masthead ────────────────────────────────────────── */}
       <section className="section relative overflow-hidden pt-32 max-[700px]:pt-24">
 
         <div className="container-1280 relative z-[1]">
-          <div className="eyebrow">Journal</div>
+          <div className="eyebrow">Blog</div>
 
           <h1 className="stop mt-5">Field notes</h1>
 
@@ -84,7 +84,7 @@ export default function BlogIndexClient({ posts }: Props) {
           {/* Filter tabs */}
           <div
             role="group"
-            aria-label="Filter journal by topic"
+            aria-label="Filter posts by topic"
             className="mt-4 flex flex-wrap gap-x-6 gap-y-3 border-b border-[color:var(--hairline)] pb-4"
           >
             {CATEGORIES.map((cat) => {
@@ -110,7 +110,7 @@ export default function BlogIndexClient({ posts }: Props) {
             })}
           </div>
 
-          {/* ── Posts ───────────────────────────────────────────────────── */}
+          {/* ── Posts ───────────────────────────────────────────── */}
           {filtered.length === 0 ? (
             <div className="py-20 text-center">
               <p className="text-[18px] text-[color:var(--ink)]">Nothing filed here yet</p>
@@ -141,7 +141,7 @@ export default function BlogIndexClient({ posts }: Props) {
         </div>
       </section>
 
-      {/* ── Close ─────────────────────────────────────────────────────────
+      {/* ── Close ─────────────────────────────────────────────────
           Warm, not slate. The single dark close on every page is the site
           footer, rendered by app/layout.tsx. */}
       <section className="section border-t border-[color:var(--hairline)] bg-[color:var(--surface-warm)]">
@@ -164,7 +164,7 @@ export default function BlogIndexClient({ posts }: Props) {
   )
 }
 
-/* ── Featured note ───────────────────────────────────────────────────────── */
+/* ── Featured note ─────────────────────────────────────────────────── */
 
 function FeaturedCard({ post }: { post: BlogPostMeta }) {
   const caption = captionFor(post)
@@ -228,7 +228,7 @@ function FeaturedCard({ post }: { post: BlogPostMeta }) {
   )
 }
 
-/* ── Grid note ───────────────────────────────────────────────────────────── */
+/* ── Grid note ─────────────────────────────────────────────────────── */
 
 function PostCard({ post }: { post: BlogPostMeta }) {
   const caption = captionFor(post)
