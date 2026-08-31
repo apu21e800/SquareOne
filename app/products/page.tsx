@@ -1,3 +1,4 @@
+import Image from "next/image"
 import Link from "next/link"
 import type { Metadata } from "next"
 import IndexImageHero from "@/components/IndexImageHero"
@@ -60,37 +61,43 @@ export default function ProductsPage() {
         caption="Langley Events Centre · StreetBond"
       />
 
+      {/* One photographic wall — nine systems, no half-empty category rows.
+          The category reads inside each card; the mega menu teaches the
+          taxonomy, this page sells the systems. */}
       <section className="relative overflow-hidden pt-20 pb-28 max-[700px]:pt-12 max-[700px]:pb-14">
         <div className="container-1280 relative z-[1]">
-          <div className="flex flex-col gap-16">
-            {groups.map((group) => (
-              <section key={group.category}>
-                <h2 className="label border-b border-[color:var(--hairline)] pb-[14px]">
-                  {group.category}
-                </h2>
-
-                <div className="mt-7 grid grid-cols-3 gap-6 max-[900px]:grid-cols-2 max-[700px]:grid-cols-1">
-                  {group.items.map((product) => (
-                    <article key={product.slug} className="card card-panel min-h-[200px]">
-                      <span className="tag self-start">{product.category}</span>
-
-                      <h3 className="mt-[18px]">{product.name}</h3>
-
-                      <p className="mt-2 text-[15px] leading-[1.55] text-[color:var(--ink-body)]">
-                        {product.tagline}
-                      </p>
-
-                      <Link
-                        href={`/products/${product.slug}`}
-                        className="arrow-link mt-auto pt-6"
-                        aria-label={`Explore ${product.name}`}
-                      >
-                        Explore system <span aria-hidden="true">&rarr;</span>
-                      </Link>
-                    </article>
-                  ))}
+          <div className="grid grid-cols-3 gap-6 max-[900px]:grid-cols-2 max-[600px]:grid-cols-1">
+            {groups.flatMap((group) => group.items).map((product) => (
+              <Link
+                key={product.slug}
+                href={`/products/${product.slug}`}
+                aria-label={`Explore ${product.name}`}
+                className="card group flex flex-col overflow-hidden rounded-[2px] border border-[color:var(--hairline)] bg-[color:var(--surface)]"
+              >
+                <div className="relative aspect-[16/10] overflow-hidden">
+                  <Image
+                    src={product.image}
+                    alt={`${product.name} installed by Square One Paving`}
+                    fill
+                    sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 400px"
+                    className="object-cover"
+                  />
+                  <div aria-hidden="true" className="scrim scrim-light" />
+                  <div className="caption">{product.category}</div>
                 </div>
-              </section>
+
+                <div className="flex flex-1 flex-col p-6 pt-5">
+                  <h3>{product.name}</h3>
+
+                  <p className="mt-2 text-[15px] leading-[1.55] text-[color:var(--ink-body)]">
+                    {product.tagline}
+                  </p>
+
+                  <span className="arrow-link mt-auto pt-6">
+                    Explore system <span aria-hidden="true">&rarr;</span>
+                  </span>
+                </div>
+              </Link>
             ))}
           </div>
         </div>
