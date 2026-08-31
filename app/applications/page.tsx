@@ -4,61 +4,107 @@ import IndexImageHero from "@/components/IndexImageHero"
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Applications",
+  title: "Applications | Decorative Pavement Across BC",
   description:
-    "Decorative paving and vapour blasting for driveways, patios, walkways, parking areas, and more across BC. Square One Paving — serving the Lower Mainland and Vancouver Island.",
+    "Decorative paving and vapour blasting for driveways, commercial spaces, crosswalks, bike lanes, parks and public art across BC. Square One Paving — Lower Mainland and Vancouver Island.",
   alternates: {
-    canonical: "https://squareonepaving.com/applications",
+    canonical: "https://squareonepaving.ca/applications",
   },
 }
 
-// ─── Data ─────────────────────────────────────────────────────────────────────
+// ─── Data ───
 
-const applications = [
+type AppCard = {
+  title: string
+  tag: string
+  desc: string
+  image: string
+  alt: string
+  cta: string
+  href: string
+}
+
+const applications: AppCard[] = [
   {
     title: "Driveways",
     tag: "Residential",
-    desc: "Stamped asphalt and StreetBond coatings for the entrance you use every day. 20+ patterns and colours — brick, cobblestone, slate, and more.",
-    image: "/images/applications/private-driveways/chilliwack-townhomes-brick-driveway-01.jpg",
-    alt: "Decorative brick-pattern driveway at BC townhome complex",
+    desc: "Stamped asphalt and StreetBond coatings for the entrance you use every day — brick, cobble and slate patterns for Victoria and Vancouver homes.",
+    image: "/images/applications/driveways/victoria-craigdarroch-castle-driveway-streetprint-01.jpg",
+    alt: "Stamped asphalt driveway at Craigdarroch Castle, Victoria",
     cta: "Explore driveways",
     href: "/driveways",
   },
   {
-    title: "Patios & courtyards",
-    tag: "Residential",
-    desc: "Extend your living space outdoors. Rich colour and durable texture for patios, pool decks, and private courtyards — built for BC's wet climate.",
-    image: "/images/applications/parks-paths/winding-park-path-streetbond-01.jpg",
-    alt: "Decorative StreetBond pathway in BC park",
+    title: "Commercial spaces",
+    tag: "Commercial",
+    desc: "Plazas, retail thresholds and strata surfaces that bring order and identity to large paved sites — built for coastal BC weather.",
+    image: "/images/applications/commercial-spaces/little-italy-aerial-colourful-intersection-01.jpg",
+    alt: "Little Italy intersection in Vancouver, from above",
     cta: "Request a quote",
     href: "/contact",
   },
   {
-    title: "Walkways",
-    tag: "Residential / Commercial",
-    desc: "Pedestrian paths, front walkways, and access routes — stamped or coated for curb appeal and longevity. Slip-resistant finishes available.",
-    image: "/images/applications/parks-paths/eagle-mural-courtyard-aerial-01.jpg",
-    alt: "Decorative courtyard with aerial view of paved surface",
-    cta: "Request a quote",
-    href: "/contact",
+    title: "Crosswalks",
+    tag: "Municipal",
+    desc: "Decorative and high-visibility crossings in preformed thermoplastic or stamped asphalt — from Bastion Square to Maple Ridge.",
+    image: "/images/applications/crosswalks/victoria-bastion-square-crosswalk-trafficpatternsxd-01.jpg",
+    alt: "TrafficPatternsXD crosswalk at Bastion Square, Victoria",
+    cta: "See the work",
+    href: "/projects",
+  },
+  {
+    title: "Bus & bike lanes",
+    tag: "Municipal",
+    desc: "Red and green priority-lane surfacing that holds its colour under daily traffic, plows and weather.",
+    image: "/images/products/premark/premark-north-vancouver-green-bike-lane-01.jpg",
+    alt: "Green PreMark bike lane in North Vancouver",
+    cta: "See the work",
+    href: "/projects",
   },
   {
     title: "Parking areas",
     tag: "Commercial",
-    desc: "Durable decorative coatings and thermoplastic markings for strata, commercial, and multi-family parking lots. Stall lines, accessible markings, directional graphics.",
-    image: "/images/applications/parking-lots/apartment-complex-yellow-streetprint-aerial-01.jpg",
-    alt: "Aerial view of decorative parking lot with StreetPrint pattern",
+    desc: "Decorative thresholds, stall markings and accessible-space graphics for retail, strata and multi-family lots.",
+    image: "/images/applications/parking-lots/victoria-hillside-mall-crosswalk-streetprint-01.jpg",
+    alt: "StreetPrint crosswalk at Hillside Mall, Victoria",
     cta: "Request a quote",
     href: "/contact",
   },
   {
+    title: "Parks, paths & walkways",
+    tag: "Municipal",
+    desc: "Greenways, park paths and pedestrian routes with pattern and colour underfoot — slip-resistant finishes throughout.",
+    image: "/images/applications/parks-paths/coquitlam-sheffield-park-01.jpg",
+    alt: "Decorative pavement path at Sheffield Park, Coquitlam",
+    cta: "See the work",
+    href: "/projects",
+  },
+  {
+    title: "Public art",
+    tag: "Civic",
+    desc: "Artist-designed pavement — First Nations artwork, murals and community pieces rendered durably in the road surface.",
+    image: "/images/applications/public-art/sechelt-rainbow-crosswalk-trafficpatterns-01.jpg",
+    alt: "Rainbow crosswalk in Sechelt",
+    cta: "See the work",
+    href: "/projects",
+  },
+  {
+    title: "Traffic calming & roundabouts",
+    tag: "Municipal",
+    desc: "Raised crossings, speed tables and roundabout aprons that slow traffic while looking like streetscape, not hardware.",
+    image: "/images/applications/roundabouts/surrey-roundabout-streetbond-01.jpg",
+    alt: "StreetBond-coated roundabout in Surrey",
+    cta: "See the work",
+    href: "/projects",
+  },
+  {
     title: "Vapour blasting",
     tag: "All surfaces",
-    desc: "Restore any surface to bare condition before coating or repair. No silica dust, no substrate damage — mobile vapour blasting anywhere in BC.",
-    image: "/images/products/streetbond/streetbond-cobble-macro-surface-01.jpg",
-    alt: "Clean surface ready for decorative coating",
+    desc: "Mobile wet-abrasive restoration for pavement, brick, concrete and steel — no silica dust, no substrate damage.",
+    image: "/images/services/vapor-blasting/walkway-vapour-blasting-01.jpg",
+    alt: "Walkway during vapour blasting by Square One",
     cta: "Learn about vapour blasting",
-    href: "/services/vapor-blasting",
+    href: "/vapor-blasting",
   },
 ]
 
@@ -69,24 +115,22 @@ const credentials = [
   "Free site consultations",
 ]
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
+// ─── Page ───
 
 /**
- * Applications index — docs/design-v2/Index Pages.dc.html (#applications).
+ * Applications index — rebuilt in review round 1 (31 Aug 2026).
  *
- *   Header       eyebrow + h1 + lede + one primary CTA   white
- *   Listing      4:3 photo cards, scrim + tag caption    warm, hairline top + bottom
- *   Credentials  quiet hairline row                      white
+ *   Header       IndexImageHero (h1 scale, top scrim — no nav collision)
+ *   Listing      9 edge-to-edge photo cards, tag caption on image     warm
+ *   Credentials  quiet hairline row                                   white
  *   Close        slate — rendered once by app/layout.tsx (Footer)
  *
- * The close is the page's ONLY dark region. Nothing above it may go slate.
- * Orange budget in the header viewport: eyebrow square, full stop, primary
- * button. Nothing else on this page is accent-coloured.
+ * Cards are photographic edge to edge — no padded frame around the image.
+ * Every photograph is a named, verified BC install.
  */
 export default function ApplicationsPage() {
   return (
     <main>
-      {/* ── Page header ──────────────────────────────────────────────────── */}
       <IndexImageHero
         src="/images/hero/white-rock-marine-drive-wave-crosswalk.jpg"
         alt="Wave-motif decorative crosswalk on Marine Drive, White Rock"
@@ -103,7 +147,7 @@ export default function ApplicationsPage() {
         </div>
       </IndexImageHero>
 
-      {/* ── Application cards ────────────────────────────────────────────── */}
+      {/* Application cards — photographic, edge to edge */}
       <section className="section border-t border-b border-[color:var(--hairline)] bg-[color:var(--surface-warm)]">
         <div className="container-1280">
           <div className="grid grid-cols-1 gap-6 min-[701px]:grid-cols-3">
@@ -111,9 +155,9 @@ export default function ApplicationsPage() {
               <Link
                 key={app.title}
                 href={app.href}
-                className="card group flex flex-col rounded-[2px] border border-[color:var(--hairline)] bg-[color:var(--surface)] p-5"
+                className="card group flex flex-col overflow-hidden rounded-[2px] border border-[color:var(--hairline)] bg-[color:var(--surface)]"
               >
-                <div className="relative aspect-[4/3] overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)]">
+                <div className="relative aspect-[4/3] overflow-hidden">
                   <Image
                     src={app.image}
                     alt={app.alt}
@@ -121,29 +165,31 @@ export default function ApplicationsPage() {
                     sizes="(max-width: 700px) 100vw, (max-width: 1280px) 33vw, 400px"
                     className="object-cover"
                   />
-                  <div aria-hidden className="scrim" />
+                  <div aria-hidden className="scrim scrim-light" />
                   <div className="caption">{app.tag}</div>
                 </div>
 
-                <h3 className="mt-6">{app.title}</h3>
+                <div className="flex flex-1 flex-col p-6 pt-5">
+                  <h3>{app.title}</h3>
 
-                <p className="mt-[10px] text-[15px] leading-[1.55] text-[color:var(--ink-body)]">
-                  {app.desc}
-                </p>
+                  <p className="mt-[10px] text-[15px] leading-[1.55] text-[color:var(--ink-body)]">
+                    {app.desc}
+                  </p>
 
-                <span className="arrow-link mt-auto pt-7">
-                  {app.cta}{" "}
-                  <span aria-hidden="true" className="group-hover:translate-x-1">
-                    &rarr;
+                  <span className="arrow-link mt-auto pt-6">
+                    {app.cta}{" "}
+                    <span aria-hidden="true" className="group-hover:translate-x-1">
+                      &rarr;
+                    </span>
                   </span>
-                </span>
+                </div>
               </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── Credentials ──────────────────────────────────────────────────── */}
+      {/* Credentials */}
       <section className="section bg-[color:var(--surface)]">
         <div className="container-1280">
           <div className="flex flex-wrap gap-x-10 gap-y-3 border-t border-[color:var(--hairline)] pt-6">
