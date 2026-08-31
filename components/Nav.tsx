@@ -6,6 +6,7 @@ import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { AnimatePresence, MotionConfig, motion, type Transition } from "framer-motion"
 import BrandMark from "@/components/BrandMark"
+import SearchOverlay from "@/components/SearchOverlay"
 import { products, type Product } from "@/lib/products"
 import { services, type Service } from "@/lib/services"
 
@@ -76,7 +77,7 @@ const PRIMARY_LINKS: PrimaryLink[] = [
   { label: "Products", href: "/products", match: ["/products"], menu: "products" },
   { label: "Applications", href: "/applications", match: ["/applications", "/driveways"], menu: "applications" },
   { label: "Projects", href: "/projects", match: ["/projects"] },
-  { label: "Journal", href: "/blog", match: ["/blog"] },
+  { label: "Blog", href: "/blog", match: ["/blog"] },
   { label: "About", href: "/about", match: ["/about"] },
 ]
 
@@ -88,7 +89,7 @@ const DRAWER_LINKS: { label: string; href: string }[] = [
   { label: "Applications", href: "/applications" },
   { label: "Driveways", href: "/driveways" },
   { label: "Projects", href: "/projects" },
-  { label: "Journal", href: "/blog" },
+  { label: "Blog", href: "/blog" },
   { label: "Resources", href: "/resources" },
   { label: "About", href: "/about" },
 ]
@@ -536,6 +537,7 @@ export default function Nav() {
   const [onImage, setOnImage] = useState(false)
   const [menu, setMenu] = useState<MenuKey | null>(null)
   const [drawerOpen, setDrawerOpen] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -607,6 +609,21 @@ export default function Nav() {
       document.body.style.overflow = ""
     }
   }, [drawerOpen])
+
+  // Cmd/Ctrl+K opens search from anywhere
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault()
+        clearCloseTimer()
+        setMenu(null)
+        setDrawerOpen(false)
+        setSearchOpen(true)
+      }
+    }
+    window.addEventListener("keydown", onKey)
+    return () => window.removeEventListener("keydown", onKey)
+  }, [clearCloseTimer])
 
   // Escape closes both
   useEffect(() => {
@@ -714,20 +731,51 @@ export default function Nav() {
             })}
           </nav>
 
+          <button
+            type="button"
+            onClick={() => {
+              closeAll()
+              setSearchOpen(true)
+            }}
+            aria-label="Search the site"
+            title="Search (Ctrl+K)"
+            className="nav-link ml-8 hidden h-10 w-10 shrink-0 items-center justify-center rounded-[2px] min-[821px]:flex"
+          >
+            <svg aria-hidden="true" width="17" height="17" viewBox="0 0 18 18">
+              <circle cx="8" cy="8" r="6.25" stroke="currentColor" strokeWidth="1.5" fill="none" />
+              <path d="M12.5 12.5L16.5 16.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+          </button>
+
           <Link
             href="/contact"
             onClick={closeAll}
-            className="nav-cta ml-10 hidden shrink-0 rounded-[2px] border px-[19px] py-[11px] text-[12px] font-semibold tracking-[0.12em] uppercase transition-colors min-[821px]:inline-block"
+            className="nav-cta ml-4 hidden shrink-0 rounded-[2px] border px-[19px] py-[11px] text-[12px] font-semibold tracking-[0.12em] uppercase transition-colors min-[821px]:inline-block"
           >
             Request a quote
           </Link>
 
           <button
             type="button"
+            onClick={() => {
+              closeAll()
+              setSearchOpen(true)
+            }}
+            aria-label="Search the site"
+            className="nav-link ml-auto flex h-11 w-11 items-center justify-center min-[821px]:hidden"
+          >
+            <svg aria-hidden="true" width="18" height="18" viewBox="0 0 18 18">
+              <circle cx="8" cy="8" r="6.25" stroke="currentColor" strokeWidth="1.5" fill="none" />
+              <path d="M12.5 12.5L16.5 16.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+          </button>
+
+          <button
+            type="button"
             onClick={() => setDrawerOpen(true)}
             aria-label="Open menu"
             aria-expanded={drawerOpen}
-            className="ml-auto flex h-11 w-11 flex-col items-center justify-center gap-[5px] min-[821px]:hidden"
+            className="flex h-11 w-11 flex-col items-center justify-center gap-[5px] min-[821px]:hidden"
           >
             <span aria-hidden="true" className="nav-burger-bar block h-[1.5px] w-[22px]" />
             <span aria-hidden="true" className="nav-burger-bar block h-[1.5px] w-[22px]" />
@@ -768,6 +816,8 @@ export default function Nav() {
       <AnimatePresence>
         {drawerOpen && <MobileDrawer onClose={closeAll} />}
       </AnimatePresence>
+
+      <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
     </div>
     </MotionConfig>
   )
