@@ -1,4 +1,5 @@
 import fs from "fs"
+import { heroFor } from "./gallery"
 import path from "path"
 import matter from "gray-matter"
 
@@ -39,7 +40,7 @@ export function getAllPosts(): BlogPostMeta[] {
         date: data.date ?? "",
         author: data.author ?? "Square One Paving",
         category: data.category ?? "",
-        featured_image: data.featured_image ?? "",
+        featured_image: heroFor("blog", slug, data.featured_image) ?? "",
         tags: data.tags ?? [],
       } satisfies BlogPostMeta
     })
@@ -63,7 +64,7 @@ export function getPostBySlug(slug: string): BlogPost | null {
     date: data.date ?? "",
     author: data.author ?? "Square One Paving",
     category: data.category ?? "",
-    featured_image: data.featured_image ?? "",
+    featured_image: heroFor("blog", slug, data.featured_image) ?? "",
     tags: data.tags ?? [],
     content,
   }

@@ -12,7 +12,9 @@
 type Tone = "dark" | "light"
 
 const DARK = { a: "#BB7034", b: "#595959", c: "#D8D8D8" }
-const LIGHT = { a: "#FFFFFF", b: "rgba(255,255,255,0.72)", c: "rgba(255,255,255,0.44)" }
+// Over photography the mark keeps its copper — only the grey facets go
+// light so the geometry reads. All-white washed the brand out entirely.
+const LIGHT = { a: "#C97A3A", b: "#FFFFFF", c: "rgba(255,255,255,0.66)" }
 
 export function BrandIcon({ tone = "dark", height = 34 }: { tone?: Tone; height?: number }) {
   const t = tone === "light" ? LIGHT : DARK

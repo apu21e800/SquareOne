@@ -1,10 +1,11 @@
 import Image from "next/image"
 
 /**
- * Full-bleed opening image band for index pages — Rockstar Pass Part 4.
- * The nav runs light over it ([data-nav-on-image], Part 2). Header text
- * sits bottom-left over the rising slate scrim; optional caption
- * bottom-right names the install.
+ * Full-bleed opening image band for index pages — Rockstar Pass Part 4,
+ * retuned for direction C (First-Draft fix round): caps titles run at the
+ * h1 scale (display-xl is the homepage hero's alone), the band is taller
+ * so a two-line caps title never climbs into the bar, and a top scrim
+ * keeps the light nav readable over any sky.
  */
 export default function IndexImageHero({
   src,
@@ -28,7 +29,7 @@ export default function IndexImageHero({
   return (
     <section
       data-nav-on-image
-      className="relative flex h-[52vh] min-h-[460px] items-end overflow-hidden bg-surface-slate"
+      className="relative flex h-[58vh] min-h-[560px] items-end overflow-hidden bg-surface-slate"
     >
       <Image
         src={src}
@@ -40,11 +41,15 @@ export default function IndexImageHero({
         style={{ objectPosition: imagePosition }}
       />
       <div aria-hidden="true" className="scrim-rise" />
+      <div aria-hidden="true" className="scrim-top" />
 
-      <div className="container-1280 relative z-[1] w-full pb-14 max-[700px]:pb-10">
+      <div
+        className="container-1280 relative z-[1] w-full pb-14 max-[700px]:pb-10"
+        style={{ paddingTop: "calc(var(--bar-h) + 2rem)" }}
+      >
         <div className="eyebrow eyebrow-on-image">{eyebrow}</div>
 
-        <h1 className="display-xl stop mt-5 max-w-[18ch] text-white [text-wrap:balance]">{title}</h1>
+        <h1 className="stop mt-5 max-w-[24ch] text-white [text-wrap:balance]">{title}</h1>
 
         {lede && (
           <p className="mt-5 max-w-[52ch] text-[18px] leading-[1.6] text-white/85 [text-wrap:pretty] max-[700px]:text-[16px]">
