@@ -46,12 +46,13 @@
   --shadow-rest:    0 1px 2px rgba(20, 22, 26, 0.04);
   --shadow-lift:    0 16px 40px rgba(20, 22, 26, 0.08);
 
-  /* Type — Rockstar Pass (canon §2.5 as amended): Fraunces carries display
-     at wght 680 with the SOFT axis at 100 — sturdier, sign-painter confidence.
-     THE H1 RULE: pages that open on a full-bleed photograph use .display-xl
-     (clamp → 6rem); pages with a plain header use the h1 default
-     (clamp → 4.75rem). One or the other, never a third size. */
-  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  /* Type — First-Draft Pass (canon §2.5 as amended 31 Aug 2026): direction C.
+     Jost spaced caps carries display — uppercase 600, 0.08em tracking; the
+     wordmark's Futura DNA at Tom Ford register. Inter carries body (450–500).
+     Small labels keep the 0.12em caps system, now in the display face.
+     THE H1 RULE: photo-opening pages use .display-xl (clamp → 4.25rem);
+     plain headers use the h1 default (clamp → 3.4rem). One or the other. */
+  --font-display: var(--font-jost), Futura, "Century Gothic", ui-sans-serif, sans-serif;
 
   /* Geometry */
   --radius:         2px;
@@ -103,18 +104,20 @@
 
   h1 {
     font-family: var(--font-display);
-    font-size: clamp(3.25rem, 5vw, 4.75rem);
-    font-weight: 680;
-    letter-spacing: -0.012em;
-    line-height: 1.02;
+    font-size: clamp(2.25rem, 3.6vw, 3.4rem);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    line-height: 1.14;
+    text-transform: uppercase;
   }
 
   h2 {
     font-family: var(--font-display);
-    font-size: clamp(2rem, 3.5vw, 3rem);
-    font-weight: 680;
-    letter-spacing: -0.008em;
-    line-height: 1.06;
+    font-size: clamp(1.5rem, 2.6vw, 2.25rem);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    line-height: 1.18;
+    text-transform: uppercase;
   }
 
   h3 {
@@ -143,10 +146,10 @@
     outline-offset: 2px;
   }
 
-  /* Every display voice carries the softened Fraunces cut */
-  h1, h2, .display-xl, .display-statement, .stat-num,
-  .quote-display, .prose blockquote, .prose h2, .prose h3 {
-    font-variation-settings: "SOFT" 100;
+  /* Direction C: long-form journal headings stay sentence case for reading */
+  .prose h2, .prose h3 {
+    text-transform: none;
+    letter-spacing: 0.015em;
   }
 }
 
@@ -206,6 +209,7 @@
     overflow: hidden;
   }
   .chip-name {
+    font-family: var(--font-display);
     margin-top: 8px;
     font-size: 11px;
     font-weight: 600;
@@ -217,6 +221,7 @@
   /* ---- Signature: 6px orange square ---- */
 
   .eyebrow {
+    font-family: var(--font-display);
     display: flex;
     align-items: center;
     gap: 10px;
@@ -240,6 +245,7 @@
   /* Same treatment, no square. For repeated column headings (mega menu,
      footer) where one square per column would blow the orange budget. */
   .label {
+    font-family: var(--font-display);
     font-size: 11px;
     font-weight: 600;
     letter-spacing: 0.12em;
@@ -266,19 +272,21 @@
   /* Page-opening display line — homepage hero and index page headers only */
   .display-xl {
     font-family: var(--font-display);
-    font-size: clamp(3.5rem, 6vw, 6rem);
-    font-weight: 680;
-    letter-spacing: -0.015em;
-    line-height: 1.02;
+    font-size: clamp(2.5rem, 4.4vw, 4.25rem);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    line-height: 1.14;
+    text-transform: uppercase;
   }
 
   /* Editorial statement line — display voice at band scale */
   .display-statement {
     font-family: var(--font-display);
-    font-size: clamp(2.5rem, 4vw, 3.75rem);
-    font-weight: 680;
-    letter-spacing: -0.008em;
-    line-height: 1.08;
+    font-size: clamp(1.875rem, 3vw, 2.75rem);
+    font-weight: 600;
+    letter-spacing: 0.075em;
+    line-height: 1.2;
+    text-transform: uppercase;
   }
 
   /* Shared pull-quote voice — display face, never below 400 */
@@ -308,6 +316,7 @@
   /* ---- Ghost section numeral ---- */
 
   .ghost-index {
+    font-family: var(--font-display);
     position: absolute;
     top: 3rem;
     right: 1.5rem;
@@ -328,6 +337,7 @@
   /* ---- Buttons ---- */
 
   .btn-primary {
+    font-family: var(--font-display);
     display: inline-block;
     background: var(--accent);
     color: #FFFFFF;
@@ -342,6 +352,7 @@
   .btn-primary:hover { background: var(--accent-deep); color: #FFFFFF; }
 
   .btn-secondary {
+    font-family: var(--font-display);
     display: inline-block;
     border: 1px solid var(--hairline);
     color: var(--ink);
@@ -356,6 +367,7 @@
   .btn-secondary:hover { border-color: var(--hairline-strong); color: var(--ink); }
 
   .btn-on-slate {
+    font-family: var(--font-display);
     display: inline-block;
     background: #FFFFFF;
     color: var(--surface-slate);
@@ -371,6 +383,7 @@
 
   /* Hairline button for use over photography (full-bleed hero) */
   .btn-on-image {
+    font-family: var(--font-display);
     display: inline-block;
     border: 1px solid rgba(255, 255, 255, 0.44);
     color: #FFFFFF;
@@ -433,6 +446,7 @@
   /* ---- Arrow link ---- */
 
   .arrow-link {
+    font-family: var(--font-display);
     font-size: 14px;
     font-weight: 600;
     color: var(--ink);
@@ -464,6 +478,7 @@
   /* ---- Nav underline ---- */
 
   .nav-link {
+    font-family: var(--font-display);
     font-size: 14px;
     font-weight: 500;
     color: var(--ink-body);
@@ -482,9 +497,9 @@
   .stat-num {
     font-family: var(--font-display);
     font-size: 64px;
-    font-weight: 680;
+    font-weight: 600;
     line-height: 1;
-    letter-spacing: -0.02em;
+    letter-spacing: 0.01em;
     color: var(--ink);
   }
   @media (max-width: 700px) {
@@ -522,12 +537,13 @@
   }
 
   .caption {
+    font-family: var(--font-display);
     position: absolute;
     left: 20px;
     bottom: 16px;
     font-size: 12px;
     font-weight: 600;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.05em;
     color: #FFFFFF;
   }
   .caption-right { left: auto; right: 20px; }
