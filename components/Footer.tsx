@@ -200,7 +200,7 @@ export default function Footer() {
                 <ContactRow label="Email">
                   <a
                     href="mailto:office@squareonepaving.com"
-                    className="mt-[3px] block text-[15px] text-[#C6CBD1] transition-colors hover:text-white"
+                    className="mt-[3px] block text-[15px] text-[#C6CBD1] transition-colors hover:text-white [overflow-wrap:anywhere]"
                   >
                     office@squareonepaving.com
                   </a>
