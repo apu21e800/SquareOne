@@ -93,8 +93,8 @@ const DRV = "/images/S1_update_v2/photos/Driveways"
 
 const HERO: Shot & { caption: string } = {
   src: `${DRV}/Number%201.jpg`,
-  alt: "Grey herringbone StreetPrint stamped asphalt driveway at a two-storey home, installed by Square One Paving",
-  caption: "StreetPrint · Herringbone · Square One install",
+  alt: "Grey ashlar slate StreetPrint stamped asphalt driveway at a three-bay garage, installed by Square One Paving",
+  caption: "StreetPrint · Ashlar slate · Square One install",
 }
 
 const stats: { number: string; label: string }[] = [
@@ -106,14 +106,9 @@ const stats: { number: string; label: string }[] = [
 /** Real installations, labelled by the pattern actually shown. */
 const patterns: (Shot & { label: string })[] = [
   {
-    label: "Herringbone",
-    src: `${DRV}/Number%201.jpg`,
-    alt: "Herringbone StreetPrint driveway in grey, installed by Square One Paving",
-  },
-  {
     label: "Ashlar slate",
-    src: "/images/applications/driveways/langley-ashlar-slate-driveway-streetprint-01.jpg",
-    alt: "Ashlar Slate StreetPrint driveway in Langley BC",
+    src: `${DRV}/Number%201.jpg`,
+    alt: "Ashlar slate StreetPrint driveway in grey, installed by Square One Paving",
   },
   {
     label: "Offset brick",
@@ -129,6 +124,11 @@ const patterns: (Shot & { label: string })[] = [
     label: "Cobblestone",
     src: `${FIO}/Cobblestone-stamped-asphalt-driveway-colose-up-at-Ellis-Point-Walkway-Victoria-BC-Canada.jpg`,
     alt: "Cobblestone StreetPrint close-up at Ellis Point, Victoria BC",
+  },
+  {
+    label: "Two-tone brick",
+    src: `${FIO}/303-IMG_3928.JPG`,
+    alt: "Red brick soldier-course border on charcoal running bond — StreetPrint detail, installed by Square One Paving",
   },
   {
     label: "Circle medallion",
