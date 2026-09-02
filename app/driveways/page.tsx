@@ -1,4 +1,4 @@
-// ─── SEO PILLAR PAGE ────────────────────────────────────────────────────────────────────────────────────────────────────────────
+// ──────── SEO PILLAR PAGE ────────
 // Primary SEO pillar page for decorative driveway paving in BC.
 // Target keywords: "driveway paving Vancouver", "stamped asphalt driveway BC",
 // "decorative driveway Lower Mainland", "StreetPrint driveway BC"
@@ -16,7 +16,7 @@
 //   ── Site Close                 slate — rendered once by app/layout.tsx (Footer)
 //
 // The slate close is the page's ONLY dark region. Nothing above it may go dark.
-// ───────────────────────────────────────────────────────────────────────────────
+// ────────
 
 import Link from "next/link"
 import Image from "next/image"
@@ -47,11 +47,11 @@ export const metadata: Metadata = {
 const faqs = [
   {
     q: "Can you install over my existing driveway?",
-    a: "Yes — StreetPrint and StreetBond are applied directly over existing asphalt, so there's no demolition of the base. We assess the surface condition first and may recommend DuraShield rejuvenation if the base is oxidized.",
+    a: "Yes — StreetPrint is stamped into asphalt in good condition, reheated in place, and StreetBond is coated straight over asphalt or concrete, so there's no demolition of the base. We assess the surface at the site visit first: the asphalt has to be sound before it takes a pattern.",
   },
   {
     q: "How long does a decorative driveway last?",
-    a: "StreetPrint stamped asphalt typically lasts 8–12 years in BC conditions. StreetBond coatings carry a 20-year colour retention warranty. Maintenance cycles and recoats can extend service life significantly.",
+    a: "HUB publishes a 10–20 year service life for StreetPrint in Canadian municipal service, and an 8+ year life cycle for StreetBond, which is easily refreshed with a recoat. A driveway carries a fraction of the traffic a road does.",
   },
   {
     q: "Is stamped asphalt safe in BC winters?",
@@ -59,7 +59,7 @@ const faqs = [
   },
   {
     q: "How do I get a quote?",
-    a: "Contact us with your address and a description of the work. We'll schedule a free site visit, assess the surface, and provide a written quote within 48 hours.",
+    a: "Contact us with your address and a description of the work. We'll schedule a free site visit, assess the surface, and follow up with a written quote.",
   },
   {
     q: "Do you serve Vancouver Island?",
@@ -98,7 +98,7 @@ const HERO: Shot & { caption: string } = {
 }
 
 const stats: { number: string; label: string }[] = [
-  { number: "8–12", label: "year StreetPrint service life in BC conditions" },
+  { number: "10–20", label: "year StreetPrint service life, as published by HUB" },
   { number: "25+", label: "years installing decorative pavement in BC" },
   { number: "Free", label: "site visit and written quote" },
 ]
@@ -157,12 +157,12 @@ const systems: {
   {
     name: "StreetPrint stamped asphalt",
     note: "Most popular",
-    body: "StreetPrint imprints brick, cobblestone, slate and custom patterns into your existing asphalt — no excavation, no new base. Installed in place, in days.",
+    body: "StreetPrint imprints brick, cobblestone, slate and custom patterns into your existing asphalt — no excavation, no new base. Reheated and stamped in place.",
     specs: [
-      "Applied over existing asphalt — no demolition",
-      "Patterns: brick, cobblestone, slate, running bond",
-      "Slip-resistant texture, snowplow safe",
-      "8–12 year service life in BC conditions",
+      "Stamped into new or existing asphalt — no demolition",
+      "Herringbone, offset brick, ashlar slate, British cobble and more",
+      "Textured surface, snowplow safe — flush, no raised edges",
+      "10–20 year published service life",
     ],
     href: "/products/streetprint",
     cta: "StreetPrint details",
@@ -170,25 +170,25 @@ const systems: {
   {
     name: "StreetBond colour coating",
     note: "Best value",
-    body: "StreetBond is a high-performance acrylic coating that bonds permanently to asphalt or concrete. UV stable, anti-skid, and available in dozens of custom colours. The smartest way to refresh and protect an existing driveway.",
+    body: "StreetBond is HUB's epoxy-modified acrylic coating for asphalt and concrete: UV-stable, anti-skid, mixed in dozens of colours. It moves with the pavement instead of peeling or cracking — the simplest way to refresh and protect an existing driveway.",
     specs: [
       "Bonds to asphalt and concrete",
-      "20-year colour retention warranty",
+      "UV-stable — 8+ year life cycle, easily refreshed",
       "Anti-skid aggregate included",
-      "Pantone custom colour matching",
+      "Standard colours plus custom mixing",
     ],
     href: "/products/streetbond",
     cta: "StreetBond details",
   },
   {
-    name: "DuraShield rejuvenation",
-    note: "Surface prep and protection",
-    body: "DuraShield penetrates oxidized asphalt, rejuvenating the binder and extending pavement life 3–5 years. The smart first step before any decorative system, or a standalone maintenance treatment.",
+    name: "DuraShield maintenance coating",
+    note: "Protect and refresh",
+    body: "DuraShield is HUB's two-component asphalt maintenance coating, in black or a solar-reflective grey. It shields the pavement from UV oxidation, fuel, oil and de-icing agents and gives tired asphalt a clean, uniform finish — the right call when the driveway is sound but faded.",
     specs: [
-      "Penetrating rejuvenator",
-      "Extends pavement life 3–5 years",
-      "Restores oxidized asphalt",
-      "Pairs with StreetPrint",
+      "Waterborne epoxy-modified acrylic, low VOC",
+      "Protects against UV oxidation and chemicals",
+      "Black or Solar Gray (SR 0.34) finish",
+      "Friction suited to foot and vehicle traffic",
     ],
     href: "/products/durashield",
     cta: "DuraShield details",
@@ -204,17 +204,17 @@ const steps: { num: string; title: string; desc: string }[] = [
   {
     num: "02",
     title: "Written quote",
-    desc: "A detailed written quote within 48 hours. No surprises. We specify the right system for your surface condition.",
+    desc: "A detailed written quote after the visit. No surprises: we specify the right system for the surface you have.",
   },
   {
     num: "03",
     title: "Installation",
-    desc: "Our crew handles prep, application and quality control. Most residential driveways: 1–2 days.",
+    desc: "Our own crew handles prep, stamping, colour and finishing, and confirms the schedule with your quote.",
   },
   {
     num: "04",
-    title: "20-year performance",
-    desc: "StreetPrint and StreetBond are engineered for BC winters and backed by the manufacturers' material warranties — and we stand behind the installation.",
+    title: "Built for BC winters",
+    desc: "Flush, snowplow-safe surfaces backed by the manufacturer's material warranty — and Square One stands behind the installation.",
   },
 ]
 
@@ -224,7 +224,7 @@ export default function DrivewaysPage() {
   return (
     <main>
 
-      {/* ── 01 Hero ────────────────────────────────────────────────────────────────── */}
+      {/* ── 01 Hero ──────── */}
       <section className="relative grid min-h-[640px] grid-cols-[55fr_45fr] overflow-hidden bg-surface max-[700px]:min-h-0 max-[700px]:grid-cols-1">
         <div
           className="
@@ -243,8 +243,8 @@ export default function DrivewaysPage() {
 
             <p className="mt-7 max-w-[56ch] text-[19px] leading-[1.65] text-ink-body [text-wrap:pretty] max-[700px]:text-[17px]">
               The look of stone or pavers, the wear of asphalt —
-              imprinted and coated over the driveway you already have. No demolition, most jobs
-              finished in days.
+              imprinted and coated over the driveway you already have. No demolition, no new
+              base.
             </p>
 
             <div className="mt-11 flex flex-wrap items-center gap-[14px]">
@@ -272,7 +272,7 @@ export default function DrivewaysPage() {
         </div>
       </section>
 
-      {/* ── 02 Benefits ───────────────────────────────────────────────────────────── */}
+      {/* ── 02 Benefits ──────── */}
       <section className="section relative overflow-hidden border-y border-hairline bg-surface-warm">
 
         <div className="container-1280 relative z-[1] grid grid-cols-3 gap-10 max-[700px]:grid-cols-1 max-[700px]:gap-9">
@@ -287,7 +287,7 @@ export default function DrivewaysPage() {
         </div>
       </section>
 
-      {/* ── 03 Patterns and colours ─────────────────────────────────────────────── */}
+      {/* ── 03 Patterns and colours ──────── */}
       <section id="patterns" className="section relative overflow-hidden bg-surface">
 
         <div className="container-1280 relative z-[1]">
@@ -330,7 +330,7 @@ export default function DrivewaysPage() {
         </div>
       </section>
 
-      {/* ── 04 Systems ────────────────────────────────────────────────────────────── */}
+      {/* ── 04 Systems ──────── */}
       <section className="section relative overflow-hidden border-t border-hairline bg-surface">
 
         <div className="container-1280 relative z-[1]">
@@ -390,7 +390,7 @@ export default function DrivewaysPage() {
         </div>
       </section>
 
-      {/* ── 05 How it works ─────────────────────────────────────────────────────────── */}
+      {/* ── 05 How it works ──────── */}
       <section className="section relative overflow-hidden border-y border-hairline bg-surface-warm">
 
         <div className="container-1280 relative z-[1]">
@@ -412,7 +412,7 @@ export default function DrivewaysPage() {
         </div>
       </section>
 
-      {/* ── 06 Driveways on record ───────────────────────────────────────────────── */}
+      {/* ── 06 Driveways on record ──────── */}
       <section id="gallery" className="section relative overflow-hidden bg-surface">
 
         <div className="container-1280 relative z-[1]">
@@ -421,11 +421,21 @@ export default function DrivewaysPage() {
               <div className="eyebrow">Photographed on site</div>
               <h2 className="stop stop-tight mt-4">Driveways from Victoria to Vancouver</h2>
             </div>
-            <p className="max-w-[44ch] text-[15px] leading-[1.6] text-ink-muted">
-              {gallery.length} Square One driveways on record — Saanich, Sooke, Duncan and Victoria on the
-              Island; Vancouver, West Vancouver, Burnaby, Richmond, Langley and Maple Ridge on the
-              mainland. Filter by region.
-            </p>
+            <div className="max-w-[44ch]">
+              <p className="text-[15px] leading-[1.6] text-ink-muted">
+                {gallery.length} Square One driveways on record — Saanich, Sooke, Duncan and Victoria on
+                the Island; Vancouver, West Vancouver, Burnaby, Richmond, Langley and Maple Ridge on
+                the mainland. Filter by region, or go straight to your city.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-x-7 gap-y-2">
+                <Link href="/driveways/vancouver" className="arrow-link">
+                  Vancouver driveways <span aria-hidden="true">&rarr;</span>
+                </Link>
+                <Link href="/driveways/victoria" className="arrow-link">
+                  Victoria driveways <span aria-hidden="true">&rarr;</span>
+                </Link>
+              </div>
+            </div>
           </div>
 
           <div className="mt-10">
@@ -434,7 +444,7 @@ export default function DrivewaysPage() {
         </div>
       </section>
 
-      {/* ── 07 Service area ─────────────────────────────────────────────────────────── */}
+      {/* ── 07 Service area ──────── */}
       <section className="section relative overflow-hidden border-y border-hairline bg-surface-warm">
 
         <div className="container-1280 relative z-[1]">
@@ -443,8 +453,8 @@ export default function DrivewaysPage() {
           <h2 className="mt-5">We come to you</h2>
 
           <p className="mt-5 max-w-[52ch] text-[17px] leading-[1.6] text-ink-body [text-wrap:pretty]">
-            Mobile crews across the Lower Mainland and Vancouver Island. No travel surcharge
-            within the service areas below.
+            Mobile crews across the Lower Mainland and Vancouver Island. If you are in one of
+            the areas below, we come to you.
           </p>
 
           <div className="mt-10 grid grid-cols-2 gap-3 min-[701px]:grid-cols-4 lg:grid-cols-6">
@@ -461,7 +471,7 @@ export default function DrivewaysPage() {
         </div>
       </section>
 
-      {/* ── 08 Questions we hear ────────────────────────────────────────────────────── */}
+      {/* ── 08 Questions we hear ──────── */}
       <section className="section relative overflow-hidden border-t border-hairline bg-surface">
 
         <div className="container-1280 relative z-[1]">
