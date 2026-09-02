@@ -162,6 +162,8 @@ const STATIC_PAGES: SearchEntry[] = [
   { type: "page", title: "Products", subtitle: "The nine systems we install", href: "/products", keywords: "systems catalogue products index" },
   { type: "page", title: "Applications", subtitle: "Where the work lives — crosswalks to driveways", href: "/applications", keywords: "applications index where we work" },
   { type: "page", title: "Driveways", subtitle: "Stamped asphalt for Victoria & Vancouver homes", href: "/driveways", keywords: "residential homeowner driveway victoria vancouver" },
+  { type: "page", title: "Driveways in Vancouver", subtitle: "Stamped asphalt driveways across Metro Vancouver", href: "/driveways/vancouver", keywords: "vancouver driveway lower mainland north shore burnaby richmond langley homeowner" },
+  { type: "page", title: "Driveways in Victoria", subtitle: "Stamped asphalt driveways across Greater Victoria and the Island", href: "/driveways/victoria", keywords: "victoria driveway saanich oak bay sooke langford island homeowner" },
   { type: "page", title: "Vapour blasting", subtitle: "Cleaning, priming, graffiti and mould removal", href: "/services/vapor-blasting", keywords: "vapor blasting dustless restoration surface prep graffiti mould" },
   { type: "page", title: "Projects", subtitle: "Selected work across BC", href: "/projects", keywords: "case studies portfolio work" },
   { type: "page", title: "Blog", subtitle: "Guides and project stories from BC ground", href: "/blog", keywords: "blog articles guides news stories journal" },
