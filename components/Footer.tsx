@@ -25,11 +25,30 @@ const serviceLinks: FooterLink[] = [
 
 const productLinks: FooterLink[] = [
   { label: "StreetPrint", href: "/products/streetprint" },
-  { label: "TrafficPatterns", href: "/products/trafficpatterns" },
-  { label: "TrafficPatterns XD", href: "/products/trafficpatterns-xd" },
-  { label: "DecoMark", href: "/products/decomark" },
   { label: "StreetBond", href: "/products/streetbond" },
+  { label: "TrafficPatterns", href: "/products/trafficpatterns" },
+  { label: "TrafficPatternsXD", href: "/products/trafficpatterns-xd" },
+  { label: "DecoMark", href: "/products/decomark" },
+  { label: "DuraTherm", href: "/products/duratherm" },
+  { label: "PreMark", href: "/products/premark" },
+  { label: "MMAX", href: "/products/mmax" },
+  { label: "DuraShield", href: "/products/durashield" },
   { label: "All products", href: "/products" },
+]
+
+/* Mirrors WORK_APPS in lib/work.ts — the application gallery pages. */
+const applicationLinks: FooterLink[] = [
+  { label: "Crosswalks", href: "/applications/crosswalks" },
+  { label: "Streetscapes", href: "/applications/streetscapes" },
+  { label: "Roundabouts & traffic calming", href: "/applications/roundabouts" },
+  { label: "Parking lots", href: "/applications/parking-lots" },
+  { label: "Parks & paths", href: "/applications/parks-paths" },
+  { label: "Schools & sports courts", href: "/applications/schools-sports-courts" },
+  { label: "Bike lanes", href: "/applications/bike-lanes" },
+  { label: "Public art", href: "/applications/public-art" },
+  { label: "Branding & wayfinding", href: "/applications/branding-wayfinding" },
+  { label: "Driveways", href: "/driveways" },
+  { label: "All applications", href: "/applications" },
 ]
 
 const studioLinks: FooterLink[] = [
@@ -37,6 +56,7 @@ const studioLinks: FooterLink[] = [
   { label: "Projects", href: "/projects" },
   { label: "Blog", href: "/blog" },
   { label: "Resources", href: "/resources" },
+  { label: "Search", href: "/search" },
   { label: "Contact", href: "/contact" },
 ]
 
@@ -120,7 +140,7 @@ export default function Footer() {
         style={{ borderColor: hairline }}
       >
         <div className="mx-auto max-w-[1280px]">
-          <div className="grid grid-cols-2 gap-10 min-[701px]:grid-cols-3 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1.2fr] lg:gap-12">
+          <div className="grid grid-cols-2 gap-10 min-[701px]:grid-cols-3 lg:grid-cols-[1.3fr_1fr_1.15fr_1fr_0.9fr_1.2fr] lg:gap-10">
             {/* Brand */}
             <div className="col-span-2 min-[701px]:col-span-1">
               <Link
@@ -132,8 +152,8 @@ export default function Footer() {
               </Link>
 
               <p className="mt-[18px] max-w-[30ch] text-[14px] leading-[1.6] text-[#8A9098]">
-                BC&rsquo;s decorative pavement studio since 2000. Based in Maple Ridge, serving
-                the Lower Mainland and Vancouver Island.
+                Decorative pavement for BC since 2000 &mdash; installer of HUB Surface Systems
+                products. Based in Maple Ridge, serving the Lower Mainland and Vancouver Island.
               </p>
 
               <div className="-ml-[11px] mt-5 flex items-center gap-0.5">
@@ -155,6 +175,7 @@ export default function Footer() {
             </div>
 
             <LinkColumn heading="Services" links={serviceLinks} />
+            <LinkColumn heading="Applications" links={applicationLinks} />
             <LinkColumn heading="Products" links={productLinks} />
             <LinkColumn heading="Studio" links={studioLinks} />
 
