@@ -48,7 +48,7 @@ const CITIES: Record<string, CityCopy> = {
     name: "Vancouver",
     region: "Lower Mainland",
     regionLabel: "Metro Vancouver",
-    title: "Stamped Asphalt Driveways Vancouver | Square One Paving",
+    title: "Stamped Asphalt Driveways Vancouver",
     headline: "Driveways for Vancouver homes",
     lede:
       "StreetPrint stamped asphalt and StreetBond colour, installed over the driveway you already have — from West Vancouver to Langley, by the crew that has been doing it since 2000.",
@@ -82,7 +82,7 @@ const CITIES: Record<string, CityCopy> = {
     name: "Victoria",
     region: "Vancouver Island",
     regionLabel: "Greater Victoria",
-    title: "Stamped Asphalt Driveways Victoria | Square One Paving",
+    title: "Stamped Asphalt Driveways Victoria",
     headline: "Driveways for Greater Victoria homes",
     lede:
       "StreetPrint stamped asphalt and StreetBond colour for Victoria, Saanich, Oak Bay and the Peninsula — installed by Square One crews dispatched to the Island, with more driveways on record here than anywhere else we work.",

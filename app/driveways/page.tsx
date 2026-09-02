@@ -26,7 +26,7 @@ import { workFor } from "@/lib/work"
 import WorkGallery from "@/components/WorkGallery"
 
 export const metadata: Metadata = {
-  title: "Stamped Asphalt Driveways Vancouver & Victoria | Square One Paving",
+  title: "Stamped Asphalt Driveways Vancouver & Victoria",
   description:
     "Stamped asphalt driveways in Metro Vancouver and Greater Victoria — StreetPrint patterns and StreetBond colour installed over the driveway you already have, by Square One Paving since 2000. Free site visit and written quote.",
   keywords: [
