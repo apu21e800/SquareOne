@@ -3,8 +3,8 @@ import Link from "next/link"
 import Image from "next/image"
 import { notFound } from "next/navigation"
 
-import { workForRegion, type WorkRegion } from "@/lib/work"
-import WorkGallery, { workAlt } from "@/components/WorkGallery"
+import { workForRegion, type WorkPhoto, type WorkRegion } from "@/lib/work"
+import WorkGallery from "@/components/WorkGallery"
 
 /**
  * City landing pages for the driveway pillar — /driveways/vancouver and
@@ -112,6 +112,14 @@ const CITIES: Record<string, CityCopy> = {
   },
 }
 
+/** Same wording as WorkGallery's alt text; kept here because that module is client-only. */
+function heroAlt(p: WorkPhoto): string {
+  const sys = p.systems.join(" and ")
+  return p.place
+    ? `${p.subject} in ${sys} — ${p.place}, BC. Installed by Square One Paving.`
+    : `${p.subject} in ${sys}. Installed by Square One Paving.`
+}
+
 const SYSTEMS = [
   { name: "StreetPrint stamped asphalt", body: "Brick, cobble, slate and custom patterns imprinted into your existing asphalt — no excavation, no new base.", href: "/products/streetprint" },
   { name: "StreetBond colour coating", body: "The colour and the seal in one — UV-stable, slip-resistant, and the way an existing driveway gets refreshed.", href: "/products/streetbond" },
@@ -184,7 +192,7 @@ export default async function DrivewayCityPage({ params }: Props) {
               <div className="relative aspect-[16/10] overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)]">
                 <Image
                   src={hero.src}
-                  alt={workAlt(hero)}
+                  alt={heroAlt(hero)}
                   fill
                   priority
                   sizes="(max-width: 1120px) 100vw, 1080px"
