@@ -1,15 +1,21 @@
 /**
- * Section 06 — Selected clients + pull-quote.
+ * Section 06 — Selected clients.
  * Plain text names, no logos, no cards, no ticker.
- * Every name below is already carried by lib/projects.ts or existing site copy.
+ * Every name below is an owner Square One has itself published as a client
+ * on squareonepaving.com or in its project posts — nothing inferred.
  */
 const selectedClients = [
-  "City of Vancouver",
   "TransLink",
+  "City of Vancouver",
   "UBC",
+  "Musqueam",
   "City of Burnaby",
-  "City of Richmond",
-  "District of Maple Ridge",
+  "Vancouver Park Board",
+  "City of New Westminster",
+  "City of Langley",
+  "Squamish Nation",
+  "Polygon Realty",
+  "Onni Group",
 ]
 
 export default function TrustStrip() {
@@ -23,7 +29,7 @@ export default function TrustStrip() {
 
           <p className="mt-5 max-w-[54ch] text-[17px] leading-[1.65] text-ink-body">
             Municipal work is won in open tenders and kept by holding up
-            through winters. These are some of the owners we install for.
+            through winters. These are some of the owners and developers we have installed for.
           </p>
 
         <div className="mt-8 flex flex-wrap gap-x-12 gap-y-4">

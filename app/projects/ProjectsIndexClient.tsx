@@ -2,52 +2,37 @@
 
 import { useMemo, useState } from "react"
 import Image from "next/image"
-import ProjectCaption from "@/components/ui/ProjectCaption"
 import Link from "next/link"
+import ProjectCaption from "@/components/ui/ProjectCaption"
 
 /**
  * Filter bar + card grid for /projects.
  *
  * Split out of app/projects/page.tsx so the page itself stays a Server
- * Component: lib/gallery.ts reads the filesystem at build time and must never
- * be pulled into a "use client" module. The page resolves every card's image
- * with heroFor() and hands the finished list down here.
+ * Component. Filters are the two questions a specifier actually asks —
+ * what kind of work, and where — not the internal service taxonomy.
  */
 
 export interface ProjectCard {
   slug: string
   title: string
-  service: string
   application: string
+  region: string
   city: string
+  systems: string[]
   year?: string
   src: string
 }
 
 interface ProjectsIndexClientProps {
   projects: ProjectCard[]
-  /** Service filter values — must match Project.service exactly. */
-  services: string[]
   /** Application filter values — must match Project.application exactly. */
   applications: string[]
+  /** Region filter values — must match Project.region exactly. */
+  regions: string[]
 }
 
 const ALL = "All"
-
-/**
- * Display copy only. The values above still match lib/projects.ts character for
- * character — this map only decides how a filter chip and caption read.
- */
-const serviceLabel: Record<string, string> = {
-  "Stamped Asphalt": "Stamped asphalt",
-  "Decorative Coatings": "Decorative coatings",
-  "Preformed Thermoplastic": "Preformed thermoplastic",
-  "Vapour Blasting": "Vapour blasting",
-}
-
-function displayService(value: string): string {
-  return serviceLabel[value] ?? value
-}
 
 /** "Vancouver, BC" → "Vancouver" — the caption carries the city, not the province. */
 function cityName(city: string): string {
@@ -81,20 +66,20 @@ function Chip({
 
 export default function ProjectsIndexClient({
   projects,
-  services,
   applications,
+  regions,
 }: ProjectsIndexClientProps) {
-  const [serviceFilter, setServiceFilter] = useState(ALL)
   const [appFilter, setAppFilter] = useState(ALL)
+  const [regionFilter, setRegionFilter] = useState(ALL)
 
   const filtered = useMemo(
     () =>
       projects.filter((p) => {
-        const matchService = serviceFilter === ALL || p.service === serviceFilter
         const matchApp = appFilter === ALL || p.application === appFilter
-        return matchService && matchApp
+        const matchRegion = regionFilter === ALL || p.region === regionFilter
+        return matchApp && matchRegion
       }),
-    [projects, serviceFilter, appFilter],
+    [projects, appFilter, regionFilter],
   )
 
   return (
@@ -103,19 +88,19 @@ export default function ProjectsIndexClient({
         {/* ---- Filters ---- */}
         <div className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-4">
           <div className="flex flex-wrap items-center gap-3">
-            <span className="label mr-1">Service</span>
-            {services.map((s) => (
-              <Chip key={s} active={serviceFilter === s} onSelect={() => setServiceFilter(s)}>
-                {displayService(s)}
+            <span className="label mr-1">Application</span>
+            {applications.map((a) => (
+              <Chip key={a} active={appFilter === a} onSelect={() => setAppFilter(a)}>
+                {a}
               </Chip>
             ))}
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
-            <span className="label mr-1">Type</span>
-            {applications.map((a) => (
-              <Chip key={a} active={appFilter === a} onSelect={() => setAppFilter(a)}>
-                {a}
+            <span className="label mr-1">Region</span>
+            {regions.map((r) => (
+              <Chip key={r} active={regionFilter === r} onSelect={() => setRegionFilter(r)}>
+                {r}
               </Chip>
             ))}
           </div>
@@ -129,11 +114,7 @@ export default function ProjectsIndexClient({
         {filtered.length > 0 ? (
           <div className="mt-10 grid grid-cols-1 gap-6 min-[701px]:grid-cols-3">
             {filtered.map((project) => {
-              const meta = [
-                cityName(project.city),
-                displayService(project.service),
-                project.year,
-              ]
+              const meta = [cityName(project.city), project.systems.join(" + "), project.year]
                 .filter((part): part is string => Boolean(part))
                 .join(" · ")
 
@@ -166,8 +147,8 @@ export default function ProjectsIndexClient({
             <button
               type="button"
               onClick={() => {
-                setServiceFilter(ALL)
                 setAppFilter(ALL)
+                setRegionFilter(ALL)
               }}
               className="arrow-link mt-6"
             >

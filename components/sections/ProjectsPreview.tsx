@@ -2,7 +2,6 @@ import Image from "next/image"
 import ProjectCaption from "@/components/ui/ProjectCaption"
 import Link from "next/link"
 import { getFeaturedProjects, projects } from "@/lib/projects"
-import { heroFor } from "@/lib/gallery"
 
 /** "Vancouver, BC" → "Vancouver" — the caption carries the city, not the province. */
 function cityName(city: string): string {
@@ -14,9 +13,9 @@ function cityName(city: string): string {
    the default featured order. */
 const FEATURED_ORDER = [
   "ubc-musqueam-crosswalk", // cool — blues and greens
-  "joyce-skytrain-art-installation", // warm — dusk plaza
-  "agnes-greenway-new-westminster", // cool — eagle mural
-  "every-child-matters-new-westminster", // warm — orange motif
+  "nanaimo-rainbow-intersection", // warm — full spectrum
+  "white-rock-custom-crosswalk", // cool — sea blues
+  "langley-events-centre-streetbond", // warm — orange and sand
 ]
 
 export default function ProjectsPreview() {
@@ -43,10 +42,9 @@ export default function ProjectsPreview() {
 
         <div data-reveal-group className="mt-12 grid grid-cols-1 gap-8 min-[701px]:grid-cols-2">
           {featuredProjects.map((project) => {
-            const src =
-              heroFor("projects", project.slug, project.imageUrl) ?? project.imageUrl
+            const src = project.imageUrl
 
-            const meta = [cityName(project.city), project.service, project.year]
+            const meta = [cityName(project.city), project.systems.join(" + "), project.year]
               .filter((part): part is string => Boolean(part))
               .join(" · ")
 
