@@ -3,6 +3,7 @@ import { services } from "@/lib/services"
 import { projects } from "@/lib/projects"
 import { products } from "@/lib/products"
 import { getAllPosts } from "@/lib/blog"
+import { WORK_APPS } from "@/lib/work"
 
 const BASE_URL = "https://squareonepaving.com"
 
@@ -110,5 +111,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }))
 
-  return [...staticRoutes, ...serviceRoutes, ...productRoutes, ...projectRoutes, ...blogRoutes]
+  const applicationRoutes: MetadataRoute.Sitemap = WORK_APPS.filter((a) => a.slug !== "driveways").map((a) => ({
+    url: `${BASE_URL}/applications/${a.slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly",
+    priority: 0.8,
+  }))
+
+  return [...staticRoutes, ...serviceRoutes, ...productRoutes, ...applicationRoutes, ...projectRoutes, ...blogRoutes]
 }
