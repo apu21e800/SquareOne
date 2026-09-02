@@ -56,7 +56,7 @@ const DRV = "/images/S1_update_v2/photos/Driveways"
 const GAL = "/images/S1_update_v2/Old%20Square%20One%20Web%20Assets/Galleries"
 
 const records: ProjectInput[] = [
-  // ── Municipal & civic ──────────────────────────────────────────────────────
+  // ── Municipal & civic ────────
 
   {
     title: "Rainbow intersection — Nanaimo",
@@ -172,6 +172,25 @@ const records: ProjectInput[] = [
       "/images/projects/joyce-skytrain-art-installation/joyce-station-carpeting-renee-van-halm-streetbond-02.jpg",
     ],
     heroWide: false,
+  },
+  {
+    title: "Victoria High School — whorl and canoes",
+    slug: "victoria-high-school-whorl-canoes",
+    service: "Preformed Thermoplastic",
+    application: "Public art",
+    city: "Victoria, BC",
+    region: "Vancouver Island",
+    systems: ["DecoMark", "StreetBond"],
+    client: "Victoria High School",
+    year: "2024",
+    excerpt:
+      "DecoMark and StreetBond coatings combined for two art installations at Victoria High School — a First Nations whorl at the entrance and a run of canoes down the plaza walk. Installed May 2024.",
+    images: [
+      `${FIO}/IMG_4531-scaled.jpeg`,
+      `${FIO}/IMG_5995-scaled-e1720551462740.jpeg`,
+      `${FIO}/IMG_6053-scaled.jpeg`,
+    ],
+    heroWide: true,
   },
   {
     title: "Brighouse Station — TrafficPatternsXD crosswalks",
@@ -351,9 +370,9 @@ const records: ProjectInput[] = [
     city: "Osoyoos, BC",
     region: "Interior",
     systems: ["StreetBond SR"],
-    flag: true,
+    year: "2023",
     excerpt:
-      "A park pathway coated in StreetBond SR — all the durability of StreetBond 150 with solar-reflective pigments that keep the surface cooler underfoot in the South Okanagan sun.",
+      "A park pathway coated in StreetBond SR — all the benefits of StreetBond 150 with solar-reflective characteristics that keep the surface cooler underfoot. Installed May 2023.",
     images: [
       `${FIO}/Photo-2023-05-25-12-55-19%E2%80%AFPM-scaled.jpg`,
       `${FIO}/Photo-2023-05-25-12-56-23%E2%80%AFPM-scaled.jpg`,
@@ -369,9 +388,8 @@ const records: ProjectInput[] = [
     region: "Lower Mainland",
     systems: ["StreetBond"],
     year: "2025",
-    flag: true,
     excerpt:
-      "StreetBond 150 across a new spray park in Maple Ridge — blue and orange colour fields around the water features, slip-resistant and ready for opening in July 2025.",
+      "StreetBond 150 across a new spray park in Maple Ridge — blue and orange colour fields around the water features, slip-resistant, installed July 2025.",
     images: [
       `${FIO}/Photo-2025-07-07-11-54-41-AM.jpg`,
       `${FIO}/Photo-2025-06-16-5-06-20-PM-scaled.jpg`,
@@ -460,7 +478,7 @@ const records: ProjectInput[] = [
     heroWide: false,
   },
 
-  // ── Commercial & strata ────────────────────────────────────────────────────
+  // ── Commercial & strata ────────
 
   {
     title: "Ralph's Farm Market — Murrayville, Langley",
@@ -544,7 +562,7 @@ const records: ProjectInput[] = [
     heroWide: false,
   },
 
-  // ── Residential driveways ──────────────────────────────────────────────────
+  // ── Residential driveways ────────
 
   {
     title: "Ten Mile Point driveway — Saanich",

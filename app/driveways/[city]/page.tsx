@@ -189,6 +189,7 @@ export default async function DrivewayCityPage({ params }: Props) {
         <section className="bg-[color:var(--surface)] pb-16 max-[700px]:pb-10">
           <div className="container-1280">
             <figure className="max-w-[1080px]">
+              {/* Driveway photographs carry the surface in the lower half, so the crop anchors to the bottom edge. */}
               <div className="relative aspect-[16/10] overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)]">
                 <Image
                   src={hero.src}
@@ -196,7 +197,7 @@ export default async function DrivewayCityPage({ params }: Props) {
                   fill
                   priority
                   sizes="(max-width: 1120px) 100vw, 1080px"
-                  className="object-cover"
+                  className="object-cover [object-position:center_100%]"
                 />
               </div>
               <figcaption className="label mt-3">
