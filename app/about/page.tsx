@@ -5,18 +5,18 @@ import type { Metadata } from "next"
 export const metadata: Metadata = {
   title: "About Us | BC's Decorative Pavement Specialists Since 2000",
   description:
-    "Jan Stewart and the Square One team have been BC's go-to decorative pavement applicators since 2000 — HUB Surface Systems certified, serving Metro Vancouver, Fraser Valley, and Vancouver Island.",
+    "Square One Paving has installed decorative pavement across British Columbia since 2000 — installer of HUB Surface Systems products, serving Metro Vancouver, the Fraser Valley and Vancouver Island.",
   keywords: [
     "Square One Paving BC",
     "Jan Stewart paving contractor BC",
-    "HUB Surface Systems certified BC",
+    "HUB Surface Systems installer BC",
     "decorative pavement contractor BC",
   ],
   alternates: { canonical: "https://squareonepaving.ca/about" },
   openGraph: {
     title: "About Us | BC's Decorative Pavement Specialists Since 2000 | Square One Paving",
     description:
-      "Jan Stewart and the Square One team have been BC's go-to decorative pavement applicators since 2000.",
+      "Square One Paving has installed decorative pavement across British Columbia since 2000 — cities, municipalities, developers and homeowners.",
   },
 }
 
@@ -57,8 +57,8 @@ const principles = [
     body: "Every system we install is specified for BC weather — wet winters, freeze-thaw cycles, marine UV. The right product in the wrong climate is a five-year repair bill.",
   },
   {
-    title: "No subcontractors",
-    body: "Same crews since 2000. The applicators on your job have ten-plus years of HUB Surface Systems experience. We don't sub out the install.",
+    title: "Precision installation",
+    body: "Our team focuses on precision installation, proven materials and surface solutions engineered for long-term performance in real-world conditions.",
   },
   {
     title: "Both sides of the Strait",
@@ -66,53 +66,55 @@ const principles = [
   },
   {
     title: "Municipal discipline, residential care",
-    body: "We build to Vision Zero, Complete Streets and AODA standards on civic projects — then bring the same discipline to a private driveway.",
+    body: "We build to the owner's specification on civic projects — layout, colour and tolerances signed off before the first pass — then bring the same discipline to a private driveway.",
   },
   {
     title: "Warrantied systems",
-    body: "StreetBond, TrafficPatterns, StreetPrint — all carry 8+ year manufacturer performance warranties when properly installed. We install them properly.",
+    body: "StreetBond, TrafficPatterns, StreetPrint — every system we install is backed by its manufacturer's material warranty when installed to specification. We install to specification.",
   },
   {
     title: "End-to-end accountability",
-    body: "Surface prep through final cure. One company, one phone number, one accountable team. From the site walk to the eight-year inspection.",
+    body: "Surface prep through final cure. One company, one phone number, one accountable team — from the site walk to the walk-through.",
   },
 ]
 
+/* On the record — every figure below is counted from what this site publishes. */
 const timeline = [
-  { year: "2000", event: "Square One Paving founded in BC" },
-  { year: "2005", event: "First StreetPrint stamped asphalt installations" },
-  { year: "2012", event: "Vancouver Island operations launched" },
-  { year: "2018", event: "Mobile vapour blasting service added" },
-  { year: "2024", event: "100+ municipal and commercial projects completed" },
-  { year: "2026", event: "51+ BC communities served" },
+  { year: "2000", event: "Square One Paving begins installing decorative pavement in British Columbia" },
+  { year: "31", event: "published case studies, from Nanaimo to Kelowna" },
+  { year: "195", event: "site photographs on record, each captioned with the system and the place" },
+  { year: "9", event: "HUB Surface Systems products installed, from StreetPrint to PreMark" },
+  { year: "2", event: "regions served — Lower Mainland and Vancouver Island" },
 ]
 
 const process = [
   { step: "01", title: "Site walk", body: "We measure, photograph and flag substrate issues on site." },
   { step: "02", title: "Specification", body: "Pattern, colours and product matched to traffic and budget." },
   { step: "03", title: "Surface prep", body: "Cleaning, and vapour blasting where the surface needs it." },
-  { step: "04", title: "Application", body: "Installed by our own crews, never subcontracted." },
+  { step: "04", title: "Application", body: "Installed by Square One's own crew, to the specification." },
   { step: "05", title: "Cure & walk-through", body: "Open to traffic on schedule; we walk the finished work with you." },
 ]
 
+/* Owners and developers Square One has itself named as clients in its published project record. */
 const clients: string[] = [
-  "City of Vancouver", "City of Victoria", "TransLink", "BC Transit", "City of Richmond", "Burnaby",
-  "Coquitlam", "Nanaimo", "Surrey", "Langley", "UBC", "BC Housing", "District of Saanich",
-  "Capital Regional District", "Sechelt", "White Rock", "Kelowna", "Mission",
+  "TransLink", "City of Vancouver", "UBC", "Musqueam", "City of Burnaby", "Vancouver Park Board",
+  "City of New Westminster", "City of Langley", "Squamish Nation", "Polygon Realty", "Onni Group",
+  "DAVA Developments",
 ]
 
 const serviceRegions = [
-  "Greater Vancouver",
+  "Metro Vancouver",
   "Fraser Valley",
+  "Sea to Sky",
   "Sunshine Coast",
   "Vancouver Island",
-  "Gulf Islands",
+  "Okanagan",
 ]
 
 export default function AboutPage() {
   return (
     <main>
-      {/* ── 1 · Header ─────────────────────────────────────────── */}
+      {/* ── 1 · Header ─────────────────────────────────────────────────────── */}
       <section className="section bg-surface">
         <div className="container-1280">
           <div className="eyebrow">The studio</div>
@@ -124,13 +126,13 @@ export default function AboutPage() {
           <p className="mt-7 max-w-[56ch] text-[19px] leading-[1.7] text-ink-body [text-wrap:pretty] max-[700px]:text-[17px]">
             Square One Paving has installed decorative pavement across British Columbia since 2000,
             and is recognized as the most experienced decorative stamped asphalt applicator in
-            Western Canada. The crews that stamped our first crosswalks still run our installs
-            today, from our Maple Ridge base to both sides of the Strait of Georgia.
+            Western Canada. Cities, municipalities, organizations, companies and private owners
+            &mdash; from the Maple Ridge office to both sides of the Strait of Georgia.
           </p>
         </div>
       </section>
 
-      {/* ── 2 · The people ─────────────────────────────────────── */}
+      {/* ── 2 · The people ───────────────────────────────────────────────── */}
       <section className="bg-surface pb-28 max-[700px]:pb-14">
         <div className="container-1280">
           <h2>The people</h2>
@@ -158,7 +160,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── 3 · Our story ──────────────────────────────────────── */}
+      {/* ── 3 · Our story ────────────────────────────────────────────────── */}
       <section className="section border-y border-[color:var(--hairline)] bg-surface-warm">
         <div className="container-1280">
           <div className="grid grid-cols-1 gap-14 min-[901px]:grid-cols-2 min-[901px]:gap-x-20">
@@ -170,26 +172,27 @@ export default function AboutPage() {
               <div className="mt-8 space-y-5 text-[16px] leading-[1.65] text-ink-body">
                 <p>
                   Square One Paving started in 2000 doing one thing: decorative pavement, in BC,
-                  through BC weather. The first crosswalks and driveways we imprinted are still
-                  underfoot. What has not changed since is how the work gets done — the same
-                  crews walk the site, quote it, and stand behind it.
+                  through BC weather. Twenty-five years on, the work has earned a longstanding
+                  reputation for quality installations of stamped asphalt, StreetBond coatings and
+                  decorative preformed thermoplastics &mdash; and the people who quote a job are
+                  still the people who stand behind it.
                 </p>
                 <p>
-                  Over twenty-five years we&apos;ve built the practice around four decorative
-                  pavement systems — stamped asphalt, decorative coatings, preformed thermoplastic
-                  and vapour blasting. Each one is engineered for Canadian conditions and backed by
-                  a manufacturer warranty.
+                  The practice has settled around four trades &mdash; stamped asphalt, decorative
+                  coatings, preformed thermoplastic and, as the supporting service, vapour
+                  blasting. Every system we install is specified for Canadian conditions and backed
+                  by its manufacturer&apos;s material warranty.
                 </p>
                 <p>
-                  Today Square One works out of Maple Ridge, with crews serving every municipality
-                  and authority south of Prince George. TransLink, BC Transit, UBC, the cities, the
-                  school districts, the strata councils, the families. The mobile vapour blasting
-                  unit goes wherever the surface is.
+                  Today Square One works out of Maple Ridge, with crews serving the Lower Mainland
+                  and Vancouver Island &mdash; TransLink, UBC, the cities and districts, the
+                  developers, the strata councils, the families. The mobile vapour blasting rig
+                  goes wherever the surface is.
                 </p>
               </div>
 
               <div className="mt-12">
-                <div className="label">Milestones</div>
+                <div className="label">On the record</div>
 
                 <ol className="mt-5 border-t border-[color:var(--hairline)]">
                   {timeline.map((item) => (
@@ -210,15 +213,15 @@ export default function AboutPage() {
             <div>
               <figure className="relative m-0 aspect-[4/5] overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)]">
                 <Image
-                  src="/images/applications/private-driveways/estate-herringbone-gated-driveway-01.jpg"
-                  alt="Gated estate driveway in herringbone-stamped asphalt by Square One Paving"
+                  src="/images/S1_update_v2/photos/Featured%20image%20options/Langley-event-3-2048x1536.jpg"
+                  alt="Circle of Life artwork in StreetBond at Langley Events Centre, installed by Square One Paving"
                   fill
                   sizes="(max-width: 900px) 100vw, 50vw"
                   className="object-cover"
                 />
                 <div aria-hidden="true" className="scrim scrim-light" />
                 <figcaption className="caption">
-                  Vancouver Island &middot; Custom stamped asphalt
+                  Langley Events Centre &middot; StreetBond
                 </figcaption>
               </figure>
 
@@ -242,7 +245,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── 4 · Why Square One ─────────────────────────────────── */}
+      {/* ── 4 · Why Square One ─────────────────────────────────────────────── */}
       <section className="section bg-surface">
         <div className="container-1280">
           <h2>Why Square One</h2>
@@ -260,7 +263,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── 5 · Five steps, one crew ───────────────────────────── */}
+      {/* ── 5 · Five steps, one crew ───────────────────────────────────────── */}
       <section className="section border-y border-[color:var(--hairline)] bg-surface-warm">
         <div className="container-1280">
           <h2>Five steps, one crew</h2>
@@ -279,7 +282,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── 6 · Clients ────────────────────────────────────────── */}
+      {/* ── 6 · Clients ────────────────────────────────────────────────────── */}
       <section className="section bg-surface">
         <div className="container-1280">
           <div className="eyebrow">Client organizations since 2000</div>
@@ -294,7 +297,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── 7 · Where we work ──────────────────────────────────── */}
+      {/* ── 7 · Where we work ──────────────────────────────────────────────── */}
       <section className="section border-t border-[color:var(--hairline)] bg-surface-warm">
         <div className="container-1280">
           <h2>Where we work</h2>
@@ -326,7 +329,7 @@ export default function AboutPage() {
               <div className="label">Service region</div>
               <h3 className="mt-2">Vancouver Island</h3>
               <p className="mt-1.5 text-[15px] leading-[1.6] text-ink-muted">
-                Crews serve the Island and the Gulf Islands
+                Crews serve Greater Victoria, the Cowichan Valley and Nanaimo
               </p>
               <p className="mt-1.5 text-[15px] leading-[1.6] text-ink-muted">
                 <a href="tel:+12503910270">250-391-0270</a>

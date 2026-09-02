@@ -42,7 +42,7 @@ export default function BlogFeedGrid({ posts }: { posts: BlogPostMeta[] }) {
       <span aria-hidden="true" className="ghost-index">05</span>
 
       <div className="container-1280 relative z-[1]">
-        <h2 data-reveal>Field notes</h2>
+        <h2 data-reveal>From the blog</h2>
 
         <div data-reveal-group className="mt-10 grid grid-cols-1 gap-6 min-[701px]:grid-cols-3">
           {posts.map((post) => (

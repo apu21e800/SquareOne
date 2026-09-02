@@ -2,12 +2,12 @@ import Image from "next/image"
 import Link from "next/link"
 
 const features: string[] = [
-  "Driveways & estate exteriors",
-  "Graffiti & storefront refresh",
-  "Heritage stone restoration",
-  "Industrial steel & marine",
-  "Pre-coating substrate prep",
-  "Parking-lot stripe removal",
+  "Graffiti, gum, mould & soot removal",
+  "Road marking removal",
+  "Steel & concrete surface preparation",
+  "Paint & stain removal",
+  "Brick & patio cleaning",
+  "Marine coating removal",
 ]
 
 /**
@@ -25,10 +25,10 @@ export default function VaporBlastingBand() {
             <h2 className="stop mt-5">The cleanest way to restore a surface</h2>
 
             <p className="mt-6 max-w-[56ch] text-[19px] leading-[1.65] text-ink-body">
-              Dustless abrasive blasting &mdash; water and recycled glass at calibrated pressure.
-              We strip decades of grime, graffiti, and oxidation without silica dust, surface
-              scarring, or harsh chemicals. Mobile across BC, specified by municipalities since
-              2000.
+              A powerful, portable blasting solution for surface prep &mdash; less water, up to
+              92% less dust, little to no heat and less environmental impact than the
+              alternatives, while getting the job done faster. The same rig primes the surfaces
+              we coat ourselves.
             </p>
 
             <ul className="mt-9 grid grid-cols-1 border-t border-[color:var(--hairline)] min-[521px]:grid-cols-2">
@@ -47,21 +47,21 @@ export default function VaporBlastingBand() {
                 Explore vapour blasting
               </Link>
               <span className="label">
-                &lt; 5% airborne dust &middot; water + recycled glass
+                Up to 92% less dust &middot; Lower Mainland &amp; Vancouver Island
               </span>
             </div>
           </div>
 
           <div className="relative aspect-[4/3] overflow-hidden rounded-[2px] bg-surface-warm min-[901px]:aspect-auto min-[901px]:min-h-[560px]">
             <Image
-              src="/images/products/streetbond/streetbond-cobble-macro-surface-01.jpg"
-              alt="Mobile surface restoration substrate — Square One Paving"
+              src="/images/services/vapor-blasting/granville-island-vapour-blasting-01.jpg"
+              alt="Square One crew vapour blasting brick at Granville Island, Vancouver"
               fill
               sizes="(max-width: 900px) 100vw, 55vw"
               className="object-cover"
             />
             <div aria-hidden className="scrim" />
-            <div className="caption">Mobile across BC</div>
+            <div className="caption">Granville Island &middot; brick</div>
           </div>
         </div>
       </div>

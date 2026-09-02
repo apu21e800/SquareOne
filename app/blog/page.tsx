@@ -4,9 +4,9 @@ import { getAllPosts } from "@/lib/blog"
 import BlogFilterClient from "@/components/blog/BlogFilterClient"
 
 export const metadata: Metadata = {
-  title: "Field Notes | Decorative Pavement Guides & Project Stories",
+  title: "Blog | Decorative Pavement Guides & Project Stories",
   description:
-    "Project documentation, product deep-dives, and real-world case studies from BC's most experienced decorative pavement crew. StreetPrint, StreetBond, stamped asphalt, vapour blasting — all documented.",
+    "Project stories, product deep-dives and practical guides from Square One Paving — stamped asphalt, StreetBond coatings, preformed thermoplastic and vapour blasting across BC since 2000.",
   keywords: [
     "decorative pavement blog BC",
     "StreetPrint project BC",
@@ -19,9 +19,9 @@ export const metadata: Metadata = {
     canonical: "https://squareonepaving.ca/blog",
   },
   openGraph: {
-    title: "Field Notes | Decorative Pavement Guides & Project Stories | Square One Paving",
+    title: "Blog | Decorative Pavement Guides & Project Stories | Square One Paving",
     description:
-      "Project documentation, product deep-dives, and real-world case studies from BC's most experienced decorative pavement crew.",
+      "Project stories, product deep-dives and practical guides from Square One Paving across BC since 2000.",
   },
 }
 
@@ -35,8 +35,8 @@ export default function BlogPage() {
         src="/images/hero/bowen-island-polka-dot-walkway-streetbond.jpg"
         alt="Polka-dot StreetBond walkway along a road on Bowen Island"
         eyebrow="Blog"
-        title="Field notes"
-        lede="Notes from the crews and the estimating desk: materials, methods, and what holds up on BC pavement."
+        title="Guides and project stories"
+        lede="From the crews and the estimating desk: materials, methods, and what holds up on BC pavement."
         caption="Bowen Island · StreetBond"
         imagePosition="center 40%"
       />

@@ -40,7 +40,7 @@ export default function ProcessBand() {
         <div className="grid grid-cols-1 items-end gap-8 min-[901px]:grid-cols-[auto_1fr] min-[901px]:gap-16">
           <div>
             <div className="eyebrow">How we work</div>
-            <h2 className="stop mt-5">Five steps, no subcontractors</h2>
+            <h2 className="stop mt-5">Five steps, one crew</h2>
           </div>
 
           <p className="max-w-[56ch] text-[19px] leading-[1.65] text-ink-body">
