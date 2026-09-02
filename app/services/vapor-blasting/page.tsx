@@ -32,7 +32,8 @@ export const metadata: Metadata = {
 // ── Field records ──────────────────────────────────────────────────────────
 // The only vapour photography we hold is 524px archive material. It NEVER
 // runs at hero scale (the low-res rule) — it rides small, captioned and
-// honest instead. Replace these the day sharper originals arrive.
+// honest at the foot of The Method. Replace these the day sharper
+// originals arrive.
 
 const fieldRecords = [
   {
@@ -57,9 +58,9 @@ const fieldRecords = [
 type Fact = { number: string; label: string }
 
 const facts: Fact[] = [
-  { number: "< 5%", label: "airborne dust, against 100 for dry blasting" },
+  { number: "< 5%", label: "airborne dust — the water sheath holds the rest" },
   { number: "0", label: "harsh chemicals — water and recycled glass only" },
-  { number: "2", label: "operating bases — Lower Mainland and Vancouver Island" },
+  { number: "2", label: "regions served — Lower Mainland and Vancouver Island" },
 ]
 
 // ── Three-tier service offering — commercial leads, per the hierarchy ──────
@@ -113,7 +114,7 @@ const tiers = [
 
 const rigSpecs = [
   { label: "Method", value: "Wet abrasive — water and recycled glass" },
-  { label: "Particulate", value: "< 5% airborne, against 100% dry" },
+  { label: "Particulate", value: "< 5% airborne (dry blasting: 100%)" },
   { label: "Substrate", value: "Concrete · brick · stone · steel · GRP" },
   { label: "Pressure", value: "60–120 PSI calibrated to surface" },
   { label: "Containment", value: "Runoff captured, water-recirculation system" },
@@ -145,7 +146,7 @@ const advantages = [
     num: "04",
     title: "Mobile across BC",
     body:
-      "Two operating bases — Lower Mainland and Vancouver Island. The rig dispatches to your site. No transporting industrial equipment to a shop, no shutdown of adjacent operations.",
+      "Crews dispatch across the Lower Mainland and Vancouver Island. The rig comes to your site — no transporting industrial equipment to a shop, no shutdown of adjacent operations.",
   },
 ]
 
@@ -178,60 +179,36 @@ const cities = [
 export default function VaporBlastingServicePage() {
   return (
     <main>
-      {/* ── Hero — text-led; archive photos ride small and honest ── */}
-      <section className="relative grid min-h-[620px] grid-cols-[55fr_45fr] overflow-hidden bg-surface max-[700px]:min-h-0 max-[700px]:grid-cols-1">
-        <div
-          className="
-            relative flex items-center
-            pt-24 pb-24 pr-[72px] pl-[max(calc((100vw_-_1280px)/2),40px)]
-            max-[700px]:pt-[72px] max-[700px]:pr-6 max-[700px]:pb-14 max-[700px]:pl-6
-          "
-        >
-          <div className="relative z-[1]">
-            <p className="eyebrow">Service &middot; Mobile surface restoration</p>
+      {/* ── Hero — typographic. The only vapour photography we hold is 524px
+          archive material; a photo-stack hero gave the site's weakest images
+          its biggest stage (Vern, 1 Sept: "ugly"). The photos now ride small
+          as a field-records row under The Method. ── */}
+      <section className="section bg-surface pt-28 pb-16 max-[700px]:pt-[88px] max-[700px]:pb-12">
+        <div className="container-1280">
+          <p className="eyebrow">Service &middot; Mobile surface restoration</p>
 
-            <h1 className="stop mt-7">Clean it, prime it, bring it back</h1>
+          <h1 className="stop mt-7 max-w-[22ch] [text-wrap:balance]">Clean it, prime it, bring it back</h1>
 
-            <p className="mt-7 max-w-[56ch] text-[19px] leading-[1.65] text-ink-body [text-wrap:pretty] max-[700px]:text-[17px]">
-              Dustless vapour blasting — water and recycled glass at calibrated pressure. Graffiti
-              off heritage brick, mould and grime off commercial exteriors, coatings off steel,
-              decades of weather off driveways and decks. No silica dust, no harsh chemicals, no
-              surface scarring. Mobile across British Columbia.
-            </p>
+          <p className="mt-7 max-w-[58ch] text-[19px] leading-[1.65] text-ink-body [text-wrap:pretty] max-[700px]:text-[17px]">
+            Dustless vapour blasting — water and recycled glass at calibrated pressure. Graffiti
+            off heritage brick, mould and grime off commercial exteriors, coatings off steel,
+            decades of weather off driveways and decks. No silica dust, no harsh chemicals, no
+            surface scarring. Mobile across British Columbia.
+          </p>
 
-            <p className="mt-5 max-w-[56ch] text-[15px] leading-[1.6] text-ink-muted [text-wrap:pretty]">
-              It is also how we prep our own installs — the same rig cleans and primes pavement
-              for the coating systems Square One has placed across BC since 2000.
-            </p>
+          <p className="mt-5 max-w-[58ch] text-[15px] leading-[1.6] text-ink-muted [text-wrap:pretty]">
+            It is also how we prep our own installs — the same rig cleans and primes pavement
+            for the coating systems Square One has placed across BC since 2000.
+          </p>
 
-            <div className="mt-11 flex flex-wrap items-center gap-[14px]">
-              <Link href="/contact" className="btn-primary">
-                Request a site walk
-              </Link>
-              <a href="tel:+16044669902" className="btn-secondary">
-                604-466-9902
-              </a>
-            </div>
+          <div className="mt-11 flex flex-wrap items-center gap-[14px]">
+            <Link href="/contact" className="btn-primary">
+              Request a site walk
+            </Link>
+            <a href="tel:+16044669902" className="btn-secondary">
+              604-466-9902
+            </a>
           </div>
-        </div>
-
-        <div className="relative flex min-w-0 flex-col justify-center gap-4 overflow-hidden border-l border-hairline bg-surface-stone px-10 py-10 max-[700px]:grid max-[700px]:grid-cols-3 max-[700px]:gap-2 max-[700px]:border-l-0 max-[700px]:border-t max-[700px]:px-6 max-[700px]:py-6">
-          {fieldRecords.map((record) => (
-            <div key={record.src} className="relative mx-auto w-full max-w-[440px]">
-              <div className="relative aspect-[5/3] overflow-hidden rounded-[2px]">
-                <Image
-                  src={record.src}
-                  alt={record.alt}
-                  fill
-                  sizes="(max-width: 700px) 33vw, 440px"
-                  className="object-cover"
-                />
-              </div>
-              <p className="mt-2 text-[12px] font-medium tracking-[0.06em] text-ink-muted max-[700px]:hidden">
-                {record.caption}
-              </p>
-            </div>
-          ))}
         </div>
       </section>
 
@@ -380,6 +357,30 @@ export default function VaporBlastingServicePage() {
               </div>
             ))}
           </div>
+
+          {/* Field records — the 524px archive shots at the one size they hold */}
+          <div className="mt-14 border-t border-hairline pt-8">
+            <p className="label">Field records</p>
+
+            <div className="mt-6 grid max-w-[920px] grid-cols-3 gap-4 max-[700px]:gap-2">
+              {fieldRecords.map((record) => (
+                <figure key={record.src} className="m-0">
+                  <span className="relative block aspect-[5/3] overflow-hidden rounded-[2px] bg-surface-stone">
+                    <Image
+                      src={record.src}
+                      alt={record.alt}
+                      fill
+                      sizes="(max-width: 700px) 33vw, 296px"
+                      className="object-cover"
+                    />
+                  </span>
+                  <figcaption className="mt-2 text-[12px] font-medium tracking-[0.04em] text-ink-muted max-[700px]:text-[11px]">
+                    {record.caption}
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
@@ -421,8 +422,8 @@ export default function VaporBlastingServicePage() {
             <div className="border-t border-hairline pt-6">
               <p className="label">Service area</p>
               <p className="mt-5 text-[15px] leading-[1.6] text-ink-body">
-                Two operating bases, Lower Mainland and Vancouver Island. The rig is dispatched
-                the same week, with no minimum job size for routine residential work.
+                Lower Mainland and Vancouver Island. The rig is dispatched the same week,
+                with no minimum job size for routine residential work.
               </p>
               <p className="mt-4 text-[15px] leading-[1.6] text-ink-muted">
                 {cities.join(" · ")}
