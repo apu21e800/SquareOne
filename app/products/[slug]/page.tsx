@@ -6,6 +6,9 @@ import type { Metadata } from "next"
 
 import { products, getProductBySlug } from "@/lib/products"
 import { galleryWithFallback } from "@/lib/gallery"
+import { resourceGroups } from "@/lib/resources"
+import { getWork } from "@/lib/work"
+import WorkGallery from "@/components/WorkGallery"
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -34,8 +37,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
  *   Overview    band    full description
  *   Benefits    band    hairline list
  *   Where used  band    applications
+ *   The work    band    Square One installs of this system, from lib/work.ts
  *   Colours     band    palette chart (only where one exists)
  *   Gallery     band    folder-first imagery
+ *   Documents   band    the system's specifications, SDS and guides (lib/resources)
  *   Related     band    same service, other systems
  *
  * The slate close belongs to components/Footer.tsx — this page stays light
@@ -46,7 +51,7 @@ const GALLERY_LIMIT = 9
 
 type BandTone = "white" | "warm"
 
-type BandKey = "overview" | "benefits" | "applications" | "colours" | "gallery" | "related"
+type BandKey = "overview" | "benefits" | "applications" | "work" | "colours" | "gallery" | "documents" | "related"
 
 /**
  * Bands alternate white / warm in document order. Optional bands drop out of
@@ -92,9 +97,19 @@ export default async function ProductPage({ params }: Props) {
     .filter((src) => src !== product.image)
     .slice(0, GALLERY_LIMIT)
 
+  // Square One's own photographs of this system, captioned with place and
+  // subject. StreetBond also owns its SR variant. Empty for systems with no
+  // installs on record (DuraShield) — the band simply does not render.
+  const work = getWork().filter((photo) =>
+    photo.systems.some((system) => system === product.name || (product.name === "StreetBond" && system.startsWith("StreetBond"))),
+  )
+  const docs = resourceGroups.find((group) => group.product === product.name)?.docs ?? []
+
   const bands: BandKey[] = ["overview", "benefits", "applications"]
+  if (work.length > 0) bands.push("work")
   if (product.colorPaletteImage) bands.push("colours")
   if (gallery.length > 0) bands.push("gallery")
+  if (docs.length > 0) bands.push("documents")
   if (related.length > 0) bands.push("related")
 
   const toneOf = (key: BandKey): BandTone =>
@@ -127,7 +142,7 @@ export default async function ProductPage({ params }: Props) {
         </div>
       </section>
 
-      {/* ── Header ─────────────────────────────────── */}
+      {/* ── Header ──────── */}
       <section className="section bg-surface pt-16 pb-14 max-[700px]:pt-10">
         <div className="container-1280">
           <Link
@@ -170,14 +185,14 @@ export default async function ProductPage({ params }: Props) {
 
 
 
-      {/* ── Overview ────────────────────────────────── */}
+      {/* ── Overview ──────── */}
       <Band tone={toneOf("overview")}>
         <p className="max-w-[60ch] text-[17px] leading-[1.75] text-ink-body [text-wrap:pretty]">
           {product.fullDescription}
         </p>
       </Band>
 
-      {/* ── Key benefits ─────────────────────────────── */}
+      {/* ── Key benefits ──────── */}
       <Band tone={toneOf("benefits")}>
         <div className="eyebrow">Key benefits</div>
 
@@ -193,7 +208,7 @@ export default async function ProductPage({ params }: Props) {
         </ul>
       </Band>
 
-      {/* ── Where it is specified ──────────────────────── */}
+      {/* ── Where it is specified ──────── */}
       <Band tone={toneOf("applications")}>
         <div className="eyebrow">Applications</div>
 
@@ -208,7 +223,26 @@ export default async function ProductPage({ params }: Props) {
         </div>
       </Band>
 
-      {/* ── Colours ───────────────────────────────── */}
+      {/* ── The work on record ──────── */}
+      {work.length > 0 && (
+        <Band tone={toneOf("work")} id="work">
+          <div className="flex flex-wrap items-baseline justify-between gap-6">
+            <div>
+              <div className="eyebrow">Photographed on site</div>
+              <h2 className="mt-4 [text-wrap:balance]">{product.name} on the record</h2>
+            </div>
+            <p className="max-w-[44ch] text-[15px] leading-[1.6] text-ink-muted">
+              {work.length} Square One installations of {product.name} across BC, captioned with the
+              community and the surface. Filter by region or by the systems installed alongside it.
+            </p>
+          </div>
+          <div className="mt-10">
+            <WorkGallery photos={work} initial={8} ariaLabel={`${product.name} installation photographs`} />
+          </div>
+        </Band>
+      )}
+
+      {/* ── Colours ──────── */}
       {product.colorPaletteImage && (
         <Band tone={toneOf("colours")}>
           <div className="eyebrow">Colours</div>
@@ -229,7 +263,7 @@ export default async function ProductPage({ params }: Props) {
         </Band>
       )}
 
-      {/* ── Gallery ───────────────────────────────── */}
+      {/* ── Gallery ──────── */}
       {gallery.length > 0 && (
         <Band tone={toneOf("gallery")} id="gallery">
           <div className="flex flex-wrap items-baseline justify-between gap-6">
@@ -259,7 +293,38 @@ export default async function ProductPage({ params }: Props) {
         </Band>
       )}
 
-      {/* ── Related systems ──────────────────────────── */}
+      {/* ── Documents ──────── */}
+      {docs.length > 0 && (
+        <Band tone={toneOf("documents")} id="documents">
+          <div className="flex flex-wrap items-baseline justify-between gap-6">
+            <div>
+              <div className="eyebrow">Specify it</div>
+              <h2 className="mt-4">{product.name} documents</h2>
+            </div>
+            <Link href="/resources" className="arrow-link whitespace-nowrap">
+              The full library <span aria-hidden="true">&rarr;</span>
+            </Link>
+          </div>
+          <ul className="mt-10 border-t border-hairline">
+            {docs.map((doc) => (
+              <li key={doc.href} className="border-b border-hairline">
+                <a
+                  href={doc.href}
+                  download
+                  className="group flex flex-wrap items-baseline justify-between gap-x-8 gap-y-1 py-4 no-underline"
+                >
+                  <span className="text-[16px] font-medium text-ink group-hover:text-accent-deep">{doc.name}</span>
+                  <span className="text-[13px] text-ink-muted">
+                    {doc.type} &middot; {doc.size} &middot; PDF
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </Band>
+      )}
+
+      {/* ── Related systems ──────── */}
       {related.length > 0 && (
         <Band tone={relatedTone}>
           <h2>Related systems</h2>
