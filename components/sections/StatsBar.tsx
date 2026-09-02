@@ -1,8 +1,12 @@
+import { getWork, workCities } from "@/lib/work"
+
+/* Every figure here is provable: Square One has installed since 2000, and the
+   counts are read off the photographed work record at build time. */
 const stats: { number: string; label: string }[] = [
-  { number: "51", label: "BC communities served" },
-  { number: "25", label: "years, same crews" },
-  { number: "04", label: "specialist services" },
-  { number: "100%", label: "BC owned and operated" },
+  { number: "25+", label: "years installing decorative pavement in BC" },
+  { number: String(workCities().length), label: "BC communities in the work record" },
+  { number: String(getWork().length), label: "site photographs in the work record" },
+  { number: "04", label: "specialist services, one crew" },
 ]
 
 export default function StatsBar() {

@@ -3,7 +3,7 @@ import { buildMetadata } from "@/lib/seo";
 export const metadata = buildMetadata({
   title: "Contact & Free Quote | Maple Ridge BC",
   description:
-    "Get a free site visit and written quote within 48 hours. Reach Jan Stewart directly — decorative pavement specialists serving Metro Vancouver, Fraser Valley, and Vancouver Island.",
+    "Get a free site visit and a written quote. Reach Jan Stewart directly — decorative pavement specialists serving Metro Vancouver, Fraser Valley, and Vancouver Island.",
   slug: "contact",
 });
 

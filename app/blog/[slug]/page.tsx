@@ -193,7 +193,7 @@ export default async function BlogPostPage({ params }: Props) {
             max-[700px]:px-6 max-[700px]:pt-[88px] max-[700px]:pb-16
           "
         >
-          {/* ── Breadcrumb ──────────────────────────────────────── */}
+          {/* ── Breadcrumb ──────── */}
           <nav
             aria-label="Breadcrumb"
             className="flex flex-wrap items-center gap-2 text-[13px] text-[color:var(--ink-muted)]"
@@ -209,7 +209,7 @@ export default async function BlogPostPage({ params }: Props) {
             <span className="text-[color:var(--ink)]">{post.title}</span>
           </nav>
 
-          {/* ── Title block ───────────────────────────────────── */}
+          {/* ── Title block ──────── */}
           {post.category && (
             <div className="mt-8">
               <span className="tag">{post.category}</span>
@@ -226,7 +226,7 @@ export default async function BlogPostPage({ params }: Props) {
             {post.content && <> &middot; {estimateReadTime(post.content)} min read</>}
           </div>
 
-          {/* ── Lede photograph ───────────────────────────────── */}
+          {/* ── Lede photograph ──────── */}
           {post.featured_image && (
             <figure className="relative mt-12 aspect-[16/9] overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)]">
               <Image
@@ -246,24 +246,24 @@ export default async function BlogPostPage({ params }: Props) {
             </figure>
           )}
 
-          {/* ── Article body ──────────────────────────────────── */}
+          {/* ── Article body ──────── */}
           <div className={`mt-12 ${proseClass}`} style={proseTokens}>
             <MDXRemote source={post.content} />
           </div>
 
-          {/* ── Quiet conversion panel ──────────────────────────── */}
+          {/* ── Quiet conversion panel ──────── */}
           <aside className="card-panel mt-16">
             <div className="eyebrow">Planning something similar?</div>
             <p className="mt-4 text-[16px] leading-[1.6] text-[color:var(--ink-body)]">
               We work across the Lower Mainland and Vancouver Island. Free site visit,
-              written quote within 48 hours.
+              written quote.
             </p>
             <Link href="/contact" className="btn-primary mt-7 self-start">
               Request a quote
             </Link>
           </aside>
 
-          {/* ── Filed under ───────────────────────────────────── */}
+          {/* ── Filed under ──────── */}
           {post.tags && post.tags.length > 0 && (
             <div className="mt-14 border-t border-[color:var(--hairline)] pt-7">
               <div className="label">Filed under</div>
@@ -280,7 +280,7 @@ export default async function BlogPostPage({ params }: Props) {
             </div>
           )}
 
-          {/* ── Related notes ─────────────────────────────────── */}
+          {/* ── Related notes ──────── */}
           {related.length > 0 && (
             <section className="mt-14">
               <h2>Related notes</h2>
@@ -293,7 +293,7 @@ export default async function BlogPostPage({ params }: Props) {
             </section>
           )}
 
-          {/* ── Foot of article ───────────────────────────────── */}
+          {/* ── Foot of article ──────── */}
           <div className="mt-14 flex flex-wrap items-center justify-between gap-5 border-t border-[color:var(--hairline)] pt-7">
             <Link href="/blog" className="arrow-link">
               &larr; Back to Blog
@@ -325,7 +325,7 @@ export default async function BlogPostPage({ params }: Props) {
   )
 }
 
-/* ── Related note card ───────────────────────────────────────────── */
+/* ── Related note card ──────── */
 
 function RelatedNote({ post }: { post: BlogPostMeta }) {
   const caption = captionFor(post)

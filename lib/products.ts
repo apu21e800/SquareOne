@@ -28,7 +28,7 @@ export const products: Product[] = [
       "StreetPrint is the world's leading decorative asphalt imprinting system. Using heated templates pressed into fresh asphalt, it creates realistic brick, cobblestone, slate, and custom patterns that are built into the asphalt itself — not painted on. The surface holds its pattern and colour through wet coastal winters and freeze-thaw cycles inland.",
     keyBenefits: [
       "Slip-resistant textured surface",
-      "8–12 year service life in BC conditions",
+      "10–20 year published service life",
       "Snowplow and de-icing salt safe",
       "Custom patterns and colours available",
       "Retroreflective options for crosswalks",
@@ -52,7 +52,7 @@ export const products: Product[] = [
     keyBenefits: [
       "50+ standard colours + custom mixing",
       "Anti-skid aggregate for wet surfaces",
-      "UV stable — 5+ year colour retention",
+      "UV-stable acrylic — 8+ year life cycle, easily refreshed",
       "Retroreflective options available",
       "Eco-friendly water-based formula",
       "Works on asphalt and concrete",
@@ -81,8 +81,8 @@ export const products: Product[] = [
     keyBenefits: [
       "No spray drift or overspray",
       "Precise placement every time",
-      "Retroreflective glass beads included",
-      "7+ year service life",
+      "Anti-skid elements throughout the 125-mil sheet",
+      "Open to traffic within minutes of application",
       "Made to the owner's marking standard",
       "Fast installation, minimal downtime",
     ],
@@ -100,13 +100,13 @@ export const products: Product[] = [
     shortDescription:
       "Extra-durable version of TrafficPatterns engineered for the highest-wear environments — major intersections, transit hubs, and arterial crosswalks.",
     fullDescription:
-      "TrafficPatternsXD uses a thicker thermoplastic formulation with enhanced wear resistance for BC's busiest intersections and transit corridors. Where standard thermoplastic would show wear within 3–4 years, XD maintains appearance and retroreflectivity for 10+ years in high-traffic environments.",
+      "TrafficPatternsXD is the heavy-duty version of TrafficPatterns: 150-mil sheets instead of 125, positioned on prepared asphalt and heat-fused, for BC's busiest intersections and transit corridors where the standard material would wear faster. As the surface wears, new anti-skid elements are exposed.",
     keyBenefits: [
-      "10+ year service life in high-traffic zones",
-      "Thicker formulation resists wear",
-      "Enhanced retroreflectivity maintained longer",
-      "Same precision placement as TrafficPatterns",
-      "Ideal for transit hubs and major intersections",
+      "150-mil sheets — heavier than standard TrafficPatterns",
+      "New anti-skid elements exposed as the material wears",
+      "Fast installation, minimal traffic downtime",
+      "Same patterns, borders and colours as TrafficPatterns",
+      "Built for transit hubs and major intersections",
     ],
     applications: ["Major Intersections", "Transit Hubs", "Arterial Crosswalks", "Bus Stops", "High-Volume Pedestrian Zones"],
     image: "/images/hero/white-rock-marine-drive-wave-crosswalk.jpg",
@@ -139,20 +139,21 @@ export const products: Product[] = [
   {
     slug: "durashield",
     name: "DuraShield",
-    tagline: "Protective asphalt sealer that extends pavement life and improves appearance.",
+    tagline: "Two-component asphalt maintenance coating — black or solar-reflective grey.",
     category: "Surface Protection",
     shortDescription:
-      "Coal tar-free asphalt sealer that protects against oxidation, water infiltration, and surface deterioration while giving pavement a refreshed appearance.",
+      "HUB's waterborne epoxy-modified acrylic maintenance coating for asphalt. It protects the pavement from UV oxidation, fuel, oil and de-icing agents and gives tired asphalt a uniform finish — in black or Solar Gray.",
     fullDescription:
-      "DuraShield is a professional-grade asphalt protective coating that extends the service life of existing pavement while improving its appearance. The coal tar-free formula is suitable for residential driveways, parking lots, and commercial properties across BC. When combined with decorative coatings, DuraShield provides an excellent base layer.",
+      "DuraShield Pavement Coating is a two-component waterborne epoxy-modified acrylic formulated as an asphalt pavement maintenance coating — primarily for parking lots, and used on driveways, pathways, raised medians and pedestrian plazas. It balances flexibility, adhesion, colour stability and chemical resistance to preserve the asphalt while shielding it from UV oxidation. The Solar Gray version has a solar reflectance of 0.34, which keeps pavement cooler and helps mitigate urban heat island effects.",
     keyBenefits: [
-      "Extends pavement life 5–7 years",
-      "Coal tar-free, environmentally responsible",
-      "Resists oil, fuel, and UV oxidation",
-      "Gives worn asphalt a fresh appearance",
-      "Ideal prep layer before decorative coatings",
+      "Protects asphalt from UV oxidation",
+      "Resists fuel, oil and de-icing agents",
+      "Black or Solar Gray (SR 0.34) finish",
+      "Friction suited to pedestrian and vehicle traffic",
+      "Low VOC, no unpleasant odour during installation",
+      "Fully recyclable with asphalt",
     ],
-    applications: ["Residential Driveways", "Parking Lots", "Commercial Properties", "Strata Complexes", "Pavement Maintenance"],
+    applications: ["Parking Lots", "Residential Driveways", "Pathways", "Raised Medians", "Pedestrian Plazas", "Pavement Restoration"],
     image: "/images/products/durashield/durashield-rejuvenated-driveway-02.jpg",
     galleryImages: [
       "/images/products/durashield/durashield-parking-lot-sealcoat-01.jpg",
@@ -193,9 +194,9 @@ export const products: Product[] = [
       "MMAX is a cold-applied MMA (methyl methacrylate) coloured pavement system developed for high-wear BRT corridors, bus-only lanes, high-volume bike lanes, and complex multi-colour transit infrastructure. Compared to water-based coatings, MMA offers faster cure times (even in cold BC weather), superior bond strength, and dramatically longer service life in heavy-wear environments.",
     keyBenefits: [
       "MMA chemistry for superior wear resistance",
-      "Rapid cure — open to traffic in under an hour",
-      "Works in near-freezing BC temperatures",
-      "High retroreflectivity maintained long-term",
+      "No-track in under 20 minutes in the right conditions",
+      "Applies at pavement temperatures down to 5°C",
+      "UV-stable pigments, chemical and crack resistant",
       "Built for transit priority and bus-only lanes",
       "Multi-colour capability for complex designs",
     ],

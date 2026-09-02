@@ -4,8 +4,7 @@ import Link from "next/link"
  * Site-walk bar — the conversion close, done the S1 way: one slim white
  * band between the client names and the field notes. Every claim here is
  * already established elsewhere on the site (free site visit on /driveways
- * and /contact; written quote within 48 hours ditto) — nothing new is
- * promised. Accent budget in-viewport: eyebrow square + primary button.
+ * and /contact; written quote ditto) — nothing new is promised. Accent budget in-viewport: eyebrow square + primary button.
  */
 export default function SiteWalkBar() {
   return (
@@ -15,7 +14,7 @@ export default function SiteWalkBar() {
           <p className="eyebrow">Free site walk</p>
 
           <h2 className="mt-4 max-w-[26ch] text-pretty">
-            Send a photo of your surface, get a written quote within 48 hours
+            Send a photo of your surface and we will come back with a written quote
           </h2>
         </div>
 

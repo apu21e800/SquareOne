@@ -17,12 +17,12 @@ export const services: Service[] = [
     name: "Stamped Asphalt",
     tagline: "Brick, cobble and slate — pressed into the asphalt you already have.",
     shortDescription:
-      "Pattern and colour worked into the asphalt you already have. Our stamped asphalt systems are slip-resistant, snowplow safe and built for 8–12 years of service in BC conditions.",
+      "Pattern and colour worked into the asphalt you already have. Our stamped asphalt systems are slip-resistant, snowplow safe and built for the 10–20 years of service HUB publishes for StreetPrint.",
     fullDescription:
       "Stamped asphalt is more than aesthetics — it's functional design that performs. Whether it's a vibrant crosswalk in downtown Vancouver or a subtle traffic pattern on Vancouver Island, our StreetPrint Imprinting System delivers precision, colour, and durability. Custom patterns, reflective options, and snowplow-safe surfaces make this the choice for municipalities and developers who demand both form and function.",
     productsIncluded: [
       "StreetPrint Asphalt Imprinting System",
-      "TrafficPatterns XD",
+      "StreetBond colour and seal",
       "Custom colour mixing",
     ],
     applications: [
@@ -42,7 +42,7 @@ export const services: Service[] = [
     ],
     benefits: [
       "Slip-resistant textured surface",
-      "8–12 year service life in BC conditions",
+      "10–20 year published service life",
       "Snowplow safe",
       "Custom patterns available",
       "Retroreflective options",
@@ -84,7 +84,7 @@ export const services: Service[] = [
       "Quick installation (minimal road closure)",
       "Colours and symbols to the owner's marking standard",
       "Custom shapes and logos",
-      "Long service life (7+ years)",
+      "Long service life, minimal maintenance",
       "No spray drift or overspray",
     ],
     imageUrl: "/images/S1_update_v2/photos/Featured%20image%20options/UBC-crosswalk-3-300dpi.jpg",
@@ -120,7 +120,7 @@ export const services: Service[] = [
     ],
     benefits: [
       "Retroreflective for night visibility",
-      "UV stable, colour holds 5+ years",
+      "UV-stable — 8+ year life cycle, easily refreshed",
       "Anti-skid aggregate for wet conditions",
       "High-visibility colour for safety applications",
       "Eco-friendly water-based options",
