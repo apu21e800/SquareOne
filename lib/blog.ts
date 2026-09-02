@@ -16,6 +16,7 @@ const BLOG_DIR = path.join(process.cwd(), "content/blog")
  */
 const FIO = "/images/S1_update_v2/photos/Featured%20image%20options"
 const CROSSWALKS = "/images/S1_update_v2/Old%20Square%20One%20Web%20Assets/Galleries/Crosswalks/Gallery"
+const TP_GALLERY = "/images/S1_update_v2/Old%20Square%20One%20Web%20Assets/Product%20Pages/TrafficPatterns/Gallery"
 
 const LEDE: Record<string, string> = {
   "boundary-road-pump-station": `${FIO}/Photo-2023-07-05-11-22-34-AM.jpg`,
@@ -47,6 +48,17 @@ const LEDE: Record<string, string> = {
   "white-rock-crosswalk": `${FIO}/Whiterock-Pier-Crosswalk-TrafficPatternsXD-1-scaled.jpg`,
   "windsor-gate-townhouse-driveway-2": `${FIO}/StreetPrint-%E2%80%94-Stamped-Asphalt-Decorative-Crosswalk-Windsor-Gate.jpg`,
   "windsor-gate-townhouse-driveway": "/images/projects/windsor-gate-coquitlam/windsor-gate-crosswalk-streetprint-03.jpg",
+  // Front-matter pointed at wp-content URLs that 404 on the live WordPress site —
+  // the archive holds one honest match; the rest run without a lede until Gord
+  // sends the photograph.
+  "traffic-pattern-crosswalk-upgrade-for-tsain-ko-centre": `${TP_GALLERY}/TrafficPatterns%20Decorative%20Crosswalk%2C%20Sechelt%20BC.jpg`,
+  "lickman-interchange": "",
+  "new-westminster-oxford-townhomes": "",
+  "parc-riviera-mews-streetbond-asphalt-walkway": "",
+  "townhouse-driveway-natures-walk": "",
+  "tsuyuki-park-maple-ridge": "",
+  "wesburn-water-park-burnaby": "",
+  "west-vancouver-rainbow-crosswalk": "",
 }
 
 function ledeFor(slug: string, frontMatter?: string): string {
