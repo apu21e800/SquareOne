@@ -81,7 +81,7 @@ export default async function ServicePage({ params }: Props) {
 
   return (
     <main>
-      {/* ── Service header ───────────────────────────────────── */}
+      {/* ── Service header ─────────────────────────────────────── */}
       <section className="section bg-surface">
         <div className="container-1280">
           <div className="flex flex-wrap items-center gap-[14px]">
@@ -119,7 +119,7 @@ export default async function ServicePage({ params }: Props) {
         </div>
       </section>
 
-      {/* ── Overview ───────────────────────────────────────── */}
+      {/* ── Overview ───────────────────────────────────────────── */}
       <section className="section border-y border-[color:var(--hairline)] bg-surface-warm">
         <div className="container-1280">
           <div className="grid grid-cols-1 gap-10 min-[901px]:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] min-[901px]:gap-20">
@@ -135,7 +135,7 @@ export default async function ServicePage({ params }: Props) {
         </div>
       </section>
 
-      {/* ── Specification ────────────────────────────────────── */}
+      {/* ── Specification ────────────────────────────────────────── */}
       <section className="section bg-surface">
         <div className="container-1280">
           <p className="eyebrow">Specification</p>
@@ -162,7 +162,7 @@ export default async function ServicePage({ params }: Props) {
         </div>
       </section>
 
-      {/* ── Recent work ──────────────────────────────────────── */}
+      {/* ── Recent work ──────────────────────────────────────────── */}
       {relatedProjects.length > 0 && (
         <section className="section border-y border-[color:var(--hairline)] bg-surface-warm">
           <div className="container-1280">
@@ -175,10 +175,9 @@ export default async function ServicePage({ params }: Props) {
 
             <div className="mt-10 grid grid-cols-1 gap-6 min-[701px]:grid-cols-3">
               {relatedProjects.map((project) => {
-                const src =
-                  heroFor("projects", project.slug, project.imageUrl) ?? project.imageUrl
+                const src = project.imageUrl
 
-                const meta = [cityName(project.city), project.service, project.year]
+                const meta = [cityName(project.city), project.systems.join(" + "), project.year]
                   .filter((part): part is string => Boolean(part))
                   .join(" · ")
 
@@ -207,7 +206,7 @@ export default async function ServicePage({ params }: Props) {
         </section>
       )}
 
-      {/* ── Products used ────────────────────────────────────── */}
+      {/* ── Products used ────────────────────────────────────────── */}
       <section className="section bg-surface">
         <div className="container-1280">
           <div className="flex flex-wrap items-baseline justify-between gap-6">
@@ -230,7 +229,7 @@ export default async function ServicePage({ params }: Props) {
         </div>
       </section>
 
-      {/* ── More services ────────────────────────────────────── */}
+      {/* ── More services ────────────────────────────────────────── */}
       <section className="section border-t border-[color:var(--hairline)] bg-surface-warm">
         <div className="container-1280">
           <div className="flex flex-wrap items-baseline justify-between gap-6">

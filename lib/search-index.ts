@@ -6,14 +6,21 @@ import { products } from "@/lib/products"
 import { projects } from "@/lib/projects"
 import { resourceGroups } from "@/lib/resources"
 import { getAllPosts } from "@/lib/blog"
+import { getWork, WORK_APPS } from "@/lib/work"
 import type { SearchEntry } from "@/lib/search-score"
 
 /**
  * Build-time search index — everything the sitewide search can reach:
- * pages, services, products, applications, projects, journal posts, the
- * 90-document specifications library, and gallery imagery (by humanized
- * filename). Served frozen by app/api/search-index (force-static), so the
- * fs walking below runs at build, where public/ exists.
+ * pages, services, products, applications, projects, blog posts, the
+ * 90-document specifications library, and imagery. Served frozen by
+ * app/api/search-index (force-static), so the fs walking below runs at
+ * build, where public/ exists.
+ *
+ * Imagery comes from two honest sources: lib/work.ts (Square One's own
+ * captioned site photography — every project and application photo) and
+ * the products/ folders (system reference imagery, labelled as product
+ * photography, never as Square One work). The applications/ folders are
+ * NOT walked: they mix Square One shots with national reference material.
  *
  * Honesty rules carry through: AI imagery (generated/ dirs, gen- prefix)
  * and AirMark (not an S1 product) never enter the index.
@@ -81,48 +88,34 @@ function listImages(dir: string): string[] {
 
 function imageEntries(): SearchEntry[] {
   const entries: SearchEntry[] = []
-  const projectTitle = new Map(projects.map((p) => [p.slug, p.title]))
   const productName = new Map(products.map((p) => [p.slug, p.name]))
 
-  // Projects — each slug dir belongs to a project page
-  const projectsRoot = path.join(IMAGE_ROOT, "projects")
-  if (fs.existsSync(projectsRoot)) {
-    for (const slug of fs.readdirSync(projectsRoot)) {
-      const dir = path.join(projectsRoot, slug)
-      if (!fs.statSync(dir).isDirectory() || slug === "generated") continue
-      const owner = projectTitle.get(slug)
-      for (const file of listImages(dir)) {
-        entries.push({
-          type: "image",
-          title: humanize(file),
-          subtitle: owner ? `Project — ${owner}` : "Projects",
-          href: owner ? `/projects/${slug}` : "/projects",
-          image: `/images/projects/${slug}/${file}`,
-          keywords: slug.replace(/-/g, " "),
-        })
-      }
-    }
+  // Projects — every curated case-study photograph, labelled by its project
+  for (const project of projects) {
+    project.images.forEach((image, i) => {
+      entries.push({
+        type: "image",
+        title: i === 0 ? project.title : `${project.title} — photo ${i + 1}`,
+        subtitle: `Project — ${project.city.split(",")[0].trim()}`,
+        href: `/projects/${project.slug}`,
+        image,
+        keywords: `${project.systems.join(" ")} ${project.application} ${project.city} ${project.client ?? ""}`,
+      })
+    })
   }
 
-  // Applications — category dirs roll up to /applications (driveways → /driveways)
-  const appsRoot = path.join(IMAGE_ROOT, "applications")
-  if (fs.existsSync(appsRoot)) {
-    for (const cat of fs.readdirSync(appsRoot)) {
-      const dir = path.join(appsRoot, cat)
-      // airports holds AirMark reference imagery — not an S1 offering, stays out
-      if (!fs.existsSync(dir) || !fs.statSync(dir).isDirectory() || cat === "generated" || cat === "airports") continue
-      const isDriveway = cat === "driveways" || cat === "private-driveways"
-      for (const file of listImages(dir)) {
-        entries.push({
-          type: "image",
-          title: humanize(file),
-          subtitle: `Applications — ${humanize(cat)}`,
-          href: isDriveway ? "/driveways" : "/applications",
-          image: `/images/applications/${cat}/${file}`,
-          keywords: cat.replace(/-/g, " "),
-        })
-      }
-    }
+  // The work on record — captioned site photography by application
+  const appLabel = new Map(WORK_APPS.map((a) => [a.slug, a.label]))
+  for (const photo of getWork()) {
+    const label = appLabel.get(photo.app) ?? photo.app
+    entries.push({
+      type: "image",
+      title: photo.place ? `${photo.subject} — ${photo.place}` : photo.subject,
+      subtitle: `${photo.systems.join(" + ")} · ${label}`,
+      href: photo.app === "driveways" ? "/driveways" : `/applications/${photo.app}`,
+      image: photo.src,
+      keywords: `${photo.place} ${photo.region ?? ""} ${label} ${photo.systems.join(" ")}`,
+    })
   }
 
   // Products — dir names map to product slugs; airmark is not sold and stays out
@@ -171,22 +164,21 @@ const STATIC_PAGES: SearchEntry[] = [
   { type: "page", title: "Driveways", subtitle: "Stamped asphalt for Victoria & Vancouver homes", href: "/driveways", keywords: "residential homeowner driveway victoria vancouver" },
   { type: "page", title: "Vapour blasting", subtitle: "Cleaning, priming, graffiti and mould removal", href: "/services/vapor-blasting", keywords: "vapor blasting dustless restoration surface prep graffiti mould" },
   { type: "page", title: "Projects", subtitle: "Selected work across BC", href: "/projects", keywords: "case studies portfolio work" },
-  { type: "page", title: "Blog", subtitle: "Field notes from BC ground", href: "/blog", keywords: "blog articles field notes news journal" },
+  { type: "page", title: "Blog", subtitle: "Guides and project stories from BC ground", href: "/blog", keywords: "blog articles guides news stories journal" },
   { type: "page", title: "Resources", subtitle: "90 specifications, colour cards, SDS and guides", href: "/resources", keywords: "documents specs specifications library downloads sds colour cards" },
   { type: "page", title: "About", subtitle: "The crew behind 25 years of BC surfaces", href: "/about", keywords: "company about team gord jan history" },
   { type: "page", title: "Contact", subtitle: "Free site visit and written quote", href: "/contact", keywords: "quote request phone email contact maple ridge" },
 ]
 
-/** Mirrors the /applications card set — keep in step with app/applications/page.tsx. */
+/** Mirrors the /applications card set — one entry per application page, plus the pillar and the extra service. */
 const APPLICATION_CARDS: SearchEntry[] = [
-  { type: "application", title: "Commercial spaces", subtitle: "Plazas, retail thresholds and strata surfaces", href: "/applications", keywords: "commercial strata retail plaza" },
-  { type: "application", title: "Crosswalks", subtitle: "Decorative and high-visibility crossings", href: "/applications", keywords: "municipal crosswalk pedestrian crossing" },
-  { type: "application", title: "Bus & bike lanes", subtitle: "Red and green priority-lane surfacing", href: "/applications", keywords: "transit bus bike lane red green municipal" },
-  { type: "application", title: "Parking areas", subtitle: "Thresholds, stall markings, accessible-space graphics", href: "/applications", keywords: "parking lot commercial stall" },
-  { type: "application", title: "Parks, paths & walkways", subtitle: "Greenways and park paths with pattern underfoot", href: "/applications", keywords: "park path greenway walkway municipal" },
-  { type: "application", title: "Public art", subtitle: "Artist-designed pavement, rendered durably", href: "/applications", keywords: "civic first nations artwork mural" },
-  { type: "application", title: "Traffic calming & roundabouts", subtitle: "Raised crossings, speed tables, roundabout aprons", href: "/applications", keywords: "municipal roundabout speed table raised crossing" },
-  { type: "application", title: "Driveways", subtitle: "Brick, cobble and slate for Victoria & Vancouver homes", href: "/driveways", keywords: "residential homeowner driveway" },
+  ...WORK_APPS.map((a) => ({
+    type: "application" as const,
+    title: a.label,
+    subtitle: a.blurb,
+    href: a.slug === "driveways" ? "/driveways" : `/applications/${a.slug}`,
+    keywords: `${a.slug.replace(/-/g, " ")} municipal commercial ${a.label.toLowerCase()}`,
+  })),
   { type: "application", title: "Vapour blasting", subtitle: "Cleaning, priming, graffiti and mould removal", href: "/services/vapor-blasting", keywords: "extra service restoration cleaning" },
 ]
 
@@ -219,10 +211,10 @@ export function buildSearchIndex(): SearchEntry[] {
   const projectEntries: SearchEntry[] = projects.map((p) => ({
     type: "project",
     title: p.title,
-    subtitle: [p.city.split(",")[0].trim(), p.service, p.year].filter(Boolean).join(" · "),
+    subtitle: [p.city.split(",")[0].trim(), p.systems.join(" + "), p.year].filter(Boolean).join(" · "),
     href: `/projects/${p.slug}`,
     image: p.imageUrl,
-    keywords: `${p.excerpt} ${p.application}`,
+    keywords: `${p.excerpt} ${p.application} ${p.region} ${p.client ?? ""} ${p.artist ?? ""}`,
   }))
 
   const postEntries: SearchEntry[] = getAllPosts().map((post) => ({
