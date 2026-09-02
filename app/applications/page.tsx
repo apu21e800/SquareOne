@@ -24,85 +24,106 @@ type AppCard = {
   href: string
 }
 
-/* Card order is the business hierarchy: commercial and municipal work leads,
-   residential driveways follow, vapour blasting closes as the extra service. */
+const FIO = "/images/S1_update_v2/photos/Featured%20image%20options"
+
+/* Card order is the business hierarchy: municipal and commercial work leads,
+   residential driveways follow, vapour blasting closes as the extra service.
+   Every photograph is Square One's own, from a named BC install. */
 const applications: AppCard[] = [
-  {
-    title: "Commercial spaces",
-    tag: "Commercial",
-    desc: "Plazas, retail thresholds and strata surfaces that bring order and identity to large paved sites — built for coastal BC weather.",
-    image: "/images/applications/commercial-spaces/little-italy-aerial-colourful-intersection-01.jpg",
-    alt: "Little Italy intersection in Vancouver, from above",
-    cta: "Request a quote",
-    href: "/contact",
-  },
   {
     title: "Crosswalks",
     tag: "Municipal",
-    desc: "Decorative and high-visibility crossings in preformed thermoplastic or stamped asphalt — from Bastion Square to Maple Ridge.",
-    image: "/images/applications/crosswalks/victoria-bastion-square-crosswalk-trafficpatternsxd-01.jpg",
-    alt: "TrafficPatternsXD crosswalk at Bastion Square, Victoria",
+    desc: "Decorative and high-visibility crossings in preformed thermoplastic and stamped asphalt — from Bastion Square to a school zone in Surrey.",
+    image: `${FIO}/UBC-crosswalk-3-300dpi.jpg`,
+    alt: "UBC and Musqueam crosswalk in TrafficPatterns, University Boulevard, Vancouver",
     cta: "See the work",
-    href: "/projects",
+    href: "/applications/crosswalks",
   },
   {
-    title: "Bus & bike lanes",
+    title: "Streetscapes",
     tag: "Municipal",
-    desc: "Red and green priority-lane surfacing that holds its colour under daily traffic, plows and weather.",
-    image: "/images/products/premark/premark-north-vancouver-green-bike-lane-01.jpg",
-    alt: "Green PreMark bike lane in North Vancouver",
+    desc: "Intersections, medians, lanes and civic frontages where the surface carries the design — pattern imprinted, colour that holds.",
+    image: `${FIO}/Photo-2023-05-19-5-56-47%E2%80%AFPM-scaled%20%281%29.jpg`,
+    alt: "Blue StreetBond decorative fire lane at Maplewoods Townhomes, North Vancouver",
     cta: "See the work",
-    href: "/projects",
+    href: "/applications/streetscapes",
   },
   {
-    title: "Parking areas",
+    title: "Roundabouts & traffic calming",
+    tag: "Municipal",
+    desc: "Truck aprons, splitter islands, speed tables and raised crossings that slow traffic while looking like streetscape, not hardware.",
+    image: "/images/applications/roundabouts/surrey-roundabout-streetbond-01.jpg",
+    alt: "StreetBond-coated median and roundabout in Surrey",
+    cta: "See the work",
+    href: "/applications/roundabouts",
+  },
+  {
+    title: "Parking lots",
     tag: "Commercial",
-    desc: "Decorative thresholds, stall markings and accessible-space graphics for retail, strata and multi-family lots.",
-    image: "/images/applications/parking-lots/victoria-hillside-mall-crosswalk-streetprint-01.jpg",
-    alt: "StreetPrint crosswalk at Hillside Mall, Victoria",
-    cta: "Request a quote",
-    href: "/contact",
+    desc: "Thresholds, walkways and crosswalks that organise retail, strata and institutional lots — and tie a site to its branding.",
+    image: `${FIO}/Ralphs-Farm-Market-Parking-Lot-with-StreetPrint-Decorative-Stamped-Asphalt-in-Langley-BC-Canada.jpg`,
+    alt: "Red brick StreetPrint walkway across the parking lot at Ralph's Farm Market, Langley",
+    cta: "See the work",
+    href: "/applications/parking-lots",
   },
   {
-    title: "Parks, paths & walkways",
+    title: "Parks & paths",
     tag: "Municipal",
-    desc: "Greenways, park paths and pedestrian routes with pattern and colour underfoot — slip-resistant finishes throughout.",
-    image: "/images/applications/parks-paths/coquitlam-sheffield-park-01.jpg",
-    alt: "Decorative pavement path at Sheffield Park, Coquitlam",
+    desc: "Greenways, park walkways, plazas and spray parks with colour and pattern underfoot — slip-resistant finishes throughout.",
+    image: `${FIO}/Bowen-Island-asphalt-walkway-with-StreetBond150-scaled-1.jpg`,
+    alt: "StreetBond 150 public art walkway at Snug Cove, Bowen Island",
     cta: "See the work",
-    href: "/projects",
+    href: "/applications/parks-paths",
+  },
+  {
+    title: "Schools & sports courts",
+    tag: "Institutional",
+    desc: "Sports courts, school-zone crossings, sensory pathways and labyrinths — surfaces that take hundreds of kids a day.",
+    image: `${FIO}/StreetBond-Sports-Court-Brookmere-Park-Coquitlam-BC.jpg`,
+    alt: "StreetBond sports court at Brookmere Park, Coquitlam",
+    cta: "See the work",
+    href: "/applications/schools-sports-courts",
+  },
+  {
+    title: "Bike lanes",
+    tag: "Municipal",
+    desc: "Green bike lanes and red priority lanes in PreMark thermoplastic and MMAX coatings — colour that survives sweepers and winter grit.",
+    image: `${FIO}/Photo-2024-07-04-10-58-08-AM-scaled.jpg`,
+    alt: "Red brick stamped asphalt multi-use path with bike lane markings",
+    cta: "See the work",
+    href: "/applications/bike-lanes",
   },
   {
     title: "Public art",
     tag: "Civic",
-    desc: "Artist-designed pavement — First Nations artwork, murals and community pieces rendered durably in the road surface.",
-    image: "/images/applications/public-art/sechelt-rainbow-crosswalk-trafficpatterns-01.jpg",
-    alt: "Rainbow crosswalk in Sechelt",
+    desc: "Artist-designed pavement — First Nations artwork, community murals and memorial plazas rendered durably in the road surface.",
+    image: `${FIO}/Langley-event-3-2048x1536.jpg`,
+    alt: "Circle of Life artwork in StreetBond at Langley Events Centre",
     cta: "See the work",
-    href: "/projects",
+    href: "/applications/public-art",
   },
   {
-    title: "Traffic calming & roundabouts",
-    tag: "Municipal",
-    desc: "Raised crossings, speed tables and roundabout aprons that slow traffic while looking like streetscape, not hardware.",
-    image: "/images/applications/roundabouts/surrey-roundabout-streetbond-01.jpg",
-    alt: "StreetBond-coated roundabout in Surrey",
+    title: "Branding & wayfinding",
+    tag: "Commercial",
+    desc: "Logos, legends and decals heat-fused into the pavement for campuses, retail centres and civic sites.",
+    image: `${FIO}/Decorative-asphalt-sidewalk-with-at-Reunion-housing-development-in-langley-BC-Canada.jpg`,
+    alt: "Oak-leaf DecoMark decals on an asphalt sidewalk at Reunion, Murrayville, Langley",
     cta: "See the work",
-    href: "/projects",
+    href: "/applications/branding-wayfinding",
   },
   {
     title: "Driveways",
     tag: "Residential",
     desc: "Stamped asphalt and StreetBond coatings for the entrance you use every day — brick, cobble and slate patterns for Victoria and Vancouver homes.",
-    image: "/images/applications/driveways/victoria-craigdarroch-castle-driveway-streetprint-01.jpg",
-    alt: "Stamped asphalt driveway at Craigdarroch Castle, Victoria",
+    image: "/images/applications/driveways/saanich-ten-mile-point-driveway-streetprint-01.jpg",
+    alt: "Stamped asphalt driveway at Ten Mile Point, Saanich",
     cta: "Explore driveways",
     href: "/driveways",
   },
   {
     title: "Vapour blasting",
-    tag: "All surfaces",
-    desc: "Surface cleaning, priming, graffiti and mould removal — mobile wet-abrasive restoration with no dust and no substrate damage.",
+    tag: "Extra service",
+    desc: "Surface cleaning, priming, graffiti and mould removal — mobile wet-abrasive restoration with up to 92% less dust than dry blasting.",
     image: "/images/services/vapor-blasting/walkway-vapour-blasting-01.jpg",
     alt: "Walkway during vapour blasting by Square One",
     cta: "Learn about vapour blasting",
@@ -112,7 +133,7 @@ const applications: AppCard[] = [
 
 const credentials = [
   "Serving BC since 2000",
-  "BC's decorative pavement studio",
+  "Installer of HUB Surface Systems products",
   "Lower Mainland & Vancouver Island",
   "Free site consultations",
 ]
@@ -125,12 +146,14 @@ const credentials = [
  * driveways second-to-last as the residential anchor, vapour closes.
  *
  *   Header       IndexImageHero (h1 scale, top scrim — no nav collision)
- *   Listing      9 edge-to-edge photo cards, tag caption on image     warm
+ *   Listing      11 edge-to-edge photo cards, tag caption on image    warm
  *   Credentials  quiet hairline row                                   white
  *   Close        slate — rendered once by app/layout.tsx (Footer)
  *
  * Cards are photographic edge to edge — no padded frame around the image.
- * Every photograph is a named, verified BC install.
+ * Every photograph is Square One's own, from a named BC install; each card
+ * opens the application's gallery (lib/work.ts) — driveways to the pillar,
+ * vapour to its service page.
  */
 export default function ApplicationsPage() {
   return (

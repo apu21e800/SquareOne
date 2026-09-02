@@ -1,4 +1,4 @@
-// ─── SEO PILLAR PAGE ──────────────────────────────────────────────────────────────────────────────────────
+// ─── SEO PILLAR PAGE ────────────────────────────────────────────────────────────────────────────────────────────────────────────
 // Primary SEO pillar page for decorative driveway paving in BC.
 // Target keywords: "driveway paving Vancouver", "stamped asphalt driveway BC",
 // "decorative driveway Lower Mainland", "StreetPrint driveway BC"
@@ -22,12 +22,13 @@ import Link from "next/link"
 import Image from "next/image"
 import type { Metadata } from "next"
 
-import { galleryWithFallback } from "@/lib/gallery"
+import { workFor } from "@/lib/work"
+import WorkGallery from "@/components/WorkGallery"
 
 export const metadata: Metadata = {
-  title: "Decorative Driveways BC | Stamped Asphalt & Coatings",
+  title: "Stamped Asphalt Driveways Vancouver & Victoria | Square One Paving",
   description:
-    "Stamped asphalt, StreetBond coatings and StreetPrint patterns, installed over the driveway you already have. BC's most experienced decorative pavement installer. Free quotes — Lower Mainland & Vancouver Island.",
+    "Stamped asphalt driveways in Metro Vancouver and Greater Victoria — StreetPrint patterns and StreetBond colour installed over the driveway you already have, by Square One Paving since 2000. Free site visit and written quote.",
   keywords: [
     "decorative driveway BC",
     "stamped asphalt driveway Vancouver",
@@ -54,7 +55,7 @@ const faqs = [
   },
   {
     q: "Is stamped asphalt safe in BC winters?",
-    a: "Absolutely. StreetPrint patterns are ASTM D3939 slip-resistant, and the impression depth is designed to be snowplow safe. The product has been installed across BC — including areas with regular freeze-thaw cycles — for over 25 years.",
+    a: "Absolutely. StreetPrint's textured surface is slip-resistant, and the impression depth is designed to be snowplow safe. The product has been installed across BC — including areas with regular freeze-thaw cycles — for over 25 years.",
   },
   {
     q: "How do I get a quote?",
@@ -83,22 +84,17 @@ const regions = [
 
 type Shot = { src: string; alt: string }
 
-/** Curated fallback — used until public/images/applications/driveways/ is populated. */
-const galleryFallback: Shot[] = [
-  { src: "/images/applications/private-driveways/estate-herringbone-gated-driveway-01.jpg", alt: "Estate herringbone stamped asphalt driveway, Metro Vancouver BC" },
-  { src: "/images/applications/private-driveways/luxury-grey-gated-driveway-01.jpg", alt: "Luxury grey gated driveway, StreetPrint installation BC" },
-  { src: "/images/applications/private-driveways/red-herringbone-circle-medallion-driveway-01.jpg", alt: "Red herringbone with custom circle medallion, BC driveway" },
-  { src: "/images/applications/private-driveways/orca-driveway-medallion-custom-01.jpg", alt: "Custom orca medallion decorative driveway, Vancouver Island" },
-  { src: "/images/applications/private-driveways/craftsman-home-charcoal-herringbone-driveway-01.jpg", alt: "Craftsman home charcoal herringbone driveway, Lower Mainland" },
-  { src: "/images/applications/private-driveways/fall-estate-dark-brick-gated-driveway-01.jpg", alt: "Fall estate dark brick driveway, gated entrance BC" },
-  { src: "/images/applications/private-driveways/hampton-gate-charcoal-brick-entrance-01.jpg", alt: "Hampton gate charcoal brick entrance driveway, BC" },
-  { src: "/images/applications/private-driveways/lakefront-charcoal-herringbone-driveway-01.jpg", alt: "Lakefront charcoal herringbone stamped asphalt driveway BC" },
-]
+const FIO = "/images/S1_update_v2/photos/Featured%20image%20options"
+const DRV = "/images/S1_update_v2/photos/Driveways"
+
+/* Every photograph on this page is a Square One driveway. Where the record
+   carries a location it is in the caption; where it does not, the caption
+   says only what the photo shows. Nothing is stock. */
 
 const HERO: Shot & { caption: string } = {
-  src: "/images/applications/private-driveways/estate-herringbone-gated-driveway-01.jpg",
-  alt: "Estate herringbone stamped asphalt driveway installed by Square One Paving, BC",
-  caption: "Metro Vancouver · StreetPrint · Herringbone",
+  src: `${DRV}/Number%201.jpg`,
+  alt: "Grey herringbone StreetPrint stamped asphalt driveway at a two-storey home, installed by Square One Paving",
+  caption: "StreetPrint · Herringbone · Square One install",
 }
 
 const stats: { number: string; label: string }[] = [
@@ -111,33 +107,33 @@ const stats: { number: string; label: string }[] = [
 const patterns: (Shot & { label: string })[] = [
   {
     label: "Herringbone",
-    src: "/images/applications/private-driveways/estate-herringbone-gated-driveway-01.jpg",
-    alt: "Herringbone StreetPrint pattern on a gated estate driveway, Metro Vancouver BC",
+    src: `${DRV}/Number%201.jpg`,
+    alt: "Herringbone StreetPrint driveway in grey, installed by Square One Paving",
   },
   {
-    label: "Running bond brick",
-    src: "/images/applications/private-driveways/chilliwack-townhomes-brick-driveway-01.jpg",
-    alt: "Running bond brick pattern driveway at townhomes in Chilliwack BC",
+    label: "Ashlar slate",
+    src: "/images/applications/driveways/langley-ashlar-slate-driveway-streetprint-01.jpg",
+    alt: "Ashlar Slate StreetPrint driveway in Langley BC",
+  },
+  {
+    label: "Offset brick",
+    src: "/images/applications/driveways/victoria-offset-brick-driveway-streetprint-01.jpg",
+    alt: "Offset Brick StreetPrint driveway in Victoria BC",
+  },
+  {
+    label: "British cobble",
+    src: "/images/applications/driveways/west-saanich-british-cobble-driveway-streetprint-01.jpg",
+    alt: "British Cobble StreetPrint driveway in West Saanich BC",
   },
   {
     label: "Cobblestone",
-    src: "/images/applications/private-driveways/cobblestone-residential-driveway-closeup-01.jpg",
-    alt: "Cobblestone StreetPrint pattern, residential driveway close-up BC",
+    src: `${FIO}/Cobblestone-stamped-asphalt-driveway-colose-up-at-Ellis-Point-Walkway-Victoria-BC-Canada.jpg`,
+    alt: "Cobblestone StreetPrint close-up at Ellis Point, Victoria BC",
   },
   {
-    label: "Charcoal herringbone",
-    src: "/images/applications/private-driveways/craftsman-home-charcoal-herringbone-driveway-01.jpg",
-    alt: "Charcoal herringbone driveway at a craftsman home, Lower Mainland BC",
-  },
-  {
-    label: "Red brick",
-    src: "/images/applications/private-driveways/townhomes-red-brick-driveway-01.jpg",
-    alt: "Red brick pattern stamped asphalt driveway at townhomes, BC",
-  },
-  {
-    label: "Custom medallion",
-    src: "/images/applications/private-driveways/orca-driveway-medallion-custom-01.jpg",
-    alt: "Custom orca medallion set into a decorative driveway, Vancouver Island BC",
+    label: "Circle medallion",
+    src: `${DRV}/Number%202.jpg`,
+    alt: "Stamped asphalt driveway with a circle medallion, installed by Square One Paving",
   },
 ]
 
@@ -165,7 +161,7 @@ const systems: {
     specs: [
       "Applied over existing asphalt — no demolition",
       "Patterns: brick, cobblestone, slate, running bond",
-      "ASTM slip-resistant, snowplow safe",
+      "Slip-resistant texture, snowplow safe",
       "8–12 year service life in BC conditions",
     ],
     href: "/products/streetprint",
@@ -213,7 +209,7 @@ const steps: { num: string; title: string; desc: string }[] = [
   {
     num: "03",
     title: "Installation",
-    desc: "Our certified crew handles prep, application, and quality control. Most residential driveways: 1–2 days.",
+    desc: "Our crew handles prep, application and quality control. Most residential driveways: 1–2 days.",
   },
   {
     num: "04",
@@ -223,18 +219,12 @@ const steps: { num: string; title: string; desc: string }[] = [
 ]
 
 export default function DrivewaysPage() {
-  const altBySrc = new Map(galleryFallback.map((shot) => [shot.src, shot.alt]))
-
-  const gallery = galleryWithFallback(
-    "applications",
-    "driveways",
-    galleryFallback.map((shot) => shot.src),
-  )
+  const gallery = workFor("driveways")
 
   return (
     <main>
 
-      {/* ── 01 Hero ────────────────────────────────────────────────────────── */}
+      {/* ── 01 Hero ────────────────────────────────────────────────────────────────── */}
       <section className="relative grid min-h-[640px] grid-cols-[55fr_45fr] overflow-hidden bg-surface max-[700px]:min-h-0 max-[700px]:grid-cols-1">
         <div
           className="
@@ -246,7 +236,7 @@ export default function DrivewaysPage() {
 
           <div className="relative z-[1]">
             <div className="eyebrow">
-              Residential driveways &middot; Metro Vancouver &amp; Vancouver Island
+              Residential driveways &middot; Metro Vancouver &amp; Greater Victoria
             </div>
 
             <h1 className="stop mt-7">Make an entrance</h1>
@@ -282,7 +272,7 @@ export default function DrivewaysPage() {
         </div>
       </section>
 
-      {/* ── 02 Benefits ───────────────────────────────────────────────── */}
+      {/* ── 02 Benefits ───────────────────────────────────────────────────────────── */}
       <section className="section relative overflow-hidden border-y border-hairline bg-surface-warm">
 
         <div className="container-1280 relative z-[1] grid grid-cols-3 gap-10 max-[700px]:grid-cols-1 max-[700px]:gap-9">
@@ -297,7 +287,7 @@ export default function DrivewaysPage() {
         </div>
       </section>
 
-      {/* ── 03 Patterns and colours ───────────────────────────────── */}
+      {/* ── 03 Patterns and colours ─────────────────────────────────────────────── */}
       <section id="patterns" className="section relative overflow-hidden bg-surface">
 
         <div className="container-1280 relative z-[1]">
@@ -340,11 +330,11 @@ export default function DrivewaysPage() {
         </div>
       </section>
 
-      {/* ── 04 Systems ────────────────────────────────────────────────── */}
+      {/* ── 04 Systems ────────────────────────────────────────────────────────────── */}
       <section className="section relative overflow-hidden border-t border-hairline bg-surface">
 
         <div className="container-1280 relative z-[1]">
-          <h2>Three systems, one certified crew</h2>
+          <h2>Three systems, one crew</h2>
 
           <p className="mt-5 max-w-[56ch] text-[17px] leading-[1.6] text-ink-body [text-wrap:pretty]">
             Which one goes down depends on the condition of the surface you already have. We
@@ -400,7 +390,7 @@ export default function DrivewaysPage() {
         </div>
       </section>
 
-      {/* ── 05 How it works ─────────────────────────────────────────── */}
+      {/* ── 05 How it works ─────────────────────────────────────────────────────────── */}
       <section className="section relative overflow-hidden border-y border-hairline bg-surface-warm">
 
         <div className="container-1280 relative z-[1]">
@@ -422,41 +412,29 @@ export default function DrivewaysPage() {
         </div>
       </section>
 
-      {/* ── 06 Selected driveways ─────────────────────────────────── */}
-      <section className="section relative overflow-hidden bg-surface">
+      {/* ── 06 Driveways on record ───────────────────────────────────────────────── */}
+      <section id="gallery" className="section relative overflow-hidden bg-surface">
 
         <div className="container-1280 relative z-[1]">
           <div className="flex flex-wrap items-baseline justify-between gap-6">
-            <h2 className="stop stop-tight">Driveways across BC</h2>
-            <Link href="/projects" className="arrow-link whitespace-nowrap">
-              All projects <span aria-hidden="true">&rarr;</span>
-            </Link>
+            <div>
+              <div className="eyebrow">Photographed on site</div>
+              <h2 className="stop stop-tight mt-4">Driveways from Victoria to Vancouver</h2>
+            </div>
+            <p className="max-w-[44ch] text-[15px] leading-[1.6] text-ink-muted">
+              {gallery.length} Square One driveways on record — Saanich, Sooke, Duncan and Victoria on the
+              Island; Vancouver, West Vancouver, Burnaby, Richmond, Langley and Maple Ridge on the
+              mainland. Filter by region.
+            </p>
           </div>
 
-          <div className="mt-10 grid grid-cols-4 gap-6 max-[700px]:grid-cols-2 max-[700px]:gap-4">
-            {gallery.map((src) => (
-              <div
-                key={src}
-                className="card relative aspect-[4/3] overflow-hidden rounded-[2px] bg-surface-stone"
-              >
-                <Image
-                  src={src}
-                  alt={
-                    altBySrc.get(src) ??
-                    "Decorative stamped asphalt driveway by Square One Paving, British Columbia"
-                  }
-                  fill
-                  sizes="(max-width: 700px) 50vw, (max-width: 1280px) 25vw, 296px"
-                  className="object-cover"
-                />
-                <div aria-hidden="true" className="scrim scrim-light" />
-                </div>
-            ))}
+          <div className="mt-10">
+            <WorkGallery photos={gallery} initial={12} ariaLabel="Driveway installation photographs" />
           </div>
         </div>
       </section>
 
-      {/* ── 07 Service area ─────────────────────────────────────────── */}
+      {/* ── 07 Service area ─────────────────────────────────────────────────────────── */}
       <section className="section relative overflow-hidden border-y border-hairline bg-surface-warm">
 
         <div className="container-1280 relative z-[1]">
@@ -483,7 +461,7 @@ export default function DrivewaysPage() {
         </div>
       </section>
 
-      {/* ── 08 Questions we hear ──────────────────────────────────── */}
+      {/* ── 08 Questions we hear ────────────────────────────────────────────────────── */}
       <section className="section relative overflow-hidden border-t border-hairline bg-surface">
 
         <div className="container-1280 relative z-[1]">
