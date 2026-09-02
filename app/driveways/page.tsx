@@ -1,4 +1,4 @@
-// ─── SEO PILLAR PAGE ────────────────────────────────────────────────────────────────────────────────
+// ─── SEO PILLAR PAGE ──────────────────────────────────────────────────────────────────────────────────────
 // Primary SEO pillar page for decorative driveway paving in BC.
 // Target keywords: "driveway paving Vancouver", "stamped asphalt driveway BC",
 // "decorative driveway Lower Mainland", "StreetPrint driveway BC"
@@ -16,7 +16,7 @@
 //   ── Site Close                 slate — rendered once by app/layout.tsx (Footer)
 //
 // The slate close is the page's ONLY dark region. Nothing above it may go dark.
-// ─────────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────────────────
 
 import Link from "next/link"
 import Image from "next/image"
@@ -62,7 +62,7 @@ const faqs = [
   },
   {
     q: "Do you serve Vancouver Island?",
-    a: "Yes — we serve both the Lower Mainland and Vancouver Island. Our mobile crews operate out of Maple Ridge and Victoria, so no job site in the covered regions is out of reach.",
+    a: "Yes — we serve both the Lower Mainland and Vancouver Island. Crews are dispatched across both regions, so no job site in the covered areas is out of reach.",
   },
 ]
 
@@ -218,11 +218,11 @@ const steps: { num: string; title: string; desc: string }[] = [
   {
     num: "04",
     title: "20-year performance",
-    desc: "StreetPrint and StreetBond are engineered for BC winters. Backed by material warranties and our craftsmanship guarantee.",
+    desc: "StreetPrint and StreetBond are engineered for BC winters and backed by the manufacturers' material warranties — and we stand behind the installation.",
   },
 ]
 
-export default function DriveywaysPage() {
+export default function DrivewaysPage() {
   const altBySrc = new Map(galleryFallback.map((shot) => [shot.src, shot.alt]))
 
   const gallery = galleryWithFallback(
@@ -234,7 +234,7 @@ export default function DriveywaysPage() {
   return (
     <main>
 
-      {/* ── 01 Hero ─────────────────────────────────────────────── */}
+      {/* ── 01 Hero ────────────────────────────────────────────────────────── */}
       <section className="relative grid min-h-[640px] grid-cols-[55fr_45fr] overflow-hidden bg-surface max-[700px]:min-h-0 max-[700px]:grid-cols-1">
         <div
           className="
@@ -282,7 +282,7 @@ export default function DriveywaysPage() {
         </div>
       </section>
 
-      {/* ── 02 Benefits ─────────────────────────────────────────── */}
+      {/* ── 02 Benefits ───────────────────────────────────────────────── */}
       <section className="section relative overflow-hidden border-y border-hairline bg-surface-warm">
 
         <div className="container-1280 relative z-[1] grid grid-cols-3 gap-10 max-[700px]:grid-cols-1 max-[700px]:gap-9">
@@ -297,7 +297,7 @@ export default function DriveywaysPage() {
         </div>
       </section>
 
-      {/* ── 03 Patterns and colours ─────────────────────────────── */}
+      {/* ── 03 Patterns and colours ───────────────────────────────── */}
       <section id="patterns" className="section relative overflow-hidden bg-surface">
 
         <div className="container-1280 relative z-[1]">
@@ -340,7 +340,7 @@ export default function DriveywaysPage() {
         </div>
       </section>
 
-      {/* ── 04 Systems ──────────────────────────────────────────── */}
+      {/* ── 04 Systems ────────────────────────────────────────────────── */}
       <section className="section relative overflow-hidden border-t border-hairline bg-surface">
 
         <div className="container-1280 relative z-[1]">
@@ -383,7 +383,7 @@ export default function DriveywaysPage() {
           <div className="mt-14 flex flex-wrap items-center justify-between gap-x-10 gap-y-4 border-t border-hairline pt-6">
             <div className="flex flex-wrap gap-x-10 gap-y-2">
               <span className="text-[13px] font-medium text-ink-muted">
-                BC&rsquo;s only certified HUB Surface Systems applicator
+                Installer of HUB Surface Systems products
               </span>
               <span className="text-[13px] font-medium text-ink-muted">
                 StreetPrint &middot; StreetBond &middot; TrafficPatterns &middot; DecoMark
@@ -400,7 +400,7 @@ export default function DriveywaysPage() {
         </div>
       </section>
 
-      {/* ── 05 How it works ─────────────────────────────────────── */}
+      {/* ── 05 How it works ─────────────────────────────────────────── */}
       <section className="section relative overflow-hidden border-y border-hairline bg-surface-warm">
 
         <div className="container-1280 relative z-[1]">
@@ -422,7 +422,7 @@ export default function DriveywaysPage() {
         </div>
       </section>
 
-      {/* ── 06 Selected driveways ───────────────────────────────── */}
+      {/* ── 06 Selected driveways ─────────────────────────────────── */}
       <section className="section relative overflow-hidden bg-surface">
 
         <div className="container-1280 relative z-[1]">
@@ -456,7 +456,7 @@ export default function DriveywaysPage() {
         </div>
       </section>
 
-      {/* ── 07 Service area ─────────────────────────────────────── */}
+      {/* ── 07 Service area ─────────────────────────────────────────── */}
       <section className="section relative overflow-hidden border-y border-hairline bg-surface-warm">
 
         <div className="container-1280 relative z-[1]">
@@ -465,8 +465,8 @@ export default function DriveywaysPage() {
           <h2 className="mt-5">We come to you</h2>
 
           <p className="mt-5 max-w-[52ch] text-[17px] leading-[1.6] text-ink-body [text-wrap:pretty]">
-            Mobile crews from Maple Ridge and Victoria. No travel surcharge within the service
-            areas below.
+            Mobile crews across the Lower Mainland and Vancouver Island. No travel surcharge
+            within the service areas below.
           </p>
 
           <div className="mt-10 grid grid-cols-2 gap-3 min-[701px]:grid-cols-4 lg:grid-cols-6">
@@ -483,7 +483,7 @@ export default function DriveywaysPage() {
         </div>
       </section>
 
-      {/* ── 08 Questions we hear ────────────────────────────────── */}
+      {/* ── 08 Questions we hear ──────────────────────────────────── */}
       <section className="section relative overflow-hidden border-t border-hairline bg-surface">
 
         <div className="container-1280 relative z-[1]">

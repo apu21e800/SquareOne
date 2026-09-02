@@ -8,6 +8,7 @@ import FieldPanorama from "@/components/sections/FieldPanorama"
 import ProjectsPreview from "@/components/sections/ProjectsPreview"
 import ApplicationsSection from "@/components/sections/ApplicationsSection"
 import TrustStrip from "@/components/sections/TrustStrip"
+import SiteWalkBar from "@/components/sections/SiteWalkBar"
 import BlogFeed from "@/components/sections/BlogFeed"
 
 export const metadata: Metadata = {
@@ -49,6 +50,7 @@ export const metadata: Metadata = {
  *   06 Selected work  #work     white, hairline top
  *   07 Applications             warm, contents-rows, hairline top + bottom
  *   08 Trust strip (real client names only)  white
+ *   08b Site-walk bar           white, hairline top — slim conversion band
  *   09 Field notes    #journal  warm, hairline top
  *   10 Site Close               slate — rendered once by app/layout.tsx (Footer)
  *
@@ -79,6 +81,8 @@ export default function Home() {
       <ApplicationsSection />
 
       <TrustStrip />
+
+      <SiteWalkBar />
 
       <BlogFeed />
     </main>

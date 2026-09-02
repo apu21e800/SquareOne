@@ -27,7 +27,7 @@ const serviceFallback: Record<string, string> = {
   "Stamped Asphalt":         "/images/applications/private-driveways/estate-herringbone-gated-driveway-01.jpg",
   "Decorative Coatings":     "/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg",
   "Preformed Thermoplastic": "/images/products/streetbond/streetbond-crosswalk-perspective-01.jpg",
-  "Vapour Blasting":          "/images/products/streetbond/streetbond-cobble-macro-surface-01.jpg",
+  "Vapour Blasting":          "/images/services/vapor-blasting/parking-lot-vapour-blasting-01.jpg",
 }
 
 const SERVICES = ["All", "Stamped Asphalt", "Decorative Coatings", "Preformed Thermoplastic", "Vapour Blasting"]
