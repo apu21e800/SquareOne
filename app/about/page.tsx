@@ -42,12 +42,12 @@ const people = [
   {
     initials: "GS",
     name: "Gord Stewart",
-    bio: "On BC pavement since the first StreetPrint rig arrived in 2000.",
+    bio: "Owner. Decorative pavement in BC since 2000.",
   },
   {
     initials: "JS",
     name: "Jan Stewart",
-    bio: "Runs the estimating desk; every quote ties to a site we have walked.",
+    bio: "Owner. Estimates and site visits — the first call on every job.",
   },
 ]
 
@@ -69,8 +69,8 @@ const principles = [
     body: "We build to the owner's specification on civic projects — layout, colour and tolerances signed off before the first pass — then bring the same discipline to a private driveway.",
   },
   {
-    title: "Warrantied systems",
-    body: "StreetBond, TrafficPatterns, StreetPrint — every system we install is backed by its manufacturer's material warranty when installed to specification. We install to specification.",
+    title: "Specified, not improvised",
+    body: "StreetBond coatings carry HUB's limited warranty against manufacturing defects; StreetPrint is expected to last the life of the asphalt it is printed into. Every system goes down to its manufacturer's specification, and Square One stands behind the installation.",
   },
   {
     title: "End-to-end accountability",
@@ -114,13 +114,13 @@ const serviceRegions = [
 export default function AboutPage() {
   return (
     <main>
-      {/* ── 1 · Header ─────────────────────────────────────────────────────── */}
+      {/* ── 1 · Header ──────── */}
       <section className="section bg-surface">
         <div className="container-1280">
           <div className="eyebrow">The studio</div>
 
           <h1 className="stop mt-7 max-w-[18ch] [text-wrap:balance]">
-            Same crews since 2000
+            Decorative pavement since 2000
           </h1>
 
           <p className="mt-7 max-w-[56ch] text-[19px] leading-[1.7] text-ink-body [text-wrap:pretty] max-[700px]:text-[17px]">
@@ -132,7 +132,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── 2 · The people ───────────────────────────────────────────────── */}
+      {/* ── 2 · The people ──────── */}
       <section className="bg-surface pb-28 max-[700px]:pb-14">
         <div className="container-1280">
           <h2>The people</h2>
@@ -160,7 +160,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── 3 · Our story ────────────────────────────────────────────────── */}
+      {/* ── 3 · Our story ──────── */}
       <section className="section border-y border-[color:var(--hairline)] bg-surface-warm">
         <div className="container-1280">
           <div className="grid grid-cols-1 gap-14 min-[901px]:grid-cols-2 min-[901px]:gap-x-20">
@@ -180,8 +180,8 @@ export default function AboutPage() {
                 <p>
                   The practice has settled around four trades &mdash; stamped asphalt, decorative
                   coatings, preformed thermoplastic and, as the supporting service, vapour
-                  blasting. Every system we install is specified for Canadian conditions and backed
-                  by its manufacturer&apos;s material warranty.
+                  blasting. Every system we install is specified for Canadian conditions and goes
+                  down to its manufacturer&apos;s specification.
                 </p>
                 <p>
                   Today Square One works out of Maple Ridge, with crews serving the Lower Mainland
@@ -245,7 +245,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── 4 · Why Square One ─────────────────────────────────────────────── */}
+      {/* ── 4 · Why Square One ──────── */}
       <section className="section bg-surface">
         <div className="container-1280">
           <h2>Why Square One</h2>
@@ -263,7 +263,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── 5 · Five steps, one crew ───────────────────────────────────────── */}
+      {/* ── 5 · Five steps, one crew ──────── */}
       <section className="section border-y border-[color:var(--hairline)] bg-surface-warm">
         <div className="container-1280">
           <h2>Five steps, one crew</h2>
@@ -282,7 +282,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── 6 · Clients ────────────────────────────────────────────────────── */}
+      {/* ── 6 · Clients ──────── */}
       <section className="section bg-surface">
         <div className="container-1280">
           <div className="eyebrow">Client organizations since 2000</div>
@@ -297,7 +297,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── 7 · Where we work ──────────────────────────────────────────────── */}
+      {/* ── 7 · Where we work ──────── */}
       <section className="section border-t border-[color:var(--hairline)] bg-surface-warm">
         <div className="container-1280">
           <h2>Where we work</h2>

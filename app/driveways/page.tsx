@@ -214,7 +214,7 @@ const steps: { num: string; title: string; desc: string }[] = [
   {
     num: "04",
     title: "Built for BC winters",
-    desc: "Flush, snowplow-safe surfaces backed by the manufacturer's material warranty — and Square One stands behind the installation.",
+    desc: "Flush, snowplow-safe surfaces installed to the manufacturer's specification — StreetBond carries HUB's limited warranty, and Square One stands behind the installation.",
   },
 ]
 
@@ -379,7 +379,7 @@ export default function DrivewaysPage() {
                 StreetPrint &middot; StreetBond &middot; TrafficPatterns &middot; DecoMark
               </span>
               <span className="text-[13px] font-medium text-ink-muted">
-                Manufacturer-warrantied systems
+                Installed to manufacturer specification
               </span>
             </div>
 
