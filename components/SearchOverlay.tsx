@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import Image from "next/image"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import {
   searchEntries,
@@ -159,7 +160,7 @@ export default function SearchOverlay({
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search products, projects, documents, pages…"
+            placeholder="Search products, projects, documents, places…"
             aria-label="Search the site"
             className="min-w-0 flex-1 border-0 bg-transparent text-[19px] text-[#14161A] outline-none placeholder:text-[#A9A297] max-[700px]:text-[17px]"
           />
@@ -236,9 +237,16 @@ export default function SearchOverlay({
                               />
                             </span>
                           )}
-                          <button
-                            type="button"
-                            onClick={() => openEntry(entry)}
+                          {/* A real link (middle-click, copy address, screen readers);
+                              a plain click still routes through openEntry so the
+                              overlay closes and documents open in a new tab. */}
+                          <Link
+                            href={entry.href}
+                            onClick={(e) => {
+                              if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return
+                              e.preventDefault()
+                              openEntry(entry)
+                            }}
                             className="min-w-0 flex-1 text-left"
                           >
                             <span className="block truncate text-[15px] font-medium text-[#14161A]">
@@ -249,7 +257,7 @@ export default function SearchOverlay({
                                 {entry.subtitle}
                               </span>
                             )}
-                          </button>
+                          </Link>
                           {isDocument(entry) && (
                             <span className="flex shrink-0 items-center gap-4">
                               <a
@@ -299,6 +307,7 @@ export default function SearchOverlay({
           <span>&uarr;&darr; navigate</span>
           <span>Enter to open</span>
           <span>Esc to close</span>
+          <span className="ml-auto">Ctrl / &#8984; K opens this anywhere</span>
         </div>
       </div>
     </div>

@@ -14,7 +14,7 @@ import { services, type Service } from "@/lib/services"
    Data — derived from lib/, never duplicated.
    ------------------------------------------------------------------ */
 
-type MenuKey = "services" | "products" | "applications"
+type MenuKey = "services" | "products" | "applications" | "driveways"
 
 const PRODUCT_CATEGORIES = [
   "Stamped Asphalt",
@@ -73,20 +73,24 @@ interface PrimaryLink {
 }
 
 /** Bar order follows the business hierarchy: commercial lines first, then
-    driveways as its own destination (4 Sept 2026). Blog stays reachable from
-    the drawer, the footer, the home feed and search. */
+    driveways as its own destination, then proof, specs and the company
+    (4 Sept 2026). Resources sits in the bar because specifiers go straight
+    to it — hubss.com parity. Blog stays reachable from the drawer, the
+    footer, the home feed and search. */
 const PRIMARY_LINKS: PrimaryLink[] = [
   { label: "Services", href: "/services", match: ["/services"], menu: "services" },
   { label: "Products", href: "/products", match: ["/products"], menu: "products" },
   { label: "Applications", href: "/applications", match: ["/applications"], menu: "applications" },
-  { label: "Driveways", href: "/driveways", match: ["/driveways"] },
+  { label: "Driveways", href: "/driveways", match: ["/driveways"], menu: "driveways" },
   { label: "Projects", href: "/projects", match: ["/projects"] },
+  { label: "Resources", href: "/resources", match: ["/resources"] },
   { label: "About", href: "/about", match: ["/about"] },
 ]
 
-/** The bar needs 1024px now that Poppins sets it (six links plus the CTA);
-    below that the drawer takes over, and the search icon joins the bar at
-    1280 (Ctrl/Cmd+K and the footer link cover it in between). */
+/** Seven links at 15px/600 need 1280px with the CTA; from 1024 the bar runs
+    at 14px with the search icon and without the CTA (the hero, the sticky
+    mobile bar and the footer all carry it); below 1024 the drawer takes
+    over. */
 /** Mobile drawer keeps every route the desktop bar reaches, including the
     two that live inside the mega menu on desktop. */
 const DRAWER_LINKS: { label: string; href: string }[] = [
@@ -155,9 +159,13 @@ const SERVICE_TILES: { slug: string; note: string; src: string; alt: string }[] 
   },
 ]
 
-/** Applications mega — five photo tiles into the five busiest gallery pages
-    (lib/work.ts WORK_APPS slugs), the other five as a text row beneath.
-    Commercial-first hierarchy; driveways anchors the end of the strip. */
+/** Square One's archive galleries (the old site's ten). Encoded once here;
+    lib/work.ts walks the same folders. */
+const GAL = "/images/S1_update_v2/Old%20Square%20One%20Web%20Assets/Galleries"
+
+/** Applications mega — all ten galleries as photo tiles (the old site's
+    /galleries page, one for one), each into its gallery page. Commercial
+    first; driveways closes the set. */
 const APPLICATION_TILES: { label: string; href: string; src: string; alt: string }[] = [
   {
     label: "Crosswalks",
@@ -172,16 +180,46 @@ const APPLICATION_TILES: { label: string; href: string; src: string; alt: string
     alt: "Little Italy intersection in Vancouver from above",
   },
   {
+    label: "Roundabouts & traffic calming",
+    href: "/applications/roundabouts",
+    src: `${GAL}/Roundabouts/Gallery/StreetPrint%20%20Roundabout%2C%20North%20Cowichan%20BC.jpg`,
+    alt: "StreetPrint roundabout apron in North Cowichan",
+  },
+  {
+    label: "Parking lots",
+    href: "/applications/parking-lots",
+    src: `${GAL}/Parking%20Lots/Gallery/StreetBond%20Parking%20Lot%2C%20Kingsway%2C%20Vancouver%20BC.jpg`,
+    alt: "StreetBond parking lot on Kingsway, Vancouver",
+  },
+  {
     label: "Parks & paths",
     href: "/applications/parks-paths",
     src: "/images/applications/parks-paths/victoria-beacon-hill-park-streetprint-01.jpg",
     alt: "Stamped asphalt path at Beacon Hill Park, Victoria",
   },
   {
+    label: "Schools & sports courts",
+    href: "/applications/schools-sports-courts",
+    src: `${GAL}/Schools%20%26%20Sports%20Courts/Gallery/StreetBond%20%20Sports%20Court%2C%20Brookmere%20Park%2C%20Coquitlam%20BC.jpg`,
+    alt: "StreetBond sports court at Brookmere Park, Coquitlam",
+  },
+  {
+    label: "Bike lanes",
+    href: "/applications/bike-lanes",
+    src: `${GAL}/Bike%20Lanes/Gallery/PreMark%20Green%20Bike%20Lane%2C%20North%20Vancouver%20BC.jpg`,
+    alt: "PreMark green bike lane in North Vancouver",
+  },
+  {
     label: "Public art",
     href: "/applications/public-art",
     src: "/images/applications/public-art/north-vancouver-whatever-the-weather-mia-weinberg-decomark-01.jpg",
     alt: "Whatever the Weather pavement artwork, North Vancouver",
+  },
+  {
+    label: "Branding & wayfinding",
+    href: "/applications/branding-wayfinding",
+    src: `${GAL}/Branding%20%26%20Wayfinding/Gallery/DecoMark%20City%20Branding%2C%20Newton%20Athletic%20Park%2C%20Surrey%20BC.jpg`,
+    alt: "DecoMark city branding at Newton Athletic Park, Surrey",
   },
   {
     label: "Driveways",
@@ -191,12 +229,38 @@ const APPLICATION_TILES: { label: string; href: string; src: string; alt: string
   },
 ]
 
-const APPLICATION_MORE: { label: string; href: string }[] = [
-  { label: "Roundabouts & traffic calming", href: "/applications/roundabouts" },
-  { label: "Parking lots", href: "/applications/parking-lots" },
-  { label: "Schools & sports courts", href: "/applications/schools-sports-courts" },
-  { label: "Bike lanes", href: "/applications/bike-lanes" },
-  { label: "Branding & wayfinding", href: "/applications/branding-wayfinding" },
+/** Driveways mega — the residential line gets its own panel (Vern, 4 Sept
+    2026: "whole section, pages and mega menu items focused on residential
+    driveways"). Every frame is a Square One driveway from the record. */
+const DRIVEWAY_TILES: { label: string; note: string; href: string; src: string; alt: string }[] = [
+  {
+    label: "Stamped asphalt driveways",
+    note: "Patterns pressed into the driveway you already have",
+    href: "/driveways",
+    src: "/images/S1_update_v2/photos/Driveways/Number%201.jpg",
+    alt: "Ashlar slate StreetPrint driveway installed by Square One",
+  },
+  {
+    label: "Vancouver & the Lower Mainland",
+    note: "West Vancouver to Langley and the Fraser Valley",
+    href: "/driveways/vancouver",
+    src: "/images/applications/driveways/west-vancouver-decorative-driveway-streetprint-01.jpg",
+    alt: "Decorative StreetPrint driveway in West Vancouver",
+  },
+  {
+    label: "Victoria & the Island",
+    note: "Saanich, Oak Bay, the Peninsula, Sooke and up-Island",
+    href: "/driveways/victoria",
+    src: "/images/applications/driveways/victoria-offset-brick-driveway-streetprint-01.jpg",
+    alt: "Offset brick StreetPrint driveway in Victoria",
+  },
+  {
+    label: "Patterns & colours",
+    note: "Ashlar slate, cobble, brick, medallions",
+    href: "/driveways#patterns",
+    src: "/images/applications/driveways/west-saanich-british-cobble-driveway-streetprint-01.jpg",
+    alt: "British cobble StreetPrint driveway in West Saanich",
+  },
 ]
 
 const HAIRLINE = "#E7E3DC"
@@ -347,29 +411,63 @@ function ApplicationsMega({ onNavigate, onMouseEnter, onMouseLeave }: MegaPanelP
               src={tile.src}
               alt={tile.alt}
               name={tile.label}
-              aspect="aspect-[3/4]"
+              aspect="aspect-[4/3]"
               onNavigate={onNavigate}
             />
           ))}
         </div>
         <div className="mt-6 flex flex-wrap items-center justify-between gap-x-8 gap-y-3 border-t border-[#E7E3DC] pt-5">
-          <div className="flex flex-wrap items-center gap-x-7 gap-y-2">
-            <span className="label">Also</span>
-            {APPLICATION_MORE.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={onNavigate}
-                data-mega-item
-                className="text-[13px] font-medium text-[#3D4147] transition-colors hover:text-[#14161A]"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
+          <span className="text-[13px] text-[#767B82]">
+            Ten galleries. Every photograph is our own install, captioned with the system and the place.
+          </span>
           <Link href="/applications" onClick={onNavigate} className="arrow-link">
             All applications <span>&rarr;</span>
           </Link>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
+function DrivewaysMega({ onNavigate, onMouseEnter, onMouseLeave }: MegaPanelProps) {
+  return (
+    <motion.div
+      role="region"
+      aria-label="Driveways menu"
+      initial={{ opacity: 0, y: 6 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 6 }}
+      transition={panelTransition}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      className="fixed top-[72px] right-0 left-0 z-40 hidden border-t border-b border-[#E7E3DC] bg-white min-[1024px]:block"
+    >
+      <div className="mx-auto max-w-[1280px] px-10 py-8">
+        <div className="grid grid-cols-4 gap-5">
+          {DRIVEWAY_TILES.map((tile) => (
+            <MegaTile
+              key={tile.href}
+              href={tile.href}
+              src={tile.src}
+              alt={tile.alt}
+              name={tile.label}
+              note={tile.note}
+              onNavigate={onNavigate}
+            />
+          ))}
+        </div>
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-x-8 gap-y-3 border-t border-[#E7E3DC] pt-5">
+          <span className="text-[13px] text-[#767B82]">
+            For homeowners and strata: a site visit, a written quote, and the same crews that do our municipal work.
+          </span>
+          <div className="flex flex-wrap items-center gap-x-8 gap-y-2">
+            <Link href="/driveways#gallery" onClick={onNavigate} className="arrow-link">
+              Driveway photographs <span>&rarr;</span>
+            </Link>
+            <Link href="/contact" onClick={onNavigate} className="arrow-link">
+              Book a site visit <span>&rarr;</span>
+            </Link>
+          </div>
         </div>
       </div>
     </motion.div>
@@ -720,7 +818,7 @@ export default function Nav() {
 
           <nav
             aria-label="Primary"
-            className="ml-auto hidden items-center gap-5 min-[1024px]:flex min-[1280px]:gap-8"
+            className="ml-auto hidden items-center gap-4 min-[1024px]:flex min-[1280px]:gap-6"
           >
             {PRIMARY_LINKS.map((link) => {
               const menuKey = link.menu
@@ -783,7 +881,7 @@ export default function Nav() {
             }}
             aria-label="Search the site"
             title="Search (Ctrl+K)"
-            className="nav-link ml-6 hidden h-10 w-10 shrink-0 items-center justify-center rounded-[2px] min-[1280px]:flex"
+            className="nav-link ml-3 hidden h-10 w-10 shrink-0 items-center justify-center rounded-[2px] min-[1024px]:flex"
           >
             <svg aria-hidden="true" width="17" height="17" viewBox="0 0 18 18">
               <circle cx="8" cy="8" r="6.25" stroke="currentColor" strokeWidth="1.5" fill="none" />
@@ -795,7 +893,7 @@ export default function Nav() {
             href="/contact"
             onClick={closeAll}
             style={{ fontFamily: "var(--font-display)" }}
-            className="nav-cta ml-4 hidden shrink-0 rounded-[2px] border px-4 py-[11px] text-[12px] font-semibold tracking-[0.12em] uppercase transition-colors min-[1024px]:inline-block min-[1280px]:px-[19px]"
+            className="nav-cta ml-3 hidden shrink-0 rounded-[2px] border px-[19px] py-[11px] text-[12px] font-semibold tracking-[0.1em] uppercase transition-colors min-[1280px]:inline-block"
           >
             Request a quote
           </Link>
@@ -868,6 +966,16 @@ export default function Nav() {
           <ApplicationsMega
             onNavigate={closeAll}
             onMouseEnter={() => openMenu("applications")}
+            onMouseLeave={scheduleClose}
+          />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {menu === "driveways" && (
+          <DrivewaysMega
+            onNavigate={closeAll}
+            onMouseEnter={() => openMenu("driveways")}
             onMouseLeave={scheduleClose}
           />
         )}

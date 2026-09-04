@@ -7,6 +7,7 @@ import ServicesGrid from "@/components/sections/ServicesGrid"
 import FieldPanorama from "@/components/sections/FieldPanorama"
 import ProjectsPreview from "@/components/sections/ProjectsPreview"
 import ApplicationsSection from "@/components/sections/ApplicationsSection"
+import DrivewaysBand from "@/components/sections/DrivewaysBand"
 import TrustStrip from "@/components/sections/TrustStrip"
 import SiteWalkBar from "@/components/sections/SiteWalkBar"
 import BlogFeed from "@/components/sections/BlogFeed"
@@ -49,6 +50,7 @@ export const metadata: Metadata = {
  *   05 Field panorama           full-bleed photograph (breath 2 of 2)
  *   06 Selected work  #work     white, hairline top
  *   07 Applications             warm, contents-rows, hairline top + bottom
+ *   07b Driveways band          white, photo + copy — the residential line
  *   08 Trust strip (real client names only)  white
  *   08b Site-walk bar           white, hairline top — slim conversion band
  *   09 Field notes    #journal  warm, hairline top
@@ -79,6 +81,8 @@ export default function Home() {
       <ProjectsPreview />
 
       <ApplicationsSection />
+
+      <DrivewaysBand />
 
       <TrustStrip />
 

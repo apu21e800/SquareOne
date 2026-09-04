@@ -103,12 +103,16 @@
     text-wrap: pretty;
   }
 
+  /* Caps tracking for Poppins (retuned 4 Sept 2026): the face is wide and
+     round, so it wants LESS air than Jost did — 0.05em at H1, 0.055em at
+     H2, 0.045em at hero scale, 0.1em on 11–13px labels. Leading tightens
+     with size the same way. */
   h1 {
     font-family: var(--font-display);
     font-size: clamp(2.25rem, 3.6vw, 3.4rem);
     font-weight: 600;
-    letter-spacing: 0.065em;
-    line-height: 1.12;
+    letter-spacing: 0.05em;
+    line-height: 1.08;
     text-transform: uppercase;
   }
 
@@ -116,8 +120,8 @@
     font-family: var(--font-display);
     font-size: clamp(1.5rem, 2.6vw, 2.25rem);
     font-weight: 600;
-    letter-spacing: 0.075em;
-    line-height: 1.16;
+    letter-spacing: 0.055em;
+    line-height: 1.12;
     text-transform: uppercase;
   }
 
@@ -277,8 +281,8 @@
     font-family: var(--font-display);
     font-size: clamp(2.4rem, 4.2vw, 4rem);
     font-weight: 600;
-    letter-spacing: 0.06em;
-    line-height: 1.1;
+    letter-spacing: 0.045em;
+    line-height: 1.06;
     text-transform: uppercase;
   }
 
@@ -287,8 +291,8 @@
     font-family: var(--font-display);
     font-size: clamp(1.875rem, 3vw, 2.75rem);
     font-weight: 600;
-    letter-spacing: 0.065em;
-    line-height: 1.18;
+    letter-spacing: 0.05em;
+    line-height: 1.14;
     text-transform: uppercase;
   }
 
@@ -346,7 +350,7 @@
     color: #FFFFFF;
     font-size: 13px;
     font-weight: 600;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     padding: 16px 28px;
     border-radius: var(--radius);
@@ -362,7 +366,7 @@
     color: var(--ink);
     font-size: 13px;
     font-weight: 600;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     padding: 15px 27px;
     border-radius: var(--radius);
@@ -377,7 +381,7 @@
     color: var(--surface-slate);
     font-size: 13px;
     font-weight: 600;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     padding: 16px 28px;
     border-radius: var(--radius);
@@ -393,7 +397,7 @@
     color: #FFFFFF;
     font-size: 13px;
     font-weight: 600;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     padding: 15px 27px;
     border-radius: var(--radius);
@@ -486,18 +490,22 @@
 
   .nav-link {
     font-family: var(--font-display);
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--ink-body);
-    padding: 2px 0;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--ink);
+    padding: 3px 0;
     background-image: linear-gradient(var(--ink), var(--ink));
-    background-size: 0% 1px;
+    background-size: 0% 1.5px;
     background-repeat: no-repeat;
     background-position: left bottom;
     transition: background-size 0.2s ease, color 0.2s ease;
   }
-  .nav-link:hover { background-size: 100% 1px; color: var(--ink); }
-  .nav-link-active { font-weight: 600; color: var(--ink); }
+  .nav-link:hover { background-size: 100% 1.5px; color: var(--ink); }
+  .nav-link-active { background-size: 100% 1.5px; color: var(--ink); }
+  @media (max-width: 1279px) {
+    .nav-link { font-size: 14px; }
+  }
 
   /* ---- Stat numeral ---- */
 

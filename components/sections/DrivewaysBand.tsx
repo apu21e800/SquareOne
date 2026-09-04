@@ -1,10 +1,16 @@
 import Image from "next/image"
 import Link from "next/link"
 
+/* Home — the residential line, after the commercial applications (business
+   hierarchy canon: commercial first, driveways second). Every figure is
+   published: StreetPrint's 10–20 year municipal service life (hubss.com),
+   Square One installing since 2000, two regions on two phone lines. The
+   photograph is a Square One driveway from the record. */
+
 const stats: { value: string; label: string }[] = [
-  { value: "8+", label: "year service life" },
-  { value: "60%", label: "cost vs. concrete pavers" },
-  { value: "1 wk", label: "typical install" },
+  { value: "10–20", label: "years — StreetPrint's published service life" },
+  { value: "25+", label: "years installing driveways across BC" },
+  { value: "2", label: "regions, one crew — Metro Vancouver and Greater Victoria" },
 ]
 
 export default function DrivewaysBand() {
@@ -12,49 +18,55 @@ export default function DrivewaysBand() {
     <section className="section border-t border-[color:var(--hairline)] bg-surface">
       <div className="container-1280">
         <div className="grid grid-cols-1 gap-10 min-[901px]:grid-cols-2 min-[901px]:items-center min-[901px]:gap-16">
-          <div className="min-[901px]:order-2 relative aspect-[4/3] overflow-hidden rounded-[2px] bg-surface-stone min-[901px]:aspect-auto min-[901px]:min-h-[560px]">
+          <div className="relative aspect-[4/3] overflow-hidden rounded-[2px] bg-surface-stone min-[901px]:order-2 min-[901px]:aspect-auto min-[901px]:min-h-[560px]">
             <Image
-              src="/images/applications/private-driveways/estate-herringbone-gated-driveway-01.jpg"
-              alt="Decorative stamped asphalt driveway by Square One Paving"
+              src="/images/applications/driveways/victoria-offset-brick-ashlar-driveway-streetprint-01.jpg"
+              alt="Offset brick and ashlar slate StreetPrint driveway in Victoria, installed by Square One"
               fill
               sizes="(max-width: 900px) 100vw, 50vw"
               className="object-cover"
             />
-            <div aria-hidden className="scrim" />
-            <div className="caption">Custom medallion driveway &middot; Vancouver Island estate</div>
+            <div aria-hidden className="scrim scrim-light" />
+            <div className="caption">Victoria &middot; StreetPrint &middot; Offset brick on ashlar slate</div>
           </div>
 
           <div className="min-[901px]:order-1">
-            <div className="eyebrow">Driveways &amp; estates</div>
+            <div className="eyebrow">Driveways &middot; Vancouver &amp; Victoria</div>
 
-            <h2 className="stop mt-5">Your driveway, reimagined</h2>
+            <h2 className="stop mt-5 max-w-[18ch] [text-wrap:balance]">
+              The driveway you already have, made to look like stone
+            </h2>
 
-            <p className="mt-6 max-w-[56ch] text-[19px] leading-[1.65] text-ink-body">
-              From stamped asphalt that echoes the architecture of your home to vapour-blasted
-              surfaces ready for fresh coating &mdash; we bring the same municipal-grade precision
-              to residential projects across Metro Vancouver and Vancouver Island.
+            <p className="mt-6 max-w-[54ch] text-[17px] leading-[1.7] text-ink-body [text-wrap:pretty]">
+              StreetPrint patterns pressed into your existing asphalt and sealed in StreetBond
+              colour &mdash; one continuous surface, with no joints to heave and nothing for weeds
+              to take hold in. Installed by the same crews that do our municipal work, on both
+              sides of the Strait.
             </p>
 
-            <div className="mt-10 grid grid-cols-3 gap-6 border-t border-[color:var(--hairline)] pt-8">
+            <div className="mt-10 grid grid-cols-3 gap-6 border-t border-[color:var(--hairline)] pt-8 max-[560px]:grid-cols-1">
               {stats.map((stat) => (
                 <div key={stat.label}>
                   <div className="stat-num">{stat.value}</div>
-                  <div className="label mt-3">{stat.label}</div>
+                  <div className="label mt-3 max-w-[18ch] leading-[1.5]">{stat.label}</div>
                 </div>
               ))}
             </div>
 
-            <div className="mt-9 flex flex-wrap gap-3">
+            <div className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-4">
               <Link href="/driveways" className="btn-primary">
-                See driveway projects
+                Driveways
               </Link>
-              <Link href="/contact" className="btn-secondary">
-                Get a quote
+              <Link href="/driveways/vancouver" className="arrow-link">
+                Vancouver <span aria-hidden="true">&rarr;</span>
+              </Link>
+              <Link href="/driveways/victoria" className="arrow-link">
+                Victoria <span aria-hidden="true">&rarr;</span>
               </Link>
             </div>
 
-            <p className="mt-7 text-[15px] leading-[1.55] text-ink-muted">
-              Metro Vancouver &middot; Victoria &middot; Vancouver Island
+            <p className="mt-7 text-[14px] leading-[1.6] text-ink-muted">
+              Site visit and written quote &middot; 604-466-9902 Lower Mainland &middot; 250-391-0270 Vancouver Island
             </p>
           </div>
         </div>
