@@ -3,224 +3,200 @@
 import Image from "next/image"
 import { useState } from "react"
 
-/* Direction C (Jost spaced caps) is SELECTED and live sitewide, picked on
-   this page 31 Aug 2026. S1–S4 are the requested sans alternates (Poppins +
-   the Avenir-register cuts + Montserrat) rendered at the same scale for a
-   fair one-glance comparison. A/B and R1–R4 kept for the record. Real
-   Avenir is a licensed face — if S2/S3 wins and the true cut is wanted,
-   that is a font licence away (Adobe Fonts / Monotype). */
+/* Six sans directions at the same scale for a fair one-glance comparison.
+   Jost spaced caps is live sitewide, picked 31 Aug 2026; the client picks
+   the display face, the body face and the case here, on real screens.
+   Serifs retired 4 Sept 2026. Real Avenir is a licensed face — if Mulish or
+   Nunito Sans wins and the true cut is wanted, that is a font licence away. */
 
-type DirectionKey = "A" | "B" | "C" | "S1" | "S2" | "S3" | "S4" | "R1" | "R2" | "R3" | "R4"
+type DirectionKey = "jost" | "poppins" | "inter" | "mulish" | "nunito" | "montserrat"
+type BodyKey = "inter" | "poppins"
+type CaseMode = "caps" | "title"
 
-const DIRECTIONS: Record<
-  DirectionKey,
-  {
-    tab: string
-    blurb: string
-    family: string
-    displayWeight: number
-    displaySpacing: string
-    displayTransform: "none" | "uppercase"
-    displayLineHeight: number
-    heroSize: string
-    h2Size: string
-    cardWeight: number
-    soft?: boolean
-  }
-> = {
-  A: {
-    tab: "A — Fraunces",
-    blurb: "High-contrast crafted serif, 580 weight. Luxury with soul.",
-    family: "var(--tt-fraunces)",
-    displayWeight: 580,
-    displaySpacing: "-0.015em",
-    displayTransform: "none",
-    displayLineHeight: 1.02,
-    heroSize: "clamp(3.5rem, 6vw, 6rem)",
-    h2Size: "clamp(2rem, 3.5vw, 3rem)",
-    cardWeight: 560,
-  },
-  B: {
-    tab: "B — Playfair Display",
-    blurb: "Classic didone, 650 weight. Fashion-house authority.",
-    family: "var(--tt-playfair)",
-    displayWeight: 650,
-    displaySpacing: "-0.008em",
-    displayTransform: "none",
-    displayLineHeight: 1.04,
-    heroSize: "clamp(3.5rem, 6vw, 6rem)",
-    h2Size: "clamp(2rem, 3.5vw, 3rem)",
-    cardWeight: 600,
-  },
-  C: {
-    tab: "C — Jost spaced caps",
-    blurb: "SELECTED - live sitewide. Uppercase 600, 0.08em tracking. The wordmark's Futura DNA, Tom Ford register.",
+interface Direction {
+  name: string
+  note?: string
+  blurb: string
+  family: string
+  capsWeight: number
+  capsSpacing: string
+  titleWeight: number
+  titleSpacing: string
+}
+
+const DIRECTIONS: Record<DirectionKey, Direction> = {
+  jost: {
+    name: "Jost",
+    note: "current",
+    blurb: "The site as it stands — geometric sans in the wordmark's Futura family.",
     family: "var(--tt-jost)",
-    displayWeight: 600,
-    displaySpacing: "0.08em",
-    displayTransform: "uppercase",
-    displayLineHeight: 1.14,
-    heroSize: "clamp(2.5rem, 4.4vw, 4.25rem)",
-    h2Size: "clamp(1.5rem, 2.6vw, 2.25rem)",
-    cardWeight: 600,
+    capsWeight: 600,
+    capsSpacing: "0.08em",
+    titleWeight: 600,
+    titleSpacing: "-0.01em",
   },
-  S1: {
-    tab: "S1 — Poppins",
-    blurb: "Geometric sans, rounder bowls than Jost — friendlier Futura energy.",
+  poppins: {
+    name: "Poppins",
+    blurb: "Geometric sans with rounder letterforms — a friendlier take on the same idea.",
     family: "var(--tt-poppins)",
-    displayWeight: 600,
-    displaySpacing: "0.07em",
-    displayTransform: "uppercase",
-    displayLineHeight: 1.14,
-    heroSize: "clamp(2.5rem, 4.4vw, 4.25rem)",
-    h2Size: "clamp(1.5rem, 2.6vw, 2.25rem)",
-    cardWeight: 600,
+    capsWeight: 600,
+    capsSpacing: "0.07em",
+    titleWeight: 600,
+    titleSpacing: "-0.015em",
   },
-  S2: {
-    tab: "S2 — Mulish (Avenir register)",
-    blurb: "The closest open cut to Avenir — humanist warmth under geometric caps.",
+  inter: {
+    name: "Inter",
+    blurb: "The body face carrying the headlines too — one family across the whole site, quiet and modern.",
+    family: "var(--tt-inter)",
+    capsWeight: 650,
+    capsSpacing: "0.08em",
+    titleWeight: 650,
+    titleSpacing: "-0.025em",
+  },
+  mulish: {
+    name: "Mulish",
+    blurb: "Humanist sans in the Avenir register — warmer and softer.",
     family: "var(--tt-mulish)",
-    displayWeight: 700,
-    displaySpacing: "0.08em",
-    displayTransform: "uppercase",
-    displayLineHeight: 1.14,
-    heroSize: "clamp(2.5rem, 4.4vw, 4.25rem)",
-    h2Size: "clamp(1.5rem, 2.6vw, 2.25rem)",
-    cardWeight: 700,
+    capsWeight: 700,
+    capsSpacing: "0.08em",
+    titleWeight: 700,
+    titleSpacing: "-0.01em",
   },
-  S3: {
-    tab: "S3 — Nunito Sans (Avenir Next register)",
-    blurb: "Soft-terminal sans in the Avenir Next spirit — calm, rounded, premium.",
+  nunito: {
+    name: "Nunito Sans",
+    blurb: "Soft-terminal sans — calm and rounded.",
     family: "var(--tt-nunito)",
-    displayWeight: 700,
-    displaySpacing: "0.08em",
-    displayTransform: "uppercase",
-    displayLineHeight: 1.14,
-    heroSize: "clamp(2.5rem, 4.4vw, 4.25rem)",
-    h2Size: "clamp(1.5rem, 2.6vw, 2.25rem)",
-    cardWeight: 700,
+    capsWeight: 700,
+    capsSpacing: "0.08em",
+    titleWeight: 700,
+    titleSpacing: "-0.01em",
   },
-  S4: {
-    tab: "S4 — Montserrat",
-    blurb: "Urban geometric standard — wider caps, strong civic presence.",
+  montserrat: {
+    name: "Montserrat",
+    blurb: "Wider geometric caps — a strong civic presence.",
     family: "var(--tt-montserrat)",
-    displayWeight: 600,
-    displaySpacing: "0.06em",
-    displayTransform: "uppercase",
-    displayLineHeight: 1.14,
-    heroSize: "clamp(2.4rem, 4.2vw, 4rem)",
-    h2Size: "clamp(1.5rem, 2.6vw, 2.25rem)",
-    cardWeight: 600,
-  },
-  R1: {
-    tab: "R1 — Fraunces 680 / SOFT 100",
-    blurb: "The robust cut of the current default — sturdier, sign-painter confidence.",
-    family: "var(--tt-fraunces)",
-    displayWeight: 680,
-    displaySpacing: "-0.012em",
-    displayTransform: "none",
-    displayLineHeight: 1.02,
-    heroSize: "clamp(3.5rem, 6vw, 6rem)",
-    h2Size: "clamp(2rem, 3.5vw, 3rem)",
-    cardWeight: 640,
-    soft: true,
-  },
-  R2: {
-    tab: "R2 — Source Serif 700",
-    blurb: "Workhorse oldstyle serif at bold — quieter contrast, very solid.",
-    family: "var(--tt-source-serif)",
-    displayWeight: 700,
-    displaySpacing: "-0.012em",
-    displayTransform: "none",
-    displayLineHeight: 1.04,
-    heroSize: "clamp(3.5rem, 6vw, 6rem)",
-    h2Size: "clamp(2rem, 3.5vw, 3rem)",
-    cardWeight: 700,
-  },
-  R3: {
-    tab: "R3 — DM Serif Display",
-    blurb: "Single-cut display didone — heavy by design, high shine.",
-    family: "var(--tt-dm-serif)",
-    displayWeight: 400,
-    displaySpacing: "-0.005em",
-    displayTransform: "none",
-    displayLineHeight: 1.06,
-    heroSize: "clamp(3.5rem, 6vw, 6rem)",
-    h2Size: "clamp(2rem, 3.5vw, 3rem)",
-    cardWeight: 400,
-  },
-  R4: {
-    tab: "R4 — Young Serif",
-    blurb: "Rounded slab warmth — craft-bakery confidence, one weight.",
-    family: "var(--tt-young-serif)",
-    displayWeight: 400,
-    displaySpacing: "-0.005em",
-    displayTransform: "none",
-    displayLineHeight: 1.08,
-    heroSize: "clamp(3.25rem, 5.5vw, 5.5rem)",
-    h2Size: "clamp(1.9rem, 3.3vw, 2.8rem)",
-    cardWeight: 400,
+    capsWeight: 600,
+    capsSpacing: "0.06em",
+    titleWeight: 600,
+    titleSpacing: "-0.015em",
   },
 }
 
-const CAPS: React.CSSProperties = {
-  fontFamily: "var(--tt-inter)",
-  fontWeight: 600,
-  letterSpacing: "0.14em",
-  textTransform: "uppercase",
+const BODIES: Record<BodyKey, { name: string; family: string; weight: number }> = {
+  inter: { name: "Inter", family: "var(--tt-inter)", weight: 460 },
+  poppins: { name: "Poppins", family: "var(--tt-poppins)", weight: 400 },
+}
+
+const CASES: Record<CaseMode, string> = {
+  caps: "Spaced caps",
+  title: "Title case",
+}
+
+function Group({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div className="flex flex-wrap items-center gap-2">
+      <span className="mr-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#767B82]">{label}</span>
+      {children}
+    </div>
+  )
 }
 
 export default function TypeTestClient() {
-  const [dir, setDir] = useState<DirectionKey>("C")
+  const [dir, setDir] = useState<DirectionKey>("jost")
+  const [bodyKey, setBodyKey] = useState<BodyKey>("inter")
+  const [mode, setMode] = useState<CaseMode>("caps")
+
   const d = DIRECTIONS[dir]
+  const b = BODIES[bodyKey]
+  const caps = mode === "caps"
 
   const display: React.CSSProperties = {
     fontFamily: d.family,
-    fontWeight: d.displayWeight,
-    letterSpacing: d.displaySpacing,
-    textTransform: d.displayTransform,
-    lineHeight: d.displayLineHeight,
-    ...(d.soft ? { fontVariationSettings: '"SOFT" 100' } : {}),
+    fontWeight: caps ? d.capsWeight : d.titleWeight,
+    letterSpacing: caps ? d.capsSpacing : d.titleSpacing,
+    textTransform: caps ? "uppercase" : "none",
+    lineHeight: caps ? 1.14 : 1.05,
+  }
+  const heroSize = caps ? "clamp(2.5rem, 4.4vw, 4.25rem)" : "clamp(3rem, 5.2vw, 5rem)"
+  const h2Size = caps ? "clamp(1.5rem, 2.6vw, 2.25rem)" : "clamp(1.9rem, 3.2vw, 2.75rem)"
+
+  // Eyebrows, buttons and captions follow the body face.
+  const small: React.CSSProperties = {
+    fontFamily: b.family,
+    fontWeight: 600,
+    letterSpacing: "0.14em",
+    textTransform: "uppercase",
   }
   const body: React.CSSProperties = {
-    fontFamily: "var(--tt-inter)",
-    fontWeight: 460,
+    fontFamily: b.family,
+    fontWeight: b.weight,
     fontSize: "17px",
     lineHeight: 1.65,
   }
 
+  const pill = (active: boolean) =>
+    `rounded-[2px] border px-4 py-2 transition-colors duration-150 ${
+      active
+        ? "border-[#14161A] bg-[#14161A] text-white"
+        : "border-[#E7E3DC] text-[#3D4147] hover:border-[#A9A297]"
+    }`
+
   return (
-    <main style={{ fontFamily: "var(--tt-inter)", fontWeight: 450 }} className="bg-white text-[#3D4147]">
-      {/* ── Switcher ─────────────────────────────────────── */}
+    <main style={{ fontFamily: b.family, fontWeight: b.weight }} className="bg-white text-[#3D4147]">
+      {/* ── Switcher ──────── */}
       <div className="sticky top-0 z-50 border-b border-[#E7E3DC] bg-white/95 backdrop-blur-sm">
-        <div className="container-1280 flex flex-wrap items-center gap-x-6 gap-y-2 py-4">
-          <span style={{ ...CAPS, fontSize: 11 }} className="text-[#767B82]">
-            Type test · unlinked
-          </span>
-          <div className="flex gap-2">
-            {(Object.keys(DIRECTIONS) as DirectionKey[]).map((key) => (
-              <button
-                key={key}
-                type="button"
-                onClick={() => setDir(key)}
-                style={{ ...CAPS, fontSize: 12 }}
-                className={`rounded-[2px] border px-4 py-2 transition-colors duration-150 ${
-                  dir === key
-                    ? "border-[#14161A] bg-[#14161A] text-white"
-                    : "border-[#E7E3DC] text-[#3D4147] hover:border-[#A9A297]"
-                }`}
-              >
-                {key}
-              </button>
-            ))}
+        <div className="container-1280 flex flex-col gap-3 py-4">
+          <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
+            <Group label="Display">
+              {(Object.keys(DIRECTIONS) as DirectionKey[]).map((key) => (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setDir(key)}
+                  style={{ ...small, fontSize: 12 }}
+                  className={pill(dir === key)}
+                >
+                  {DIRECTIONS[key].name}
+                  {DIRECTIONS[key].note && (
+                    <span className="ml-2 opacity-60">&middot; {DIRECTIONS[key].note}</span>
+                  )}
+                </button>
+              ))}
+            </Group>
+            <Group label="Body">
+              {(Object.keys(BODIES) as BodyKey[]).map((key) => (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setBodyKey(key)}
+                  style={{ ...small, fontSize: 12 }}
+                  className={pill(bodyKey === key)}
+                >
+                  {BODIES[key].name}
+                </button>
+              ))}
+            </Group>
+            <Group label="Case">
+              {(Object.keys(CASES) as CaseMode[]).map((key) => (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setMode(key)}
+                  style={{ ...small, fontSize: 12 }}
+                  className={pill(mode === key)}
+                >
+                  {CASES[key]}
+                </button>
+              ))}
+            </Group>
           </div>
-          <span style={{ fontWeight: 500 }} className="text-[14px] text-[#767B82]">
-            {DIRECTIONS[dir].tab} — {DIRECTIONS[dir].blurb}
-          </span>
+          <p style={{ fontWeight: 500 }} className="text-[14px] text-[#767B82]">
+            <span className="text-[#14161A]">{d.name}</span> — {d.blurb} Body text in {b.name}.
+          </p>
         </div>
       </div>
 
-      {/* ── Specimen 1: the real hero ────────────────────── */}
+      {/* ── Specimen 1: the real hero ──────── */}
       <section className="relative h-[80vh] min-h-[520px] overflow-hidden bg-[#14181D]">
         <Image
           src="/images/hero/white-rock-pier-crosswalk-trafficpatternsxd.jpg"
@@ -233,23 +209,23 @@ export default function TypeTestClient() {
         <div aria-hidden="true" className="scrim-rise" />
         <div className="absolute inset-x-0 bottom-0 z-[1]">
           <div className="container-1280 pb-16">
-            <div style={{ ...CAPS, fontSize: 11 }} className="text-white/80">
+            <div style={{ ...small, fontSize: 11 }} className="text-white/80">
               <span aria-hidden="true" className="mr-[10px] inline-block h-[6px] w-[6px] rounded-[1px] bg-[#F26430] align-middle" />
               BC&rsquo;s decorative pavement studio &middot; Since 2000
             </div>
-            <h1 style={{ ...display, fontSize: d.heroSize }} className="mt-6 max-w-[17ch] text-white">
+            <h1 style={{ ...display, fontSize: heroSize }} className="mt-6 max-w-[17ch] text-white">
               Surfaces that define a place
               <span aria-hidden="true" className="ml-4 inline-block h-[8px] w-[8px] rounded-[1px] bg-[#F26430]" />
             </h1>
             <div className="mt-10 flex flex-wrap items-center gap-[14px]">
               <span
-                style={{ ...CAPS, fontSize: 13 }}
+                style={{ ...small, fontSize: 13 }}
                 className="inline-block cursor-pointer rounded-[2px] bg-[#F26430] px-7 py-4 text-white"
               >
                 Request a quote
               </span>
               <span
-                style={{ ...CAPS, fontSize: 13 }}
+                style={{ ...small, fontSize: 13 }}
                 className="inline-block cursor-pointer rounded-[2px] border border-white/45 px-7 py-4 text-white"
               >
                 See our work
@@ -262,26 +238,26 @@ export default function TypeTestClient() {
         </div>
       </section>
 
-      {/* ── Specimen 2: section header ───────────────────── */}
+      {/* ── Specimen 2: section header ──────── */}
       <section className="border-b border-[#E7E3DC] bg-[#FAF8F5] py-24">
         <div className="container-1280">
-          <div style={{ ...CAPS, fontSize: 11 }} className="text-[#767B82]">
+          <div style={{ ...small, fontSize: 11 }} className="text-[#767B82]">
             <span aria-hidden="true" className="mr-[10px] inline-block h-[6px] w-[6px] rounded-[1px] bg-[#F26430] align-middle" />
             What we do
           </div>
-          <h2 style={{ ...display, fontSize: d.h2Size }} className="mt-5 max-w-[24ch] text-[#14161A]">
+          <h2 style={{ ...display, fontSize: h2Size }} className="mt-5 max-w-[24ch] text-[#14161A]">
             Four services, one standard
           </h2>
           <p style={body} className="mt-6 max-w-[56ch]">
             Stamped asphalt, decorative coatings, preformed thermoplastic and mobile vapour
             blasting — installed by the same crews across the Lower Mainland and Vancouver
-            Island since 2000. This paragraph is Inter 460 at 17px: judge the pairing, not
+            Island since 2000. This paragraph is {b.name} at 17px: judge the pairing, not
             just the headline.
           </p>
         </div>
       </section>
 
-      {/* ── Specimen 3: product card ─────────────────────── */}
+      {/* ── Specimen 3: product card ──────── */}
       <section className="bg-white py-24">
         <div className="container-1280">
           <div className="grid grid-cols-3 gap-6 max-[900px]:grid-cols-1">
@@ -303,11 +279,10 @@ export default function TypeTestClient() {
                 <h3
                   style={{
                     fontFamily: d.family,
-                    fontWeight: d.cardWeight,
-                    ...(d.soft ? { fontVariationSettings: '"SOFT" 100' } : {}),
-                    letterSpacing: d.displayTransform === "uppercase" ? "0.07em" : d.displaySpacing,
-                    textTransform: d.displayTransform,
-                    fontSize: d.displayTransform === "uppercase" ? 17 : 22,
+                    fontWeight: caps ? d.capsWeight : d.titleWeight,
+                    letterSpacing: caps ? "0.07em" : d.titleSpacing,
+                    textTransform: caps ? "uppercase" : "none",
+                    fontSize: caps ? 17 : 22,
                     lineHeight: 1.25,
                   }}
                   className="text-[#14161A]"
@@ -317,7 +292,7 @@ export default function TypeTestClient() {
                 <p style={{ ...body, fontSize: 15 }} className="mt-2 text-[#767B82]">
                   Brick, cobble and slate patterns imprinted into the asphalt you already have.
                 </p>
-                <div style={{ ...CAPS, fontSize: 12 }} className="mt-6 text-[#14161A]">
+                <div style={{ ...small, fontSize: 12 }} className="mt-6 text-[#14161A]">
                   Explore <span aria-hidden="true">&rarr;</span>
                 </div>
               </div>
@@ -326,9 +301,9 @@ export default function TypeTestClient() {
             <div className="col-span-2 flex items-center max-[900px]:col-span-1">
               <p style={body} className="max-w-[48ch] text-[#767B82]">
                 The card at left renders the direction&rsquo;s product-title treatment against a
-                real photograph, the unified grade, and the caption system. Switch A / B / C in
-                the bar above — the hero, the section header, and this card all follow. Nothing
-                on this page sits below weight 400.
+                real photograph, the unified grade, and the caption system. Switch the display
+                face, the body face and the case in the bar above — the hero, the section
+                header and this card all follow. Nothing on this page sits below weight 400.
               </p>
             </div>
           </div>
