@@ -18,8 +18,8 @@ const displayName: Record<string, string> = {
 
 const cardImage: Record<string, { src: string; alt: string }> = {
   "stamped-asphalt": {
-    src: "/images/hero/granville-island-crosswalk-streetprint.jpg",
-    alt: "StreetPrint stamped asphalt crosswalk at Granville Island, Vancouver",
+    src: "/images/hero/victoria-ellis-point-walkway-streetprint.jpg",
+    alt: "British Cobble StreetPrint walkway at Ellis Point, Victoria",
   },
   "decorative-coatings": {
     src: "/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg",

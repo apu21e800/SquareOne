@@ -4,10 +4,11 @@ import Image from "next/image"
 import { useState } from "react"
 
 /* Six sans directions at the same scale for a fair one-glance comparison.
-   Jost spaced caps is live sitewide, picked 31 Aug 2026; the client picks
-   the display face, the body face and the case here, on real screens.
-   Serifs retired 4 Sept 2026. Real Avenir is a licensed face — if Mulish or
-   Nunito Sans wins and the true cut is wanted, that is a font licence away. */
+   Poppins is live sitewide (display and body) since 4 Sept 2026 at Vern's
+   call; Jost was the 31 Aug pick and stays here for the record. The client
+   can still weigh the alternates on real screens. Real Avenir is a licensed
+   face — if Mulish or Nunito Sans wins and the true cut is wanted, that is
+   a font licence away. */
 
 type DirectionKey = "jost" | "poppins" | "inter" | "mulish" | "nunito" | "montserrat"
 type BodyKey = "inter" | "poppins"
@@ -27,8 +28,8 @@ interface Direction {
 const DIRECTIONS: Record<DirectionKey, Direction> = {
   jost: {
     name: "Jost",
-    note: "current",
-    blurb: "The site as it stands — geometric sans in the wordmark's Futura family.",
+    note: "previous",
+    blurb: "The 31 August pick — geometric sans in the wordmark's Futura family.",
     family: "var(--tt-jost)",
     capsWeight: 600,
     capsSpacing: "0.08em",
@@ -37,7 +38,8 @@ const DIRECTIONS: Record<DirectionKey, Direction> = {
   },
   poppins: {
     name: "Poppins",
-    blurb: "Geometric sans with rounder letterforms — a friendlier take on the same idea.",
+    note: "current",
+    blurb: "The site as it stands — geometric sans with rounder letterforms, display and body.",
     family: "var(--tt-poppins)",
     capsWeight: 600,
     capsSpacing: "0.07em",
@@ -102,8 +104,8 @@ function Group({ label, children }: { label: string; children: React.ReactNode }
 }
 
 export default function TypeTestClient() {
-  const [dir, setDir] = useState<DirectionKey>("jost")
-  const [bodyKey, setBodyKey] = useState<BodyKey>("inter")
+  const [dir, setDir] = useState<DirectionKey>("poppins")
+  const [bodyKey, setBodyKey] = useState<BodyKey>("poppins")
   const [mode, setMode] = useState<CaseMode>("caps")
 
   const d = DIRECTIONS[dir]

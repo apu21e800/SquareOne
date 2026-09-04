@@ -1,6 +1,14 @@
-import Image from "next/image"
 import Link from "next/link"
 import BrandMark from "@/components/BrandMark"
+
+/* Site close — the one dark region on every page (docs/design-v2 Site Close),
+   rebuilt 4 Sept 2026 at Vern's call ("just looks like a jumble of text").
+   Three moves: one closing CTA; a four-part footer that reads left to right
+   as who we are → what we do → where to go → how to reach us; one legal
+   row. Products and applications are indexes, not lists — the mega menu
+   and the index pages carry those. Contact canon only: 604-466-9902 office,
+   250-391-0270 Vancouver Island, 1-877-391-0270 toll-free,
+   office@squareonepaving.com, 505-20800 Lougheed Hwy, Maple Ridge. */
 
 const socials = [
   { label: "Facebook", href: "https://www.facebook.com/squareonepaving/", path: "M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5 3.66 9.13 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.89 3.77-3.89 1.09 0 2.24.19 2.24.19v2.47h-1.26c-1.24 0-1.63.78-1.63 1.57v1.88h2.78l-.45 2.91h-2.33V22c4.78-.81 8.44-4.94 8.44-9.94z" },
@@ -14,86 +22,45 @@ interface FooterLink {
   href: string
 }
 
-const serviceLinks: FooterLink[] = [
+const whatWeDo: FooterLink[] = [
   { label: "Stamped asphalt", href: "/services/stamped-asphalt" },
   { label: "Decorative coatings", href: "/services/decorative-coatings" },
   { label: "Preformed thermoplastic", href: "/services/preformed-thermoplastic" },
   { label: "Vapour blasting", href: "/services/vapor-blasting" },
-  { label: "Driveways", href: "/driveways" },
-  { label: "All services", href: "/services" },
+  { label: "Driveways — Vancouver & Victoria", href: "/driveways" },
 ]
 
-const productLinks: FooterLink[] = [
-  { label: "StreetPrint", href: "/products/streetprint" },
-  { label: "StreetBond", href: "/products/streetbond" },
-  { label: "TrafficPatterns", href: "/products/trafficpatterns" },
-  { label: "TrafficPatternsXD", href: "/products/trafficpatterns-xd" },
-  { label: "DecoMark", href: "/products/decomark" },
-  { label: "DuraTherm", href: "/products/duratherm" },
-  { label: "PreMark", href: "/products/premark" },
-  { label: "MMAX", href: "/products/mmax" },
-  { label: "DuraShield", href: "/products/durashield" },
-  { label: "All products", href: "/products" },
-]
-
-/* Mirrors WORK_APPS in lib/work.ts — the application gallery pages. */
-const applicationLinks: FooterLink[] = [
-  { label: "Crosswalks", href: "/applications/crosswalks" },
-  { label: "Streetscapes", href: "/applications/streetscapes" },
-  { label: "Roundabouts & traffic calming", href: "/applications/roundabouts" },
-  { label: "Parking lots", href: "/applications/parking-lots" },
-  { label: "Parks & paths", href: "/applications/parks-paths" },
-  { label: "Schools & sports courts", href: "/applications/schools-sports-courts" },
-  { label: "Bike lanes", href: "/applications/bike-lanes" },
-  { label: "Public art", href: "/applications/public-art" },
-  { label: "Branding & wayfinding", href: "/applications/branding-wayfinding" },
-  { label: "Driveways", href: "/driveways" },
-  { label: "All applications", href: "/applications" },
-]
-
-const studioLinks: FooterLink[] = [
-  { label: "About", href: "/about" },
+const company: FooterLink[] = [
   { label: "Projects", href: "/projects" },
+  { label: "Applications", href: "/applications" },
+  { label: "Products", href: "/products" },
+  { label: "Resources & specs", href: "/resources" },
   { label: "Blog", href: "/blog" },
-  { label: "Resources", href: "/resources" },
-  { label: "Search", href: "/search" },
+  { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
+]
+
+const phones = [
+  { label: "Office · Maple Ridge", display: "604-466-9902", href: "tel:+16044669902" },
+  { label: "Vancouver Island", display: "250-391-0270", href: "tel:+12503910270" },
+  { label: "Toll-free", display: "1-877-391-0270", href: "tel:+18773910270" },
 ]
 
 const hairline = "var(--hairline-slate)"
 
-function ColumnHeading({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="label label-on-slate">
-      {children}
-    </div>
-  )
-}
-
-function LinkColumn({ heading, links }: { heading: string; links: FooterLink[] }) {
+function Column({ heading, links }: { heading: string; links: FooterLink[] }) {
   return (
     <div>
-      <ColumnHeading>{heading}</ColumnHeading>
-      <div className="mt-5 flex flex-col gap-3">
+      <div className="label label-on-slate">{heading}</div>
+      <ul className="mt-5 flex flex-col gap-[11px]">
         {links.map((link) => (
-          <Link
-            key={link.href}
-            href={link.href}
-            className="text-[15px] text-[#C6CBD1] transition-colors hover:text-white"
-          >
-            {link.label}
-          </Link>
+          <li key={link.href}>
+            <Link href={link.href} className="foot-link">
+              {link.label}
+            </Link>
+          </li>
         ))}
-      </div>
-    </div>
-  )
-}
-
-function ContactRow({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div>
-      <div className="text-[12px] text-[#8A9098]">{label}</div>
-      {children}
+      </ul>
     </div>
   )
 }
@@ -103,21 +70,21 @@ export default function Footer() {
 
   return (
     <div className="bg-[color:var(--surface-slate)]">
-      {/* ---- Closing CTA — the single dark close for every page ---- */}
+      {/* ── Closing CTA — the single dark close for every page ──────── */}
       <section className="section text-center">
         <div className="container-1280">
           <p className="eyebrow eyebrow-center text-[#9BA1A9]">Start a project</p>
 
-          <h2 className="mx-auto mt-6 max-w-[20ch] text-white">
+          <h2 className="mx-auto mt-6 max-w-[20ch] text-white [text-wrap:balance]">
             Let&rsquo;s build something worth looking at
           </h2>
 
-          <p className="mx-auto mt-5 max-w-[52ch] text-[17px] leading-[1.65] text-[#9BA1A9]">
+          <p className="mx-auto mt-5 max-w-[50ch] text-[16px] leading-[1.7] text-[#9BA1A9] [text-wrap:pretty]">
             Send drawings, a site address, or a rough description. We will walk the site before
             we quote it.
           </p>
 
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-6">
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-x-7 gap-y-4">
             <Link href="/contact" className="btn-on-slate">
               Request a quote
             </Link>
@@ -134,29 +101,22 @@ export default function Footer() {
         </div>
       </section>
 
-      {/* ---- Footer proper ---- */}
-      <footer
-        className="border-t px-6 pt-14 min-[701px]:px-10 min-[701px]:pt-20"
-        style={{ borderColor: hairline }}
-      >
-        <div className="mx-auto max-w-[1280px]">
-          <div className="grid grid-cols-2 gap-10 min-[701px]:grid-cols-3 lg:grid-cols-[1.3fr_1fr_1.15fr_1fr_0.9fr_1.2fr] lg:gap-10">
-            {/* Brand */}
-            <div className="col-span-2 min-[701px]:col-span-1">
-              <Link
-                href="/"
-                className="flex items-center gap-3"
-                aria-label="Square One Paving — home"
-              >
+      {/* ── Footer proper ──────── */}
+      <footer className="border-t" style={{ borderColor: hairline }}>
+        <div className="container-1280 pt-16 pb-8 max-[700px]:pt-12">
+          <div className="grid grid-cols-1 gap-x-10 gap-y-12 min-[701px]:grid-cols-2 lg:grid-cols-12">
+            {/* Who we are */}
+            <div className="min-[701px]:col-span-2 lg:col-span-4">
+              <Link href="/" className="inline-flex items-center" aria-label="Square One Paving — home">
                 <BrandMark tone="light" size="footer" />
               </Link>
 
-              <p className="mt-[18px] max-w-[30ch] text-[14px] leading-[1.6] text-[#8A9098]">
-                Decorative pavement for BC since 2000 &mdash; installer of HUB Surface Systems
-                products. Based in Maple Ridge, serving the Lower Mainland and Vancouver Island.
+              <p className="mt-6 max-w-[34ch] text-[15px] leading-[1.7] text-[#9BA1A9] [text-wrap:pretty]">
+                Decorative pavement for BC since 2000. Installer of HUB Surface Systems products,
+                based in Maple Ridge and working across the Lower Mainland and Vancouver Island.
               </p>
 
-              <div className="-ml-[11px] mt-5 flex items-center gap-0.5">
+              <div className="-ml-[11px] mt-6 flex items-center gap-1">
                 {socials.map((s) => (
                   <a
                     key={s.label}
@@ -164,9 +124,9 @@ export default function Footer() {
                     aria-label={s.label}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex h-9 w-9 items-center justify-center text-[#8A9098] transition-colors hover:text-white"
+                    className="inline-flex h-9 w-9 items-center justify-center rounded-[2px] text-[#8A9098] transition-colors hover:text-white"
                   >
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                       <path d={s.path} />
                     </svg>
                   </a>
@@ -174,82 +134,67 @@ export default function Footer() {
               </div>
             </div>
 
-            <LinkColumn heading="Services" links={serviceLinks} />
-            <LinkColumn heading="Applications" links={applicationLinks} />
-            <LinkColumn heading="Products" links={productLinks} />
-            <LinkColumn heading="Studio" links={studioLinks} />
+            {/* What we do */}
+            <div className="lg:col-span-2">
+              <Column heading="What we do" links={whatWeDo} />
+            </div>
 
-            {/* Contact */}
-            <div>
-              <ColumnHeading>Contact</ColumnHeading>
-              <div className="mt-5 flex flex-col gap-[14px]">
-                <ContactRow label="Office">
-                  <address className="mt-[3px] text-[15px] not-italic leading-[1.5] text-[#C6CBD1]">
-                    505&ndash;20800 Lougheed Highway
-                    <br />
-                    Maple Ridge, BC V2X 3P2
-                  </address>
-                </ContactRow>
+            {/* Where to go */}
+            <div className="lg:col-span-2">
+              <Column heading="Company" links={company} />
+            </div>
 
-                <ContactRow label="Lower Mainland">
-                  <a
-                    href="tel:+16044669902"
-                    className="mt-[3px] block text-[15px] text-[#C6CBD1] transition-colors hover:text-white"
-                  >
-                    604-466-9902
-                  </a>
-                </ContactRow>
-
-                <ContactRow label="Vancouver Island">
-                  <a
-                    href="tel:+12503910270"
-                    className="mt-[3px] block text-[15px] text-[#C6CBD1] transition-colors hover:text-white"
-                  >
-                    250-391-0270
-                  </a>
-                </ContactRow>
-
-                <ContactRow label="Toll-free">
-                  <a
-                    href="tel:+18773910270"
-                    className="mt-[3px] block text-[15px] text-[#C6CBD1] transition-colors hover:text-white"
-                  >
-                    1-877-391-0270
-                  </a>
-                </ContactRow>
-
-                <ContactRow label="Email">
+            {/* How to reach us */}
+            <div className="min-[701px]:col-span-2 lg:col-span-4 lg:pl-8">
+              <div className="label label-on-slate">Talk to us</div>
+              <ul className="mt-5 flex flex-col gap-[14px]">
+                {phones.map((p) => (
+                  <li key={p.href} className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+                    <span className="text-[13px] text-[#8A9098]">{p.label}</span>
+                    <a
+                      href={p.href}
+                      className="text-[17px] font-medium tracking-[0.01em] text-white transition-colors hover:text-[#C6CBD1] tabular-nums"
+                    >
+                      {p.display}
+                    </a>
+                  </li>
+                ))}
+                <li className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+                  <span className="text-[13px] text-[#8A9098]">Email</span>
                   <a
                     href="mailto:office@squareonepaving.com"
-                    className="mt-[3px] block text-[15px] text-[#C6CBD1] transition-colors hover:text-white [overflow-wrap:anywhere]"
+                    className="text-[15px] font-medium text-white transition-colors hover:text-[#C6CBD1] [overflow-wrap:anywhere]"
                   >
                     office@squareonepaving.com
                   </a>
-                </ContactRow>
-              </div>
+                </li>
+              </ul>
+              <address className="mt-6 border-t pt-5 text-[14px] not-italic leading-[1.6] text-[#8A9098]" style={{ borderColor: hairline }}>
+                505&ndash;20800 Lougheed Highway
+                <br />
+                Maple Ridge, BC V2X 3P2
+              </address>
             </div>
           </div>
 
-          <p className="mt-14 text-[13px] leading-[1.8] text-[#7E848C] min-[701px]:mt-[72px]">
-            Lower Mainland &mdash; Vancouver, Burnaby, Richmond, Surrey, Langley, Maple Ridge
-            &middot; Vancouver Island &mdash; Victoria, Nanaimo, Courtenay
+          {/* Service area — one quiet line */}
+          <p className="mt-14 text-[13px] leading-[1.8] text-[#7E848C] max-[700px]:mt-10">
+            <span className="label label-on-slate mr-3">Serving</span>
+            Vancouver, Burnaby, Richmond, Surrey, Langley, Maple Ridge and the Fraser Valley
+            &middot; Victoria, Nanaimo, Courtenay and Vancouver Island &middot; Okanagan and
+            Interior projects on record
           </p>
 
+          {/* Legal row */}
           <div
-            className="mt-7 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-t py-6"
+            className="mt-6 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-t pt-6"
             style={{ borderColor: hairline }}
           >
             <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] text-[#7E848C]">
               <span>&copy; {year} Square One Paving</span>
               <span>BBB Accredited Business</span>
               <span className="flex items-center gap-2">
-                <svg
-                  viewBox="0 0 32 16"
-                  width="18"
-                  height="9"
-                  aria-hidden="true"
-                  className="flex-shrink-0"
-                >
+                <svg viewBox="0 0 32 16" width="18" height="9" aria-hidden="true" className="flex-shrink-0">
                   <rect x="0" y="0" width="8" height="16" fill="#D80621" />
                   <rect x="8" y="0" width="16" height="16" fill="#FFFFFF" />
                   <rect x="24" y="0" width="8" height="16" fill="#D80621" />
@@ -262,18 +207,15 @@ export default function Footer() {
               </span>
             </div>
 
-            <div className="flex gap-6">
-              <Link
-                href="/privacy"
-                className="text-[13px] text-[#7E848C] transition-colors hover:text-white"
-              >
+            <div className="flex gap-6 text-[13px]">
+              <Link href="/privacy" className="text-[#7E848C] transition-colors hover:text-white">
                 Privacy
               </Link>
-              <Link
-                href="/terms"
-                className="text-[13px] text-[#7E848C] transition-colors hover:text-white"
-              >
+              <Link href="/terms" className="text-[#7E848C] transition-colors hover:text-white">
                 Terms
+              </Link>
+              <Link href="/search" className="text-[#7E848C] transition-colors hover:text-white">
+                Search
               </Link>
             </div>
           </div>

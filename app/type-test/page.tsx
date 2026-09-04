@@ -5,8 +5,9 @@ import TypeTestClient from "./TypeTestClient"
 /* Unlinked type lab. Six sans directions rendered as the real hero, a
    section header and a product card, with a body toggle (Inter / Poppins)
    and a case toggle (spaced caps / title case). Serif directions retired
-   4 Sept 2026 at Vern's call; Jost stays the live default until the client
-   picks. Nothing on this page sits below weight 400. */
+   and Poppins made the live face sitewide on 4 Sept 2026 at Vern's call;
+   the alternates stay here for the record. Nothing on this page sits below
+   weight 400. */
 
 const jost = Jost({ subsets: ["latin"], display: "swap", variable: "--tt-jost" })
 const inter = Inter({ subsets: ["latin"], display: "swap", variable: "--tt-inter" })

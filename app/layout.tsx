@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Inter, Jost } from 'next/font/google'
+import { Poppins } from 'next/font/google'
 import "./globals.css"
 import Nav from "@/components/Nav"
 import Footer from "@/components/Footer"
@@ -7,20 +7,15 @@ import StructuredData from "@/components/StructuredData"
 import MobileStickyCTA from "@/components/MobileStickyCTA"
 import MotionBreath from "@/components/MotionBreath"
 
-// Two-face system per the First-Draft Pass (canon §2.5 as amended, 31 Aug
-// 2026 — direction C, picked on /type-test): Jost spaced caps carries
-// display/H1/H2 at 600 with 0.08em tracking — the wordmark's Futura DNA.
-// Inter variable carries body (450–500). Nothing renders below weight 400 —
-// the ghost numerals are the one sanctioned exception.
-const inter = Inter({
+// One-face system (canon §2.5 as amended 4 Sept 2026 — Vern's call, the
+// alternates stay on /type-test): Poppins carries display at 600 spaced
+// caps and body at 400/500. Poppins ships static cuts, so every weight the
+// site uses is listed here — nothing renders below 400 except the ghost
+// numerals at 300, the one sanctioned exception.
+const poppins = Poppins({
   subsets: ['latin'],
-  variable: '--font-inter',
-  display: 'swap',
-})
-
-const jost = Jost({
-  subsets: ['latin'],
-  variable: '--font-jost',
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-poppins',
   display: 'swap',
 })
 
@@ -60,7 +55,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${jost.variable}`}>
+    <html lang="en" className={poppins.variable}>
       <body className="antialiased">
         <StructuredData />
         <Nav />

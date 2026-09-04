@@ -73,11 +73,11 @@ export default function ServicesPage() {
       {/* ---- Header — full-bleed image band (Rockstar Part 4) ---- */}
       <IndexImageHero
         src="/images/hero/granville-island-crosswalk-streetprint.jpg"
-        alt="Decorative stamped asphalt crosswalk at Granville Island, Vancouver"
+        alt="Brick-red TrafficPatternsXD crosswalk outside Granville Island Brewing, Vancouver"
         eyebrow="What we do"
         title="Four services, one standard"
         lede="Stamped asphalt, decorative coatings, preformed thermoplastic and mobile vapour blasting — installed by the same crews across the Lower Mainland and Vancouver Island since 2000."
-        caption="Granville Island · StreetPrint"
+        caption="Granville Island · TrafficPatternsXD"
         imagePosition="center 70%"
       />
 

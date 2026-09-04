@@ -46,13 +46,14 @@
   --shadow-rest:    0 1px 2px rgba(20, 22, 26, 0.04);
   --shadow-lift:    0 16px 40px rgba(20, 22, 26, 0.08);
 
-  /* Type — First-Draft Pass (canon §2.5 as amended 31 Aug 2026): direction C.
-     Jost spaced caps carries display — uppercase 600, 0.08em tracking; the
-     wordmark's Futura DNA at Tom Ford register. Inter carries body (450–500).
-     Small labels keep the 0.12em caps system, now in the display face.
-     THE H1 RULE: photo-opening pages use .display-xl (clamp → 4.25rem);
+  /* Type — one face (canon §2.5 as amended 4 Sept 2026, Vern's call).
+     Poppins carries everything: spaced caps at 600 for display (the
+     wordmark's Futura DNA, rounder), 400/500 for body. Static cuts only —
+     300 · 400 · 500 · 600 · 700 — so nothing may ask for an in-between
+     weight. Small labels keep the 0.12em caps system.
+     THE H1 RULE: photo-opening pages use .display-xl (clamp → 4rem);
      plain headers use the h1 default (clamp → 3.4rem). One or the other. */
-  --font-display: var(--font-jost), Futura, "Century Gothic", ui-sans-serif, sans-serif;
+  --font-display: var(--font-poppins), Futura, "Century Gothic", ui-sans-serif, sans-serif;
 
   /* Geometry */
   --radius:         2px;
@@ -84,10 +85,10 @@
   body {
     background-color: var(--surface);
     color: var(--ink-body);
-    font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
-    font-size: 17px;
-    font-weight: 450;
-    line-height: 1.65;
+    font-family: var(--font-poppins), system-ui, -apple-system, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.7;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
@@ -123,7 +124,7 @@
   h3 {
     font-size: 1.25rem;
     font-weight: 600;
-    letter-spacing: -0.015em;
+    letter-spacing: -0.01em;
     line-height: 1.4;
   }
 
@@ -274,7 +275,7 @@
      mechanical. Leading tiers follow. */
   .display-xl {
     font-family: var(--font-display);
-    font-size: clamp(2.5rem, 4.4vw, 4.25rem);
+    font-size: clamp(2.4rem, 4.2vw, 4rem);
     font-weight: 600;
     letter-spacing: 0.06em;
     line-height: 1.1;
@@ -324,7 +325,7 @@
     right: 1.5rem;
     z-index: 0;
     font-size: 10rem;
-    font-weight: 200;
+    font-weight: 300;
     line-height: 1;
     letter-spacing: -0.04em;
     color: var(--surface-stone);
@@ -349,9 +350,10 @@
     text-transform: uppercase;
     padding: 16px 28px;
     border-radius: var(--radius);
-    transition: background 0.12s ease;
+    transition: background 0.12s ease, transform 0.12s ease;
   }
   .btn-primary:hover { background: var(--accent-deep); color: #FFFFFF; }
+  .btn-primary:active { transform: translateY(1px); }
 
   .btn-secondary {
     font-family: var(--font-display);
@@ -443,7 +445,9 @@
     border: 1px solid var(--hairline);
     border-radius: var(--radius);
     padding: 32px 28px;
+    transition: border-color 0.12s ease, box-shadow 0.2s ease;
   }
+  .card-panel:hover { box-shadow: var(--shadow-lift); }
 
   /* ---- Arrow link ---- */
 
@@ -562,6 +566,64 @@
   }
   .caption-right { left: auto; right: 20px; }
 
+  /* ---- Hero reel (home) ----
+     Five frames on a slow crossfade. The active frame settles from a
+     1.06 scale to rest over the dwell — the one sanctioned drift, because
+     Vern asked for a reel (4 Sept 2026). Progress segments are hairlines. */
+  .reel-frame {
+    transform: scale(1.06);
+    transition: transform 8.4s linear;
+  }
+  .reel-frame-active { transform: scale(1); }
+
+  .reel-seg {
+    position: relative;
+    height: 1px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.28);
+  }
+  .reel-seg-fill {
+    position: absolute;
+    inset: 0;
+    background: #FFFFFF;
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+  .reel-seg-fill.is-running { animation: reel-fill 7s linear forwards; }
+  .reel-seg-fill.is-paused { animation-play-state: paused; }
+  .reel-seg-fill.is-done { transform: scaleX(1); }
+
+  .reel-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.34);
+    border-radius: var(--radius);
+    color: #FFFFFF;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .reel-btn:hover { border-color: rgba(255, 255, 255, 0.9); color: #FFFFFF; background: rgba(255, 255, 255, 0.06); }
+
+  /* ---- Mega menu scrim — the page steps back while a panel is open ---- */
+  .mega-scrim {
+    position: fixed;
+    inset: 0;
+    top: var(--bar-h);
+    z-index: 30;
+    background: rgba(20, 24, 29, 0.28);
+  }
+
+  /* ---- Footer links ---- */
+  .foot-link {
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--ink-on-slate-body);
+    transition: color 0.12s ease;
+  }
+  .foot-link:hover { color: #FFFFFF; }
+
   /* ---- Tag pill ---- */
 
   .tag {
@@ -574,6 +636,11 @@
     padding: 5px 10px;
     border-radius: var(--radius);
   }
+}
+
+@keyframes reel-fill {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
 }
 
 @media (prefers-reduced-motion: reduce) {
