@@ -84,6 +84,9 @@ const PRIMARY_LINKS: PrimaryLink[] = [
   { label: "About", href: "/about", match: ["/about"] },
 ]
 
+/** The bar needs 1024px now that Poppins sets it (six links plus the CTA);
+    below that the drawer takes over, and the search icon joins the bar at
+    1280 (Ctrl/Cmd+K and the footer link cover it in between). */
 /** Mobile drawer keeps every route the desktop bar reaches, including the
     two that live inside the mega menu on desktop. */
 const DRAWER_LINKS: { label: string; href: string }[] = [
@@ -288,7 +291,7 @@ function ServicesMega({ onNavigate, onMouseEnter, onMouseLeave }: MegaPanelProps
       transition={panelTransition}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      className="fixed top-[72px] right-0 left-0 z-40 hidden border-t border-b border-[#E7E3DC] bg-white min-[821px]:block"
+      className="fixed top-[72px] right-0 left-0 z-40 hidden border-t border-b border-[#E7E3DC] bg-white min-[1024px]:block"
     >
       <div className="mx-auto max-w-[1280px] px-10 py-8">
         <div className="grid grid-cols-4 gap-5">
@@ -333,7 +336,7 @@ function ApplicationsMega({ onNavigate, onMouseEnter, onMouseLeave }: MegaPanelP
       transition={panelTransition}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      className="fixed top-[72px] right-0 left-0 z-40 hidden border-t border-b border-[#E7E3DC] bg-white min-[821px]:block"
+      className="fixed top-[72px] right-0 left-0 z-40 hidden border-t border-b border-[#E7E3DC] bg-white min-[1024px]:block"
     >
       <div className="mx-auto max-w-[1280px] px-10 py-8">
         <div className="grid grid-cols-5 gap-4">
@@ -416,7 +419,7 @@ function ProductsMega({ onNavigate, onMouseEnter, onMouseLeave }: ProductsMegaPr
       transition={panelTransition}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      className="fixed top-[72px] right-0 left-0 z-40 hidden border-t border-b border-[#E7E3DC] bg-white min-[821px]:block"
+      className="fixed top-[72px] right-0 left-0 z-40 hidden border-t border-b border-[#E7E3DC] bg-white min-[1024px]:block"
     >
       <div
         ref={panelRef}
@@ -492,7 +495,7 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.18, ease: "easeOut" }}
-      className="fixed inset-0 z-[300] flex flex-col bg-white min-[821px]:hidden"
+      className="fixed inset-0 z-[300] flex flex-col bg-white min-[1024px]:hidden"
     >
       <div className="flex h-[72px] shrink-0 items-center justify-between border-b border-[#E7E3DC] px-6">
         <Wordmark onClick={onClose} />
@@ -717,7 +720,7 @@ export default function Nav() {
 
           <nav
             aria-label="Primary"
-            className="ml-auto hidden items-center gap-8 min-[821px]:flex"
+            className="ml-auto hidden items-center gap-5 min-[1024px]:flex min-[1280px]:gap-8"
           >
             {PRIMARY_LINKS.map((link) => {
               const menuKey = link.menu
@@ -780,7 +783,7 @@ export default function Nav() {
             }}
             aria-label="Search the site"
             title="Search (Ctrl+K)"
-            className="nav-link ml-8 hidden h-10 w-10 shrink-0 items-center justify-center rounded-[2px] min-[821px]:flex"
+            className="nav-link ml-6 hidden h-10 w-10 shrink-0 items-center justify-center rounded-[2px] min-[1280px]:flex"
           >
             <svg aria-hidden="true" width="17" height="17" viewBox="0 0 18 18">
               <circle cx="8" cy="8" r="6.25" stroke="currentColor" strokeWidth="1.5" fill="none" />
@@ -792,7 +795,7 @@ export default function Nav() {
             href="/contact"
             onClick={closeAll}
             style={{ fontFamily: "var(--font-display)" }}
-            className="nav-cta ml-4 hidden shrink-0 rounded-[2px] border px-[19px] py-[11px] text-[12px] font-semibold tracking-[0.12em] uppercase transition-colors min-[821px]:inline-block"
+            className="nav-cta ml-4 hidden shrink-0 rounded-[2px] border px-4 py-[11px] text-[12px] font-semibold tracking-[0.12em] uppercase transition-colors min-[1024px]:inline-block min-[1280px]:px-[19px]"
           >
             Request a quote
           </Link>
@@ -804,7 +807,7 @@ export default function Nav() {
               setSearchOpen(true)
             }}
             aria-label="Search the site"
-            className="nav-link ml-auto flex h-11 w-11 items-center justify-center min-[821px]:hidden"
+            className="nav-link ml-auto flex h-11 w-11 items-center justify-center min-[1024px]:hidden"
           >
             <svg aria-hidden="true" width="18" height="18" viewBox="0 0 18 18">
               <circle cx="8" cy="8" r="6.25" stroke="currentColor" strokeWidth="1.5" fill="none" />
@@ -817,7 +820,7 @@ export default function Nav() {
             onClick={() => setDrawerOpen(true)}
             aria-label="Open menu"
             aria-expanded={drawerOpen}
-            className="flex h-11 w-11 flex-col items-center justify-center gap-[5px] min-[821px]:hidden"
+            className="flex h-11 w-11 flex-col items-center justify-center gap-[5px] min-[1024px]:hidden"
           >
             <span aria-hidden="true" className="nav-burger-bar block h-[1.5px] w-[22px]" />
             <span aria-hidden="true" className="nav-burger-bar block h-[1.5px] w-[22px]" />
@@ -835,7 +838,7 @@ export default function Nav() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
             onClick={closeMenu}
-            className="mega-scrim hidden min-[821px]:block"
+            className="mega-scrim hidden min-[1024px]:block"
           />
         )}
       </AnimatePresence>

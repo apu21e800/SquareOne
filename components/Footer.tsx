@@ -27,14 +27,14 @@ const whatWeDo: FooterLink[] = [
   { label: "Decorative coatings", href: "/services/decorative-coatings" },
   { label: "Preformed thermoplastic", href: "/services/preformed-thermoplastic" },
   { label: "Vapour blasting", href: "/services/vapor-blasting" },
-  { label: "Driveways — Vancouver & Victoria", href: "/driveways" },
+  { label: "Driveways", href: "/driveways" },
 ]
 
 const company: FooterLink[] = [
   { label: "Projects", href: "/projects" },
   { label: "Applications", href: "/applications" },
   { label: "Products", href: "/products" },
-  { label: "Resources & specs", href: "/resources" },
+  { label: "Resources", href: "/resources" },
   { label: "Blog", href: "/blog" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
@@ -135,7 +135,7 @@ export default function Footer() {
             </div>
 
             {/* What we do */}
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-3">
               <Column heading="What we do" links={whatWeDo} />
             </div>
 
@@ -145,7 +145,7 @@ export default function Footer() {
             </div>
 
             {/* How to reach us */}
-            <div className="min-[701px]:col-span-2 lg:col-span-4 lg:pl-8">
+            <div className="min-[701px]:col-span-2 lg:col-span-3">
               <div className="label label-on-slate">Talk to us</div>
               <ul className="mt-5 flex flex-col gap-[14px]">
                 {phones.map((p) => (
