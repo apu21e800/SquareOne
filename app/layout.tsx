@@ -40,22 +40,19 @@ export const metadata: Metadata = {
     "vapor blasting Lower Mainland",
     "pavement applicator BC",
   ],
+  // No title, description or url here: Next fills og/twitter title and
+  // description from each page's own metadata, so a shared link previews as
+  // the page, not as the homepage.
   openGraph: {
     type: "website",
     locale: "en_CA",
-    url: "https://squareonepaving.ca",
     siteName: "Square One Paving",
-    title: "Square One Paving | BC's Decorative Pavement Specialists since 2000",
-    description:
-      "BC's trusted decorative pavement applicators since 2000.",
     images: [
       { url: "/images/og-image.png", width: 1200, height: 600, alt: "Square One Paving" },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Square One Paving | BC's Decorative Pavement Specialists since 2000",
-    description: "BC's trusted decorative pavement applicators since 2000.",
   },
   alternates: { canonical: "https://squareonepaving.ca" },
   robots: { index: true, follow: true },

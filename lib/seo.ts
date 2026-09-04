@@ -34,7 +34,8 @@ export function buildMetadata({
   const clampedDesc = clampDesc(description)
 
   return {
-    title: clampedTitle,
+    // Absolute: the root layout's title template would append the brand a second time.
+    title: { absolute: clampedTitle },
     description: clampedDesc,
     openGraph: {
       title: clampedTitle,

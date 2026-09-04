@@ -1,9 +1,10 @@
 import type { Metadata } from "next"
 
+// Titles, descriptions and canonicals live on the pages themselves. A plain
+// `title` string in this layout would drop the root title template for every
+// page beneath it (Next stashes templates from ancestor layouts only), which
+// is how the project pages lost their brand suffix.
 export const metadata: Metadata = {
-  title: "Projects | Stamped Asphalt & Decorative Pavement Portfolio",
-  description:
-    "Explore completed decorative pavement projects across BC — stamped asphalt driveways, StreetPrint crosswalks, StreetBond coatings, and vapour blasting. Metro Vancouver, Vancouver Island, and beyond.",
   keywords: [
     "pavement projects Vancouver",
     "stamped asphalt projects BC",
@@ -14,14 +15,6 @@ export const metadata: Metadata = {
     "crosswalk installation project BC",
     "decorative pavement gallery BC",
   ],
-  alternates: {
-    canonical: "https://squareonepaving.ca/projects",
-  },
-  openGraph: {
-    title: "Projects | Stamped Asphalt & Decorative Pavement Portfolio | Square One Paving",
-    description:
-      "Completed decorative pavement projects across BC — stamped asphalt driveways, StreetPrint crosswalks, StreetBond coatings, and vapour blasting.",
-  },
 }
 
 export default function ProjectsLayout({

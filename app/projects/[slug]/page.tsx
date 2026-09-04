@@ -72,7 +72,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const project = getProjectBySlug(slug)
   if (!project) return {}
   return {
-    title: `${project.title} | Projects BC`,
+    title: { absolute: `${project.title} | Square One Paving` },
     description: project.excerpt,
     alternates: { canonical: `https://squareonepaving.ca/projects/${slug}` },
     openGraph: {
@@ -134,7 +134,7 @@ export default async function ProjectPage({ params }: Props) {
   return (
     <main className="bg-[color:var(--surface)]">
 
-      {/* ── 01 Project header ─────────────────────────────────────────────────── */}
+      {/* ── 01 Project header ──────── */}
       <section className="pt-[calc(var(--bar-h)+96px)] max-[700px]:pt-[calc(var(--bar-h)+56px)]">
         <div className="container-1280">
           <Link
@@ -206,7 +206,7 @@ export default async function ProjectPage({ params }: Props) {
         </div>
       </section>
 
-      {/* ── 02 Narrative ──────────────────────────────────────────────────────── */}
+      {/* ── 02 Narrative ──────── */}
       <section className="section bg-[color:var(--surface)] pb-28 max-[700px]:pb-14">
         <div className="container-1280">
           <p className="max-w-[60ch] text-[17px] leading-[1.75] text-[color:var(--ink-body)] [text-wrap:pretty]">
@@ -236,7 +236,7 @@ export default async function ProjectPage({ params }: Props) {
         </div>
       </section>
 
-      {/* ── 03 Gallery ────────────────────────────────────────────────────────── */}
+      {/* ── 03 Gallery ──────── */}
       {galleryRest.length > 0 && (
         <section className="section border-y border-[color:var(--hairline)] bg-[color:var(--surface-warm)]">
           <div className="container-1280">
@@ -270,7 +270,7 @@ export default async function ProjectPage({ params }: Props) {
         </section>
       )}
 
-      {/* ── 04 More projects ──────────────────────────────────────────────────── */}
+      {/* ── 04 More projects ──────── */}
       {related.length > 0 && (
         <section className="section bg-[color:var(--surface)]">
           <div className="container-1280">
