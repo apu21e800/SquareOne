@@ -40,7 +40,7 @@ export default function ProjectsPreview() {
           </Link>
         </div>
 
-        <div data-reveal-group className="mt-12 grid grid-cols-1 gap-8 min-[701px]:grid-cols-2">
+        <div data-reveal-group className="rail-m mt-12 grid grid-cols-1 gap-8 min-[701px]:grid-cols-2">
           {featuredProjects.map((project) => {
             const src = project.imageUrl
 

@@ -44,7 +44,7 @@ export default function BlogFeedGrid({ posts }: { posts: BlogPostMeta[] }) {
       <div className="container-1280 relative z-[1]">
         <h2 data-reveal>From the blog</h2>
 
-        <div data-reveal-group className="mt-10 grid grid-cols-1 gap-6 min-[701px]:grid-cols-3">
+        <div data-reveal-group className="rail-m mt-10 grid grid-cols-1 gap-6 min-[701px]:grid-cols-3">
           {posts.map((post) => (
             <article key={post.slug} data-reveal className="card relative">
               <Link

@@ -46,7 +46,7 @@ export default function ServicesGrid() {
           <h2 className="mt-5">Four services, one standard</h2>
         </div>
 
-        <div data-reveal-group className="mt-10 grid grid-cols-4 gap-6 max-[900px]:grid-cols-2 max-[560px]:grid-cols-1">
+        <div data-reveal-group className="rail-m mt-10 grid grid-cols-4 gap-6 max-[900px]:grid-cols-2 max-[560px]:grid-cols-1">
           {services.map((service, i) => {
             const img = cardImage[service.slug]
             return (

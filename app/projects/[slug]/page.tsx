@@ -6,6 +6,7 @@ import type { Metadata } from "next"
 import { projects, getProjectBySlug } from "@/lib/projects"
 import { galleryFor } from "@/lib/gallery"
 import { WORK_APPS } from "@/lib/work"
+import ProjectGallery from "@/components/ProjectGallery"
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -236,36 +237,19 @@ export default async function ProjectPage({ params }: Props) {
         </div>
       </section>
 
-      {/* ── 03 Gallery ──────── */}
+      {/* ── 03 Gallery — every photograph opens the full-screen viewer ──────── */}
       {galleryRest.length > 0 && (
         <section className="section border-y border-[color:var(--hairline)] bg-[color:var(--surface-warm)]">
           <div className="container-1280">
-            <div
-              className={`grid gap-6 max-[700px]:grid-cols-1 ${
-                galleryRest.length === 1
-                  ? "grid-cols-2"
-                  : galleryRest.length === 2 || galleryRest.length === 4
-                    ? "grid-cols-2"
-                    : "grid-cols-3"
-              }`}
-            >
-              {galleryRest.map((src, i) => (
-                <figure
-                  key={src}
-                  className="thumb relative aspect-[4/3] overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)]"
-                >
-                  <Image
-                    src={src}
-                    alt={`${project.title} — photo ${i + 2} of ${gallery.length}`}
-                    fill
-                    sizes="(max-width: 700px) 100vw, (max-width: 1280px) 50vw, 628px"
-                    className="object-cover"
-                  />
-                  <div aria-hidden="true" className="scrim scrim-light" />
-                  <figcaption className="caption">{caption}</figcaption>
-                </figure>
-              ))}
-            </div>
+            <ProjectGallery
+              caption={caption}
+              photos={gallery.map((src, i) => ({
+                src,
+                alt: i === 0 ? project.title : `${project.title} — photo ${i + 1} of ${gallery.length}`,
+                primary: project.title,
+                secondary: caption,
+              }))}
+            />
           </div>
         </section>
       )}

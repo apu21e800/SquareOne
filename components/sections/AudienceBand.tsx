@@ -46,7 +46,7 @@ export default function AudienceBand() {
           <h2 className="mt-5">Three kinds of owner, one standard of work</h2>
         </div>
 
-        <div data-reveal-group className="mt-10 grid grid-cols-3 gap-6 max-[900px]:grid-cols-1">
+        <div data-reveal-group className="rail-m mt-10 grid grid-cols-3 gap-6 max-[900px]:grid-cols-1">
           {audiences.map((audience) => (
             <Link
               key={audience.label}
