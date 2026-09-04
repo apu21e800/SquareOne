@@ -72,12 +72,15 @@ interface PrimaryLink {
   menu?: MenuKey
 }
 
+/** Bar order follows the business hierarchy: commercial lines first, then
+    driveways as its own destination (4 Sept 2026). Blog stays reachable from
+    the drawer, the footer, the home feed and search. */
 const PRIMARY_LINKS: PrimaryLink[] = [
   { label: "Services", href: "/services", match: ["/services"], menu: "services" },
   { label: "Products", href: "/products", match: ["/products"], menu: "products" },
-  { label: "Applications", href: "/applications", match: ["/applications", "/driveways"], menu: "applications" },
+  { label: "Applications", href: "/applications", match: ["/applications"], menu: "applications" },
+  { label: "Driveways", href: "/driveways", match: ["/driveways"] },
   { label: "Projects", href: "/projects", match: ["/projects"] },
-  { label: "Blog", href: "/blog", match: ["/blog"] },
   { label: "About", href: "/about", match: ["/about"] },
 ]
 
@@ -126,8 +129,8 @@ const SERVICE_TILES: { slug: string; note: string; src: string; alt: string }[] 
   {
     slug: "stamped-asphalt",
     note: "Patterns pressed into hot asphalt",
-    src: "/images/hero/granville-island-crosswalk-streetprint.jpg",
-    alt: "StreetPrint stamped asphalt crosswalk at Granville Island, Vancouver",
+    src: "/images/hero/victoria-ellis-point-walkway-streetprint.jpg",
+    alt: "British Cobble StreetPrint walkway at Ellis Point, Victoria",
   },
   {
     slug: "decorative-coatings",
@@ -149,36 +152,31 @@ const SERVICE_TILES: { slug: string; note: string; src: string; alt: string }[] 
   },
 ]
 
-/** Applications mega — a six-frame editorial strip, tall crops.
+/** Applications mega — five photo tiles into the five busiest gallery pages
+    (lib/work.ts WORK_APPS slugs), the other five as a text row beneath.
     Commercial-first hierarchy; driveways anchors the end of the strip. */
 const APPLICATION_TILES: { label: string; href: string; src: string; alt: string }[] = [
   {
-    label: "Commercial spaces",
-    href: "/applications",
+    label: "Crosswalks",
+    href: "/applications/crosswalks",
+    src: "/images/applications/crosswalks/victoria-bastion-square-crosswalk-trafficpatternsxd-01.jpg",
+    alt: "TrafficPatternsXD crosswalk at Bastion Square, Victoria",
+  },
+  {
+    label: "Streetscapes",
+    href: "/applications/streetscapes",
     src: "/images/applications/commercial-spaces/little-italy-aerial-colourful-intersection-01.jpg",
     alt: "Little Italy intersection in Vancouver from above",
   },
   {
-    label: "Crosswalks",
-    href: "/applications",
-    src: "/images/projects/ubc-musqueam-crosswalk/ubc-musqueam-crosswalk-trafficpatterns-02.jpg",
-    alt: "Coast Salish crosswalk artwork at UBC",
-  },
-  {
-    label: "Bus & bike lanes",
-    href: "/applications",
-    src: "/images/products/premark/premark-north-vancouver-green-bike-lane-01.jpg",
-    alt: "Green PreMark bike lane in North Vancouver",
-  },
-  {
     label: "Parks & paths",
-    href: "/applications",
+    href: "/applications/parks-paths",
     src: "/images/applications/parks-paths/victoria-beacon-hill-park-streetprint-01.jpg",
     alt: "Stamped asphalt path at Beacon Hill Park, Victoria",
   },
   {
     label: "Public art",
-    href: "/applications",
+    href: "/applications/public-art",
     src: "/images/applications/public-art/north-vancouver-whatever-the-weather-mia-weinberg-decomark-01.jpg",
     alt: "Whatever the Weather pavement artwork, North Vancouver",
   },
@@ -188,6 +186,14 @@ const APPLICATION_TILES: { label: string; href: string; src: string; alt: string
     src: "/images/applications/private-driveways/orca-driveway-medallion-custom-01.jpg",
     alt: "Custom orca medallion stamped into a Victoria driveway",
   },
+]
+
+const APPLICATION_MORE: { label: string; href: string }[] = [
+  { label: "Roundabouts & traffic calming", href: "/applications/roundabouts" },
+  { label: "Parking lots", href: "/applications/parking-lots" },
+  { label: "Schools & sports courts", href: "/applications/schools-sports-courts" },
+  { label: "Bike lanes", href: "/applications/bike-lanes" },
+  { label: "Branding & wayfinding", href: "/applications/branding-wayfinding" },
 ]
 
 const HAIRLINE = "#E7E3DC"
@@ -244,14 +250,22 @@ function MegaTile({
         className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
       />
       <span aria-hidden="true" className="scrim" />
-      <span className="absolute inset-x-0 bottom-0 p-4">
-        <span
-          className="block text-[13px] font-semibold tracking-[0.1em] uppercase text-white"
-          style={{ fontFamily: "var(--font-display)" }}
-        >
-          {name}
+      <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-4">
+        <span className="min-w-0">
+          <span
+            className="block text-[13px] font-semibold tracking-[0.1em] uppercase text-white"
+            style={{ fontFamily: "var(--font-display)" }}
+          >
+            {name}
+          </span>
+          {note && <span className="mt-[3px] block text-[12px] leading-[1.45] text-white/75">{note}</span>}
         </span>
-        {note && <span className="mt-[3px] block text-[12px] leading-[1.45] text-white/75">{note}</span>}
+        <span
+          aria-hidden="true"
+          className="mb-[1px] shrink-0 text-[15px] leading-none text-white/70 transition-transform duration-200 group-hover:translate-x-1 group-hover:text-white"
+        >
+          &rarr;
+        </span>
       </span>
     </Link>
   )
@@ -290,13 +304,18 @@ function ServicesMega({ onNavigate, onMouseEnter, onMouseLeave }: MegaPanelProps
             />
           ))}
         </div>
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-[#E7E3DC] pt-5">
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-x-8 gap-y-3 border-t border-[#E7E3DC] pt-5">
           <Link href="/services" onClick={onNavigate} className="arrow-link">
             All services <span>&rarr;</span>
           </Link>
-          <Link href="/driveways" onClick={onNavigate} className="arrow-link">
-            Driveways for Victoria &amp; Vancouver homes <span>&rarr;</span>
-          </Link>
+          <div className="flex flex-wrap items-center gap-x-8 gap-y-2">
+            <Link href="/driveways" onClick={onNavigate} className="arrow-link">
+              Driveways for Victoria &amp; Vancouver homes <span>&rarr;</span>
+            </Link>
+            <Link href="/resources" onClick={onNavigate} className="arrow-link">
+              Specifications &amp; documents <span>&rarr;</span>
+            </Link>
+          </div>
         </div>
       </div>
     </motion.div>
@@ -317,7 +336,7 @@ function ApplicationsMega({ onNavigate, onMouseEnter, onMouseLeave }: MegaPanelP
       className="fixed top-[72px] right-0 left-0 z-40 hidden border-t border-b border-[#E7E3DC] bg-white min-[821px]:block"
     >
       <div className="mx-auto max-w-[1280px] px-10 py-8">
-        <div className="grid grid-cols-6 gap-4">
+        <div className="grid grid-cols-5 gap-4">
           {APPLICATION_TILES.map((tile) => (
             <MegaTile
               key={tile.label}
@@ -330,13 +349,24 @@ function ApplicationsMega({ onNavigate, onMouseEnter, onMouseLeave }: MegaPanelP
             />
           ))}
         </div>
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-[#E7E3DC] pt-5">
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-x-8 gap-y-3 border-t border-[#E7E3DC] pt-5">
+          <div className="flex flex-wrap items-center gap-x-7 gap-y-2">
+            <span className="label">Also</span>
+            {APPLICATION_MORE.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={onNavigate}
+                data-mega-item
+                className="text-[13px] font-medium text-[#3D4147] transition-colors hover:text-[#14161A]"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
           <Link href="/applications" onClick={onNavigate} className="arrow-link">
             All applications <span>&rarr;</span>
           </Link>
-          <span className="text-[13px] text-[#767B82]">
-            Municipal, commercial and residential — across BC since 2000
-          </span>
         </div>
       </div>
     </motion.div>
@@ -393,7 +423,7 @@ function ProductsMega({ onNavigate, onMouseEnter, onMouseLeave }: ProductsMegaPr
         onKeyDown={onKeyDown}
         className="mx-auto grid max-w-[1280px] grid-cols-8 gap-x-8 px-10 py-8"
       >
-        {/* ── Cols 1–2: categories ──────────────────── */}
+        {/* ── Cols 1–2: categories ──────── */}
         <div className="col-span-2 flex flex-col border-r border-[#E7E3DC] pr-8">
           {productColumns.map((col) => (
             <button
@@ -403,6 +433,7 @@ function ProductsMega({ onNavigate, onMouseEnter, onMouseLeave }: ProductsMegaPr
               onMouseEnter={() => setActive(col.category)}
               onFocus={() => setActive(col.category)}
               onClick={() => setActive(col.category)}
+              style={{ fontFamily: "var(--font-display)" }}
               className={`flex items-baseline justify-between gap-4 rounded-[2px] px-3 py-[14px] text-left text-[12px] font-semibold tracking-[0.12em] uppercase transition-colors duration-150 ${
                 active === col.category
                   ? "bg-[#FAF8F5] text-[#14161A]"
@@ -516,10 +547,20 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
         </div>
       </nav>
 
+      <div className="flex shrink-0 flex-wrap items-center gap-x-6 gap-y-1 border-t border-[#E7E3DC] px-6 py-4 text-[13px] text-[#767B82]">
+        <span>
+          <a href="tel:+16044669902" className="font-medium text-[#14161A]">604-466-9902</a> Maple Ridge
+        </span>
+        <span>
+          <a href="tel:+12503910270" className="font-medium text-[#14161A]">250-391-0270</a> Vancouver Island
+        </span>
+      </div>
+
       <Link
         href="/contact"
         onClick={onClose}
         className="flex h-16 shrink-0 items-center justify-center bg-[#F26430] text-[13px] font-semibold tracking-[0.12em] uppercase text-white transition-colors hover:bg-[#D8511F] hover:text-white"
+        style={{ fontFamily: "var(--font-display)" }}
       >
         Request a quote
       </Link>
@@ -750,6 +791,7 @@ export default function Nav() {
           <Link
             href="/contact"
             onClick={closeAll}
+            style={{ fontFamily: "var(--font-display)" }}
             className="nav-cta ml-4 hidden shrink-0 rounded-[2px] border px-[19px] py-[11px] text-[12px] font-semibold tracking-[0.12em] uppercase transition-colors min-[821px]:inline-block"
           >
             Request a quote
@@ -782,6 +824,21 @@ export default function Nav() {
           </button>
         </div>
       </header>
+
+      {/* The page steps back while a panel is open; a click on it closes the panel */}
+      <AnimatePresence>
+        {menu && (
+          <motion.div
+            aria-hidden="true"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            onClick={closeMenu}
+            className="mega-scrim hidden min-[821px]:block"
+          />
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {menu === "products" && (
