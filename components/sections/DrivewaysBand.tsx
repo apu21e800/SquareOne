@@ -33,7 +33,7 @@ export default function DrivewaysBand() {
           <div className="min-[901px]:order-1">
             <div className="eyebrow">Driveways &middot; Vancouver &amp; Victoria</div>
 
-            <h2 className="stop mt-5 max-w-[18ch] [text-wrap:balance]">
+            <h2 className="stop mt-5 max-w-[18ch] [text-wrap:balance] max-[600px]:max-w-none">
               The driveway you already have, made to look like stone
             </h2>
 
@@ -53,7 +53,7 @@ export default function DrivewaysBand() {
                   key={stat.label}
                   className="max-[560px]:flex max-[560px]:items-baseline max-[560px]:gap-5 max-[560px]:border-b max-[560px]:border-[color:var(--hairline)] max-[560px]:py-4"
                 >
-                  <div className="stat-num max-[560px]:w-[112px] max-[560px]:shrink-0 max-[560px]:text-[40px]">{stat.value}</div>
+                  <div className="stat-num whitespace-nowrap max-[560px]:w-[124px] max-[560px]:shrink-0 max-[560px]:text-[36px]">{stat.value}</div>
                   <div className="label mt-3 max-w-[18ch] leading-[1.5] max-[560px]:mt-0 max-[560px]:max-w-none">{stat.label}</div>
                 </div>
               ))}

@@ -17,7 +17,7 @@
 
 @media (max-width: 700px) {
   /* H2 gets a touch more presence on a 390px column. */
-  h2:not(.display-statement):not(.display-xl) { font-size: 1.625rem; }
+  h2:not(.display-statement):not(.display-xl):not(.label):not(.eyebrow) { font-size: 1.625rem; }
 
   /* Every field at 16px: iOS zooms the page on focus below that. */
   input, select, textarea { font-size: 16px; }
