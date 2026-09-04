@@ -61,7 +61,7 @@ export default function ProjectsPage() {
 
       <ProjectsIndexClient projects={cards} />
 
-      {/* ── By application ────────────────────────────────────────────────────────────────────── */}
+      {/* ── By application ──────── */}
       <section className="section border-t border-[color:var(--hairline)] bg-[color:var(--surface-warm)]">
         <div className="container-1280">
           <div className="flex flex-wrap items-baseline justify-between gap-6">
@@ -69,10 +69,10 @@ export default function ProjectsPage() {
               <div className="eyebrow">The record</div>
               <h2 className="mt-4 [text-wrap:balance]">The work, by application</h2>
             </div>
-            <p className="max-w-[44ch] text-[15px] leading-[1.6] text-[color:var(--ink-muted)]">
-              {byUse.reduce((n, a) => n + a.count, 0)} site photographs, each captioned with the
-              system installed and where.
-            </p>
+            <Link href="/galleries" className="arrow-link whitespace-nowrap">
+              All {byUse.reduce((n, a) => n + a.count, 0)} photographs, by application and system{" "}
+              <span aria-hidden="true">&rarr;</span>
+            </Link>
           </div>
 
           <ul className="mt-10 grid grid-cols-2 gap-x-8 gap-y-[2px] min-[701px]:grid-cols-3 min-[1024px]:grid-cols-5">

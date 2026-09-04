@@ -32,6 +32,7 @@ const whatWeDo: FooterLink[] = [
 
 const company: FooterLink[] = [
   { label: "Projects", href: "/projects" },
+  { label: "Galleries", href: "/galleries" },
   { label: "Applications", href: "/applications" },
   { label: "Products", href: "/products" },
   { label: "Resources", href: "/resources" },

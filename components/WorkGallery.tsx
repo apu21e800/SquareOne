@@ -1,17 +1,20 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState, type TouchEvent } from "react"
 import Image from "next/image"
 import type { WorkPhoto } from "@/lib/work"
 
 /**
  * The work, photographed on site — a captioned tile grid of Square One's
- * own installation photography (lib/work.ts).
+ * own installation photography (lib/work.ts), and the viewer Jan shows
+ * clients: any tile opens full-screen with its caption, and the arrows,
+ * keyboard and swipe walk the set (Vern, 4 Sept 2026: "Jan likes to be
+ * able to show clients image galleries").
  *
  * Tiles are 5:3 because the archive shots are 667×402: no crop, no upscale.
  * Captions sit under the image in the type canon's small sizes rather than
- * over it — a scrim on a 667px tile reads as mud. Nothing here links to a
- * detail page; the photo and its caption ARE the record.
+ * over it — a scrim on a 667px tile reads as mud. The viewer shows the
+ * photograph whole (object-contain) on slate, never cropped.
  *
  *   filters   system + region chips (only the values present in `photos`)
  *   initial   tiles shown before "Show all" — 8 fits two rows of four
@@ -26,6 +29,7 @@ interface WorkGalleryProps {
 }
 
 const ALL = "All"
+const SWIPE = 44
 
 function Chip({
   active,
@@ -60,6 +64,163 @@ export function workAlt(p: WorkPhoto): string {
     : `${p.subject} in ${sys}. Installed by Square One Paving.`
 }
 
+function captionLines(p: WorkPhoto): { primary: string; secondary: string } {
+  const primary = p.place || p.subject
+  const secondary = p.place
+    ? [p.systems.join(" + "), p.subject].filter(Boolean).join(" · ")
+    : p.systems.join(" + ")
+  return { primary, secondary }
+}
+
+/* ------------------------------------------------------------------
+   Viewer — full-screen, slate, the photograph whole
+   ------------------------------------------------------------------ */
+
+function Lightbox({
+  photos,
+  index,
+  onIndex,
+  onClose,
+}: {
+  photos: WorkPhoto[]
+  index: number
+  onIndex: (i: number) => void
+  onClose: () => void
+}) {
+  const count = photos.length
+  const photo = photos[index]
+  const touchX = useRef<number | null>(null)
+  const closeRef = useRef<HTMLButtonElement>(null)
+
+  const step = useCallback((n: number) => onIndex((index + n + count) % count), [index, count, onIndex])
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose()
+      if (e.key === "ArrowRight") step(1)
+      if (e.key === "ArrowLeft") step(-1)
+    }
+    document.addEventListener("keydown", onKey)
+    const prev = document.body.style.overflow
+    document.body.style.overflow = "hidden"
+    closeRef.current?.focus()
+    return () => {
+      document.removeEventListener("keydown", onKey)
+      document.body.style.overflow = prev
+    }
+  }, [onClose, step])
+
+  const onTouchStart = (e: TouchEvent<HTMLElement>) => {
+    touchX.current = e.touches[0]?.clientX ?? null
+  }
+  const onTouchEnd = (e: TouchEvent<HTMLElement>) => {
+    const start = touchX.current
+    touchX.current = null
+    if (start === null) return
+    const dx = (e.changedTouches[0]?.clientX ?? start) - start
+    if (Math.abs(dx) > SWIPE) step(dx < 0 ? 1 : -1)
+  }
+
+  const { primary, secondary } = captionLines(photo)
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label={`Photograph ${index + 1} of ${count}: ${primary}`}
+      className="fixed inset-0 z-[500] flex flex-col bg-[color:var(--surface-slate)] text-white"
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+    >
+      {/* Top bar */}
+      <div className="flex h-[64px] shrink-0 items-center justify-between px-6 max-[700px]:px-4">
+        <span
+          className="text-[12px] font-semibold tracking-[0.12em] text-white/70 tabular-nums"
+          style={{ fontFamily: "var(--font-display)" }}
+        >
+          {String(index + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}
+        </span>
+        <button
+          ref={closeRef}
+          type="button"
+          onClick={onClose}
+          aria-label="Close the viewer"
+          className="reel-btn"
+        >
+          <svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14">
+            <path d="M2 2l10 10M12 2L2 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+          </svg>
+        </button>
+      </div>
+
+      {/* Photograph — whole, never cropped */}
+      <div className="relative min-h-0 flex-1">
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Close the viewer"
+          className="absolute inset-0 cursor-default"
+        />
+        <div className="pointer-events-none absolute inset-0 mx-auto max-w-[1600px] px-6 max-[700px]:px-2">
+          <div className="relative h-full w-full">
+            <Image
+              key={photo.src}
+              src={photo.src}
+              alt={workAlt(photo)}
+              fill
+              priority
+              sizes="100vw"
+              className="object-contain"
+            />
+          </div>
+        </div>
+
+        {count > 1 && (
+          <>
+            <button
+              type="button"
+              onClick={() => step(-1)}
+              aria-label="Previous photograph"
+              className="reel-btn absolute top-1/2 left-4 -translate-y-1/2 bg-[rgba(20,24,29,0.5)] max-[700px]:left-2"
+            >
+              <svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14">
+                <path d="M9 2L4 7l5 5" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              onClick={() => step(1)}
+              aria-label="Next photograph"
+              className="reel-btn absolute top-1/2 right-4 -translate-y-1/2 bg-[rgba(20,24,29,0.5)] max-[700px]:right-2"
+            >
+              <svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14">
+                <path d="M5 2l5 5-5 5" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          </>
+        )}
+      </div>
+
+      {/* Caption */}
+      <div className="shrink-0 border-t border-[color:var(--hairline-slate)] px-6 py-4 max-[700px]:px-4">
+        <div className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-1">
+          <div>
+            <div className="text-[15px] leading-[1.4] font-semibold text-white">{primary}</div>
+            <div className="mt-[2px] text-[13px] leading-[1.5] text-white/70">{secondary}</div>
+          </div>
+          <div className="text-[12px] text-white/50 max-[700px]:hidden">
+            &larr; &rarr; to move &middot; Esc to close
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ------------------------------------------------------------------
+   Grid
+   ------------------------------------------------------------------ */
+
 export default function WorkGallery({
   photos,
   filters = true,
@@ -69,6 +230,7 @@ export default function WorkGallery({
   const [system, setSystem] = useState(ALL)
   const [region, setRegion] = useState(ALL)
   const [expanded, setExpanded] = useState(false)
+  const [open, setOpen] = useState<number | null>(null)
 
   const systems = useMemo(() => {
     const counts = new Map<string, number>()
@@ -95,6 +257,7 @@ export default function WorkGallery({
 
   const visible = expanded ? filtered : filtered.slice(0, initial)
   const hidden = filtered.length - visible.length
+  const close = useCallback(() => setOpen(null), [])
 
   return (
     <div>
@@ -141,24 +304,34 @@ export default function WorkGallery({
             filters ? "mt-10" : ""
           }`}
         >
-          {visible.map((p) => {
-            const primary = p.place || p.subject
-            const secondary = p.place
-              ? [p.systems.join(" + "), p.subject].filter(Boolean).join(" · ")
-              : p.systems.join(" + ")
+          {visible.map((p, i) => {
+            const { primary, secondary } = captionLines(p)
 
             return (
               <li key={p.src}>
                 <figure>
-                  <div className="thumb relative aspect-[5/3] overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)]">
+                  <button
+                    type="button"
+                    onClick={() => setOpen(i)}
+                    aria-label={`View ${primary} full screen`}
+                    className="thumb group relative block w-full aspect-[5/3] overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)] text-left"
+                  >
                     <Image
                       src={p.src}
                       alt={workAlt(p)}
                       fill
                       sizes="(max-width: 700px) 50vw, (max-width: 1023px) 33vw, 300px"
-                      className="object-cover"
+                      className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                     />
-                  </div>
+                    <span
+                      aria-hidden="true"
+                      className="absolute right-3 bottom-3 inline-flex h-8 w-8 items-center justify-center rounded-[2px] bg-[rgba(20,24,29,0.55)] text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100"
+                    >
+                      <svg width="14" height="14" viewBox="0 0 14 14">
+                        <path d="M2 6V2h4M12 8v4H8M2 2l4 4M12 12L8 8" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+                      </svg>
+                    </span>
+                  </button>
                   <figcaption className="mt-3">
                     <div className="text-[14px] leading-[1.35] font-semibold text-[color:var(--ink)] [text-wrap:pretty]">
                       {primary}
@@ -206,6 +379,10 @@ export default function WorkGallery({
             Show fewer <span aria-hidden="true">&uarr;</span>
           </button>
         </div>
+      )}
+
+      {open !== null && filtered[open] && (
+        <Lightbox photos={filtered} index={open} onIndex={setOpen} onClose={close} />
       )}
     </div>
   )

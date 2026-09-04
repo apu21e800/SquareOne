@@ -179,7 +179,6 @@ const nextConfig: NextConfig = {
       { source: "/tag/:path*", destination: "/blog", permanent: true },
       { source: "/author/:path*", destination: "/blog", permanent: true },
       // WP pages: galleries, product galleries, product slugs, documents, service landings
-      { source: "/galleries", destination: "/applications", permanent: true },
       { source: "/galleries/streetscapes", destination: "/applications/streetscapes", permanent: true },
       { source: "/galleries/schools-and-sports-courts", destination: "/applications/schools-sports-courts", permanent: true },
       { source: "/galleries/bike-lanes", destination: "/applications/bike-lanes", permanent: true },
@@ -190,7 +189,7 @@ const nextConfig: NextConfig = {
       { source: "/galleries/parks-and-paths", destination: "/applications/parks-paths", permanent: true },
       { source: "/galleries/public-art", destination: "/applications/public-art", permanent: true },
       { source: "/galleries/branding-and-wayfinding", destination: "/applications/branding-wayfinding", permanent: true },
-      { source: "/galleries/:path*", destination: "/applications", permanent: true },
+      { source: "/galleries/:path+", destination: "/applications", permanent: true },
       { source: "/trafficpatterns-xd-gallery", destination: "/products/trafficpatterns-xd", permanent: true },
       { source: "/street-bond-150-coating-gallery", destination: "/products/streetbond", permanent: true },
       { source: "/streetprint-gallery", destination: "/products/streetprint", permanent: true },
