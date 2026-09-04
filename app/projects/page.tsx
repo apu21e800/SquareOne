@@ -10,7 +10,7 @@ import ProjectsIndexClient, { type ProjectCard } from "./ProjectsIndexClient"
  * Projects index — docs/design-v2/Index Pages.dc.html (#projects).
  *
  *   Header   full-bleed image, eyebrow + h1 + lede        slate scrim
- *   Listing  application + region chips, 4:3 card grid   white
+ *   Listing  one-line filter bar, lead card + 16:10 grid  white
  *   By use   the work by application — tile row           warm
  *   Close    slate — rendered once by app/layout.tsx (Footer)
  *
@@ -28,13 +28,6 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://squareonepaving.ca/projects" },
 }
 
-const APP_LABELS = WORK_APPS.map((a) => a.label).filter((label) =>
-  projects.some((p) => p.application === label),
-)
-const REGIONS = ["Lower Mainland", "Vancouver Island", "Interior"].filter((r) =>
-  projects.some((p) => p.region === r),
-)
-
 const APP_HREF: Record<string, string> = Object.fromEntries(
   WORK_APPS.map((a) => [a.slug, a.slug === "driveways" ? "/driveways" : `/applications/${a.slug}`]),
 )
@@ -48,6 +41,7 @@ export default function ProjectsPage() {
     city: project.city,
     systems: project.systems,
     year: project.year,
+    excerpt: project.excerpt,
     src: project.imageUrl,
   }))
 
@@ -65,9 +59,9 @@ export default function ProjectsPage() {
         imagePosition="center 55%"
       />
 
-      <ProjectsIndexClient projects={cards} applications={["All", ...APP_LABELS]} regions={["All", ...REGIONS]} />
+      <ProjectsIndexClient projects={cards} />
 
-      {/* ── By application ────────────────────────────────────────────────────── */}
+      {/* ── By application ────────────────────────────────────────────────────────────────────── */}
       <section className="section border-t border-[color:var(--hairline)] bg-[color:var(--surface-warm)]">
         <div className="container-1280">
           <div className="flex flex-wrap items-baseline justify-between gap-6">

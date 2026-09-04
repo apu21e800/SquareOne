@@ -1,16 +1,16 @@
 "use client"
 
 import { useMemo, useState } from "react"
-import Image from "next/image"
-import Link from "next/link"
-import ProjectCaption from "@/components/ui/ProjectCaption"
+import FilterBar, { type FilterDef } from "@/components/ui/FilterBar"
+import RecordCard from "@/components/ui/RecordCard"
 
 /**
  * Filter bar + card grid for /projects.
  *
  * Split out of app/projects/page.tsx so the page itself stays a Server
- * Component. Filters are the two questions a specifier actually asks —
- * what kind of work, and where — not the internal service taxonomy.
+ * Component. One line of filters — the three questions a specifier asks:
+ * what kind of work, where, and with which system. Cards are the shared
+ * RecordCard, so this index and /blog read as one system.
  */
 
 export interface ProjectCard {
@@ -21,137 +21,119 @@ export interface ProjectCard {
   city: string
   systems: string[]
   year?: string
+  excerpt: string
   src: string
 }
 
 interface ProjectsIndexClientProps {
   projects: ProjectCard[]
-  /** Application filter values — must match Project.application exactly. */
-  applications: string[]
-  /** Region filter values — must match Project.region exactly. */
-  regions: string[]
 }
 
-const ALL = "All"
+const ALL = "all"
 
 /** "Vancouver, BC" → "Vancouver" — the caption carries the city, not the province. */
 function cityName(city: string): string {
   return city.split(",")[0].trim()
 }
 
-function Chip({
-  active,
-  onSelect,
-  children,
-}: {
-  active: boolean
-  onSelect: () => void
-  children: React.ReactNode
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onSelect}
-      aria-pressed={active}
-      className={`rounded-[2px] border px-4 py-[9px] text-[14px] transition-colors ${
-        active
-          ? "border-[color:var(--ink)] bg-[color:var(--ink)] font-semibold text-white"
-          : "border-[color:var(--hairline)] font-medium text-[color:var(--ink-muted)] hover:border-[color:var(--hairline-strong)] hover:text-[color:var(--ink)]"
-      }`}
-    >
-      {children}
-    </button>
-  )
+function options(values: string[], all: string) {
+  const counts = new Map<string, number>()
+  for (const v of values) counts.set(v, (counts.get(v) ?? 0) + 1)
+  return [
+    { value: ALL, label: all },
+    ...[...counts.entries()]
+      .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+      .map(([value, count]) => ({ value, label: value, count })),
+  ]
 }
 
-export default function ProjectsIndexClient({
-  projects,
-  applications,
-  regions,
-}: ProjectsIndexClientProps) {
-  const [appFilter, setAppFilter] = useState(ALL)
-  const [regionFilter, setRegionFilter] = useState(ALL)
+export default function ProjectsIndexClient({ projects }: ProjectsIndexClientProps) {
+  const [app, setApp] = useState(ALL)
+  const [region, setRegion] = useState(ALL)
+  const [system, setSystem] = useState(ALL)
+
+  const filters: FilterDef[] = [
+    { key: "app", label: "Application", value: app, onChange: setApp, options: options(projects.map((p) => p.application), "All applications") },
+    { key: "region", label: "Region", value: region, onChange: setRegion, options: options(projects.map((p) => p.region), "All regions") },
+    { key: "system", label: "System", value: system, onChange: setSystem, options: options(projects.flatMap((p) => p.systems), "All systems") },
+  ]
+
+  const active = app !== ALL || region !== ALL || system !== ALL
 
   const filtered = useMemo(
     () =>
-      projects.filter((p) => {
-        const matchApp = appFilter === ALL || p.application === appFilter
-        const matchRegion = regionFilter === ALL || p.region === regionFilter
-        return matchApp && matchRegion
-      }),
-    [projects, appFilter, regionFilter],
+      projects.filter(
+        (p) =>
+          (app === ALL || p.application === app) &&
+          (region === ALL || p.region === region) &&
+          (system === ALL || p.systems.includes(system)),
+      ),
+    [projects, app, region, system],
   )
+
+  const clear = () => {
+    setApp(ALL)
+    setRegion(ALL)
+    setSystem(ALL)
+  }
+
+  const [lead, ...rest] = filtered
 
   return (
     <section className="pb-[var(--section-y)] max-[700px]:pb-[var(--section-y-sm)]">
       <div className="container-1280">
-        {/* ---- Filters ---- */}
-        <div className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-4">
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="label mr-1">Application</span>
-            {applications.map((a) => (
-              <Chip key={a} active={appFilter === a} onSelect={() => setAppFilter(a)}>
-                {a}
-              </Chip>
-            ))}
-          </div>
-
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="label mr-1">Region</span>
-            {regions.map((r) => (
-              <Chip key={r} active={regionFilter === r} onSelect={() => setRegionFilter(r)}>
-                {r}
-              </Chip>
-            ))}
-          </div>
-
-          <span className="label ml-auto whitespace-nowrap" aria-live="polite">
-            {filtered.length} project{filtered.length !== 1 ? "s" : ""}
-          </span>
+        <div className="mt-12">
+          <FilterBar
+            filters={filters}
+            summary={`${filtered.length} project${filtered.length !== 1 ? "s" : ""}`}
+            onClear={clear}
+            active={active}
+          />
         </div>
 
-        {/* ---- Grid ---- */}
         {filtered.length > 0 ? (
-          <div className="mt-10 grid grid-cols-1 gap-6 min-[701px]:grid-cols-3">
-            {filtered.map((project) => {
-              const meta = [cityName(project.city), project.systems.join(" + "), project.year]
-                .filter((part): part is string => Boolean(part))
-                .join(" · ")
+          <>
+            {lead && (
+              <div className="mt-10">
+                <RecordCard
+                  lead
+                  priority
+                  href={`/projects/${lead.slug}`}
+                  src={lead.src}
+                  alt={lead.title}
+                  caption={[cityName(lead.city), lead.systems.join(" + "), lead.year].filter(Boolean).join(" · ")}
+                  kicker={lead.application}
+                  title={lead.title}
+                  description={lead.excerpt}
+                  meta={[cityName(lead.city), lead.region].join(" · ")}
+                />
+              </div>
+            )}
 
-              return (
-                <Link
-                  key={project.slug}
-                  href={`/projects/${project.slug}`}
-                  className="card relative block aspect-[4/3] overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)]"
-                >
-                  <Image
+            {rest.length > 0 && (
+              <div className="mt-10 grid grid-cols-3 gap-6 max-[1000px]:grid-cols-2 max-[700px]:grid-cols-1 max-[700px]:gap-10">
+                {rest.map((project) => (
+                  <RecordCard
+                    key={project.slug}
+                    href={`/projects/${project.slug}`}
                     src={project.src}
                     alt={project.title}
-                    fill
-                    sizes="(max-width: 700px) 100vw, (max-width: 1280px) 33vw, 411px"
-                    className="object-cover"
+                    caption={[cityName(project.city), project.systems.join(" + "), project.year]
+                      .filter(Boolean)
+                      .join(" · ")}
+                    kicker={project.application}
+                    title={project.title}
+                    description={project.excerpt}
+                    meta={[cityName(project.city), project.region].join(" · ")}
                   />
-
-                  <div aria-hidden className="scrim" />
-
-                  <ProjectCaption title={project.title} meta={meta} />
-                </Link>
-              )
-            })}
-          </div>
+                ))}
+              </div>
+            )}
+          </>
         ) : (
           <div className="mt-10 border-t border-[color:var(--hairline)] py-24 text-center">
-            <p className="text-[17px] text-[color:var(--ink-body)]">
-              No projects match this filter.
-            </p>
-            <button
-              type="button"
-              onClick={() => {
-                setAppFilter(ALL)
-                setRegionFilter(ALL)
-              }}
-              className="arrow-link mt-6"
-            >
+            <p className="text-[17px] text-[color:var(--ink-body)]">No projects match this filter.</p>
+            <button type="button" onClick={clear} className="arrow-link mt-6">
               Clear filters <span aria-hidden="true">&rarr;</span>
             </button>
           </div>

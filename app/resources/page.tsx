@@ -25,15 +25,14 @@ export default function ResourcesPage() {
         <div className="container-1280">
           <div className="eyebrow">Resources</div>
 
-          <h1 className="stop mt-6 max-w-[20ch]">
-            Specifications and technical documents
-          </h1>
+          <h1 className="stop mt-6 max-w-[20ch]">Specification library</h1>
 
           <p className="mt-7 max-w-[56ch] text-[19px] leading-[1.65] text-[color:var(--ink-body)] [text-wrap:pretty] max-[700px]:text-[17px]">
-            {resourceCount} documents for engineers and specifiers &mdash; spec
-            language, colour palettes, safety data sheets and design guides for
-            every system we install. Preview any document in the browser, or
-            download it straight into your spec package.
+            {resourceCount} documents for engineers and specifiers &mdash;
+            specifications, technical data sheets, safety data sheets, colour
+            cards, design manuals and brochures for every system we install.
+            Preview any document in the browser, or download it straight into
+            your spec package.
           </p>
 
           <p className="mt-4 max-w-[56ch] text-[15px] leading-[1.55] text-[color:var(--ink-muted)]">
