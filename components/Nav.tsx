@@ -99,6 +99,7 @@ const DRAWER_LINKS: { label: string; href: string }[] = [
   { label: "Applications", href: "/applications" },
   { label: "Driveways", href: "/driveways" },
   { label: "Projects", href: "/projects" },
+  { label: "Galleries", href: "/galleries" },
   { label: "Blog", href: "/blog" },
   { label: "Resources", href: "/resources" },
   { label: "About", href: "/about" },
@@ -417,9 +418,9 @@ function ApplicationsMega({ onNavigate, onMouseEnter, onMouseLeave }: MegaPanelP
           ))}
         </div>
         <div className="mt-6 flex flex-wrap items-center justify-between gap-x-8 gap-y-3 border-t border-[#E7E3DC] pt-5">
-          <span className="text-[13px] text-[#767B82]">
-            Ten galleries. Every photograph is our own install, captioned with the system and the place.
-          </span>
+          <Link href="/galleries" onClick={onNavigate} className="arrow-link">
+            Image galleries &mdash; every photograph, by application and system <span>&rarr;</span>
+          </Link>
           <Link href="/applications" onClick={onNavigate} className="arrow-link">
             All applications <span>&rarr;</span>
           </Link>
