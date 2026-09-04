@@ -167,16 +167,17 @@ export default function Hero() {
 
       {/* ── Headline block, bottom-left ──────── */}
       <div className="absolute inset-x-0 bottom-0 z-[2]">
-        <div className="container-1280 pb-[72px] max-[700px]:pb-16">
+        <div className="container-1280 pb-[72px] max-[1100px]:pb-[84px] max-[700px]:pb-[80px]">
           <div className="eyebrow eyebrow-on-image">
-            BC&rsquo;s decorative pavement studio &middot; Since 2000
+            <span className="max-[600px]:hidden">BC&rsquo;s decorative pavement studio &middot; Since 2000</span>
+            <span className="hidden max-[600px]:inline">Decorative pavement &middot; BC &middot; Since 2000</span>
           </div>
 
           <h1 className="display-xl stop mt-6 max-w-[15ch] text-white [text-wrap:balance]">
             Surfaces that define a place
           </h1>
 
-          <div className="mt-10 flex flex-wrap items-center gap-[14px]">
+          <div className="mt-10 flex flex-wrap items-center gap-[14px] max-[700px]:mt-8 max-[700px]:gap-3">
             <Link href="/contact" className="btn-primary">
               Request a quote
             </Link>
@@ -230,6 +231,17 @@ export default function Hero() {
             )}
           </button>
         </div>
+      </div>
+
+      {/* ── Caption + counter — phones and tablets; wide screens carry the cluster ──────── */}
+      <div
+        className="absolute inset-x-6 bottom-[34px] z-[2] flex items-baseline justify-between gap-4 text-[11px] font-semibold tracking-[0.08em] text-white/80 min-[1101px]:hidden"
+        style={{ fontFamily: "var(--font-display)" }}
+      >
+        <span className="min-w-0 truncate">{caption}</span>
+        <span className="shrink-0 tabular-nums">
+          {pad(index + 1)} / {pad(count)}
+        </span>
       </div>
 
       {/* ── Progress hairlines — the reel's clock ──────── */}

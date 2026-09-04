@@ -44,16 +44,22 @@ export default function DrivewaysBand() {
               sides of the Strait.
             </p>
 
-            <div className="mt-10 grid grid-cols-3 gap-6 border-t border-[color:var(--hairline)] pt-8 max-[560px]:grid-cols-1">
+            {/* Three figures: a row of numerals on wide screens; on a phone each
+                becomes a hairline row — numeral left, its line right — so the
+                long labels never stack four deep. */}
+            <div className="mt-10 grid grid-cols-3 gap-6 border-t border-[color:var(--hairline)] pt-8 max-[560px]:grid-cols-1 max-[560px]:gap-0 max-[560px]:pt-2">
               {stats.map((stat) => (
-                <div key={stat.label}>
-                  <div className="stat-num">{stat.value}</div>
-                  <div className="label mt-3 max-w-[18ch] leading-[1.5]">{stat.label}</div>
+                <div
+                  key={stat.label}
+                  className="max-[560px]:flex max-[560px]:items-baseline max-[560px]:gap-5 max-[560px]:border-b max-[560px]:border-[color:var(--hairline)] max-[560px]:py-4"
+                >
+                  <div className="stat-num max-[560px]:w-[112px] max-[560px]:shrink-0 max-[560px]:text-[40px]">{stat.value}</div>
+                  <div className="label mt-3 max-w-[18ch] leading-[1.5] max-[560px]:mt-0 max-[560px]:max-w-none">{stat.label}</div>
                 </div>
               ))}
             </div>
 
-            <div className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-4">
+            <div className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-4 max-[560px]:gap-x-8">
               <Link href="/driveways" className="btn-primary">
                 Driveways
               </Link>

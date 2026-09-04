@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Poppins } from 'next/font/google'
 import "./globals.css"
+import "./mobile.css"
 import Nav from "@/components/Nav"
 import Footer from "@/components/Footer"
 import StructuredData from "@/components/StructuredData"

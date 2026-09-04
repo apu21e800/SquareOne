@@ -1,0 +1,83 @@
+/* ============================================================
+   Square One v2 — the phone pass (4 Sept 2026; Vern: "make the mobile
+   experience ultra premium"). Unlayered on purpose: these rules sit
+   above Tailwind's utility layer, so a phone rule always wins over a
+   utility class on the same element. Nothing here touches a viewport
+   wider than 700px except the eyebrow fix, which is universal.
+   ============================================================ */
+
+/* The 6px square rides the first line when an eyebrow wraps (it used to
+   centre on the two-line block and float between the lines). */
+.eyebrow { align-items: flex-start; }
+.eyebrow::before { margin-top: 6px; }
+
+/* Arrow links: a thumb-sized hit area that never moves the layout. */
+.arrow-link { position: relative; }
+.arrow-link::after { content: ""; position: absolute; inset: -10px 0; }
+
+@media (max-width: 700px) {
+  /* H2 gets a touch more presence on a 390px column. */
+  h2:not(.display-statement):not(.display-xl) { font-size: 1.625rem; }
+
+  /* Every field at 16px: iOS zooms the page on focus below that. */
+  input, select, textarea { font-size: 16px; }
+
+  /* Buttons stack full-width — one rhythm, no ragged pair. */
+  .btn-primary, .btn-secondary, .btn-on-slate, .btn-on-image {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    padding-block: 17px;
+  }
+
+  /* Footer links: a row you can hit with a thumb. */
+  .foot-link { display: inline-block; padding-block: 5px; }
+
+  /* Rails — a card set swipes sideways with the next card peeking.
+     Snap to each card; the reveal animation stays out of the way. */
+  .rail-m {
+    display: flex;
+    grid-template-columns: none;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 12px;
+    margin-inline: calc(-1 * var(--gutter-sm));
+    padding-inline: var(--gutter-sm);
+    padding-bottom: 8px;
+    scroll-padding-inline: var(--gutter-sm);
+    scrollbar-width: none;
+  }
+  .rail-m::-webkit-scrollbar { display: none; }
+  .rail-m > * { flex: 0 0 min(84%, 340px); scroll-snap-align: start; min-width: 0; }
+  .rail-m > .reveal-armed { opacity: 1; transform: none; transition: none; }
+
+  /* Filter chips scroll in one line rather than wrapping into a block. */
+  .chip-rail {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    width: calc(100% + 2 * var(--gutter-sm));
+    margin-inline: calc(-1 * var(--gutter-sm));
+    padding-inline: var(--gutter-sm);
+    padding-bottom: 4px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .chip-rail::-webkit-scrollbar { display: none; }
+  .chip-rail > * { flex-shrink: 0; }
+
+  /* Footer: the two link lists share a row; brand and contact span it. */
+  footer .grid { grid-template-columns: 1fr 1fr; column-gap: 20px; row-gap: 40px; }
+  footer .grid > :first-child, footer .grid > :last-child { grid-column: 1 / -1; }
+
+  /* Specification library: Preview / Download get thumb room. */
+  a[aria-label^="Preview "], a[aria-label^="Download "] {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding-inline: 6px;
+    margin-inline: -6px;
+  }
+}

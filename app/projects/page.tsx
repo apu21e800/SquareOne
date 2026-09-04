@@ -69,13 +69,13 @@ export default function ProjectsPage() {
               <div className="eyebrow">The record</div>
               <h2 className="mt-4 [text-wrap:balance]">The work, by application</h2>
             </div>
-            <Link href="/galleries" className="arrow-link whitespace-nowrap">
+            <Link href="/galleries" className="arrow-link max-w-full">
               All {byUse.reduce((n, a) => n + a.count, 0)} photographs, by application and system{" "}
               <span aria-hidden="true">&rarr;</span>
             </Link>
           </div>
 
-          <ul className="mt-10 grid grid-cols-2 gap-x-8 gap-y-[2px] min-[701px]:grid-cols-3 min-[1024px]:grid-cols-5">
+          <ul className="mt-10 grid grid-cols-1 gap-x-8 gap-y-[2px] min-[560px]:grid-cols-2 min-[701px]:grid-cols-3 min-[1024px]:grid-cols-5">
             {byUse.map((a) => (
               <li key={a.slug}>
                 <Link
