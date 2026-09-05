@@ -2,12 +2,12 @@ import type { MetadataRoute } from "next"
 import { services } from "@/lib/services"
 import { projects } from "@/lib/projects"
 import { products } from "@/lib/products"
-import { getAllPosts } from "@/lib/blog"
+import { getPosts } from "@/lib/blog"
 import { WORK_APPS } from "@/lib/work"
 
 const BASE_URL = "https://squareonepaving.com"
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
     {
       url: BASE_URL,
@@ -116,7 +116,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }))
 
-  const blogRoutes: MetadataRoute.Sitemap = getAllPosts().map((post) => ({
+  const blogRoutes: MetadataRoute.Sitemap = (await getPosts()).map((post) => ({
     url: `${BASE_URL}/blog/${post.slug}`,
     lastModified: post.date ? new Date(post.date) : new Date(),
     changeFrequency: "yearly",

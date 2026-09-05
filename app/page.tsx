@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import Hero from "@/components/sections/Hero"
+import { HERO_SLIDES } from "@/lib/hero-slides"
 import StatsBar from "@/components/sections/StatsBar"
 import AudienceBand from "@/components/sections/AudienceBand"
 import EditorialBand from "@/components/sections/EditorialBand"
@@ -11,6 +12,8 @@ import DrivewaysBand from "@/components/sections/DrivewaysBand"
 import TrustStrip from "@/components/sections/TrustStrip"
 import SiteWalkBar from "@/components/sections/SiteWalkBar"
 import BlogFeed from "@/components/sections/BlogFeed"
+import FollowTheWork from "@/components/sections/FollowTheWork"
+import { getSiteSettings, getSlots, getSocialPosts, slotImage, slotText } from "@/lib/cms"
 
 export const metadata: Metadata = {
   title: "Decorative Pavement BC | Stamped Asphalt & Coatings | Square One Paving",
@@ -54,6 +57,7 @@ export const metadata: Metadata = {
  *   08 Trust strip (real client names only)  white
  *   08b Site-walk bar           white, hairline top — slim conversion band
  *   09 Field notes    #journal  warm, hairline top
+ *   09b Follow the work #follow white, hairline top — the social strip
  *   10 Site Close               slate — rendered once by app/layout.tsx (Footer)
  *
  * Two full-bleed breaths per page, never more. Section 10 is the page's
@@ -63,16 +67,27 @@ export const metadata: Metadata = {
  * <section>. BlogFeedGrid does not carry #journal, so the anchor lives here;
  * its scroll-margin clears the 72px sticky nav bar.
  */
-export default function Home() {
+export default async function Home() {
+  // CMS overlays (lib/cms.ts): every reader falls back to the built-in copy
+  // and photography, so the page renders the same with no Sanity project.
+  const [settings, tiles, slots] = await Promise.all([getSiteSettings(), getSocialPosts(6), getSlots()])
+  const slides = HERO_SLIDES.map((slide, i) => {
+    const key = `home.hero.${i + 1}`
+    const img = slotImage(slots, key, { src: slide.src, alt: slide.alt })
+    return img.src === slide.src ? slide : { ...slide, src: img.src, alt: img.alt, caption: img.caption }
+  })
+  const eyebrow = slotText(slots, "home.hero.eyebrow", "")
+  const title = slotText(slots, "home.hero.title", "")
+
   return (
     <main>
-      <Hero />
+      <Hero slides={slides} eyebrow={eyebrow || undefined} title={title || undefined} />
 
       <StatsBar />
 
       <AudienceBand />
 
-      <EditorialBand />
+      <EditorialBand statement={slotText(slots, "home.statement", "Twenty-five years on BC ground")} />
 
       <ServicesGrid />
 
@@ -89,6 +104,8 @@ export default function Home() {
       <SiteWalkBar />
 
       <BlogFeed />
+
+      <FollowTheWork settings={settings} tiles={tiles} />
     </main>
   )
 }

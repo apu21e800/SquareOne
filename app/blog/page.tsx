@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import IndexImageHero from "@/components/IndexImageHero"
-import { getAllPosts } from "@/lib/blog"
+import { getPosts } from "@/lib/blog"
 import BlogFilterClient from "@/components/blog/BlogFilterClient"
 
 export const metadata: Metadata = {
@@ -25,8 +25,8 @@ export const metadata: Metadata = {
   },
 }
 
-export default function BlogPage() {
-  const posts = getAllPosts()
+export default async function BlogPage() {
+  const posts = await getPosts()
 
   return (
     <main className="bg-[color:var(--surface)]">

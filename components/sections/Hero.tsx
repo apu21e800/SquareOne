@@ -3,6 +3,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { useCallback, useEffect, useRef, useState, type KeyboardEvent, type TouchEvent } from "react"
+import { HERO_SLIDES, type Slide } from "@/lib/hero-slides"
 
 /* Home hero — an image reel (Vern, 4 Sept 2026: "some sort of image slider
    experience on a reel like the current S1 website"). Five of Square One's
@@ -13,61 +14,19 @@ import { useCallback, useEffect, useRef, useState, type KeyboardEvent, type Touc
    stops under prefers-reduced-motion (no drift either), and every frame is
    reachable by button, keyboard arrow or swipe. */
 
-interface Slide {
-  src: string
-  alt: string
-  place: string
-  system: string
-  year?: string
-  position: string
-}
-
-const SLIDES: Slide[] = [
-  {
-    src: "/images/hero/white-rock-pier-crosswalk-trafficpatternsxd.jpg",
-    alt: "Red TrafficPatternsXD crosswalk leading to the White Rock Pier, Semiahmoo Bay at low tide beyond",
-    place: "White Rock Pier",
-    system: "TrafficPatternsXD",
-    year: "2019",
-    position: "center 62%",
-  },
-  {
-    src: "/images/hero/white-rock-marine-drive-wave-crosswalk.jpg",
-    alt: "Artist-designed crosswalk of waves, sand and sky in TrafficPatterns on Marine Drive, White Rock",
-    place: "Marine Drive, White Rock",
-    system: "TrafficPatterns",
-    year: "2025",
-    position: "center 60%",
-  },
-  {
-    src: "/images/hero/granville-island-crosswalk-streetprint.jpg",
-    alt: "Brick-red TrafficPatternsXD crosswalk outside Granville Island Brewing, Vancouver",
-    place: "Granville Island, Vancouver",
-    system: "TrafficPatternsXD",
-    position: "center 66%",
-  },
-  {
-    src: "/images/hero/bowen-island-polka-dot-walkway-streetbond.jpg",
-    alt: "Polka-dot StreetBond walkway with a bald eagle asking a question, Snug Cove, Bowen Island",
-    place: "Snug Cove, Bowen Island",
-    system: "StreetBond",
-    position: "center 50%",
-  },
-  {
-    src: "/images/hero/victoria-ellis-point-walkway-streetprint.jpg",
-    alt: "British Cobble StreetPrint walkway in a warm brick tone at Ellis Point, Victoria",
-    place: "Ellis Point, Victoria",
-    system: "StreetPrint",
-    position: "center 60%",
-  },
-]
-
 const FADE = 1100
 const SWIPE = 44
 
 const pad = (n: number) => String(n).padStart(2, "0")
 
-export default function Hero() {
+interface HeroProps {
+  slides?: Slide[]
+  eyebrow?: string
+  title?: string
+}
+
+export default function Hero({ slides, eyebrow, title }: HeroProps) {
+  const SLIDES = slides && slides.length > 0 ? slides : HERO_SLIDES
   const count = SLIDES.length
   const [pos, setPos] = useState({ index: 0, prev: -1 })
   const [held, setHeld] = useState(false)
@@ -114,7 +73,7 @@ export default function Hero() {
 
   const { index, prev } = pos
   const slide = SLIDES[index]
-  const caption = [slide.place, slide.system, slide.year].filter(Boolean).join(" · ")
+  const caption = slide.caption ?? [slide.place, slide.system, slide.year].filter(Boolean).join(" · ")
   const paused = held || !playing
 
   return (
@@ -168,13 +127,17 @@ export default function Hero() {
       {/* ── Headline block, bottom-left ──────── */}
       <div className="absolute inset-x-0 bottom-0 z-[2]">
         <div className="container-1280 pb-[72px] max-[1100px]:pb-[84px] max-[700px]:pb-[80px]">
-          <div className="eyebrow eyebrow-on-image">
-            <span className="max-[600px]:hidden">BC&rsquo;s decorative pavement studio &middot; Since 2000</span>
-            <span className="hidden max-[600px]:inline">Decorative pavement &middot; BC &middot; Since 2000</span>
-          </div>
+          {eyebrow ? (
+            <div className="eyebrow eyebrow-on-image">{eyebrow}</div>
+          ) : (
+            <div className="eyebrow eyebrow-on-image">
+              <span className="max-[600px]:hidden">BC&rsquo;s decorative pavement studio &middot; Since 2000</span>
+              <span className="hidden max-[600px]:inline">Decorative pavement &middot; BC &middot; Since 2000</span>
+            </div>
+          )}
 
           <h1 className="display-xl stop mt-6 max-w-[15ch] text-white [text-wrap:balance]">
-            Surfaces that define a place
+            {title ?? "Surfaces that define a place"}
           </h1>
 
           <div className="mt-10 flex flex-wrap items-center gap-[14px] max-[700px]:mt-8 max-[700px]:gap-3">
