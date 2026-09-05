@@ -23,6 +23,7 @@ import Image from "next/image"
 import type { Metadata } from "next"
 
 import { workFor } from "@/lib/work"
+import { DRIVEWAY_COLOURS } from "@/lib/palette"
 import WorkGallery from "@/components/WorkGallery"
 
 export const metadata: Metadata = {
@@ -137,14 +138,8 @@ const patterns: (Shot & { label: string })[] = [
   },
 ]
 
-const colours: { name: string; hex: string }[] = [
-  { name: "Charcoal", hex: "#4B4C4E" },
-  { name: "Slate grey", hex: "#74787D" },
-  { name: "Sandstone", hex: "#C7B296" },
-  { name: "Buff", hex: "#D9CBB0" },
-  { name: "Terra cotta", hex: "#A96A50" },
-  { name: "Moss", hex: "#7C8272" },
-]
+/** Six StreetBond colours that suit a driveway — by their published names (lib/palette.ts). */
+const colours = DRIVEWAY_COLOURS
 
 const systems: {
   name: string

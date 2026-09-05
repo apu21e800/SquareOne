@@ -3,6 +3,7 @@ import Link from "next/link"
 import type { Metadata } from "next"
 import { getWork, workCities } from "@/lib/work"
 import { projects } from "@/lib/projects"
+import { CLIENTS } from "@/lib/clients"
 
 export const metadata: Metadata = {
   title: "About Us | BC's Decorative Pavement Specialists Since 2000",
@@ -33,13 +34,14 @@ export const metadata: Metadata = {
  *   4 What we install   white  — the four trades, photographed
  *   5 How we work       warm,  hairline top + bottom — six principles
  *   6 Five steps        white
- *   7 Clients           warm,  hairline top + bottom
+ *   7 Clients           SLATE — the client index, the mission line beside it
  *   8 Where we work     white
  *   9 Site Close        slate — rendered once by app/layout.tsx (Footer)
  *
- * Section 9 is the page's ONLY dark region. Nothing above it may go slate.
- * Maple Ridge is the office. Vancouver Island is a service region with its
- * own phone line, never an office.
+ * Two slate bands on the page (7 and 9), never adjacent — the character
+ * pass of 5 Sept 2026 (Vern: "everything is very white"; "selected clients
+ * is very boring"). Maple Ridge is the office. Vancouver Island is a
+ * service region with its own phone line, never an office.
  */
 
 const trades: { name: string; line: string; href: string; src: string; alt: string }[] = [
@@ -116,13 +118,6 @@ const process = [
   { step: "03", title: "Surface prep", body: "Cleaning, and vapour blasting where the surface needs it." },
   { step: "04", title: "Application", body: "Installed by Square One's own crew, to the specification." },
   { step: "05", title: "Cure & walk-through", body: "Open to traffic on schedule; we walk the finished work with you." },
-]
-
-/* Owners and developers Square One has itself named as clients in its published project record. */
-const clients: string[] = [
-  "TransLink", "City of Vancouver", "UBC", "Musqueam", "City of Burnaby", "Vancouver Park Board",
-  "City of New Westminster", "City of Langley", "Squamish Nation", "Polygon Realty", "Onni Group",
-  "DAVA Developments",
 ]
 
 const serviceRegions = [
@@ -331,16 +326,33 @@ export default function AboutPage() {
       </section>
 
       {/* ── 7 · Clients ──────── */}
-      <section className="section border-y border-[color:var(--hairline)] bg-surface-warm">
-        <div className="container-1280">
-          <div className="eyebrow">Client organizations since 2000</div>
+      <section className="relative overflow-hidden bg-surface-slate py-[6.5rem] max-[700px]:py-14">
+        <div className="container-1280 relative z-[1]">
+          <div className="grid grid-cols-12 gap-x-12 gap-y-12 max-[900px]:grid-cols-1">
+            <div className="col-span-5 flex flex-col justify-center max-[900px]:col-span-1">
+              <div className="eyebrow eyebrow-on-image">Installed for</div>
+              <p className="display-statement stop m-0 mt-6 max-w-[22ch] text-white [text-wrap:balance]">
+                Won in the open, kept through winters
+              </p>
+              <p className="mt-6 max-w-[42ch] text-[15px] leading-[1.65] text-[color:var(--ink-on-slate-body)]">
+                Municipal work is won in open tenders and kept by holding up. These are the owners and
+                developers Square One has installed for, as published in its project record.
+              </p>
+            </div>
 
-          <div className="mt-8 flex max-w-[1080px] flex-wrap gap-x-11 gap-y-3.5">
-            {clients.map((client) => (
-              <span key={client} className="text-[16px] font-medium text-ink-body">
-                {client}
-              </span>
-            ))}
+            <div className="col-span-7 self-center max-[900px]:col-span-1">
+              <ul className="grid grid-cols-3 gap-x-8 max-[700px]:grid-cols-2">
+                {CLIENTS.map((client) => (
+                  <li
+                    key={client}
+                    className="border-t py-[12px] text-[15px] font-medium leading-[1.4] text-[color:var(--ink-on-slate-body)]"
+                    style={{ borderColor: "var(--hairline-slate)" }}
+                  >
+                    {client}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       </section>

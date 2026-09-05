@@ -185,11 +185,53 @@ export default async function ProductPage({ params }: Props) {
 
 
 
-      {/* ── Overview ──────── */}
+      {/* ── Overview + the spec panel (character pass, 5 Sept 2026): the
+             description on the left, the system's facts on the right, so
+             the band reads as a data sheet rather than a paragraph adrift. ── */}
       <Band tone={toneOf("overview")}>
-        <p className="max-w-[60ch] text-[17px] leading-[1.75] text-ink-body [text-wrap:pretty]">
-          {product.fullDescription}
-        </p>
+        <div className="grid grid-cols-12 gap-x-12 gap-y-10 max-[900px]:grid-cols-1">
+          <div className="col-span-7 max-[900px]:col-span-1">
+            <div className="eyebrow">Overview</div>
+            <p className="mt-6 max-w-[60ch] text-[17px] leading-[1.75] text-ink-body [text-wrap:pretty]">
+              {product.fullDescription}
+            </p>
+          </div>
+
+          <div className="card-panel col-span-5 self-start !p-0 max-[900px]:col-span-1 max-[900px]:max-w-[560px]">
+            <dl className="m-0">
+            {[
+              { k: "System", v: product.name },
+              { k: "Category", v: product.category },
+              { k: "Installed by", v: "Square One Paving, since 2000" },
+              { k: "Applications", v: `${product.applications.length} listed below` },
+              ...(work.length > 0
+                ? [{ k: "On record", v: `${work.length} site photograph${work.length === 1 ? "" : "s"}` }]
+                : []),
+              ...(docs.length > 0
+                ? [{ k: "Documents", v: `${docs.length} in the specification library` }]
+                : []),
+            ].map((row) => (
+              <div
+                key={row.k}
+                className="grid grid-cols-[120px_1fr] items-baseline gap-x-6 border-b border-hairline px-7 py-[13px] last:border-b-0 max-[700px]:grid-cols-[100px_1fr] max-[700px]:px-5"
+              >
+                <dt className="label">{row.k}</dt>
+                <dd className="m-0 text-[15px] font-medium leading-[1.45] text-ink">{row.v}</dd>
+              </div>
+            ))}
+            </dl>
+            <div className="flex flex-wrap gap-x-6 gap-y-2 border-t border-hairline px-7 py-5 max-[700px]:px-5">
+              <Link href={`/services/${product.serviceSlug}`} className="arrow-link">
+                The service <span aria-hidden="true">&rarr;</span>
+              </Link>
+              {docs.length > 0 && (
+                <Link href="/resources" className="arrow-link">
+                  Specifications <span aria-hidden="true">&rarr;</span>
+                </Link>
+              )}
+            </div>
+          </div>
+        </div>
       </Band>
 
       {/* ── Key benefits ──────── */}
