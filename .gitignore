@@ -42,6 +42,7 @@ next-env.d.ts
 
 .vercel
 .env*.local
+!.env.local.example
 .superpowers/
 .claude/worktrees/
 
@@ -52,3 +53,6 @@ next-env.d.ts
 !/_image-queue/*/
 /_image-queue/*/*
 !/_image-queue/*/.gitkeep
+
+# CMS seed output (regenerate with npm run cms:seed)
+/sanity/seed/*.ndjson
