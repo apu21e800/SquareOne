@@ -1,0 +1,65 @@
+/* ============================================================
+   Square One v2 — the polish pass (5 Sept 2026; Vern: "gentle rounding…
+   keep the square theme but soften it", "cinematic on big monitors").
+   Unlayered and loaded after globals + mobile, so it wins over utilities.
+   ============================================================ */
+
+/* ---- One soft radius. The utility classes stay in the markup; every
+   2px corner on the site takes the token, so cards, photographs, buttons,
+   fields and chips agree. The 6px orange squares keep their 1px corners —
+   that is the signature, and it stays square. ---- */
+:root { --radius: 6px; }
+[class*="rounded-[2px]"] { border-radius: var(--radius); }
+.card-panel, .btn-primary, .btn-secondary, .btn-on-slate, .btn-on-image, .chip, .tag, .reel-btn,
+input[type="text"], input[type="email"], input[type="tel"], input[type="search"], select, textarea {
+  border-radius: var(--radius);
+}
+.eyebrow::before, .stop::after { border-radius: 1px; }
+
+/* ---- The light bar over a photograph: a deeper, longer top settle so the
+   links read against a bright sky or a pale plaza, not only against a dark
+   one (Vern's screenshot: "the nav gets lost on the top right"). ---- */
+.scrim-top {
+  height: 200px;
+  background: linear-gradient(
+    to bottom,
+    rgba(20, 24, 29, 0.68) 0%,
+    rgba(20, 24, 29, 0.42) 72px,
+    rgba(20, 24, 29, 0.14) 140px,
+    rgba(20, 24, 29, 0) 100%
+  );
+}
+
+/* ---- The two split heroes (driveways, vapour blasting) align their text
+   column with the container's content edge at every width. ---- */
+@media (min-width: 701px) {
+  [class*="100vw_-_1280px"] { padding-left: max(calc((100vw - var(--container)) / 2 + var(--gutter)), var(--gutter)); }
+}
+
+/* ---- Cinematic widths. The measure opens with the screen: 1440px on a
+   27" monitor, 1600px on anything wider, with a little more gutter and
+   air; display type follows. Phones and laptops are untouched. ---- */
+@media (min-width: 1536px) {
+  :root {
+    --container: 1440px;
+    --gutter: 56px;
+    --section-y: 7.5rem;
+  }
+  h1 { font-size: clamp(2.25rem, 3.2vw, 4rem); }
+  h2:not(.label):not(.eyebrow) { font-size: clamp(1.5rem, 2.2vw, 2.6rem); }
+  .display-xl { font-size: clamp(2.4rem, 4vw, 5rem); }
+  .display-statement { font-size: clamp(1.875rem, 2.6vw, 3.25rem); }
+  .stat-num { font-size: 72px; }
+  /* Mega panels and any 1280-capped block follow the container */
+  [class*="max-w-[1280px]"] { max-width: var(--container); }
+  /* Index heroes and the field panorama get taller with the screen */
+  [data-nav-on-image][class*="h-[58vh]"] { height: 64vh; }
+  [class*="h-[55vh]"] { height: 62vh; }
+}
+@media (min-width: 1920px) {
+  :root {
+    --container: 1600px;
+    --gutter: 64px;
+  }
+  body { font-size: 17px; }
+}

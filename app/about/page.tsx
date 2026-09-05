@@ -1,6 +1,8 @@
 import Image from "next/image"
 import Link from "next/link"
 import type { Metadata } from "next"
+import { getWork, workCities } from "@/lib/work"
+import { projects } from "@/lib/projects"
 
 export const metadata: Metadata = {
   title: "About Us | BC's Decorative Pavement Specialists Since 2000",
@@ -8,46 +10,66 @@ export const metadata: Metadata = {
     "Square One Paving has installed decorative pavement across British Columbia since 2000 — installer of HUB Surface Systems products, serving Metro Vancouver, the Fraser Valley and Vancouver Island.",
   keywords: [
     "Square One Paving BC",
-    "Jan Stewart paving contractor BC",
     "HUB Surface Systems installer BC",
     "decorative pavement contractor BC",
+    "stamped asphalt contractor Vancouver",
   ],
   alternates: { canonical: "https://squareonepaving.ca/about" },
   openGraph: {
     title: "About Us | BC's Decorative Pavement Specialists Since 2000 | Square One Paving",
     description:
       "Square One Paving has installed decorative pavement across British Columbia since 2000 — cities, municipalities, developers and homeowners.",
+    images: [{ url: "/images/hero/white-rock-marine-drive-wave-crosswalk.jpg", width: 1600, height: 1067, alt: "Artist-designed crosswalk on Marine Drive, White Rock, installed by Square One Paving" }],
   },
 }
 
 /**
- * About — docs/design-v2/About.dc.html
+ * About — rebuilt 5 Sept 2026 (Vern: "we don't need Jan and Gord's images,
+ * so let's re-do the About page"). The work is the portrait.
  *
- *   1 Header            white
- *   2 The people        white  (continues the header block)
- *   3 Our story         warm,  hairline top + bottom
- *   4 Why Square One    white
- *   5 Five steps        warm,  hairline top + bottom
- *   6 Clients           white
- *   7 Where we work     warm,  hairline top
- *   8 Site Close        slate — rendered once by app/layout.tsx (Footer)
+ *   1 Header            white  — the claim, the lede
+ *   2 Photograph        full-bleed, one install, one caption (breath)
+ *   3 Our story         warm,  hairline top + bottom — story, on the record, mission
+ *   4 What we install   white  — the four trades, photographed
+ *   5 How we work       warm,  hairline top + bottom — six principles
+ *   6 Five steps        white
+ *   7 Clients           warm,  hairline top + bottom
+ *   8 Where we work     white
+ *   9 Site Close        slate — rendered once by app/layout.tsx (Footer)
  *
- * Section 08 is the page's ONLY dark region. Nothing above it may go slate.
- * Maple Ridge is the office. Vancouver Island — Ladysmith included — is a
- * service region, never an office.
+ * Section 9 is the page's ONLY dark region. Nothing above it may go slate.
+ * Maple Ridge is the office. Vancouver Island is a service region with its
+ * own phone line, never an office.
  */
 
-/** Portrait tiles are flat stone with initials until real headshots land in /public/images/about. */
-const people = [
+const trades: { name: string; line: string; href: string; src: string; alt: string }[] = [
   {
-    initials: "GS",
-    name: "Gord Stewart",
-    bio: "Owner. Decorative pavement in BC since 2000.",
+    name: "Stamped asphalt",
+    line: "StreetPrint patterns pressed into hot asphalt — brick, cobble, slate and custom templates.",
+    href: "/services/stamped-asphalt",
+    src: "/images/hero/victoria-ellis-point-walkway-streetprint.jpg",
+    alt: "British Cobble StreetPrint walkway at Ellis Point, Victoria",
   },
   {
-    initials: "JS",
-    name: "Jan Stewart",
-    bio: "Owner. Estimates and site visits — the first call on every job.",
+    name: "Decorative coatings",
+    line: "StreetBond and MMAX colour systems for asphalt and concrete — plazas, lanes, spray parks, driveways.",
+    href: "/services/decorative-coatings",
+    src: "/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg",
+    alt: "StreetBond multicolour plaza at Joyce Station, Vancouver",
+  },
+  {
+    name: "Preformed thermoplastic",
+    line: "TrafficPatterns, DecoMark, DuraTherm and PreMark — crosswalks, symbols and public art fused into the road.",
+    href: "/services/preformed-thermoplastic",
+    src: "/images/projects/ubc-musqueam-crosswalk/ubc-musqueam-crosswalk-trafficpatterns-01.jpg",
+    alt: "Musqueam crosswalk artwork at UBC, Vancouver",
+  },
+  {
+    name: "Vapour blasting",
+    line: "Surface cleaning, priming and graffiti removal with the mobile rig — the supporting service.",
+    href: "/services/vapor-blasting",
+    src: "/images/services/vapor-blasting/granville-island-vapour-blasting-01.jpg",
+    alt: "Square One crew vapour blasting at Granville Island",
   },
 ]
 
@@ -78,13 +100,14 @@ const principles = [
   },
 ]
 
-/* On the record — every figure below is counted from what this site publishes. */
+/* On the record — every figure below is counted from what this site publishes,
+   by the same helpers the home page stats use, so the two can never drift. */
 const timeline = [
   { year: "2000", event: "Square One Paving begins installing decorative pavement in British Columbia" },
-  { year: "31", event: "published case studies, from Nanaimo to Kelowna" },
-  { year: "195", event: "site photographs on record, each captioned with the system and the place" },
+  { year: String(projects.length), event: "published case studies, from Nanaimo to Kelowna" },
+  { year: String(getWork().length), event: "site photographs on record, each captioned with the system and the place" },
   { year: "9", event: "HUB Surface Systems products installed, from StreetPrint to PreMark" },
-  { year: "2", event: "regions served — Lower Mainland and Vancouver Island" },
+  { year: String(workCities().length), event: "BC communities in the work record" },
 ]
 
 const process = [
@@ -115,53 +138,46 @@ export default function AboutPage() {
   return (
     <main>
       {/* ── 1 · Header ──────── */}
-      <section className="section bg-surface">
+      <section className="bg-surface pt-[calc(var(--bar-h)+96px)] pb-20 max-[700px]:pt-[calc(var(--bar-h)+56px)] max-[700px]:pb-12">
         <div className="container-1280">
-          <div className="eyebrow">The studio</div>
+          <div className="eyebrow">About Square One</div>
 
           <h1 className="stop mt-7 max-w-[18ch] [text-wrap:balance]">
             Decorative pavement since 2000
           </h1>
 
-          <p className="mt-7 max-w-[56ch] text-[19px] leading-[1.7] text-ink-body [text-wrap:pretty] max-[700px]:text-[17px]">
-            Square One Paving has installed decorative pavement across British Columbia since 2000,
-            and is recognized as the most experienced decorative stamped asphalt applicator in
-            Western Canada. Cities, municipalities, organizations, companies and private owners
-            &mdash; from the Maple Ridge office to both sides of the Strait of Georgia.
-          </p>
-        </div>
-      </section>
-
-      {/* ── 2 · The people ──────── */}
-      <section className="bg-surface pb-28 max-[700px]:pb-14">
-        <div className="container-1280">
-          <h2>The people</h2>
-
-          <div className="mt-10 grid max-w-[880px] grid-cols-1 gap-12 min-[701px]:grid-cols-2 min-[701px]:gap-6">
-            {people.map((person) => (
-              <div key={person.name}>
-                <div className="pattern-herringbone relative aspect-[4/5] max-w-[320px] overflow-hidden rounded-[2px] border border-[color:var(--hairline)]">
-                  <span
-                    aria-hidden="true"
-                    className="absolute inset-0 flex items-center justify-center text-[64px] font-semibold [font-family:var(--font-display)] tracking-[-0.01em] text-[rgba(20,22,26,0.22)]"
-                  >
-                    {person.initials}
-                  </span>
-                </div>
-
-                <h3 className="mt-[18px]">{person.name}</h3>
-
-                <p className="mt-1.5 max-w-[36ch] text-[15px] leading-[1.6] text-ink-muted">
-                  {person.bio}
-                </p>
-              </div>
-            ))}
+          <div className="mt-9 grid grid-cols-12 gap-x-10 gap-y-6 max-[900px]:grid-cols-1">
+            <p className="col-span-7 max-w-[56ch] text-[19px] leading-[1.7] text-ink-body [text-wrap:pretty] max-[700px]:text-[17px]">
+              Square One Paving has installed decorative pavement across British Columbia since
+              2000, and is recognized as the most experienced decorative stamped asphalt applicator
+              in Western Canada. Cities, municipalities, organizations, companies and private
+              owners &mdash; from the Maple Ridge office to both sides of the Strait of Georgia.
+            </p>
+            <p className="col-span-5 max-w-[40ch] self-start pt-2 text-[15px] leading-[1.65] text-ink-muted max-[900px]:max-w-[56ch] max-[900px]:pt-0">
+              Installer of HUB Surface Systems products &mdash; StreetPrint, StreetBond, MMAX,
+              TrafficPatterns, TrafficPatternsXD, DecoMark, DuraTherm, PreMark and DuraShield
+              &mdash; every one installed to its manufacturer&apos;s specification.
+            </p>
           </div>
         </div>
       </section>
 
+      {/* ── 2 · Photograph — the work is the portrait ──────── */}
+      <section className="relative h-[62vh] min-h-[420px] overflow-hidden bg-surface-stone">
+        <Image
+          src="/images/hero/white-rock-marine-drive-wave-crosswalk.jpg"
+          alt="Artist-designed crosswalk of waves, sand and sky in TrafficPatterns on Marine Drive, White Rock, installed by Square One Paving"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover [object-position:center_60%]"
+        />
+        <div aria-hidden="true" className="scrim scrim-light" />
+        <div className="caption">Marine Drive, White Rock &middot; TrafficPatterns &middot; 2025</div>
+      </section>
+
       {/* ── 3 · Our story ──────── */}
-      <section className="section border-y border-[color:var(--hairline)] bg-surface-warm">
+      <section className="section border-b border-[color:var(--hairline)] bg-surface-warm">
         <div className="container-1280">
           <div className="grid grid-cols-1 gap-14 min-[901px]:grid-cols-2 min-[901px]:gap-x-20">
             <div>
@@ -169,7 +185,7 @@ export default function AboutPage() {
 
               <h2 className="mt-5">One trade, done properly</h2>
 
-              <div className="mt-8 space-y-5 text-[16px] leading-[1.65] text-ink-body">
+              <div className="mt-8 space-y-5 text-[16px] leading-[1.7] text-ink-body">
                 <p>
                   Square One Paving started in 2000 doing one thing: decorative pavement, in BC,
                   through BC weather. Twenty-five years on, the work has earned a longstanding
@@ -210,8 +226,8 @@ export default function AboutPage() {
               </div>
             </div>
 
-            <div>
-              <figure className="relative m-0 aspect-[4/5] overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)]">
+            <div className="flex flex-col gap-6">
+              <figure className="relative m-0 aspect-[4/3] overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)]">
                 <Image
                   src="/images/S1_update_v2/photos/Featured%20image%20options/Langley-event-3-2048x1536.jpg"
                   alt="Circle of Life artwork in StreetBond at Langley Events Centre, installed by Square One Paving"
@@ -225,12 +241,12 @@ export default function AboutPage() {
                 </figcaption>
               </figure>
 
-              <div className="mt-6 rounded-[2px] border border-[color:var(--hairline)] bg-[color:var(--surface)] p-8 max-[700px]:p-6">
+              <div className="rounded-[2px] border border-[color:var(--hairline)] bg-[color:var(--surface)] p-8 max-[700px]:p-6">
                 <div className="label">Our mission</div>
 
                 <blockquote className="m-0 mt-5 p-0">
                   <p className="quote-display m-0 text-[24px] leading-[1.4] text-ink [text-wrap:pretty] max-[700px]:text-[21px]">
-                    &ldquo;Build surfaces that perform as good as they look — and last.&rdquo;
+                    &ldquo;Build surfaces that perform as good as they look &mdash; and last.&rdquo;
                   </p>
                 </blockquote>
 
@@ -245,16 +261,47 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── 4 · Why Square One ──────── */}
+      {/* ── 4 · What we install ──────── */}
       <section className="section bg-surface">
         <div className="container-1280">
-          <h2>Why Square One</h2>
+          <div className="flex flex-wrap items-baseline justify-between gap-6">
+            <div>
+              <div className="eyebrow">What we install</div>
+              <h2 className="mt-4">Four trades, one crew</h2>
+            </div>
+            <Link href="/services" className="arrow-link whitespace-nowrap">
+              All services <span>&rarr;</span>
+            </Link>
+          </div>
 
-          <div className="mt-10 grid grid-cols-1 gap-x-24 gap-y-14 min-[701px]:grid-cols-2">
+          <div className="rail-m mt-10 grid grid-cols-4 gap-6 max-[900px]:grid-cols-2 max-[560px]:grid-cols-1">
+            {trades.map((t) => (
+              <Link key={t.href} href={t.href} className="card group block">
+                <div className="relative aspect-[4/3] overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)]">
+                  <Image src={t.src} alt={t.alt} fill sizes="(max-width: 900px) 50vw, 25vw" className="object-cover" />
+                </div>
+                <h3 className="mt-5">{t.name}</h3>
+                <p className="mt-2 text-[15px] leading-[1.6] text-ink-body [text-wrap:pretty]">{t.line}</p>
+                <span className="arrow-link mt-3 inline-block">
+                  Explore <span aria-hidden="true">&rarr;</span>
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── 5 · How we work ──────── */}
+      <section className="section border-y border-[color:var(--hairline)] bg-surface-warm">
+        <div className="container-1280">
+          <div className="eyebrow">How we work</div>
+          <h2 className="mt-4">Why Square One</h2>
+
+          <div className="mt-10 grid grid-cols-1 gap-x-16 gap-y-12 min-[701px]:grid-cols-2 min-[1101px]:grid-cols-3">
             {principles.map((principle) => (
               <div key={principle.title} className="border-t border-[color:var(--hairline)] pt-6">
                 <h3>{principle.title}</h3>
-                <p className="mt-2.5 max-w-[52ch] text-[15px] leading-[1.65] text-ink-body">
+                <p className="mt-2.5 max-w-[46ch] text-[15px] leading-[1.65] text-ink-body">
                   {principle.body}
                 </p>
               </div>
@@ -263,10 +310,11 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── 5 · Five steps, one crew ──────── */}
-      <section className="section border-y border-[color:var(--hairline)] bg-surface-warm">
+      {/* ── 6 · Five steps, one crew ──────── */}
+      <section className="section bg-surface">
         <div className="container-1280">
-          <h2>Five steps, one crew</h2>
+          <div className="eyebrow">From the site walk to the walk-through</div>
+          <h2 className="mt-4">Five steps, one crew</h2>
 
           <div className="mt-10 grid grid-cols-1 gap-10 min-[701px]:grid-cols-2 min-[1001px]:grid-cols-5">
             {process.map((item) => (
@@ -282,14 +330,14 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── 6 · Clients ──────── */}
-      <section className="section bg-surface">
+      {/* ── 7 · Clients ──────── */}
+      <section className="section border-y border-[color:var(--hairline)] bg-surface-warm">
         <div className="container-1280">
           <div className="eyebrow">Client organizations since 2000</div>
 
           <div className="mt-8 flex max-w-[1080px] flex-wrap gap-x-11 gap-y-3.5">
             {clients.map((client) => (
-              <span key={client} className="text-[15px] font-medium text-ink-muted">
+              <span key={client} className="text-[16px] font-medium text-ink-body">
                 {client}
               </span>
             ))}
@@ -297,14 +345,14 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── 7 · Where we work ──────── */}
-      <section className="section border-t border-[color:var(--hairline)] bg-surface-warm">
+      {/* ── 8 · Where we work ──────── */}
+      <section className="section bg-surface">
         <div className="container-1280">
           <h2>Where we work</h2>
 
           <p className="mt-7 max-w-[56ch] text-[17px] leading-[1.65] text-ink-body [text-wrap:pretty]">
             One office in Maple Ridge, crews on both sides of the Strait. Vancouver, Surrey,
-            Burnaby, Richmond, Victoria, Nanaimo and Ladysmith are among the communities we serve —
+            Burnaby, Richmond, Victoria, Nanaimo and Ladysmith are among the communities we serve &mdash;
             and the mobile vapour blasting rig goes wherever the surface is.
           </p>
 

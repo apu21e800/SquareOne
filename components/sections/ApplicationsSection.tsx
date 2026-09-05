@@ -1,53 +1,31 @@
 import Link from "next/link"
+import { WORK_APPS, workFor } from "@/lib/work"
 
-type Application = {
-  label: string
-  desc: string
-  href: string
+/* Row order is the business hierarchy (lib/work.ts WORK_APPS): commercial
+   and municipal work leads, residential driveways follow, vapour blasting
+   closes as the extra service. Do not resort alphabetically or "by
+   interest" — the order is intentional. Each row is one of the ten galleries
+   the Services panel and /galleries carry, with its photograph count from
+   the record, so the home page, the menu and the galleries name the same
+   ten things the same way. */
+
+const VAPOUR = {
+  label: "Vapour blasting",
+  desc: "Surface cleaning, priming, graffiti and mould removal — mobile, dustless, no substrate damage. The supporting service.",
+  href: "/services/vapor-blasting",
 }
 
-/* Row order is the business hierarchy: commercial and municipal work leads,
-   residential driveways follow, vapour blasting closes as the extra service.
-   Do not resort alphabetically or "by interest" — the order is intentional. */
-const applications: Application[] = [
-  {
-    label: "Commercial spaces",
-    desc: "Plazas, retail thresholds and parking lots that bring order and identity to large paved sites.",
-    href: "/applications",
-  },
-  {
-    label: "Crosswalks",
-    desc: "Decorative and high-visibility crossings in thermoplastic or stamped asphalt.",
-    href: "/applications",
-  },
-  {
-    label: "Bus & bike lanes",
-    desc: "Red and green priority lane surfacing that holds its colour under traffic.",
-    href: "/applications",
-  },
-  {
-    label: "Public spaces",
-    desc: "Plazas, greenways and park paths with pattern and colour underfoot.",
-    href: "/applications",
-  },
-  {
-    label: "School zones",
-    desc: "Slip-resistant, high-visibility markings for pedestrian priority areas.",
-    href: "/applications",
-  },
-  {
-    label: "Driveways",
-    desc: "Stamped asphalt drives for Victoria and Vancouver homes — patterned and coloured to suit the house.",
-    href: "/driveways",
-  },
-  {
-    label: "Vapour blasting",
-    desc: "Surface cleaning, priming, graffiti and mould removal — mobile, dustless, no substrate damage.",
-    href: "/services/vapor-blasting",
-  },
-]
-
 export default function ApplicationsSection() {
+  const rows = [
+    ...WORK_APPS.map((a) => ({
+      label: a.label,
+      desc: a.blurb,
+      href: a.slug === "driveways" ? "/driveways" : `/applications/${a.slug}`,
+      count: workFor(a.slug).length,
+    })),
+    { ...VAPOUR, count: 0 },
+  ]
+
   return (
     <section
       className="grain-paper section relative overflow-hidden"
@@ -57,24 +35,27 @@ export default function ApplicationsSection() {
         borderBottom: "1px solid var(--hairline)",
       }}
     >
-
       <span aria-hidden="true" className="ghost-index">03</span>
 
       <div className="container-1280 relative z-[1]">
-        <div data-reveal>
-          <p className="eyebrow">Applications</p>
-
-          <h2 className="mt-5">Where these systems are specified</h2>
+        <div data-reveal className="flex flex-wrap items-baseline justify-between gap-6">
+          <div>
+            <p className="eyebrow">Applications</p>
+            <h2 className="mt-5">Where these systems are specified</h2>
+          </div>
+          <Link href="/galleries" className="arrow-link whitespace-nowrap">
+            Every photograph, by application <span>&rarr;</span>
+          </Link>
         </div>
 
         {/* Contents-rows — the catalogue's table-of-contents move (SOUL-PASS MOVE 2) */}
         <div data-reveal-group className="mt-12">
-          {applications.map((app, i) => (
+          {rows.map((app, i) => (
             <Link
-              key={app.label}
+              key={app.href}
               href={app.href}
               data-reveal
-              className="group grid grid-cols-[72px_minmax(180px,1fr)_2fr_auto] items-baseline gap-x-8 border-b border-hairline py-6 first:border-t max-[700px]:grid-cols-[44px_1fr_auto] max-[700px]:py-5"
+              className="group grid grid-cols-[72px_minmax(220px,1fr)_2fr_auto] items-baseline gap-x-8 border-b border-hairline py-6 first:border-t max-[700px]:grid-cols-[44px_1fr_auto] max-[700px]:py-5"
             >
               <span className="text-[13px] font-semibold tracking-[0.08em] text-ink-muted">
                 {String(i + 1).padStart(2, "0")}
@@ -88,11 +69,13 @@ export default function ApplicationsSection() {
               >
                 {app.desc}
               </p>
-              <span
-                aria-hidden="true"
-                className="arrow-link justify-self-end text-ink-muted"
-              >
-                <span>&rarr;</span>
+              <span className="flex items-baseline gap-5 justify-self-end">
+                {app.count > 0 && (
+                  <span className="label whitespace-nowrap max-[700px]:hidden">{app.count} photos</span>
+                )}
+                <span aria-hidden="true" className="arrow-link text-ink-muted">
+                  <span>&rarr;</span>
+                </span>
               </span>
             </Link>
           ))}

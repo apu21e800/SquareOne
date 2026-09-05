@@ -71,13 +71,4 @@
   /* Footer: the two link lists share a row; brand and contact span it. */
   footer .grid { grid-template-columns: 1fr 1fr; column-gap: 20px; row-gap: 40px; }
   footer .grid > :first-child, footer .grid > :last-child { grid-column: 1 / -1; }
-
-  /* Specification library: Preview / Download get thumb room. */
-  a[aria-label^="Preview "], a[aria-label^="Download "] {
-    display: inline-flex;
-    align-items: center;
-    min-height: 40px;
-    padding-inline: 6px;
-    margin-inline: -6px;
-  }
 }
