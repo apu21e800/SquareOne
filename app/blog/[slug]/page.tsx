@@ -4,20 +4,21 @@ import Link from "next/link"
 import { Metadata } from "next"
 import type { CSSProperties } from "react"
 import { MDXRemote } from "next-mdx-remote/rsc"
-import { getAllPosts, getPostBySlug } from "@/lib/blog"
-import type { BlogPost, BlogPostMeta } from "@/lib/blog"
+import { getPost, getPosts } from "@/lib/blog"
+import type { AnyPost, BlogPostMeta } from "@/lib/blog"
+import PortableBody from "@/components/blog/PortableBody"
 
 interface Props {
   params: Promise<{ slug: string }>
 }
 
 export async function generateStaticParams() {
-  return getAllPosts().map((post) => ({ slug: post.slug }))
+  return (await getPosts()).map((post) => ({ slug: post.slug }))
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
-  const post = getPostBySlug(slug)
+  const post = await getPost(slug)
   if (!post) return {}
 
   return {
@@ -47,9 +48,12 @@ function formatDate(dateStr: string) {
   })
 }
 
-function estimateReadTime(content: string) {
-  const words = content?.split(/\s+/).length ?? 0
+function estimateReadTime(words: number) {
   return Math.max(2, Math.ceil(words / 200))
+}
+
+function wordCount(post: AnyPost): number {
+  return "body" in post ? post.words : (post.content?.split(/\s+/).length ?? 0)
 }
 
 /**
@@ -66,11 +70,11 @@ function captionFor(post: Pick<BlogPostMeta, "category" | "date">): string {
 }
 
 /** Same category scores highest, then shared tags, then recency. */
-function relatedPosts(current: BlogPost, limit = 2): BlogPostMeta[] {
+function relatedPosts(current: AnyPost, all: BlogPostMeta[], limit = 2): BlogPostMeta[] {
   const currentTags = new Set((current.tags ?? []).map((tag) => tag.toLowerCase()))
   const currentCategory = current.category?.toLowerCase() ?? ""
 
-  return getAllPosts()
+  return all
     .filter((post) => post.slug !== current.slug)
     .map((post) => {
       let score = 0
@@ -148,11 +152,11 @@ const proseClass = [
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params
-  const post = getPostBySlug(slug)
+  const post = await getPost(slug)
 
   if (!post) notFound()
 
-  const related = relatedPosts(post)
+  const related = relatedPosts(post, await getPosts())
   const heroCaption = captionFor(post)
   const shareUrl = `https://squareonepaving.ca/blog/${slug}`
 
@@ -223,7 +227,7 @@ export default async function BlogPostPage({ params }: Props) {
           <div className="mt-[18px] text-[14px] text-[color:var(--ink-muted)]">
             By {post.author || "Square One Paving"}
             {post.date && <> &middot; {formatDate(post.date)}</>}
-            {post.content && <> &middot; {estimateReadTime(post.content)} min read</>}
+            {wordCount(post) > 0 && <> &middot; {estimateReadTime(wordCount(post))} min read</>}
           </div>
 
           {/* ── Lede photograph ──────── */}
@@ -248,7 +252,7 @@ export default async function BlogPostPage({ params }: Props) {
 
           {/* ── Article body ──────── */}
           <div className={`mt-12 ${proseClass}`} style={proseTokens}>
-            <MDXRemote source={post.content} />
+            {"body" in post ? <PortableBody value={post.body} /> : <MDXRemote source={post.content} />}
           </div>
 
           {/* ── Quiet conversion panel ──────── */}

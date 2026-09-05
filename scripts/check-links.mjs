@@ -81,8 +81,8 @@ for (const file of codeFiles) {
     if (!fs.existsSync(fsPath)) errors.push(`${rel(file)}: missing asset ${resolved}`)
   }
 }
-// Slugs whose lede is fixed in lib/blog.ts LEDE never read their front-matter image
-const blogLib = fs.existsSync("lib/blog.ts") ? fs.readFileSync("lib/blog.ts", "utf8") : ""
+// Slugs whose lede is fixed in lib/blog-ledes.ts LEDE never read their front-matter image
+const blogLib = fs.existsSync("lib/blog-ledes.ts") ? fs.readFileSync("lib/blog-ledes.ts", "utf8") : ""
 const overridden = new Set([...blogLib.matchAll(/^\s+"([^"]+)":\s/gm)].map((m) => m[1]))
 for (const file of walk(path.join(ROOT, "content"), new Set([".mdx", ".md"]))) {
   if (overridden.has(path.basename(file).replace(/\.(mdx|md)$/, ""))) continue
@@ -91,9 +91,9 @@ for (const file of walk(path.join(ROOT, "content"), new Set([".mdx", ".md"]))) {
   const m = fm.match(/featured_image:\s*"?([^"\n]*)"?/)
   if (!m || !m[1].trim()) continue
   const v = m[1].trim()
-  if (/^https?:\/\//.test(v)) { warnings.push(`${rel(file)}: remote featured_image ${v} (override it in lib/blog.ts LEDE)`); continue }
+  if (/^https?:\/\//.test(v)) { warnings.push(`${rel(file)}: remote featured_image ${v} (override it in lib/blog-ledes.ts LEDE)`); continue }
   const fsPath = path.join(PUBLIC, decodeURIComponent(v.replace(/%20/g, " ")))
-  if (!fs.existsSync(fsPath) && !fs.existsSync(path.join(PUBLIC, decodeURIComponent(v)))) warnings.push(`${rel(file)}: featured_image not on disk ${v} (override it in lib/blog.ts LEDE)`)
+  if (!fs.existsSync(fsPath) && !fs.existsSync(path.join(PUBLIC, decodeURIComponent(v)))) warnings.push(`${rel(file)}: featured_image not on disk ${v} (override it in lib/blog-ledes.ts LEDE)`)
 }
 
 // ── Redirect destinations ────────

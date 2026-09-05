@@ -1,5 +1,6 @@
 import Link from "next/link"
 import BrandMark from "@/components/BrandMark"
+import { getSiteSettings } from "@/lib/cms"
 
 /* Site close — the one dark region on every page (docs/design-v2 Site Close),
    rebuilt 4 Sept 2026 at Vern's call ("just looks like a jumble of text").
@@ -10,6 +11,10 @@ import BrandMark from "@/components/BrandMark"
    250-391-0270 Vancouver Island, 1-877-391-0270 toll-free,
    office@squareonepaving.com, 505-20800 Lougheed Hwy, Maple Ridge. */
 
+const TIKTOK_PATH =
+  "M12.53.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"
+
+/** Icon paths by network; the links themselves come from Site settings (CMS) with the record as fallback. */
 const socials = [
   { label: "Facebook", href: "https://www.facebook.com/squareonepaving/", path: "M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5 3.66 9.13 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.89 3.77-3.89 1.09 0 2.24.19 2.24.19v2.47h-1.26c-1.24 0-1.63.78-1.63 1.57v1.88h2.78l-.45 2.91h-2.33V22c4.78-.81 8.44-4.94 8.44-9.94z" },
   { label: "Instagram", href: "https://www.instagram.com/squareonepaving/", path: "M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.81.25 2.23.42.56.22.96.48 1.38.9.42.42.68.82.9 1.38.17.42.37 1.06.42 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.81-.42 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.17-1.06.37-2.23.42-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.81-.25-2.23-.42-.56-.22-.96-.48-1.38-.9-.42-.42-.68-.82-.9-1.38-.17-.42-.37-1.06-.42-2.23-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.05-1.17.25-1.81.42-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.17 1.06-.37 2.23-.42 1.27-.06 1.65-.07 4.85-.07zM12 0C8.74 0 8.33.01 7.05.07 5.78.13 4.9.33 4.14.63c-.79.31-1.46.72-2.13 1.39A5.9 5.9 0 0 0 .63 4.14C.33 4.9.13 5.78.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.27.26 2.15.56 2.91.31.79.72 1.46 1.39 2.13.67.67 1.34 1.08 2.13 1.39.76.3 1.64.5 2.91.56C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c1.27-.06 2.15-.26 2.91-.56.79-.31 1.46-.72 2.13-1.39.67-.67 1.08-1.34 1.39-2.13.3-.76.5-1.64.56-2.91.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.15-.56-2.91a5.9 5.9 0 0 0-1.39-2.13A5.9 5.9 0 0 0 19.86.63c-.76-.3-1.64-.5-2.91-.56C15.67.01 15.26 0 12 0zm0 5.84a6.16 6.16 0 1 0 0 12.32 6.16 6.16 0 0 0 0-12.32zm0 10.16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.41-11.85a1.44 1.44 0 1 0 0 2.88 1.44 1.44 0 0 0 0-2.88z" },
@@ -41,11 +46,11 @@ const company: FooterLink[] = [
   { label: "Contact", href: "/contact" },
 ]
 
-const phones = [
-  { label: "Office · Maple Ridge", display: "604-466-9902", href: "tel:+16044669902" },
-  { label: "Vancouver Island", display: "250-391-0270", href: "tel:+12503910270" },
-  { label: "Toll-free", display: "1-877-391-0270", href: "tel:+18773910270" },
-]
+/** "604-466-9902" → "tel:+16044669902" */
+const tel = (display: string) => {
+  const digits = display.replace(/\D/g, "")
+  return `tel:+${digits.length === 10 ? "1" + digits : digits}`
+}
 
 const hairline = "var(--hairline-slate)"
 
@@ -66,8 +71,24 @@ function Column({ heading, links }: { heading: string; links: FooterLink[] }) {
   )
 }
 
-export default function Footer() {
+export default async function Footer() {
   const year = new Date().getFullYear()
+  const site = await getSiteSettings()
+  const phones = [
+    { label: "Office · Maple Ridge", display: site.phoneOffice, href: tel(site.phoneOffice) },
+    { label: "Vancouver Island", display: site.phoneIsland, href: tel(site.phoneIsland) },
+    { label: "Toll-free", display: site.phoneTollFree, href: tel(site.phoneTollFree) },
+  ]
+  const links: Record<string, string | undefined> = {
+    Facebook: site.facebook,
+    Instagram: site.instagram,
+    LinkedIn: site.linkedin,
+    YouTube: site.youtube,
+  }
+  const networks = [
+    ...socials.map((n) => ({ ...n, href: links[n.label] ?? n.href })),
+    ...(site.tiktok ? [{ label: "TikTok", href: site.tiktok, path: TIKTOK_PATH }] : []),
+  ]
 
   return (
     <div className="bg-[color:var(--surface-slate)]">
@@ -92,10 +113,10 @@ export default function Footer() {
             <span className="text-[15px] text-[#8A9098]">
               or call{" "}
               <a
-                href="tel:+16044669902"
+                href={tel(site.phoneOffice)}
                 className="font-medium text-[#C6CBD1] transition-colors hover:text-white"
               >
-                604-466-9902
+                {site.phoneOffice}
               </a>
             </span>
           </div>
@@ -113,12 +134,11 @@ export default function Footer() {
               </Link>
 
               <p className="mt-6 max-w-[34ch] text-[15px] leading-[1.7] text-[#9BA1A9] [text-wrap:pretty]">
-                Decorative pavement for BC since 2000. Installer of HUB Surface Systems products,
-                based in Maple Ridge and working across the Lower Mainland and Vancouver Island.
+                {site.positioning}
               </p>
 
               <div className="-ml-[11px] mt-6 flex items-center gap-1">
-                {socials.map((s) => (
+                {networks.map((s) => (
                   <a
                     key={s.label}
                     href={s.href}
@@ -163,17 +183,17 @@ export default function Footer() {
                 <li className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
                   <span className="text-[13px] text-[#8A9098]">Email</span>
                   <a
-                    href="mailto:office@squareonepaving.com"
+                    href={`mailto:${site.email}`}
                     className="text-[15px] font-medium text-white transition-colors hover:text-[#C6CBD1] [overflow-wrap:anywhere]"
                   >
-                    office@squareonepaving.com
+                    {site.email}
                   </a>
                 </li>
               </ul>
               <address className="mt-6 border-t pt-5 text-[14px] not-italic leading-[1.6] text-[#8A9098]" style={{ borderColor: hairline }}>
-                505&ndash;20800 Lougheed Highway
+                {site.addressLine1}
                 <br />
-                Maple Ridge, BC V2X 3P2
+                {site.addressLine2}
               </address>
             </div>
           </div>
