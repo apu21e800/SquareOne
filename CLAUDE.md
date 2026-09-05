@@ -18,6 +18,10 @@ for municipalities, developers, and contractors across BC.
 **Applications**: Crosswalks, Bus & Bike Lanes, Parking Lots, Driveways, School Zones, Public Spaces, Surface Prep
 
 ## Brand
+<!-- Type system: ONE face (canon §2.5 as amended 4 Sept 2026, Vern's call) —
+     Poppins carries display at 600 spaced caps and body at 400/500. Nothing
+     renders below weight 400 except the ghost numerals at 300. The earlier
+     Fraunces + Inter amendment (2026-08-28) is superseded. See app/layout.tsx. -->
 - Colors: Warm beige background (#F5F3F0), orange accent (#C85A3A), stone (#8B8680), charcoal (#2D2D2D)
 - Tone: Professional, practical, BC-focused
 - Positioning: "BC's Trusted Decorative Pavement Applicators" — quality work that lasts
