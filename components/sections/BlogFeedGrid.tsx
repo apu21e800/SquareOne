@@ -39,10 +39,15 @@ export default function BlogFeedGrid({ posts }: { posts: BlogPostMeta[] }) {
       id="journal"
       className="grain-paper section relative overflow-hidden border-t border-[color:var(--hairline)] bg-[color:var(--surface-warm)]"
     >
-      <span aria-hidden="true" className="ghost-index">05</span>
+      <span aria-hidden="true" className="ghost-index">06</span>
 
       <div className="container-1280 relative z-[1]">
-        <h2 data-reveal>From the blog</h2>
+        <div data-reveal>
+          <div className="eyebrow">
+            <span className="eyebrow-num">06</span>Field notes
+          </div>
+          <h2 className="mt-5">From the blog</h2>
+        </div>
 
         <div data-reveal-group className="rail-m mt-10 grid grid-cols-1 gap-6 min-[701px]:grid-cols-3">
           {posts.map((post) => (

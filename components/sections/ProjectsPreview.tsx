@@ -30,11 +30,16 @@ export default function ProjectsPreview() {
       id="work"
       className="section relative overflow-hidden border-t border-[color:var(--hairline)] bg-[color:var(--surface)]"
     >
-      <span aria-hidden="true" className="ghost-index">02</span>
+      <span aria-hidden="true" className="ghost-index">03</span>
 
       <div className="container-1280 relative z-[1]">
         <div data-reveal className="flex flex-wrap items-baseline justify-between gap-6">
-          <h2>Selected work</h2>
+          <div>
+            <div className="eyebrow">
+              <span className="eyebrow-num">03</span>Case studies
+            </div>
+            <h2 className="mt-5">Selected work</h2>
+          </div>
           <Link href="/projects" className="arrow-link whitespace-nowrap">
             All {projects.length} projects <span>&rarr;</span>
           </Link>

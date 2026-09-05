@@ -43,12 +43,14 @@ export default function FollowTheWork({ settings, tiles }: { settings: SiteSetti
       aria-labelledby="follow-heading"
       className="section relative overflow-hidden border-t border-[color:var(--hairline)] bg-[color:var(--surface)]"
     >
-      <span aria-hidden="true" className="ghost-index">06</span>
+      <span aria-hidden="true" className="ghost-index">07</span>
 
       <div className="container-1280 relative z-[1]">
         <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-6">
           <div data-reveal>
-            <div className="eyebrow">On Instagram &middot; {handle}</div>
+            <div className="eyebrow">
+              <span className="eyebrow-num">07</span>On Instagram &middot; {handle}
+            </div>
             <h2 id="follow-heading" className="mt-4 [text-wrap:balance]">
               {settings.socialHeading}
             </h2>
