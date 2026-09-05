@@ -208,6 +208,8 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },
+      // Sanity's image CDN — photographs the marketing team uploads in the Studio
+      { protocol: "https", hostname: "cdn.sanity.io" },
       { protocol: "https", hostname: "plus.unsplash.com" },
       { protocol: "https", hostname: "squareonepaving.com" },
       { protocol: "https", hostname: "www.squareonepaving.com" },
