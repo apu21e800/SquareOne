@@ -5,12 +5,10 @@ import StatsBar from "@/components/sections/StatsBar"
 import AudienceBand from "@/components/sections/AudienceBand"
 import EditorialBand from "@/components/sections/EditorialBand"
 import ServicesGrid from "@/components/sections/ServicesGrid"
-import FieldPanorama from "@/components/sections/FieldPanorama"
+import MaterialsBand from "@/components/sections/MaterialsBand"
 import ProjectsPreview from "@/components/sections/ProjectsPreview"
 import ApplicationsSection from "@/components/sections/ApplicationsSection"
 import DrivewaysBand from "@/components/sections/DrivewaysBand"
-import TrustStrip from "@/components/sections/TrustStrip"
-import SiteWalkBar from "@/components/sections/SiteWalkBar"
 import BlogFeed from "@/components/sections/BlogFeed"
 import FollowTheWork from "@/components/sections/FollowTheWork"
 import { getSiteSettings, getSlots, getSocialPosts, slotImage, slotText } from "@/lib/cms"
@@ -43,25 +41,29 @@ export const metadata: Metadata = {
 }
 
 /**
- * Homepage composition — docs/SOUL-PASS.md MOVE 2 (density variance)
+ * Homepage composition — the character pass, 5 Sept 2026 (Vern: "everything
+ * is very white", "the huge useless image", "the free site walk section
+ * blends together", "weave the clients in somehow else").
  *
- *   01 Hero                     full-bleed photograph (breath 1 of 2)
- *   02 Stats                    warm, TIGHT band, hairline top + bottom
- *   02b Audience band           white, three persona cards (hierarchy order)
- *   03 Editorial statement      warm, one display line, generous air
- *   04 Services       #services white, dense cards
- *   05 Field panorama           full-bleed photograph (breath 2 of 2)
- *   06 Selected work  #work     white, hairline top
- *   07 Applications             warm, contents-rows, hairline top + bottom
- *   07b Driveways band          white, photo + copy — the residential line
- *   08 Trust strip (real client names only)  white
- *   08b Site-walk bar           white, hairline top — slim conversion band
- *   09 Field notes    #journal  warm, hairline top
- *   09b Follow the work #follow white, hairline top — the social strip
- *   10 Site Close               slate — rendered once by app/layout.tsx (Footer)
+ *   Hero                        full-bleed photograph — the one breath
+ *   Stats                       warm, tight band, hairline top + bottom
+ *   Audience band               white, three persona cards (hierarchy order)
+ *   Statement                   SLATE — one display line + the client index
+ *   01 Services       #services white, dense cards
+ *   02 Materials board          stone, hairline top + bottom — patterns drawn,
+ *                               colours by name (replaces the field panorama)
+ *   03 Selected work  #work     white, hairline top
+ *   04 Applications             warm, photo contents-rows, hairline top + bottom
+ *   05 Driveways band           white — the residential line + the orange
+ *                               offer card (the old site-walk bar folded in)
+ *   06 Field notes    #journal  warm, hairline top
+ *   07 Follow the work #follow  white, hairline top — the social strip
+ *   Site Close                  slate — rendered once by app/layout.tsx (Footer)
  *
- * Two full-bleed breaths per page, never more. Section 10 is the page's
- * ONLY dark region. Nothing above it may go slate.
+ * Rhythm: white → paper → white → SLATE → white → stone → white → paper →
+ * white → paper → white → slate. Two dark bands on the page, never adjacent;
+ * one orange block (the offer card). The client names live in the statement
+ * band and on /about (lib/clients.ts) — the trust strip is retired.
  *
  * ServicesGrid and ProjectsPreview carry #services / #work on their own
  * <section>. BlogFeedGrid does not carry #journal, so the anchor lives here;
@@ -91,17 +93,13 @@ export default async function Home() {
 
       <ServicesGrid />
 
-      <FieldPanorama />
+      <MaterialsBand />
 
       <ProjectsPreview />
 
       <ApplicationsSection />
 
       <DrivewaysBand />
-
-      <TrustStrip />
-
-      <SiteWalkBar />
 
       <BlogFeed />
 

@@ -1,8 +1,19 @@
 /* ============================================================
-   Square One v2 — the polish pass (5 Sept 2026; Vern: "gentle rounding…
-   keep the square theme but soften it", "cinematic on big monitors").
+   Square One v2 — the polish + character passes (5 Sept 2026; Vern:
+   "gentle rounding… keep the square theme but soften it", "cinematic on
+   big monitors", then "H1 could pop more", "the stats look too big",
+   "everything is very white", "give the site a bit more character").
    Unlayered and loaded after globals + mobile, so it wins over utilities.
+   Where this file disagrees with the comments in globals.css, this file
+   is current — the canon moved on Vern's word.
    ============================================================ */
+
+/* ---- Surfaces: paper and stone deepen a step so the white → paper →
+   stone alternation can actually be seen. Slate is unchanged. ---- */
+:root {
+  --surface-warm:  #F6F3EE;
+  --surface-stone: #ECE7DF;
+}
 
 /* ---- One soft radius. The utility classes stay in the markup; every
    2px corner on the site takes the token, so cards, photographs, buttons,
@@ -15,6 +26,126 @@ input[type="text"], input[type="email"], input[type="tel"], input[type="search"]
   border-radius: var(--radius);
 }
 .eyebrow::before, .stop::after { border-radius: 1px; }
+
+/* ---- Type: the display voice gets its weight back. H1, the hero line and
+   the statement carry Poppins 700 at tight tracking — a headline should
+   land, not float. H2 stays 600. Stat numerals come down a size. ---- */
+h1 {
+  font-size: clamp(2.5rem, 4.2vw, 4.25rem);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.02;
+}
+.display-xl {
+  font-size: clamp(2.6rem, 5vw, 5rem);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+.display-statement {
+  font-size: clamp(2rem, 2.8vw, 3rem);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.08;
+}
+h2:not(.label):not(.eyebrow) {
+  font-size: clamp(1.5rem, 2.4vw, 2.1rem);
+  letter-spacing: 0.04em;
+  line-height: 1.12;
+}
+.stat-num { font-size: 52px; letter-spacing: 0; }
+@media (max-width: 700px) { .stat-num { font-size: 40px; } }
+
+/* The full stop scales with the line it closes (never below the 6px square). */
+.stop::after {
+  width: max(6px, 0.11em);
+  height: max(6px, 0.11em);
+  margin-left: max(12px, 0.2em);
+}
+
+/* ---- Numbered eyebrows: the section index in ink, then the label in
+   muted caps — "■ 04 APPLICATIONS". The ghost numeral behind the section
+   carries the same figure. ---- */
+.eyebrow-num {
+  color: var(--ink);
+  letter-spacing: 0.08em;
+}
+.eyebrow-on-image .eyebrow-num { color: #FFFFFF; }
+
+/* Ghost numerals read on every surface they sit on. */
+.ghost-index-slate {
+  color: rgba(241, 238, 233, 0.04);
+  top: auto;
+  right: auto;
+  bottom: -0.75rem;
+  left: 1.25rem;
+}
+.ghost-index-stone { color: rgba(20, 22, 26, 0.045); }
+
+/* ---- The offer card (home, driveways band): the page's one orange block.
+   White type, a white button, and the square motif drawn in the corner. ---- */
+.offer-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: #FFFFFF;
+  padding: 28px 30px 30px;
+}
+.offer-card::after {
+  content: "";
+  position: absolute;
+  right: 22px;
+  top: 22px;
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.92);
+}
+.offer-card::before {
+  content: "";
+  position: absolute;
+  right: -34px;
+  bottom: -34px;
+  width: 132px;
+  height: 132px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 4px;
+  pointer-events: none;
+}
+.offer-title {
+  font-family: var(--font-display);
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: #FFFFFF;
+}
+.offer-btn { background: #FFFFFF; color: var(--accent-deep); }
+.offer-btn:hover { background: var(--surface-stone); color: var(--accent-deep); }
+@media (max-width: 700px) {
+  .offer-card { padding: 22px 22px 24px; }
+  .offer-title { font-size: 19px; }
+}
+
+/* Small figures — a hairline row of numerals, a size below the stat. */
+.figure {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--ink);
+}
+
+/* ---- Pattern tiles (materials board): plan drawings in hairline-strong,
+   ink on hover. ---- */
+.pattern-tile {
+  color: var(--hairline-strong);
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.group:hover .pattern-tile { color: var(--ink); border-color: var(--hairline-strong); }
 
 /* ---- The light bar over a photograph: a deeper, longer top settle so the
    links read against a bright sky or a pale plaza, not only against a dark
@@ -45,21 +176,19 @@ input[type="text"], input[type="email"], input[type="tel"], input[type="search"]
     --gutter: 56px;
     --section-y: 7.5rem;
   }
-  h1 { font-size: clamp(2.25rem, 3.2vw, 4rem); }
-  h2:not(.label):not(.eyebrow) { font-size: clamp(1.5rem, 2.2vw, 2.6rem); }
-  .display-xl { font-size: clamp(2.4rem, 4vw, 5rem); }
-  .display-statement { font-size: clamp(1.875rem, 2.6vw, 3.25rem); }
-  .stat-num { font-size: 72px; }
+  h1 { font-size: clamp(2.75rem, 3.9vw, 4.75rem); }
+  h2:not(.label):not(.eyebrow) { font-size: clamp(1.5rem, 2vw, 2.4rem); }
+  .display-xl { font-size: clamp(3rem, 4.8vw, 6rem); }
+  .display-statement { font-size: clamp(2.2rem, 2.8vw, 3.4rem); }
+  .stat-num { font-size: 56px; }
   /* Mega panels and any 1280-capped block follow the container */
   [class*="max-w-[1280px]"] { max-width: var(--container); }
-  /* Index heroes and the field panorama get taller with the screen */
+  /* Index heroes get taller with the screen */
   [data-nav-on-image][class*="h-[58vh]"] { height: 64vh; }
-  [class*="h-[55vh]"] { height: 62vh; }
 }
 @media (min-width: 1920px) {
   :root {
     --container: 1600px;
     --gutter: 64px;
   }
-  body { font-size: 17px; }
 }
