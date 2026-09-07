@@ -7,14 +7,17 @@ import { FEATURED_COLOURS, STREETPRINT_PATTERNS } from "@/lib/palette"
  * "not a fan of the huge useless image on the front page"). Where the
  * photograph only breathed, this band works: the StreetPrint templates as
  * plan drawings, and a dozen StreetBond colours by their published names,
- * each tile a route into the product page. Stone surface, hairline frame —
- * the one band on the page that reads as a drawing rather than a photograph.
+ * each tile a route into the product page.
+ *
+ * 7 Sept 2026: the template drawings were hairline-strong (#A9A297) on white
+ * inside a stone band — pale on pale, and effectively invisible. The tile is
+ * now asphalt and the template is the joint line pressed into it, which is
+ * what StreetPrint actually leaves behind. The band still reads as a drawing
+ * rather than a photograph; now it reads at all.
  */
 export default function MaterialsBand() {
   return (
     <section className="grain-paper section relative overflow-hidden border-y border-hairline bg-surface-stone">
-      <span aria-hidden="true" className="ghost-index ghost-index-stone">02</span>
-
       <div className="container-1280 relative z-[1]">
         <div data-reveal className="flex flex-wrap items-end justify-between gap-x-12 gap-y-6">
           <div>
@@ -42,7 +45,10 @@ export default function MaterialsBand() {
         <div data-reveal-group className="mt-12 grid grid-cols-8 gap-4 max-[1100px]:grid-cols-4 max-[560px]:grid-cols-3 max-[560px]:gap-3">
           {STREETPRINT_PATTERNS.map((pattern) => (
             <Link key={pattern.id} href="/products/streetprint" data-reveal className="group block">
-              <div className="pattern-tile relative aspect-[4/3] overflow-hidden rounded-[2px] border border-hairline bg-surface">
+              <div
+                className="pattern-tile relative aspect-[4/3] overflow-hidden rounded-[2px] border bg-surface-slate"
+                style={{ borderColor: "var(--hairline-slate)" }}
+              >
                 <PatternTile id={pattern.id} className="absolute inset-0 h-full w-full" />
               </div>
               <div className="chip-name">{pattern.name}</div>

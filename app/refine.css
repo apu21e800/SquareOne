@@ -171,13 +171,19 @@ h2:not(.label):not(.eyebrow) {
   color: var(--ink);
 }
 
-/* ---- Pattern tiles (materials board): plan drawings in hairline-strong,
-   ink on hover. ---- */
+/* ---- Pattern tiles (materials board). Until 7 Sept these were drawn in
+   hairline-strong on white inside a stone band, which made them pale on
+   pale and effectively invisible. The tile is now asphalt and the template
+   is the joint line pressed into it — what StreetPrint actually leaves
+   behind — so the drawing reads, and warms to the accent on hover. ---- */
 .pattern-tile {
-  color: var(--hairline-strong);
+  color: rgba(214, 208, 199, 0.62);
   transition: color 0.2s ease, border-color 0.2s ease;
 }
-.group:hover .pattern-tile { color: var(--ink); border-color: var(--hairline-strong); }
+.group:hover .pattern-tile {
+  color: var(--accent);
+  border-color: rgba(246, 240, 232, 0.22);
+}
 
 /* ---- The light bar over a photograph: a deeper, longer top settle so the
    links read against a bright sky or a pale plaza, not only against a dark
