@@ -22,8 +22,6 @@ const figures: { value: string; label: string }[] = [
 export default function DrivewaysBand() {
   return (
     <section className="section relative overflow-hidden bg-surface">
-      <span aria-hidden="true" className="ghost-index">05</span>
-
       <div className="container-1280 relative z-[1]">
         <div className="grid grid-cols-12 gap-x-12 gap-y-10 max-[900px]:grid-cols-1">
           {/* ── The photograph ──────── */}

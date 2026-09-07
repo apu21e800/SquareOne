@@ -53,8 +53,6 @@ export default function ApplicationsSection() {
     <section
       className="section relative overflow-hidden bg-surface-slate"
     >
-      <span aria-hidden="true" className="ghost-index ghost-index-slate">04</span>
-
       <div className="container-1280 relative z-[1]">
         <div data-reveal className="flex flex-wrap items-baseline justify-between gap-6">
           <div>
