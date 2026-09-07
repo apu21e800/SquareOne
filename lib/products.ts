@@ -12,8 +12,6 @@ export interface Product {
   serviceSlug: string
   /** Manufacturer/brand logo shown in the product hero */
   logoImage?: string
-  /** Colour palette swatch tile — shown in a dedicated Colours section */
-  colorPaletteImage?: string
 }
 
 export const products: Product[] = [
@@ -67,7 +65,6 @@ export const products: Product[] = [
     ],
     serviceSlug: "decorative-coatings",
     logoImage: "/images/S1_update_v2/Old%20Square%20One%20Web%20Assets/Product%20Pages/StreetBond/StreetBond.png",
-    colorPaletteImage: "/images/S1_update_v2/logos/streetbond/streetbond-color%20tile-vector.svg",
   },
   {
     slug: "trafficpatterns",
