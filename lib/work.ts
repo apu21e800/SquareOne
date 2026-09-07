@@ -1,5 +1,6 @@
 import fs from "node:fs"
 import path from "node:path"
+import { curate } from "@/lib/curation"
 
 /**
  * The work, on record — Square One's own site photography, captioned with the
@@ -385,15 +386,10 @@ function build(): WorkPhoto[] {
     photos.push({ src, w, h, app, systems, subject, place, region: regionFor(place), hires: true, ...(flag ? { flag: true } : {}) })
   }
 
-  photos.sort(
-    (a, b) =>
-      (order.get(a.app) ?? 0) - (order.get(b.app) ?? 0) ||
-      Number(Boolean(b.hires)) - Number(Boolean(a.hires)) ||
-      Number(a.place === "") - Number(b.place === "") ||
-      a.place.localeCompare(b.place) ||
-      a.subject.localeCompare(b.subject),
-  )
-  return photos
+  // The photo pass of 5 Sept 2026: lib/curation.ts decides which photographs
+  // lead a gallery, which are pulled and which trail, and applies the
+  // resolution gate. Files are never renamed to reorder a gallery.
+  return curate(photos, order)
 }
 
 /** Every photo on record, sorted by application → hi-res first → located first. */
