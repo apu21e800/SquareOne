@@ -56,3 +56,6 @@ next-env.d.ts
 
 # CMS seed output (regenerate with npm run cms:seed)
 /sanity/seed/*.ndjson
+
+# Photo pass: originals kept locally before any re-encode, not shipped
+public/images/_pre-photo-pass/
