@@ -12,8 +12,6 @@ import { CLIENTS } from "@/lib/clients"
 export default function EditorialBand({ statement = "Twenty-five years on BC ground" }: { statement?: string }) {
   return (
     <section className="relative overflow-hidden bg-surface-slate py-[7rem] max-[700px]:py-16">
-      <span aria-hidden="true" className="ghost-index ghost-index-slate">2000</span>
-
       <div className="container-1280 relative z-[1]">
         <div className="grid grid-cols-12 gap-x-12 gap-y-12 max-[900px]:grid-cols-1">
           <div className="col-span-7 flex flex-col justify-center max-[900px]:col-span-1">
