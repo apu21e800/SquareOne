@@ -93,6 +93,18 @@ h2:not(.label):not(.eyebrow) {
 .stat-num { font-size: 52px; letter-spacing: 0; }
 @media (max-width: 700px) { .stat-num { font-size: 40px; } }
 
+/* ---- Headings never push the page sideways (7 Sept 2026). Ten blog titles
+   carry an unbreakable product name — "TrafficPatternsXD" is 380px of
+   Poppins 700 at 40px, against 342px of column on a 390px phone — so the
+   word spilled and the whole document scrolled horizontally. Measured: the
+   name fits at 34px. Phones take a scaled h1 that tops out there, and every
+   heading gets break-word as a permanent guard, which does nothing until a
+   single word genuinely cannot fit its line. ---- */
+h1, h2, h3, .display-xl, .display-statement { overflow-wrap: break-word; }
+@media (max-width: 560px) {
+  h1 { font-size: clamp(1.75rem, 8.6vw, 2.125rem); }
+}
+
 /* The full stop scales with the line it closes (never below the 6px square). */
 .stop::after {
   width: max(6px, 0.11em);
