@@ -5,9 +5,11 @@ import type { ReactNode } from "react"
 import type { Metadata } from "next"
 
 import { products, getProductBySlug } from "@/lib/products"
+import { STREETBOND_COLOURS, COLOUR_RANGES } from "@/lib/palette"
 import { galleryWithFallback } from "@/lib/gallery"
 import { resourceGroups } from "@/lib/resources"
-import { getWork } from "@/lib/work"
+import { getWork, WORK_APPS } from "@/lib/work"
+import type { WorkAppMeta } from "@/lib/work"
 import WorkGallery from "@/components/WorkGallery"
 
 interface Props {
@@ -34,51 +36,72 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
  *
  *   Header      white   tag, wordmark, name, lede, CTAs
  *   Plate       —       full-bleed hero photograph
- *   Overview    band    full description
- *   Benefits    band    hairline list
- *   Where used  band    applications
+ *   Overview    band    description, key benefits and the spec panel
+ *   Where used  SLATE   applications, each linked to its gallery
  *   The work    band    Square One installs of this system, from lib/work.ts
- *   Colours     band    palette chart (only where one exists)
+ *   Colours     band    the 52 StreetBond colours off HUB's chart (StreetBond only)
  *   Gallery     band    folder-first imagery
  *   Documents   band    the system's specifications, SDS and guides (lib/resources)
  *   Related     band    same service, other systems
  *
- * The slate close belongs to components/Footer.tsx — this page stays light
- * end to end.
+ * Applications is the page's one dark beat, so the page is not white end to
+ * end; the slate close still belongs to components/Footer.tsx.
  */
 
 const GALLERY_LIMIT = 9
 
-type BandTone = "white" | "warm"
+type BandTone = "white" | "warm" | "slate"
 
-type BandKey = "overview" | "benefits" | "applications" | "work" | "colours" | "gallery" | "documents" | "related"
+type BandKey = "overview" | "applications" | "work" | "colours" | "gallery" | "documents" | "related"
 
 /**
- * Bands alternate white / warm in document order. Optional bands drop out of
- * the sequence rather than out of the alternation, so two sections never share
- * a surface no matter which of them a given product renders.
+ * Light bands alternate white / warm in document order. Optional bands drop out
+ * of the sequence rather than out of the alternation, so two sections never
+ * share a surface no matter which of them a given product renders.
  */
 function Band({
   tone,
   id,
+  tightTop = false,
   children,
 }: {
   tone: BandTone
   id?: string
+  /** The band directly under the header shares its white surface — one gap, not two. */
+  tightTop?: boolean
   children: ReactNode
 }) {
   return (
     <section
       id={id}
-      className={
-        tone === "warm"
-          ? "section border-y border-hairline bg-surface-warm"
-          : "section bg-surface"
-      }
+      className={[
+        tone === "slate"
+          ? "section relative overflow-hidden bg-surface-slate"
+          : tone === "warm"
+            ? "section border-y border-hairline bg-surface-warm"
+            : "section bg-surface",
+        tightTop ? "!pt-2" : "",
+      ]
+        .filter(Boolean)
+        .join(" ")}
     >
-      <div className="container-1280">{children}</div>
+      <div className="container-1280 relative z-[1]">{children}</div>
     </section>
   )
+}
+
+/**
+ * Applications that name one of the ten galleries get a link into it; anything
+ * else renders plain. Matching is on the flattened label, so "Decorative
+ * Driveways" finds Driveways and "Bus Priority Corridors" correctly finds
+ * nothing rather than guessing.
+ */
+function galleryFor(application: string): WorkAppMeta | undefined {
+  const key = application.toLowerCase().replace(/[^a-z]/g, "")
+  return WORK_APPS.find((app) => {
+    const label = app.label.toLowerCase().replace(/[^a-z]/g, "")
+    return key === label || key.includes(label) || label.includes(key)
+  })
 }
 
 export default async function ProductPage({ params }: Props) {
@@ -105,15 +128,29 @@ export default async function ProductPage({ params }: Props) {
   )
   const docs = resourceGroups.find((group) => group.product === product.name)?.docs ?? []
 
-  const bands: BandKey[] = ["overview", "benefits", "applications"]
+  // The colour card is StreetBond's. The thermoplastic systems carry their own
+  // colours, which HUB publishes separately — never assume this chart covers them.
+  const showColours = product.name === "StreetBond"
+
+  const bands: BandKey[] = ["overview", "applications"]
   if (work.length > 0) bands.push("work")
-  if (product.colorPaletteImage) bands.push("colours")
+  if (showColours) bands.push("colours")
   if (gallery.length > 0) bands.push("gallery")
   if (docs.length > 0) bands.push("documents")
   if (related.length > 0) bands.push("related")
 
-  const toneOf = (key: BandKey): BandTone =>
-    bands.indexOf(key) % 2 === 0 ? "white" : "warm"
+  // "applications" is fixed slate — the page's one dark beat — so it sits out of
+  // the light alternation. Because it separates its neighbours, the bands either
+  // side of it may share a surface without touching.
+  const lightTones = new Map<BandKey, BandTone>()
+  let next: BandTone = "white"
+  for (const key of bands) {
+    if (key === "applications") continue
+    lightTones.set(key, next)
+    next = next === "white" ? "warm" : "white"
+  }
+
+  const toneOf = (key: BandKey): BandTone => lightTones.get(key) ?? "white"
 
   const relatedTone = toneOf("related")
 
@@ -143,7 +180,7 @@ export default async function ProductPage({ params }: Props) {
       </section>
 
       {/* ── Header ──────── */}
-      <section className="section bg-surface pt-16 pb-14 max-[700px]:pt-10">
+      <section className="section bg-surface pt-16 pb-0 max-[700px]:pt-10">
         <div className="container-1280">
           <Link
             href="/products"
@@ -183,18 +220,32 @@ export default async function ProductPage({ params }: Props) {
         </div>
       </section>
 
-
-
       {/* ── Overview + the spec panel (character pass, 5 Sept 2026): the
              description on the left, the system's facts on the right, so
              the band reads as a data sheet rather than a paragraph adrift. ── */}
-      <Band tone={toneOf("overview")}>
+      <Band tone={toneOf("overview")} tightTop>
         <div className="grid grid-cols-12 gap-x-12 gap-y-10 max-[900px]:grid-cols-1">
           <div className="col-span-7 max-[900px]:col-span-1">
             <div className="eyebrow">Overview</div>
             <p className="mt-6 max-w-[60ch] text-[17px] leading-[1.75] text-ink-body [text-wrap:pretty]">
               {product.fullDescription}
             </p>
+
+            {product.keyBenefits.length > 0 && (
+              <>
+                <div className="label mt-12">Key benefits</div>
+                <ul className="mt-4 grid grid-cols-2 gap-x-10 max-[700px]:grid-cols-1 max-[700px]:gap-x-0">
+                  {product.keyBenefits.map((benefit) => (
+                    <li
+                      key={benefit}
+                      className="border-t border-hairline py-[15px] text-[15px] font-medium leading-[1.5] text-ink"
+                    >
+                      {benefit}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
           </div>
 
           <div className="card-panel col-span-5 self-start !p-0 max-[900px]:col-span-1 max-[900px]:max-w-[560px]">
@@ -234,35 +285,55 @@ export default async function ProductPage({ params }: Props) {
         </div>
       </Band>
 
-      {/* ── Key benefits ──────── */}
-      <Band tone={toneOf("benefits")}>
-        <div className="eyebrow">Key benefits</div>
-
-        <ul className="mt-9 grid grid-cols-2 gap-x-16 max-[700px]:grid-cols-1 max-[700px]:gap-x-0">
-          {product.keyBenefits.map((benefit) => (
-            <li
-              key={benefit}
-              className="border-t border-hairline py-[18px] text-[16px] font-medium leading-[1.5] text-ink"
-            >
-              {benefit}
-            </li>
-          ))}
-        </ul>
-      </Band>
-
-      {/* ── Where it is specified ──────── */}
-      <Band tone={toneOf("applications")}>
-        <div className="eyebrow">Applications</div>
-
-        <h2 className="mt-5 max-w-[22ch]">Where {product.name} is specified</h2>
-
-        <div className="mt-10 grid grid-cols-3 gap-x-10 gap-y-8 max-[700px]:grid-cols-1">
-          {product.applications.map((application) => (
-            <div key={application} className="border-t border-hairline pt-4">
-              <h3>{application}</h3>
-            </div>
-          ))}
+      {/* ── Where it is specified — the page's one dark beat ──────── */}
+      <Band tone="slate" id="applications">
+        <div className="flex flex-wrap items-baseline justify-between gap-6">
+          <div>
+            <div className="eyebrow eyebrow-on-image">Applications</div>
+            <h2 className="mt-4 max-w-[22ch] text-white">Where {product.name} is specified</h2>
+          </div>
+          <p className="max-w-[36ch] text-[15px] leading-[1.6] text-[color:var(--ink-on-slate-muted)]">
+            The surfaces Square One installs it on, each one linked to the
+            photographs on record.
+          </p>
         </div>
+
+        <ul className="mt-12 grid grid-cols-3 gap-x-10 max-[900px]:grid-cols-2 max-[600px]:grid-cols-1">
+          {product.applications.map((application, i) => {
+            const gallery = galleryFor(application)
+            const count = gallery ? getWork().filter((p) => p.app === gallery.slug).length : 0
+            return (
+              <li
+                key={application}
+                className="border-t py-5"
+                style={{ borderColor: "var(--hairline-slate)" }}
+              >
+                <div className="flex items-baseline gap-3">
+                  <span className="text-[12px] font-medium tabular-nums text-[color:var(--ink-on-slate-muted)]">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  {gallery ? (
+                    <Link
+                      href={`/applications/${gallery.slug}`}
+                      className="text-[17px] font-medium leading-[1.3] text-white no-underline transition-colors hover:text-accent"
+                    >
+                      {application}
+                    </Link>
+                  ) : (
+                    <span className="text-[17px] font-medium leading-[1.3] text-white">
+                      {application}
+                    </span>
+                  )}
+                </div>
+                {gallery && count > 0 && (
+                  <span className="mt-1 block pl-8 text-[13px] text-[color:var(--ink-on-slate-muted)]">
+                    {count} photographs
+                  </span>
+                )}
+              </li>
+            )
+          })}
+        </ul>
       </Band>
 
       {/* ── The work on record ──────── */}
@@ -285,22 +356,54 @@ export default async function ProductPage({ params }: Props) {
       )}
 
       {/* ── Colours ──────── */}
-      {product.colorPaletteImage && (
-        <Band tone={toneOf("colours")}>
-          <div className="eyebrow">Colours</div>
+      {showColours && (
+        <Band tone={toneOf("colours")} id="colours">
+          <div className="flex flex-wrap items-baseline justify-between gap-6">
+            <div>
+              <div className="eyebrow">Colours</div>
+              <h2 className="mt-4 max-w-[26ch]">
+                Fifty-two standard colours, plus custom matching
+              </h2>
+            </div>
+            <p className="max-w-[34ch] text-[14px] leading-[1.65] text-ink-muted">
+              Read off HUB&rsquo;s StreetBond colour chart. On-screen colour is a
+              reference only &mdash; the sample board we bring to the site visit is
+              what decides.
+            </p>
+          </div>
 
-          <h2 className="mt-5 max-w-[24ch]">Standard colours, plus custom matching</h2>
+          <div className="mt-12 flex flex-col gap-10">
+            {COLOUR_RANGES.map((range) => {
+              const swatches = STREETBOND_COLOURS.filter((c) => c.range === range)
+              if (swatches.length === 0) return null
+              return (
+                <div key={range}>
+                  <div className="flex items-baseline gap-3 border-b border-hairline pb-3">
+                    <span className="label">{range}</span>
+                    <span className="text-[13px] text-ink-muted">{swatches.length}</span>
+                  </div>
+                  <ul className="mt-5 grid grid-cols-[repeat(auto-fill,minmax(108px,1fr))] gap-x-4 gap-y-6">
+                    {swatches.map((c) => (
+                      <li key={c.name}>
+                        <span
+                          aria-hidden="true"
+                          className="block h-14 w-full rounded-[2px] border border-black/10"
+                          style={{ backgroundColor: c.hex }}
+                        />
+                        <span className="mt-2 block text-[12px] font-medium leading-[1.35] text-ink">
+                          {c.name}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )
+            })}
+          </div>
 
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={product.colorPaletteImage}
-            alt={`${product.name} colour chart`}
-            className="mt-10 w-full max-w-[880px] rounded-[2px] border border-hairline bg-white"
-          />
-
-          <p className="mt-6 max-w-[56ch] text-[15px] leading-[1.6] text-ink-body">
-            Standard colours can be specified straight off the chart. For anything outside it,
-            send us a colour reference and we will match it.
+          <p className="mt-10 max-w-[62ch] text-[15px] leading-[1.6] text-ink-body">
+            Standard colours can be specified straight off the chart. For anything
+            outside it, send us a colour reference and we will match it.
           </p>
         </Band>
       )}
