@@ -43,8 +43,6 @@ export default function FollowTheWork({ settings, tiles }: { settings: SiteSetti
       aria-labelledby="follow-heading"
       className="section relative overflow-hidden border-t border-[color:var(--hairline)] bg-[color:var(--surface)]"
     >
-      <span aria-hidden="true" className="ghost-index">07</span>
-
       <div className="container-1280 relative z-[1]">
         <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-6">
           <div data-reveal>
@@ -96,13 +94,13 @@ export default function FollowTheWork({ settings, tiles }: { settings: SiteSetti
                 />
                 <span
                   aria-hidden="true"
-                  className="absolute inset-0 flex items-end bg-[rgba(20,24,29,0.62)] p-3 text-[12px] leading-[1.4] font-semibold text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100"
+                  className="absolute inset-0 flex items-end bg-[rgba(24,21,18,0.66)] p-3 text-[12px] leading-[1.4] font-semibold text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100"
                 >
                   {tile.caption}
                 </span>
                 <span
                   aria-hidden="true"
-                  className="absolute top-2 right-2 inline-flex h-7 w-7 items-center justify-center rounded-[2px] bg-[rgba(20,24,29,0.45)] text-white"
+                  className="absolute top-2 right-2 inline-flex h-7 w-7 items-center justify-center rounded-[2px] bg-[rgba(24,21,18,0.50)] text-white"
                 >
                   {tile.isVideo ? (
                     <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
