@@ -2,18 +2,55 @@
    Square One v2 — the polish + character passes (5 Sept 2026; Vern:
    "gentle rounding… keep the square theme but soften it", "cinematic on
    big monitors", then "H1 could pop more", "the stats look too big",
-   "everything is very white", "give the site a bit more character").
+   "everything is very white", "give the site a bit more character"), then
+   7 Sept 2026 ("get rid of the weird big numbers on the sides of the page",
+   "skip the dark blue colour that belongs to hubss — S1 needs its own brand").
    Unlayered and loaded after globals + mobile, so it wins over utilities.
    Where this file disagrees with the comments in globals.css, this file
    is current — the canon moved on Vern's word.
    ============================================================ */
 
 /* ---- Surfaces: paper and stone deepen a step so the white → paper →
-   stone alternation can actually be seen. Slate is unchanged. ---- */
+   stone alternation can actually be seen. ---- */
 :root {
   --surface-warm:  #F6F3EE;
   --surface-stone: #ECE7DF;
 }
+
+/* ---- Square One's dark (7 Sept 2026). The inherited #14181D is a blue
+   black — R−B = −9 — and it is HUB's, not Square One's. This company
+   installs on asphalt, and its own palette is warm: beige #F5F3F0,
+   stone #8B8680, a terracotta accent #C85A3A. So the dark warms to match
+   the material and the accent it has to carry: R−B = +6, the same warm
+   axis as the beige. The token keeps its "slate" name because every
+   surface on the site already reads it; only the value moved.
+
+   Contrast on #1E1B18, all AA or better:
+     white 17.1 : 1   body 11.2 : 1   muted 6.7 : 1
+     faint 5.4 : 1    legal 4.8 : 1
+   ---- */
+:root {
+  --surface-slate:        #1E1B18;
+  --ink-on-slate-body:    #D6D0C7;
+  --ink-on-slate-muted:   #A8A198;
+  --ink-on-slate-faint:   #968F86;
+  --ink-on-slate-legal:   #8F877E;
+  --hairline-slate: rgba(246, 240, 232, 0.10);
+}
+
+/* The scrims over photography follow the same warm black, so a hero does
+   not cool off at its edges while the band below it is warm. */
+.scrim { background: linear-gradient(to top, rgba(24, 21, 18, 0.72), rgba(24, 21, 18, 0) 52%); }
+.scrim-light { background: linear-gradient(to top, rgba(24, 21, 18, 0.55), rgba(24, 21, 18, 0) 38%); }
+.scrim-rise {
+  background: linear-gradient(
+    to top,
+    rgba(24, 21, 18, 0.82) 0%,
+    rgba(24, 21, 18, 0.42) 32%,
+    rgba(24, 21, 18, 0) 60%
+  );
+}
+.mega-scrim { background: rgba(24, 21, 18, 0.30); }
 
 /* ---- One soft radius. The utility classes stay in the markup; every
    2px corner on the site takes the token, so cards, photographs, buttons,
@@ -64,23 +101,18 @@ h2:not(.label):not(.eyebrow) {
 }
 
 /* ---- Numbered eyebrows: the section index in ink, then the label in
-   muted caps — "■ 04 APPLICATIONS". The ghost numeral behind the section
-   carries the same figure. ---- */
+   muted caps — "■ 04 APPLICATIONS". ---- */
 .eyebrow-num {
   color: var(--ink);
   letter-spacing: 0.08em;
 }
 .eyebrow-on-image .eyebrow-num { color: #FFFFFF; }
 
-/* Ghost numerals read on every surface they sit on. */
-.ghost-index-slate {
-  color: rgba(241, 238, 233, 0.04);
-  top: auto;
-  right: auto;
-  bottom: -0.75rem;
-  left: 1.25rem;
-}
-.ghost-index-stone { color: rgba(20, 22, 26, 0.045); }
+/* ---- Ghost numerals, retired 7 Sept 2026 (Vern: "get rid of the weird big
+   numbers on the sides of the page"). The spans are gone from the section
+   components; this rule keeps any stray one from rendering as loose text,
+   and the section index survives in the eyebrow, where it is legible. ---- */
+.ghost-index, .ghost-index-slate, .ghost-index-stone { display: none; }
 
 /* ---- The offer card (home, driveways band): the page's one orange block.
    White type, a white button, and the square motif drawn in the corner. ---- */
@@ -154,10 +186,10 @@ h2:not(.label):not(.eyebrow) {
   height: 200px;
   background: linear-gradient(
     to bottom,
-    rgba(20, 24, 29, 0.68) 0%,
-    rgba(20, 24, 29, 0.42) 72px,
-    rgba(20, 24, 29, 0.14) 140px,
-    rgba(20, 24, 29, 0) 100%
+    rgba(24, 21, 18, 0.68) 0%,
+    rgba(24, 21, 18, 0.42) 72px,
+    rgba(24, 21, 18, 0.14) 140px,
+    rgba(24, 21, 18, 0) 100%
   );
 }
 
