@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#EAE7E1;color:#3D4147;font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#14161A;text-decoration:none}
+a:hover{color:#D8511F}
+</style>
+</helmet>
+<section style="padding:48px">
+  <div style="max-width:860px">
+    <div style="display:flex;align-items:center;gap:10px;font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82"><span style="width:6px;height:6px;background:#F26430;border-radius:1px;flex-shrink:0"></span>CD Pass 3 &mdash; mega menu &middot; contact truth &middot; repair sweep</div>
+    <h1 style="margin:20px 0 0;font-size:clamp(1.75rem, 3vw, 2.75rem);font-weight:300;letter-spacing:-0.03em;line-height:1.06;color:#14161A">Full-width products menu, one office, one set of numbers</h1>
+    <p style="margin:16px 0 0;font-size:15px;line-height:1.65;color:#3D4147;text-wrap:pretty">All states below are live pages, not screenshots. The Products menu now spans the viewport edge to edge under the bar; Services has a compact dropdown; the nav button is ink outline so each hero keeps its one orange primary. Ladysmith is gone as an office &mdash; the island presence is the region Vancouver Island, with the canonical Maple Ridge address and three phone lines everywhere.</p>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:48px;align-items:flex-start;margin-top:48px">
+    <div>
+      <div style="font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82;margin-bottom:14px">Homepage &middot; 1440 &middot; mega menu open &middot; live, hover works</div>
+      <div style="width:792px;height:495px;overflow:hidden;border:1px solid #DDD9D1;background:#FFFFFF">
+        <iframe src="Square One Homepage.dc.html?nav=products" style="width:1440px;height:900px;border:0;transform:scale(0.55);transform-origin:top left" title="Homepage with mega menu open"></iframe>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82;margin-bottom:14px">Homepage &middot; 390 &middot; drawer open</div>
+      <div style="width:390px;height:844px;overflow:hidden;border:1px solid #DDD9D1;background:#FFFFFF">
+        <iframe src="Square One Homepage.dc.html?nav=drawer" style="width:390px;height:844px;border:0" title="Homepage mobile drawer"></iframe>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:48px">
+    <div style="font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82;margin-bottom:14px">Contact &middot; 1440 &middot; subject dropdown + canonical contact block</div>
+    <div style="width:792px;height:560px;overflow:hidden;border:1px solid #DDD9D1;background:#FFFFFF">
+      <iframe src="Quote Request.dc.html" style="width:1440px;height:1020px;border:0;transform:scale(0.55);transform-origin:top left" title="Contact page"></iframe>
+    </div>
+  </div>
+  <div style="margin-top:56px;max-width:920px">
+    <div style="font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82">Status per page</div>
+    <div style="margin-top:16px;border-top:1px solid #DDD9D1">
+      <sc-for list="{{ pages }}" as="pg" hint-placeholder-count="8">
+        <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 20px;padding:11px 4px;border-bottom:1px solid #DDD9D1">
+          <a href="{{ pg.href }}" style="width:250px;font-size:15px;font-weight:600;color:#14161A" style-hover="color:#D8511F">{{ pg.name }}</a>
+          <span style="font-size:12px;font-weight:600;letter-spacing:0.06em;color:{{ pg.col }}">{{ pg.tag }}</span>
+          <span style="flex:1;min-width:280px;font-size:14px;line-height:1.5;color:#767B82">{{ pg.note }}</span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const OK = '#3E7A4E', AMBER = '#A8721F';
+    const p = (name, href, note, amber) => ({ name, href, note, tag: amber ? 'NOTE' : 'OK', col: amber ? AMBER : OK });
+    return { pages: [
+      p('Homepage', 'Square One Homepage.dc.html', 'Hero primary orange, stat now reads 2 service regions, stamped-asphalt card routes to Driveways.'),
+      p('Products index', 'Index Pages.dc.html#products', 'Ghost numeral 01 added; StreetPrint and all thermoplastic cards route to their real pages.'),
+      p('Applications index', 'Index Pages.dc.html#applications', 'Ghost numeral 02 added; every card routes to a built page.'),
+      p('Projects index', 'Index Pages.dc.html#projects', 'Ghost numeral 03 added. Cards route to the one built project detail as the template stand-in.', true),
+      p('Journal index', 'Index Pages.dc.html#journal', 'Ghost numeral 04 added. Posts route to the one built journal post as the template stand-in.', true),
+      p('Product — StreetBond', 'Product Detail StreetBond.dc.html', 'Header, gallery captions and orange budget verified.'),
+      p('Service — Thermoplastic', 'Service Detail Preformed Thermoplastic.dc.html', 'Header, gallery captions and orange budget verified.'),
+      p('Application — School zones', 'Application Detail School Zones.dc.html', 'Worked example carries surface, scrim and caption.'),
+      p('Project — UBC Musqueam', 'Project Detail UBC Musqueam.dc.html', 'All image blocks captioned; footer inherits the canonical contact block.'),
+      p('Journal — Brighouse', 'Journal Post Brighouse.dc.html', 'All image blocks captioned; footer inherits the canonical contact block.'),
+      p('Landing — Vapour blasting', 'Vapor Blasting Landing.dc.html', 'Hero primary orange; island copy now reads Vancouver Island, not a town.'),
+      p('Landing — Driveways', 'Driveways Landing.dc.html', 'Hero primary orange; trust row added with the BBB mark.'),
+      p('About', 'About.dc.html', 'Offices section recast as Office + Service region with scrims and captions; Town of Ladysmith stays only as a client credit.'),
+      p('Resources', 'Resources.dc.html', 'CTA number updated. Document rows are placeholders pending real PDFs.', true),
+      p('Contact', 'Quote Request.dc.html', 'Subject dropdown, address, three phone lines, serving line and BBB mark in place.')
+    ]};
+  }
+}
+</script>
+</body>
+</html>

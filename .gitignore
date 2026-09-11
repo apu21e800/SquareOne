@@ -42,5 +42,26 @@ next-env.d.ts
 
 .vercel
 .env*.local
+!.env.local.example
 .superpowers/
 .claude/worktrees/
+
+# Image staging queue — contents never committed, never served.
+# The README is kept so the folder structure survives a clone.
+/_image-queue/*
+!/_image-queue/README.md
+!/_image-queue/*/
+/_image-queue/*/*
+!/_image-queue/*/.gitkeep
+
+# CMS seed output (regenerate with npm run cms:seed)
+/sanity/seed/*.ndjson
+
+# Photo pass: originals kept locally before any re-encode, not shipped
+public/images/_pre-photo-pass/
+
+# Never committed — the repository is public.
+# Session output folders (screenshots, working notes) and the private
+# lint patterns (personal numbers and mailboxes) stay on the machine.
+/Claude outputs/
+/scripts/lint-claims.private.json

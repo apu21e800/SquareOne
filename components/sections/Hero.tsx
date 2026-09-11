@@ -2,255 +2,238 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { motion, AnimatePresence, type Variants } from "framer-motion"
-import { useEffect, useState } from "react"
-import Container from "@/components/ui/Container"
+import { useCallback, useEffect, useRef, useState, type KeyboardEvent, type TouchEvent } from "react"
+import { HERO_SLIDES, type Slide } from "@/lib/hero-slides"
 
-const heroSlides: { src: string; alt: string; eyebrow: string; tag: string; locale: string }[] = [
-  {
-    src: "/images/S1_update_v2/photos/Featured image options/UBC-crosswalk-3-300dpi.jpg",
-    alt: "UBC × Musqueam crosswalk by Square One Paving",
-    eyebrow: "Indigenous Public Art",
-    tag: "Vancouver, BC",
-    locale: "UBC × Musqueam Crosswalk, TrafficPatterns",
-  },
-  {
-    src: "/images/applications/private-driveways/estate-herringbone-gated-driveway-01.jpg",
-    alt: "Premium residential driveway by Square One Paving",
-    eyebrow: "Residential Estates",
-    tag: "Vancouver Island",
-    locale: "Custom estate driveway",
-  },
-  {
-    src: "/images/applications/bus-bike-lanes/green-bike-lane-bridge-gopro-01.jpg",
-    alt: "Green bike lane on bridge by Square One Paving",
-    eyebrow: "Vision Zero Infrastructure",
-    tag: "BC Bridges",
-    locale: "Coloured cycling corridor",
-  },
-  {
-    src: "/images/products/streetbond/streetbond-multicolour-plaza-green-circles-01.jpg",
-    alt: "Langley Events Centre — Circle of Life public art by Square One Paving",
-    eyebrow: "Civic Public Art",
-    tag: "Langley, BC",
-    locale: "Langley Events Centre — Circle of Life",
-  },
-  {
-    src: "/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg",
-    alt: "StreetBond multicolour transit plaza at dusk — Square One Paving",
-    eyebrow: "Transit & Public Realm",
-    tag: "Metro Vancouver",
-    locale: "Joyce SkyTrain Plaza, multi-colour StreetBond",
-  },
-]
+/* Home hero — an image reel (Vern, 4 Sept 2026: "some sort of image slider
+   experience on a reel like the current S1 website"). Five of Square One's
+   own frames on a slow crossfade under one headline; every caption is the
+   record's place · system · year, nothing invented. The progress hairline
+   IS the timer (the advance fires on its animationend), so pausing the bar
+   pauses the reel with it. Autoplay pauses on hover, focus and touch,
+   stops under prefers-reduced-motion (no drift either), and every frame is
+   reachable by button, keyboard arrow or swipe. */
 
-const tickerItems: string[] = [
-  "BC's Decorative Pavement Studio",
-  "Since 2000",
-  "Metro Vancouver",
-  "Vancouver Island",
-  "Ladysmith",
-  "Municipal-Grade",
-  "25 Years",
-  "Vapor Blasting Certified",
-  "Stamped Asphalt",
-  "Authorized HUB Applicator",
-  "Vision Zero Capable",
-]
+const FADE = 1100
+const SWIPE = 44
 
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { duration: 0.3, staggerChildren: 0.08, delayChildren: 0.15 } },
+const pad = (n: number) => String(n).padStart(2, "0")
+
+interface HeroProps {
+  slides?: Slide[]
+  eyebrow?: string
+  title?: string
 }
 
-const childVariants: Variants = {
-  hidden: { y: 32, opacity: 0 },
-  show: { y: 0, opacity: 1, transition: { duration: 1.0, ease: [0.22, 1, 0.36, 1] } },
-}
+export default function Hero({ slides, eyebrow, title }: HeroProps) {
+  const SLIDES = slides && slides.length > 0 ? slides : HERO_SLIDES
+  const count = SLIDES.length
+  const [pos, setPos] = useState({ index: 0, prev: -1 })
+  const [held, setHeld] = useState(false)
+  const [playing, setPlaying] = useState(true)
+  const [reduced, setReduced] = useState(false)
+  const touchX = useRef<number | null>(null)
 
-function ArrowRight() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">
-      <path d="M1 7H13M13 7L7.5 1.5M13 7L7.5 12.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="square" />
-    </svg>
+  const go = useCallback(
+    (n: number) => setPos((p) => ({ index: (p.index + n + count) % count, prev: p.index })),
+    [count],
   )
-}
-
-export default function Hero() {
-  const [scrollY, setScrollY] = useState<number>(0)
-  const [activeSlide, setActiveSlide] = useState<number>(0)
 
   useEffect(() => {
-    if (typeof window !== "undefined" && window.innerWidth < 1024) return
-    const onScroll = () => setScrollY(window.scrollY)
-    onScroll()
-    window.addEventListener("scroll", onScroll, { passive: true })
-    return () => window.removeEventListener("scroll", onScroll)
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)")
+    const sync = () => setReduced(mq.matches)
+    sync()
+    mq.addEventListener("change", sync)
+    return () => mq.removeEventListener("change", sync)
   }, [])
 
-  useEffect(() => {
-    const id = window.setInterval(() => {
-      setActiveSlide((s) => (s + 1) % heroSlides.length)
-    }, 7000)
-    return () => window.clearInterval(id)
-  }, [])
+  const onKeyDown = (e: KeyboardEvent<HTMLElement>) => {
+    if (e.key === "ArrowRight") {
+      e.preventDefault()
+      go(1)
+    }
+    if (e.key === "ArrowLeft") {
+      e.preventDefault()
+      go(-1)
+    }
+  }
 
-  const currentSlide = heroSlides[activeSlide]
+  const onTouchStart = (e: TouchEvent<HTMLElement>) => {
+    touchX.current = e.touches[0]?.clientX ?? null
+    setHeld(true)
+  }
+  const onTouchEnd = (e: TouchEvent<HTMLElement>) => {
+    const start = touchX.current
+    touchX.current = null
+    setHeld(false)
+    if (start === null) return
+    const dx = (e.changedTouches[0]?.clientX ?? start) - start
+    if (Math.abs(dx) > SWIPE) go(dx < 0 ? 1 : -1)
+  }
+
+  const { index, prev } = pos
+  const slide = SLIDES[index]
+  const caption = slide.caption ?? [slide.place, slide.system, slide.year].filter(Boolean).join(" · ")
+  const paused = held || !playing
 
   return (
-    <section className="relative min-h-screen flex items-end overflow-hidden bg-[#0A0A0A]">
-      <div className="absolute inset-0 will-change-transform" style={{ transform: `translateY(${scrollY * 0.08}px)` }}>
-        <AnimatePresence mode="sync">
-          <motion.div
-            key={currentSlide.src}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1.6, ease: "easeInOut" }}
-            className="absolute inset-0"
+    <section
+      data-nav-on-image
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="Featured work"
+      onMouseEnter={() => setHeld(true)}
+      onMouseLeave={() => setHeld(false)}
+      onFocus={() => setHeld(true)}
+      onBlur={() => setHeld(false)}
+      onKeyDown={onKeyDown}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+      className="relative h-[92vh] min-h-[560px] overflow-hidden bg-surface-slate supports-[height:92svh]:h-[92svh]"
+    >
+      {/* ── Frames ──────── */}
+      {SLIDES.map((s, i) => {
+        const active = i === index
+        const leaving = i === prev
+        return (
+          <div
+            key={s.src}
+            role="group"
+            aria-roledescription="slide"
+            aria-label={`${i + 1} of ${count}: ${s.place}`}
+            aria-hidden={!active}
+            className={`absolute inset-0 transition-opacity ease-[cubic-bezier(0.4,0,0.2,1)] ${
+              active ? "z-[1] opacity-100" : leaving ? "z-0 opacity-100" : "z-0 opacity-0"
+            }`}
+            style={{ transitionDuration: `${FADE}ms` }}
           >
-            <div className="absolute inset-0 ken-burns">
-              <Image src={currentSlide.src} alt={currentSlide.alt} fill priority sizes="100vw" className="object-cover" />
+            <Image
+              src={s.src}
+              alt={s.alt}
+              fill
+              priority={i === 0}
+              sizes="100vw"
+              className={`reel-frame object-cover${active ? " reel-frame-active" : ""}`}
+              style={{ objectPosition: s.position }}
+            />
+          </div>
+        )
+      })}
+
+      {/* Rising slate scrim — keeps the headline legible, lets the surface speak above it */}
+      <div aria-hidden="true" className="scrim-rise z-[1]" />
+      <div aria-hidden="true" className="scrim-top z-[1]" />
+
+      {/* ── Headline block, bottom-left ──────── */}
+      <div className="absolute inset-x-0 bottom-0 z-[2]">
+        <div className="container-1280 pb-[72px] max-[1100px]:pb-[84px] max-[700px]:pb-[80px]">
+          {eyebrow ? (
+            <div className="eyebrow eyebrow-on-image">{eyebrow}</div>
+          ) : (
+            <div className="eyebrow eyebrow-on-image">
+              <span className="max-[600px]:hidden">BC&rsquo;s decorative pavement studio &middot; Since 2000</span>
+              <span className="hidden max-[600px]:inline">Decorative pavement &middot; BC &middot; Since 2000</span>
             </div>
-          </motion.div>
-        </AnimatePresence>
+          )}
+
+          <h1 className="display-xl stop mt-6 max-w-[15ch] text-white [text-wrap:balance]">
+            {title ?? "Surfaces that define a place"}
+          </h1>
+
+          <div className="mt-10 flex flex-wrap items-center gap-[14px] max-[700px]:mt-8 max-[700px]:gap-3">
+            <Link href="/contact" className="btn-primary">
+              Request a quote
+            </Link>
+            <Link href="/projects" className="btn-on-image">
+              See our work
+            </Link>
+          </div>
+        </div>
       </div>
 
-      <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-[rgba(10,10,10,0.45)] via-[rgba(10,10,10,0.40)] to-[rgba(10,10,10,0.92)]" />
-      <div aria-hidden className="absolute inset-0 bg-gradient-to-r from-[rgba(10,10,10,0.65)] via-transparent to-[rgba(10,10,10,0.30)]" />
-      <div aria-hidden className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at center, transparent 35%, rgba(0,0,0,0.55) 100%)" }} />
-
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
-        className="absolute top-24 lg:top-28 left-6 lg:left-12 z-10 hidden md:flex items-center gap-3"
-      >
-        <span className="block w-10 h-[1px] bg-white/40" />
-        <span className="text-[10px] uppercase tracking-[0.32em] text-white/65 font-medium">
-          BC&apos;s Decorative Pavement Studio &middot; est. 2000
-        </span>
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.5 }}
-        className="absolute top-24 lg:top-28 right-6 lg:right-12 z-10 hidden md:flex items-center gap-3"
-      >
-        <span className="text-[10px] uppercase tracking-[0.32em] text-white/65 font-medium">
-          {String(activeSlide + 1).padStart(2, "0")}
-          <span className="text-white/30 mx-1.5">/</span>
-          {String(heroSlides.length).padStart(2, "0")}
-        </span>
-        <span className="block w-10 h-[1px] bg-white/40" />
-      </motion.div>
-
-      <Container className="relative z-10 w-full pt-32 pb-28 lg:pb-40">
-        <div className="relative max-w-5xl">
-          <div aria-hidden className="absolute -left-6 lg:-left-10 top-2 bottom-6 w-[1px] bg-gradient-to-b from-transparent via-white/40 to-transparent" />
-
-          <motion.div variants={containerVariants} initial="hidden" animate="show">
-            <motion.div
-              key={currentSlide.eyebrow}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-              className="mb-7 flex items-center gap-3"
-            >
-              <span className="block w-1.5 h-1.5 rounded-full bg-[#F26430] pulse-dot" />
-              <span className="text-[11px] uppercase tracking-[0.28em] text-[#FF8A5C] font-semibold">
-                {currentSlide.eyebrow}
-              </span>
-              <span className="hidden sm:block w-px h-3 bg-white/20" />
-              <span className="hidden sm:block text-[10.5px] uppercase tracking-[0.18em] text-white/55 font-medium">
-                {currentSlide.tag}
-              </span>
-            </motion.div>
-
-            <motion.h1
-              variants={childVariants}
-              className="text-white display-h"
-              style={{ fontSize: "clamp(2.75rem, 8vw, 7.5rem)" }}
-            >
-              Surfaces<br />
-              that <span className="italic font-extralight text-white/95">define</span>{" "}
-              <span className="text-[#F26430]">a place.</span>
-            </motion.h1>
-
-            <motion.p variants={childVariants} className="text-base lg:text-xl text-white/80 max-w-xl mt-8 leading-[1.65] font-light">
-              From transit corridors and public plazas to estate driveways &mdash; Square One has
-              transformed over 50 BC communities with decorative pavement that performs and inspires.
-            </motion.p>
-
-            <motion.div variants={childVariants} className="mt-12 flex flex-wrap gap-3 items-center">
-              <Link href="/projects" className="group bg-white text-[#0A0A0A] px-9 py-4 font-semibold text-[12.5px] tracking-[0.04em] uppercase rounded-none hover:bg-[#F26430] hover:text-white transition-colors duration-300 inline-flex items-center gap-3">
-                See Our Work<ArrowRight />
-              </Link>
-              <Link href="/contact" className="group border border-white/30 text-white px-9 py-4 font-medium text-[12.5px] tracking-[0.04em] uppercase rounded-none hover:bg-white hover:text-[#0A0A0A] transition-colors duration-300 inline-flex items-center gap-3">
-                Request a Quote<ArrowRight />
-              </Link>
-            </motion.div>
-          </motion.div>
+      {/* ── Reel controls, bottom-right (wide screens) ──────── */}
+      <div className="absolute right-10 bottom-[100px] z-[2] hidden flex-col items-end gap-4 min-[1101px]:flex">
+        <div
+          className="text-right text-[12px] font-semibold tracking-[0.05em] text-white"
+          style={{ fontFamily: "var(--font-display)" }}
+        >
+          {caption}
         </div>
-      </Container>
-
-      <motion.div
-        initial={{ opacity: 0, x: 24 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1], delay: 0.7 }}
-        className="hidden lg:block absolute right-8 xl:right-12 bottom-32 z-10 w-[280px]"
-      >
-        <div className="bg-white/[0.04] backdrop-blur-2xl border border-white/15 p-7"
-          style={{ boxShadow: "0 24px 64px rgba(0,0,0,0.30), 0 0 0 1px rgba(255,255,255,0.04) inset" }}>
-          <div className="flex items-center gap-2 mb-5">
-            <span className="block w-1.5 h-1.5 rounded-full bg-[#F26430] pulse-dot" />
-            <span className="text-[10px] uppercase tracking-[0.22em] text-[#FF8A5C] font-semibold">Now Showing</span>
-          </div>
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentSlide.locale}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <p className="text-white text-[15px] leading-[1.5] font-light tracking-[-0.005em]">
-                {currentSlide.locale}
-              </p>
-            </motion.div>
-          </AnimatePresence>
-          <div className="mt-6 pt-5 border-t border-white/10 grid grid-cols-2 gap-4">
-            <div>
-              <div className="text-white text-[2rem] font-extralight leading-none tracking-[-0.04em]">51<span className="text-[#F26430] text-[1.2rem]">+</span></div>
-              <div className="text-[10px] uppercase tracking-[0.16em] text-white/55 mt-1.5 font-medium">communities</div>
-            </div>
-            <div>
-              <div className="text-white text-[2rem] font-extralight leading-none tracking-[-0.04em]">25</div>
-              <div className="text-[10px] uppercase tracking-[0.16em] text-white/55 mt-1.5 font-medium">years</div>
-            </div>
-          </div>
-        </div>
-      </motion.div>
-
-      <div className="absolute left-6 lg:left-12 bottom-20 lg:bottom-24 z-10 flex items-center gap-2">
-        {heroSlides.map((_, i) => (
-          <button key={i} onClick={() => setActiveSlide(i)} aria-label={`Go to slide ${i + 1}`} className="group flex items-center justify-center h-6 w-7">
-            <span className={`block h-[1.5px] transition-all duration-500 ${i === activeSlide ? "w-10 bg-[#F26430]" : "w-5 bg-white/35 group-hover:bg-white/65"}`} />
+        <div className="flex items-center gap-3">
+          <span
+            className="mr-2 text-[12px] font-semibold tracking-[0.12em] text-white/80 tabular-nums"
+            style={{ fontFamily: "var(--font-display)" }}
+          >
+            {pad(index + 1)} / {pad(count)}
+          </span>
+          <button type="button" onClick={() => go(-1)} aria-label="Previous frame" className="reel-btn">
+            <svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14">
+              <path d="M9 2L4 7l5 5" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
           </button>
+          <button type="button" onClick={() => go(1)} aria-label="Next frame" className="reel-btn">
+            <svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14">
+              <path d="M5 2l5 5-5 5" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            onClick={() => setPlaying((p) => !p)}
+            aria-label={playing ? "Pause the reel" : "Play the reel"}
+            aria-pressed={!playing}
+            className="reel-btn"
+          >
+            {playing ? (
+              <svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12">
+                <path d="M3.5 2v8M8.5 2v8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
+            ) : (
+              <svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12">
+                <path d="M3.5 2l6 4-6 4z" fill="currentColor" />
+              </svg>
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* ── Caption + counter — phones and tablets; wide screens carry the cluster ──────── */}
+      <div
+        className="absolute inset-x-6 bottom-[34px] z-[2] flex items-baseline justify-between gap-4 text-[11px] font-semibold tracking-[0.08em] text-white/80 min-[1101px]:hidden"
+        style={{ fontFamily: "var(--font-display)" }}
+      >
+        <span className="min-w-0 truncate">{caption}</span>
+        <span className="shrink-0 tabular-nums">
+          {pad(index + 1)} / {pad(count)}
+        </span>
+      </div>
+
+      {/* ── Progress hairlines — the reel's clock ──────── */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-x-6 bottom-5 z-[2] flex gap-[6px] min-[1101px]:inset-x-auto min-[1101px]:right-10 min-[1101px]:bottom-[72px] min-[1101px]:w-[252px]"
+      >
+        {SLIDES.map((s, i) => (
+          <div key={s.src} className="reel-seg flex-1">
+            {i < index && <div className="reel-seg-fill is-done" />}
+            {i === index &&
+              (reduced ? (
+                <div className="reel-seg-fill is-done" />
+              ) : (
+                <div
+                  key={index}
+                  className={`reel-seg-fill is-running${paused ? " is-paused" : ""}`}
+                  onAnimationEnd={() => go(1)}
+                />
+              ))}
+          </div>
         ))}
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 z-10 border-t border-white/10 bg-[rgba(10,10,10,0.78)] backdrop-blur-md py-3.5 overflow-hidden ticker-mask">
-        <div className="ticker-track">
-          {[...tickerItems, ...tickerItems].map((item, i) => (
-            <span key={i} className="flex items-center whitespace-nowrap px-6 text-[10.5px] uppercase tracking-[0.22em] text-white/65 font-medium">
-              {item}
-              <span className="mx-7 text-[#F26430]">&middot;</span>
-            </span>
-          ))}
-        </div>
-      </div>
+      {/* ── Quiet scroll cue ──────── */}
+      <div
+        aria-hidden="true"
+        className="absolute bottom-0 left-1/2 z-[2] h-9 w-px -translate-x-1/2 bg-white/40 max-[1100px]:hidden"
+      />
     </section>
   )
 }

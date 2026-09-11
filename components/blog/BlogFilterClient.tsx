@@ -1,11 +1,26 @@
 "use client"
 
-import { useState, useMemo } from "react"
-import Link from "next/link"
-import Image from "next/image"
+import { useMemo, useState } from "react"
 import type { BlogPostMeta } from "@/lib/blog"
+import FilterBar, { type FilterDef } from "@/components/ui/FilterBar"
+import RecordCard from "@/components/ui/RecordCard"
 
-const CATEGORIES = ["All", "Municipal", "Driveways", "Vapor Blasting", "Public Art", "Case Studies"]
+/**
+ * Filter bar + card grid for /blog — the same FilterBar and RecordCard as
+ * /projects, so the two indexes are one system. `label` is display copy
+ * (Canadian English, sentence case); `match` is the original filter token
+ * and must not change — it is what post categories and tags are tested
+ * against.
+ */
+const TOPICS: ReadonlyArray<{ label: string; match: string }> = [
+  { label: "Municipal", match: "Municipal" },
+  { label: "Driveways", match: "Driveways" },
+  { label: "Vapour blasting", match: "Vapour Blasting" },
+  { label: "Public art", match: "Public Art" },
+  { label: "Case studies", match: "Case Studies" },
+]
+
+const ALL = "all"
 
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString("en-CA", {
@@ -15,184 +30,125 @@ function formatDate(dateStr: string) {
   })
 }
 
+function yearOf(post: BlogPostMeta): string {
+  const y = post.date ? new Date(post.date).getFullYear() : Number.NaN
+  return Number.isFinite(y) ? String(y) : ""
+}
+
+/** Photo caption — category and year, the only location data frontmatter carries. */
+function captionFor(post: BlogPostMeta): string {
+  return [post.category, yearOf(post)].filter(Boolean).join(" · ")
+}
+
+function matchesTopic(post: BlogPostMeta, match: string) {
+  const haystack = [post.category, ...(post.tags ?? [])].join(" ").toLowerCase()
+  return haystack.includes(match.toLowerCase())
+}
+
 interface Props {
   posts: BlogPostMeta[]
 }
 
 export default function BlogFilterClient({ posts }: Props) {
-  const [activeCategory, setActiveCategory] = useState("All")
+  const [topic, setTopic] = useState(ALL)
+  const [year, setYear] = useState(ALL)
 
-  const filtered = useMemo(() => {
-    if (activeCategory === "All") return posts
-    return posts.filter((p) => {
-      const cat = p.category?.toLowerCase() ?? ""
-      const tag = p.tags?.join(" ").toLowerCase() ?? ""
-      const search = activeCategory.toLowerCase()
-      return cat.includes(search) || tag.includes(search)
-    })
-  }, [activeCategory, posts])
+  const years = useMemo(() => {
+    const counts = new Map<string, number>()
+    for (const p of posts) {
+      const y = yearOf(p)
+      if (y) counts.set(y, (counts.get(y) ?? 0) + 1)
+    }
+    return [...counts.entries()].sort((a, b) => b[0].localeCompare(a[0]))
+  }, [posts])
 
-  const featured = filtered[0]
-  const rest = filtered.slice(1)
+  const filters: FilterDef[] = [
+    {
+      key: "topic",
+      label: "Topic",
+      value: topic,
+      onChange: setTopic,
+      options: [
+        { value: ALL, label: "All topics" },
+        ...TOPICS.map((t) => ({ value: t.match, label: t.label, count: posts.filter((p) => matchesTopic(p, t.match)).length })),
+      ],
+    },
+    {
+      key: "year",
+      label: "Year",
+      value: year,
+      onChange: setYear,
+      options: [{ value: ALL, label: "All years" }, ...years.map(([y, n]) => ({ value: y, label: y, count: n }))],
+    },
+  ]
+
+  const active = topic !== ALL || year !== ALL
+
+  const filtered = useMemo(
+    () => posts.filter((p) => (topic === ALL || matchesTopic(p, topic)) && (year === ALL || yearOf(p) === year)),
+    [posts, topic, year],
+  )
+
+  const clear = () => {
+    setTopic(ALL)
+    setYear(ALL)
+  }
+
+  const [lead, ...rest] = filtered
 
   return (
-    <>
-      {/* Category filter tabs */}
-      <div className="flex flex-wrap gap-2 mt-8 overflow-x-auto scrollbar-hide pb-1">
-        {CATEGORIES.map((cat) => (
-          <button
-            key={cat}
-            onClick={() => setActiveCategory(cat)}
-            className="text-xs font-semibold px-4 py-2 rounded whitespace-nowrap transition-all"
-            style={{
-              background: activeCategory === cat ? "#C8601A" : "white",
-              color: activeCategory === cat ? "white" : "#5A5A5A",
-              border: activeCategory === cat ? "1px solid #C8601A" : "1px solid #E2DDD8",
-            }}
-          >
-            {cat}
-          </button>
-        ))}
-      </div>
+    // Section shell, background and container come from app/blog/page.tsx —
+    // this is a child, not a section of its own.
+    <div>
+      <FilterBar
+        filters={filters}
+        summary={`${filtered.length} post${filtered.length !== 1 ? "s" : ""}`}
+        onClear={clear}
+        active={active}
+      />
 
-      <div className="max-w-[1400px] mx-auto px-6 sm:px-8 py-14">
-        {filtered.length === 0 ? (
-          <p style={{ color: "#5A5A5A" }} className="py-12 text-center">
-            No posts in this category yet — check back soon.
-          </p>
-        ) : (
-          <>
-            {/* ── Featured post ───────────────────────────────────── */}
-            {featured && (
-              <Link href={`/blog/${featured.slug}`} className="group block mb-14">
-                <div
-                  className="grid grid-cols-1 lg:grid-cols-2 overflow-hidden transition-all duration-300"
-                  style={{
-                    background: "white",
-                    border: "1px solid #E2DDD8",
-                    boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.boxShadow = "0 8px 32px rgba(0,0,0,0.10)" }}
-                  onMouseLeave={(e) => { e.currentTarget.style.boxShadow = "0 1px 3px rgba(0,0,0,0.06)" }}
-                >
-                  {featured.featured_image && (
-                    <div className="relative overflow-hidden" style={{ minHeight: "340px" }}>
-                      <Image
-                        src={featured.featured_image}
-                        alt={featured.title}
-                        fill
-                        className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-                        sizes="(max-width: 1024px) 100vw, 50vw"
-                        priority
-                      />
-                      <div className="absolute top-4 left-4">
-                        <span
-                          className="text-[10px] font-bold uppercase tracking-[0.12em] px-3 py-1.5 text-white"
-                          style={{ background: "#C8601A" }}
-                        >
-                          Featured
-                        </span>
-                      </div>
-                    </div>
-                  )}
-                  <div className="flex flex-col justify-center p-10 lg:p-14">
-                    {featured.category && (
-                      <p className="eyebrow mb-4">{featured.category}</p>
-                    )}
-                    <h2
-                      className="mb-5 transition-colors duration-200 group-hover:text-[#C8601A]"
-                      style={{ fontSize: "clamp(1.6rem, 2.5vw, 2.25rem)", fontWeight: 300, letterSpacing: "-0.025em", color: "#111111", lineHeight: 1.15 }}
-                    >
-                      {featured.title}
-                    </h2>
-                    <p className="text-base leading-relaxed mb-8" style={{ color: "#5A5A5A" }}>
-                      {featured.description}
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm" style={{ color: "#767676" }}>
-                        {formatDate(featured.date)}
-                      </span>
-                      <span className="text-sm font-semibold" style={{ color: "#C8601A" }}>
-                        Read Article →
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            )}
+      {filtered.length === 0 ? (
+        <p className="py-20 text-center text-[16px] text-[color:var(--ink-body)]">
+          Nothing filed under that yet.
+        </p>
+      ) : (
+        <>
+          {lead && (
+            <div className="mt-10">
+              <RecordCard
+                lead
+                priority
+                href={`/blog/${lead.slug}`}
+                src={lead.featured_image || undefined}
+                alt={lead.title}
+                caption={captionFor(lead)}
+                kicker={lead.category || undefined}
+                title={lead.title}
+                description={lead.description}
+                meta={lead.date ? formatDate(lead.date) : undefined}
+              />
+            </div>
+          )}
 
-            {/* ── Remaining posts grid ─────────────────────────────── */}
-            {rest.length > 0 && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {rest.map((post) => (
-                  <Link
-                    key={post.slug}
-                    href={`/blog/${post.slug}`}
-                    className="group block overflow-hidden transition-all duration-250"
-                    style={{ background: "white", border: "1px solid #E2DDD8" }}
-                    onMouseEnter={(e) => {
-                      const el = e.currentTarget as HTMLElement
-                      el.style.borderColor = "rgba(200,96,26,0.4)"
-                      el.style.boxShadow = "0 8px 32px rgba(0,0,0,0.10)"
-                      el.style.transform = "translateY(-2px)"
-                    }}
-                    onMouseLeave={(e) => {
-                      const el = e.currentTarget as HTMLElement
-                      el.style.borderColor = "#E2DDD8"
-                      el.style.boxShadow = "none"
-                      el.style.transform = "translateY(0)"
-                    }}
-                  >
-                    {post.featured_image && (
-                      <div className="relative overflow-hidden" style={{ aspectRatio: "16/9" }}>
-                        <Image
-                          src={post.featured_image}
-                          alt={post.title}
-                          fill
-                          className="object-cover transition-transform duration-700 group-hover:scale-[1.05]"
-                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        />
-                        {post.category && (
-                          <div className="absolute top-3 left-3">
-                            <span
-                              className="text-[10px] font-bold uppercase tracking-[0.1em] px-2.5 py-1 text-white"
-                              style={{ background: "rgba(200,96,26,0.88)", backdropFilter: "blur(4px)" }}
-                            >
-                              {post.category}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                    <div className="p-6">
-                      <h3
-                        className="mb-3 leading-snug transition-colors duration-200 group-hover:text-[#C8601A]"
-                        style={{ fontSize: "1.05rem", fontWeight: 600, color: "#111111" }}
-                      >
-                        {post.title}
-                      </h3>
-                      <p className="text-sm leading-relaxed mb-5 line-clamp-3" style={{ color: "#5A5A5A" }}>
-                        {post.description}
-                      </p>
-                      <div className="flex items-center justify-between pt-4" style={{ borderTop: "1px solid #EDEBE7" }}>
-                        <span className="text-xs" style={{ color: "#767676" }}>
-                          {formatDate(post.date)}
-                        </span>
-                        <span
-                          className="text-xs font-bold uppercase tracking-widest transition-all duration-200 group-hover:tracking-[0.2em]"
-                          style={{ color: "#C8601A" }}
-                        >
-                          Read →
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </>
-        )}
-      </div>
-    </>
+          {rest.length > 0 && (
+            <div className="mt-10 grid grid-cols-3 gap-6 max-[1000px]:grid-cols-2 max-[700px]:grid-cols-1 max-[700px]:gap-10">
+              {rest.map((post) => (
+                <RecordCard
+                  key={post.slug}
+                  href={`/blog/${post.slug}`}
+                  src={post.featured_image || undefined}
+                  alt={post.title}
+                  caption={captionFor(post)}
+                  kicker={post.category || undefined}
+                  title={post.title}
+                  description={post.description}
+                  meta={post.date ? formatDate(post.date) : undefined}
+                />
+              ))}
+            </div>
+          )}
+        </>
+      )}
+    </div>
   )
 }

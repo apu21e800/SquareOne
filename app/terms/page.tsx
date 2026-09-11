@@ -1,9 +1,12 @@
 import type { Metadata } from "next"
+import { SITE_URL } from "@/lib/site"
+import { clampDescription } from "@/lib/seo"
 
 export const metadata: Metadata = {
-  title: "Terms of Use | Square One Paving",
+  title: "Terms of Use",
   description:
-    "Terms of use for squareonepaving.com — governing law, intellectual property, and disclaimer of warranties.",
+    clampDescription("Terms of use for squareonepaving.com — governing law, intellectual property, and disclaimer of warranties."),
+  alternates: { canonical: `${SITE_URL}/terms` },
 }
 
 const sections = [
@@ -41,7 +44,7 @@ const sections = [
   },
   {
     heading: "9. Contact",
-    body: `Questions about these Terms of Use may be directed to:\n\nSquare One Paving\nLadysmith, British Columbia\ninfo@squareonepaving.com | 604-309-8212`,
+    body: `Questions about these Terms of Use may be directed to:\n\nSquare One Paving\nMaple Ridge, British Columbia\noffice@squareonepaving.com | 604-466-9902`,
   },
 ]
 

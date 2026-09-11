@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+@media (max-width:700px){[data-sc~="pad"]{padding:56px 24px !important}[data-sc~="fpad"]{padding:56px 24px 0 !important}[data-sc~="cols"]{grid-template-columns:1fr 1fr !important;gap:40px !important}}
+</style>
+</helmet>
+<div data-screen-label="Closing CTA + footer" style="background:#14181D;font-family:'Inter',system-ui,sans-serif">
+  <sc-if value="{{ showCta }}" hint-placeholder-val="{{ true }}">
+  <section data-sc="pad" style="position:relative;overflow:hidden;padding:96px 40px;text-align:center">
+    <sc-if value="{{ hasIndex }}" hint-placeholder-val="{{ false }}">
+      <div aria-hidden="true" style="position:absolute;top:40px;right:32px;z-index:0;font-size:10rem;font-weight:200;line-height:1;letter-spacing:-0.04em;color:rgba(241, 238, 233, 0.04);pointer-events:none;user-select:none">{{ idx }}</div>
+    </sc-if>
+    <div style="position:relative;z-index:1">
+      <div style="display:flex;align-items:center;justify-content:center;gap:10px;font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#9BA1A9"><span style="width:6px;height:6px;background:#F26430;border-radius:1px;flex-shrink:0"></span>Start a project</div>
+      <h2 style="margin:24px auto 0;font-size:clamp(1.75rem, 3vw, 2.75rem);font-weight:300;letter-spacing:-0.03em;line-height:1.06;color:#FFFFFF;max-width:20ch;text-wrap:pretty">Let&#8217;s build something worth looking at</h2>
+      <p style="margin:20px auto 0;font-size:17px;line-height:1.65;color:#9BA1A9;max-width:52ch;text-wrap:pretty">Send drawings, a site address, or a rough description. We will walk the site before we quote it.</p>
+      <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:24px;margin-top:40px">
+        <a href="Quote Request.dc.html" style="display:inline-block;background:#FFFFFF;color:#14181D;font-size:15px;font-weight:600;padding:15px 30px;border-radius:2px;transition:background 0.15s" style-hover="background:#F1EEE9;color:#14181D">Request a quote</a>
+        <span style="font-size:15px;color:#8A9098">or call <a href="tel:+16046126209" style="color:#C6CBD1;font-weight:500" style-hover="color:#FFFFFF">604-612-6209</a></span>
+      </div>
+    </div>
+  </section>
+  </sc-if>
+  <footer data-sc="fpad" style="border-top:1px solid rgba(255, 255, 255, 0.08);padding:80px 40px 0">
+    <div style="max-width:1280px;margin:0 auto">
+      <div data-sc="cols" style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1.2fr;gap:48px">
+        <div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="width:28px;height:28px;background:#FFFFFF;border-radius:2px;display:flex;align-items:center;justify-content:center;color:#14181D;font-size:11px;font-weight:600">S1</div>
+            <div style="font-size:15px;font-weight:600;color:#FFFFFF">Square One Paving</div>
+          </div>
+          <p style="margin:18px 0 0;font-size:14px;line-height:1.6;color:#8A9098;max-width:30ch">BC&#8217;s decorative pavement studio since 2000. Based in Maple Ridge, serving the Lower Mainland and Vancouver Island.</p>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#8A9098">Services</div>
+          <div style="display:flex;flex-direction:column;gap:12px;margin-top:20px">
+            <a href="Square One Homepage.dc.html#services" style="font-size:15px;color:#C6CBD1" style-hover="color:#FFFFFF">Stamped asphalt</a>
+            <a href="Product Detail StreetBond.dc.html" style="font-size:15px;color:#C6CBD1" style-hover="color:#FFFFFF">Decorative coatings</a>
+            <a href="Service Detail Preformed Thermoplastic.dc.html" style="font-size:15px;color:#C6CBD1" style-hover="color:#FFFFFF">Preformed thermoplastic</a>
+            <a href="Vapor Blasting Landing.dc.html" style="font-size:15px;color:#C6CBD1" style-hover="color:#FFFFFF">Vapour blasting</a>
+            <a href="Driveways Landing.dc.html" style="font-size:15px;color:#C6CBD1" style-hover="color:#FFFFFF">Driveways</a>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#8A9098">Studio</div>
+          <div style="display:flex;flex-direction:column;gap:12px;margin-top:20px">
+            <a href="About.dc.html" style="font-size:15px;color:#C6CBD1" style-hover="color:#FFFFFF">About</a>
+            <a href="Index Pages.dc.html#projects" style="font-size:15px;color:#C6CBD1" style-hover="color:#FFFFFF">Projects</a>
+            <a href="Index Pages.dc.html#journal" style="font-size:15px;color:#C6CBD1" style-hover="color:#FFFFFF">Journal</a>
+            <a href="Resources.dc.html" style="font-size:15px;color:#C6CBD1" style-hover="color:#FFFFFF">Resources</a>
+            <a href="Quote Request.dc.html" style="font-size:15px;color:#C6CBD1" style-hover="color:#FFFFFF">Contact</a>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#8A9098">Contact</div>
+          <div style="display:flex;flex-direction:column;gap:14px;margin-top:20px">
+            <div><div style="font-size:12px;color:#8A9098">Office</div><div style="margin-top:3px;font-size:15px;line-height:1.5;color:#C6CBD1">505&ndash;20800 Lougheed Highway<br>Maple Ridge, BC V2X 3P2</div></div>
+            <div><div style="font-size:12px;color:#8A9098">Lower Mainland</div><a href="tel:+16046126209" style="display:block;margin-top:3px;font-size:15px;color:#C6CBD1" style-hover="color:#FFFFFF">604-612-6209</a></div>
+            <div><div style="font-size:12px;color:#8A9098">Vancouver Island</div><a href="tel:+12503910270" style="display:block;margin-top:3px;font-size:15px;color:#C6CBD1" style-hover="color:#FFFFFF">250-391-0270</a></div>
+            <div><div style="font-size:12px;color:#8A9098">Toll-free</div><a href="tel:+18773910270" style="display:block;margin-top:3px;font-size:15px;color:#C6CBD1" style-hover="color:#FFFFFF">1-877-391-0270</a></div>
+            <a href="mailto:office@squareonepaving.com" style="font-size:15px;color:#C6CBD1" style-hover="color:#FFFFFF">office@squareonepaving.com</a>
+          </div>
+        </div>
+      </div>
+      <p style="margin:72px 0 0;font-size:13px;line-height:1.8;color:#7E848C">Lower Mainland &mdash; Vancouver, Burnaby, Richmond, Surrey, Langley, Maple Ridge &middot; Vancouver Island &mdash; Victoria, Nanaimo, Courtenay</p>
+      <div style="margin-top:28px;border-top:1px solid rgba(255, 255, 255, 0.08);padding:24px 0;display:flex;flex-wrap:wrap;gap:8px 24px;align-items:center;justify-content:space-between">
+        <div style="display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center"><div style="font-size:13px;color:#7E848C">&copy; 2026 Square One Paving</div><div style="font-size:13px;color:#7E848C">BBB Accredited Business</div></div>
+        <div style="display:flex;gap:24px">
+          <a href="#" style="font-size:13px;color:#7E848C" style-hover="color:#FFFFFF">Privacy</a>
+          <a href="#" style="font-size:13px;color:#7E848C" style-hover="color:#FFFFFF">Terms</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1050},&quot;hideCta&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Close&quot;},&quot;index&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Close&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const idx = this.props.index || '';
+    return { showCta: !(this.props.hideCta ?? false), hasIndex: !!idx, idx };
+  }
+}
+</script>
+</body>
+</html>

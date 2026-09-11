@@ -1,9 +1,12 @@
 import type { Metadata } from "next"
+import { SITE_URL } from "@/lib/site"
+import { clampDescription } from "@/lib/seo"
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Square One Paving",
+  title: "Privacy Policy",
   description:
-    "Square One Paving privacy policy — how we collect, use, and protect your personal information under PIPEDA.",
+    clampDescription("Square One Paving privacy policy — how we collect, use, and protect your personal information under PIPEDA."),
+  alternates: { canonical: `${SITE_URL}/privacy` },
 }
 
 const sections = [
@@ -37,7 +40,7 @@ const sections = [
   },
   {
     heading: "8. Contact Us",
-    body: `For privacy-related inquiries, contact:\n\nSquare One Paving\nLadysmith, British Columbia\ninfo@squareonepaving.com | 604-309-8212`,
+    body: `For privacy-related inquiries, contact:\n\nSquare One Paving\nMaple Ridge, British Columbia\noffice@squareonepaving.com | 604-466-9902`,
   },
 ]
 

@@ -1,413 +1,898 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { motion, AnimatePresence, type Variants, type Transition } from "framer-motion"
+import { usePathname } from "next/navigation"
+import { AnimatePresence, MotionConfig, motion, type Transition } from "framer-motion"
+import BrandMark from "@/components/BrandMark"
+import SearchOverlay from "@/components/SearchOverlay"
+import { products, type Product } from "@/lib/products"
+import { services, type Service } from "@/lib/services"
+import { APP_LEADS } from "@/lib/app-leads"
 
-interface ProductItem { label: string; href: string; tag?: string }
-interface ProductColumn { category: string; items: ProductItem[]; accent: string }
+/* ------------------------------------------------------------------
+   Data — derived from lib/, never duplicated.
+   ------------------------------------------------------------------ */
 
-const productColumns: ProductColumn[] = [
-  {
-    category: "Stamped Asphalt",
-    accent: "01",
-    items: [
-      { label: "StreetPrint", href: "/products/streetprint", tag: "Imprint System" },
-      { label: "TrafficPatterns XD", href: "/products/trafficpatternsxd", tag: "Heavy Traffic" },
-    ],
-  },
-  {
-    category: "Decorative Coatings",
-    accent: "02",
-    items: [
-      { label: "StreetBond", href: "/products/streetbond", tag: "Flagship" },
-      { label: "StreetBondSR", href: "/products/streetbondsr", tag: "Solar Reflective" },
-      { label: "MMAX", href: "/products/mmax", tag: "Bus Lanes" },
-      { label: "DuraShield", href: "/products/durashield", tag: "Sealcoat" },
-    ],
-  },
-  {
-    category: "Thermoplastic",
-    accent: "03",
-    items: [
-      { label: "TrafficPatterns", href: "/products/trafficpatterns", tag: "Inset Marking" },
-      { label: "DecoMark", href: "/products/decomark", tag: "Custom Graphics" },
-      { label: "DuraTherm", href: "/products/duratherm", tag: "Premium" },
-      { label: "PreMark", href: "/products/premark", tag: "MUTCD Compliant" },
-    ],
-  },
-]
+type MenuKey = "services" | "products"
 
-interface ServiceItem { label: string; href: string; description: string; eyebrow: string }
+const PRODUCT_CATEGORIES = [
+  "Stamped Asphalt",
+  "Decorative Coatings",
+  "Thermoplastic",
+  "Surface Protection",
+] as const
 
-const serviceItems: ServiceItem[] = [
-  { label: "Stamped Asphalt", href: "/services/stamped-asphalt", description: "Custom patterns, slip-resistant, 8+ year life", eyebrow: "01" },
-  { label: "Decorative Coatings", href: "/services/decorative-coatings", description: "StreetBond systems for parks, plazas, transit", eyebrow: "02" },
-  { label: "Preformed Thermoplastic", href: "/services/preformed-thermoplastic", description: "High-visibility markings that last", eyebrow: "03" },
-  { label: "Vapor Blasting", href: "/services/vapor-blasting", description: "Surface prep & removal, no chemicals", eyebrow: "04" },
-]
-
-const panelVariants: Variants = {
-  hidden: { opacity: 0, y: -8 },
-  visible: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -8 },
+/** Short nav-only descriptor. Falls back to the product tagline. */
+const PRODUCT_DESCRIPTOR: Record<string, string> = {
+  streetprint: "Patterned hot asphalt pavers",
+  streetbond: "Water-based colour coating",
+  trafficpatterns: "Preformed pattern sheets",
+  "trafficpatterns-xd": "Heavy-duty intersections",
+  duratherm: "Inlaid textured surfaces",
+  decomark: "Shapes, symbols, graphics",
+  premark: "Standard legends and bars",
+  durashield: "Clear protective seal",
 }
 
-const panelTransitionIn: Transition = { duration: 0.25, ease: [0.22, 1, 0.36, 1] }
+interface ProductColumn {
+  category: (typeof PRODUCT_CATEGORIES)[number]
+  items: Product[]
+}
 
-const ArrowRight = () => (
-  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">
-    <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-)
+const productColumns: ProductColumn[] = PRODUCT_CATEGORIES.map((category) => ({
+  category,
+  items: products.filter((p) => p.category === category),
+}))
 
-function ProductsPanel({ onClose }: { onClose: () => void }) {
+const SERVICE_ORDER = [
+  "stamped-asphalt",
+  "decorative-coatings",
+  "preformed-thermoplastic",
+  "vapor-blasting",
+]
+
+/** Canadian English in prose; slugs and routes stay untouched. */
+const SERVICE_LABEL: Record<string, string> = {
+  "stamped-asphalt": "Stamped asphalt",
+  "decorative-coatings": "Decorative coatings",
+  "preformed-thermoplastic": "Preformed thermoplastic",
+  "vapor-blasting": "Vapour blasting",
+}
+
+const serviceLinks: Service[] = SERVICE_ORDER.map((slug) =>
+  services.find((s) => s.slug === slug),
+).filter((s): s is Service => s !== undefined)
+
+interface PrimaryLink {
+  label: string
+  href: string
+  match: string[]
+  menu?: MenuKey
+}
+
+/** Five items (Vern, 5 Sept 2026: "too many items across the top").
+    Applications and Driveways live inside the Services panel — the four
+    trades, the residential line, and where the work goes — so the bar
+    reads as a sentence: what we do, what we install, the proof, the
+    specs, the company. */
+const PRIMARY_LINKS: PrimaryLink[] = [
+  { label: "Services", href: "/services", match: ["/services", "/applications", "/driveways", "/galleries"], menu: "services" },
+  { label: "Products", href: "/products", match: ["/products"], menu: "products" },
+  { label: "Projects", href: "/projects", match: ["/projects"] },
+  { label: "Resources", href: "/resources", match: ["/resources"] },
+  { label: "About", href: "/about", match: ["/about"] },
+]
+
+/** The drawer keeps every route the desktop panels reach. */
+const DRAWER_LINKS: { label: string; href: string }[] = [
+  { label: "Services", href: "/services" },
+  { label: "Products", href: "/products" },
+  { label: "Projects", href: "/projects" },
+  { label: "Galleries", href: "/galleries" },
+  { label: "Blog", href: "/blog" },
+  { label: "Resources", href: "/resources" },
+  { label: "About", href: "/about" },
+]
+
+/** Services panel — the four trades and the residential line as photo tiles. */
+const SERVICE_TILES: { href: string; name: string; note: string; src: string; alt: string }[] = [
+  {
+    href: "/services/stamped-asphalt",
+    name: "Stamped asphalt",
+    note: "Patterns pressed into hot asphalt",
+    src: "/images/hero/victoria-ellis-point-walkway-streetprint.jpg",
+    alt: "British Cobble StreetPrint walkway at Ellis Point, Victoria",
+  },
+  {
+    href: "/services/decorative-coatings",
+    name: "Decorative coatings",
+    note: "Colour that holds under traffic",
+    src: "/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg",
+    alt: "StreetBond multicolour plaza at Joyce Station, Vancouver",
+  },
+  {
+    href: "/services/preformed-thermoplastic",
+    name: "Preformed thermoplastic",
+    note: "Crosswalks, symbols, civic art",
+    src: "/images/projects/ubc-musqueam-crosswalk/ubc-musqueam-crosswalk-trafficpatterns-01.jpg",
+    alt: "Musqueam crosswalk artwork at UBC, Vancouver",
+  },
+  {
+    href: "/driveways",
+    name: "Driveways",
+    note: "For homeowners — Vancouver & Victoria",
+    src: "/images/S1_update_v2/photos/Driveways/Number%201.jpg",
+    alt: "Ashlar slate StreetPrint driveway installed by Square One",
+  },
+  {
+    href: "/services/vapor-blasting",
+    name: "Vapour blasting",
+    note: "Cleaning, priming, graffiti removal",
+    src: "/images/services/vapor-blasting/granville-island-vapour-blasting-01.jpg",
+    alt: "Square One crew vapour blasting at Granville Island",
+  },
+]
+
+/** Where the work goes — the ten application galleries (mirrors lib/work.ts WORK_APPS), each with its gallery's lead photograph. */
+const APPLICATIONS: { label: string; href: string; slug: string }[] = [
+  { label: "Crosswalks", href: "/applications/crosswalks", slug: "crosswalks" },
+  { label: "Streetscapes", href: "/applications/streetscapes", slug: "streetscapes" },
+  { label: "Roundabouts & traffic calming", href: "/applications/roundabouts", slug: "roundabouts" },
+  { label: "Parking lots", href: "/applications/parking-lots", slug: "parking-lots" },
+  { label: "Parks & paths", href: "/applications/parks-paths", slug: "parks-paths" },
+  { label: "Schools & sports courts", href: "/applications/schools-sports-courts", slug: "schools-sports-courts" },
+  { label: "Bike lanes", href: "/applications/bike-lanes", slug: "bike-lanes" },
+  { label: "Public art", href: "/applications/public-art", slug: "public-art" },
+  { label: "Branding & wayfinding", href: "/applications/branding-wayfinding", slug: "branding-wayfinding" },
+  { label: "Driveways", href: "/driveways", slug: "driveways" },
+]
+
+const HAIRLINE = "#E7E3DC"
+
+const panelTransition: Transition = { duration: 0.15, ease: "easeOut" }
+
+/* ------------------------------------------------------------------
+   Sub-components
+   ------------------------------------------------------------------ */
+
+function Wordmark({ onClick, light = false }: { onClick?: () => void; light?: boolean }) {
   return (
-    <motion.div variants={panelVariants} initial="hidden" animate="visible" exit="exit" transition={panelTransitionIn}
-      className="absolute top-full left-0 right-0 bg-white border-b border-[#E2DDD8] shadow-[0_24px_64px_rgba(0,0,0,0.10)]">
-      <div className="max-w-[1400px] mx-auto px-6 sm:px-10 py-10">
-        <div className="grid grid-cols-[1fr_400px] gap-12">
-          <div className="grid grid-cols-3 gap-10">
-            {productColumns.map((col) => (
-              <div key={col.category}>
-                <div className="flex items-center gap-2.5 mb-5 pb-3 border-b border-[#E2DDD8]">
-                  <span className="text-[10px] uppercase tracking-[0.22em] text-[#F26430] font-bold">{col.accent}</span>
-                  <span className="text-[10.5px] uppercase tracking-[0.16em] text-[#0A0A0A] font-semibold">{col.category}</span>
-                </div>
-                <ul className="space-y-1">
-                  {col.items.map((item) => (
-                    <li key={item.href}>
-                      <Link href={item.href} onClick={onClose}
-                        className="group/item flex items-center justify-between min-h-[44px] px-3 -mx-3 text-[13.5px] font-semibold tracking-[0.005em] text-[#0A0A0A] hover:text-[#F26430] hover:bg-[#F6F4F0] rounded-sm transition-all">
-                        <span>{item.label}</span>
-                        {item.tag && (
-                          <span className="text-[9.5px] uppercase tracking-[0.18em] text-[#8C8C8C] group-hover/item:text-[#F26430] transition-colors font-medium">
-                            {item.tag}
-                          </span>
-                        )}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
+    <Link
+      href="/"
+      onClick={onClick}
+      aria-label="Square One Paving — home"
+      className="flex shrink-0 items-center"
+    >
+      <BrandMark tone={light ? "light" : "dark"} />
+    </Link>
+  )
+}
 
-          <Link href="/products/streetbond" onClick={onClose} className="group relative bg-[#0F1115] overflow-hidden block">
-            <div className="relative aspect-[4/3.2]">
-              <Image fill src="/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg"
-                alt="StreetBond at transit plaza" className="object-cover transition-transform duration-1000 ease-out group-hover:scale-105" sizes="400px" />
-              <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[rgba(15,17,21,0.96)] via-[rgba(15,17,21,0.40)] to-transparent" />
-              <div className="absolute top-5 left-5 flex items-center gap-2">
-                <span className="block w-1.5 h-1.5 rounded-full bg-[#F26430] pulse-dot" />
-                <span className="text-[10px] uppercase tracking-[0.28em] text-white font-semibold">Most Specified</span>
-              </div>
-              <div className="absolute bottom-0 left-0 right-0 p-6">
-                <h4 className="text-white font-light text-2xl tracking-[-0.02em] leading-tight mb-2">StreetBond by HUB</h4>
-                <p className="text-white/70 text-[13px] leading-[1.6] mb-4 font-light max-w-[280px]">
-                  Our most-installed decorative coating &mdash; proven on BC transit corridors, cycle lanes, and urban plazas.
-                </p>
-                <span className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] font-semibold text-white border-b border-white/40 pb-1.5 group-hover:border-[#F26430] group-hover:text-[#FF8A5C] transition-all">
-                  Explore StreetBond<ArrowRight />
-                </span>
-              </div>
-            </div>
-          </Link>
-        </div>
+/** One photographic tile — the shared voice of both panels. */
+function MegaTile({
+  href,
+  src,
+  alt,
+  name,
+  note,
+  aspect = "aspect-[16/10]",
+  compact = false,
+  onNavigate,
+}: {
+  href: string
+  src: string
+  alt: string
+  name: string
+  note?: string
+  aspect?: string
+  /** Five-across tiles: a smaller name below 1536px, and the note only from 1536px up. */
+  compact?: boolean
+  onNavigate: () => void
+}) {
+  return (
+    <Link
+      href={href}
+      onClick={onNavigate}
+      data-mega-item
+      className={`group relative block overflow-hidden rounded-[2px] bg-[#F1EEE9] ${aspect}`}
+    >
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        sizes="(max-width: 1280px) 33vw, 420px"
+        className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+      />
+      <span aria-hidden="true" className="scrim" />
+      <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-4">
+        <span className="min-w-0">
+          <span
+            className={`block font-semibold uppercase text-white ${
+              compact ? "text-[12px] tracking-[0.08em] min-[1536px]:text-[13px] min-[1536px]:tracking-[0.1em]" : "text-[13px] tracking-[0.1em]"
+            }`}
+            style={{ fontFamily: "var(--font-display)" }}
+          >
+            {name}
+          </span>
+          {note && (
+            <span className={`mt-[3px] block text-[12px] leading-[1.45] text-white/75 ${compact ? "max-[1535px]:hidden" : ""}`}>
+              {note}
+            </span>
+          )}
+        </span>
+        <span
+          aria-hidden="true"
+          className="mb-[1px] shrink-0 text-[15px] leading-none text-white/70 transition-transform duration-200 group-hover:translate-x-1 group-hover:text-white"
+        >
+          &rarr;
+        </span>
+      </span>
+    </Link>
+  )
+}
 
-        <div className="mt-10 pt-6 border-t border-[#E2DDD8] flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-8">
-            <Link href="/products" onClick={onClose} className="group inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.18em] font-semibold text-[#0A0A0A] hover:text-[#F26430] transition-colors">
-              View All Products<ArrowRight />
-            </Link>
-            <Link href="/products" onClick={onClose} className="group inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.18em] font-semibold text-[#5A5A5A] hover:text-[#F26430] transition-colors">
-              Download Spec Sheets<ArrowRight />
-            </Link>
-          </div>
-          <p className="text-[11px] text-[#8C8C8C] tracking-[0.04em]">
-            Authorized HUB Surface Systems Applicator
-          </p>
-        </div>
+interface MegaPanelProps {
+  onNavigate: () => void
+  onMouseEnter: () => void
+  onMouseLeave: () => void
+}
+
+/** The panel frame — fixed under the bar, the site's container width. */
+function Panel({
+  label,
+  children,
+  onMouseEnter,
+  onMouseLeave,
+}: {
+  label: string
+  children: React.ReactNode
+  onMouseEnter: () => void
+  onMouseLeave: () => void
+}) {
+  return (
+    <motion.div
+      role="region"
+      aria-label={label}
+      initial={{ opacity: 0, y: 6 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 6 }}
+      transition={panelTransition}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      className="fixed top-[72px] right-0 left-0 z-40 hidden border-t border-b border-[#E7E3DC] bg-white min-[1024px]:block"
+    >
+      <div className="mx-auto py-8" style={{ maxWidth: "var(--container)", paddingInline: "var(--gutter)" }}>
+        {children}
       </div>
     </motion.div>
   )
 }
 
-function ServicesPanel({ onClose }: { onClose: () => void }) {
+function ServicesMega({ onNavigate, onMouseEnter, onMouseLeave }: MegaPanelProps) {
   return (
-    <motion.div variants={panelVariants} initial="hidden" animate="visible" exit="exit" transition={panelTransitionIn}
-      className="absolute top-full left-0 right-0 bg-white border-b border-[#E2DDD8] shadow-[0_24px_64px_rgba(0,0,0,0.10)]">
-      <div className="max-w-[1400px] mx-auto px-6 sm:px-10 py-10">
-        <div className="grid grid-cols-[1fr_400px] gap-12">
-          <div className="grid grid-cols-2 gap-3">
-            {serviceItems.map((item) => (
-              <Link key={item.href} href={item.href} onClick={onClose}
-                className="group relative flex flex-col justify-between min-h-[120px] p-5 border border-[#E2DDD8] hover:border-[#F26430]/50 hover:bg-[#FAF7F4] transition-all">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-[10px] uppercase tracking-[0.28em] text-[#F26430] font-bold">{item.eyebrow}</span>
-                  <span className="opacity-0 group-hover:opacity-100 transition-opacity"><ArrowRight /></span>
-                </div>
-                <div>
-                  <h4 className="text-[15px] font-semibold tracking-[-0.005em] text-[#0A0A0A] group-hover:text-[#F26430] transition-colors mb-1.5">{item.label}</h4>
-                  <p className="text-[12.5px] text-[#5A5A5A] leading-[1.5] font-light">{item.description}</p>
-                </div>
+    <Panel label="Services menu" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+      {/* ── The trades, the residential line, and the supporting service —
+             one row of five photographs, in the business order ──────── */}
+      <div className="grid grid-cols-5 gap-4">
+        {SERVICE_TILES.map((tile) => (
+          <MegaTile
+            key={tile.href}
+            href={tile.href}
+            src={tile.src}
+            alt={tile.alt}
+            name={tile.name}
+            note={tile.note}
+            aspect="aspect-[4/3]"
+            compact
+            onNavigate={onNavigate}
+          />
+        ))}
+      </div>
+
+      {/* ── Where the work goes — the same ten applications the galleries
+             and the home page carry, as one band under the photographs ──────── */}
+      <div className="mt-7 border-t border-[#E7E3DC] pt-5">
+        <div className="label">Where it goes</div>
+        <ul className="mt-3 grid grid-cols-5 gap-x-6 gap-y-1">
+          {APPLICATIONS.map((a) => (
+            <li key={a.href}>
+              <Link
+                href={a.href}
+                onClick={onNavigate}
+                data-mega-item
+                className="group -mx-2 flex items-center gap-3 rounded-[2px] px-2 py-[6px] text-[13.5px] font-medium text-[#3D4147] transition-colors hover:bg-[#FAF8F5] hover:text-[#14161A]"
+              >
+                {APP_LEADS[a.slug] && (
+                  <span className="relative block h-[34px] w-[46px] shrink-0 overflow-hidden rounded-[2px] bg-[#F1EEE9]">
+                    <Image src={APP_LEADS[a.slug]} alt="" fill sizes="46px" className="object-cover transition-transform duration-500 group-hover:scale-[1.06]" />
+                  </span>
+                )}
+                <span className="min-w-0 truncate">{a.label}</span>
+                <span aria-hidden="true" className="ml-auto text-[#A9A297] opacity-0 transition-all duration-200 group-hover:translate-x-1 group-hover:opacity-100 group-hover:text-[#14161A]">
+                  &rarr;
+                </span>
               </Link>
-            ))}
-          </div>
+            </li>
+          ))}
+        </ul>
+      </div>
 
-          <Link href="/services/stamped-asphalt" onClick={onClose} className="group relative bg-[#0F1115] overflow-hidden block">
-            <div className="relative aspect-[4/3.2]">
-              <Image fill src="/images/applications/private-driveways/estate-herringbone-gated-driveway-01.jpg"
-                alt="Stamped asphalt estate driveway" className="object-cover transition-transform duration-1000 ease-out group-hover:scale-105" sizes="400px" />
-              <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[rgba(15,17,21,0.96)] via-[rgba(15,17,21,0.30)] to-transparent" />
-              <div className="absolute top-5 left-5 flex items-center gap-2">
-                <span className="block w-1.5 h-1.5 rounded-full bg-[#F26430] pulse-dot" />
-                <span className="text-[10px] uppercase tracking-[0.28em] text-white font-semibold">Flagship Service</span>
-              </div>
-              <div className="absolute bottom-0 left-0 right-0 p-6">
-                <h4 className="text-white font-light text-2xl tracking-[-0.02em] leading-tight mb-2">Stamped Asphalt</h4>
-                <p className="text-white/70 text-[13px] leading-[1.6] mb-4 font-light max-w-[280px]">
-                  Custom patterns, slip-resistant, 8+ year life. Our foundational service for driveways, crosswalks, and plazas.
-                </p>
-                <span className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] font-semibold text-white border-b border-white/40 pb-1.5 group-hover:border-[#F26430] group-hover:text-[#FF8A5C] transition-all">
-                  See stamped asphalt<ArrowRight />
-                </span>
-              </div>
-            </div>
+      <div className="mt-5 flex flex-wrap items-center justify-between gap-x-8 gap-y-3 border-t border-[#E7E3DC] pt-5">
+        <Link href="/services" onClick={onNavigate} className="arrow-link">
+          All services <span>&rarr;</span>
+        </Link>
+        <div className="flex flex-wrap items-center gap-x-8 gap-y-2">
+          <Link href="/galleries" onClick={onNavigate} className="arrow-link">
+            Image galleries <span>&rarr;</span>
           </Link>
-        </div>
-
-        <div className="mt-10 pt-6 border-t border-[#E2DDD8] flex flex-wrap items-center justify-between gap-4">
-          <Link href="/contact" onClick={onClose} className="group inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.18em] font-semibold text-[#0A0A0A] hover:text-[#F26430] transition-colors">
-            Book a Site Visit<ArrowRight />
+          <Link href="/applications" onClick={onNavigate} className="arrow-link">
+            All applications <span>&rarr;</span>
           </Link>
-          <p className="text-[11px] text-[#8C8C8C] tracking-[0.04em]">25 years &middot; 51+ BC communities &middot; Mobile across BC</p>
+          <Link href="/resources" onClick={onNavigate} className="arrow-link">
+            Specifications &amp; documents <span>&rarr;</span>
+          </Link>
         </div>
       </div>
-    </motion.div>
+    </Panel>
   )
 }
 
-interface MobileAccordionProps { label: string; children: React.ReactNode }
+function ProductsMega({ onNavigate, onMouseEnter, onMouseLeave }: MegaPanelProps) {
+  // Every system is on the list at once — nothing hides behind a category.
+  // Pointing at a row swaps the photograph; the row itself is the link.
+  const [active, setActive] = useState<Product>(products[0])
+  const panelRef = useRef<HTMLDivElement>(null)
 
-function MobileAccordion({ label, children }: MobileAccordionProps) {
-  const [open, setOpen] = useState(false)
-  return (
-    <div className="border-b border-[#EDEBE7]">
-      <button onClick={() => setOpen(!open)}
-        className="flex items-center justify-between w-full min-h-[56px] px-6 text-[17px] font-medium text-[#2C2C2C] hover:text-[#F26430] transition-colors"
-        aria-expanded={open}>
-        <span>{label}</span>
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-          className={`transition-transform duration-200 ${open ? "rotate-180" : ""}`} aria-hidden="true">
-          <path d="M1 4L6 9L11 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </button>
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.div key="accordion-content" initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2, ease: "easeInOut" }} className="overflow-hidden">
-            <div className="pb-2">{children}</div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  )
-}
-
-type ActivePanel = "products" | "services" | null
-
-export default function Nav() {
-  const [activePanel, setActivePanel] = useState<ActivePanel>(null)
-  const [scrolled, setScrolled] = useState(false)
-  const [mobileOpen, setMobileOpen] = useState(false)
-  const navRef = useRef<HTMLElement>(null)
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 10)
-    handleScroll()
-    window.addEventListener("scroll", handleScroll, { passive: true })
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
-
-  useEffect(() => {
-    document.body.style.overflow = mobileOpen ? "hidden" : ""
-    return () => { document.body.style.overflow = "" }
-  }, [mobileOpen])
-
-  useEffect(() => {
-    if (!activePanel) return
-    const handleClickOutside = (e: MouseEvent) => {
-      if (navRef.current && !navRef.current.contains(e.target as Node)) setActivePanel(null)
-    }
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [activePanel])
-
-  useEffect(() => {
-    if (!activePanel && !mobileOpen) return
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") { setActivePanel(null); setMobileOpen(false) }
-    }
-    document.addEventListener("keydown", handleKey)
-    return () => document.removeEventListener("keydown", handleKey)
-  }, [activePanel, mobileOpen])
-
-  const closeAll = () => { setActivePanel(null); setMobileOpen(false) }
-  const togglePanel = (panel: ActivePanel) => { setActivePanel((prev) => (prev === panel ? null : panel)) }
-
-  const chevronDown = (
-    <svg width="11" height="11" viewBox="0 0 11 11" fill="none" aria-hidden="true" className="inline-block ml-1.5 flex-shrink-0">
-      <path d="M1 3.5L5.5 8L10 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  )
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    const panel = panelRef.current
+    if (!panel) return
+    const items = Array.from(panel.querySelectorAll<HTMLElement>("[data-mega-item]"))
+    const el = document.activeElement as HTMLElement | null
+    if (!el || !items.includes(el)) return
+    const i = items.indexOf(el)
+    if (e.key === "ArrowDown") { e.preventDefault(); items[Math.min(i + 1, items.length - 1)]?.focus() }
+    if (e.key === "ArrowUp") { e.preventDefault(); items[Math.max(i - 1, 0)]?.focus() }
+  }
 
   return (
-    <>
-      <nav ref={navRef}
-        className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ${scrolled ? "bg-white/95 backdrop-blur-md border-b border-[#E2DDD8] shadow-[0_2px_24px_rgba(0,0,0,0.04)]" : "bg-white/80 backdrop-blur-sm"}`}>
-        <div className="max-w-[1400px] mx-auto px-5 sm:px-8">
-          <div className="flex items-center justify-between h-[68px]">
-            <Link href="/" onClick={closeAll} className="flex-shrink-0 inline-flex items-center group" aria-label="Square One Paving — home">
-              <Image
-                src="/images/logo/SquareOne-wordmark-dark.svg"
-                alt="Square One Paving"
-                width={200}
-                height={32}
-                className="h-7 lg:h-8 w-auto"
-                priority
-              />
-            </Link>
-
-            <div className="hidden lg:flex items-center gap-0">
-              <button onClick={() => togglePanel("products")}
-                className={`flex items-center px-4 py-2 text-[13px] font-semibold tracking-[0.005em] transition-colors ${activePanel === "products" ? "text-[#F26430]" : "text-[#0A0A0A] hover:text-[#F26430]"}`}
-                aria-expanded={activePanel === "products"} aria-haspopup="true">
-                Products
-                <span className={`transition-transform duration-200 ${activePanel === "products" ? "rotate-180" : ""}`}>{chevronDown}</span>
-              </button>
-
-              <button onClick={() => togglePanel("services")}
-                className={`flex items-center px-4 py-2 text-[13px] font-semibold tracking-[0.005em] transition-colors ${activePanel === "services" ? "text-[#F26430]" : "text-[#0A0A0A] hover:text-[#F26430]"}`}
-                aria-expanded={activePanel === "services"} aria-haspopup="true">
-                Services
-                <span className={`transition-transform duration-200 ${activePanel === "services" ? "rotate-180" : ""}`}>{chevronDown}</span>
-              </button>
-
-              {([
-                { label: "Projects", href: "/projects" },
-                { label: "Driveways", href: "/driveways" },
-                { label: "Blog", href: "/blog" },
-                { label: "About", href: "/about" },
-                { label: "Contact", href: "/contact" },
-              ] as const).map((link) => (
-                <Link key={link.href} href={link.href} onClick={closeAll}
-                  className="px-4 py-2 text-[13px] font-semibold tracking-[0.005em] text-[#0A0A0A] hover:text-[#F26430] transition-colors">
-                  {link.label}
-                </Link>
+    <Panel label="Products menu" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+      <div ref={panelRef} onKeyDown={onKeyDown} className="grid grid-cols-12 gap-x-10">
+        {/* ── Cols 1–6: every system, grouped by trade — two balanced columns ──────── */}
+        <div className="col-span-6 grid grid-cols-2 gap-x-8 gap-y-6 border-r border-[#E7E3DC] pr-10">
+          {[
+            productColumns.filter((c) => c.category !== "Thermoplastic"),
+            productColumns.filter((c) => c.category === "Thermoplastic"),
+          ].map((groups, gi) => (
+            <div key={gi} className="flex flex-col gap-6">
+              {groups.map((col) => (
+                <div key={col.category}>
+                  <div className="label">{col.category}</div>
+                  <ul className="mt-2">
+                    {col.items.map((product) => {
+                      const on = active.slug === product.slug
+                      return (
+                        <li key={product.slug}>
+                          <Link
+                            href={`/products/${product.slug}`}
+                            onClick={onNavigate}
+                            data-mega-item
+                            onMouseEnter={() => setActive(product)}
+                            onFocus={() => setActive(product)}
+                            className={`group -mx-3 flex items-center justify-between gap-3 rounded-[2px] px-3 py-[9px] transition-colors duration-150 ${
+                              on ? "bg-[#FAF8F5]" : "hover:bg-[#FAF8F5]"
+                            }`}
+                          >
+                            <span className="min-w-0">
+                              <span
+                                className={`block text-[13px] font-semibold uppercase tracking-[0.08em] ${on ? "text-[#14161A]" : "text-[#3D4147]"}`}
+                                style={{ fontFamily: "var(--font-display)" }}
+                              >
+                                {product.name}
+                              </span>
+                              <span className="mt-[2px] block whitespace-nowrap text-[12.5px] leading-[1.4] text-[#767B82]">
+                                {PRODUCT_DESCRIPTOR[product.slug] ?? product.tagline}
+                              </span>
+                            </span>
+                            <span
+                              aria-hidden="true"
+                              className={`shrink-0 text-[15px] leading-none transition-all duration-200 ${
+                                on ? "translate-x-0 text-[#14161A] opacity-100" : "-translate-x-1 text-[#A9A297] opacity-0 group-hover:opacity-100"
+                              }`}
+                            >
+                              &rarr;
+                            </span>
+                          </Link>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                </div>
               ))}
             </div>
-
-            <div className="flex items-center gap-3">
-              <Link href="/contact" onClick={closeAll} className="hidden lg:inline-flex">
-                <span className="group inline-flex items-center gap-2 bg-[#0A0A0A] text-white px-5 py-2.5 text-[12.5px] font-semibold tracking-[0.04em] uppercase rounded-none transition-all hover:bg-[#F26430] hover:shadow-[0_8px_24px_rgba(242,100,48,0.30)]">
-                  Get a Quote<ArrowRight />
-                </span>
-              </Link>
-
-              <button onClick={() => setMobileOpen(!mobileOpen)} className="lg:hidden relative w-11 h-11 flex items-center justify-center"
-                aria-label={mobileOpen ? "Close menu" : "Open menu"} aria-expanded={mobileOpen}>
-                <span className="absolute block h-[2px] w-6 bg-[#0A0A0A] transition-all duration-300"
-                  style={{ transform: mobileOpen ? "translateY(0) rotate(45deg)" : "translateY(-4px)" }} />
-                <span className="absolute block h-[2px] w-6 bg-[#0A0A0A] transition-all duration-300"
-                  style={{ transform: mobileOpen ? "translateY(0) rotate(-45deg)" : "translateY(4px)" }} />
-              </button>
-            </div>
+          ))}
+          <div className="col-span-2 flex flex-wrap items-center gap-x-8 gap-y-2 border-t border-[#E7E3DC] pt-5">
+            <Link href="/products" onClick={onNavigate} className="arrow-link">
+              All products <span>&rarr;</span>
+            </Link>
+            <Link href="/resources" onClick={onNavigate} className="arrow-link">
+              Specifications &amp; documents <span>&rarr;</span>
+            </Link>
           </div>
         </div>
 
-        <AnimatePresence>{activePanel === "products" && <ProductsPanel key="products-panel" onClose={closeAll} />}</AnimatePresence>
-        <AnimatePresence>{activePanel === "services" && <ServicesPanel key="services-panel" onClose={closeAll} />}</AnimatePresence>
+        {/* ── Cols 7–12: the active system, photographed ──────── */}
+        <div className="col-span-6">
+          <Link
+            href={`/products/${active.slug}`}
+            onClick={onNavigate}
+            className="group relative block aspect-[16/9] overflow-hidden rounded-[2px] bg-[#F1EEE9]"
+            tabIndex={-1}
+            aria-hidden="true"
+          >
+            <AnimatePresence initial={false}>
+              <motion.span
+                key={active.slug}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.22, ease: "easeOut" }}
+                className="absolute inset-0"
+              >
+                <Image
+                  src={active.image}
+                  alt=""
+                  fill
+                  sizes="(max-width: 1280px) 50vw, 620px"
+                  className="object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+                />
+              </motion.span>
+            </AnimatePresence>
+            <span aria-hidden="true" className="scrim" />
+            <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-6 p-6">
+              <span className="min-w-0">
+                <span className="block text-[11px] font-semibold uppercase tracking-[0.14em] text-white/70" style={{ fontFamily: "var(--font-display)" }}>
+                  {active.category}
+                </span>
+                <span className="mt-2 block text-[22px] font-semibold uppercase leading-[1.1] tracking-[0.05em] text-white" style={{ fontFamily: "var(--font-display)" }}>
+                  {active.name}
+                  {active.mark && <sup className="ml-[0.1em] text-[0.45em] font-medium align-super">{active.mark}</sup>}
+                </span>
+                <span className="mt-2 block max-w-[46ch] text-[13.5px] leading-[1.5] text-white/80">
+                  {active.tagline}
+                </span>
+              </span>
+              <span
+                aria-hidden="true"
+                className="mb-1 shrink-0 text-[13px] font-semibold uppercase tracking-[0.1em] text-white/80 transition-colors group-hover:text-white"
+                style={{ fontFamily: "var(--font-display)" }}
+              >
+                See the system &rarr;
+              </span>
+            </span>
+          </Link>
+        </div>
+      </div>
+    </Panel>
+  )
+}
+
+function MobileDrawer({ onClose }: { onClose: () => void }) {
+  return (
+    <motion.div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Navigation menu"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.18, ease: "easeOut" }}
+      className="fixed inset-0 z-[300] flex flex-col bg-white min-[1024px]:hidden"
+    >
+      <div className="flex h-[72px] shrink-0 items-center justify-between border-b border-[#E7E3DC] px-6">
+        <Wordmark onClick={onClose} />
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Close menu"
+          className="px-3 py-2 text-[28px] leading-none font-normal text-[#14161A]"
+        >
+          &times;
+        </button>
+      </div>
+
+      <nav aria-label="Mobile" className="flex-1 overflow-auto px-6 pt-2 pb-6">
+        {/* The five services as a swipeable photo rail — the desktop panel's
+            first row, one thumb-width at a time. */}
+        <div className="-mx-6 flex snap-x snap-mandatory gap-3 overflow-x-auto px-6 pt-3 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {SERVICE_TILES.map((tile) => (
+            <Link
+              key={tile.href}
+              href={tile.href}
+              onClick={onClose}
+              className="relative block aspect-[4/3] w-[62vw] max-w-[260px] shrink-0 snap-start overflow-hidden rounded-[2px] bg-[#F1EEE9]"
+            >
+              <Image src={tile.src} alt={tile.alt} fill sizes="62vw" className="object-cover" />
+              <span aria-hidden="true" className="scrim" />
+              <span className="absolute inset-x-0 bottom-0 p-3">
+                <span className="block text-[12px] font-semibold uppercase tracking-[0.1em] text-white" style={{ fontFamily: "var(--font-display)" }}>
+                  {tile.name}
+                </span>
+                <span className="mt-[2px] block text-[12px] text-white/75">{tile.note}</span>
+              </span>
+            </Link>
+          ))}
+        </div>
+
+        {DRAWER_LINKS.map((link) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            onClick={onClose}
+            className="block border-b border-[#E7E3DC] py-[18px] text-[24px] leading-tight font-medium tracking-[-0.02em] text-[#14161A]"
+          >
+            {link.label}
+          </Link>
+        ))}
+
+        <div className="label mt-9">Services</div>
+        <div className="mt-3 flex flex-col">
+          {serviceLinks.map((service) => (
+            <Link
+              key={service.slug}
+              href={`/services/${service.slug}`}
+              onClick={onClose}
+              className="py-[9px] text-[16px] font-medium text-[#3D4147]"
+            >
+              {SERVICE_LABEL[service.slug] ?? service.name}
+            </Link>
+          ))}
+          <Link href="/driveways" onClick={onClose} className="py-[9px] text-[16px] font-medium text-[#3D4147]">
+            Driveways
+          </Link>
+        </div>
+
+        <div className="label mt-8">Applications</div>
+        <div className="mt-3 grid grid-cols-2 gap-x-4">
+          {APPLICATIONS.filter((a) => a.href !== "/driveways").map((a) => (
+            <Link key={a.href} href={a.href} onClick={onClose} className="flex items-center gap-3 py-[7px] text-[15px] font-medium text-[#3D4147]">
+              {APP_LEADS[a.slug] && (
+                <span className="relative block h-[30px] w-[40px] shrink-0 overflow-hidden rounded-[2px] bg-[#F1EEE9]">
+                  <Image src={APP_LEADS[a.slug]} alt="" fill sizes="40px" className="object-cover" />
+                </span>
+              )}
+              <span className="min-w-0 leading-[1.25]">{a.label}</span>
+            </Link>
+          ))}
+        </div>
+
+        <div className="label mt-8">Products</div>
+        <div className="mt-3 grid grid-cols-2 gap-x-6">
+          {products.map((product) => (
+            <Link
+              key={product.slug}
+              href={`/products/${product.slug}`}
+              onClick={onClose}
+              className="py-[9px] text-[16px] font-medium text-[#3D4147]"
+            >
+              {product.name}
+            </Link>
+          ))}
+        </div>
       </nav>
 
+      <div className="flex shrink-0 flex-wrap items-center gap-x-6 gap-y-1 border-t border-[#E7E3DC] px-6 py-4 text-[13px] text-[#767B82]">
+        <span>
+          <a href="tel:+16044669902" className="font-medium text-[#14161A]">604-466-9902</a> Maple Ridge
+        </span>
+        <span>
+          <a href="tel:+12503910270" className="font-medium text-[#14161A]">250-391-0270</a> Vancouver Island
+        </span>
+      </div>
+
+      <Link
+        href="/contact"
+        onClick={onClose}
+        className="flex h-16 shrink-0 items-center justify-center bg-[#F26430] text-[13px] font-semibold tracking-[0.12em] uppercase text-white transition-colors hover:bg-[#D8511F] hover:text-white"
+        style={{ fontFamily: "var(--font-display)" }}
+      >
+        Request a quote
+      </Link>
+    </motion.div>
+  )
+}
+
+/* ------------------------------------------------------------------
+   Nav
+   ------------------------------------------------------------------ */
+
+export default function Nav() {
+  const pathname = usePathname()
+  const [scrolled, setScrolled] = useState(false)
+  const [onImage, setOnImage] = useState(false)
+  const [menu, setMenu] = useState<MenuKey | null>(null)
+  const [drawerOpen, setDrawerOpen] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
+  const rootRef = useRef<HTMLDivElement>(null)
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const clearCloseTimer = useCallback(() => {
+    if (closeTimer.current) {
+      clearTimeout(closeTimer.current)
+      closeTimer.current = null
+    }
+  }, [])
+
+  const openMenu = useCallback(
+    (key: MenuKey) => {
+      clearCloseTimer()
+      setMenu(key)
+    },
+    [clearCloseTimer],
+  )
+
+  const closeMenu = useCallback(() => {
+    clearCloseTimer()
+    setMenu(null)
+  }, [clearCloseTimer])
+
+  const scheduleClose = useCallback(() => {
+    clearCloseTimer()
+    closeTimer.current = setTimeout(() => setMenu(null), 140)
+  }, [clearCloseTimer])
+
+  const hoverOpen = useCallback(
+    (key: MenuKey) => {
+      if (window.matchMedia("(hover: hover)").matches) openMenu(key)
+    },
+    [openMenu],
+  )
+
+  const closeAll = useCallback(() => {
+    clearCloseTimer()
+    setMenu(null)
+    setDrawerOpen(false)
+  }, [clearCloseTimer])
+
+  // Bar goes opaque past 24px
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24)
+    onScroll()
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [])
+
+  // Over-hero state: only a page that opens on a full-bleed photograph
+  // ([data-nav-on-image]) gets the transparent, light bar. Everywhere
+  // else the bar is solid white from the first pixel, so it can never
+  // sink into a split-hero photograph (Vern, 5 Sept 2026).
+  useEffect(() => {
+    setOnImage(Boolean(document.querySelector("[data-nav-on-image]")))
+  }, [pathname])
+
+  // Lock body scroll while the drawer is open
+  useEffect(() => {
+    document.body.style.overflow = drawerOpen ? "hidden" : ""
+    return () => {
+      document.body.style.overflow = ""
+    }
+  }, [drawerOpen])
+
+  // Cmd/Ctrl+K opens search from anywhere
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault()
+        clearCloseTimer()
+        setMenu(null)
+        setDrawerOpen(false)
+        setSearchOpen(true)
+      }
+    }
+    window.addEventListener("keydown", onKey)
+    return () => window.removeEventListener("keydown", onKey)
+  }, [clearCloseTimer])
+
+  // Escape closes both
+  useEffect(() => {
+    if (!menu && !drawerOpen) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeAll()
+    }
+    document.addEventListener("keydown", onKey)
+    return () => document.removeEventListener("keydown", onKey)
+  }, [menu, drawerOpen, closeAll])
+
+  // Outside click closes the dropdown
+  useEffect(() => {
+    if (!menu) return
+    const onDocClick = (e: MouseEvent) => {
+      if (rootRef.current && !rootRef.current.contains(e.target as Node)) closeMenu()
+    }
+    document.addEventListener("mousedown", onDocClick)
+    return () => document.removeEventListener("mousedown", onDocClick)
+  }, [menu, closeMenu])
+
+  useEffect(() => clearCloseTimer, [clearCloseTimer])
+
+  const isActive = (link: PrimaryLink) =>
+    link.match.some((base) => pathname === base || pathname.startsWith(`${base}/`))
+
+  // Solid unless the page opens on a photograph and we are still at the top.
+  const solid = scrolled || menu !== null || !onImage
+  // Menus and the drawer sit on white, so the light treatment yields to them
+  const light = onImage && !scrolled && menu === null
+
+  return (
+    // reducedMotion="user": the CSS kill switch cannot stop framer's JS
+    // animations, so the dropdown/drawer fades opt out here (MOVE 8).
+    <MotionConfig reducedMotion="user">
+    <div ref={rootRef}>
+      <header
+        className={`fixed top-0 right-0 left-0 z-50${light ? " nav-light" : ""}`}
+        style={{
+          background: solid ? "#FFFFFF" : "rgba(255,255,255,0)",
+          backdropFilter: solid ? "blur(8px)" : "none",
+          WebkitBackdropFilter: solid ? "blur(8px)" : "none",
+          borderBottom: `1px solid ${solid ? HAIRLINE : "rgba(231,227,220,0)"}`,
+          transition: "background 0.25s ease, border-color 0.25s ease",
+        }}
+      >
+        <div className="container-1280 flex h-[72px] min-w-0 items-center gap-x-6">
+          <Wordmark onClick={closeAll} light={light} />
+
+          <nav
+            aria-label="Primary"
+            className="ml-auto hidden items-center gap-6 min-[1024px]:flex min-[1280px]:gap-8"
+          >
+            {PRIMARY_LINKS.map((link) => {
+              const menuKey = link.menu
+              const linkClass = `nav-link${isActive(link) ? " nav-link-active" : ""}`
+
+              if (!menuKey) {
+                return (
+                  <Link key={link.href} href={link.href} onClick={closeAll} className={linkClass}>
+                    {link.label}
+                  </Link>
+                )
+              }
+
+              return (
+                <div
+                  key={link.href}
+                  className="relative flex h-[72px] items-center"
+                  onMouseEnter={() => hoverOpen(menuKey)}
+                  onMouseLeave={scheduleClose}
+                >
+                  <Link
+                    href={link.href}
+                    aria-haspopup="true"
+                    aria-expanded={menu === menuKey}
+                    onClick={(e) => {
+                      // Open panel + click again (or hover-open + click) =
+                      // go to the index page. Closed = open the panel.
+                      if (menu === menuKey) {
+                        closeAll()
+                        return
+                      }
+                      e.preventDefault()
+                      openMenu(menuKey)
+                    }}
+                    className={`${linkClass} inline-flex items-center gap-[6px]`}
+                  >
+                    {link.label}
+                    <svg
+                      aria-hidden="true"
+                      width="8"
+                      height="5"
+                      viewBox="0 0 8 5"
+                      className={`shrink-0 transition-transform duration-150 ${
+                        menu === menuKey ? "rotate-180" : ""
+                      }`}
+                    >
+                      <path d="M1 1l3 3 3-3" stroke="currentColor" strokeWidth="1.5" fill="none" />
+                    </svg>
+                  </Link>
+                </div>
+              )
+            })}
+          </nav>
+
+          <button
+            type="button"
+            onClick={() => {
+              closeAll()
+              setSearchOpen(true)
+            }}
+            aria-label="Search the site"
+            title="Search (Ctrl+K)"
+            className="nav-link ml-2 hidden h-10 w-10 shrink-0 items-center justify-center rounded-[2px] min-[1024px]:flex"
+          >
+            <svg aria-hidden="true" width="17" height="17" viewBox="0 0 18 18">
+              <circle cx="8" cy="8" r="6.25" stroke="currentColor" strokeWidth="1.5" fill="none" />
+              <path d="M12.5 12.5L16.5 16.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+          </button>
+
+          <Link
+            href="/contact"
+            onClick={closeAll}
+            style={{ fontFamily: "var(--font-display)" }}
+            className="nav-cta ml-2 hidden shrink-0 rounded-[2px] border px-[19px] py-[11px] text-[12px] font-semibold tracking-[0.1em] uppercase transition-colors min-[1024px]:inline-block"
+          >
+            Request a quote
+          </Link>
+
+          <button
+            type="button"
+            onClick={() => {
+              closeAll()
+              setSearchOpen(true)
+            }}
+            aria-label="Search the site"
+            className="nav-link ml-auto flex h-11 w-11 items-center justify-center min-[1024px]:hidden"
+          >
+            <svg aria-hidden="true" width="18" height="18" viewBox="0 0 18 18">
+              <circle cx="8" cy="8" r="6.25" stroke="currentColor" strokeWidth="1.5" fill="none" />
+              <path d="M12.5 12.5L16.5 16.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setDrawerOpen(true)}
+            aria-label="Open menu"
+            aria-expanded={drawerOpen}
+            className="flex h-11 w-11 flex-col items-center justify-center gap-[5px] min-[1024px]:hidden"
+          >
+            <span aria-hidden="true" className="nav-burger-bar block h-[1.5px] w-[22px]" />
+            <span aria-hidden="true" className="nav-burger-bar block h-[1.5px] w-[22px]" />
+          </button>
+        </div>
+      </header>
+
+      {/* The page steps back while a panel is open; a click on it closes the panel */}
       <AnimatePresence>
-        {mobileOpen && (
-          <motion.div key="mobile-menu" className="lg:hidden fixed inset-0 w-full h-full z-[70] bg-white flex flex-col overflow-hidden"
-            initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }}
-            transition={{ duration: 0.22, ease: "easeOut" }} aria-modal="true" role="dialog" aria-label="Navigation menu">
-
-            <div className="flex items-center justify-between px-5 h-[68px] border-b border-[#E2DDD8] flex-shrink-0">
-              <Link href="/" onClick={closeAll} className="inline-flex items-center">
-                <Image src="/images/logo/SquareOne-wordmark-dark.svg" alt="Square One Paving" width={170} height={28} className="h-7 w-auto" />
-              </Link>
-              <button onClick={() => setMobileOpen(false)} className="relative w-11 h-11 flex items-center justify-center hover:bg-[#F6F4F0] transition-colors" aria-label="Close menu">
-                <span className="absolute block h-[2px] w-6 bg-[#0A0A0A] transition-all duration-300" style={{ transform: "translateY(0) rotate(45deg)" }} />
-                <span className="absolute block h-[2px] w-6 bg-[#0A0A0A] transition-all duration-300" style={{ transform: "translateY(0) rotate(-45deg)" }} />
-              </button>
-            </div>
-
-            <div className="flex-1 overflow-y-auto overscroll-contain pb-12">
-              <MobileAccordion label="Products">
-                {productColumns.map((col) => (
-                  <div key={col.category} className="px-6 pt-3 pb-1">
-                    <p className="text-[10px] uppercase tracking-[0.18em] text-[#F26430] font-bold mb-1">{col.category}</p>
-                    {col.items.map((item) => (
-                      <Link key={item.href} href={item.href} onClick={closeAll}
-                        className="flex items-center min-h-[48px] pl-2 text-[15px] font-medium text-[#2C2C2C] hover:text-[#F26430] transition-colors border-l-2 border-transparent hover:border-[#F26430]">
-                        {item.label}
-                      </Link>
-                    ))}
-                  </div>
-                ))}
-                <div className="px-6 py-3 border-t border-[#EDEBE7] mt-2 space-y-2">
-                  <div className="flex items-center gap-5 flex-wrap">
-                    <Link href="/products" onClick={closeAll} className="text-sm font-semibold text-[#F26430] hover:underline">View All Products &rarr;</Link>
-                    <Link href="/products" onClick={closeAll} className="text-sm font-semibold text-[#5A5A5A] hover:text-[#F26430] hover:underline">Download Spec Sheets &rarr;</Link>
-                  </div>
-                  <p className="text-[11px] text-[#8C8C8C] tracking-[0.04em]">Authorized HUB Surface Systems Applicator</p>
-                </div>
-              </MobileAccordion>
-
-              <MobileAccordion label="Services">
-                <div className="px-6 py-2 space-y-0.5">
-                  {serviceItems.map((item) => (
-                    <Link key={item.href} href={item.href} onClick={closeAll}
-                      className="flex flex-col min-h-[56px] justify-center pl-2 py-2 border-l-2 border-transparent hover:border-[#F26430] hover:bg-[#F6F4F0] transition-all">
-                      <span className="text-[15px] font-medium text-[#2C2C2C] hover:text-[#F26430]">{item.label}</span>
-                      <span className="text-xs text-[#5A5A5A]">{item.description}</span>
-                    </Link>
-                  ))}
-                </div>
-                <div className="px-6 py-3 border-t border-[#EDEBE7] mt-1 space-y-1.5">
-                  <Link href="/contact" onClick={closeAll} className="text-sm font-semibold text-[#F26430] hover:underline">Book a Site Visit &rarr;</Link>
-                  <p className="text-[11px] text-[#8C8C8C] tracking-[0.04em]">25 years &middot; 51+ BC communities &middot; Mobile across BC</p>
-                </div>
-              </MobileAccordion>
-
-              {([
-                { label: "Projects", href: "/projects" },
-                { label: "Driveways", href: "/driveways" },
-                { label: "Blog", href: "/blog" },
-                { label: "About", href: "/about" },
-                { label: "Contact", href: "/contact" },
-              ] as const).map((link) => (
-                <Link key={link.href} href={link.href} onClick={closeAll}
-                  className="flex items-center min-h-[56px] px-6 text-[17px] font-medium text-[#2C2C2C] border-b border-[#EDEBE7] hover:text-[#F26430] transition-colors">
-                  {link.label}
-                </Link>
-              ))}
-            </div>
-
-            <div className="flex-shrink-0 border-t border-[#E2DDD8] bg-white">
-              <Link href="/contact" onClick={closeAll}
-                className="block bg-[#0A0A0A] text-white text-center py-4 text-sm font-semibold tracking-[0.1em] uppercase transition-all hover:bg-[#F26430]">
-                Get a Quote &rarr;
-              </Link>
-            </div>
-          </motion.div>
+        {menu && (
+          <motion.div
+            aria-hidden="true"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            onClick={closeMenu}
+            className="mega-scrim hidden min-[1024px]:block"
+          />
         )}
       </AnimatePresence>
-    </>
+
+      <AnimatePresence>
+        {menu === "products" && (
+          <ProductsMega
+            onNavigate={closeAll}
+            onMouseEnter={() => openMenu("products")}
+            onMouseLeave={scheduleClose}
+          />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {menu === "services" && (
+          <ServicesMega
+            onNavigate={closeAll}
+            onMouseEnter={() => openMenu("services")}
+            onMouseLeave={scheduleClose}
+          />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {drawerOpen && <MobileDrawer onClose={closeAll} />}
+      </AnimatePresence>
+
+      <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
+    </div>
+    </MotionConfig>
   )
 }

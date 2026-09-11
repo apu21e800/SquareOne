@@ -1,0 +1,256 @@
+/* ============================================================
+   Square One v2 — the polish + character passes (5 Sept 2026; Vern:
+   "gentle rounding… keep the square theme but soften it", "cinematic on
+   big monitors", then "H1 could pop more", "the stats look too big",
+   "everything is very white", "give the site a bit more character"), then
+   7 Sept 2026 ("get rid of the weird big numbers on the sides of the page",
+   "skip the dark blue colour that belongs to hubss — S1 needs its own brand").
+   Unlayered and loaded after globals + mobile, so it wins over utilities.
+   Where this file disagrees with the comments in globals.css, this file
+   is current — the canon moved on Vern's word.
+   ============================================================ */
+
+/* ---- Surfaces: paper and stone deepen a step so the white → paper →
+   stone alternation can actually be seen. ---- */
+:root {
+  --surface-warm:  #F6F3EE;
+  --surface-stone: #ECE7DF;
+}
+
+/* ---- Square One's dark (7 Sept 2026). The inherited #14181D is a blue
+   black — R−B = −9 — and it is HUB's, not Square One's. This company
+   installs on asphalt, and its own palette is warm: beige #F5F3F0,
+   stone #8B8680, a terracotta accent #C85A3A. So the dark warms to match
+   the material and the accent it has to carry: R−B = +6, the same warm
+   axis as the beige. The token keeps its "slate" name because every
+   surface on the site already reads it; only the value moved.
+
+   Contrast on #1E1B18, all AA or better:
+     white 17.1 : 1   body 11.2 : 1   muted 6.7 : 1
+     faint 5.4 : 1    legal 4.8 : 1
+   ---- */
+:root {
+  --surface-slate:        #1E1B18;
+  --ink-on-slate-body:    #D6D0C7;
+  --ink-on-slate-muted:   #A8A198;
+  --ink-on-slate-faint:   #968F86;
+  --ink-on-slate-legal:   #8F877E;
+  --hairline-slate: rgba(246, 240, 232, 0.10);
+}
+
+/* The scrims over photography follow the same warm black, so a hero does
+   not cool off at its edges while the band below it is warm. */
+.scrim { background: linear-gradient(to top, rgba(24, 21, 18, 0.72), rgba(24, 21, 18, 0) 52%); }
+.scrim-light { background: linear-gradient(to top, rgba(24, 21, 18, 0.55), rgba(24, 21, 18, 0) 38%); }
+.scrim-rise {
+  background: linear-gradient(
+    to top,
+    rgba(24, 21, 18, 0.82) 0%,
+    rgba(24, 21, 18, 0.42) 32%,
+    rgba(24, 21, 18, 0) 60%
+  );
+}
+.mega-scrim { background: rgba(24, 21, 18, 0.30); }
+
+/* ---- One soft radius. The utility classes stay in the markup; every
+   2px corner on the site takes the token, so cards, photographs, buttons,
+   fields and chips agree. The 6px orange squares keep their 1px corners —
+   that is the signature, and it stays square. ---- */
+:root { --radius: 6px; }
+[class*="rounded-[2px]"] { border-radius: var(--radius); }
+.card-panel, .btn-primary, .btn-secondary, .btn-on-slate, .btn-on-image, .chip, .tag, .reel-btn,
+input[type="text"], input[type="email"], input[type="tel"], input[type="search"], select, textarea {
+  border-radius: var(--radius);
+}
+.eyebrow::before, .stop::after { border-radius: 1px; }
+
+/* ---- Type: the display voice gets its weight back. H1, the hero line and
+   the statement carry Poppins 700 at tight tracking — a headline should
+   land, not float. H2 stays 600. Stat numerals come down a size. ---- */
+h1 {
+  font-size: clamp(2.5rem, 4.2vw, 4.25rem);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.02;
+}
+.display-xl {
+  font-size: clamp(2.6rem, 5vw, 5rem);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+.display-statement {
+  font-size: clamp(2rem, 2.8vw, 3rem);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.08;
+}
+h2:not(.label):not(.eyebrow) {
+  font-size: clamp(1.5rem, 2.4vw, 2.1rem);
+  letter-spacing: 0.04em;
+  line-height: 1.12;
+}
+.stat-num { font-size: 52px; letter-spacing: 0; }
+@media (max-width: 700px) { .stat-num { font-size: 40px; } }
+
+/* ---- Headings never push the page sideways (7 Sept 2026). Ten blog titles
+   carry an unbreakable product name — "TrafficPatternsXD" is 380px of
+   Poppins 700 at 40px, against 342px of column on a 390px phone — so the
+   word spilled and the whole document scrolled horizontally. Measured: the
+   name fits at 34px. Phones take a scaled h1 that tops out there, and every
+   heading gets break-word as a permanent guard, which does nothing until a
+   single word genuinely cannot fit its line. ---- */
+h1, h2, h3, .display-xl, .display-statement { overflow-wrap: break-word; }
+@media (max-width: 560px) {
+  h1 { font-size: clamp(1.75rem, 8.6vw, 2.125rem); }
+}
+
+/* The full stop scales with the line it closes (never below the 6px square). */
+.stop::after {
+  width: max(6px, 0.11em);
+  height: max(6px, 0.11em);
+  margin-left: max(12px, 0.2em);
+}
+
+/* ---- Numbered eyebrows: the section index in ink, then the label in
+   muted caps — "■ 04 APPLICATIONS". ---- */
+.eyebrow-num {
+  color: var(--ink);
+  letter-spacing: 0.08em;
+}
+.eyebrow-on-image .eyebrow-num { color: #FFFFFF; }
+
+/* ---- Ghost numerals, retired 7 Sept 2026 (Vern: "get rid of the weird big
+   numbers on the sides of the page"). The spans are gone from the section
+   components; this rule keeps any stray one from rendering as loose text,
+   and the section index survives in the eyebrow, where it is legible. ---- */
+.ghost-index, .ghost-index-slate, .ghost-index-stone { display: none; }
+
+/* ---- The offer card (home, driveways band): the page's one orange block.
+   White type, a white button, nothing else. ---- */
+.offer-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: #FFFFFF;
+  padding: 28px 30px 30px;
+}
+/* The two decorative squares (::before / ::after) were retired 11 Sept
+   2026 — at card size they read as a stray checkbox and a clipped frame. */
+.offer-title {
+  font-family: var(--font-display);
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: #FFFFFF;
+}
+.offer-btn { background: #FFFFFF; color: var(--accent-deep); }
+.offer-btn:hover { background: var(--surface-stone); color: var(--accent-deep); }
+@media (max-width: 700px) {
+  .offer-card { padding: 22px 22px 24px; }
+  .offer-title { font-size: 19px; }
+}
+
+/* Small figures — a hairline row of numerals, a size below the stat. */
+.figure {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--ink);
+}
+
+/* ---- Pattern tiles (materials board). Until 7 Sept these were drawn in
+   hairline-strong on white inside a stone band, which made them pale on
+   pale and effectively invisible. The tile is now asphalt and the template
+   is the joint line pressed into it — what StreetPrint actually leaves
+   behind — so the drawing reads, and warms to the accent on hover. ---- */
+.pattern-tile {
+  color: rgba(214, 208, 199, 0.62);
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.group:hover .pattern-tile {
+  color: var(--accent);
+  border-color: rgba(246, 240, 232, 0.22);
+}
+
+/* ---- The light bar over a photograph: a deeper, longer top settle so the
+   links read against a bright sky or a pale plaza, not only against a dark
+   one (Vern's screenshot: "the nav gets lost on the top right"). ---- */
+.scrim-top {
+  height: 200px;
+  background: linear-gradient(
+    to bottom,
+    rgba(24, 21, 18, 0.68) 0%,
+    rgba(24, 21, 18, 0.42) 72px,
+    rgba(24, 21, 18, 0.14) 140px,
+    rgba(24, 21, 18, 0) 100%
+  );
+}
+
+/* ---- The two split heroes (driveways, vapour blasting) align their text
+   column with the container's content edge at every width. ---- */
+@media (min-width: 701px) {
+  [class*="100vw_-_1280px"] { padding-left: max(calc((100vw - var(--container)) / 2 + var(--gutter)), var(--gutter)); }
+}
+
+/* ---- Cinematic widths. The measure opens with the screen: 1440px on a
+   27" monitor, 1600px on anything wider, with a little more gutter and
+   air; display type follows. Phones and laptops are untouched. ---- */
+@media (min-width: 1536px) {
+  :root {
+    --container: 1440px;
+    --gutter: 56px;
+    --section-y: 7.5rem;
+  }
+  h1 { font-size: clamp(2.75rem, 3.9vw, 4.75rem); }
+  h2:not(.label):not(.eyebrow) { font-size: clamp(1.5rem, 2vw, 2.4rem); }
+  .display-xl { font-size: clamp(3rem, 4.8vw, 6rem); }
+  .display-statement { font-size: clamp(2.2rem, 2.8vw, 3.4rem); }
+  .stat-num { font-size: 56px; }
+  /* Mega panels and any 1280-capped block follow the container */
+  [class*="max-w-[1280px]"] { max-width: var(--container); }
+  /* Index heroes get taller with the screen */
+  [data-nav-on-image][class*="h-[58vh]"] { height: 64vh; }
+}
+@media (min-width: 1920px) {
+  :root {
+    --container: 1600px;
+    --gutter: 64px;
+  }
+}
+
+/* ── The Futura option (11 Sept 2026 — Vern: "let's see both") ──────────
+   <html data-type="futura"> swaps the display face to Jost (the open
+   Futura-family cut; a licensed Futura drops into the same variable in
+   app/layout.tsx) and the text face to Inter, and restores the Jost caps
+   tracking the site ran before 4 Sept (0.065em H1, 0.075em H2, 0.06em at
+   hero scale). Poppins stays the default; nothing here applies without the
+   attribute. Set by components/TypeToggle or ?type=futura. */
+html[data-type="futura"] {
+  --font-display: var(--font-jost), Futura, "Century Gothic", ui-sans-serif, sans-serif;
+}
+html[data-type="futura"] body {
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  font-size: 16.5px;
+}
+html[data-type="futura"] h1 { letter-spacing: 0.065em; font-weight: 600; }
+html[data-type="futura"] h2 { letter-spacing: 0.075em; font-weight: 600; }
+html[data-type="futura"] .display-xl { letter-spacing: 0.06em; }
+html[data-type="futura"] .display-statement { letter-spacing: 0.065em; }
+html[data-type="futura"] .label,
+html[data-type="futura"] .eyebrow { letter-spacing: 0.14em; }
+html[data-type="futura"] .btn-primary,
+html[data-type="futura"] .btn-secondary,
+html[data-type="futura"] .btn-on-slate,
+html[data-type="futura"] .btn-on-image { letter-spacing: 0.12em; }
+html[data-type="futura"] h3,
+html[data-type="futura"] h4 { letter-spacing: 0; }
+
+/* Search overlay — one clear control, ours; the browser's own is hidden. */
+.search-input::-webkit-search-cancel-button,
+.search-input::-webkit-search-decoration { -webkit-appearance: none; appearance: none; display: none; }

@@ -1,270 +1,118 @@
-"use client"
-
+import Image from "next/image"
 import Link from "next/link"
-import { motion } from "framer-motion"
+import { WORK_APPS, workFor, type WorkPhoto } from "@/lib/work"
 
-const easeOut: [number, number, number, number] = [0.22, 1, 0.36, 1]
+/* Row order is the business hierarchy (lib/work.ts WORK_APPS): commercial
+   and municipal work leads, residential driveways follow, vapour blasting
+   closes as the extra service. Do not resort alphabetically or "by
+   interest" — the order is intentional. Each row is one of the ten galleries
+   the Services panel and /galleries carry, with its photograph count and
+   its lead photograph from the record, so the home page, the menu and the
+   galleries name the same ten things the same way.
 
-const applications = [
-  {
-    label: "Residential Driveways",
-    desc: "Stamped asphalt and StreetBond coatings that transform your home entrance. 20+ patterns available.",
-    href: "/driveways",
-    tag: "Residential",
-  },
-  {
-    label: "Strata & Townhome",
-    desc: "Uniform surface upgrades across multi-unit developments. Consistent finishes, one crew.",
-    href: "/driveways",
-    tag: "Residential",
-  },
-  {
-    label: "Municipal Crosswalks",
-    desc: "Vision Zero-compliant decorative crosswalks. AODA-ready patterns with retroreflective finish.",
-    href: "/contact",
-    tag: "Municipal",
-  },
-  {
-    label: "Bus & Bike Lanes",
-    desc: "High-visibility StreetBond coatings for transit corridors — red, green, and custom colours.",
-    href: "/contact",
-    tag: "Municipal",
-  },
-  {
-    label: "Patios & Courtyards",
-    desc: "Custom patterns and rich colours for outdoor living spaces and commercial courtyards.",
-    href: "/contact",
-    tag: "Commercial",
-  },
-  {
-    label: "Parking Lots",
-    desc: "Durable thermoplastic markings, stall layouts, accessible parking, and directional graphics.",
-    href: "/contact",
-    tag: "Commercial",
-  },
-  {
-    label: "Pools & Splash Pads",
-    desc: "Slip-resistant, UV-stable coatings engineered for wet aquatic and play surfaces.",
-    href: "/contact",
-    tag: "Commercial",
-  },
-  {
-    label: "School Zones",
-    desc: "School logo branding, crosswalks, speed legends, and safety markings — all in one install.",
-    href: "/contact",
-    tag: "Municipal",
-  },
-  {
-    label: "Walkways & Paths",
-    desc: "Decorative surface treatments for pedestrian paths, trails, park entries, and plazas.",
-    href: "/contact",
-    tag: "Municipal",
-  },
-  {
-    label: "Public Art & Plazas",
-    desc: "Large-format thermoplastic artwork and custom branded pavement for civic spaces.",
-    href: "/contact",
-    tag: "Municipal",
-  },
-  {
-    label: "Airports & Transit Hubs",
-    desc: "Regulatory and wayfinding markings for high-traffic airport and transit environments.",
-    href: "/contact",
-    tag: "Commercial",
-  },
-  {
-    label: "Vapor Blasting",
-    desc: "Surface removal and prep for any application — graffiti, old markings, or prior coatings.",
-    href: "/vapor-blasting",
-    tag: "Prep",
-  },
-]
+   Rebuilt 5 Sept 2026 (Vern: "the text feels overwhelming and massive") —
+   the row is now a photograph, a name and one quiet line; two columns from
+   1536px so the index sits in a single screen on a big monitor.
 
-// WCAG AA-safe on white backgrounds
-const tagStyle: Record<string, { color: string; bg: string }> = {
-  Residential: { color: "#2D6A2D", bg: "rgba(45,106,45,0.08)" },
-  Municipal:   { color: "#1A55A8", bg: "rgba(26,85,168,0.08)" },
-  Commercial:  { color: "#8B5000", bg: "rgba(139,80,0,0.08)" },
-  Prep:        { color: "#6B2FA0", bg: "rgba(107,47,160,0.08)" },
+   Moved onto slate 7 Sept 2026: after the statement band the page ran seven
+   light sections in a row, which is what "everything is very white" was
+   pointing at. This is the back half's dark beat, and the ten lead
+   photographs carry far more on it. */
+
+const VAPOUR = {
+  label: "Vapour blasting",
+  desc: "Surface cleaning, priming, graffiti and mould removal — mobile, dustless, no substrate damage. The supporting service.",
+  href: "/services/vapor-blasting",
+  thumb: "/images/services/vapor-blasting/granville-island-vapour-blasting-01.jpg",
+  alt: "Square One crew vapour blasting at Granville Island",
+}
+
+function alt(p: WorkPhoto): string {
+  const sys = p.systems.join(" and ")
+  return p.place ? `${p.subject} in ${sys} — ${p.place}, BC` : `${p.subject} in ${sys}`
 }
 
 export default function ApplicationsSection() {
+  const rows = [
+    ...WORK_APPS.map((a) => {
+      const photos = workFor(a.slug)
+      const lead = photos[0]
+      return {
+        label: a.label,
+        desc: a.blurb,
+        href: a.slug === "driveways" ? "/driveways" : `/applications/${a.slug}`,
+        count: photos.length,
+        thumb: lead?.src,
+        alt: lead ? alt(lead) : "",
+      }
+    }),
+    { ...VAPOUR, count: 0 },
+  ]
+
   return (
     <section
-      className="relative overflow-hidden"
-      style={{ background: "#FFFFFF" }}
+      className="section relative overflow-hidden bg-surface-slate"
     >
-      {/* Top accent bar */}
-      <div
-        aria-hidden
-        className="absolute top-0 inset-x-0 h-px"
-        style={{ background: "#E8E4DE" }}
-      />
-
-      <div className="relative max-w-[1400px] mx-auto px-6 lg:px-10 py-24 lg:py-32">
-
-        {/* Header */}
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-12 lg:mb-16">
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.7, ease: easeOut }}
-          >
-            <p
-              className="text-[11px] uppercase tracking-[0.18em] font-semibold mb-4 flex items-center gap-3"
-              style={{ color: "#C8601A" }}
-            >
-              <span
-                className="inline-block w-8 h-px"
-                style={{ background: "#C8601A" }}
-              />
-              Where We Work
+      <div className="container-1280 relative z-[1]">
+        <div data-reveal className="flex flex-wrap items-baseline justify-between gap-6">
+          <div>
+            <p className="eyebrow eyebrow-on-image">
+              <span className="eyebrow-num">04</span>Applications
             </p>
-            <h2
-              style={{
-                fontSize: "clamp(2rem, 4vw, 3.25rem)",
-                fontWeight: 800,
-                lineHeight: 0.97,
-                letterSpacing: "-0.04em",
-                color: "#111111",
-              }}
-            >
-              Every surface,{" "}
-              <span style={{ color: "#C8601A" }}>covered.</span>
-            </h2>
-          </motion.div>
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.7, ease: easeOut, delay: 0.1 }}
-            className="text-sm leading-relaxed max-w-xs lg:text-right"
-            style={{ color: "#767676" }}
-          >
-            From private driveways to municipal transit corridors — every paved surface in BC.
-          </motion.p>
+            <h2 className="mt-5 text-white">Where these systems are specified</h2>
+          </div>
+          <Link href="/galleries" className="arrow-link whitespace-nowrap text-[color:var(--ink-on-slate-body)] hover:text-[color:var(--accent)]">
+            Every photograph, by application <span>&rarr;</span>
+          </Link>
         </div>
 
-        {/* Editorial index list */}
-        <div style={{ borderTop: "1px solid #E8E4DE" }}>
-          {applications.map((app, i) => (
-            <motion.div
-              key={app.label}
-              initial={{ opacity: 0, x: -12 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.5, ease: easeOut, delay: i * 0.04 }}
+        {/* Contents-rows — the catalogue's table-of-contents move (SOUL-PASS
+            MOVE 2), now with the lead photograph of each gallery. */}
+        <div data-reveal-group className="mt-12 grid grid-cols-1 gap-x-16 min-[1536px]:grid-flow-col min-[1536px]:grid-cols-2 min-[1536px]:grid-rows-6">
+          {rows.map((app, i) => (
+            <Link
+              key={app.href}
+              href={app.href}
+              data-reveal
+              style={{ borderColor: "var(--hairline-slate)" }}
+              className="app-row group grid grid-cols-[32px_96px_minmax(0,1fr)_auto] items-center gap-x-6 border-b py-4 first:border-t min-[1536px]:[&:nth-child(7)]:border-t max-[700px]:grid-cols-[72px_minmax(0,1fr)_auto] max-[700px]:gap-x-4 max-[700px]:py-3"
             >
-              <Link
-                href={app.href}
-                className="group flex items-center gap-4 lg:gap-8 py-5 transition-all"
-                style={{ borderBottom: "1px solid #E8E4DE" }}
-              >
-                {/* Number */}
-                <span
-                  className="flex-shrink-0 text-[11px] font-black tabular-nums"
-                  style={{ color: "#C8601A", letterSpacing: "0.04em", minWidth: "24px" }}
-                >
-                  {String(i + 1).padStart(2, "0")}
-                </span>
+              <span className="text-[12px] font-semibold tracking-[0.08em] text-[color:var(--ink-on-slate-faint)] max-[700px]:hidden">
+                {String(i + 1).padStart(2, "0")}
+              </span>
 
-                {/* Tag — hidden on mobile */}
-                <span
-                  className="hidden sm:block flex-shrink-0 text-[9px] font-bold uppercase tracking-[0.18em] px-2.5 py-1 rounded"
-                  style={{
-                    color: tagStyle[app.tag]?.color ?? "#5A5A5A",
-                    background: tagStyle[app.tag]?.bg ?? "rgba(0,0,0,0.05)",
-                    minWidth: "90px",
-                    textAlign: "center",
-                  }}
-                >
-                  {app.tag}
-                </span>
+              <span className="relative block aspect-[4/3] w-full overflow-hidden rounded-[2px] bg-black/25">
+                {app.thumb && (
+                  <Image
+                    src={app.thumb}
+                    alt={app.alt}
+                    fill
+                    sizes="96px"
+                    className="object-cover transition-transform duration-500 group-hover:scale-[1.06]"
+                  />
+                )}
+              </span>
 
-                {/* Title */}
-                <h3
-                  className="flex-shrink-0 font-bold transition-colors duration-200 group-hover:text-[#C8601A]"
-                  style={{
-                    fontSize: "clamp(0.95rem, 1.4vw, 1.15rem)",
-                    letterSpacing: "-0.015em",
-                    color: "#111111",
-                  }}
-                >
+              <span className="min-w-0">
+                <span className="block text-[17px] font-semibold leading-[1.3] text-white transition-colors duration-200 group-hover:text-[color:var(--accent)] max-[700px]:text-[16px]">
                   {app.label}
-                </h3>
-
-                {/* Description — desktop only */}
-                <p
-                  className="hidden lg:block flex-1 text-[13px] truncate"
-                  style={{ color: "#767676" }}
-                >
+                </span>
+                <span className="mt-[3px] line-clamp-2 block text-[14px] leading-[1.5] text-[color:var(--ink-on-slate-muted)] max-[700px]:hidden">
                   {app.desc}
-                </p>
+                </span>
+              </span>
 
-                {/* Arrow */}
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 14 14"
-                  fill="none"
-                  aria-hidden="true"
-                  className="flex-shrink-0 ml-auto transition-all duration-200 group-hover:translate-x-1"
-                >
-                  <path
-                    d="M2 7h10M8 3l4 4-4 4"
-                    stroke="#C8601A"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                  />
-                  <path
-                    d="M2 7h10M8 3l4 4-4 4"
-                    stroke="#C8C4BC"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="opacity-100 group-hover:opacity-0 transition-opacity duration-200"
-                  />
-                </svg>
-              </Link>
-            </motion.div>
+              <span className="flex items-center gap-4 justify-self-end">
+                {app.count > 0 && (
+                  <span className="label label-on-slate whitespace-nowrap max-[700px]:hidden">{app.count} photos</span>
+                )}
+                <span aria-hidden="true" className="arrow-link text-[color:var(--ink-on-slate-faint)]">
+                  <span>&rarr;</span>
+                </span>
+              </span>
+            </Link>
           ))}
         </div>
-
-        {/* Bottom CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.6, ease: easeOut, delay: 0.2 }}
-          className="mt-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5"
-          style={{ borderTop: "1px solid #E8E4DE", paddingTop: "2.5rem" }}
-        >
-          <p className="text-sm" style={{ color: "#5A5A5A" }}>
-            Not sure what your project needs?{" "}
-            <span style={{ color: "#111111", fontWeight: 600 }}>
-              We offer free site consultations across BC.
-            </span>
-          </p>
-          <Link
-            href="/contact"
-            className="flex-shrink-0 inline-flex items-center gap-2 bg-[#C8601A] text-white px-7 py-3.5 text-[13px] font-bold tracking-[0.02em] hover:bg-[#A84F15] transition-colors rounded-lg"
-            style={{ boxShadow: "0 4px 20px rgba(200,96,26,0.22)" }}
-          >
-            Get a Free Quote
-            <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-              <path
-                d="M2 7h10M8 3l4 4-4 4"
-                stroke="currentColor"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </Link>
-        </motion.div>
       </div>
     </section>
   )

@@ -1,100 +1,148 @@
-"use client"
-
 import Image from "next/image"
 import Link from "next/link"
-import { motion } from "framer-motion"
 
-const easeOut: [number, number, number, number] = [0.22, 1, 0.36, 1]
+/* Home — the residential line, after the commercial applications (business
+   hierarchy canon: commercial first, driveways second).
 
-function ArrowRight() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">
-      <path d="M1 7H13M13 7L7.5 1.5M13 7L7.5 12.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="square" />
-    </svg>
-  )
+   Rebuilt 11 Sept 2026 (Vern: "this page on the homepage still sucks").
+   What was wrong: the photograph was a 667px WordPress tile blown up to
+   830px — soft at any size, and the one thing a driveway band has to be is
+   sharp; the orange card carried two decorative squares that read as
+   rendering bugs; the figures row said "2 regions, one crew", which is
+   filler. Now: the Ten Mile Point driveway (2048px, Saanich, on the
+   record) leads, three more driveways from the record sit under it as a
+   strip into /driveways, the offer card is plain, and the only figure left
+   is the one HUB publishes. Captions come from lib/work.ts — never guessed. */
+
+const LEAD = {
+  src: "/images/S1_update_v2/photos/Driveways/Ten Mile Point Driveway I.jpg",
+  alt: "StreetPrint stamped asphalt driveway at Ten Mile Point, Saanich, installed by Square One",
+  caption: "Ten Mile Point, Saanich · StreetPrint",
 }
+
+const STRIP: { src: string; alt: string; caption: string }[] = [
+  {
+    src: "/images/S1_update_v2/photos/Driveways/Number 1.jpg",
+    alt: "Ashlar slate StreetPrint driveway installed by Square One",
+    caption: "Ashlar slate",
+  },
+  {
+    src: "/images/S1_update_v2/photos/Driveways/Number 2.jpg",
+    alt: "StreetPrint driveway with a circle medallion, installed by Square One",
+    caption: "Circle medallion",
+  },
+  {
+    src: "/images/S1_update_v2/photos/Driveways/Number 3.jpg",
+    alt: "Charcoal cobble StreetPrint driveway installed by Square One",
+    caption: "Charcoal cobble",
+  },
+]
 
 export default function DrivewaysBand() {
   return (
-    <section className="overflow-hidden">
-      <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[680px]">
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 1.0, ease: easeOut }}
-          className="relative h-[440px] lg:h-auto group overflow-hidden order-1 lg:order-2"
-        >
-          <Image
-            src="/images/applications/private-driveways/estate-herringbone-gated-driveway-01.jpg"
-            alt="Premium decorative driveway by Square One Paving"
-            fill
-            className="object-cover transition-transform duration-[1500ms] ease-out group-hover:scale-105"
-            sizes="(max-width: 1024px) 100vw, 50vw"
-          />
-          <div aria-hidden className="absolute inset-0 lg:hidden bg-gradient-to-t from-[rgba(10,10,10,0.5)] via-transparent to-transparent" />
-          <div className="absolute top-6 left-6 flex items-center gap-2 bg-[rgba(10,10,10,0.65)] backdrop-blur-md px-3.5 py-2">
-            <span className="block w-1.5 h-1.5 rounded-full bg-[#F26430] pulse-dot" />
-            <span className="text-[10px] uppercase tracking-[0.22em] text-white font-semibold">Premium Residential</span>
-          </div>
-          <div className="absolute bottom-6 left-6 hidden lg:block">
-            <div className="bg-[rgba(10,10,10,0.6)] backdrop-blur-md px-4 py-2.5">
-              <p className="text-[10.5px] uppercase tracking-[0.18em] text-white/70 font-medium">Custom medallion driveway</p>
-              <p className="text-[10px] tracking-[0.04em] text-white/50 mt-0.5">Vancouver Island estate</p>
-            </div>
-          </div>
-        </motion.div>
-
-        <div className="relative bg-[#F6F4F0] p-10 lg:p-20 flex flex-col justify-center overflow-hidden order-2 lg:order-1">
-          <div className="absolute -top-32 -left-32 w-[500px] h-[500px] pointer-events-none" style={{ background: "radial-gradient(circle, rgba(242,100,48,0.06) 0%, transparent 70%)" }} aria-hidden />
-          <div aria-hidden className="absolute right-10 lg:right-20 top-10 lg:top-20 bottom-10 lg:bottom-20 w-[1px] bg-gradient-to-b from-transparent via-[#F26430]/30 to-transparent hidden lg:block" />
-
-          <motion.div
-            initial={{ y: 24, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.8, ease: easeOut }}
-            className="relative z-10 max-w-md lg:pr-8"
-          >
-            <div className="flex items-center gap-3 mb-6">
-              <span className="block w-1.5 h-1.5 rounded-full bg-[#F26430]" />
-              <span className="text-[10.5px] uppercase tracking-[0.28em] text-[#F26430] font-bold">Driveways &amp; Estates</span>
+    <section className="section relative overflow-hidden bg-surface">
+      <div className="container-1280 relative z-[1]">
+        <div className="grid grid-cols-12 gap-x-12 gap-y-10 max-[900px]:grid-cols-1">
+          {/* ── The photographs ──────── */}
+          <div className="col-span-7 max-[900px]:col-span-1">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-[2px] bg-surface-stone">
+              <Image
+                src={LEAD.src}
+                alt={LEAD.alt}
+                fill
+                sizes="(max-width: 900px) 100vw, 58vw"
+                className="object-cover"
+              />
+              <div aria-hidden className="scrim scrim-light" />
+              <div className="caption">{LEAD.caption}</div>
             </div>
 
-            <h2 className="text-[#0A0A0A] display-h mb-6" style={{ fontSize: "clamp(2.25rem, 4.5vw, 3.5rem)" }}>
-              Your driveway.<br />
-              <span className="italic font-extralight">Reimagined.</span>
+            <ul className="mt-4 grid grid-cols-3 gap-4 max-[560px]:gap-3">
+              {STRIP.map((photo) => (
+                <li key={photo.src}>
+                  <Link
+                    href="/driveways"
+                    className="group relative block aspect-[4/3] overflow-hidden rounded-[2px] bg-surface-stone"
+                    aria-label={`${photo.caption} — more driveways`}
+                  >
+                    <Image
+                      src={photo.src}
+                      alt={photo.alt}
+                      fill
+                      sizes="(max-width: 900px) 33vw, 19vw"
+                      className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                    />
+                    <span aria-hidden="true" className="scrim scrim-light" />
+                    <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-2 p-3">
+                      <span
+                        className="text-[11px] font-semibold uppercase tracking-[0.1em] text-white max-[560px]:hidden"
+                        style={{ fontFamily: "var(--font-display)" }}
+                      >
+                        {photo.caption}
+                      </span>
+                      <span aria-hidden="true" className="text-[14px] leading-none text-white/80 transition-transform duration-200 group-hover:translate-x-1">
+                        &rarr;
+                      </span>
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* ── The line, and the offer ──────── */}
+          <div className="col-span-5 flex flex-col justify-center max-[900px]:col-span-1">
+            <div className="eyebrow">
+              <span className="eyebrow-num">05</span>Driveways &middot; Vancouver &amp; Victoria
+            </div>
+
+            <h2 className="stop mt-5 max-w-[20ch] [text-wrap:balance] max-[600px]:max-w-none">
+              The driveway you already have, made to look like stone
             </h2>
 
-            <p className="text-[#2C2C2C] leading-[1.7] text-[15px] font-light">
-              From stamped asphalt that echoes the architecture of your home to vapor-blasted surfaces ready for fresh
-              coating &mdash; we bring the same municipal-grade precision to residential projects across Metro
-              Vancouver and Vancouver Island.
+            <p className="mt-5 max-w-[46ch] text-[16px] leading-[1.65] text-ink-body [text-wrap:pretty]">
+              StreetPrint patterns pressed into your existing asphalt and sealed in StreetBond
+              colour &mdash; one continuous surface, no joints to heave, nothing for weeds to take
+              hold in. Installed by the crews that do our municipal work, on both sides of the Strait.
             </p>
 
-            <div className="mt-9 grid grid-cols-3 gap-4 pb-8 border-b border-[#E2DDD8]">
-              {[
-                { value: "8+", label: "year service life" },
-                { value: "60%", label: "cost vs. concrete pavers" },
-                { value: "1 wk", label: "typical install" },
-              ].map((s) => (
-                <div key={s.label}>
-                  <div className="text-[#0A0A0A] font-extralight leading-none text-[clamp(1.5rem,3vw,2.25rem)] tracking-[-0.04em]">{s.value}</div>
-                  <div className="text-[10.5px] uppercase tracking-[0.14em] text-[#5A5A5A] mt-2">{s.label}</div>
-                </div>
-              ))}
+            {/* The offer card — the page's one accent block. */}
+            <div className="offer-card mt-8">
+              <div className="label text-white/75">Free site visit</div>
+              <p className="offer-title mt-3">We walk it before we quote it</p>
+              <p className="mt-3 max-w-[40ch] text-[14.5px] leading-[1.6] text-white/85">
+                We assess the asphalt on site, bring the sample boards, and come back with a written
+                quote. No demolition, no new base.
+              </p>
+              <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
+                <Link href="/contact" className="btn-on-slate offer-btn">
+                  Book a site visit
+                </Link>
+                <span className="inline-flex flex-wrap items-center gap-x-2 text-[13px] font-semibold tracking-[0.02em] text-white/85">
+                  <a href="tel:+16044669902" className="whitespace-nowrap text-white hover:text-white">604-466-9902</a>
+                  <span aria-hidden="true" className="text-white/50">&middot;</span>
+                  <a href="tel:+12503910270" className="whitespace-nowrap text-white hover:text-white">250-391-0270</a>
+                </span>
+              </div>
             </div>
 
-            <div className="mt-9 flex flex-wrap gap-3">
-              <Link href="/driveways" className="group bg-[#0A0A0A] text-white px-7 py-3.5 rounded-none font-semibold text-[12px] uppercase tracking-[0.04em] hover:bg-[#F26430] transition-colors duration-300 inline-flex items-center gap-3">
-                See Driveway Projects<ArrowRight />
+            <p className="mt-6 max-w-[46ch] text-[13.5px] leading-[1.6] text-ink-muted">
+              HUB Surface Systems publishes a 10&ndash;20 year service life for StreetPrint under
+              municipal traffic.
+            </p>
+
+            <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
+              <Link href="/driveways" className="arrow-link">
+                Driveways <span aria-hidden="true">&rarr;</span>
               </Link>
-              <Link href="/contact" className="border border-[#0A0A0A]/30 text-[#0A0A0A] px-7 py-3.5 rounded-none font-medium text-[12px] uppercase tracking-[0.04em] hover:bg-[#0A0A0A] hover:text-white transition-colors duration-300">
-                Get a Quote
+              <Link href="/driveways/vancouver" className="arrow-link">
+                Vancouver <span aria-hidden="true">&rarr;</span>
+              </Link>
+              <Link href="/driveways/victoria" className="arrow-link">
+                Victoria <span aria-hidden="true">&rarr;</span>
               </Link>
             </div>
-            <p className="mt-6 text-[10.5px] uppercase tracking-[0.18em] text-[#8C8C8C]">★★★★★ &nbsp;Metro Vancouver &middot; Victoria &middot; Vancouver Island</p>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

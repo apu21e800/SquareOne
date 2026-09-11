@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FFFFFF;color:#3D4147;font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#14161A;text-decoration:none}
+a:hover{color:#D8511F}
+@media (max-width: 700px){
+[data-mq~="section"]{padding:56px 0 !important}
+[data-mq~="container"]{padding:0 24px !important}
+[data-mq~="grid-cards"]{grid-template-columns:1fr !important}
+[data-mq~="grid-2"]{grid-template-columns:1fr !important;gap:48px !important}
+[data-mq~="ctarow"]{flex-direction:column !important}
+}
+a[data-arrow] span{display:inline-block;transition:transform 0.2s}a[data-arrow]:hover span{transform:translateX(4px)}
+[data-card]{transition:transform 0.25s, box-shadow 0.25s}[data-card]:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(20,22,26,0.08)}
+[data-card] img{transition:transform 0.4s ease}[data-card]:hover img{transform:scale(1.02)}
+[data-card] [data-zoom]{transition:transform 0.4s ease}[data-card]:hover [data-zoom]{transform:scale(1.02)}
+</style>
+</helmet>
+
+<dc-import name="Site Nav" active="About" hint-size="100%,72px" style="position:sticky;top:0;z-index:120"></dc-import>
+
+<section data-mq="section" data-screen-label="About header" style="background:#FFFFFF;padding:96px 0">
+  <div data-mq="container" style="max-width:1280px;margin:0 auto;padding:0 40px">
+    <div style="display:flex;align-items:center;gap:10px;font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82"><span style="width:6px;height:6px;background:#F26430;border-radius:1px;flex-shrink:0"></span>The studio</div>
+    <h1 data-mq="h1" style="margin:28px 0 0;font-size:clamp(3rem, 5vw, 4.5rem);font-weight:300;letter-spacing:-0.035em;line-height:0.98;color:#14161A;max-width:18ch;text-wrap:balance">Same crews since 2000<span aria-hidden="true" style="display:inline-block;width:6px;height:6px;background:#F26430;border-radius:1px;margin-left:14px"></span></h1>
+    <p style="margin:28px 0 0;font-size:19px;line-height:1.7;color:#3D4147;max-width:56ch;text-wrap:pretty">Square One Paving has installed decorative pavement across British Columbia since 2000, and is recognized as the most experienced decorative stamped asphalt applicator in Western Canada. The crews that stamped our first crosswalks still run our installs today, from our Maple Ridge base to both sides of the Strait of Georgia.</p>
+  </div>
+</section>
+
+<section data-screen-label="The people" style="background:#FFFFFF;padding:0 0 112px">
+  <div data-mq="container" style="max-width:1280px;margin:0 auto;padding:0 40px">
+    <h2 data-mq="h2" style="margin:0;font-size:clamp(1.75rem, 3vw, 2.75rem);font-weight:300;letter-spacing:-0.03em;line-height:1.06;color:#14161A">The people</h2>
+    <div data-mq="grid-2" style="display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:880px;margin-top:40px">
+      <div>
+        <div style="position:relative;aspect-ratio:4/5;border-radius:2px;overflow:hidden;background:#EDE9E2;border:1px solid #E7E3DC;max-width:320px">
+          <div style="position:absolute;inset:0;background:linear-gradient(180deg, #F0ECE5 0%, #E5E0D7 100%)"></div><div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%222%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22/%3E%3C/svg%3E');opacity:0.04;pointer-events:none"></div><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:64px;font-weight:200;letter-spacing:0.04em;color:rgba(20, 22, 26, 0.22)">GS</div>
+        </div>
+        <div style="margin-top:18px;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">Gord Stewart</div>
+        <p style="margin:6px 0 0;font-size:15px;line-height:1.6;color:#767B82;max-width:36ch">On BC pavement since the first StreetPrint rig arrived in 2000.</p>
+      </div>
+      <div>
+        <div style="position:relative;aspect-ratio:4/5;border-radius:2px;overflow:hidden;background:#EDE9E2;border:1px solid #E7E3DC;max-width:320px">
+          <div style="position:absolute;inset:0;background:linear-gradient(180deg, #F0ECE5 0%, #E5E0D7 100%)"></div><div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%222%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22/%3E%3C/svg%3E');opacity:0.04;pointer-events:none"></div><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:64px;font-weight:200;letter-spacing:0.04em;color:rgba(20, 22, 26, 0.22)">JS</div>
+        </div>
+        <div style="margin-top:18px;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">Jan Stewart</div>
+        <p style="margin:6px 0 0;font-size:15px;line-height:1.6;color:#767B82;max-width:36ch">Runs the estimating desk; every quote ties to a site we have walked.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section data-mq="section" data-screen-label="Why Square One" style="background:#FAF8F5;border-top:1px solid #E7E3DC;border-bottom:1px solid #E7E3DC;padding:96px 0">
+  <div data-mq="container" style="max-width:1280px;margin:0 auto;padding:0 40px">
+    <h2 data-mq="h2" style="margin:0;font-size:clamp(1.75rem, 3vw, 2.75rem);font-weight:300;letter-spacing:-0.03em;line-height:1.06;color:#14161A">Why Square One</h2>
+    <div data-mq="grid-2" style="display:grid;grid-template-columns:1fr 1fr;gap:56px 96px;margin-top:40px">
+      <div style="border-top:1px solid #E7E3DC;padding-top:24px">
+        <h3 style="margin:0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">Same crews since 2000</h3>
+        <p style="margin:10px 0 0;font-size:15px;line-height:1.65;color:#3D4147;max-width:52ch">Installation stays in house. The standard on the first job in 2000 is the standard now.</p>
+      </div>
+      <div style="border-top:1px solid #E7E3DC;padding-top:24px">
+        <h3 style="margin:0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">Both sides of the Strait</h3>
+        <p style="margin:10px 0 0;font-size:15px;line-height:1.65;color:#3D4147;max-width:52ch">Based in Maple Ridge, with crews serving the Lower Mainland and Vancouver Island.</p>
+      </div>
+      <div style="border-top:1px solid #E7E3DC;padding-top:24px">
+        <h3 style="margin:0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">Municipal specifications</h3>
+        <p style="margin:10px 0 0;font-size:15px;line-height:1.65;color:#3D4147;max-width:52ch">We install to municipal and transit-authority specs, and help write them when asked.</p>
+      </div>
+      <div style="border-top:1px solid #E7E3DC;padding-top:24px">
+        <h3 style="margin:0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">Warrantied systems</h3>
+        <p style="margin:10px 0 0;font-size:15px;line-height:1.65;color:#3D4147;max-width:52ch">Every system we install carries a manufacturer warranty we stand behind on site.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section data-mq="section" data-screen-label="Process" style="background:#FFFFFF;padding:96px 0">
+  <div data-mq="container" style="max-width:1280px;margin:0 auto;padding:0 40px">
+    <h2 data-mq="h2" style="margin:0;font-size:clamp(1.75rem, 3vw, 2.75rem);font-weight:300;letter-spacing:-0.03em;line-height:1.06;color:#14161A">Five steps, one crew</h2>
+    <div data-mq="grid-cards" style="display:grid;grid-template-columns:repeat(5, 1fr);gap:40px;margin-top:40px;border-top:1px solid #E7E3DC">
+      <div style="padding-top:28px">
+        <div style="font-size:13px;font-weight:600;letter-spacing:0.08em;color:#767B82">01</div>
+        <h3 style="margin:16px 0 0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">Site walk</h3>
+        <p style="margin:8px 0 0;font-size:14px;line-height:1.6;color:#767B82">We measure, photograph and flag substrate issues on site.</p>
+      </div>
+      <div style="padding-top:28px">
+        <div style="font-size:13px;font-weight:600;letter-spacing:0.08em;color:#767B82">02</div>
+        <h3 style="margin:16px 0 0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">Specification</h3>
+        <p style="margin:8px 0 0;font-size:14px;line-height:1.6;color:#767B82">Pattern, colours and product matched to traffic and budget.</p>
+      </div>
+      <div style="padding-top:28px">
+        <div style="font-size:13px;font-weight:600;letter-spacing:0.08em;color:#767B82">03</div>
+        <h3 style="margin:16px 0 0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">Surface prep</h3>
+        <p style="margin:8px 0 0;font-size:14px;line-height:1.6;color:#767B82">Cleaning, and vapour blasting where the surface needs it.</p>
+      </div>
+      <div style="padding-top:28px">
+        <div style="font-size:13px;font-weight:600;letter-spacing:0.08em;color:#767B82">04</div>
+        <h3 style="margin:16px 0 0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">Application</h3>
+        <p style="margin:8px 0 0;font-size:14px;line-height:1.6;color:#767B82">Installed by our own crews, never subcontracted.</p>
+      </div>
+      <div style="padding-top:28px">
+        <div style="font-size:13px;font-weight:600;letter-spacing:0.08em;color:#767B82">05</div>
+        <h3 style="margin:16px 0 0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">Cure &amp; walk-through</h3>
+        <p style="margin:8px 0 0;font-size:14px;line-height:1.6;color:#767B82">Open to traffic on schedule; we walk the finished work with you.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<sc-if value="{{ showClients }}" hint-placeholder-val="{{ true }}">
+<section data-mq="section" data-screen-label="Clients" style="background:#FAF8F5;border-top:1px solid #E7E3DC;border-bottom:1px solid #E7E3DC;padding:96px 0">
+  <div data-mq="container" style="max-width:1280px;margin:0 auto;padding:0 40px">
+    <div style="display:flex;align-items:center;gap:10px;font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82"><span style="width:6px;height:6px;background:#F26430;border-radius:1px;flex-shrink:0"></span>Client organizations since 2000</div>
+    <div style="display:flex;flex-wrap:wrap;gap:14px 44px;margin-top:32px;max-width:1080px">
+      <span style="font-size:15px;font-weight:500;color:#767B82">City of Vancouver</span>
+      <span style="font-size:15px;font-weight:500;color:#767B82">TransLink</span>
+      <span style="font-size:15px;font-weight:500;color:#767B82">UBC</span>
+      <span style="font-size:15px;font-weight:500;color:#767B82">City of Burnaby</span>
+      <span style="font-size:15px;font-weight:500;color:#767B82">City of Richmond</span>
+      <span style="font-size:15px;font-weight:500;color:#767B82">District of Maple Ridge</span>
+      <span style="font-size:15px;font-weight:500;color:#767B82">City of Surrey</span>
+      <span style="font-size:15px;font-weight:500;color:#767B82">City of Langley</span>
+      <span style="font-size:15px;font-weight:500;color:#767B82">Township of Langley</span>
+      <span style="font-size:15px;font-weight:500;color:#767B82">City of New Westminster</span>
+      <span style="font-size:15px;font-weight:500;color:#767B82">City of Coquitlam</span>
+      <span style="font-size:15px;font-weight:500;color:#767B82">City of North Vancouver</span>
+      <span style="font-size:15px;font-weight:500;color:#767B82">City of Victoria</span>
+      <span style="font-size:15px;font-weight:500;color:#767B82">City of Nanaimo</span>
+      <span style="font-size:15px;font-weight:500;color:#767B82">Town of Ladysmith</span>
+      <span style="font-size:15px;font-weight:500;color:#767B82">City of Courtenay</span>
+      <span style="font-size:15px;font-weight:500;color:#767B82">City of Langford</span>
+      <span style="font-size:15px;font-weight:500;color:#767B82">BC Transit</span>
+      <span style="font-size:15px;font-weight:500;color:#767B82">Vancouver Airport Authority</span>
+      <span style="font-size:15px;font-weight:500;color:#767B82">BC Housing</span>
+      <span style="font-size:15px;font-weight:500;color:#767B82">School District 43</span>
+    </div>
+  </div>
+</section>
+</sc-if>
+
+<sc-if value="{{ showOffices }}" hint-placeholder-val="{{ true }}">
+<section data-mq="section" data-screen-label="Offices" style="background:#FFFFFF;padding:96px 0">
+  <div data-mq="container" style="max-width:1280px;margin:0 auto;padding:0 40px">
+    <h2 data-mq="h2" style="margin:0;font-size:clamp(1.75rem, 3vw, 2.75rem);font-weight:300;letter-spacing:-0.03em;line-height:1.06;color:#14161A">Where we work</h2>
+    <div data-mq="grid-2" style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:40px">
+      <div>
+        <div style="position:relative;aspect-ratio:16/10;border-radius:2px;overflow:hidden;background:#EDE9E2;border:1px solid #E7E3DC">
+          <div style="position:absolute;inset:0;background-color:#EDE9E2;background-image:repeating-linear-gradient(0deg, rgba(120, 108, 90, 0.10) 0px, rgba(120, 108, 90, 0.10) 1.5px, rgba(255, 255, 255, 0) 1.5px, rgba(255, 255, 255, 0) 56px),repeating-linear-gradient(90deg, rgba(120, 108, 90, 0.10) 0px, rgba(120, 108, 90, 0.10) 1.5px, rgba(255, 255, 255, 0) 1.5px, rgba(255, 255, 255, 0) 72px),linear-gradient(58deg, rgba(255, 255, 255, 0) 49%, #D9D2C7 49%, #D9D2C7 51%, rgba(255, 255, 255, 0) 51%),linear-gradient(180deg, #F0ECE5 0%, #E5E0D7 100%)"></div><div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%222%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22/%3E%3C/svg%3E');opacity:0.04;pointer-events:none"></div><div style="position:absolute;left:50%;top:46%;width:10px;height:10px;border-radius:50%;background:#F26430;box-shadow:0 0 0 6px rgba(242, 100, 48, 0.16)"></div><div style="position:absolute;left:50%;top:46%;transform:translate(14px, -50%);background:#FFFFFF;border:1px solid #E7E3DC;border-radius:2px;padding:4px 9px;font-size:12px;font-weight:600;color:#14161A">Maple Ridge</div><div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(20, 24, 29, 0.5), rgba(20, 24, 29, 0) 30%);pointer-events:none"></div><div style="position:absolute;left:16px;bottom:12px;font-size:12px;font-weight:600;letter-spacing:0.02em;color:#FFFFFF">Maple Ridge &middot; Office &middot; Since 2000</div>
+        </div>
+        <div style="margin-top:20px;font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82">Office</div>
+        <div style="margin-top:8px;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">Maple Ridge, BC</div>
+        <p style="margin:6px 0 0;font-size:15px;line-height:1.6;color:#767B82">505&ndash;20800 Lougheed Highway, V2X 3P2 &middot; 604-466-9902</p>
+      </div>
+      <div>
+        <div style="position:relative;aspect-ratio:16/10;border-radius:2px;overflow:hidden;background:#EDE9E2;border:1px solid #E7E3DC">
+          <div style="position:absolute;inset:0;background-color:#EDE9E2;background-image:repeating-linear-gradient(0deg, rgba(120, 108, 90, 0.10) 0px, rgba(120, 108, 90, 0.10) 1.5px, rgba(255, 255, 255, 0) 1.5px, rgba(255, 255, 255, 0) 56px),repeating-linear-gradient(90deg, rgba(120, 108, 90, 0.10) 0px, rgba(120, 108, 90, 0.10) 1.5px, rgba(255, 255, 255, 0) 1.5px, rgba(255, 255, 255, 0) 72px),linear-gradient(58deg, rgba(255, 255, 255, 0) 49%, #D9D2C7 49%, #D9D2C7 51%, rgba(255, 255, 255, 0) 51%),linear-gradient(180deg, #F0ECE5 0%, #E5E0D7 100%)"></div><div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%222%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22/%3E%3C/svg%3E');opacity:0.04;pointer-events:none"></div><div style="position:absolute;left:50%;top:46%;width:10px;height:10px;border-radius:50%;background:#F26430;box-shadow:0 0 0 6px rgba(242, 100, 48, 0.16)"></div><div style="position:absolute;left:50%;top:46%;transform:translate(14px, -50%);background:#FFFFFF;border:1px solid #E7E3DC;border-radius:2px;padding:4px 9px;font-size:12px;font-weight:600;color:#14161A">Vancouver Island</div><div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(20, 24, 29, 0.5), rgba(20, 24, 29, 0) 30%);pointer-events:none"></div><div style="position:absolute;left:16px;bottom:12px;font-size:12px;font-weight:600;letter-spacing:0.02em;color:#FFFFFF">Vancouver Island &middot; Service region &middot; Since 2000</div>
+        </div>
+        <div style="margin-top:20px;font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82">Service region</div>
+        <div style="margin-top:8px;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">Vancouver Island</div>
+        <p style="margin:6px 0 0;font-size:15px;line-height:1.6;color:#767B82">Crews serve the Island and Gulf Islands &middot; 250-391-0270</p>
+      </div>
+    </div>
+  </div>
+</section>
+</sc-if>
+
+<dc-import name="Site Close" hint-size="100%,1100px"></dc-import>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;showClients&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Sections&quot;},
+  &quot;showOffices&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Sections&quot;}
+}">
+class Component extends DCLogic {
+  componentDidMount() {
+    const go = () => import('./site.js').then(m => m.init());
+    go(); setTimeout(go, 900);
+  }
+  renderVals() {
+    return {
+      showClients: this.props.showClients ?? true,
+      showOffices: this.props.showOffices ?? true,
+    };
+  }
+}
+</script>
+</body>
+</html>

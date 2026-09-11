@@ -1,527 +1,550 @@
 import Link from "next/link"
 import Image from "next/image"
 import { Metadata } from "next"
-import Container from "@/components/ui/Container"
+import { SITE_URL } from "@/lib/site"
+import JsonLd, { breadcrumbSchema, faqSchema } from "@/components/JsonLd"
+import { getServiceBySlug } from "@/lib/services"
+import { clampDescription } from "@/lib/seo"
+
+// Route and slug keep the US spelling; display prose reads "vapour blasting".
+// This page is the ONLY vapour route — /vapor-blasting redirects here.
+//
+// Positioning per the business hierarchy (§2.4a): vapour blasting is Square
+// One's EXTRA service — cleaning surfaces, priming surfaces, graffiti removal,
+// commercial muck like mould. Commercial and municipal paving leads the
+// company; this page sells the supporting trade on its own merits.
+//
+// Every claim below is one Square One has published itself: "uses less water,
+// generates up to 92% less dust, produces little to no heat, and creates less
+// environmental impact than the alternatives, all while getting the job done
+// faster", plus its own list of applications. Nothing else is asserted.
+//
+// Imagery (11 Sept 2026): the four vapour photographs Square One holds were
+// 524px archive tiles. They are the real rig on real jobs, so rather than
+// invent pictures they were rebuilt with a photographic upscaler (Real-ESRGAN,
+// 4x) and now carry the page — hero, tiers, detail. Captions say only what
+// the record says. The one non-vapour frame (the retail plaza entrance) is a
+// finished StreetBond surface, captioned as such.
 
 export const metadata: Metadata = {
-  title: "Mobile Surface Restoration BC | Dustless Vapor Blasting | Square One Paving",
+  title: "Vapour Blasting BC | Cleaning & Priming",
   description:
-    "BC's mobile dustless abrasive blasting specialists. We restore — not just clean — pavement, brick, concrete, steel, and marine surfaces. No silica dust, no harsh chemicals, no surface scarring. Lower Mainland & Vancouver Island.",
+    clampDescription("Mobile vapour blasting across the Lower Mainland and Vancouver Island — surface cleaning and priming, graffiti, gum and mould removal, road-marking removal, paint and coating stripping. Up to 92% less dust than dry blasting. Square One Paving."),
   keywords: [
-    "vapor blasting BC",
-    "dustless abrasive blasting Vancouver",
-    "mobile surface restoration BC",
-    "graffiti removal Vancouver Island",
+    "vapour blasting BC",
+    "vapor blasting Vancouver",
+    "dustless blasting Vancouver Island",
+    "graffiti removal Vancouver",
+    "mould removal exterior BC",
+    "road marking removal BC",
+    "surface priming coating prep BC",
     "wet abrasive blasting BC",
-    "concrete surface prep BC",
-    "heritage stone cleaning Victoria",
-    "industrial surface restoration BC",
+    "marine coating removal BC",
   ],
-  alternates: { canonical: "https://squareonepaving.ca/services/vapor-blasting" },
+  alternates: { canonical: `${SITE_URL}/services/vapor-blasting` },
   openGraph: {
-    title: "Mobile Surface Restoration BC | Dustless Vapor Blasting",
+    title: "Vapour Blasting BC | Cleaning & Priming | Square One Paving",
     description:
-      "Heritage stone, industrial steel, marine hulls, decks, pavement, graffiti — restored with water and recycled abrasive. Mobile across BC.",
+      clampDescription("Graffiti off brick, mould off commercial exteriors, markings off roads, coatings off steel and hulls — with up to 92% less dust than dry blasting. Mobile across BC."),
+    images: [{ url: "/images/og-image.png", width: 1200, height: 600, alt: "Square One Paving" }],
   },
 }
 
-// ── Three-tier service offering ──────────────────────────────────────────────
+// ── Headline facts — Square One's own published numbers ─────────────────────────
+
+type Fact = { number: string; label: string }
+
+const facts: Fact[] = [
+  { number: "92%", label: "less dust than dry blasting — the water holds it down" },
+  { number: "Low heat", label: "little to no heat at the surface, so nothing warps or scorches" },
+  { number: "2", label: "regions — Lower Mainland and Vancouver Island, one mobile rig" },
+]
+
+// ── What it handles — Square One's published applications, grouped by the
+//    business hierarchy: commercial and municipal first ──────────────────────
 
 const tiers = [
   {
-    eyebrow: "01 · Residential",
-    title: "Driveways, decks & exteriors.",
+    eyebrow: "01 · Commercial & municipal",
+    title: "Storefronts, plazas, roads",
     body:
-      "Oil-stained driveways, weathered patios, mossy walkways, wood deck stripping, pool-deck calcium, brick patios. The water-based system is gentle enough for heritage stonework yet aggressive enough to strip a decade of grime without scarring the substrate.",
+      "Graffiti, gum, mould and soot off brick, concrete and stone. Road-marking removal ahead of a new layout. Fire and smoke damage cleaned back to the substrate. Steel and concrete prepared for the next coat — faster than grinding, without the dust cloud of dry blasting.",
     bullets: [
-      "Oil & rust stain removal",
-      "Wood deck stripping",
-      "Pool-deck calcium",
-      "Brick & stone restoration",
-      "Pre-recoat preparation",
+      "Graffiti, gum, mould and soot removal",
+      "Road marking removal",
+      "Steel and concrete surface preparation",
+      "Brick and patio cleaning",
+      "Fire and smoke damage cleaning",
     ],
-    image: "/images/products/streetbond/streetbond-cobble-macro-surface-01.jpg",
-    alt: "Cobble surface restoration close-up",
+    tag: "Property managers · Municipalities · Strata",
+    photo: {
+      src: "/images/services/vapor-blasting/parking-lot-vapour-blasting-01.jpg",
+      alt: "Square One removing painted parking symbols from an asphalt lot with the vapour blasting rig",
+      caption: "Commercial parking lot · marking removal",
+      position: "center 45%",
+    },
+  },
+  {
+    eyebrow: "02 · Residential",
+    title: "Driveways, patios, railings",
+    body:
+      "Paint and stain off wood, concrete and steel. Limestone, marble and stucco stains lifted without etching. Iron fences and railings taken back to bare metal before paint. Brick and patio surfaces cleaned, then primed for whatever comes next.",
+    bullets: [
+      "Paint and stain removal",
+      "Wood, concrete and steel cleaning",
+      "Limestone, marble and stucco stain removal",
+      "Iron fence and railing preparation",
+      "Priming before a coating",
+    ],
     tag: "Homeowners · Estates",
+    photo: {
+      src: "/images/services/vapor-blasting/walkway-vapour-blasting-01.jpg",
+      alt: "Square One stripping a red coating from a public walkway with the vapour blasting rig",
+      caption: "Public walkway · coating removal",
+      position: "center 55%",
+    },
   },
   {
-    eyebrow: "02 · Commercial",
-    title: "Graffiti, storefronts, parkades.",
+    eyebrow: "03 · Marine & industrial",
+    title: "Hulls, decks, equipment",
     body:
-      "Graffiti abatement on heritage brick. Storefront and façade refresh. Parking-lot stripe and thermoplastic removal. Strata and HOA work. Faster than mechanical grinding, cleaner than dry sandblasting — without closing your block to dust.",
+      "Polyurethane deck coating removal for yachts. On-board coating removal and surface preparation. Steel taken to a clean profile without the heat that warps thin sections — the water does the cooling.",
     bullets: [
-      "Graffiti abatement",
-      "Stripe & marking removal",
-      "Storefront restoration",
-      "Strata & HOA exteriors",
-      "Pre-coating prep at scale",
+      "Polyurethane deck coating removal (yachting)",
+      "Marine on-board coating removal",
+      "Steel surface preparation",
+      "Equipment and frames",
     ],
-    image: "/images/applications/parking-lots/storage-facility-red-brick-apron-01.jpg",
-    alt: "Commercial brick threshold surface",
-    tag: "Property Managers · Cities",
-  },
-  {
-    eyebrow: "03 · Industrial",
-    title: "Heavy machinery, marine, steel.",
-    body:
-      "Mill scale, weld discoloration, oxidation. Hydraulic frames, pumps, tanks, structural steel. Marine hulls, decks, props, anchors. We restore the substrate to a pre-coating profile without warping or surface scarring — uniform satin finish, no heat damage.",
-    bullets: [
-      "Industrial equipment & frames",
-      "Tanks & pressure vessels",
-      "Marine hulls & decks",
-      "Mill scale & rust removal",
-      "Coating spec preparation",
-    ],
-    image: "/images/products/streetbond/streetbond-cobble-texture-detail-01.jpg",
-    alt: "Industrial substrate detail",
     tag: "Marine · Manufacturing",
+    photo: {
+      src: "/images/services/vapor-blasting/granville-island-vapour-blasting-01.jpg",
+      alt: "Square One vapour blasting a marina boardwalk at Granville Island, Vancouver, with False Creek behind",
+      caption: "Granville Island · marina boardwalk",
+      position: "20% 30%",
+    },
   },
 ]
 
-// ── The Rig — equipment trust band ─────────────────────────────────────────
-
-const rigSpecs = [
-  { label: "Method", value: "Wet abrasive — water + recycled glass" },
-  { label: "Particulate", value: "< 5% airborne (vs. 100% dry)" },
-  { label: "Substrate", value: "Concrete · brick · stone · steel · GRP" },
-  { label: "Pressure", value: "60–120 PSI calibrated to surface" },
-  { label: "Containment", value: "Runoff captured, water-recirc system" },
-  { label: "Mobile", value: "Truck-mounted across BC" },
-]
-
-// ── Why-vapor differentiators ───────────────────────────────────────────────
+// ── Why wet — each point traces to Square One's own description ────────────
 
 const advantages = [
   {
     num: "01",
-    title: "No silica dust hazard",
+    title: "Up to 92% less dust",
     body:
-      "The water sheath suppresses 95%+ of airborne particulate. Approved for occupied buildings, schools, food-grade facilities, and heritage permits where dry blasting cannot enter.",
+      "The abrasive travels in water, so the particulate that makes dry blasting a shutdown job stays on the ground. Occupied buildings and busy frontages keep operating around the work.",
   },
   {
     num: "02",
-    title: "No chemicals, no scarring",
+    title: "Little to no heat",
     body:
-      "Recycled glass abrasive and water — that's it. No solvents, no caustics, no etching compounds. The substrate underneath the contamination is preserved.",
+      "No friction heat at the surface — no warping thin steel, no scorching stone, no glazing the substrate you are trying to save.",
   },
   {
     num: "03",
-    title: "Eco-responsible by design",
+    title: "Less water, less impact",
     body:
-      "Water-controlled runoff, recycled abrasive media, no chemical runoff to storm drains. Specified by BC municipalities and HOA councils with environmental compliance requirements.",
+      "Less water than pressure washing, less environmental impact than chemical stripping. The finish is a clean, primed surface — not a chemical residue.",
   },
   {
     num: "04",
-    title: "Mobile across BC",
+    title: "Faster, and it comes to you",
     body:
-      "Two operating bases — Lower Mainland and Vancouver Island. The rig dispatches to your job site. No transporting industrial equipment to a shop, no shutdown of adjacent operations.",
+      "A portable rig that gets the job done faster than the alternatives, dispatched across the Lower Mainland and Vancouver Island. Nothing gets trucked to a shop.",
   },
 ]
 
-// ── Process ────────────────────────────────────────────────────────────────
+// ── Process — what actually happens, no invented paperwork ─────────────────
 
 const process = [
-  { num: "01", title: "Site Walk", body: "On-site assessment. Substrate ID, contamination type, target finish spec, runoff containment plan, photo set for the quote." },
-  { num: "02", title: "Containment", body: "Adjacent areas masked. Runoff containment built. Recirculation tank staged. Surrounding surfaces protected before water meets media." },
-  { num: "03", title: "Restore", body: "Wet abrasive at calibrated pressure. Continuous monitoring of profile, consumption, and adjacent surfaces. Adjustments dialled in real time." },
-  { num: "04", title: "Sign-Off", body: "Profile gauge readings. Photo set, before-and-after. Written report. Site cleared, runoff captured, surface ready for what comes next." },
+  { num: "01", title: "Photos and a postcode", body: "Send a couple of photos of the surface and where it is. We identify the substrate and what is on it." },
+  { num: "02", title: "Written quote", body: "A written estimate with the approach — pressure, media, containment — and how long the site is affected." },
+  { num: "03", title: "The rig on site", body: "Adjacent surfaces protected, runoff managed, the surface taken back to clean in passes." },
+  { num: "04", title: "Primed for what's next", body: "Ready for paint, coating, sealer or the decorative system we install ourselves — same crew, same day if it suits." },
 ]
 
-// ── Substrates we restore ─────────────────────────────────────────────────
+// ── Substrates — from Square One's published application list ──────────────
 
 const substrates = [
-  "Asphalt", "Concrete", "Brick & Heritage Stone", "Limestone & Sandstone",
-  "Steel & Structural Metal", "Aluminum", "Marine GRP & Gelcoat", "Wood (deck stripping)",
-  "Pavers & Cobblestone", "Pool Tile", "Industrial Equipment", "Tanks & Vessels",
+  "Asphalt", "Concrete", "Brick", "Limestone", "Marble", "Stucco", "Steel", "Iron",
+  "Wood", "Pavers & patios", "Marine decks", "Hulls & on-board coatings",
 ]
 
-// ── Service area ──────────────────────────────────────────────────────────
+// ── Service area — the same regions every other page names ─────────────────
 
 const cities = [
-  "Vancouver", "Burnaby", "Surrey", "Richmond", "Coquitlam", "Maple Ridge",
-  "Langley", "Abbotsford", "Chilliwack", "North Vancouver", "West Vancouver",
-  "Whistler", "Squamish", "Sunshine Coast", "Victoria", "Saanich", "Sidney",
-  "Nanaimo", "Ladysmith", "Duncan", "Parksville", "Courtenay", "Bowen Island",
+  "Vancouver", "North Vancouver", "West Vancouver", "Burnaby", "Richmond", "Surrey",
+  "Coquitlam", "Maple Ridge", "Langley", "Abbotsford", "Chilliwack",
+  "Victoria", "Saanich", "Langford", "Duncan", "Nanaimo", "Parksville",
 ]
 
-function ArrowRight() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">
-      <path d="M1 7H13M13 7L7.5 1.5M13 7L7.5 12.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="square" />
-    </svg>
-  )
-}
+const YOUTUBE = "https://www.youtube.com/channel/UCBDvB4vgdahH67BmP6FeccQ"
 
 export default function VaporBlastingServicePage() {
+  const service = getServiceBySlug("vapor-blasting")
+  const faqs = service?.faqs ?? []
   return (
-    <main className="bg-[#F6F4F0]">
+    <main>
+      <JsonLd
+        data={[
+          {
+            "@type": "Service",
+            name: "Vapour blasting",
+            serviceType: "Vapour blasting — surface cleaning, priming, graffiti and marking removal",
+            description: metadata.description,
+            provider: { "@id": `${SITE_URL}/#organization` },
+            areaServed: [
+              { "@type": "AdministrativeArea", name: "Lower Mainland, British Columbia" },
+              { "@type": "AdministrativeArea", name: "Vancouver Island, British Columbia" },
+            ],
+            url: `${SITE_URL}/services/vapor-blasting`,
+          },
+          faqSchema(faqs),
+          breadcrumbSchema(SITE_URL, [
+            { name: "Services", path: "/services" },
+            { name: "Vapour blasting", path: "/services/vapor-blasting" },
+          ]),
+        ]}
+      />
+      {/* ── Hero — 55/45 split: typographic left, designed image hold right ── */}
+      <section className="relative grid min-h-[600px] grid-cols-[55fr_45fr] overflow-hidden bg-surface max-[900px]:min-h-0 max-[900px]:grid-cols-1">
+        <div className="relative flex items-center pt-28 pb-16 pr-[72px] pl-[max(calc((100vw_-_1280px)/2),40px)] max-[900px]:pt-[88px] max-[900px]:pr-10 max-[900px]:pb-12 max-[900px]:pl-10 max-[700px]:px-6">
+          <div className="relative z-[1]">
+            <p className="eyebrow">Service &middot; Mobile surface cleaning and priming</p>
 
-      {/* ── HERO — cinematic dark, dustless USP ──────────────────────────── */}
-      <section className="relative min-h-[88vh] flex items-end overflow-hidden bg-[#0A0A0A]">
-        <div className="absolute inset-0">
-          <Image
-            src="/images/services/vapor-blasting/hero.jpg"
-            alt="Square One Paving — mobile vapor blasting rig across BC"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover"
-          />
-          <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-[rgba(10,10,10,0.55)] via-[rgba(10,10,10,0.45)] to-[rgba(10,10,10,0.95)]" />
-          <div aria-hidden className="absolute inset-0 bg-gradient-to-r from-[rgba(10,10,10,0.75)] via-transparent to-[rgba(10,10,10,0.20)]" />
-          <div aria-hidden className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 0% 60%, rgba(242,100,48,0.12) 0%, transparent 55%)" }} />
-        </div>
+            <h1 className="stop mt-7 max-w-[20ch] [text-wrap:balance]">Clean it, prime it, bring it back</h1>
 
-        <div className="absolute top-24 lg:top-28 left-6 lg:left-12 z-10 flex items-center gap-3">
-          <span className="block w-1.5 h-1.5 rounded-full bg-[#F26430] pulse-dot" />
-          <span className="text-[10.5px] uppercase tracking-[0.32em] text-white/65 font-semibold">
-            Square One Paving · Vapor Blasting Division
-          </span>
-        </div>
-
-        <Container className="relative z-10 w-full pt-32 pb-24 lg:pb-32">
-          <div className="grid lg:grid-cols-[1fr_360px] gap-12 lg:gap-16 items-end">
-            <div className="max-w-3xl">
-              <div className="flex items-center gap-3 mb-7">
-                <span className="block w-1.5 h-1.5 rounded-full bg-[#F26430]" />
-                <span className="text-[11px] uppercase tracking-[0.28em] text-[#FF8A5C] font-bold">Mobile Surface Restoration</span>
-                <span className="hidden sm:block w-px h-3 bg-white/20" />
-                <span className="hidden sm:block text-[10.5px] uppercase tracking-[0.18em] text-white/55 font-medium">British Columbia</span>
-              </div>
-
-              <h1 className="text-white display-h" style={{ fontSize: "clamp(2.75rem, 7.5vw, 7rem)" }}>
-                The cleanest way<br />
-                to <span className="italic font-extralight text-white/95">restore</span>{" "}
-                <span className="text-[#F26430]">a surface.</span>
-              </h1>
-
-              <p className="text-white/75 text-base lg:text-xl mt-9 max-w-xl leading-[1.65] font-light">
-                Dustless abrasive blasting — water and recycled glass at calibrated pressure. We strip decades of grime, graffiti, oxidation, and coatings without silica dust, surface scarring, or harsh chemicals. Mobile across BC since 2000.
-              </p>
-
-              <div className="mt-12 flex flex-wrap gap-3 items-center">
-                <Link href="/contact" className="group bg-white text-[#0A0A0A] px-9 py-4 font-semibold text-[12.5px] tracking-[0.04em] uppercase rounded-none hover:bg-[#F26430] hover:text-white transition-colors duration-300 inline-flex items-center gap-3">
-                  Request a Site Walk<ArrowRight />
-                </Link>
-                <a href="tel:6043098212" className="group border border-white/30 text-white px-9 py-4 font-medium text-[12.5px] tracking-[0.04em] uppercase rounded-none hover:bg-white hover:text-[#0A0A0A] transition-colors duration-300 inline-flex items-center gap-3">
-                  604-309-8212
-                </a>
-              </div>
-            </div>
-
-            {/* Spec strip — hero-side */}
-            <div className="hidden lg:flex flex-col bg-white/[0.04] backdrop-blur-2xl border border-white/15"
-              style={{ boxShadow: "0 24px 64px rgba(0,0,0,0.30), 0 0 0 1px rgba(255,255,255,0.04) inset" }}>
-              {[
-                { label: "Method", value: "Water + Recycled Glass" },
-                { label: "Particulate", value: "< 5% Airborne" },
-                { label: "Service Area", value: "BC Lower Mainland + Island" },
-                { label: "Established", value: "2000 — 25 Years On the Ground" },
-              ].map((spec, i) => (
-                <div key={spec.label} className={`px-7 py-5 ${i > 0 ? "border-t border-white/10" : ""}`}>
-                  <p className="text-[9.5px] uppercase tracking-[0.26em] text-white/40 font-bold mb-1.5">{spec.label}</p>
-                  <p className="text-white text-[14.5px] font-semibold tracking-[-0.005em]">{spec.value}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </Container>
-      </section>
-
-      {/* ── DUSTLESS BAND — bold USP strip ───────────────────────────────── */}
-      <section className="bg-[#0F1115] border-y border-white/5 py-10 lg:py-12">
-        <Container>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-y-6 gap-x-10 items-center">
-            {[
-              { stat: "< 5%", label: "Airborne dust", sub: "vs. 100% dry blasting" },
-              { stat: "0", label: "Harsh chemicals", sub: "water + recycled abrasive" },
-              { stat: "BC", label: "Mobile across", sub: "two-base province coverage" },
-            ].map((item) => (
-              <div key={item.label} className="flex items-center gap-5">
-                <div className="text-white" style={{ fontWeight: 200, fontSize: "clamp(2.5rem, 4vw, 3.5rem)", lineHeight: 1, letterSpacing: "-0.05em" }}>
-                  {item.stat}
-                </div>
-                <div>
-                  <div className="text-[12px] uppercase tracking-[0.22em] text-white font-semibold">{item.label}</div>
-                  <div className="text-[11px] tracking-[0.04em] text-white/50 mt-1 font-light">{item.sub}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </Container>
-      </section>
-
-      {/* ── THREE-TIER SERVICE — Residential / Commercial / Industrial ───── */}
-      <section className="bg-white section-padding">
-        <Container>
-          <div className="mb-14 lg:mb-20 grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-8 lg:gap-16 items-end">
-            <div>
-              <div className="flex items-center gap-3 mb-5">
-                <span className="block w-1.5 h-1.5 rounded-full bg-[#F26430]" />
-                <p className="text-[11px] uppercase tracking-[0.28em] text-[#F26430] font-semibold">Three Tiers · One Method</p>
-              </div>
-              <h2 className="text-[#0A0A0A] display-h" style={{ fontSize: "clamp(2.25rem, 4.5vw, 3.5rem)" }}>
-                What we restore.<br />
-                <span className="italic font-extralight">From driveway to drydock.</span>
-              </h2>
-            </div>
-            <p className="text-[#5A5A5A] max-w-md leading-[1.7] text-[15px] lg:text-base font-light lg:mb-2">
-              Vapor blasting works on virtually every hard substrate &mdash; the difference between a homeowner&apos;s patio and an industrial pump frame is the pressure setting and the abrasive grade, not the underlying method.
+            <p className="mt-7 max-w-[54ch] text-[19px] leading-[1.65] text-ink-body [text-wrap:pretty] max-[700px]:text-[17px]">
+              A powerful, portable blasting solution for surface prep. Vapour blasting uses less
+              water, generates up to 92% less dust, produces little to no heat and creates less
+              environmental impact than the alternatives — while getting the job done faster.
             </p>
-          </div>
 
-          <div className="space-y-6 lg:space-y-8">
-            {tiers.map((tier, i) => (
-              <article key={tier.eyebrow} className="grid md:grid-cols-2 gap-0 overflow-hidden border border-[#E2DDD8] bg-white hover:border-[#F26430]/40 hover:shadow-[0_8px_28px_rgba(0,0,0,0.06)] transition-all duration-500">
-                <div className={`relative aspect-[4/3] md:aspect-auto md:min-h-[420px] overflow-hidden ${i % 2 === 1 ? "md:order-2" : ""}`}>
-                  <Image src={tier.image} alt={tier.alt} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover transition-transform duration-1000 ease-out hover:scale-105" />
-                  <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[rgba(10,10,10,0.45)] via-transparent to-transparent" />
-                  <div className="absolute top-6 left-6 flex items-center gap-2 bg-[rgba(10,10,10,0.65)] backdrop-blur-md px-3.5 py-2">
-                    <span className="block w-1.5 h-1.5 rounded-full bg-[#F26430]" />
-                    <span className="text-[10px] uppercase tracking-[0.22em] text-white font-semibold">{tier.tag}</span>
-                  </div>
+            <p className="mt-5 max-w-[54ch] text-[15px] leading-[1.6] text-ink-muted [text-wrap:pretty]">
+              Graffiti, gum and mould off commercial exteriors. Markings off roads. Coatings off
+              steel and hulls. It is also how we prime surfaces for the decorative systems
+              Square One has installed across BC since 2000.
+            </p>
+
+            <div className="mt-11 flex flex-wrap items-center gap-[14px]">
+              <Link href="/contact" className="btn-primary">
+                Request a quote
+              </Link>
+              <a href="tel:+16044669902" className="btn-secondary">
+                604-466-9902
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div className="relative flex items-center p-10 pl-0 max-[900px]:px-10 max-[900px]:pb-12 max-[700px]:px-6">
+          <div className="relative aspect-[4/5] w-full max-h-[640px] overflow-hidden rounded-[2px] bg-surface-stone">
+            <Image
+              src="/images/services/vapor-blasting/granville-island-vapour-blasting-01.jpg"
+              alt="A Square One operator vapour blasting a painted marking off the Granville Island boardwalk, Vancouver"
+              fill
+              priority
+              sizes="(max-width: 900px) 100vw, 45vw"
+              className="object-cover"
+              style={{ objectPosition: "38% 60%" }}
+            />
+            <div aria-hidden="true" className="scrim scrim-light" />
+            <div className="caption">Granville Island, Vancouver &middot; marking removal</div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Facts ───────────────────────────────────────────────────── */}
+      <section className="section border-y border-hairline bg-surface-warm">
+        <div className="container-1280 grid grid-cols-3 gap-10 max-[700px]:grid-cols-1 max-[700px]:gap-9">
+          {facts.map((fact) => (
+            <div key={fact.label} className="stat-rule">
+              <div className="stat-num">{fact.number}</div>
+              <div className="mt-[14px] text-[15px] text-ink-muted">{fact.label}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── What it handles — three tiers, commercial first ──────── */}
+      <section className="section relative overflow-hidden bg-surface">
+        <div className="container-1280 relative z-[1]">
+          <p className="eyebrow">What it handles</p>
+
+          <h2 className="mt-5">From storefront to drydock</h2>
+
+          <p className="mt-5 max-w-[56ch] text-[17px] leading-[1.6] text-ink-body [text-wrap:pretty]">
+            Vapour blasting works on almost every hard surface. The difference between a parkade,
+            a patio and a yacht deck is the pressure and the media — not the method.
+          </p>
+
+          <div className="mt-10 grid grid-cols-3 gap-6 max-[900px]:grid-cols-1">
+            {tiers.map((tier) => (
+              <article
+                key={tier.eyebrow}
+                className="flex flex-col rounded-[2px] border border-hairline bg-surface"
+              >
+                <div className="relative aspect-[5/3] overflow-hidden rounded-t-[2px] border-b border-hairline bg-surface-stone">
+                  <Image
+                    src={tier.photo.src}
+                    alt={tier.photo.alt}
+                    fill
+                    sizes="(max-width: 900px) 100vw, 400px"
+                    className="object-cover"
+                    style={{ objectPosition: tier.photo.position }}
+                  />
+                  <div aria-hidden="true" className="scrim scrim-light" />
+                  <div className="caption">{tier.photo.caption}</div>
                 </div>
 
-                <div className={`p-9 lg:p-14 flex flex-col justify-center ${i % 2 === 1 ? "md:order-1" : ""}`}>
-                  <p className="text-[10.5px] uppercase tracking-[0.28em] text-[#F26430] font-bold mb-5">{tier.eyebrow}</p>
-                  <h3 className="text-[#0A0A0A] display-h mb-5" style={{ fontSize: "clamp(1.6rem, 3vw, 2.25rem)" }}>
-                    {tier.title}
-                  </h3>
-                  <p className="text-[#2C2C2C] leading-[1.75] text-[15px] font-light mb-7">
-                    {tier.body}
-                  </p>
-                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2.5">
-                    {tier.bullets.map((b) => (
-                      <li key={b} className="flex items-start gap-2.5 text-[13.5px] text-[#3A3A3A]">
-                        <span className="text-[#F26430] flex-shrink-0 mt-1" aria-hidden>
-                          <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
-                            <path d="M2 6.5L4.5 9L10 3.5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
-                          </svg>
-                        </span>
-                        <span className="font-medium">{b}</span>
+                <div className="flex flex-1 flex-col p-8 max-[700px]:p-6">
+                  <p className="label">{tier.eyebrow}</p>
+
+                  <h3 className="mt-4">{tier.title}</h3>
+
+                  <p className="mt-4 text-[15px] leading-[1.6] text-ink-body">{tier.body}</p>
+
+                  <ul className="mt-6 border-t border-hairline">
+                    {tier.bullets.map((bullet) => (
+                      <li
+                        key={bullet}
+                        className="border-b border-hairline py-[10px] text-[14px] leading-[1.5] text-ink-body"
+                      >
+                        {bullet}
                       </li>
                     ))}
                   </ul>
+
+                  <p className="mt-auto pt-6 text-[12px] font-medium tracking-[0.08em] text-ink-muted">
+                    {tier.tag}
+                  </p>
                 </div>
               </article>
             ))}
           </div>
-        </Container>
-      </section>
-
-      {/* ── THE RIG — equipment trust band ───────────────────────────────── */}
-      <section className="relative bg-[#0A0A0A] section-padding overflow-hidden">
-        <div className="absolute inset-0">
-          <Image
-            src="/images/products/streetbond/streetbond-cobble-macro-surface-01.jpg"
-            alt=""
-            aria-hidden
-            fill
-            sizes="100vw"
-            className="object-cover opacity-25"
-          />
         </div>
-        <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-[rgba(10,10,10,0.85)] via-[rgba(10,10,10,0.92)] to-[rgba(10,10,10,0.95)]" />
-        <div aria-hidden className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at 100% 0%, rgba(242,100,48,0.14) 0%, transparent 55%)" }} />
-
-        <Container className="relative">
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-14 lg:gap-20 items-start">
-            <div>
-              <div className="flex items-center gap-3 mb-6">
-                <span className="block w-1.5 h-1.5 rounded-full bg-[#F26430] pulse-dot" />
-                <p className="text-[11px] uppercase tracking-[0.28em] text-[#FF8A5C] font-bold">The Rig</p>
-              </div>
-              <h2 className="text-white display-h mb-7" style={{ fontSize: "clamp(2rem, 4vw, 3rem)" }}>
-                Industrial-grade gear.<br />
-                <span className="italic font-extralight">Owner-operated.</span>
-              </h2>
-              <p className="text-white/70 text-[15.5px] leading-[1.75] font-light mb-8 max-w-md">
-                The rig is truck-mounted and mobile across BC. Industrial diesel compressor, water-recirculation system, calibrated nozzle assembly, certified abrasive media, full runoff containment. The same unit that restores a Heritage façade in Victoria handles a parkade in Burnaby on Tuesday.
-              </p>
-              <p className="text-white/55 text-[14px] leading-[1.7] font-light">
-                Every job is run by Square One staff &mdash; no subcontractors, no rented operators. The crew on your site has a decade-plus of restoration experience and pulls up to your address with the same equipment they used yesterday.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-white/10">
-              {rigSpecs.map((spec) => (
-                <div key={spec.label} className="bg-[#0A0A0A] p-7 lg:p-8">
-                  <p className="text-[10px] uppercase tracking-[0.26em] text-[#FF8A5C] font-bold mb-3">{spec.label}</p>
-                  <p className="text-white text-[15px] font-medium leading-[1.45] tracking-[-0.005em]">{spec.value}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </Container>
       </section>
 
-      {/* ── DUSTLESS ADVANTAGE — 4 differentiators ───────────────────────── */}
-      <section className="bg-[#F6F4F0] section-padding">
-        <Container>
-          <div className="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-8 lg:gap-16 items-end mb-14 lg:mb-20">
-            <div>
-              <div className="flex items-center gap-3 mb-5">
-                <span className="block w-1.5 h-1.5 rounded-full bg-[#F26430]" />
-                <p className="text-[11px] uppercase tracking-[0.28em] text-[#F26430] font-semibold">The Dustless Advantage</p>
-              </div>
-              <h2 className="text-[#0A0A0A] display-h" style={{ fontSize: "clamp(2.25rem, 4.5vw, 3.5rem)" }}>
-                Why wet beats<br />
-                <span className="italic font-extralight">dry &mdash; every time.</span>
-              </h2>
-            </div>
-            <p className="text-[#5A5A5A] max-w-md leading-[1.7] text-[15px] lg:text-base font-light lg:mb-2">
-              Dry sandblasting and mechanical grinding belong to an older era of surface prep. Vapor blasting is the working specification on every job that involves occupied buildings, environmental compliance, or heritage substrates.
+      {/* ── Why wet ──────────────────────────────────────────────────── */}
+      <section className="section relative overflow-hidden border-y border-hairline bg-surface-warm">
+        <div className="container-1280 relative z-[1] grid grid-cols-[1fr_1.15fr] gap-16 max-[900px]:grid-cols-1 max-[900px]:gap-10">
+          <div>
+            <p className="eyebrow">Why wet beats dry</p>
+
+            <h2 className="mt-5">The dust stays on the ground</h2>
+
+            <p className="mt-6 max-w-[48ch] text-[17px] leading-[1.6] text-ink-body [text-wrap:pretty]">
+              Dry sandblasting turns a cleaning job into a shutdown. Because the abrasive travels
+              in water, vapour blasting takes a surface back to clean while the building beside it
+              stays open — and leaves it primed rather than scarred.
             </p>
+
+            <div className="relative mt-8 aspect-[4/3] overflow-hidden rounded-[2px] bg-surface-stone">
+              <Image
+                src="/images/services/vapor-blasting/nozzle-pavers-01.jpg"
+                alt="The vapour blasting nozzle mid-pass over pavers — the wet fan of abrasive and the clean line behind it"
+                fill
+                sizes="(max-width: 900px) 100vw, 560px"
+                className="object-cover"
+              />
+              <div aria-hidden="true" className="scrim scrim-light" />
+              <div className="caption">The nozzle mid-pass &middot; pavers</div>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border-t border-[#E2DDD8]">
-            {advantages.map((a) => (
-              <div key={a.num} className="border-b border-[#E2DDD8] md:[&:nth-child(odd)]:border-r md:[&:nth-child(odd)]:border-r-[#E2DDD8] p-9 lg:p-11 group bg-white hover:bg-[#FAF7F4] transition-colors">
-                <div className="flex items-baseline gap-3 mb-5">
-                  <span className="text-[10.5px] uppercase tracking-[0.28em] text-[#F26430] font-bold">{a.num}</span>
-                  <div className="h-px flex-1 bg-[#E2DDD8] group-hover:bg-[#F26430] transition-colors duration-500" />
+          <div className="grid grid-cols-2 gap-x-12 gap-y-2 max-[700px]:grid-cols-1">
+            {advantages.map((advantage) => (
+              <div key={advantage.num} className="border-t border-hairline py-7">
+                <div className="text-[13px] font-semibold tracking-[0.08em] text-ink-muted">
+                  {advantage.num}
                 </div>
-                <h3 className="text-[#0A0A0A] font-semibold text-[20px] lg:text-[22px] leading-[1.2] tracking-[-0.01em] mb-4">{a.title}</h3>
-                <p className="text-[#5A5A5A] text-[14.5px] leading-[1.7] font-light">{a.body}</p>
+                <h3 className="mt-4">{advantage.title}</h3>
+                <p className="mt-[10px] max-w-[40ch] text-[15px] leading-[1.55] text-ink-body">
+                  {advantage.body}
+                </p>
               </div>
             ))}
           </div>
-        </Container>
-      </section>
-
-      {/* ── PROCESS — 4 steps ────────────────────────────────────────────── */}
-      <section className="bg-white section-padding">
-        <Container>
-          <div className="text-center mb-14 lg:mb-20">
-            <div className="flex items-center justify-center gap-3 mb-5">
-              <span className="block w-1.5 h-1.5 rounded-full bg-[#F26430]" />
-              <p className="text-[11px] uppercase tracking-[0.28em] text-[#F26430] font-semibold">The Method</p>
-              <span className="block w-1.5 h-1.5 rounded-full bg-[#F26430]" />
-            </div>
-            <h2 className="text-[#0A0A0A] display-h max-w-3xl mx-auto" style={{ fontSize: "clamp(2.25rem, 4.5vw, 3.5rem)" }}>
-              Site walk to sign-off.<br />
-              <span className="italic font-extralight">Four steps, every job.</span>
-            </h2>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-0 border-t border-[#E2DDD8]">
-            {process.map((step) => (
-              <div key={step.num} className="border-b border-[#E2DDD8] sm:[&:nth-child(odd)]:border-r lg:[&:not(:last-child)]:border-r border-[#E2DDD8] p-8 lg:p-10 group hover:bg-[#FAF7F4] transition-colors">
-                <p className="text-[10.5px] uppercase tracking-[0.28em] text-[#F26430] font-bold mb-5">{step.num}</p>
-                <div className="h-px w-10 bg-[#F26430] mb-5 group-hover:w-16 transition-all duration-500" />
-                <h3 className="text-[#0A0A0A] font-semibold text-[18.5px] leading-[1.2] tracking-[-0.005em] mb-4">{step.title}</h3>
-                <p className="text-[#5A5A5A] text-[13.5px] leading-[1.7] font-light">{step.body}</p>
-              </div>
-            ))}
-          </div>
-        </Container>
-      </section>
-
-      {/* ── SUBSTRATES — chips strip ─────────────────────────────────────── */}
-      <section className="bg-[#F6F4F0] py-20 lg:py-24">
-        <Container>
-          <div className="text-center mb-10">
-            <p className="text-[10.5px] uppercase tracking-[0.32em] text-[#F26430] font-bold mb-4">Substrates We Restore</p>
-            <h2 className="text-[#0A0A0A] display-h max-w-3xl mx-auto" style={{ fontSize: "clamp(1.75rem, 3.2vw, 2.5rem)" }}>
-              From Heritage limestone to industrial steel.
-            </h2>
-          </div>
-          <div className="flex flex-wrap justify-center gap-2.5">
-            {substrates.map((s) => (
-              <span key={s} className="text-[12px] uppercase tracking-[0.16em] font-semibold px-4 py-2.5 border border-[#E2DDD8] bg-white text-[#2C2C2C] hover:border-[#F26430] hover:text-[#F26430] transition-colors">
-                {s}
-              </span>
-            ))}
-          </div>
-        </Container>
-      </section>
-
-      {/* ── ECO BAND — for municipal/HOA contracts ───────────────────────── */}
-      <section className="relative bg-[#0F1115] py-20 lg:py-28 overflow-hidden border-y border-white/5">
-        <div aria-hidden className="absolute inset-0 pointer-events-none opacity-50" style={{ background: "radial-gradient(ellipse at 50% 100%, rgba(242,100,48,0.10) 0%, transparent 60%)" }} />
-        <Container>
-          <div className="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-10 lg:gap-16 items-center">
-            <div className="lg:max-w-md">
-              <div className="flex items-center gap-3 mb-6">
-                <span className="block w-1.5 h-1.5 rounded-full bg-[#F26430] pulse-dot" />
-                <p className="text-[11px] uppercase tracking-[0.28em] text-[#FF8A5C] font-bold">Specified by BC Cities</p>
-              </div>
-              <h2 className="text-white display-h" style={{ fontSize: "clamp(1.9rem, 3.5vw, 2.75rem)" }}>
-                Eco-responsible.<br />
-                <span className="italic font-extralight">By specification.</span>
-              </h2>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
-              <p className="text-white/75 text-[15px] leading-[1.75] font-light">
-                Recycled glass abrasive. Water-controlled runoff. No solvents. No caustic chemicals. No toxic media. The system was specified by BC municipalities precisely because it satisfies environmental compliance requirements that dry blasting and chemical stripping can&apos;t.
-              </p>
-              <p className="text-white/75 text-[15px] leading-[1.75] font-light">
-                For HOA councils, strata operations, and municipal procurement teams &mdash; the documentation trail (containment plan, runoff capture, media SDS, sign-off photos) is part of every job. We work to the standard your insurance and your residents expect.
-              </p>
-            </div>
-          </div>
-        </Container>
-      </section>
-
-      {/* ── SERVICE AREA — BC mobile coverage ────────────────────────────── */}
-      <section className="bg-white section-padding">
-        <Container>
-          <div className="text-center mb-12">
-            <p className="text-[10.5px] uppercase tracking-[0.32em] text-[#F26430] font-bold mb-4">Mobile Across BC</p>
-            <h2 className="text-[#0A0A0A] display-h max-w-3xl mx-auto" style={{ fontSize: "clamp(1.9rem, 3.5vw, 2.75rem)" }}>
-              Two operating bases. One province.
-            </h2>
-            <p className="text-[#5A5A5A] mt-5 max-w-2xl mx-auto leading-[1.7] text-[15px] font-light">
-              Lower Mainland and Vancouver Island. Mobile rig dispatched same week, no minimum job size for routine residential work. Don&apos;t see your city below? It&apos;s likely covered &mdash; ask.
-            </p>
-          </div>
-          <div className="ticker-mask overflow-hidden border-y border-[#E2DDD8] py-6">
-            <div className="ticker-track">
-              {[...cities, ...cities].map((c, i) => (
-                <span key={i} className="flex items-center whitespace-nowrap px-7 text-[14.5px] text-[#2C2C2C] font-medium tracking-[-0.005em]">
-                  {c}
-                  <span className="mx-7 w-1 h-1 rounded-full bg-[#F26430] opacity-60" />
-                </span>
-              ))}
-            </div>
-          </div>
-        </Container>
-      </section>
-
-      {/* ── CTA — premium dark ───────────────────────────────────────────── */}
-      <section className="relative bg-[#0A0A0A] py-24 lg:py-32 overflow-hidden">
-        <div className="absolute inset-0">
-          <Image src="/images/services/vapor-blasting/hero.jpg" alt="" aria-hidden fill sizes="100vw" className="object-cover opacity-30" />
         </div>
-        <div aria-hidden className="absolute inset-0 bg-gradient-to-b from-[rgba(10,10,10,0.92)] via-[rgba(10,10,10,0.85)] to-[rgba(10,10,10,0.95)]" />
-        <div aria-hidden className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at center, rgba(242,100,48,0.16) 0%, transparent 65%)" }} />
+      </section>
 
-        <Container className="relative">
-          <div className="max-w-3xl">
-            <div className="flex items-center gap-3 mb-6">
-              <span className="block w-1.5 h-1.5 rounded-full bg-[#F26430] pulse-dot" />
-              <p className="text-[11px] uppercase tracking-[0.28em] text-[#FF8A5C] font-bold">Book a Site Walk</p>
-            </div>
-            <h2 className="text-white display-h mb-7" style={{ fontSize: "clamp(2.25rem, 4.5vw, 3.75rem)" }}>
-              Send us a photo.<br />
-              <span className="italic font-extralight">We&apos;ll send back a quote.</span>
-            </h2>
-            <p className="text-white/75 text-[15.5px] lg:text-lg leading-[1.7] font-light mb-10 max-w-xl">
-              The fastest path to a quote is a couple of photos and a postcode. No driving, no obligation, no minimum job. We assess the substrate, suggest the right abrasive, and come back with a written estimate the same week.
+      {/* ── Prep for our own installs ────────────────────────────────────── */}
+      <section className="section relative overflow-hidden bg-surface">
+        <div className="container-1280 relative z-[1] grid grid-cols-2 gap-16 max-[900px]:grid-cols-1 max-[900px]:gap-10">
+          <div>
+            <p className="eyebrow">The supporting trade</p>
+
+            <h2 className="mt-5">The same rig primes our own work</h2>
+
+            <p className="mt-6 max-w-[52ch] text-[17px] leading-[1.6] text-ink-body [text-wrap:pretty]">
+              Before StreetBond goes on a spray pad or DecoMark goes on a plaza, the surface has to
+              be clean and open. Vapour blasting is how we get there on our own installs — which is
+              why we offer it to everyone else as a service in its own right.
             </p>
-            <div className="flex flex-wrap gap-3">
-              <Link href="/contact" className="group bg-white text-[#0A0A0A] px-9 py-4 font-semibold text-[12.5px] tracking-[0.04em] uppercase rounded-none hover:bg-[#F26430] hover:text-white transition-colors duration-300 inline-flex items-center gap-3">
-                Request a Quote<ArrowRight />
+
+            <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3">
+              <Link href="/services/decorative-coatings" className="arrow-link">
+                Decorative coatings <span aria-hidden="true">&rarr;</span>
               </Link>
-              <a href="tel:6043098212" className="group border border-white/30 text-white px-9 py-4 font-medium text-[12.5px] tracking-[0.04em] uppercase rounded-none hover:bg-white hover:text-[#0A0A0A] transition-colors duration-300 inline-flex items-center gap-3">
-                604-309-8212
-              </a>
-              <a href="mailto:info@squareonepaving.ca" className="group border border-white/15 text-white/80 px-9 py-4 font-medium text-[12.5px] tracking-[0.04em] uppercase rounded-none hover:border-white/40 hover:text-white transition-colors duration-300 inline-flex items-center gap-3">
-                info@squareonepaving.ca
-              </a>
+              <Link href="/services/preformed-thermoplastic" className="arrow-link">
+                Preformed thermoplastic <span aria-hidden="true">&rarr;</span>
+              </Link>
             </div>
           </div>
-        </Container>
+
+          <div className="relative aspect-[3/2] overflow-hidden rounded-[2px] bg-surface-stone">
+            <Image
+              src="/images/S1_update_v2/photos/Featured%20image%20options/Photo-2025-07-28-2-10-43-PM-scaled.jpg"
+              alt="A finished StreetBond retail plaza entrance installed by Square One"
+              fill
+              sizes="(max-width: 900px) 100vw, 600px"
+              className="object-cover"
+            />
+            <div aria-hidden="true" className="scrim scrim-light" />
+            <div className="caption">Retail plaza entrance &middot; StreetBond, over a prepared surface</div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── The method + field records ───────────────────────────────────── */}
+      <section className="section relative overflow-hidden border-y border-hairline bg-surface-warm">
+        <div className="container-1280 relative z-[1]">
+          <p className="eyebrow">The method</p>
+
+          <h2 className="mt-5">Photos to primed surface, four steps</h2>
+
+          <div className="mt-10 grid grid-cols-4 gap-10 border-t border-hairline max-[700px]:grid-cols-1 max-[700px]:gap-8">
+            {process.map((step) => (
+              <div key={step.num} className="pt-7">
+                <div className="text-[13px] font-semibold tracking-[0.08em] text-ink-muted">
+                  {step.num}
+                </div>
+                <h3 className="mt-4">{step.title}</h3>
+                <p className="mt-[10px] max-w-[44ch] text-[15px] leading-[1.55] text-ink-body">
+                  {step.body}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-12 flex flex-wrap items-baseline justify-between gap-6 border-t border-hairline pt-8">
+            <p className="max-w-[52ch] text-[15px] leading-[1.6] text-ink-muted">
+              The photographs on this page are Square One&rsquo;s own jobs, from the record.
+            </p>
+            <a href={YOUTUBE} target="_blank" rel="noopener noreferrer" className="arrow-link">
+              Demonstration videos on our YouTube channel <span aria-hidden="true">&rarr;</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Scope: substrates, environment, service area ──────── */}
+      <section className="section relative overflow-hidden bg-surface">
+        <div className="container-1280 relative z-[1]">
+          <p className="eyebrow">Scope</p>
+
+          <h2 className="mt-5">What we take on, and where</h2>
+
+          <div className="mt-10 grid grid-cols-3 gap-12 max-[900px]:grid-cols-1 max-[900px]:gap-10">
+            <div className="border-t border-hairline pt-6">
+              <p className="label">Surfaces</p>
+              <div className="mt-5 flex flex-wrap gap-2">
+                {substrates.map((substrate) => (
+                  <span key={substrate} className="tag">
+                    {substrate}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="border-t border-hairline pt-6">
+              <p className="label">Environment</p>
+              <p className="mt-5 text-[15px] leading-[1.6] text-ink-body">
+                Less water than pressure washing, up to 92% less dust than dry blasting, and less
+                environmental impact than chemical stripping — with little to no heat at the
+                surface.
+              </p>
+              <p className="mt-4 text-[15px] leading-[1.6] text-ink-muted">
+                Adjacent surfaces are protected and runoff is managed on every job. Ask for the
+                approach in writing with your quote.
+              </p>
+            </div>
+
+            <div className="border-t border-hairline pt-6">
+              <p className="label">Service area</p>
+              <p className="mt-5 text-[15px] leading-[1.6] text-ink-body">
+                Lower Mainland and Vancouver Island — the rig is mobile, and it comes to the site.
+              </p>
+              <p className="mt-4 text-[15px] leading-[1.6] text-ink-muted">
+                {cities.join(" · ")}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Questions ────────────────────────────────────────────── */}
+      <section className="section border-t border-hairline bg-surface">
+        <div className="container-1280">
+          <div className="grid grid-cols-12 gap-x-12 gap-y-8 max-[900px]:grid-cols-1">
+            <div className="col-span-4 max-[900px]:col-span-1">
+              <p className="eyebrow">Questions</p>
+              <h2 className="mt-5 [text-wrap:balance]">What people ask about vapour blasting</h2>
+            </div>
+            <div className="col-span-8 border-t border-hairline max-[900px]:col-span-1">
+              {faqs.map((faq, i) => (
+                <details key={faq.q} open={i === 0} className="group border-b border-hairline">
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-[20px] [&::-webkit-details-marker]:hidden">
+                    <span className="text-[1.125rem] font-semibold leading-[1.4] tracking-[-0.01em] text-ink">{faq.q}</span>
+                    <span aria-hidden="true" className="flex-shrink-0 text-[22px] font-normal leading-none text-ink-muted">
+                      <span className="group-open:hidden">+</span>
+                      <span className="hidden group-open:inline">&minus;</span>
+                    </span>
+                  </summary>
+                  <p className="max-w-[64ch] pb-6 pr-10 text-[15px] leading-[1.65] text-ink-body max-[700px]:pr-0">{faq.a}</p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Close ───────────────────────────────────────────────────── */}
+      <section className="section border-t border-hairline bg-surface-warm">
+        <div className="container-1280">
+          <p className="eyebrow">Get a quote</p>
+
+          <h2 className="stop mt-5 max-w-[20ch]">Send us a photo, we send back a quote</h2>
+
+          <p className="mt-6 max-w-[56ch] text-[19px] leading-[1.65] text-ink-body [text-wrap:pretty]">
+            The fastest path to a quote is a couple of photos and a postcode. We identify the
+            surface, suggest the approach and come back with a written estimate.
+          </p>
+
+          <div className="mt-11 flex flex-wrap items-center gap-[14px]">
+            <Link href="/contact" className="btn-primary">
+              Request a quote
+            </Link>
+            <a href="tel:+16044669902" className="btn-secondary">
+              604-466-9902
+            </a>
+          </div>
+
+          <p className="mt-8 text-[15px] text-ink-muted">
+            Vancouver Island{" "}
+            <a href="tel:+12503910270" className="font-semibold text-ink">
+              250-391-0270
+            </a>{" "}
+            &middot; toll-free{" "}
+            <a href="tel:+18773910270" className="font-semibold text-ink">
+              1-877-391-0270
+            </a>{" "}
+            &middot;{" "}
+            <a href="mailto:office@squareonepaving.com" className="font-semibold text-ink">
+              office@squareonepaving.com
+            </a>
+          </p>
+        </div>
       </section>
     </main>
   )

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { Resend } from "resend"
 
-const TO_EMAIL = process.env.CONTACT_EMAIL ?? "jan@squareonepaving.com"
+const TO_EMAIL = process.env.CONTACT_EMAIL ?? "office@squareonepaving.com"
 
 interface ContactPayload {
   formType: "contact"
@@ -10,18 +10,27 @@ interface ContactPayload {
   company?: string
   phone?: string
   projectType?: string
+  location?: string
   message?: string
   website?: string // honeypot
 }
 
+/** Everything a visitor typed is shown in the office's inbox as text, never as markup. */
+function esc(value: string): string {
+  return value.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] ?? c)
+}
+
 function buildEmailHtml(data: ContactPayload): string {
+  const cell = (label: string, value: string, top = false) =>
+    `<tr><td style="padding:4px 16px 4px 0;color:#888;font-size:12px;white-space:nowrap${top ? ";vertical-align:top" : ""}"><strong>${label}</strong></td><td style="font-size:14px${top ? ";white-space:pre-wrap" : ""}">${esc(value)}</td></tr>`
   const rows = [
-    data.name     && `<tr><td style="padding:4px 16px 4px 0;color:#888;font-size:12px;white-space:nowrap"><strong>Name</strong></td><td style="font-size:14px">${data.name}</td></tr>`,
-    data.email    && `<tr><td style="padding:4px 16px 4px 0;color:#888;font-size:12px;white-space:nowrap"><strong>Email</strong></td><td style="font-size:14px">${data.email}</td></tr>`,
-    data.company  && `<tr><td style="padding:4px 16px 4px 0;color:#888;font-size:12px;white-space:nowrap"><strong>Company</strong></td><td style="font-size:14px">${data.company}</td></tr>`,
-    data.phone    && `<tr><td style="padding:4px 16px 4px 0;color:#888;font-size:12px;white-space:nowrap"><strong>Phone</strong></td><td style="font-size:14px">${data.phone}</td></tr>`,
-    data.projectType && `<tr><td style="padding:4px 16px 4px 0;color:#888;font-size:12px;white-space:nowrap"><strong>Project</strong></td><td style="font-size:14px">${data.projectType}</td></tr>`,
-    data.message  && `<tr><td style="padding:4px 16px 4px 0;color:#888;font-size:12px;white-space:nowrap;vertical-align:top"><strong>Message</strong></td><td style="font-size:14px;white-space:pre-wrap">${data.message}</td></tr>`,
+    data.name && cell("Name", data.name),
+    data.email && cell("Email", data.email),
+    data.company && cell("Company", data.company),
+    data.phone && cell("Phone", data.phone),
+    data.projectType && cell("Project", data.projectType),
+    data.location && cell("Location", data.location),
+    data.message && cell("Message", data.message, true),
   ].filter(Boolean).join("\n")
 
   return `
@@ -64,7 +73,7 @@ export async function POST(req: NextRequest) {
       from: "Square One <noreply@squareonepaving.com>",
       to: [TO_EMAIL],
       replyTo: body.email,
-      subject: `New enquiry — ${body.name ?? "Unknown"} @ ${body.company ?? "Unknown"}`,
+      subject: `New enquiry — ${body.name ?? "Unknown"}${body.company ? ` @ ${body.company}` : ""}${body.projectType ? ` · ${body.projectType}` : ""}`,
       html: buildEmailHtml(body),
     })
 

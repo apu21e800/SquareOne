@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FFFFFF;color:#3D4147;font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#14161A;text-decoration:none}
+a:hover{color:#D8511F}
+@media (max-width: 700px){
+[data-mq~="section"]{padding:56px 0 !important}
+[data-mq~="container"]{padding:0 24px !important}
+[data-mq~="grid-2"]{grid-template-columns:1fr !important;gap:48px !important}
+[data-mq~="ctarow"]{flex-direction:column !important}
+}
+a[data-arrow] span{display:inline-block;transition:transform 0.2s}a[data-arrow]:hover span{transform:translateX(4px)}
+[data-card]{transition:transform 0.25s, box-shadow 0.25s}[data-card]:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(20,22,26,0.08)}
+[data-card] img{transition:transform 0.4s ease}[data-card]:hover img{transform:scale(1.02)}
+[data-card] [data-zoom]{transition:transform 0.4s ease}[data-card]:hover [data-zoom]{transform:scale(1.02)}
+</style>
+</helmet>
+
+<dc-import name="Site Nav" active="Journal" hint-size="100%,72px" style="position:sticky;top:0;z-index:120"></dc-import>
+
+<article data-screen-label="Journal post" style="background:#FFFFFF">
+  <div data-mq="container section" style="max-width:calc(68ch + 80px);margin:0 auto;padding:96px 40px 112px;font-size:17px">
+    <div><span style="display:inline-block;background:#F1EEE9;color:#5B6167;font-size:12px;font-weight:600;letter-spacing:0.04em;padding:5px 10px;border-radius:2px">Transit</span></div>
+    <h1 style="margin:24px 0 0;font-size:clamp(3rem, 5vw, 4.5rem);font-weight:300;letter-spacing:-0.035em;line-height:0.98;color:#14161A;text-wrap:balance">TrafficPatternsXD at Brighouse Station<span aria-hidden="true" style="display:inline-block;width:6px;height:6px;background:#F26430;border-radius:1px;margin-left:14px"></span></h1>
+    <div style="margin-top:18px;font-size:14px;color:#767B82">By the Richmond install crew &middot; June 3, 2026</div>
+
+    <div data-lbx data-cap="Brighouse Station &mdash; Richmond &middot; TrafficPatternsXD &middot; 2019" style="position:relative;aspect-ratio:16/9;border-radius:2px;overflow:hidden;background:#E7E0D3;margin-top:48px">
+      <div style="position:absolute;inset:0;background-color:#E7E1D6;background-image:repeating-linear-gradient(0deg, rgba(120, 108, 90, 0.16) 0px, rgba(120, 108, 90, 0.16) 2px, rgba(255, 255, 255, 0) 2px, rgba(255, 255, 255, 0) 36px),repeating-linear-gradient(90deg, rgba(120, 108, 90, 0.10) 0px, rgba(120, 108, 90, 0.10) 2px, rgba(255, 255, 255, 0) 2px, rgba(255, 255, 255, 0) 80px),linear-gradient(180deg, #EDE8E1 0%, #DDD6CA 100%)"></div>
+      <div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%222%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22/%3E%3C/svg%3E');opacity:0.04;pointer-events:none"></div>
+      <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(20, 24, 29, 0.55), rgba(20, 24, 29, 0) 38%);pointer-events:none"></div>
+      <div style="position:absolute;left:16px;bottom:12px;font-size:12px;font-weight:600;letter-spacing:0.02em;color:#FFFFFF;pointer-events:none">Richmond &middot; TrafficPatternsXD &middot; 2019</div>
+    </div>
+
+    <p style="margin:48px 0 0;font-size:17px;line-height:1.75;color:#3D4147;text-wrap:pretty">Brighouse Station anchors the Richmond end of the Canada Line, and the plaza in front of it never really empties. Buses pull through all day, bikes cut the corners, and every surface decision gets tested by rubber within the week.</p>
+    <p style="margin:24px 0 0;font-size:17px;line-height:1.75;color:#3D4147;text-wrap:pretty">The City wanted a patterned surface that would organize the plaza without paint lines, and that could take turning buses without scuffing into a blur by winter.</p>
+
+    <h2 style="margin:56px 0 0;font-size:clamp(1.75rem, 3vw, 2.75rem);font-weight:300;letter-spacing:-0.03em;line-height:1.06;color:#14161A">Why the XD gauge</h2>
+    <p style="margin:20px 0 0;font-size:17px;line-height:1.75;color:#3D4147;text-wrap:pretty">Standard TrafficPatterns handles crosswalks and medians well. Where buses turn, we specify TrafficPatternsXD: a heavier-gauge preformed sheet made for intersections and plazas. It fuses the same way and reads the same from the curb; the difference shows up three winters later.</p>
+
+    <blockquote style="margin:48px 0 0;padding:4px 0 4px 28px;border-left:2px solid #14161A">
+      <p style="margin:0;font-size:23px;font-weight:300;line-height:1.5;letter-spacing:-0.01em;color:#14161A;text-wrap:pretty">A plaza in front of a station is an intersection that never gets a night off<span aria-hidden="true" style="display:inline-block;width:6px;height:6px;background:#F26430;border-radius:1px;margin-left:12px"></span></p>
+    </blockquote>
+
+    <h3 style="margin:56px 0 0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">Panel layout</h3>
+    <p style="margin:16px 0 0;font-size:17px;line-height:1.75;color:#3D4147;text-wrap:pretty">The pattern arrived as 34 factory-cut panels. We dry-laid the full field on a Sunday morning, walked it with the City&#8217;s project engineer, and only then brought out the heat. Fusing ran across two overnight windows, sequenced so the bus loop stayed open.</p>
+
+    <div style="margin-top:40px">
+      <div data-lbx data-cap="Dry layout &mdash; Richmond &middot; TrafficPatternsXD &middot; 2019" style="position:relative;aspect-ratio:16/9;border-radius:2px;overflow:hidden;background:#E7E0D3">
+        <div style="position:absolute;inset:0;background-color:#E7E1D6;background-image:repeating-linear-gradient(0deg, rgba(120, 108, 90, 0.16) 0px, rgba(120, 108, 90, 0.16) 2px, rgba(255, 255, 255, 0) 2px, rgba(255, 255, 255, 0) 36px),repeating-linear-gradient(90deg, rgba(120, 108, 90, 0.10) 0px, rgba(120, 108, 90, 0.10) 2px, rgba(255, 255, 255, 0) 2px, rgba(255, 255, 255, 0) 80px),linear-gradient(180deg, #EDE8E1 0%, #DDD6CA 100%)"></div>
+        <div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%222%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22/%3E%3C/svg%3E');opacity:0.04;pointer-events:none"></div>
+        <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(20, 24, 29, 0.55), rgba(20, 24, 29, 0) 38%);pointer-events:none"></div>
+        <div style="position:absolute;left:16px;bottom:12px;font-size:12px;font-weight:600;letter-spacing:0.02em;color:#FFFFFF;pointer-events:none">Richmond &middot; TrafficPatternsXD &middot; 2019</div>
+      </div>
+      <div style="margin-top:12px;font-size:13px;color:#767B82">Dry-laying panels before the torches come out.</div>
+    </div>
+
+    <h3 style="margin:56px 0 0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">What we would repeat</h3>
+    <ul style="margin:16px 0 0;padding-left:22px;display:flex;flex-direction:column;gap:10px">
+      <li style="font-size:17px;line-height:1.6;color:#3D4147">Dry-lay the full field before fusing anything.</li>
+      <li style="font-size:17px;line-height:1.6;color:#3D4147">Sequence the work around bus service rather than against it.</li>
+      <li style="font-size:17px;line-height:1.6;color:#3D4147">Leave spare panels with the owner for future utility cuts.</li>
+    </ul>
+
+    <p style="margin:40px 0 0;font-size:17px;line-height:1.75;color:#3D4147;text-wrap:pretty">The plaza opened on schedule both mornings. Seven years on, the pattern still holds its edges where the buses turn, which is the only review that matters to us.</p>
+
+    <div style="border-top:1px solid #E7E3DC;margin-top:40px;padding-top:28px">
+      <div style="font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82">Filed under</div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:16px">
+        <span style="border:1px solid #E7E3DC;border-radius:2px;padding:6px 12px;font-size:13px;font-weight:500;color:#767B82">Transit</span>
+        <span style="border:1px solid #E7E3DC;border-radius:2px;padding:6px 12px;font-size:13px;font-weight:500;color:#767B82">TrafficPatternsXD</span>
+        <span style="border:1px solid #E7E3DC;border-radius:2px;padding:6px 12px;font-size:13px;font-weight:500;color:#767B82">Richmond</span>
+      </div>
+    </div>
+
+    <sc-if value="{{ showRelated }}" hint-placeholder-val="{{ true }}">
+    <div style="margin-top:40px">
+      <h2 data-mq="h2" style="margin:0;font-size:clamp(1.75rem, 3vw, 2.75rem);font-weight:300;letter-spacing:-0.03em;line-height:1.06;color:#14161A">Related notes</h2>
+      <div data-mq="grid-2" style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:32px">
+        <div data-card style="position:relative">
+          <a href="Index Pages.dc.html#journal" aria-label="How BC transit priority lanes stay red" style="position:absolute;inset:0;z-index:2"></a>
+          <div style="position:relative;aspect-ratio:16/10;border-radius:2px;overflow:hidden;background:#E7E0D3">
+            <div data-zoom style="position:absolute;inset:0;background-color:#9E3B2F;background-image:linear-gradient(90deg, rgba(237, 232, 225, 0.85) 0%, rgba(237, 232, 225, 0.85) 3%, rgba(0, 0, 0, 0) 3%, rgba(0, 0, 0, 0) 97%, rgba(237, 232, 225, 0.85) 97%, rgba(237, 232, 225, 0.85) 100%),repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.05) 0px, rgba(0, 0, 0, 0.05) 2px, rgba(0, 0, 0, 0) 2px, rgba(0, 0, 0, 0) 44px),linear-gradient(180deg, #A84335 0%, #8C3226 100%)"></div><div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%222%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22/%3E%3C/svg%3E');opacity:0.04;pointer-events:none"></div>
+            <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(20, 24, 29, 0.55), rgba(20, 24, 29, 0) 38%);pointer-events:none"></div>
+            <div style="position:absolute;left:16px;bottom:12px;font-size:12px;font-weight:600;letter-spacing:0.02em;color:#FFFFFF;pointer-events:none">Vancouver &middot; MMAX Red &middot; 2024</div>
+          </div>
+          <div style="margin-top:16px"><span style="display:inline-block;background:#F1EEE9;color:#5B6167;font-size:12px;font-weight:600;letter-spacing:0.04em;padding:5px 10px;border-radius:2px">Transit</span></div>
+          <h3 style="margin:12px 0 0;font-size:1.25rem;font-weight:600;line-height:1.4;letter-spacing:-0.015em;color:#14161A;text-wrap:pretty">How BC transit priority lanes stay red</h3>
+          <div style="margin-top:8px;font-size:13px;color:#767B82">March 9, 2026</div>
+        </div>
+        <div data-card style="position:relative">
+          <a href="Index Pages.dc.html#journal" aria-label="What roundabout aprons ask of a surface" style="position:absolute;inset:0;z-index:2"></a>
+          <div style="position:relative;aspect-ratio:16/10;border-radius:2px;overflow:hidden;background:#E7E0D3">
+            <div data-zoom style="position:absolute;inset:0;background-color:#A8523A;background-image:radial-gradient(circle at 118% 118%, #383D44 0%, #383D44 42%, rgba(0, 0, 0, 0) 42.5%),repeating-linear-gradient(15deg, rgba(237, 232, 225, 0.12) 0px, rgba(237, 232, 225, 0.12) 2px, rgba(0, 0, 0, 0) 2px, rgba(0, 0, 0, 0) 24px),linear-gradient(180deg, #B25A40 0%, #94462E 100%)"></div><div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%222%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22/%3E%3C/svg%3E');opacity:0.04;pointer-events:none"></div>
+            <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(20, 24, 29, 0.55), rgba(20, 24, 29, 0) 38%);pointer-events:none"></div>
+            <div style="position:absolute;left:16px;bottom:12px;font-size:12px;font-weight:600;letter-spacing:0.02em;color:#FFFFFF;pointer-events:none">Langley &middot; TrafficPatternsXD &middot; 2025</div>
+          </div>
+          <div style="margin-top:16px"><span style="display:inline-block;background:#F1EEE9;color:#5B6167;font-size:12px;font-weight:600;letter-spacing:0.04em;padding:5px 10px;border-radius:2px">Technical</span></div>
+          <h3 style="margin:12px 0 0;font-size:1.25rem;font-weight:600;line-height:1.4;letter-spacing:-0.015em;color:#14161A;text-wrap:pretty">What roundabout aprons ask of a surface</h3>
+          <div style="margin-top:8px;font-size:13px;color:#767B82">July 14, 2026</div>
+        </div>
+      </div>
+    </div>
+    </sc-if>
+  </div>
+</article>
+
+<dc-import name="Site Close" hint-size="100%,1100px"></dc-import>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;showRelated&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Sections&quot;}
+}">
+class Component extends DCLogic {
+  componentDidMount() {
+    const go = () => import('./site.js').then(m => m.init());
+    go(); setTimeout(go, 900);
+  }
+  renderVals() {
+    return { showRelated: this.props.showRelated ?? true };
+  }
+}
+</script>
+</body>
+</html>

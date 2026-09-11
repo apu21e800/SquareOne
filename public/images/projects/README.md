@@ -1,34 +1,50 @@
 # /public/images/projects
 
-Hero images for completed project case studies.
-Referenced in `lib/projects.ts` → `project.imageUrl` per entry.
-
-## Naming convention
-
-Name each file after the project's `slug` field in `lib/projects.ts`:
+Project photography. **One folder per project, named after its `slug` in
+`lib/projects.ts`.** All 21 folders already exist — just drop files in.
 
 ```
-[project-slug].jpg
+public/images/projects/ubc-musqueam-crosswalk/01-hero.jpg
+public/images/projects/ubc-musqueam-crosswalk/02-detail.jpg
 ```
 
-**Example:** A project with `slug: "york-region-crosswalk"` uses `york-region-crosswalk.jpg`.
+`lib/gallery.ts` reads these at build time, so adding a photo is a file drop —
+no code change, no rebuild of any data file.
+
+## Rules that actually matter
+
+- **Folder name must match the slug exactly.** It is the lookup key.
+- **Order is natural filename sort.** Prefix `01-`, `02-`, `03-` when sequence
+  matters, otherwise `detail.jpg` sorts before `hero.jpg`.
+- **The first file is the hero** — it becomes the card image on `/projects` and
+  the lead image on the project page.
+- **Accepted:** `.jpg` `.jpeg` `.png` `.webp` `.avif` `.gif`. Everything else,
+  including `.gitkeep`, `README.md` and dotfiles, is ignored.
+- **Avoid spaces in filenames.** They work but need URL-encoding; hyphens are
+  safer.
+- **Empty folders are fine.** With no images the page falls back to
+  `project.imageUrl` from `lib/projects.ts` — exactly the current behaviour. Fill
+  them at whatever pace suits.
 
 ## Dimensions
 
-| Slot           | Width  | Height | Notes              |
-|----------------|--------|--------|--------------------|
-| Project hero   | 1200px | 800px  | 3:2                |
-| Gallery tile   | 800px  | 533px  | 3:2, centred crop  |
+| Slot         | Width  | Height | Notes             |
+|--------------|--------|--------|-------------------|
+| Project hero | 1200px | 800px  | 3:2               |
+| Gallery tile | 800px  | 533px  | 3:2, centred crop |
 
-You can use a single file for both — Next.js Image handles cropping.
+Cards render 4:3 and journal cards 16:10; Next.js Image crops from the centre,
+so a 3:2 master works for both.
 
 ## Shot guidance
 
-- Show the finished surface from the best angle (aerial preferred)
-- Include enough context to identify the location type (intersection, plaza, airport, etc.)
-- Before/after pairs are excellent — name them `[slug]-before.jpg` / `[slug]-after.jpg`
-- Avoid construction-in-progress shots as the primary image
+- Finished surface from the best angle, aerial preferred
+- Enough context to read the location type (intersection, plaza, greenway)
+- Before/after pairs are excellent — `01-before.jpg` / `02-after.jpg`
+- Avoid construction-in-progress as the first file, since it becomes the hero
 
-## Current projects
+## Sibling folders
 
-Check `lib/projects.ts` for the full list of slugs. Add one `.jpg` per project.
+`public/images/products/<slug>/` and `public/images/applications/<slug>/` follow
+the identical convention and are already populated. Product slugs come from
+`lib/products.ts`.

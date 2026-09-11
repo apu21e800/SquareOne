@@ -1,12 +1,25 @@
-import Link from "next/link"
 import type { Metadata } from "next"
-import { getAllPosts } from "@/lib/blog"
+import IndexImageHero from "@/components/IndexImageHero"
+import { getPosts } from "@/lib/blog"
 import BlogFilterClient from "@/components/blog/BlogFilterClient"
+import { SITE_URL } from "@/lib/site"
+import { clampDescription } from "@/lib/seo"
+
+/**
+ * ISR: the blog is the one CMS-backed surface (lib/blog merges content/blog
+ * MDX with Sanity posts when the CMS is enabled). Revalidate hourly at most;
+ * a Sanity webhook to /api/revalidate refreshes on publish, and sanityFetch
+ * caps CMS reads at 60s when the CMS is live. Do NOT copy this to the home,
+ * gallery or product pages: they read public/images at build time through
+ * lib/work and lib/gallery, and public/ is excluded from the serverless
+ * bundle (next.config.ts) — regenerating them at runtime would fail.
+ */
+export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: "Field Notes | Decorative Pavement Guides & Project Stories | Square One Paving",
+  title: "Blog | Project Stories & Guides",
   description:
-    "Project documentation, product deep-dives, and real-world case studies from BC's most experienced decorative pavement crew. StreetPrint, StreetBond, stamped asphalt, vapor blasting — all documented.",
+    clampDescription("Project stories, product deep-dives and practical guides from Square One Paving — stamped asphalt, StreetBond coatings, preformed thermoplastic and vapour blasting across BC since 2000."),
   keywords: [
     "decorative pavement blog BC",
     "StreetPrint project BC",
@@ -16,96 +29,45 @@ export const metadata: Metadata = {
     "decorative coatings guide",
   ],
   alternates: {
-    canonical: "https://squareonepaving.ca/blog",
+    canonical: `${SITE_URL}/blog`,
   },
   openGraph: {
-    title: "Field Notes | Decorative Pavement Guides & Project Stories | Square One Paving",
+    title: "Blog | Project Stories & Guides | Square One Paving",
     description:
-      "Project documentation, product deep-dives, and real-world case studies from BC's most experienced decorative pavement crew.",
+      clampDescription("Project stories, product deep-dives and practical guides from Square One Paving across BC since 2000."),
+    images: [{ url: "/images/og-image.png", width: 1200, height: 600, alt: "Square One Paving" }],
   },
 }
 
-export default function BlogPage() {
-  const posts = getAllPosts()
+export default async function BlogPage() {
+  const posts = await getPosts()
 
   return (
-    <main style={{ background: "var(--bg-warm, #F6F4F0)" }}>
+    <main className="bg-[color:var(--surface)]">
+      {/* ---- Header — full-bleed image band (Rockstar Part 4) ---- */}
+      <IndexImageHero
+        src="/images/hero/bowen-island-polka-dot-walkway-streetbond.jpg"
+        alt="Polka-dot StreetBond walkway along a road on Bowen Island"
+        eyebrow="Blog"
+        title="Guides and project stories"
+        lede="From the crews and the estimating desk: materials, methods, and what holds up on BC pavement."
+        caption="Bowen Island · StreetBond"
+        imagePosition="center 40%"
+      />
 
-      {/* ── Page header ─────────────────────────────────────────────── */}
-      <section className="bg-white border-b border-[#E2DDD8] pt-28 pb-12 px-6 sm:px-8">
-        <div className="max-w-[1400px] mx-auto">
-          <p className="eyebrow mb-3">From the Field</p>
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-            <div>
-              <h1
-                style={{
-                  fontSize: "clamp(2.5rem, 5vw, 4.5rem)",
-                  fontWeight: 300,
-                  letterSpacing: "-0.03em",
-                  color: "#111111",
-                }}
-              >
-                Square One Blog
-              </h1>
-              <p
-                className="text-lg mt-3 max-w-xl leading-relaxed"
-                style={{ color: "#5A5A5A" }}
-              >
-                Project guides, product insights, and real talk about decorative
-                paving in BC.
-              </p>
-            </div>
-            <Link href="/contact">
-              <span
-                className="inline-block px-7 py-3.5 text-sm font-semibold tracking-wide text-white transition-all hover:brightness-110 rounded-lg"
-                style={{
-                  background: "linear-gradient(135deg, #C8601A 0%, #E8895A 100%)",
-                }}
-              >
-                Get a Quote
-              </span>
-            </Link>
-          </div>
+      {/* ---- Category filter + posts (client component, data wiring unchanged) ---- */}
+      <section
+        aria-labelledby="journal-heading"
+        className="section border-t border-[color:var(--hairline)] bg-[color:var(--surface-warm)]"
+      >
+        <h2 id="journal-heading" className="sr-only">
+          All posts
+        </h2>
+
+        <div className="container-1280">
+          <BlogFilterClient posts={posts} />
         </div>
       </section>
-
-      {/* ── Client component: category tabs + posts ──────────────────── */}
-      <BlogFilterClient posts={posts} />
-
-      {/* ── CTA ────────────────────────────────────────────────────────── */}
-      <section className="py-20 px-6 sm:px-8" style={{ background: "#1C2026" }}>
-        <div className="max-w-3xl mx-auto text-center">
-          <p className="eyebrow mb-5" style={{ color: "#E8895A" }}>
-            Ready to Start a Project?
-          </p>
-          <h2
-            style={{
-              fontSize: "clamp(1.9rem, 3vw, 3rem)",
-              fontWeight: 300,
-              color: "white",
-              letterSpacing: "-0.025em",
-            }}
-            className="mb-6"
-          >
-            Get a Free Consultation
-          </h2>
-          <p className="text-lg mb-10" style={{ color: "rgba(255,255,255,0.6)" }}>
-            We serve the Lower Mainland and Vancouver Island. Free site visits, no
-            pressure quotes.
-          </p>
-          <Link href="/contact">
-            <span
-              className="inline-block px-10 py-4 text-sm font-semibold tracking-wide text-white transition-all hover:brightness-110 rounded-lg"
-              style={{
-                background: "linear-gradient(135deg, #C8601A 0%, #E8895A 100%)",
-              }}
-            >
-              Contact Us
-            </span>
-          </Link>
-        </div>
-      </section>
-
     </main>
   )
 }

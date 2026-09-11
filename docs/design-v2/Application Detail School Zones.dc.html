@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FFFFFF;color:#3D4147;font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#14161A;text-decoration:none}
+a:hover{color:#D8511F}
+@media (max-width: 700px){
+[data-mq~="section"]{padding:56px 0 !important}
+[data-mq~="container"]{padding:0 24px !important}
+[data-mq~="grid-cards"]{grid-template-columns:1fr !important}
+[data-mq~="grid-2"]{grid-template-columns:1fr !important;gap:48px !important}
+[data-mq~="ctarow"]{flex-direction:column !important}
+}
+a[data-arrow] span{display:inline-block;transition:transform 0.2s}a[data-arrow]:hover span{transform:translateX(4px)}
+[data-card]{transition:transform 0.25s, box-shadow 0.25s}[data-card]:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(20,22,26,0.08)}
+[data-card] img{transition:transform 0.4s ease}[data-card]:hover img{transform:scale(1.02)}
+[data-card] [data-zoom]{transition:transform 0.4s ease}[data-card]:hover [data-zoom]{transform:scale(1.02)}
+</style>
+</helmet>
+
+<dc-import name="Site Nav" active="Applications" hint-size="100%,72px" style="position:sticky;top:0;z-index:120"></dc-import>
+
+<section data-mq="section" data-screen-label="Application header" style="background:#FFFFFF;padding:96px 0">
+  <div data-mq="container" style="max-width:1280px;margin:0 auto;padding:0 40px">
+    <div style="display:flex;align-items:center;gap:10px;font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82"><span style="width:6px;height:6px;background:#F26430;border-radius:1px;flex-shrink:0"></span>Applications</div>
+    <h1 id="app-h1" style="margin:28px 0 0;font-size:clamp(3rem, 5vw, 4.5rem);font-weight:300;letter-spacing:-0.035em;line-height:0.98;color:#14161A;max-width:24ch;text-wrap:balance">School zones<span aria-hidden="true" style="display:inline-block;width:6px;height:6px;background:#F26430;border-radius:1px;margin-left:14px"></span></h1>
+    <p style="margin:24px 0 0;font-size:19px;line-height:1.65;color:#3D4147;max-width:56ch;text-wrap:pretty">Around schools, municipalities need markings that read in rain and low light, hold colour through winter maintenance, and install inside a summer break.</p>
+  </div>
+</section>
+
+<section data-mq="section" data-screen-label="What we install here" style="background:#FAF8F5;border-top:1px solid #E7E3DC;border-bottom:1px solid #E7E3DC;padding:96px 0">
+  <div data-mq="container" style="max-width:1280px;margin:0 auto;padding:0 40px">
+    <h2 data-mq="h2" style="margin:0;font-size:clamp(1.75rem, 3vw, 2.75rem);font-weight:300;letter-spacing:-0.03em;line-height:1.06;color:#14161A">What we install here</h2>
+    <div data-mq="grid-cards" style="display:grid;grid-template-columns:repeat(3, 1fr);gap:24px;margin-top:40px">
+      <div data-card style="display:flex;flex-direction:column;background:#FFFFFF;border:1px solid #E7E3DC;border-radius:2px;padding:26px 28px;min-height:170px">
+        <div style="font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82">Thermoplastic</div>
+        <h3 style="margin:14px 0 0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">PreMark</h3>
+        <p style="margin:8px 0 0;font-size:14px;line-height:1.55;color:#3D4147">Standard legends, arrows and crossing bars.</p>
+        <a data-arrow href="Service Detail Preformed Thermoplastic.dc.html" style="margin-top:auto;padding-top:20px;font-size:14px;font-weight:600;color:#14161A" style-hover="color:#D8511F">Explore <span>&rarr;</span></a>
+      </div>
+      <div data-card style="display:flex;flex-direction:column;background:#FFFFFF;border:1px solid #E7E3DC;border-radius:2px;padding:26px 28px;min-height:170px">
+        <div style="font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82">Thermoplastic</div>
+        <h3 style="margin:14px 0 0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">DecoMark</h3>
+        <p style="margin:8px 0 0;font-size:14px;line-height:1.55;color:#3D4147">Preformed shapes, symbols and custom graphics.</p>
+        <a data-arrow href="Service Detail Preformed Thermoplastic.dc.html" style="margin-top:auto;padding-top:20px;font-size:14px;font-weight:600;color:#14161A" style-hover="color:#D8511F">Explore <span>&rarr;</span></a>
+      </div>
+      <div data-card style="display:flex;flex-direction:column;background:#FFFFFF;border:1px solid #E7E3DC;border-radius:2px;padding:26px 28px;min-height:170px">
+        <div style="font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#767B82">Decorative Coatings</div>
+        <h3 style="margin:14px 0 0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">StreetBond</h3>
+        <p style="margin:8px 0 0;font-size:14px;line-height:1.55;color:#3D4147">Coloured fields and slip-resistant surfacing at crossings.</p>
+        <a data-arrow href="Product Detail StreetBond.dc.html" style="margin-top:auto;padding-top:20px;font-size:14px;font-weight:600;color:#14161A" style-hover="color:#D8511F">Explore <span>&rarr;</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<sc-if value="{{ showExample }}" hint-placeholder-val="{{ true }}">
+<section data-mq="section" data-screen-label="Worked example" style="background:#FFFFFF;padding:96px 0">
+  <div data-mq="container" style="max-width:1280px;margin:0 auto;padding:0 40px">
+    <h2 data-mq="h2" style="margin:0;font-size:clamp(1.75rem, 3vw, 2.75rem);font-weight:300;letter-spacing:-0.03em;line-height:1.06;color:#14161A">In practice</h2>
+    <div data-lbx data-cap="Willow Street School Zone &mdash; Chemainus &middot; PreMark &middot; 2023" style="position:relative;aspect-ratio:21/9;border-radius:2px;overflow:hidden;background:#383D44;margin-top:40px">
+      <div style="position:absolute;inset:0;background-color:#383D44;background-image:linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 62%, rgba(233, 196, 90, 0.85) 62%, rgba(233, 196, 90, 0.85) 78%, rgba(0, 0, 0, 0) 78%),repeating-linear-gradient(90deg, rgba(237, 232, 225, 0.85) 0px, rgba(237, 232, 225, 0.85) 34px, rgba(237, 232, 225, 0) 34px, rgba(237, 232, 225, 0) 78px),linear-gradient(180deg, #454A52 0%, #31363D 100%)"></div>
+      <div style="position:absolute;inset:0;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%222%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22200%22 height=%22200%22 filter=%22url(%23n)%22/%3E%3C/svg%3E');opacity:0.04;pointer-events:none"></div>
+      <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(20, 24, 29, 0.72), rgba(20, 24, 29, 0) 40%);pointer-events:none"></div>
+      <div style="position:absolute;left:32px;right:32px;bottom:26px;pointer-events:none">
+        <div style="font-size:18px;font-weight:600;color:#FFFFFF">Willow Street School Zone</div>
+        <div style="margin-top:5px;font-size:14px;color:rgba(255, 255, 255, 0.78)">Chemainus &middot; PreMark &middot; 2023</div>
+      </div>
+    </div>
+  </div>
+</section>
+</sc-if>
+
+<sc-if value="{{ showNotes }}" hint-placeholder-val="{{ true }}">
+<section data-mq="section" data-screen-label="Practical notes" style="background:#FAF8F5;border-top:1px solid #E7E3DC;border-bottom:1px solid #E7E3DC;padding:96px 0">
+  <div data-mq="container" style="max-width:1280px;margin:0 auto;padding:0 40px">
+    <h2 data-mq="h2" style="margin:0;font-size:clamp(1.75rem, 3vw, 2.75rem);font-weight:300;letter-spacing:-0.03em;line-height:1.06;color:#14161A">Practical notes</h2>
+    <div data-mq="grid-2" style="display:grid;grid-template-columns:1fr 1fr;gap:56px 96px;margin-top:40px">
+      <div>
+        <h3 style="margin:0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">Surface prep</h3>
+        <p style="margin:10px 0 0;font-size:15px;line-height:1.65;color:#3D4147;max-width:52ch">New asphalt needs about 30 days to cure before thermoplastic goes down. Existing surfaces are cleaned first, and vapour blasted where old paint or oils would interfere with the bond.</p>
+      </div>
+      <div>
+        <h3 style="margin:0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">Cure windows</h3>
+        <p style="margin:10px 0 0;font-size:15px;line-height:1.65;color:#3D4147;max-width:52ch">Preformed thermoplastic opens to traffic as it cools, usually within the hour. Coated colour fields need 24 to 48 dry hours, so we sequence them ahead of the markings.</p>
+      </div>
+      <div>
+        <h3 style="margin:0;font-size:1.25rem;font-weight:600;letter-spacing:-0.015em;color:#14161A">Traffic management</h3>
+        <p style="margin:10px 0 0;font-size:15px;line-height:1.65;color:#3D4147;max-width:52ch">We carry our own traffic control people and signage for single-lane and full closures, and stage school-zone work inside summer and holiday breaks.</p>
+      </div>
+    </div>
+  </div>
+</section>
+</sc-if>
+
+<dc-import name="Site Close" hint-size="100%,1100px"></dc-import>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;showExample&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Sections&quot;},
+  &quot;showNotes&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Sections&quot;}
+}">
+class Component extends DCLogic {
+  componentDidMount() {
+    const go = () => import('./site.js').then(m => m.init());
+    go(); setTimeout(go, 900);
+
+    const h1 = document.getElementById('app-h1');
+    if (!h1) return;
+    const size = () => {
+      const n = (h1.textContent || '').trim().length;
+      h1.style.fontSize = n <= 28 ? 'clamp(3rem, 5vw, 4.5rem)' : n <= 130 ? 'clamp(2rem, 3.4vw, 3rem)' : 'clamp(1.5rem, 2.4vw, 2.25rem)';
+    };
+    size();
+    this._mo = new MutationObserver(size);
+    this._mo.observe(h1, { characterData: true, childList: true, subtree: true });
+  }
+  componentWillUnmount() { if (this._mo) this._mo.disconnect(); }
+  renderVals() {
+    return {
+      showExample: this.props.showExample ?? true,
+      showNotes: this.props.showNotes ?? true,
+    };
+  }
+}
+</script>
+</body>
+</html>
