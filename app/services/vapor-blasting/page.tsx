@@ -1,7 +1,10 @@
 import Link from "next/link"
 import Image from "next/image"
 import { Metadata } from "next"
-import ImagePlaceholder from "@/components/ui/ImagePlaceholder"
+import { SITE_URL } from "@/lib/site"
+import JsonLd, { breadcrumbSchema, faqSchema } from "@/components/JsonLd"
+import { getServiceBySlug } from "@/lib/services"
+import { clampDescription } from "@/lib/seo"
 
 // Route and slug keep the US spelling; display prose reads "vapour blasting".
 // This page is the ONLY vapour route — /vapor-blasting redirects here.
@@ -16,15 +19,17 @@ import ImagePlaceholder from "@/components/ui/ImagePlaceholder"
 // environmental impact than the alternatives, all while getting the job done
 // faster", plus its own list of applications. Nothing else is asserted.
 //
-// Imagery: the only vapour photography we hold is 524px archive material,
-// which rides small and captioned (low-res never goes big). The large image
-// positions are designed holds — each carries the shot brief for the
-// photography or §11 generated set that replaces it. Swap = one `src`.
+// Imagery (11 Sept 2026): the four vapour photographs Square One holds were
+// 524px archive tiles. They are the real rig on real jobs, so rather than
+// invent pictures they were rebuilt with a photographic upscaler (Real-ESRGAN,
+// 4x) and now carry the page — hero, tiers, detail. Captions say only what
+// the record says. The one non-vapour frame (the retail plaza entrance) is a
+// finished StreetBond surface, captioned as such.
 
 export const metadata: Metadata = {
-  title: "Vapour Blasting BC | Surface Cleaning, Priming & Graffiti Removal",
+  title: "Vapour Blasting BC | Cleaning & Priming",
   description:
-    "Mobile vapour blasting across the Lower Mainland and Vancouver Island — surface cleaning and priming, graffiti, gum and mould removal, road-marking removal, paint and coating stripping. Up to 92% less dust than dry blasting. Square One Paving.",
+    clampDescription("Mobile vapour blasting across the Lower Mainland and Vancouver Island — surface cleaning and priming, graffiti, gum and mould removal, road-marking removal, paint and coating stripping. Up to 92% less dust than dry blasting. Square One Paving."),
   keywords: [
     "vapour blasting BC",
     "vapor blasting Vancouver",
@@ -36,11 +41,12 @@ export const metadata: Metadata = {
     "wet abrasive blasting BC",
     "marine coating removal BC",
   ],
-  alternates: { canonical: "https://squareonepaving.ca/services/vapor-blasting" },
+  alternates: { canonical: `${SITE_URL}/services/vapor-blasting` },
   openGraph: {
-    title: "Vapour Blasting BC | Surface Cleaning, Priming & Graffiti Removal",
+    title: "Vapour Blasting BC | Cleaning & Priming | Square One Paving",
     description:
-      "Graffiti off brick, mould off commercial exteriors, markings off roads, coatings off steel and hulls — with up to 92% less dust than dry blasting. Mobile across BC.",
+      clampDescription("Graffiti off brick, mould off commercial exteriors, markings off roads, coatings off steel and hulls — with up to 92% less dust than dry blasting. Mobile across BC."),
+    images: [{ url: "/images/og-image.png", width: 1200, height: 600, alt: "Square One Paving" }],
   },
 }
 
@@ -71,7 +77,12 @@ const tiers = [
       "Fire and smoke damage cleaning",
     ],
     tag: "Property managers · Municipalities · Strata",
-    brief: "Nozzle on heritage brick, contained mist, half of the wall cleaned — the before and after in one frame.",
+    photo: {
+      src: "/images/services/vapor-blasting/parking-lot-vapour-blasting-01.jpg",
+      alt: "Square One removing painted parking symbols from an asphalt lot with the vapour blasting rig",
+      caption: "Commercial parking lot · marking removal",
+      position: "center 45%",
+    },
   },
   {
     eyebrow: "02 · Residential",
@@ -86,7 +97,12 @@ const tiers = [
       "Priming before a coating",
     ],
     tag: "Homeowners · Estates",
-    brief: "A weathered patio, half restored — wet stone, clean line between old and new.",
+    photo: {
+      src: "/images/services/vapor-blasting/walkway-vapour-blasting-01.jpg",
+      alt: "Square One stripping a red coating from a public walkway with the vapour blasting rig",
+      caption: "Public walkway · coating removal",
+      position: "center 55%",
+    },
   },
   {
     eyebrow: "03 · Marine & industrial",
@@ -100,7 +116,12 @@ const tiers = [
       "Equipment and frames",
     ],
     tag: "Marine · Manufacturing",
-    brief: "Yacht deck coating coming off in a clean band, marina in soft focus behind.",
+    photo: {
+      src: "/images/services/vapor-blasting/granville-island-vapour-blasting-01.jpg",
+      alt: "Square One vapour blasting a marina boardwalk at Granville Island, Vancouver, with False Creek behind",
+      caption: "Granville Island · marina boardwalk",
+      position: "20% 30%",
+    },
   },
 ]
 
@@ -142,26 +163,6 @@ const process = [
   { num: "04", title: "Primed for what's next", body: "Ready for paint, coating, sealer or the decorative system we install ourselves — same crew, same day if it suits." },
 ]
 
-// ── Field records — the archive shots at the one size they hold ───────────
-
-const fieldRecords = [
-  {
-    src: "/images/services/vapor-blasting/granville-island-vapour-blasting-01.jpg",
-    alt: "Square One crew vapour blasting brick at Granville Island, Vancouver",
-    caption: "Granville Island · brick",
-  },
-  {
-    src: "/images/services/vapor-blasting/parking-lot-vapour-blasting-01.jpg",
-    alt: "Vapour blasting a commercial parking lot surface",
-    caption: "Commercial parking lot",
-  },
-  {
-    src: "/images/services/vapor-blasting/walkway-vapour-blasting-01.jpg",
-    alt: "Public walkway during vapour blasting by Square One",
-    caption: "Public walkway",
-  },
-]
-
 // ── Substrates — from Square One's published application list ──────────────
 
 const substrates = [
@@ -180,8 +181,31 @@ const cities = [
 const YOUTUBE = "https://www.youtube.com/channel/UCBDvB4vgdahH67BmP6FeccQ"
 
 export default function VaporBlastingServicePage() {
+  const service = getServiceBySlug("vapor-blasting")
+  const faqs = service?.faqs ?? []
   return (
     <main>
+      <JsonLd
+        data={[
+          {
+            "@type": "Service",
+            name: "Vapour blasting",
+            serviceType: "Vapour blasting — surface cleaning, priming, graffiti and marking removal",
+            description: metadata.description,
+            provider: { "@id": `${SITE_URL}/#organization` },
+            areaServed: [
+              { "@type": "AdministrativeArea", name: "Lower Mainland, British Columbia" },
+              { "@type": "AdministrativeArea", name: "Vancouver Island, British Columbia" },
+            ],
+            url: `${SITE_URL}/services/vapor-blasting`,
+          },
+          faqSchema(faqs),
+          breadcrumbSchema(SITE_URL, [
+            { name: "Services", path: "/services" },
+            { name: "Vapour blasting", path: "/services/vapor-blasting" },
+          ]),
+        ]}
+      />
       {/* ── Hero — 55/45 split: typographic left, designed image hold right ── */}
       <section className="relative grid min-h-[600px] grid-cols-[55fr_45fr] overflow-hidden bg-surface max-[900px]:min-h-0 max-[900px]:grid-cols-1">
         <div className="relative flex items-center pt-28 pb-16 pr-[72px] pl-[max(calc((100vw_-_1280px)/2),40px)] max-[900px]:pt-[88px] max-[900px]:pr-10 max-[900px]:pb-12 max-[900px]:pl-10 max-[700px]:px-6">
@@ -214,10 +238,19 @@ export default function VaporBlastingServicePage() {
         </div>
 
         <div className="relative flex items-center p-10 pl-0 max-[900px]:px-10 max-[900px]:pb-12 max-[700px]:px-6">
-          <ImagePlaceholder
-            ratio="aspect-[4/5] w-full max-h-[640px]"
-            brief="Hero: the rig at work on a brick storefront — operator in silhouette, a soft cone of mist, the cleaned band brighter than the rest. Vertical, daylight, Vancouver street context."
-          />
+          <div className="relative aspect-[4/5] w-full max-h-[640px] overflow-hidden rounded-[2px] bg-surface-stone">
+            <Image
+              src="/images/services/vapor-blasting/granville-island-vapour-blasting-01.jpg"
+              alt="A Square One operator vapour blasting a painted marking off the Granville Island boardwalk, Vancouver"
+              fill
+              priority
+              sizes="(max-width: 900px) 100vw, 45vw"
+              className="object-cover"
+              style={{ objectPosition: "38% 60%" }}
+            />
+            <div aria-hidden="true" className="scrim scrim-light" />
+            <div className="caption">Granville Island, Vancouver &middot; marking removal</div>
+          </div>
         </div>
       </section>
 
@@ -251,7 +284,18 @@ export default function VaporBlastingServicePage() {
                 key={tier.eyebrow}
                 className="flex flex-col rounded-[2px] border border-hairline bg-surface"
               >
-                <ImagePlaceholder ratio="aspect-[5/3]" className="rounded-b-none border-0 border-b" brief={tier.brief} />
+                <div className="relative aspect-[5/3] overflow-hidden rounded-t-[2px] border-b border-hairline bg-surface-stone">
+                  <Image
+                    src={tier.photo.src}
+                    alt={tier.photo.alt}
+                    fill
+                    sizes="(max-width: 900px) 100vw, 400px"
+                    className="object-cover"
+                    style={{ objectPosition: tier.photo.position }}
+                  />
+                  <div aria-hidden="true" className="scrim scrim-light" />
+                  <div className="caption">{tier.photo.caption}</div>
+                </div>
 
                 <div className="flex flex-1 flex-col p-8 max-[700px]:p-6">
                   <p className="label">{tier.eyebrow}</p>
@@ -295,11 +339,16 @@ export default function VaporBlastingServicePage() {
               stays open — and leaves it primed rather than scarred.
             </p>
 
-            <div className="mt-8">
-              <ImagePlaceholder
-                ratio="aspect-[4/3]"
-                brief="Detail: the nozzle head mid-pass on concrete — the wet fan of abrasive, the sharp edge between grimy and clean."
+            <div className="relative mt-8 aspect-[4/3] overflow-hidden rounded-[2px] bg-surface-stone">
+              <Image
+                src="/images/services/vapor-blasting/nozzle-pavers-01.jpg"
+                alt="The vapour blasting nozzle mid-pass over pavers — the wet fan of abrasive and the clean line behind it"
+                fill
+                sizes="(max-width: 900px) 100vw, 560px"
+                className="object-cover"
               />
+              <div aria-hidden="true" className="scrim scrim-light" />
+              <div className="caption">The nozzle mid-pass &middot; pavers</div>
             </div>
           </div>
 
@@ -343,10 +392,17 @@ export default function VaporBlastingServicePage() {
             </div>
           </div>
 
-          <ImagePlaceholder
-            ratio="aspect-[3/2]"
-            brief="Wide: a cleaned, primed parking lot with the Square One crew laying StreetBond colour on one half — prep and finish in the same frame."
-          />
+          <div className="relative aspect-[3/2] overflow-hidden rounded-[2px] bg-surface-stone">
+            <Image
+              src="/images/S1_update_v2/photos/Featured%20image%20options/Photo-2025-07-28-2-10-43-PM-scaled.jpg"
+              alt="A finished StreetBond retail plaza entrance installed by Square One"
+              fill
+              sizes="(max-width: 900px) 100vw, 600px"
+              className="object-cover"
+            />
+            <div aria-hidden="true" className="scrim scrim-light" />
+            <div className="caption">Retail plaza entrance &middot; StreetBond, over a prepared surface</div>
+          </div>
         </div>
       </section>
 
@@ -371,32 +427,13 @@ export default function VaporBlastingServicePage() {
             ))}
           </div>
 
-          <div className="mt-14 border-t border-hairline pt-8">
-            <div className="flex flex-wrap items-baseline justify-between gap-6">
-              <p className="label">Field records</p>
-              <a href={YOUTUBE} target="_blank" rel="noopener noreferrer" className="arrow-link">
-                Demonstration videos on our YouTube channel <span aria-hidden="true">&rarr;</span>
-              </a>
-            </div>
-
-            <div className="mt-6 grid max-w-[920px] grid-cols-3 gap-4 max-[700px]:gap-2">
-              {fieldRecords.map((record) => (
-                <figure key={record.src} className="m-0">
-                  <span className="relative block aspect-[5/3] overflow-hidden rounded-[2px] bg-surface-stone">
-                    <Image
-                      src={record.src}
-                      alt={record.alt}
-                      fill
-                      sizes="(max-width: 700px) 33vw, 296px"
-                      className="object-cover"
-                    />
-                  </span>
-                  <figcaption className="mt-2 text-[12px] font-medium tracking-[0.04em] text-ink-muted max-[700px]:text-[11px]">
-                    {record.caption}
-                  </figcaption>
-                </figure>
-              ))}
-            </div>
+          <div className="mt-12 flex flex-wrap items-baseline justify-between gap-6 border-t border-hairline pt-8">
+            <p className="max-w-[52ch] text-[15px] leading-[1.6] text-ink-muted">
+              The photographs on this page are Square One&rsquo;s own jobs, from the record.
+            </p>
+            <a href={YOUTUBE} target="_blank" rel="noopener noreferrer" className="arrow-link">
+              Demonstration videos on our YouTube channel <span aria-hidden="true">&rarr;</span>
+            </a>
           </div>
         </div>
       </section>
@@ -441,6 +478,32 @@ export default function VaporBlastingServicePage() {
               <p className="mt-4 text-[15px] leading-[1.6] text-ink-muted">
                 {cities.join(" · ")}
               </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Questions ────────────────────────────────────────────── */}
+      <section className="section border-t border-hairline bg-surface">
+        <div className="container-1280">
+          <div className="grid grid-cols-12 gap-x-12 gap-y-8 max-[900px]:grid-cols-1">
+            <div className="col-span-4 max-[900px]:col-span-1">
+              <p className="eyebrow">Questions</p>
+              <h2 className="mt-5 [text-wrap:balance]">What people ask about vapour blasting</h2>
+            </div>
+            <div className="col-span-8 border-t border-hairline max-[900px]:col-span-1">
+              {faqs.map((faq, i) => (
+                <details key={faq.q} open={i === 0} className="group border-b border-hairline">
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-[20px] [&::-webkit-details-marker]:hidden">
+                    <span className="text-[1.125rem] font-semibold leading-[1.4] tracking-[-0.01em] text-ink">{faq.q}</span>
+                    <span aria-hidden="true" className="flex-shrink-0 text-[22px] font-normal leading-none text-ink-muted">
+                      <span className="group-open:hidden">+</span>
+                      <span className="hidden group-open:inline">&minus;</span>
+                    </span>
+                  </summary>
+                  <p className="max-w-[64ch] pb-6 pr-10 text-[15px] leading-[1.65] text-ink-body max-[700px]:pr-0">{faq.a}</p>
+                </details>
+              ))}
             </div>
           </div>
         </div>

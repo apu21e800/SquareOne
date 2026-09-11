@@ -4,6 +4,8 @@ import { useMemo, useState } from "react"
 import type { ResourceGroup, ResourceType } from "@/lib/resources"
 import { tokenize } from "@/lib/search-score"
 import FilterBar from "@/components/ui/FilterBar"
+import { DocRow, TYPE_ORDER } from "@/components/documents/DocumentRail"
+import DocPreviewModal, { type PreviewTarget } from "@/components/documents/DocPreviewModal"
 
 /**
  * Specification library — rebuilt 5 Sept 2026 (Vern: "the Resources page
@@ -13,9 +15,11 @@ import FilterBar from "@/components/ui/FilterBar"
  *             the documents on the right under one search field
  *   Phone     the same two filters as selects — the FilterBar /projects and
  *             /blog use — so the three indexes read as one system
- *   Rows      a type code, the document, its system · type · size, and two
- *             actions: Preview (the browser's PDF viewer, new tab) and
- *             Download (same-origin /docs/, so `download` is honoured)
+ *   Rows      page one of the document as a thumbnail (pre-rendered, see
+ *             lib/doc-previews), the document, its system · type · size,
+ *             and two actions: Preview (opens the page in place, with
+ *             Download / Open / HUB's current edition) and Download
+ *             (same-origin /docs/, so `download` is honoured)
  *
  * Browsing is grouped by system with a sticky heading per group; a type
  * filter or a search cuts across systems, so those views flatten into one
@@ -23,86 +27,6 @@ import FilterBar from "@/components/ui/FilterBar"
  */
 
 const ALL = "all" as const
-
-const TYPE_ORDER: ResourceType[] = [
-  "Specification",
-  "Technical info",
-  "SDS",
-  "Guide",
-  "Colour card",
-  "Brochure",
-]
-
-/** Two-letter codes in a stone square — the type at a glance, on brand. */
-const TYPE_CODE: Record<ResourceType, string> = {
-  Specification: "SP",
-  "Technical info": "TD",
-  SDS: "SD",
-  Guide: "GD",
-  "Colour card": "CC",
-  Brochure: "BR",
-}
-
-type Doc = { name: string; href: string; type: ResourceType; size: string }
-
-function DocRow({ doc, product }: { doc: Doc; product: string }) {
-  return (
-    <li className="group -mx-3 flex flex-wrap items-center gap-x-4 gap-y-3 rounded-[2px] px-3 py-[10px] transition-colors hover:bg-[color:var(--surface-warm)]">
-      <span
-        aria-hidden="true"
-        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[2px] bg-[color:var(--surface-stone)] text-[11px] font-semibold tracking-[0.08em] text-[color:var(--ink-body)]"
-        style={{ fontFamily: "var(--font-display)" }}
-      >
-        {TYPE_CODE[doc.type]}
-      </span>
-
-      <a
-        href={doc.href}
-        target="_blank"
-        rel="noopener noreferrer"
-        title={`Preview ${doc.name} (PDF, ${doc.size})`}
-        className="min-w-0 flex-1"
-      >
-        <span className="block truncate text-[15px] leading-[1.5] font-medium text-[color:var(--ink)] max-[700px]:whitespace-normal">
-          {doc.name}
-        </span>
-        <span className="mt-[2px] block text-[12.5px] leading-[1.5] text-[color:var(--ink-muted)]">
-          {product} &middot; {doc.type} &middot; {doc.size}
-        </span>
-      </a>
-
-      {/* Phones: the two actions drop under the title as one full-width row,
-          indented past the type code, so each is a proper 40px thumb target. */}
-      <span className="flex shrink-0 items-center gap-2 max-[700px]:basis-full max-[700px]:pl-14">
-        <a
-          href={doc.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={`Preview ${doc.name}`}
-          className="inline-flex h-9 items-center gap-[6px] rounded-[2px] border border-[color:var(--hairline)] px-3 text-[12px] font-semibold tracking-[0.06em] text-[color:var(--ink)] transition-colors hover:border-[color:var(--hairline-strong)] hover:bg-white max-[700px]:h-10 max-[700px]:flex-1 max-[700px]:justify-center"
-          style={{ fontFamily: "var(--font-display)" }}
-        >
-          Preview
-          <svg aria-hidden="true" width="11" height="11" viewBox="0 0 12 12">
-            <path d="M2 10L10 2M4 2h6v6" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </a>
-        <a
-          href={doc.href}
-          download
-          aria-label={`Download ${doc.name} (${doc.size})`}
-          className="inline-flex h-9 items-center gap-[6px] rounded-[2px] border border-[color:var(--hairline)] px-3 text-[12px] font-semibold tracking-[0.06em] text-[color:var(--ink)] transition-colors hover:border-[color:var(--hairline-strong)] hover:bg-white max-[700px]:h-10 max-[700px]:flex-1 max-[700px]:justify-center"
-          style={{ fontFamily: "var(--font-display)" }}
-        >
-          Download
-          <svg aria-hidden="true" width="11" height="11" viewBox="0 0 12 12">
-            <path d="M6 1v8M2.5 5.5L6 9l3.5-3.5M1.5 11h9" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </a>
-      </span>
-    </li>
-  )
-}
 
 function RailItem({
   active,
@@ -138,6 +62,7 @@ export default function ResourceLibrary({ groups }: { groups: ResourceGroup[] })
   const [product, setProduct] = useState<string>(ALL)
   const [docType, setDocType] = useState<ResourceType | typeof ALL>(ALL)
   const [query, setQuery] = useState("")
+  const [target, setTarget] = useState<PreviewTarget | null>(null)
 
   const total = groups.reduce((n, g) => n + g.docs.length, 0)
 
@@ -186,6 +111,8 @@ export default function ResourceLibrary({ groups }: { groups: ResourceGroup[] })
 
   return (
     <div className="grid grid-cols-12 gap-x-12 max-[1000px]:grid-cols-1 max-[1000px]:gap-x-0">
+      {target && <DocPreviewModal target={target} onClose={() => setTarget(null)} />}
+
       {/* ── Rail ──────── */}
       <aside className="col-span-3 max-[1000px]:hidden">
         <div className="sticky top-[calc(var(--bar-h)+32px)]">
@@ -218,7 +145,7 @@ export default function ResourceLibrary({ groups }: { groups: ResourceGroup[] })
           </ul>
 
           <p className="mt-9 max-w-[26ch] text-[13px] leading-[1.6] text-[color:var(--ink-muted)]">
-            SP specification &middot; TD technical data &middot; SD safety data sheet &middot; GD guide &middot; CC colour card &middot; BR brochure
+            Preview opens page one of the document. Where HUB Surface Systems keeps a current edition online, the preview links to it.
           </p>
         </div>
       </aside>
@@ -308,7 +235,7 @@ export default function ResourceLibrary({ groups }: { groups: ResourceGroup[] })
         ) : flat ? (
           <ul className="mt-2 divide-y divide-[color:var(--hairline)]">
             {flatRows.map(({ doc, product: p }) => (
-              <DocRow key={doc.href} doc={doc} product={p} />
+              <DocRow key={doc.href} doc={doc} product={p} showProduct onPreview={setTarget} />
             ))}
           </ul>
         ) : (
@@ -325,7 +252,7 @@ export default function ResourceLibrary({ groups }: { groups: ResourceGroup[] })
                 </div>
                 <ul className="mt-1 divide-y divide-[color:var(--hairline)]">
                   {group.docs.map((doc) => (
-                    <DocRow key={doc.href} doc={doc} product={group.product} />
+                    <DocRow key={doc.href} doc={doc} product={group.product} onPreview={setTarget} />
                   ))}
                 </ul>
               </section>

@@ -2,12 +2,14 @@ import Image from "next/image"
 import Link from "next/link"
 import IndexImageHero from "@/components/IndexImageHero"
 import type { Metadata } from "next"
+import { SITE_URL } from "@/lib/site"
+import { clampDescription } from "@/lib/seo"
 
 export const metadata: Metadata = {
   title: "Decorative Pavement Services BC",
   description:
-    "BC's trusted decorative pavement applicator. Stamped asphalt, decorative coatings, preformed thermoplastic, and vapour blasting services across the Lower Mainland and Vancouver Island.",
-  alternates: { canonical: "https://squareonepaving.ca/services" },
+    clampDescription("BC's trusted decorative pavement applicator. Stamped asphalt, decorative coatings, preformed thermoplastic, and vapour blasting services across the Lower Mainland and Vancouver Island."),
+  alternates: { canonical: `${SITE_URL}/services` },
 }
 
 /* Card copy mirrors lib/services taglines (canon). Images are named, verified
@@ -22,8 +24,8 @@ const services = [
     name: "Stamped asphalt",
     tagline: "Brick, cobble and slate — pressed into the asphalt you already have.",
     desc: "Custom StreetPrint patterns for crosswalks, driveways, plazas, and roundabouts. Durable, slip-resistant, and designed for BC's climate.",
-    image: "/images/products/streetprint/streetprint-victoria-ellis-point-walkway-01.jpg",
-    alt: "StreetPrint cobblestone walkway at Ellis Point, Victoria",
+    image: "/images/hero/victoria-ellis-point-walkway-streetprint.jpg",
+    alt: "British Cobble StreetPrint walkway at Ellis Point, Victoria",
     applications: ["Crosswalks", "Roundabouts", "Driveways", "Commercial Entries"],
   },
   {
@@ -31,7 +33,7 @@ const services = [
     slug: "decorative-coatings",
     name: "Decorative coatings",
     tagline: "Colour that holds under buses, bikes and BC winters.",
-    desc: "StreetBond and MMAX coatings in dozens of colours — anti-skid, UV stable, and specified for spray parks, plazas, bike lanes and parking lots across BC.",
+    desc: "StreetBond coatings in dozens of colours — anti-skid, UV stable, and specified for spray parks, plazas, bike lanes and parking lots across BC.",
     image: "/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg",
     alt: "StreetBond multicolour plaza at Joyce Station, Vancouver, at dusk",
     applications: ["Bike Lanes", "Bus Rapid Transit", "Parking Lots", "School Zones"],

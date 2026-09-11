@@ -3,23 +3,26 @@ import Link from "next/link"
 import type { Metadata } from "next"
 import { getWork, workCities } from "@/lib/work"
 import { projects } from "@/lib/projects"
+import { products } from "@/lib/products"
 import { CLIENTS } from "@/lib/clients"
+import { SITE_URL } from "@/lib/site"
+import { clampDescription } from "@/lib/seo"
 
 export const metadata: Metadata = {
-  title: "About Us | BC's Decorative Pavement Specialists Since 2000",
+  title: "About Us | Decorative Pavement Since 2000",
   description:
-    "Square One Paving has installed decorative pavement across British Columbia since 2000 — installer of HUB Surface Systems products, serving Metro Vancouver, the Fraser Valley and Vancouver Island.",
+    clampDescription("Square One Paving has installed decorative pavement across British Columbia since 2000 — installer of HUB Surface Systems products, serving Metro Vancouver, the Fraser Valley and Vancouver Island."),
   keywords: [
     "Square One Paving BC",
     "HUB Surface Systems installer BC",
     "decorative pavement contractor BC",
     "stamped asphalt contractor Vancouver",
   ],
-  alternates: { canonical: "https://squareonepaving.ca/about" },
+  alternates: { canonical: `${SITE_URL}/about` },
   openGraph: {
-    title: "About Us | BC's Decorative Pavement Specialists Since 2000 | Square One Paving",
+    title: "About Us | Decorative Pavement Since 2000 | Square One Paving",
     description:
-      "Square One Paving has installed decorative pavement across British Columbia since 2000 — cities, municipalities, developers and homeowners.",
+      clampDescription("Square One Paving has installed decorative pavement across British Columbia since 2000 — cities, municipalities, developers and homeowners."),
     images: [{ url: "/images/hero/white-rock-marine-drive-wave-crosswalk.jpg", width: 1600, height: 1067, alt: "Artist-designed crosswalk on Marine Drive, White Rock, installed by Square One Paving" }],
   },
 }
@@ -54,7 +57,7 @@ const trades: { name: string; line: string; href: string; src: string; alt: stri
   },
   {
     name: "Decorative coatings",
-    line: "StreetBond and MMAX colour systems for asphalt and concrete — plazas, lanes, spray parks, driveways.",
+    line: "StreetBond colour systems for asphalt and concrete — plazas, lanes, spray parks, driveways.",
     href: "/services/decorative-coatings",
     src: "/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg",
     alt: "StreetBond multicolour plaza at Joyce Station, Vancouver",
@@ -94,7 +97,7 @@ const principles = [
   },
   {
     title: "Specified, not improvised",
-    body: "StreetBond coatings carry HUB's limited warranty against manufacturing defects; StreetPrint is expected to last the life of the asphalt it is printed into. Every system goes down to its manufacturer's specification, and Square One stands behind the installation.",
+    body: "HUB warrants the material — StreetBond carries HUB's limited warranty against manufacturing defects. Square One is responsible for the workmanship: every system goes down to HUB's published specification, by Square One's own crews.",
   },
   {
     title: "End-to-end accountability",
@@ -108,7 +111,7 @@ const timeline = [
   { year: "2000", event: "Square One Paving begins installing decorative pavement in British Columbia" },
   { year: String(projects.length), event: "published case studies, from Nanaimo to Kelowna" },
   { year: String(getWork().length), event: "site photographs on record, each captioned with the system and the place" },
-  { year: "9", event: "HUB Surface Systems products installed, from StreetPrint to PreMark" },
+  { year: String(products.length), event: "HUB Surface Systems products installed, from StreetPrint to PreMark" },
   { year: String(workCities().length), event: "BC communities in the work record" },
 ]
 
@@ -149,8 +152,8 @@ export default function AboutPage() {
               owners &mdash; from the Maple Ridge office to both sides of the Strait of Georgia.
             </p>
             <p className="col-span-5 max-w-[40ch] self-start pt-2 text-[15px] leading-[1.65] text-ink-muted max-[900px]:max-w-[56ch] max-[900px]:pt-0">
-              Installer of HUB Surface Systems products &mdash; StreetPrint, StreetBond, MMAX,
-              TrafficPatterns, TrafficPatternsXD, DecoMark, DuraTherm, PreMark and DuraShield
+              Installer of HUB Surface Systems products &mdash; StreetPrint&reg;, StreetBond&reg;,
+              TrafficPatterns&trade;, TrafficPatternsXD&trade;, DecoMark, DuraTherm, PreMark and DuraShield
               &mdash; every one installed to its manufacturer&apos;s specification.
             </p>
           </div>

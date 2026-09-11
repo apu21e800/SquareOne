@@ -23,13 +23,16 @@ import Image from "next/image"
 import type { Metadata } from "next"
 
 import { workFor } from "@/lib/work"
-import { DRIVEWAY_COLOURS } from "@/lib/palette"
 import WorkGallery from "@/components/WorkGallery"
+import DrivewayComposer from "@/components/DrivewayComposer"
+import JsonLd, { breadcrumbSchema, faqSchema } from "@/components/JsonLd"
+import { SITE_URL } from "@/lib/site"
+import { clampDescription } from "@/lib/seo"
 
 export const metadata: Metadata = {
   title: "Stamped Asphalt Driveways Vancouver & Victoria",
   description:
-    "Stamped asphalt driveways in Metro Vancouver and Greater Victoria — StreetPrint patterns and StreetBond colour installed over the driveway you already have, by Square One Paving since 2000. Free site visit and written quote.",
+    clampDescription("Stamped asphalt driveways in Metro Vancouver and Greater Victoria — StreetPrint patterns and StreetBond colour installed over the driveway you already have, by Square One Paving since 2000. Free site visit and written quote."),
   keywords: [
     "decorative driveway BC",
     "stamped asphalt driveway Vancouver",
@@ -41,7 +44,7 @@ export const metadata: Metadata = {
     "concrete driveway alternative BC",
   ],
   alternates: {
-    canonical: "https://squareonepaving.ca/driveways",
+    canonical: `${SITE_URL}/driveways`,
   },
 }
 
@@ -65,6 +68,10 @@ const faqs = [
   {
     q: "Do you serve Vancouver Island?",
     a: "Yes — we serve both the Lower Mainland and Vancouver Island. Crews are dispatched across both regions, so no job site in the covered areas is out of reach.",
+  },
+  {
+    q: "Do you work outside the Lower Mainland and Vancouver Island?",
+    a: "For the right project, yes. Okanagan and Interior installations are in our project record. Send the address and a description and we will tell you straight away whether it makes sense for both of us.",
   },
 ]
 
@@ -99,7 +106,7 @@ const HERO: Shot & { caption: string } = {
 }
 
 const stats: { number: string; label: string }[] = [
-  { number: "10–20", label: "year StreetPrint service life, as published by HUB" },
+  { number: "10–20", label: "year StreetPrint® service life, as published by HUB" },
   { number: "25+", label: "years installing decorative pavement in BC" },
   { number: "Free", label: "site visit and written quote" },
 ]
@@ -137,9 +144,6 @@ const patterns: (Shot & { label: string })[] = [
     alt: "Stamped asphalt driveway with a circle medallion, installed by Square One Paving",
   },
 ]
-
-/** Six StreetBond colours that suit a driveway — by their published names (lib/palette.ts). */
-const colours = DRIVEWAY_COLOURS
 
 const systems: {
   name: string
@@ -209,7 +213,7 @@ const steps: { num: string; title: string; desc: string }[] = [
   {
     num: "04",
     title: "Built for BC winters",
-    desc: "Flush, snowplow-safe surfaces installed to the manufacturer's specification — StreetBond carries HUB's limited warranty, and Square One stands behind the installation.",
+    desc: "Flush, snowplow-safe surfaces installed to the manufacturer's specification — StreetBond material is covered by HUB's limited warranty; workmanship is Square One's, installed to HUB's specification.",
   },
 ]
 
@@ -218,6 +222,8 @@ export default function DrivewaysPage() {
 
   return (
     <main>
+
+      <JsonLd data={[faqSchema(faqs), breadcrumbSchema(SITE_URL, [{ name: "Driveways", path: "/driveways" }])]} />
 
       {/* ── 01 Hero ──────── */}
       <section className="relative grid min-h-[640px] grid-cols-[55fr_45fr] overflow-hidden bg-surface max-[700px]:min-h-0 max-[700px]:grid-cols-1">
@@ -286,14 +292,28 @@ export default function DrivewaysPage() {
       <section id="patterns" className="section relative overflow-hidden bg-surface">
 
         <div className="container-1280 relative z-[1]">
-          <h2>Patterns and colours</h2>
+          <div className="flex flex-wrap items-end justify-between gap-6">
+            <div>
+              <p className="eyebrow">Try it</p>
+              <h2 className="mt-5">Patterns and colours</h2>
+            </div>
+            <p className="max-w-[48ch] text-[15px] leading-[1.6] text-ink-muted [text-wrap:pretty]">
+              Ten StreetPrint templates, any StreetBond&reg; colour. Put them together here, then
+              we bring the sample boards to your driveway and hold them against the house.
+            </p>
+          </div>
 
-          <p className="mt-5 max-w-[56ch] text-[17px] leading-[1.6] text-ink-body [text-wrap:pretty]">
-            The StreetPrint patterns we install most, finished in any StreetBond colour. We bring
-            sample boards to the site visit so you can see them against your own siding and stone.
-          </p>
+          <div className="mt-10">
+            <DrivewayComposer />
+          </div>
 
-          <div className="mt-10 grid grid-cols-6 gap-4 max-[700px]:grid-cols-2">
+          <div className="mt-14 flex items-baseline justify-between gap-6 border-t border-hairline pt-8">
+            <div className="label">As installed</div>
+            <Link href="#gallery" className="arrow-link">
+              Every driveway on record <span aria-hidden="true">&rarr;</span>
+            </Link>
+          </div>
+          <div className="mt-5 grid grid-cols-6 gap-4 max-[700px]:grid-cols-3 max-[480px]:grid-cols-2">
             {patterns.map((pattern) => (
               <div key={pattern.label}>
                 <div className="card relative aspect-[4/3] overflow-hidden rounded-[2px] border border-hairline bg-surface-stone">
@@ -301,24 +321,11 @@ export default function DrivewaysPage() {
                     src={pattern.src}
                     alt={pattern.alt}
                     fill
-                    sizes="(max-width: 700px) 50vw, (max-width: 1280px) 16vw, 197px"
+                    sizes="(max-width: 700px) 33vw, (max-width: 1280px) 16vw, 197px"
                     className="object-cover"
                   />
                 </div>
                 <div className="chip-name">{pattern.label}</div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-10 grid grid-cols-6 gap-4 max-[700px]:grid-cols-2">
-            {colours.map((colour) => (
-              <div key={colour.name}>
-                <div
-                  aria-hidden="true"
-                  className="chip h-[52px]"
-                  style={{ background: colour.hex }}
-                />
-                <div className="chip-name">{colour.name}</div>
               </div>
             ))}
           </div>
@@ -450,6 +457,11 @@ export default function DrivewaysPage() {
           <p className="mt-5 max-w-[52ch] text-[17px] leading-[1.6] text-ink-body [text-wrap:pretty]">
             Mobile crews across the Lower Mainland and Vancouver Island. If you are in one of
             the areas below, we come to you.
+          </p>
+          <p className="mt-4 max-w-[52ch] text-[15px] leading-[1.6] text-ink-muted [text-wrap:pretty]">
+            Elsewhere in BC &mdash; the Okanagan and the Interior are already in our project
+            record &mdash; we travel for the right job. Tell us where, and we will say straight
+            away whether it makes sense.
           </p>
 
           <div className="mt-10 grid grid-cols-2 gap-3 min-[701px]:grid-cols-4 lg:grid-cols-6">

@@ -7,10 +7,23 @@ import { MDXRemote } from "next-mdx-remote/rsc"
 import { getPost, getPosts } from "@/lib/blog"
 import type { AnyPost, BlogPostMeta } from "@/lib/blog"
 import PortableBody from "@/components/blog/PortableBody"
+import { SITE_URL } from "@/lib/site"
+import { clampDescription } from "@/lib/seo"
 
 interface Props {
   params: Promise<{ slug: string }>
 }
+
+/**
+ * ISR: the blog is the one CMS-backed surface (lib/blog merges content/blog
+ * MDX with Sanity posts when the CMS is enabled). Revalidate hourly at most;
+ * a Sanity webhook to /api/revalidate refreshes on publish, and sanityFetch
+ * caps CMS reads at 60s when the CMS is live. Do NOT copy this to the home,
+ * gallery or product pages: they read public/images at build time through
+ * lib/work and lib/gallery, and public/ is excluded from the serverless
+ * bundle (next.config.ts) — regenerating them at runtime would fail.
+ */
+export const revalidate = 3600
 
 export async function generateStaticParams() {
   return (await getPosts()).map((post) => ({ slug: post.slug }))
@@ -21,21 +34,27 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await getPost(slug)
   if (!post) return {}
 
+  // The H1 keeps the post's full title; the <title> tag has ~65 characters
+  // before it is cut, so a long "Place: what happened" title is shortened to
+  // its first clause here — metadata only, the post itself is untouched.
+  const short = (post.title.length + 20 > 66 && post.title.includes(":") ? post.title.split(":")[0] : post.title).trim()
+  // "| Blog" keeps a post's tag distinct from the project page of the same job.
+  const tag = `${short} | Blog`
   return {
-    title: post.title,
-    description: post.description,
+    title: tag.length + 20 > 72 ? { absolute: tag } : tag,
+    description: clampDescription(post.description),
     alternates: {
-      canonical: `https://squareonepaving.ca/blog/${slug}`,
+      canonical: `${SITE_URL}/blog/${slug}`,
     },
     openGraph: {
       title: post.title,
-      description: post.description,
+      description: clampDescription(post.description),
       type: "article",
       publishedTime: post.date,
       authors: post.author ? [post.author] : ["Square One Paving"],
       images: post.featured_image
         ? [{ url: post.featured_image, width: 1200, height: 630, alt: post.title }]
-        : [],
+        : [{ url: "/images/og-image.png", width: 1200, height: 600, alt: "Square One Paving" }],
     },
   }
 }
@@ -158,7 +177,7 @@ export default async function BlogPostPage({ params }: Props) {
 
   const related = relatedPosts(post, await getPosts())
   const heroCaption = captionFor(post)
-  const shareUrl = `https://squareonepaving.ca/blog/${slug}`
+  const shareUrl = `${SITE_URL}/blog/${slug}`
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -175,11 +194,11 @@ export default async function BlogPostPage({ params }: Props) {
     publisher: {
       "@type": "Organization",
       name: "Square One Paving",
-      url: "https://squareonepaving.ca",
+      url: SITE_URL,
     },
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://squareonepaving.ca/blog/${slug}`,
+      "@id": `${SITE_URL}/blog/${slug}`,
     },
   }
 

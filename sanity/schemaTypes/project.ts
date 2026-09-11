@@ -1,6 +1,6 @@
 import { defineField, defineType } from "sanity"
 
-const SYSTEMS = ["StreetPrint", "StreetBond", "StreetBondSR", "StreetBond150", "MMAX", "TrafficPatterns", "TrafficPatternsXD", "DuraTherm", "DecoMark", "PreMark", "DuraShield"]
+const SYSTEMS = ["StreetPrint", "StreetBond", "StreetBondSR", "StreetBond150", "TrafficPatterns", "TrafficPatternsXD", "DuraTherm", "DecoMark", "PreMark", "DuraShield"]
 const APPLICATIONS = ["Crosswalks", "Streetscapes", "Roundabouts & traffic calming", "Parking lots", "Parks & paths", "Schools & sports courts", "Bike lanes", "Public art", "Branding & wayfinding", "Driveways"]
 const REGIONS = ["Lower Mainland", "Vancouver Island", "Interior", "Sunshine Coast", "Sea to Sky"]
 const SERVICES = ["Stamped Asphalt", "Decorative Coatings", "Preformed Thermoplastic", "Vapour Blasting"]

@@ -1,10 +1,12 @@
 import type { Metadata } from "next"
+import { SITE_URL } from "@/lib/site"
+import { clampDescription } from "@/lib/seo"
 
 export const metadata: Metadata = {
   title: "Terms of Use",
   description:
-    "Terms of use for squareonepaving.com — governing law, intellectual property, and disclaimer of warranties.",
-  alternates: { canonical: "https://squareonepaving.ca/terms" },
+    clampDescription("Terms of use for squareonepaving.com — governing law, intellectual property, and disclaimer of warranties."),
+  alternates: { canonical: `${SITE_URL}/terms` },
 }
 
 const sections = [

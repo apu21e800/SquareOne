@@ -40,7 +40,6 @@ const TOKEN_CASE: Record<string, string> = {
   duratherm: "DuraTherm",
   durashield: "DuraShield",
   premark: "PreMark",
-  mmax: "MMAX",
   ubc: "UBC",
   bc: "BC",
   rbc: "RBC",
@@ -62,7 +61,6 @@ function humanize(fileBase: string): string {
 const PRODUCT_DIR_TO_SLUG: Record<string, string> = {
   streetprint: "streetprint",
   streetbond: "streetbond",
-  mmax: "mmax",
   decomark: "decomark",
   durashield: "durashield",
   duratherm: "duratherm",
@@ -241,11 +239,21 @@ export function buildSearchIndex(): SearchEntry[] {
     })),
   )
 
+  // Each application card carries its gallery's lead photograph (curated,
+  // resolution-gated in lib/curation) so the overlay shows a picture, not a tile.
+  const leadByApp = new Map<string, string>()
+  for (const photo of getWork()) if (!leadByApp.has(photo.app)) leadByApp.set(photo.app, photo.src)
+  const applicationEntries: SearchEntry[] = APPLICATION_CARDS.map((card) => {
+    const slug = card.href === "/driveways" ? "driveways" : card.href.replace("/applications/", "")
+    const image = leadByApp.get(slug)
+    return image ? { ...card, image } : card
+  })
+
   return [
     ...STATIC_PAGES,
     ...serviceEntries,
     ...productEntries,
-    ...APPLICATION_CARDS,
+    ...applicationEntries,
     ...projectEntries,
     ...documentEntries,
     ...postEntries,

@@ -1,10 +1,12 @@
 import type { Metadata } from "next"
+import { SITE_URL } from "@/lib/site"
+import { clampDescription } from "@/lib/seo"
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
-    "Square One Paving privacy policy — how we collect, use, and protect your personal information under PIPEDA.",
-  alternates: { canonical: "https://squareonepaving.ca/privacy" },
+    clampDescription("Square One Paving privacy policy — how we collect, use, and protect your personal information under PIPEDA."),
+  alternates: { canonical: `${SITE_URL}/privacy` },
 }
 
 const sections = [

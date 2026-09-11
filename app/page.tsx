@@ -12,11 +12,13 @@ import DrivewaysBand from "@/components/sections/DrivewaysBand"
 import BlogFeed from "@/components/sections/BlogFeed"
 import FollowTheWork from "@/components/sections/FollowTheWork"
 import { getSiteSettings, getSlots, getSocialPosts, slotImage, slotText } from "@/lib/cms"
+import { SITE_URL } from "@/lib/site"
+import { clampDescription } from "@/lib/seo"
 
 export const metadata: Metadata = {
-  title: "Decorative Pavement BC | Stamped Asphalt & Coatings | Square One Paving",
+  title: { absolute: "Decorative Pavement Installers in BC | Square One Paving" },
   description:
-    "BC's most experienced decorative pavement applicators since 2000 — stamped asphalt, preformed thermoplastic and durable coatings for municipal streets, commercial sites and residential driveways. Metro Vancouver, Fraser Valley, and Vancouver Island.",
+    clampDescription("Stamped asphalt, decorative coatings and thermoplastic markings for BC cities, developers and homeowners — Lower Mainland and Vancouver Island. Installer of HUB Surface Systems products since 2000."),
   keywords: [
     "decorative pavement BC",
     "decorative paving Vancouver",
@@ -24,16 +26,15 @@ export const metadata: Metadata = {
     "stamped asphalt BC",
     "StreetPrint Vancouver",
     "StreetBond BC",
-    "MMAX pavement coating",
     "decorative driveway Vancouver",
     "pavement applicator BC",
     "decorative paving Lower Mainland",
   ],
-  alternates: { canonical: "https://squareonepaving.ca" },
+  alternates: { canonical: SITE_URL },
   openGraph: {
-    title: "Decorative Pavement BC | Stamped Asphalt & Coatings | Square One Paving",
+    title: "Decorative Pavement Installers in BC | Square One Paving",
     description:
-      "BC's most experienced decorative pavement applicators since 2000 — municipal streets, commercial sites and residential driveways across the Lower Mainland and Vancouver Island.",
+      clampDescription("Stamped asphalt, decorative coatings and thermoplastic markings for BC cities, developers and homeowners — Lower Mainland and Vancouver Island, since 2000."),
     images: [
       { url: "/images/og-image.png", width: 1200, height: 600, alt: "Square One Paving — BC Decorative Pavement Specialists" },
     ],

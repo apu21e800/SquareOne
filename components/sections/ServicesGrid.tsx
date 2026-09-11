@@ -8,12 +8,22 @@ import { services } from "@/lib/services"
  * "vapor-blasting" stays the slug, "Vapour blasting" is what the card reads.
  * Review round 2: cards go photographic — a real install above each body,
  * matching the mega-menu tile voice. Numerals ride the image as captions.
+ * 11 Sept 2026: three application chips and a "Specs" link per card — the
+ * hubss.com card carries both; ours did not.
  */
 const displayName: Record<string, string> = {
   "stamped-asphalt": "Stamped asphalt",
   "preformed-thermoplastic": "Preformed thermoplastic",
   "decorative-coatings": "Decorative coatings",
   "vapor-blasting": "Vapour blasting",
+}
+
+/** Three of the things each service is ordered for, and where its specs live. */
+const cardMeta: Record<string, { chips: string[]; specs?: { href: string; label: string } }> = {
+  "stamped-asphalt": { chips: ["Crosswalks", "Roundabouts", "Driveways"], specs: { href: "/resources#streetprint", label: "StreetPrint specs" } },
+  "preformed-thermoplastic": { chips: ["Crosswalks", "School zones", "Logos & art"], specs: { href: "/resources#traffic-patterns", label: "TrafficPatterns specs" } },
+  "decorative-coatings": { chips: ["Bike lanes", "Transit", "Parking lots"], specs: { href: "/resources#streetbond", label: "StreetBond specs" } },
+  "vapor-blasting": { chips: ["Graffiti", "Marking removal", "Surface prep"] },
 }
 
 const cardImage: Record<string, { src: string; alt: string }> = {
@@ -81,13 +91,34 @@ export default function ServicesGrid() {
                     {service.tagline}
                   </p>
 
-                  <Link
-                    href={`/services/${service.slug}`}
-                    className="arrow-link mt-auto pt-6"
-                    aria-label={`Explore ${displayName[service.slug] ?? service.name}`}
-                  >
-                    Explore <span aria-hidden="true">&rarr;</span>
-                  </Link>
+                  {cardMeta[service.slug] && (
+                    <ul className="mt-4 flex flex-wrap gap-[6px]">
+                      {cardMeta[service.slug].chips.map((chip) => (
+                        <li key={chip} className="tag">
+                          {chip}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+
+                  <div className="mt-auto flex flex-wrap items-center gap-x-5 gap-y-2 pt-6">
+                    <Link
+                      href={`/services/${service.slug}`}
+                      className="arrow-link"
+                      aria-label={`Explore ${displayName[service.slug] ?? service.name}`}
+                    >
+                      Explore <span aria-hidden="true">&rarr;</span>
+                    </Link>
+                    {cardMeta[service.slug]?.specs && (
+                      <Link
+                        href={cardMeta[service.slug].specs!.href}
+                        className="text-[13px] font-semibold text-ink-muted underline-offset-4 transition-colors hover:text-ink hover:underline"
+                        aria-label={cardMeta[service.slug].specs!.label}
+                      >
+                        Specs
+                      </Link>
+                    )}
+                  </div>
                 </div>
               </article>
             )

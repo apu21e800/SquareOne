@@ -2,11 +2,24 @@ import type { Metadata } from "next"
 import IndexImageHero from "@/components/IndexImageHero"
 import { getPosts } from "@/lib/blog"
 import BlogFilterClient from "@/components/blog/BlogFilterClient"
+import { SITE_URL } from "@/lib/site"
+import { clampDescription } from "@/lib/seo"
+
+/**
+ * ISR: the blog is the one CMS-backed surface (lib/blog merges content/blog
+ * MDX with Sanity posts when the CMS is enabled). Revalidate hourly at most;
+ * a Sanity webhook to /api/revalidate refreshes on publish, and sanityFetch
+ * caps CMS reads at 60s when the CMS is live. Do NOT copy this to the home,
+ * gallery or product pages: they read public/images at build time through
+ * lib/work and lib/gallery, and public/ is excluded from the serverless
+ * bundle (next.config.ts) — regenerating them at runtime would fail.
+ */
+export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: "Blog | Decorative Pavement Guides & Project Stories",
+  title: "Blog | Project Stories & Guides",
   description:
-    "Project stories, product deep-dives and practical guides from Square One Paving — stamped asphalt, StreetBond coatings, preformed thermoplastic and vapour blasting across BC since 2000.",
+    clampDescription("Project stories, product deep-dives and practical guides from Square One Paving — stamped asphalt, StreetBond coatings, preformed thermoplastic and vapour blasting across BC since 2000."),
   keywords: [
     "decorative pavement blog BC",
     "StreetPrint project BC",
@@ -16,12 +29,13 @@ export const metadata: Metadata = {
     "decorative coatings guide",
   ],
   alternates: {
-    canonical: "https://squareonepaving.ca/blog",
+    canonical: `${SITE_URL}/blog`,
   },
   openGraph: {
-    title: "Blog | Decorative Pavement Guides & Project Stories | Square One Paving",
+    title: "Blog | Project Stories & Guides | Square One Paving",
     description:
-      "Project stories, product deep-dives and practical guides from Square One Paving across BC since 2000.",
+      clampDescription("Project stories, product deep-dives and practical guides from Square One Paving across BC since 2000."),
+    images: [{ url: "/images/og-image.png", width: 1200, height: 600, alt: "Square One Paving" }],
   },
 }
 

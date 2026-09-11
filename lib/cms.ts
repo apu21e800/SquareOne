@@ -114,9 +114,9 @@ function fallbackTiles(profileUrl: string): SocialTile[] {
     { slug: "white-rock-custom-crosswalk", caption: "Artist-designed crosswalk, White Rock · TrafficPatterns" },
     { slug: "ubc-musqueam-crosswalk", caption: "UBC & Musqueam crosswalk, Vancouver · TrafficPatterns" },
     {
-      src: "/images/applications/driveways/victoria-offset-brick-ashlar-driveway-streetprint-01.jpg",
-      alt: "Offset brick and ashlar slate StreetPrint driveway in Victoria",
-      caption: "Offset brick on ashlar slate, Victoria · StreetPrint driveway",
+      src: "/images/S1_update_v2/photos/Driveways/Ten%20Mile%20Point%20Driveway%20I.jpg",
+      alt: "StreetPrint stamped asphalt driveway at Ten Mile Point, Saanich",
+      caption: "Ten Mile Point, Saanich · StreetPrint driveway",
     },
     { slug: "langley-events-centre-streetbond", caption: "Circle of Life, Langley Events Centre · StreetBond" },
     {

@@ -1,3 +1,4 @@
+import { SITE_URL } from "@/lib/site"
 // JSON-LD structured data for SEO — PavingContractor + WebSite.
 // Honesty rules (S1-BUILD-PROMPT constitution): no invented ratings, no
 // phantom endpoints, no unverified profiles. AggregateRating returns only
@@ -5,18 +6,19 @@
 
 const ORG_BASE = {
   "@type": "PavingContractor",
-  "@id": "https://squareonepaving.ca/#organization",
+  "@id": `${SITE_URL}/#organization`,
   name: "Square One Paving",
   alternateName: "Square One Paving Ltd.",
-  url: "https://squareonepaving.ca",
-  logo: "https://squareonepaving.ca/images/logo/SquareOne-wordmark-dark.svg",
-  image: "https://squareonepaving.ca/images/og-image.png",
+  url: SITE_URL,
+  logo: `${SITE_URL}/images/logo/SquareOne-wordmark-dark.svg`,
+  image: `${SITE_URL}/images/og-image.png`,
   description: "BC's decorative pavement studio since 2000. Stamped asphalt, decorative coatings, preformed thermoplastic, and vapour blasting for municipalities, developers, and residential clients across British Columbia.",
   telephone: "+1-604-466-9902",
   email: "office@squareonepaving.com",
   foundingDate: "2000",
-  founder: { "@type": "Person", name: "Jan Stewart" },
-  priceRange: "$$$",
+  // No priceRange (would be invented), no founder (not stated anywhere on
+  // record), no geo / openingHours until Vern supplies them — a wrong
+  // coordinate or opening hour is worse than none.
   areaServed: [
     { "@type": "AdministrativeArea", name: "British Columbia" },
     { "@type": "City", name: "Vancouver" },
@@ -52,7 +54,7 @@ const ORG_BASE = {
     name: "Decorative Pavement Services",
     itemListElement: [
       { "@type": "Offer", itemOffered: { "@type": "Service", name: "Stamped Asphalt", description: "StreetPrint stamped asphalt installations across BC." } },
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Decorative Coatings", description: "StreetBond and MMAX decorative coatings for transit, public realm, and residential surfaces." } },
+      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Decorative Coatings", description: "StreetBond decorative coatings for transit, public realm, and residential surfaces." } },
       { "@type": "Offer", itemOffered: { "@type": "Service", name: "Preformed Thermoplastic", description: "TrafficPatterns, DecoMark, and PreMark thermoplastic markings." } },
       { "@type": "Offer", itemOffered: { "@type": "Service", name: "Vapour Blasting", description: "Mobile vapour blasting for surface preparation and graffiti removal." } },
     ],
@@ -61,18 +63,18 @@ const ORG_BASE = {
 
 const WEBSITE = {
   "@type": "WebSite",
-  "@id": "https://squareonepaving.ca/#website",
-  url: "https://squareonepaving.ca",
+  "@id": `${SITE_URL}/#website`,
+  url: SITE_URL,
   name: "Square One Paving",
   description: "BC's decorative pavement specialists since 2000.",
-  publisher: { "@id": "https://squareonepaving.ca/#organization" },
+  publisher: { "@id": `${SITE_URL}/#organization` },
   // SearchAction is real: /search?q= renders full grouped results over the
   // build-time index (pages, systems, projects, documents, blog, imagery).
   potentialAction: {
     "@type": "SearchAction",
     target: {
       "@type": "EntryPoint",
-      urlTemplate: "https://squareonepaving.ca/search?q={search_term_string}",
+      urlTemplate: `${SITE_URL}/search?q={search_term_string}`,
     },
     "query-input": "required name=search_term_string",
   },

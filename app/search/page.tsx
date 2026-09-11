@@ -1,13 +1,15 @@
 import { Suspense } from "react"
 import type { Metadata } from "next"
 import SearchPageClient from "@/components/SearchPageClient"
+import { SITE_URL } from "@/lib/site"
+import { clampDescription } from "@/lib/seo"
 
 export const metadata: Metadata = {
   title: "Search",
   description:
-    "Search Square One Paving — products, services, applications, projects, the blog and the full specifications library.",
+    clampDescription("Search Square One Paving — products, services, applications, projects, the blog and the full specifications library."),
   robots: { index: false, follow: true },
-  alternates: { canonical: "https://squareonepaving.ca/search" },
+  alternates: { canonical: `${SITE_URL}/search` },
 }
 
 export default function SearchPage() {

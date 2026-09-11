@@ -200,7 +200,6 @@ export const CURATION: Record<string, GalleryCuration> = {
     ],
     hide: {},
     trail: [
-      "Cycle Grip MMAX Lower Levels Hwy, North Vancouver BC.jpg",
       "PreMark  Green Bike Lane, North Vancouver BC.jpg",
       "PreMark Green Bike Lane, North Vancouver BC.jpg",
       "PreMark Green Bike Lane, Assembly.jpg",
@@ -211,6 +210,11 @@ export const CURATION: Record<string, GalleryCuration> = {
 /** Photographs pulled site-wide, whatever gallery they appear in. */
 export const HIDE_EVERYWHERE: Record<string, string> = {
   "UNADJUSTEDNONRAW_thumb_3f58.jpg": "house number 2421 stamped into the driveway — private residence",
+  // 11 Sept 2026: the brief says Square One does not install MMA systems, and this
+  // is the one photograph on record captioned as an MMAX install (from the old
+  // site's own gallery). Hidden, not deleted, until Vern rules on whether it is
+  // mislabelled or a job that predates the current product line.
+  "Cycle Grip MMAX Lower Levels Hwy, North Vancouver BC.jpg": "captioned as MMAX — a system Square One does not install; awaiting Vern",
 }
 
 /* ------------------------------------------------------------------

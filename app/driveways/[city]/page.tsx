@@ -5,6 +5,10 @@ import { notFound } from "next/navigation"
 
 import { workForRegion, type WorkPhoto, type WorkRegion } from "@/lib/work"
 import WorkGallery from "@/components/WorkGallery"
+import DrivewayComposer from "@/components/DrivewayComposer"
+import JsonLd, { breadcrumbSchema, faqSchema } from "@/components/JsonLd"
+import { SITE_URL } from "@/lib/site"
+import { clampDescription } from "@/lib/seo"
 
 /**
  * City landing pages for the driveway pillar — /driveways/vancouver and
@@ -136,7 +140,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!c) return {}
   return {
     title: c.title,
-    description: `${c.lede} Free site visit and written quote.`,
+    description: clampDescription(`${c.lede} Free site visit and written quote.`),
     keywords: [
       `stamped asphalt driveway ${c.name}`,
       `decorative driveway ${c.name}`,
@@ -144,7 +148,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       `driveway paving ${c.name}`,
       `${c.name} driveway resurfacing`,
     ],
-    alternates: { canonical: `https://squareonepaving.ca/driveways/${c.slug}` },
+    alternates: { canonical: `${SITE_URL}/driveways/${c.slug}` },
   }
 }
 
@@ -160,6 +164,15 @@ export default async function DrivewayCityPage({ params }: Props) {
 
   return (
     <main className="bg-[color:var(--surface)]">
+      <JsonLd
+        data={[
+          faqSchema(c.faqs),
+          breadcrumbSchema(SITE_URL, [
+            { name: "Driveways", path: "/driveways" },
+            { name: c.name, path: `/driveways/${c.slug}` },
+          ]),
+        ]}
+      />
       {/* ── 01 Header ──────── */}
       <section className="section bg-[color:var(--surface)] pt-28 pb-14 max-[700px]:pt-[88px] max-[700px]:pb-10">
         <div className="container-1280">
@@ -261,6 +274,25 @@ export default async function DrivewayCityPage({ params }: Props) {
         </div>
       </section>
 
+      {/* ── 04b Try it — the composer, with the city on the enquiry ──────── */}
+      <section className="section border-t border-[color:var(--hairline)] bg-[color:var(--surface)]">
+        <div className="container-1280">
+          <div className="flex flex-wrap items-end justify-between gap-6">
+            <div>
+              <div className="eyebrow">Try it</div>
+              <h2 className="mt-4">Pattern and colour, before the site visit</h2>
+            </div>
+            <p className="max-w-[46ch] text-[15px] leading-[1.6] text-[color:var(--ink-muted)] [text-wrap:pretty]">
+              Put a StreetPrint template with a StreetBond colour. Your choice arrives with the
+              enquiry, and the sample boards come to {c.name} with us.
+            </p>
+          </div>
+          <div className="mt-10">
+            <DrivewayComposer city={c.name} initialColour={c.slug === "victoria" ? "Driftwood" : "Slate"} initialPattern={c.slug === "victoria" ? "british-cobble" : "ashlar-slate"} />
+          </div>
+        </div>
+      </section>
+
       {/* ── 05 Where ──────── */}
       <section className="section border-y border-[color:var(--hairline)] bg-[color:var(--surface-warm)]">
         <div className="container-1280">
@@ -274,7 +306,8 @@ export default async function DrivewayCityPage({ params }: Props) {
             ))}
           </div>
           <p className="mt-6 max-w-[52ch] text-[15px] leading-[1.6] text-[color:var(--ink-muted)]">
-            Free site visit and a written quote, anywhere in the service area.
+            Free site visit and a written quote, anywhere in the service area. Elsewhere in BC,
+            we travel for the right job &mdash; ask.
           </p>
         </div>
       </section>

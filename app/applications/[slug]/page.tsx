@@ -8,6 +8,9 @@ import { getProjectsByApplication } from "@/lib/projects"
 import { products } from "@/lib/products"
 import WorkGallery from "@/components/WorkGallery"
 import ProjectCaption from "@/components/ui/ProjectCaption"
+import { SITE_URL } from "@/lib/site"
+import JsonLd, { breadcrumbSchema } from "@/components/JsonLd"
+import { clampDescription } from "@/lib/seo"
 
 /**
  * Application page — one template, nine pages (driveways has its own pillar
@@ -84,9 +87,9 @@ const COPY: Record<Exclude<WorkApp, "driveways">, AppCopy> = {
   "bike-lanes": {
     headline: "Priority lanes that keep their colour",
     intro:
-      "Green bike lanes and red transit lanes are only useful while they are still green and red. PreMark preformed thermoplastic and MMAX coatings are engineered for the lane itself — daily traffic, street sweepers, winter grit — and StreetPrint brings a brick-pattern multi-use path to the same durability.",
-    products: ["premark", "mmax", "streetbond", "trafficpatterns"],
-    seo: "Green bike lane and red priority lane surfacing in PreMark thermoplastic and MMAX coatings across the Lower Mainland and Vancouver Island.",
+      "Green bike lanes and red transit lanes are only useful while they are still green and red. PreMark preformed thermoplastic and StreetBond coatings are laid down for the lane itself — daily traffic, street sweepers, winter grit — and StreetPrint brings a brick-pattern multi-use path to the same durability.",
+    products: ["premark", "streetbond", "trafficpatterns"],
+    seo: "Green bike lane and red priority lane surfacing in PreMark thermoplastic and StreetBond coatings across the Lower Mainland and Vancouver Island.",
   },
   "public-art": {
     headline: "Artwork rendered in the road itself",
@@ -116,9 +119,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!meta || slug === "driveways") return {}
   const copy = COPY[slug as keyof typeof COPY]
   return {
-    title: `${meta.label} | Decorative Pavement BC`,
-    description: `${copy.seo} Square One Paving — installer of HUB Surface Systems products since 2000.`,
-    alternates: { canonical: `https://squareonepaving.ca/applications/${slug}` },
+    title: `${meta.label} in BC`,
+    description: clampDescription(`${copy.seo} Square One Paving — installer of HUB Surface Systems products since 2000.`),
+    alternates: { canonical: `${SITE_URL}/applications/${slug}` },
   }
 }
 
@@ -146,6 +149,7 @@ export default async function ApplicationPage({ params }: Props) {
 
   return (
     <main className="bg-[color:var(--surface)]">
+      <JsonLd data={[breadcrumbSchema(SITE_URL, [{ name: "Applications", path: "/applications" }, { name: meta.label, path: `/applications/${slug}` }])]} />
       {/* ── 01 Header ─────────────────────────────────────────────────────────────── */}
       <section className="section bg-[color:var(--surface)] pt-28 pb-16 max-[700px]:pt-[88px] max-[700px]:pb-12">
         <div className="container-1280">

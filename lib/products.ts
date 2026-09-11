@@ -12,11 +12,14 @@ export interface Product {
   serviceSlug: string
   /** Manufacturer/brand logo shown in the product hero */
   logoImage?: string
+  /** HUB's registered/trade mark, shown on first mention (the product page H1). Never appended to `name` — lib/work.ts matches on the bare name. */
+  mark?: "®" | "™"
 }
 
 export const products: Product[] = [
   {
     slug: "streetprint",
+    mark: "®",
     name: "StreetPrint",
     tagline: "Stamped asphalt that looks like brick, cobblestone, or custom pattern.",
     category: "Stamped Asphalt",
@@ -40,6 +43,7 @@ export const products: Product[] = [
   },
   {
     slug: "streetbond",
+    mark: "®",
     name: "StreetBond",
     tagline: "Coloured pavement coating for bike lanes, plazas, courts, and driveways.",
     category: "Decorative Coatings",
@@ -68,6 +72,7 @@ export const products: Product[] = [
   },
   {
     slug: "trafficpatterns",
+    mark: "™",
     name: "TrafficPatterns",
     tagline: "Decorative preformed thermoplastic for crosswalks and pedestrian zones.",
     category: "Thermoplastic",
@@ -91,6 +96,7 @@ export const products: Product[] = [
   },
   {
     slug: "trafficpatterns-xd",
+    mark: "™",
     name: "TrafficPatternsXD",
     tagline: "Heavy-duty thermoplastic for high-traffic intersections and transit corridors.",
     category: "Thermoplastic",
@@ -179,32 +185,6 @@ export const products: Product[] = [
     galleryImages: ["/images/products/duratherm/duratherm-1.jpg"],
     serviceSlug: "preformed-thermoplastic",
     logoImage: "/images/S1_update_v2/Old%20Square%20One%20Web%20Assets/Product%20Pages/DuraTherm/DuraTherm%20logo%401x.png",
-  },
-  {
-    slug: "mmax",
-    name: "MMAX",
-    tagline: "MMA-based high-performance coloured pavement for bus rapid transit and bike infrastructure.",
-    category: "Decorative Coatings",
-    shortDescription:
-      "Methyl methacrylate (MMA) coloured pavement system for the most demanding urban mobility infrastructure. Faster cure time, higher durability, maximum colour retention.",
-    fullDescription:
-      "MMAX is a cold-applied MMA (methyl methacrylate) coloured pavement system developed for high-wear BRT corridors, bus-only lanes, high-volume bike lanes, and complex multi-colour transit infrastructure. Compared to water-based coatings, MMA offers faster cure times (even in cold BC weather), superior bond strength, and dramatically longer service life in heavy-wear environments.",
-    keyBenefits: [
-      "MMA chemistry for superior wear resistance",
-      "No-track in under 20 minutes in the right conditions",
-      "Applies at pavement temperatures down to 5°C",
-      "UV-stable pigments, chemical and crack resistant",
-      "Built for transit priority and bus-only lanes",
-      "Multi-colour capability for complex designs",
-    ],
-    applications: ["Bus Rapid Transit Corridors", "Bus-Only Lanes", "High-Volume Bike Lanes", "Transit Priority Infrastructure", "Urban BRT Systems"],
-    image: "/images/products/mmax/mmax-red-bus-lane-downtown-highrise-01.jpg",
-    galleryImages: [
-      "/images/products/mmax/mmax-red-bus-lane-downtown-highrise-01.jpg",
-      "/images/products/mmax/mmax-green-bike-lane-installation-01.jpg",
-      "/images/products/mmax/red-bus-green-bike-lane-dual-colour-01.jpg",
-    ],
-    serviceSlug: "decorative-coatings",
   },
   {
     slug: "premark",

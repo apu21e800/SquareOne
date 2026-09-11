@@ -4,15 +4,16 @@ import type { Metadata } from "next"
 import IndexImageHero from "@/components/IndexImageHero"
 
 import { products, type Product } from "@/lib/products"
+import { SITE_URL } from "@/lib/site"
+import { clampDescription } from "@/lib/seo"
 
 export const metadata: Metadata = {
-  title: "Pavement Systems & Products | StreetPrint, StreetBond, MMAX",
+  title: "Pavement Systems We Install",
   description:
-    "Every material system Square One installs across BC — StreetPrint stamped asphalt, StreetBond decorative coatings, MMAX, TrafficPatterns thermoplastic, and DuraShield surface protection.",
+    clampDescription("Every material system Square One installs across BC — StreetPrint stamped asphalt, StreetBond decorative coatings, TrafficPatterns thermoplastic, and DuraShield surface protection."),
   keywords: [
     "StreetPrint BC",
     "StreetBond Vancouver",
-    "MMAX pavement coating BC",
     "TrafficPatterns crosswalk BC",
     "decorative pavement systems BC",
     "stamped asphalt systems Vancouver",
@@ -22,12 +23,13 @@ export const metadata: Metadata = {
     "pavement products BC",
   ],
   alternates: {
-    canonical: "https://squareonepaving.ca/products",
+    canonical: `${SITE_URL}/products`,
   },
   openGraph: {
-    title: "Pavement Systems & Products | StreetPrint, StreetBond, MMAX | Square One Paving",
+    title: "Pavement Systems We Install | Square One Paving",
     description:
-      "Every material system Square One installs across BC — StreetPrint stamped asphalt, StreetBond decorative coatings, MMAX, TrafficPatterns thermoplastic, and DuraShield surface protection.",
+      clampDescription("Every material system Square One installs across BC — StreetPrint stamped asphalt, StreetBond decorative coatings, TrafficPatterns thermoplastic, and DuraShield surface protection."),
+    images: [{ url: "/images/og-image.png", width: 1200, height: 600, alt: "Square One Paving" }],
   },
 }
 

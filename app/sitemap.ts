@@ -4,8 +4,9 @@ import { projects } from "@/lib/projects"
 import { products } from "@/lib/products"
 import { getPosts } from "@/lib/blog"
 import { WORK_APPS } from "@/lib/work"
+import { SITE_URL } from "@/lib/site"
 
-const BASE_URL = "https://squareonepaving.com"
+const BASE_URL = SITE_URL
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
@@ -80,6 +81,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.8,
+    },
+    {
+      url: `${BASE_URL}/galleries`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.7,
     },
     {
       url: `${BASE_URL}/privacy`,

@@ -8,8 +8,8 @@ import type { PatternId } from "@/lib/palette"
  * ashlar courses, fans, scallops) and clipped to the tile.
  */
 
-const W = 120
-const H = 90
+export const W = 120
+export const H = 90
 
 function rect(x: number, y: number, w: number, h: number, rx = 0) {
   return `<rect x="${x}" y="${y}" width="${w}" height="${h}"${rx ? ` rx="${rx}"` : ""}/>`
@@ -129,7 +129,46 @@ function scallop(): string {
   return out.join("")
 }
 
-const DRAWINGS: Record<PatternId, () => { body: string; rotate?: number }> = {
+function tileSets(): string {
+  // Square tiles on a regular grid — the catalogue's tile sets are square
+  // modules laid in courses, joints aligned.
+  const out: string[] = []
+  const s = 22
+  for (let r = -1; r < H / s + 1; r++) {
+    for (let c = -1; c < W / s + 1; c++) out.push(rect(c * s + 2, r * s + 2, s, s))
+  }
+  return out.join("")
+}
+
+function border(): string {
+  // A soldier-course band framing a field — how a driveway border is
+  // actually laid: the field pattern inside, a running band of bricks
+  // around the edge.
+  const out: string[] = []
+  const band = 14
+  const bw = 8
+  const inner = { x: band, y: band, w: W - 2 * band, h: H - 2 * band }
+  // field: offset brick, clipped to the inner rectangle
+  const bh = 12
+  const fw = 24
+  for (let r = 0; r * bh < inner.h + bh; r++) {
+    const shift = r % 2 === 0 ? 0 : fw / 2
+    for (let c = -1; c * fw < inner.w + fw; c++) {
+      const x = inner.x + c * fw + shift
+      const y = inner.y + r * bh
+      const x0 = Math.max(x, inner.x), x1 = Math.min(x + fw, inner.x + inner.w)
+      const y0 = Math.max(y, inner.y), y1 = Math.min(y + bh, inner.y + inner.h)
+      if (x1 > x0 && y1 > y0) out.push(rect(x0, y0, x1 - x0, y1 - y0))
+    }
+  }
+  // the band: soldier bricks standing on end, top and bottom
+  for (let x = 0; x < W; x += bw) { out.push(rect(x, 0, bw, band)); out.push(rect(x, H - band, bw, band)) }
+  // and lying along the two sides
+  for (let y = band; y < H - band; y += bw) { out.push(rect(0, y, band, bw)); out.push(rect(W - band, y, band, bw)) }
+  return out.join("")
+}
+
+export const DRAWINGS: Record<PatternId, () => { body: string; rotate?: number }> = {
   "offset-brick": () => ({ body: offsetBrick() }),
   herringbone: () => ({ body: herringbone() }),
   "diagonal-herringbone": () => ({ body: herringbone(), rotate: 45 }),
@@ -138,6 +177,8 @@ const DRAWINGS: Record<PatternId, () => { body: string; rotate?: number }> = {
   stone: () => ({ body: randomStone() }),
   eurofan: () => ({ body: eurofan() }),
   scallop: () => ({ body: scallop() }),
+  "tile-sets": () => ({ body: tileSets() }),
+  border: () => ({ body: border() }),
 }
 
 export default function PatternTile({ id, className = "" }: { id: PatternId; className?: string }) {

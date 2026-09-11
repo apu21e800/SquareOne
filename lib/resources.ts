@@ -1,6 +1,15 @@
 // Technical documents library — spec sheets, colour cards, SDS, guides.
 // Source: mirrored from squareonepaving.com/support-documents/ into
 // /public/docs/ via scripts/mirror-docs.mjs — served locally, no WP dependency.
+//
+// Every document here is HUB Surface Systems' own publication (Square One
+// installs the systems; HUB writes the specifications). Page-one previews are
+// pre-rendered by scripts/doc-previews.mjs into lib/doc-previews.json.
+// Square One's own documents (insurance, WCB, capabilities, workmanship
+// warranty) are not here yet — they need Vern to supply the files.
+//
+// MMA products (MMAX, StreetBond Pro 220 / Pro 250 [MMA]) were removed on
+// 11 Sept 2026: Square One does not install them. Do not add them back.
 
 export type ResourceType =
   | "Specification"
@@ -16,6 +25,13 @@ export interface ResourceDoc {
   type: ResourceType;
   /** Human file size, baked at authoring time from public/docs (real bytes). */
   size: string;
+  /**
+   * The same document as HUB Surface Systems publishes it today, on
+   * hubss.com — verified against HUB's own document registry, 11 Sept 2026.
+   * HUB keeps that copy current; ours is a mirror for fast, same-origin
+   * download and preview. Present only where the file is identical.
+   */
+  hub?: string;
 }
 
 export interface ResourceGroup {
@@ -53,26 +69,22 @@ export const resourceGroups: ResourceGroup[] = [
       { name: "SDS — CemBase Hardener (SB-CBH)", href: "/docs/StreetBond/SB-CBH_StreetBond_CemBase_Hardener.pdf", type: "SDS", size: "169 KB" },
       { name: "SDS — StreetBond150 Part A", href: "/docs/StreetBond/SB-150A_MSDS_StreetBond150_Part_A.pdf", type: "SDS", size: "160 KB" },
       { name: "SDS — StreetBond150 Part B", href: "/docs/StreetBond/SB-150B_MSDS_StreetBond150_Part_B.pdf", type: "SDS", size: "273 KB" },
-      { name: "StreetBondSR Brochure", href: "/docs/StreetBondSR/StreetBondSR-Brochure.pdf", type: "Brochure", size: "344 KB" },
-      { name: "StreetBondSR Colour Guide", href: "/docs/StreetBondSR/Colour-Guide-1.pdf", type: "Colour card", size: "691 KB" },
-      { name: "StreetBondSR Flat Surface Specification", href: "/docs/StreetBondSR/StreetBond-SR-Flat-Surface-Specification.pdf", type: "Specification", size: "553 KB" },
-      { name: "StreetBondSR Certificate of Analysis — Friction", href: "/docs/StreetBondSR/StreetBond-SR-Certificate-of-Analysis-Friction.pdf", type: "Technical info", size: "652 KB" },
-      { name: "StreetBond SB120 Technical Data Sheet (Dec 2022)", href: "/docs/StreetBond/StreetBond%20120/StreetBond-SB120-Data-Sheet-12.22-Rev.pdf", type: "Technical info", size: "391 KB" },
-      { name: "StreetBond SB120 Coated Asphalt Specification — flat and stamped surfaces", href: "/docs/StreetBond/StreetBond%20120/StreetBond_SB120_Specifications.pdf", type: "Specification", size: "645 KB" },
-      { name: "StreetBond SB120 Coated Concrete Surface Specification", href: "/docs/StreetBond/StreetBond%20120/StreetBond-SB120-Over-Concrete-Specification.pdf", type: "Specification", size: "549 KB" },
-      { name: "StreetBond SB150 Technical Data Sheet (Dec 2022)", href: "/docs/StreetBond/StreetBond%20150/StreetBond-SB150-Data-Sheet-12.22-Rev.pdf", type: "Technical info", size: "392 KB" },
-      { name: "StreetBond SB150 AL Technical Data Sheet (Dec 2022)", href: "/docs/StreetBond/StreetBond%20150/StreetBond-SB150AL-Data-Sheet-12.22-Rev.pdf", type: "Technical info", size: "393 KB" },
-      { name: "StreetBond SB150 Coated Asphalt Specification — flat and stamped surfaces", href: "/docs/StreetBond/StreetBond%20150/StreetBond_SB150_Specifications.pdf", type: "Specification", size: "567 KB" },
-      { name: "StreetBond SB150 Coated Concrete Surface Specification", href: "/docs/StreetBond/StreetBond%20150/StreetBond-SB150-Over-Concrete-Specification.pdf", type: "Specification", size: "787 KB" },
-      { name: "StreetBond Colorant — Technical Data Sheet (2023)", href: "/docs/StreetBond/StreetBond/StreetBond-Colorant.pdf", type: "Technical info", size: "311 KB" },
-      { name: "StreetBond Concrete Primer WB — Technical Data Sheet", href: "/docs/StreetBond/StreetBond%20Concrete%20Primer/StreetBond-Concrete-Primer-WB-TDS.pdf", type: "Technical info", size: "351 KB" },
-      { name: "StreetBond Concrete Primer QS — Technical Data Sheet", href: "/docs/StreetBond/StreetBond%20Concrete%20Primer/StreetBond-QS-Concrete-TDS.pdf", type: "Technical info", size: "330 KB" },
-      { name: "StreetBond Substrate Guide (June 2016)", href: "/docs/StreetBond/StreetBond/StreetBond_Substrate_Guide.pdf", type: "Guide", size: "586 KB" },
-      { name: "StreetBond Brochure (2016)", href: "/docs/StreetBond/StreetBond/StreetBond-Brochure.pdf", type: "Brochure", size: "4.9 MB" },
-      { name: "StreetBond Pro 220 (MMA) — Technical Data Sheet", href: "/docs/StreetBond/StreetBond%20Pro%20220%20%5BMMA%5D/StreetBond-Pro-220-TDS.pdf", type: "Technical info", size: "373 KB" },
-      { name: "StreetBond Pro 250 (PMMA) — Product Data Sheet", href: "/docs/StreetBond/StreetBond%20Pro%20250%20%5BMMA%5D/Data-Sheet-StreetBond-Pro-250.pdf", type: "Technical info", size: "517 KB" },
-      { name: "StreetBond Pro 220 & 250 — Installer's Guide", href: "/docs/StreetBond/StreetBond%20Pro%20220%20%5BMMA%5D/StreetBond-Pro-220-and-250-Intallation.pdf", type: "Guide", size: "4.2 MB" },
-      { name: "StreetBond Pro 220 & 250 Brochure", href: "/docs/StreetBond/StreetBond%20Pro%20250%20%5BMMA%5D/StreetBond-Pro-220-Pro-250-Brochure.pdf", type: "Brochure", size: "8.4 MB" },
+      { name: "StreetBondSR Brochure", href: "/docs/StreetBondSR/StreetBondSR-Brochure.pdf", hub: "https://hubss.com/docs/StreetBondSR/StreetBondSR-Brochure.pdf", type: "Brochure", size: "344 KB" },
+      { name: "StreetBondSR Colour Guide", href: "/docs/StreetBondSR/Colour-Guide-1.pdf", hub: "https://hubss.com/docs/StreetBondSR/Colour-Guide-1.pdf", type: "Colour card", size: "691 KB" },
+      { name: "StreetBondSR Flat Surface Specification", href: "/docs/StreetBondSR/StreetBond-SR-Flat-Surface-Specification.pdf", hub: "https://hubss.com/docs/StreetBondSR/StreetBond-SR-Flat-Surface-Specification.pdf", type: "Specification", size: "553 KB" },
+      { name: "StreetBondSR Certificate of Analysis — Friction", href: "/docs/StreetBondSR/StreetBond-SR-Certificate-of-Analysis-Friction.pdf", hub: "https://hubss.com/docs/StreetBondSR/StreetBond-SR-Certificate-of-Analysis-Friction.pdf", type: "Technical info", size: "652 KB" },
+      { name: "StreetBond SB120 Technical Data Sheet (Dec 2022)", href: "/docs/StreetBond/StreetBond%20120/StreetBond-SB120-Data-Sheet-12.22-Rev.pdf", hub: "https://hubss.com/docs/StreetBond/StreetBond%20120/StreetBond-SB120-Data-Sheet-12.22-Rev.pdf", type: "Technical info", size: "391 KB" },
+      { name: "StreetBond SB120 Coated Asphalt Specification — flat and stamped surfaces", href: "/docs/StreetBond/StreetBond%20120/StreetBond_SB120_Specifications.pdf", hub: "https://hubss.com/docs/StreetBond/StreetBond%20120/StreetBond_SB120_Specifications.pdf", type: "Specification", size: "645 KB" },
+      { name: "StreetBond SB120 Coated Concrete Surface Specification", href: "/docs/StreetBond/StreetBond%20120/StreetBond-SB120-Over-Concrete-Specification.pdf", hub: "https://hubss.com/docs/StreetBond/StreetBond%20120/StreetBond-SB120-Over-Concrete-Specification.pdf", type: "Specification", size: "549 KB" },
+      { name: "StreetBond SB150 Technical Data Sheet (Dec 2022)", href: "/docs/StreetBond/StreetBond%20150/StreetBond-SB150-Data-Sheet-12.22-Rev.pdf", hub: "https://hubss.com/docs/StreetBond/StreetBond%20150/StreetBond-SB150-Data-Sheet-12.22-Rev.pdf", type: "Technical info", size: "392 KB" },
+      { name: "StreetBond SB150 AL Technical Data Sheet (Dec 2022)", href: "/docs/StreetBond/StreetBond%20150/StreetBond-SB150AL-Data-Sheet-12.22-Rev.pdf", hub: "https://hubss.com/docs/StreetBond/StreetBond%20150/StreetBond-SB150AL-Data-Sheet-12.22-Rev.pdf", type: "Technical info", size: "393 KB" },
+      { name: "StreetBond SB150 Coated Asphalt Specification — flat and stamped surfaces", href: "/docs/StreetBond/StreetBond%20150/StreetBond_SB150_Specifications.pdf", hub: "https://hubss.com/docs/StreetBond/StreetBond%20150/StreetBond_SB150_Specifications.pdf", type: "Specification", size: "567 KB" },
+      { name: "StreetBond SB150 Coated Concrete Surface Specification", href: "/docs/StreetBond/StreetBond%20150/StreetBond-SB150-Over-Concrete-Specification.pdf", hub: "https://hubss.com/docs/StreetBond/StreetBond%20150/StreetBond-SB150-Over-Concrete-Specification.pdf", type: "Specification", size: "787 KB" },
+      { name: "StreetBond Colorant — Technical Data Sheet (2023)", href: "/docs/StreetBond/StreetBond/StreetBond-Colorant.pdf", hub: "https://hubss.com/docs/StreetBond/StreetBond/StreetBond-Colorant.pdf", type: "Technical info", size: "311 KB" },
+      { name: "StreetBond Concrete Primer WB — Technical Data Sheet", href: "/docs/StreetBond/StreetBond%20Concrete%20Primer/StreetBond-Concrete-Primer-WB-TDS.pdf", hub: "https://hubss.com/docs/StreetBond/StreetBond%20Concrete%20Primer/StreetBond-Concrete-Primer-WB-TDS.pdf", type: "Technical info", size: "351 KB" },
+      { name: "StreetBond Concrete Primer QS — Technical Data Sheet", href: "/docs/StreetBond/StreetBond%20Concrete%20Primer/StreetBond-QS-Concrete-TDS.pdf", hub: "https://hubss.com/docs/StreetBond/StreetBond%20Concrete%20Primer/StreetBond-QS-Concrete-TDS.pdf", type: "Technical info", size: "330 KB" },
+      { name: "StreetBond Substrate Guide (June 2016)", href: "/docs/StreetBond/StreetBond/StreetBond_Substrate_Guide.pdf", hub: "https://hubss.com/docs/StreetBond/StreetBond/StreetBond_Substrate_Guide.pdf", type: "Guide", size: "586 KB" },
+      { name: "StreetBond Brochure (2016)", href: "/docs/StreetBond/StreetBond/StreetBond-Brochure.pdf", hub: "https://hubss.com/docs/StreetBond/StreetBond/StreetBond-Brochure.pdf", type: "Brochure", size: "4.9 MB" },
     ],
   },
   {
@@ -84,7 +96,7 @@ export const resourceGroups: ResourceGroup[] = [
       { name: "Asphalt Pavement Texturing Specification", href: "/docs/StreetPrint/StreetPrint_Asphalt_Pavement_Texturing_Specification_April-2020.pdf", type: "Specification", size: "777 KB" },
       { name: "Custom Stamping Template Guidelines", href: "/docs/StreetPrint/StreetPrint_Cutom-Stamping-Template-Guidlines.pdf", type: "Guide", size: "2.8 MB" },
       { name: "StreetPrint FAQ", href: "/docs/StreetPrint/STREETPRINT-FAQ-DOCUMENT.pdf", type: "Guide", size: "115 KB" },
-      { name: "StreetPrint Template Catalogue (HUB)", href: "/docs/StreetPrint/StreetPrint-Template-Catalog.pdf", type: "Guide", size: "2.4 MB" },
+      { name: "StreetPrint Template Catalogue (HUB)", href: "/docs/StreetPrint/StreetPrint-Template-Catalog.pdf", hub: "https://hubss.com/docs/streetprint/streetprint-template-catalog.pdf", type: "Guide", size: "2.4 MB" },
     ],
   },
   {
@@ -102,22 +114,22 @@ export const resourceGroups: ResourceGroup[] = [
       { name: "Sealer — Part 2", href: "/docs/traffic-patterns/Sealer-2.pdf", type: "Technical info", size: "272 KB" },
       { name: "SDS — TrafficPatterns", href: "/docs/traffic-patterns/SDS_TrafficScapes_TrafficPatterns-v.4.pdf", type: "SDS", size: "259 KB" },
       { name: "SDS — TrafficPatterns Sealer", href: "/docs/traffic-patterns/SDS_TrafficScapes_TrafficPatterns_Sealer-2.pdf", type: "SDS", size: "272 KB" },
-      { name: "TrafficPatterns Technical Sheet — TS001 (2022)", href: "/docs/TrafficPatterns/TS001_TrafficPatterns_220204.pdf", type: "Technical info", size: "865 KB" },
-      { name: "Custom TrafficPatterns Marking Design Guidelines (2020)", href: "/docs/TrafficPatterns/TrafficPatterns-Custom-Design-Guidelines.pdf", type: "Guide", size: "387 KB" },
+      { name: "TrafficPatterns Technical Sheet — TS001 (2022)", href: "/docs/TrafficPatterns/TS001_TrafficPatterns_220204.pdf", hub: "https://hubss.com/docs/TrafficPatterns/TS001_TrafficPatterns_220204.pdf", type: "Technical info", size: "865 KB" },
+      { name: "Custom TrafficPatterns Marking Design Guidelines (2020)", href: "/docs/TrafficPatterns/TrafficPatterns-Custom-Design-Guidelines.pdf", hub: "https://hubss.com/docs/TrafficPatterns/TrafficPatterns-Custom-Design-Guidelines.pdf", type: "Guide", size: "387 KB" },
     ],
   },
   {
     product: "TrafficPatternsXD",
     slug: "trafficpatterns-xd",
     docs: [
-      { name: "TrafficPatternsXD Colour Guide", href: "/docs/TrafficPatternsXD/TrafficPatternsXD-Colour-Guide.pdf", type: "Colour card", size: "334 KB" },
-      { name: "TrafficPatternsXD Design Manual", href: "/docs/TrafficPatternsXD/TrafficPatternsXD-Design-Manual.pdf", type: "Guide", size: "5.2 MB" },
-      { name: "Specification — TrafficPatternsXD", href: "/docs/TrafficPatternsXD/TrafficPatternsXD-Specification.pdf", type: "Specification", size: "488 KB" },
-      { name: "Specification — TrafficPatternsXD Branded", href: "/docs/TrafficPatternsXD/TrafficPatternsXD-Specification-Branded.pdf", type: "Specification", size: "372 KB" },
-      { name: "Specification — TrafficPatternsXD (French)", href: "/docs/TrafficPatternsXD/TrafficPatternsXD-Specification-FR.pdf", type: "Specification", size: "260 KB" },
-      { name: "Cross-Section Detail", href: "/docs/TrafficPatternsXD/TrafficPatternsXD-CrossSection-Detail.pdf", type: "Technical info", size: "1.1 MB" },
-      { name: "Technical Sheet — TS002", href: "/docs/TrafficPatternsXD/TS002_TrafficPatternsXD_220204.pdf", type: "Technical info", size: "804 KB" },
-      { name: "Two-Component Sealer", href: "/docs/TrafficPatternsXD/TrafficPatternsXD-Two-Component-Sealer.pdf", type: "Technical info", size: "230 KB" },
+      { name: "TrafficPatternsXD Colour Guide", href: "/docs/TrafficPatternsXD/TrafficPatternsXD-Colour-Guide.pdf", hub: "https://hubss.com/docs/TrafficPatternsXD/TrafficPatternsXD-Colour-Guide.pdf", type: "Colour card", size: "334 KB" },
+      { name: "TrafficPatternsXD Design Manual", href: "/docs/TrafficPatternsXD/TrafficPatternsXD-Design-Manual.pdf", hub: "https://hubss.com/docs/TrafficPatternsXD/TrafficPatternsXD-Design-Manual.pdf", type: "Guide", size: "5.2 MB" },
+      { name: "Specification — TrafficPatternsXD", href: "/docs/TrafficPatternsXD/TrafficPatternsXD-Specification.pdf", hub: "https://hubss.com/docs/TrafficPatternsXD/TrafficPatternsXD-Specification.pdf", type: "Specification", size: "488 KB" },
+      { name: "Specification — TrafficPatternsXD Branded", href: "/docs/TrafficPatternsXD/TrafficPatternsXD-Specification-Branded.pdf", hub: "https://hubss.com/docs/TrafficPatternsXD/TrafficPatternsXD-Specification-Branded.pdf", type: "Specification", size: "372 KB" },
+      { name: "Specification — TrafficPatternsXD (French)", href: "/docs/TrafficPatternsXD/TrafficPatternsXD-Specification-FR.pdf", hub: "https://hubss.com/docs/TrafficPatternsXD/TrafficPatternsXD-Specification-FR.pdf", type: "Specification", size: "260 KB" },
+      { name: "Cross-Section Detail", href: "/docs/TrafficPatternsXD/TrafficPatternsXD-CrossSection-Detail.pdf", hub: "https://hubss.com/docs/TrafficPatternsXD/TrafficPatternsXD-CrossSection-Detail.pdf", type: "Technical info", size: "1.1 MB" },
+      { name: "Technical Sheet — TS002", href: "/docs/TrafficPatternsXD/TS002_TrafficPatternsXD_220204.pdf", hub: "https://hubss.com/docs/TrafficPatternsXD/TS002_TrafficPatternsXD_220204.pdf", type: "Technical info", size: "804 KB" },
+      { name: "Two-Component Sealer", href: "/docs/TrafficPatternsXD/TrafficPatternsXD-Two-Component-Sealer.pdf", hub: "https://hubss.com/docs/TrafficPatternsXD/TrafficPatternsXD-Two-Component-Sealer.pdf", type: "Technical info", size: "230 KB" },
     ],
   },
   {
@@ -135,9 +147,9 @@ export const resourceGroups: ResourceGroup[] = [
       { name: "Sealer — Part 1", href: "/docs/DecoMark/Sealer-1-1.pdf", type: "Technical info", size: "404 KB" },
       { name: "Sealer — Part 2", href: "/docs/DecoMark/Sealer-2-1.pdf", type: "Technical info", size: "272 KB" },
       { name: "SDS — Preformed Thermoplastic (DecoMark)", href: "/docs/DecoMark/SDS_Preformed-Thermoplastic_DecoMark_v.3.pdf", type: "SDS", size: "180 KB" },
-      { name: "DecoMark Technical Sheet — TS004 (2022)", href: "/docs/DecoMark/TS004_DecoMark_220204.pdf", type: "Technical info", size: "323 KB" },
-      { name: "DecoMark Colour Guide — material and thickness options", href: "/docs/DecoMark/DecoMark-Colour-Guide.pdf", type: "Colour card", size: "346 KB" },
-      { name: "DecoMark Marking Design Guidelines (2020)", href: "/docs/DecoMark/DecoMark-Custom-Design-Guidelines.pdf", type: "Guide", size: "688 KB" },
+      { name: "DecoMark Technical Sheet — TS004 (2022)", href: "/docs/DecoMark/TS004_DecoMark_220204.pdf", hub: "https://hubss.com/docs/decomark/TS004_DecoMark_220204.pdf", type: "Technical info", size: "323 KB" },
+      { name: "DecoMark Colour Guide — material and thickness options", href: "/docs/DecoMark/DecoMark-Colour-Guide.pdf", hub: "https://hubss.com/docs/decomark/decomark-colour-guide.pdf", type: "Colour card", size: "346 KB" },
+      { name: "DecoMark Marking Design Guidelines (2020)", href: "/docs/DecoMark/DecoMark-Custom-Design-Guidelines.pdf", hub: "https://hubss.com/docs/decomark/decomark-custom-design-guidelines.pdf", type: "Guide", size: "688 KB" },
     ],
   },
   {
@@ -151,8 +163,8 @@ export const resourceGroups: ResourceGroup[] = [
       { name: "Sealer — Part 1", href: "/docs/DuraTherm/Duratherm-Sealer-1.pdf", type: "Technical info", size: "404 KB" },
       { name: "Sealer — Part 2", href: "/docs/DuraTherm/Duratherm-Sealer-2.pdf", type: "Technical info", size: "272 KB" },
       { name: "SDS — Preformed Thermoplastic (DuraTherm)", href: "/docs/DuraTherm/SDS_Preformed-Thermoplastic_DuraTherm-v.3.pdf", type: "SDS", size: "237 KB" },
-      { name: "DuraTherm Technical Sheet — TS003 (2022)", href: "/docs/DuraTherm/TS003_DuraTherm_220204.pdf", type: "Technical info", size: "1.1 MB" },
-      { name: "DuraTherm Design Manual", href: "/docs/DuraTherm/DuraTherm-Design-Manual.pdf", type: "Guide", size: "7.3 MB" },
+      { name: "DuraTherm Technical Sheet — TS003 (2022)", href: "/docs/DuraTherm/TS003_DuraTherm_220204.pdf", hub: "https://hubss.com/docs/duratherm/TS003_DuraTherm_220204.pdf", type: "Technical info", size: "1.1 MB" },
+      { name: "DuraTherm Design Manual", href: "/docs/DuraTherm/DuraTherm-Design-Manual.pdf", hub: "https://hubss.com/docs/duratherm/duratherm-design-manual.pdf", type: "Guide", size: "7.3 MB" },
     ],
   },
   {
@@ -172,27 +184,16 @@ export const resourceGroups: ResourceGroup[] = [
       { name: "Sealer — Part 1", href: "/docs/PreMark/Preamark-Sealer-1.pdf", type: "Technical info", size: "404 KB" },
       { name: "Sealer — Part 2", href: "/docs/PreMark/Premark-Sealer-2.pdf", type: "Technical info", size: "272 KB" },
       { name: "SDS — Preformed Thermoplastic (PreMark)", href: "/docs/PreMark/SDS_Preformed-Thermoplastic_PreMark-v.5.pdf", type: "SDS", size: "183 KB" },
-      { name: "PreMark Technical Sheet — TS005 (2022)", href: "/docs/PreMark/TS005_PreMark_220204.pdf", type: "Technical info", size: "391 KB" },
-      { name: "PreMarkXF Brochure — extra-flexible markings", href: "/docs/PreMark/PreMarkXF-Brochure.pdf", type: "Brochure", size: "354 KB" },
-    ],
-  },
-  {
-    product: "MMAX",
-    slug: "mmax",
-    docs: [
-      { name: "MMAX Product Data", href: "/docs/MMAX/MMAX-Product-Data.pdf", type: "Technical info", size: "547 KB" },
-      { name: "MMAX Next Gen Brochure", href: "/docs/MMAX/MMAX-Next-Gen-Brochure_06_09_23-1.pdf", type: "Brochure", size: "1.4 MB" },
-      { name: "Application Instructions — Corundum Area Markings", href: "/docs/MMAX/Application_Instructions_MMAX_Corundum_Area_Markings.pdf", type: "Guide", size: "539 KB" },
-      { name: "Extended Season MMAX — Product Data Sheet", href: "/docs/MMAX/Extended-Season-MMAX-product-data-sheet.pdf", type: "Technical info", size: "191 KB" },
-      { name: "Extended Season MMAX Corundum — Product Data Sheet", href: "/docs/MMAX/Extended-Season-MMAX-Corundum-PDS-070723.pdf", type: "Technical info", size: "191 KB" },
+      { name: "PreMark Technical Sheet — TS005 (2022)", href: "/docs/PreMark/TS005_PreMark_220204.pdf", hub: "https://hubss.com/docs/PreMark/TS005_PreMark_220204.pdf", type: "Technical info", size: "391 KB" },
+      { name: "PreMarkXF Brochure — extra-flexible markings", href: "/docs/PreMark/PreMarkXF-Brochure.pdf", hub: "https://hubss.com/docs/PreMark/PreMarkXF-Brochure.pdf", type: "Brochure", size: "354 KB" },
     ],
   },
   {
     product: "DuraShield",
     slug: "durashield",
     docs: [
-      { name: "TDS — DuraShield Colour Asphalt (Part A + B)", href: "/docs/DuraShield/DuraShield-Pavement-Coating-Part-A-B-Color-Asphalt-TDS.pdf", type: "Technical info", size: "509 KB" },
-      { name: "TDS — DuraShield Solar Gray (Part A + B)", href: "/docs/DuraShield/DuraShield-Pavement-Coating-Part-A-B-Color-Solar-Gray-TDS.pdf", type: "Technical info", size: "478 KB" },
+      { name: "TDS — DuraShield Colour Asphalt (Part A + B)", href: "/docs/DuraShield/DuraShield-Pavement-Coating-Part-A-B-Color-Asphalt-TDS.pdf", hub: "https://hubss.com/docs/DuraShield/DuraShield-Pavement-Coating-Part-A-B-Color-Asphalt-TDS.pdf", type: "Technical info", size: "509 KB" },
+      { name: "TDS — DuraShield Solar Gray (Part A + B)", href: "/docs/DuraShield/DuraShield-Pavement-Coating-Part-A-B-Color-Solar-Gray-TDS.pdf", hub: "https://hubss.com/docs/DuraShield/DuraShield-Pavement-Coating-Part-A-B-Color-Solar-Gray-TDS.pdf", type: "Technical info", size: "478 KB" },
     ],
   },
 ];

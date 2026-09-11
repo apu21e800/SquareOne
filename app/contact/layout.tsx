@@ -1,9 +1,9 @@
-import { buildMetadata } from "@/lib/seo";
+import { buildMetadata, clampDescription } from "@/lib/seo";
 
 export const metadata = buildMetadata({
-  title: "Contact & Free Quote | Maple Ridge BC",
+  title: "Request a Quote | Free Site Visit, Metro Vancouver & Vancouver Island",
   description:
-    "Get a free site visit and a written quote. Reach Jan Stewart directly — decorative pavement specialists serving Metro Vancouver, Fraser Valley, and Vancouver Island.",
+    clampDescription("Request a free site visit and a written quote from Square One Paving — decorative pavement installers serving Metro Vancouver, the Fraser Valley and Vancouver Island since 2000."),
   slug: "contact",
 });
 

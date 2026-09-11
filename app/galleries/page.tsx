@@ -8,6 +8,8 @@ import { projects } from "@/lib/projects"
 import IndexImageHero from "@/components/IndexImageHero"
 import WorkGallery from "@/components/WorkGallery"
 import ProjectCaption from "@/components/ui/ProjectCaption"
+import { SITE_URL } from "@/lib/site"
+import { clampDescription } from "@/lib/seo"
 
 /**
  * Galleries hub — every photograph Square One has on record, opened by
@@ -19,10 +21,10 @@ import ProjectCaption from "@/components/ui/ProjectCaption"
  */
 
 export const metadata: Metadata = {
-  title: "Image Galleries | Decorative Pavement Across BC",
+  title: "Image Galleries | Work Across BC",
   description:
-    "Photographs of Square One Paving's own work across BC — crosswalks, streetscapes, parks, schools, public art, parking lots, bike lanes, branding and driveways — by application, by system and by region.",
-  alternates: { canonical: "https://squareonepaving.ca/galleries" },
+    clampDescription("Photographs of Square One Paving's own work across BC — crosswalks, streetscapes, parks, schools, public art, parking lots, bike lanes, branding and driveways — by application, by system and by region."),
+  alternates: { canonical: `${SITE_URL}/galleries` },
 }
 
 /** The sharpest available frame leads a gallery card. */

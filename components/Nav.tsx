@@ -9,6 +9,7 @@ import BrandMark from "@/components/BrandMark"
 import SearchOverlay from "@/components/SearchOverlay"
 import { products, type Product } from "@/lib/products"
 import { services, type Service } from "@/lib/services"
+import { APP_LEADS } from "@/lib/app-leads"
 
 /* ------------------------------------------------------------------
    Data — derived from lib/, never duplicated.
@@ -27,7 +28,6 @@ const PRODUCT_CATEGORIES = [
 const PRODUCT_DESCRIPTOR: Record<string, string> = {
   streetprint: "Patterned hot asphalt pavers",
   streetbond: "Water-based colour coating",
-  mmax: "MMA coating for high wear",
   trafficpatterns: "Preformed pattern sheets",
   "trafficpatterns-xd": "Heavy-duty intersections",
   duratherm: "Inlaid textured surfaces",
@@ -96,33 +96,6 @@ const DRAWER_LINKS: { label: string; href: string }[] = [
   { label: "About", href: "/about" },
 ]
 
-/** One featured frame per category — real installs, tall crops. */
-const CATEGORY_FEATURE: Record<
-  (typeof PRODUCT_CATEGORIES)[number],
-  { src: string; alt: string; caption: string }
-> = {
-  "Stamped Asphalt": {
-    src: "/images/products/streetprint/streetprint-victoria-ellis-point-walkway-01.jpg",
-    alt: "StreetPrint cobblestone walkway at Ellis Point, Victoria",
-    caption: "Ellis Point Walkway · Victoria",
-  },
-  "Decorative Coatings": {
-    src: "/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg",
-    alt: "StreetBond multicolour plaza at Joyce Station, Vancouver, at dusk",
-    caption: "Joyce Station · Vancouver",
-  },
-  "Thermoplastic": {
-    src: "/images/products/traffic-patterns-xd/trafficpatternsxd-victoria-dallas-road-crosswalk-01.jpg",
-    alt: "TrafficPatternsXD crosswalk on Dallas Road, Victoria",
-    caption: "Dallas Road · Victoria",
-  },
-  "Surface Protection": {
-    src: "/images/products/durashield/durashield-protected-asphalt-surface-01.jpg",
-    alt: "DuraShield-protected asphalt surface",
-    caption: "DuraShield · Surface protection",
-  },
-}
-
 /** Services panel — the four trades and the residential line as photo tiles. */
 const SERVICE_TILES: { href: string; name: string; note: string; src: string; alt: string }[] = [
   {
@@ -162,18 +135,18 @@ const SERVICE_TILES: { href: string; name: string; note: string; src: string; al
   },
 ]
 
-/** Where the work goes — the ten application galleries (mirrors lib/work.ts WORK_APPS). */
-const APPLICATIONS: { label: string; href: string }[] = [
-  { label: "Crosswalks", href: "/applications/crosswalks" },
-  { label: "Streetscapes", href: "/applications/streetscapes" },
-  { label: "Roundabouts & traffic calming", href: "/applications/roundabouts" },
-  { label: "Parking lots", href: "/applications/parking-lots" },
-  { label: "Parks & paths", href: "/applications/parks-paths" },
-  { label: "Schools & sports courts", href: "/applications/schools-sports-courts" },
-  { label: "Bike lanes", href: "/applications/bike-lanes" },
-  { label: "Public art", href: "/applications/public-art" },
-  { label: "Branding & wayfinding", href: "/applications/branding-wayfinding" },
-  { label: "Driveways", href: "/driveways" },
+/** Where the work goes — the ten application galleries (mirrors lib/work.ts WORK_APPS), each with its gallery's lead photograph. */
+const APPLICATIONS: { label: string; href: string; slug: string }[] = [
+  { label: "Crosswalks", href: "/applications/crosswalks", slug: "crosswalks" },
+  { label: "Streetscapes", href: "/applications/streetscapes", slug: "streetscapes" },
+  { label: "Roundabouts & traffic calming", href: "/applications/roundabouts", slug: "roundabouts" },
+  { label: "Parking lots", href: "/applications/parking-lots", slug: "parking-lots" },
+  { label: "Parks & paths", href: "/applications/parks-paths", slug: "parks-paths" },
+  { label: "Schools & sports courts", href: "/applications/schools-sports-courts", slug: "schools-sports-courts" },
+  { label: "Bike lanes", href: "/applications/bike-lanes", slug: "bike-lanes" },
+  { label: "Public art", href: "/applications/public-art", slug: "public-art" },
+  { label: "Branding & wayfinding", href: "/applications/branding-wayfinding", slug: "branding-wayfinding" },
+  { label: "Driveways", href: "/driveways", slug: "driveways" },
 ]
 
 const HAIRLINE = "#E7E3DC"
@@ -322,17 +295,22 @@ function ServicesMega({ onNavigate, onMouseEnter, onMouseLeave }: MegaPanelProps
              and the home page carry, as one band under the photographs ──────── */}
       <div className="mt-7 border-t border-[#E7E3DC] pt-5">
         <div className="label">Where it goes</div>
-        <ul className="mt-2 grid grid-cols-4 gap-x-8 min-[1920px]:grid-cols-5">
+        <ul className="mt-3 grid grid-cols-5 gap-x-6 gap-y-1">
           {APPLICATIONS.map((a) => (
             <li key={a.href}>
               <Link
                 href={a.href}
                 onClick={onNavigate}
                 data-mega-item
-                className="group flex items-baseline gap-2 py-[7px] text-[14px] font-medium text-[#3D4147] transition-colors hover:text-[#14161A]"
+                className="group -mx-2 flex items-center gap-3 rounded-[2px] px-2 py-[6px] text-[13.5px] font-medium text-[#3D4147] transition-colors hover:bg-[#FAF8F5] hover:text-[#14161A]"
               >
-                {a.label}
-                <span aria-hidden="true" className="text-[#A9A297] transition-transform duration-200 group-hover:translate-x-1 group-hover:text-[#14161A]">
+                {APP_LEADS[a.slug] && (
+                  <span className="relative block h-[34px] w-[46px] shrink-0 overflow-hidden rounded-[2px] bg-[#F1EEE9]">
+                    <Image src={APP_LEADS[a.slug]} alt="" fill sizes="46px" className="object-cover transition-transform duration-500 group-hover:scale-[1.06]" />
+                  </span>
+                )}
+                <span className="min-w-0 truncate">{a.label}</span>
+                <span aria-hidden="true" className="ml-auto text-[#A9A297] opacity-0 transition-all duration-200 group-hover:translate-x-1 group-hover:opacity-100 group-hover:text-[#14161A]">
                   &rarr;
                 </span>
               </Link>
@@ -362,88 +340,138 @@ function ServicesMega({ onNavigate, onMouseEnter, onMouseLeave }: MegaPanelProps
 }
 
 function ProductsMega({ onNavigate, onMouseEnter, onMouseLeave }: MegaPanelProps) {
-  const [active, setActive] = useState<(typeof PRODUCT_CATEGORIES)[number]>(PRODUCT_CATEGORIES[0])
+  // Every system is on the list at once — nothing hides behind a category.
+  // Pointing at a row swaps the photograph; the row itself is the link.
+  const [active, setActive] = useState<Product>(products[0])
   const panelRef = useRef<HTMLDivElement>(null)
-  const column = productColumns.find((c) => c.category === active) ?? productColumns[0]
-  const feature = CATEGORY_FEATURE[active]
-  const tileCount = column.items.length + (column.items.length < 3 ? 1 : 0)
 
-  // Arrow keys: up/down within a column, right into the product rows,
-  // left back to the category list (Rockstar Part 3).
   const onKeyDown = (e: React.KeyboardEvent) => {
     const panel = panelRef.current
     if (!panel) return
-    const cats = Array.from(panel.querySelectorAll<HTMLElement>("[data-mega-cat]"))
     const items = Array.from(panel.querySelectorAll<HTMLElement>("[data-mega-item]"))
     const el = document.activeElement as HTMLElement | null
-    if (!el) return
-    const inCats = cats.includes(el)
-    const inItems = items.includes(el)
-    if (!inCats && !inItems) return
-    const group = inCats ? cats : items
-    const i = group.indexOf(el)
-    if (e.key === "ArrowDown") { e.preventDefault(); group[Math.min(i + 1, group.length - 1)]?.focus() }
-    if (e.key === "ArrowUp") { e.preventDefault(); group[Math.max(i - 1, 0)]?.focus() }
-    if (e.key === "ArrowRight" && inCats) { e.preventDefault(); items[0]?.focus() }
-    if (e.key === "ArrowLeft" && inItems) { e.preventDefault(); cats.find((c) => c.dataset.megaCat === active)?.focus() }
+    if (!el || !items.includes(el)) return
+    const i = items.indexOf(el)
+    if (e.key === "ArrowDown") { e.preventDefault(); items[Math.min(i + 1, items.length - 1)]?.focus() }
+    if (e.key === "ArrowUp") { e.preventDefault(); items[Math.max(i - 1, 0)]?.focus() }
   }
 
   return (
     <Panel label="Products menu" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
-      <div ref={panelRef} onKeyDown={onKeyDown} className="grid grid-cols-8 gap-x-8">
-        {/* ── Cols 1–2: categories ──────── */}
-        <div className="col-span-2 flex flex-col border-r border-[#E7E3DC] pr-8">
-          {productColumns.map((col) => (
-            <button
-              key={col.category}
-              type="button"
-              data-mega-cat={col.category}
-              onMouseEnter={() => setActive(col.category)}
-              onFocus={() => setActive(col.category)}
-              onClick={() => setActive(col.category)}
-              style={{ fontFamily: "var(--font-display)" }}
-              className={`flex items-baseline justify-between gap-4 rounded-[2px] px-3 py-[14px] text-left text-[12px] font-semibold tracking-[0.12em] uppercase transition-colors duration-150 ${
-                active === col.category
-                  ? "bg-[#FAF8F5] text-[#14161A]"
-                  : "text-[#767B82] hover:text-[#14161A]"
-              }`}
-            >
-              <span>{col.category}</span>
-              <span className="text-[11px] tracking-[0.08em] text-[#A9A297]">
-                {String(col.items.length).padStart(2, "0")}
-              </span>
-            </button>
+      <div ref={panelRef} onKeyDown={onKeyDown} className="grid grid-cols-12 gap-x-10">
+        {/* ── Cols 1–6: every system, grouped by trade — two balanced columns ──────── */}
+        <div className="col-span-6 grid grid-cols-2 gap-x-8 gap-y-6 border-r border-[#E7E3DC] pr-10">
+          {[
+            productColumns.filter((c) => c.category !== "Thermoplastic"),
+            productColumns.filter((c) => c.category === "Thermoplastic"),
+          ].map((groups, gi) => (
+            <div key={gi} className="flex flex-col gap-6">
+              {groups.map((col) => (
+                <div key={col.category}>
+                  <div className="label">{col.category}</div>
+                  <ul className="mt-2">
+                    {col.items.map((product) => {
+                      const on = active.slug === product.slug
+                      return (
+                        <li key={product.slug}>
+                          <Link
+                            href={`/products/${product.slug}`}
+                            onClick={onNavigate}
+                            data-mega-item
+                            onMouseEnter={() => setActive(product)}
+                            onFocus={() => setActive(product)}
+                            className={`group -mx-3 flex items-center justify-between gap-3 rounded-[2px] px-3 py-[9px] transition-colors duration-150 ${
+                              on ? "bg-[#FAF8F5]" : "hover:bg-[#FAF8F5]"
+                            }`}
+                          >
+                            <span className="min-w-0">
+                              <span
+                                className={`block text-[13px] font-semibold uppercase tracking-[0.08em] ${on ? "text-[#14161A]" : "text-[#3D4147]"}`}
+                                style={{ fontFamily: "var(--font-display)" }}
+                              >
+                                {product.name}
+                              </span>
+                              <span className="mt-[2px] block whitespace-nowrap text-[12.5px] leading-[1.4] text-[#767B82]">
+                                {PRODUCT_DESCRIPTOR[product.slug] ?? product.tagline}
+                              </span>
+                            </span>
+                            <span
+                              aria-hidden="true"
+                              className={`shrink-0 text-[15px] leading-none transition-all duration-200 ${
+                                on ? "translate-x-0 text-[#14161A] opacity-100" : "-translate-x-1 text-[#A9A297] opacity-0 group-hover:opacity-100"
+                              }`}
+                            >
+                              &rarr;
+                            </span>
+                          </Link>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                </div>
+              ))}
+            </div>
           ))}
-          <Link href="/products" onClick={onNavigate} className="arrow-link mt-auto px-3 pt-6">
-            All products <span>&rarr;</span>
-          </Link>
+          <div className="col-span-2 flex flex-wrap items-center gap-x-8 gap-y-2 border-t border-[#E7E3DC] pt-5">
+            <Link href="/products" onClick={onNavigate} className="arrow-link">
+              All products <span>&rarr;</span>
+            </Link>
+            <Link href="/resources" onClick={onNavigate} className="arrow-link">
+              Specifications &amp; documents <span>&rarr;</span>
+            </Link>
+          </div>
         </div>
 
-        {/* ── Cols 3–8: the active category as large photo tiles ─ */}
+        {/* ── Cols 7–12: the active system, photographed ──────── */}
         <div className="col-span-6">
-          <div className={`grid gap-5 ${tileCount <= 2 ? "grid-cols-2" : "grid-cols-3"}`}>
-            {column.items.map((product) => (
-              <MegaTile
-                key={product.slug}
-                href={`/products/${product.slug}`}
-                src={product.image}
-                alt={`${product.name} installed by Square One`}
-                name={product.name}
-                note={PRODUCT_DESCRIPTOR[product.slug] ?? product.tagline}
-                onNavigate={onNavigate}
-              />
-            ))}
-            {column.items.length < 3 && (
-              <MegaTile
-                href="/projects"
-                src={feature.src}
-                alt={feature.alt}
-                name="In the field"
-                note={feature.caption}
-                onNavigate={onNavigate}
-              />
-            )}
-          </div>
+          <Link
+            href={`/products/${active.slug}`}
+            onClick={onNavigate}
+            className="group relative block aspect-[16/9] overflow-hidden rounded-[2px] bg-[#F1EEE9]"
+            tabIndex={-1}
+            aria-hidden="true"
+          >
+            <AnimatePresence initial={false}>
+              <motion.span
+                key={active.slug}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.22, ease: "easeOut" }}
+                className="absolute inset-0"
+              >
+                <Image
+                  src={active.image}
+                  alt=""
+                  fill
+                  sizes="(max-width: 1280px) 50vw, 620px"
+                  className="object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+                />
+              </motion.span>
+            </AnimatePresence>
+            <span aria-hidden="true" className="scrim" />
+            <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-6 p-6">
+              <span className="min-w-0">
+                <span className="block text-[11px] font-semibold uppercase tracking-[0.14em] text-white/70" style={{ fontFamily: "var(--font-display)" }}>
+                  {active.category}
+                </span>
+                <span className="mt-2 block text-[22px] font-semibold uppercase leading-[1.1] tracking-[0.05em] text-white" style={{ fontFamily: "var(--font-display)" }}>
+                  {active.name}
+                  {active.mark && <sup className="ml-[0.1em] text-[0.45em] font-medium align-super">{active.mark}</sup>}
+                </span>
+                <span className="mt-2 block max-w-[46ch] text-[13.5px] leading-[1.5] text-white/80">
+                  {active.tagline}
+                </span>
+              </span>
+              <span
+                aria-hidden="true"
+                className="mb-1 shrink-0 text-[13px] font-semibold uppercase tracking-[0.1em] text-white/80 transition-colors group-hover:text-white"
+                style={{ fontFamily: "var(--font-display)" }}
+              >
+                See the system &rarr;
+              </span>
+            </span>
+          </Link>
         </div>
       </div>
     </Panel>
@@ -475,6 +503,28 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
       </div>
 
       <nav aria-label="Mobile" className="flex-1 overflow-auto px-6 pt-2 pb-6">
+        {/* The five services as a swipeable photo rail — the desktop panel's
+            first row, one thumb-width at a time. */}
+        <div className="-mx-6 flex snap-x snap-mandatory gap-3 overflow-x-auto px-6 pt-3 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {SERVICE_TILES.map((tile) => (
+            <Link
+              key={tile.href}
+              href={tile.href}
+              onClick={onClose}
+              className="relative block aspect-[4/3] w-[62vw] max-w-[260px] shrink-0 snap-start overflow-hidden rounded-[2px] bg-[#F1EEE9]"
+            >
+              <Image src={tile.src} alt={tile.alt} fill sizes="62vw" className="object-cover" />
+              <span aria-hidden="true" className="scrim" />
+              <span className="absolute inset-x-0 bottom-0 p-3">
+                <span className="block text-[12px] font-semibold uppercase tracking-[0.1em] text-white" style={{ fontFamily: "var(--font-display)" }}>
+                  {tile.name}
+                </span>
+                <span className="mt-[2px] block text-[12px] text-white/75">{tile.note}</span>
+              </span>
+            </Link>
+          ))}
+        </div>
+
         {DRAWER_LINKS.map((link) => (
           <Link
             key={link.href}
@@ -504,10 +554,15 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
         </div>
 
         <div className="label mt-8">Applications</div>
-        <div className="mt-3 grid grid-cols-2 gap-x-6">
+        <div className="mt-3 grid grid-cols-2 gap-x-4">
           {APPLICATIONS.filter((a) => a.href !== "/driveways").map((a) => (
-            <Link key={a.href} href={a.href} onClick={onClose} className="py-[9px] text-[16px] font-medium text-[#3D4147]">
-              {a.label}
+            <Link key={a.href} href={a.href} onClick={onClose} className="flex items-center gap-3 py-[7px] text-[15px] font-medium text-[#3D4147]">
+              {APP_LEADS[a.slug] && (
+                <span className="relative block h-[30px] w-[40px] shrink-0 overflow-hidden rounded-[2px] bg-[#F1EEE9]">
+                  <Image src={APP_LEADS[a.slug]} alt="" fill sizes="40px" className="object-cover" />
+                </span>
+              )}
+              <span className="min-w-0 leading-[1.25]">{a.label}</span>
             </Link>
           ))}
         </div>

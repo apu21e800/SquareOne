@@ -1,6 +1,6 @@
 import Link from "next/link"
 import PatternTile from "@/components/PatternTile"
-import { FEATURED_COLOURS, STREETPRINT_PATTERNS } from "@/lib/palette"
+import { FEATURED_COLOURS, STREETPRINT_PATTERNS, STREETPRINT_CATALOGUE_URL } from "@/lib/palette"
 
 /**
  * The materials board — replaces the field panorama (5 Sept 2026, Vern:
@@ -35,6 +35,9 @@ export default function MaterialsBand() {
             <Link href="/products/streetprint" className="arrow-link whitespace-nowrap">
               StreetPrint patterns <span>&rarr;</span>
             </Link>
+            <a href={STREETPRINT_CATALOGUE_URL} target="_blank" rel="noopener" className="arrow-link whitespace-nowrap">
+              HUB&rsquo;s template catalogue <span>&#8599;</span>
+            </a>
             <Link href="/products/streetbond" className="arrow-link whitespace-nowrap">
               StreetBond colours <span>&rarr;</span>
             </Link>
@@ -42,9 +45,9 @@ export default function MaterialsBand() {
         </div>
 
         {/* ── Templates, drawn ──────── */}
-        <div data-reveal-group className="mt-12 grid grid-cols-8 gap-4 max-[1100px]:grid-cols-4 max-[560px]:grid-cols-3 max-[560px]:gap-3">
+        <div data-reveal-group className="mt-12 grid grid-cols-5 gap-4 max-[1100px]:grid-cols-5 max-[700px]:grid-cols-2 max-[700px]:gap-3">
           {STREETPRINT_PATTERNS.map((pattern) => (
-            <Link key={pattern.id} href="/products/streetprint" data-reveal className="group block">
+            <Link key={pattern.id} href={`/driveways?pattern=${pattern.id}#patterns`} data-reveal className="group block" title={`See ${pattern.name} in colour`}>
               <div
                 className="pattern-tile relative aspect-[4/3] overflow-hidden rounded-[2px] border bg-surface-slate"
                 style={{ borderColor: "var(--hairline-slate)" }}
@@ -59,7 +62,7 @@ export default function MaterialsBand() {
         {/* ── Colours, by their published names ──────── */}
         <div data-reveal-group className="mt-10 grid grid-cols-12 gap-3 max-[1100px]:grid-cols-6 max-[560px]:grid-cols-4 max-[560px]:gap-2">
           {FEATURED_COLOURS.map((swatch) => (
-            <Link key={swatch.name} href="/products/streetbond" data-reveal className="group block">
+            <Link key={swatch.name} href={`/driveways?colour=${encodeURIComponent(swatch.name)}#patterns`} data-reveal className="group block" title={`See ${swatch.name} on a pattern`}>
               <div
                 aria-hidden="true"
                 className="chip h-14 transition-transform duration-200 group-hover:-translate-y-[2px]"
@@ -71,9 +74,11 @@ export default function MaterialsBand() {
           ))}
         </div>
 
-        <p className="mt-8 max-w-[64ch] text-[13px] leading-[1.6] text-ink-muted">
-          Names and ranges as HUB publishes them; on-screen colour varies from the cast colour.
-          Every pattern and colour above is installed to the manufacturer&apos;s specification.
+        <p className="mt-8 max-w-[70ch] text-[13px] leading-[1.6] text-ink-muted">
+          The ten popular patterns from HUB&rsquo;s StreetPrint&reg; template catalogue, named as HUB
+          prints them &mdash; a selection, not the whole library; custom templates are cut to order,
+          ask us. Colour names and ranges as HUB publishes them; on-screen colour varies from the cast
+          colour. Every pattern and colour above is installed to the manufacturer&apos;s specification.
         </p>
       </div>
     </section>

@@ -123,6 +123,8 @@ export type PatternId =
   | "stone"
   | "eurofan"
   | "scallop"
+  | "tile-sets"
+  | "border"
 
 export interface Pattern {
   id: PatternId
@@ -131,13 +133,29 @@ export interface Pattern {
   family: string
 }
 
+/**
+ * HUB's StreetPrint Template Catalog, "Popular Patterns", sections 1.0-10.0,
+ * named and spelled exactly as HUB prints them (verified against the
+ * catalogue's contents page, 11 Sept 2026). The five "Special Purpose"
+ * sections — Accent, Radial & Arch Extensions, Numbers & Letters, Signage &
+ * Playground, International — are left out on purpose: the page says the
+ * list is a selection and custom templates are cut to order. HUB's part
+ * numbers never appear on the site; the catalogue is linked instead.
+ * "Random stone" was never a HUB name — section 6.0 is Stone Templates and
+ * holds Random Slate, Thompson Stone and Random Cobble.
+ */
 export const STREETPRINT_PATTERNS: Pattern[] = [
-  { id: "offset-brick", name: "Offset brick", family: "Brick templates" },
-  { id: "herringbone", name: "Herringbone", family: "Standard herringbone" },
-  { id: "diagonal-herringbone", name: "Diagonal herringbone", family: "Diagonal herringbone" },
-  { id: "ashlar-slate", name: "Ashlar slate", family: "Ashlar slate" },
-  { id: "british-cobble", name: "British cobble", family: "British cobble" },
-  { id: "stone", name: "Random stone", family: "Stone templates" },
-  { id: "eurofan", name: "Eurofan", family: "Eurofan templates" },
-  { id: "scallop", name: "Scallop", family: "Scallop templates" },
+  { id: "offset-brick", name: "Offset Brick", family: "Section 1.0" },
+  { id: "diagonal-herringbone", name: "Diagonal Herringbone", family: "Section 2.0" },
+  { id: "herringbone", name: "Standard Herringbone", family: "Section 3.0" },
+  { id: "ashlar-slate", name: "Ashlar Slate", family: "Section 4.0" },
+  { id: "british-cobble", name: "British Cobble", family: "Section 5.0" },
+  { id: "stone", name: "Stone Templates", family: "Section 6.0 — Random Slate, Thompson Stone, Random Cobble" },
+  { id: "eurofan", name: "Eurofan Templates", family: "Section 7.0" },
+  { id: "scallop", name: "Scallop Templates", family: "Section 8.0" },
+  { id: "tile-sets", name: "Tile Sets", family: "Section 9.0" },
+  { id: "border", name: "Border Templates", family: "Section 10.0" },
 ]
+
+/** HUB's public catalogue — linked, never hosted, so it is always the current one. */
+export const STREETPRINT_CATALOGUE_URL = "https://hubss.com/docs/streetprint/streetprint-template-catalog.pdf"

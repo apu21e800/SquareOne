@@ -8,9 +8,13 @@ import { products, getProductBySlug } from "@/lib/products"
 import { STREETBOND_COLOURS, COLOUR_RANGES } from "@/lib/palette"
 import { galleryWithFallback } from "@/lib/gallery"
 import { resourceGroups } from "@/lib/resources"
+import DocumentRail from "@/components/documents/DocumentRail"
 import { getWork, WORK_APPS } from "@/lib/work"
 import type { WorkAppMeta } from "@/lib/work"
 import WorkGallery from "@/components/WorkGallery"
+import { SITE_URL } from "@/lib/site"
+import JsonLd, { breadcrumbSchema } from "@/components/JsonLd"
+import { clampDescription } from "@/lib/seo"
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -26,8 +30,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!product) return {}
   return {
     title: `${product.name} | Pavement Systems BC`,
-    description: product.shortDescription,
-    alternates: { canonical: `https://squareonepaving.ca/products/${product.slug}` },
+    description: clampDescription(product.shortDescription),
+    alternates: { canonical: `${SITE_URL}/products/${product.slug}` },
   }
 }
 
@@ -156,6 +160,7 @@ export default async function ProductPage({ params }: Props) {
 
   return (
     <main className="bg-surface">
+      <JsonLd data={[breadcrumbSchema(SITE_URL, [{ name: "Products", path: "/products" }, { name: product.name, path: `/products/${product.slug}` }])]} />
       {/* ── 60vh opener — the product on real ground (Rockstar Part 4) ─ */}
       <section
         data-nav-on-image
@@ -175,6 +180,7 @@ export default async function ProductPage({ params }: Props) {
           <div className="eyebrow eyebrow-on-image">{product.category}</div>
           <h1 className="display-xl stop mt-4 max-w-[16ch] text-white [text-wrap:balance]">
             {product.name}
+            {product.mark && <sup className="ml-[0.08em] text-[0.38em] font-medium align-super">{product.mark}</sup>}
           </h1>
         </div>
       </section>
@@ -450,22 +456,9 @@ export default async function ProductPage({ params }: Props) {
               The full library <span aria-hidden="true">&rarr;</span>
             </Link>
           </div>
-          <ul className="mt-10 border-t border-hairline">
-            {docs.map((doc) => (
-              <li key={doc.href} className="border-b border-hairline">
-                <a
-                  href={doc.href}
-                  download
-                  className="group flex flex-wrap items-baseline justify-between gap-x-8 gap-y-1 py-4 no-underline"
-                >
-                  <span className="text-[16px] font-medium text-ink group-hover:text-accent-deep">{doc.name}</span>
-                  <span className="text-[13px] text-ink-muted">
-                    {doc.type} &middot; {doc.size} &middot; PDF
-                  </span>
-                </a>
-              </li>
-            ))}
-          </ul>
+          <div className="mt-10">
+            <DocumentRail docs={docs} product={product.name} />
+          </div>
         </Band>
       )}
 

@@ -98,14 +98,14 @@ const CATEGORY_DIRS: Record<string, WorkApp> = {
 
 // ── Caption parsing ─────────────────────────────────────────────────────────
 
-const SYSTEMS = ["TrafficPatternsXD", "TrafficPatterns", "StreetPrint", "StreetBond", "DecoMark", "DuraTherm", "PreMark", "MMAX"]
+const SYSTEMS = ["TrafficPatternsXD", "TrafficPatterns", "StreetPrint", "StreetBond", "DecoMark", "DuraTherm", "PreMark"]
 
 /** Spelling fixes for the archived filenames, applied before parsing. */
 const FIX: [string, string][] = [
   ["Sannich", "Saanich"], ["Richomond", "Richmond"], ["Rochmond", "Richmond"], ["Granvile", "Granville"],
   ["Enterence", "Entrance"], ["Broowning", "Browning"], ["Maridian", "Median"], ["Childrens", "Children's"],
   ["Children’s", "Children's"], ["St. Pauls", "St. Paul's"], ["St. Michaels", "St. Michael's"],
-  ["Cycle Grip MMAX", "MMAX"], ["Robson St,", "Robson Street,"], ["Commercial Dr,", "Commercial Drive,"],
+  ["Robson St,", "Robson Street,"], ["Commercial Dr,", "Commercial Drive,"],
   ["FireTruck", "Fire truck"], ["BikeLane", "Bike Lane"], ["Town Home", "Townhome"],
 ]
 

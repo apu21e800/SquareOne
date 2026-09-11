@@ -2,13 +2,15 @@ import Image from "next/image"
 import Link from "next/link"
 import IndexImageHero from "@/components/IndexImageHero"
 import { Metadata } from "next"
+import { SITE_URL } from "@/lib/site"
+import { clampDescription } from "@/lib/seo"
 
 export const metadata: Metadata = {
   title: "Applications | Decorative Pavement Across BC",
   description:
-    "Decorative paving for crosswalks, commercial spaces, bike lanes, parks and public art across BC — plus residential driveways and vapour blasting. Square One Paving — Lower Mainland and Vancouver Island.",
+    clampDescription("Decorative paving for crosswalks, commercial spaces, bike lanes, parks and public art across BC — plus residential driveways and vapour blasting. Square One Paving — Lower Mainland and Vancouver Island."),
   alternates: {
-    canonical: "https://squareonepaving.ca/applications",
+    canonical: `${SITE_URL}/applications`,
   },
 }
 
@@ -87,7 +89,7 @@ const applications: AppCard[] = [
   {
     title: "Bike lanes",
     tag: "Municipal",
-    desc: "Green bike lanes and red priority lanes in PreMark thermoplastic and MMAX coatings — colour that survives sweepers and winter grit.",
+    desc: "Green bike lanes and red priority lanes in PreMark thermoplastic and StreetBond coatings — colour that survives sweepers and winter grit.",
     image: `${FIO}/Photo-2024-07-04-10-58-08-AM-scaled.jpg`,
     alt: "Red brick stamped asphalt multi-use path with bike lane markings",
     cta: "See the work",

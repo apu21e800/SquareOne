@@ -7,6 +7,9 @@ import type { Metadata } from "next"
 import { services, getServiceBySlug } from "@/lib/services"
 import { projects } from "@/lib/projects"
 import { heroFor } from "@/lib/gallery"
+import { SITE_URL } from "@/lib/site"
+import JsonLd, { breadcrumbSchema, faqSchema } from "@/components/JsonLd"
+import { clampDescription } from "@/lib/seo"
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -55,9 +58,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const service = getServiceBySlug(slug)
   if (!service) return {}
   return {
-    title: `${service.name} | Decorative Pavement BC`,
-    description: service.shortDescription,
-    alternates: { canonical: `https://squareonepaving.ca/services/${service.slug}` },
+    title: `${service.name} in BC`,
+    description: clampDescription(service.shortDescription),
+    alternates: { canonical: `${SITE_URL}/services/${service.slug}` },
   }
 }
 
@@ -79,8 +82,31 @@ export default async function ServicePage({ params }: Props) {
     { label: "Key benefits", items: service.benefits },
   ]
 
+  const serviceSchema = {
+    "@type": "Service",
+    name,
+    serviceType: name,
+    description: service.shortDescription,
+    provider: { "@id": `${SITE_URL}/#organization` },
+    areaServed: [
+      { "@type": "AdministrativeArea", name: "Lower Mainland, British Columbia" },
+      { "@type": "AdministrativeArea", name: "Vancouver Island, British Columbia" },
+    ],
+    url: `${SITE_URL}/services/${service.slug}`,
+  }
+
   return (
     <main>
+      <JsonLd
+        data={[
+          serviceSchema,
+          faqSchema(service.faqs),
+          breadcrumbSchema(SITE_URL, [
+            { name: "Services", path: "/services" },
+            { name, path: `/services/${service.slug}` },
+          ]),
+        ]}
+      />
       {/* ── Service header ─────────────────────────────────────── */}
       <section className="section bg-surface">
         <div className="container-1280">
@@ -225,6 +251,36 @@ export default async function ServicePage({ params }: Props) {
                 <h3 className="mt-5 text-pretty">{product}</h3>
               </article>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Questions ────────────────────────────────────────────── */}
+      <section className="section border-t border-[color:var(--hairline)] bg-surface">
+        <div className="container-1280">
+          <div className="grid grid-cols-12 gap-x-12 gap-y-8 max-[900px]:grid-cols-1">
+            <div className="col-span-4 max-[900px]:col-span-1">
+              <div className="eyebrow">Questions</div>
+              <h2 className="mt-5 [text-wrap:balance]">What people ask about {lowerName}</h2>
+              <p className="mt-5 max-w-[36ch] text-[15px] leading-[1.6] text-ink-muted">
+                Short answers, in the same words the page already uses. For the specification
+                itself, the documents are in the library.
+              </p>
+            </div>
+            <div className="col-span-8 border-t border-[color:var(--hairline)] max-[900px]:col-span-1">
+              {service.faqs.map((faq, i) => (
+                <details key={faq.q} open={i === 0} className="group border-b border-[color:var(--hairline)]">
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-[20px] [&::-webkit-details-marker]:hidden">
+                    <span className="text-[1.125rem] font-semibold leading-[1.4] tracking-[-0.01em] text-ink">{faq.q}</span>
+                    <span aria-hidden="true" className="flex-shrink-0 text-[22px] font-normal leading-none text-ink-muted">
+                      <span className="group-open:hidden">+</span>
+                      <span className="hidden group-open:inline">&minus;</span>
+                    </span>
+                  </summary>
+                  <p className="max-w-[64ch] pb-6 pr-10 text-[15px] leading-[1.65] text-ink-body max-[700px]:pr-0">{faq.a}</p>
+                </details>
+              ))}
+            </div>
           </div>
         </div>
       </section>

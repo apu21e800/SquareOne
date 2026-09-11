@@ -5,6 +5,8 @@ import { projects } from "@/lib/projects"
 import { WORK_APPS, workFor } from "@/lib/work"
 import IndexImageHero from "@/components/IndexImageHero"
 import ProjectsIndexClient, { type ProjectCard } from "./ProjectsIndexClient"
+import { SITE_URL } from "@/lib/site"
+import { clampDescription } from "@/lib/seo"
 
 /**
  * Projects index — docs/design-v2/Index Pages.dc.html (#projects).
@@ -24,8 +26,8 @@ const FIO = "/images/S1_update_v2/photos/Featured%20image%20options"
 export const metadata: Metadata = {
   title: "Decorative Pavement Projects Across BC",
   description:
-    "Case studies from Square One Paving — crosswalks, public art, transit stations, spray parks, parking lots and driveways from Metro Vancouver to Vancouver Island and the Interior, since 2000.",
-  alternates: { canonical: "https://squareonepaving.ca/projects" },
+    clampDescription("Case studies from Square One Paving — crosswalks, public art, transit stations, spray parks, parking lots and driveways from Metro Vancouver to Vancouver Island and the Interior, since 2000."),
+  alternates: { canonical: `${SITE_URL}/projects` },
 }
 
 const APP_HREF: Record<string, string> = Object.fromEntries(

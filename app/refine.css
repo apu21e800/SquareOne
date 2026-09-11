@@ -127,7 +127,7 @@ h1, h2, h3, .display-xl, .display-statement { overflow-wrap: break-word; }
 .ghost-index, .ghost-index-slate, .ghost-index-stone { display: none; }
 
 /* ---- The offer card (home, driveways band): the page's one orange block.
-   White type, a white button, and the square motif drawn in the corner. ---- */
+   White type, a white button, nothing else. ---- */
 .offer-card {
   position: relative;
   overflow: hidden;
@@ -136,27 +136,8 @@ h1, h2, h3, .display-xl, .display-statement { overflow-wrap: break-word; }
   color: #FFFFFF;
   padding: 28px 30px 30px;
 }
-.offer-card::after {
-  content: "";
-  position: absolute;
-  right: 22px;
-  top: 22px;
-  width: 14px;
-  height: 14px;
-  border-radius: 2px;
-  background: rgba(255, 255, 255, 0.92);
-}
-.offer-card::before {
-  content: "";
-  position: absolute;
-  right: -34px;
-  bottom: -34px;
-  width: 132px;
-  height: 132px;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  border-radius: 4px;
-  pointer-events: none;
-}
+/* The two decorative squares (::before / ::after) were retired 11 Sept
+   2026 — at card size they read as a stray checkbox and a clipped frame. */
 .offer-title {
   font-family: var(--font-display);
   margin: 0;
@@ -242,3 +223,34 @@ h1, h2, h3, .display-xl, .display-statement { overflow-wrap: break-word; }
     --gutter: 64px;
   }
 }
+
+/* ── The Futura option (11 Sept 2026 — Vern: "let's see both") ──────────
+   <html data-type="futura"> swaps the display face to Jost (the open
+   Futura-family cut; a licensed Futura drops into the same variable in
+   app/layout.tsx) and the text face to Inter, and restores the Jost caps
+   tracking the site ran before 4 Sept (0.065em H1, 0.075em H2, 0.06em at
+   hero scale). Poppins stays the default; nothing here applies without the
+   attribute. Set by components/TypeToggle or ?type=futura. */
+html[data-type="futura"] {
+  --font-display: var(--font-jost), Futura, "Century Gothic", ui-sans-serif, sans-serif;
+}
+html[data-type="futura"] body {
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  font-size: 16.5px;
+}
+html[data-type="futura"] h1 { letter-spacing: 0.065em; font-weight: 600; }
+html[data-type="futura"] h2 { letter-spacing: 0.075em; font-weight: 600; }
+html[data-type="futura"] .display-xl { letter-spacing: 0.06em; }
+html[data-type="futura"] .display-statement { letter-spacing: 0.065em; }
+html[data-type="futura"] .label,
+html[data-type="futura"] .eyebrow { letter-spacing: 0.14em; }
+html[data-type="futura"] .btn-primary,
+html[data-type="futura"] .btn-secondary,
+html[data-type="futura"] .btn-on-slate,
+html[data-type="futura"] .btn-on-image { letter-spacing: 0.12em; }
+html[data-type="futura"] h3,
+html[data-type="futura"] h4 { letter-spacing: 0; }
+
+/* Search overlay — one clear control, ours; the browser's own is hidden. */
+.search-input::-webkit-search-cancel-button,
+.search-input::-webkit-search-decoration { -webkit-appearance: none; appearance: none; display: none; }

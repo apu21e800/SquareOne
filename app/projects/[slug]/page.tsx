@@ -7,6 +7,9 @@ import { projects, getProjectBySlug } from "@/lib/projects"
 import { galleryFor } from "@/lib/gallery"
 import { WORK_APPS } from "@/lib/work"
 import ProjectGallery from "@/components/ProjectGallery"
+import { SITE_URL } from "@/lib/site"
+import JsonLd, { breadcrumbSchema } from "@/components/JsonLd"
+import { clampDescription } from "@/lib/seo"
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -74,11 +77,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!project) return {}
   return {
     title: { absolute: `${project.title} | Square One Paving` },
-    description: project.excerpt,
-    alternates: { canonical: `https://squareonepaving.ca/projects/${slug}` },
+    description: clampDescription(project.excerpt),
+    alternates: { canonical: `${SITE_URL}/projects/${slug}` },
     openGraph: {
       title: `${project.title} | Square One Paving`,
-      description: project.excerpt,
+      description: clampDescription(project.excerpt),
       images: [project.imageUrl],
     },
   }
@@ -134,6 +137,7 @@ export default async function ProjectPage({ params }: Props) {
 
   return (
     <main className="bg-[color:var(--surface)]">
+      <JsonLd data={[breadcrumbSchema(SITE_URL, [{ name: "Projects", path: "/projects" }, { name: project.title, path: `/projects/${project.slug}` }])]} />
 
       {/* ── 01 Project header ──────── */}
       <section className="pt-[calc(var(--bar-h)+96px)] max-[700px]:pt-[calc(var(--bar-h)+56px)]">

@@ -10,7 +10,7 @@ const steps: { num: string; title: string; body: string; meta: string }[] = [
   {
     num: "02",
     title: "Specification",
-    body: "We pick the system that fits the surface — StreetPrint, StreetBond, TrafficPatterns, MMAX. The wrong product on the right surface is a five-year repair bill.",
+    body: "We pick the system that fits the surface — StreetPrint, StreetBond, TrafficPatterns. The wrong product on the right surface is a five-year repair bill.",
     meta: "Day 2–3",
   },
   {

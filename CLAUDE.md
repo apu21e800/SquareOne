@@ -4,7 +4,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Client
 Square One Paving — BC's trusted decorative pavement studio since 2000.
-Independent BC pavement specialists serving the Lower Mainland and Vancouver Island.
+Independent BC installer of HUB Surface Systems products, serving the Lower Mainland and Vancouver Island.
+**Installer, not manufacturer.** HUB makes StreetPrint, StreetBond, TrafficPatterns etc.; Square One installs them. Never "our StreetPrint", never "we developed"; performance figures are HUB's and are attributed; ® / ™ on first mention per page; HUB warrants the material, Square One warrants the workmanship; no pricing, lead times or stock claims.
 - Office: 505-20800 Lougheed Hwy, Maple Ridge, BC V2X 3P2 (office@squareonepaving.com / 604-466-9902)
 - Vancouver Island is a service region with its own line (250-391-0270) — never an office, address or "base"
 - Toll-free 1-877-391-0270. No other phone numbers, emails or addresses belong on the site.
@@ -14,14 +15,28 @@ Stamped asphalt, decorative coatings, preformed thermoplastic, and vapor blastin
 for municipalities, developers, and contractors across BC.
 
 **Services** (4): Stamped Asphalt, Decorative Coatings, Preformed Thermoplastic, Vapor Blasting
-**Products** (9): StreetPrint, StreetBond, TrafficPatterns, TrafficPatternsXD, DecoMark, DuraShield, DuraTherm, MMAX, PreMark
+**Products** (8): StreetPrint, StreetBond, TrafficPatterns, TrafficPatternsXD, DecoMark, DuraShield, DuraTherm, PreMark
+(MMAX and the StreetBond Pro 220 / Pro 250 [MMA] variants were removed 11 Sept 2026 — Square One does not install MMA systems. Do not add them back.)
 **Applications**: Crosswalks, Bus & Bike Lanes, Parking Lots, Driveways, School Zones, Public Spaces, Surface Prep
+
+## Answer-engine SEO
+FAQPage / BreadcrumbList / Service JSON-LD via `components/JsonLd.tsx`; `/llms.txt` is generated from lib data (app/llms.txt/route.ts); every metadata description goes through `clampDescription` (lib/seo.ts). Service FAQs live in lib/services.ts and may only restate what the page already says.
+
+## Driveway composer
+`components/DrivewayComposer.tsx` — pattern × colour sample board (drawn, not photographed). On /driveways and /driveways/[city]; the home materials board deep-links into it; the enquiry arrives at /contact pre-filled.
+
+## Documents (lib/resources.ts)
+107 hosted PDFs in /public/docs, page-one previews pre-rendered to /public/docs-previews by `node scripts/doc-previews.mjs` (run it after adding or replacing a PDF; needs poppler + Pillow locally). 36 documents carry `hub:` — the identical file on hubss.com, verified against HUB's own registry. Product pages render a typed rail (components/documents/DocumentRail); /resources and the search overlay share the preview modal.
 
 ## Brand
 <!-- Type system: ONE face (canon §2.5 as amended 4 Sept 2026, Vern's call) —
      Poppins carries display at 600 spaced caps and body at 400/500. Nothing
-     renders below weight 400 except the ghost numerals at 300. The earlier
-     Fraunces + Inter amendment (2026-08-28) is superseded. See app/layout.tsx. -->
+     renders below weight 400. The earlier Fraunces + Inter amendment
+     (2026-08-28) is superseded. See app/layout.tsx.
+     11 Sept 2026: a Futura OPTION exists for comparison only — Jost display +
+     Inter text behind <html data-type="futura">, switched by
+     components/TypeToggle (visible on preview deployments) or ?type=futura.
+     Poppins stays the default until Vern and the client choose. -->
 - Colors: Warm beige background (#F5F3F0), orange accent (#C85A3A), stone (#8B8680), charcoal (#2D2D2D)
 - Tone: Professional, practical, BC-focused
 - Positioning: "BC's Trusted Decorative Pavement Applicators" — quality work that lasts
@@ -42,7 +57,7 @@ for municipalities, developers, and contractors across BC.
 Copy .env.local.example → .env.local and fill in:
 - RESEND_API_KEY — from resend.com (required for contact form)
 - CONTACT_EMAIL — receiving address (defaults to office@squareonepaving.com)
-- NEXT_PUBLIC_SITE_URL — public site URL for sitemap/OG tags (defaults to https://squareonepaving.ca)
+- NEXT_PUBLIC_SITE_URL — public site URL for canonical/sitemap/robots/schema/OG (defaults to https://squareonepaving.com in `lib/site.ts`; every absolute URL derives from `SITE_URL` there — never hard-code the host)
 
 ## Architecture
 
@@ -53,7 +68,7 @@ All content is managed via TypeScript interfaces in `lib/`:
 - Interface: `Service` with slug, name, tagline, descriptions, productsIncluded, applications, idealClients, benefits, imageUrl
 - Export: `services[]` array + `getServiceBySlug(slug)` helper
 
-**lib/products.ts** — 9 HUB Surface Systems products
+**lib/products.ts** — 8 HUB Surface Systems products (installed by Square One; HUB manufactures)
 - Interface: `Product` with slug, name, category, descriptions, keyBenefits, applications, image, galleryImages, **serviceSlug** (links product → service)
 - Categories: "Stamped Asphalt" | "Decorative Coatings" | "Thermoplastic" | "Surface Protection"
 - Export: `products[]` array + `getProductBySlug(slug)` helper
@@ -78,7 +93,7 @@ app/
 │   ├── [slug]/page.tsx         # Service detail
 │   └── vapor-blasting/page.tsx # Dedicated vapor blasting page
 ├── products/
-│   ├── page.tsx                # Products listing (9 products)
+│   ├── page.tsx                # Products listing (8 products)
 │   └── [slug]/page.tsx         # Product detail (gallery + specs)
 ├── applications/
 │   ├── page.tsx                # Applications listing
@@ -104,7 +119,7 @@ app/
 ### Service-Product Relationship
 Products link to services via `serviceSlug`:
 - "stamped-asphalt" service → StreetPrint, TrafficPatternsXD products
-- "decorative-coatings" service → StreetBond, MMAX, DuraShield products
+- "decorative-coatings" service → StreetBond, DuraShield products
 - "preformed-thermoplastic" service → TrafficPatterns, DecoMark, DuraTherm, PreMark products
 - "vapor-blasting" service → standalone (no products)
 
@@ -187,4 +202,4 @@ npm run start   # Run production build locally
 - **Repo**: Connected to GitHub
 - **Auto-deploy**: Push to `main` branch triggers production deployment
 - **Environment variables**: Set in Vercel dashboard (RESEND_API_KEY, CONTACT_EMAIL, NEXT_PUBLIC_SITE_URL)
-- **Domain**: squareonepaving.ca (and .com redirect)
+- **Domain**: squareonepaving.com is the canonical host in code (`lib/site.ts`). Which of .com / .ca is production and which redirects is Vern's call — set NEXT_PUBLIC_SITE_URL in Vercel if it is not .com.

@@ -9,6 +9,13 @@ const nextConfig: NextConfig = {
   outputFileTracingExcludes: {
     "**/*": ["public/**"],
   },
+  // The blog routes revalidate hourly (app/blog/**). lib/blog reads
+  // content/blog with fs at runtime when a page regenerates, and the tracer
+  // cannot see a directory read, so the MDX is pinned into those functions.
+  outputFileTracingIncludes: {
+    "/blog": ["./content/blog/**"],
+    "/blog/[slug]": ["./content/blog/**"],
+  },
   async redirects() {
     return [
       // Products
@@ -17,7 +24,7 @@ const nextConfig: NextConfig = {
       { source: "/streetprint", destination: "/products/streetprint", permanent: true },
       { source: "/streetbond", destination: "/products/streetbond", permanent: true },
       { source: "/streetbondsr", destination: "/products/streetbond", permanent: true },
-      { source: "/mmax-2", destination: "/products/mmax", permanent: true },
+      { source: "/mmax-2", destination: "/products", permanent: true },
       { source: "/decomark", destination: "/products/decomark", permanent: true },
       { source: "/duratherm-2", destination: "/products/duratherm", permanent: true },
       { source: "/durashield", destination: "/products/durashield", permanent: true },
