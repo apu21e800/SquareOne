@@ -26,8 +26,6 @@ const BANNED = [
   ["416-540-9287", "HUB East number"],
   ["info@hubss.com", "HUB email"],
   ["cleve.stordy", "personal email"],
-  ["250-216-2190", "Jan's mobile — never on the website"],
-  ["jan@squareone", "Jan's email — never on the website"],
   ["America/Toronto", "wrong timezone"],
   // Invented promises and standards
   ["within 48 hours", "quote turnaround Square One has not published"],
@@ -42,7 +40,6 @@ const BANNED = [
   ["Authorized applicator", "relationship wording not approved (§9 Q6)"],
   ["certified crew", "certification not on record"],
   ["Manufacturer-certified", "certification not on record"],
-  ["main western Canada applicator", "eyes-only fact"],
   // Products and lines Square One does not offer
   ["AirMark", "not an S1 product"],
   ["ChipFill", "repair product — not offered"],
@@ -54,6 +51,18 @@ const BANNED = [
   [/Ladysmith (office|base|shop|yard)/i, "Ladysmith is not a location"],
   [/(office|base|shop|yard) in Ladysmith/i, "Ladysmith is not a location"],
 ]
+
+/**
+ * Private patterns — personal phone numbers and mailboxes, and any wording
+ * that is private to the client relationship — never go in this file: the
+ * repository is public. They live in scripts/lint-claims.private.json
+ * (gitignored), a JSON array of [pattern, reason] pairs that is merged into
+ * BANNED whenever the file exists on the machine running the lint.
+ */
+const PRIVATE = path.join(ROOT, "scripts", "lint-claims.private.json")
+if (fs.existsSync(PRIVATE)) {
+  for (const entry of JSON.parse(fs.readFileSync(PRIVATE, "utf8"))) BANNED.push(entry)
+}
 
 /** Files where a banned token is structural, not a claim (redirect sources, the 404 guard). */
 const ALLOW = new Map([
