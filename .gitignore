@@ -59,3 +59,9 @@ next-env.d.ts
 
 # Photo pass: originals kept locally before any re-encode, not shipped
 public/images/_pre-photo-pass/
+
+# Never committed — the repository is public.
+# Session output folders (screenshots, working notes) and the private
+# lint patterns (personal numbers and mailboxes) stay on the machine.
+/Claude outputs/
+/scripts/lint-claims.private.json

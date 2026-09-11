@@ -14,7 +14,12 @@ CANON).
 
 A second copy of this document lives in the Claude project as
 `claude/S1-orientation.md`, for chat sessions with no checkout. THIS FILE IS
-CANONICAL. If they disagree, this one is right — update the other.
+CANONICAL for everything it contains. If they disagree, this one is right —
+update the other. THE REPOSITORY IS PUBLIC: personal phone numbers, private
+mailboxes, shared-folder links and anything private to the client
+relationship live ONLY in the project copy and in `claude/S1-client-email.md`,
+never here and never in any committed file (scripts/lint-claims.mjs loads
+its private patterns from a gitignored JSON file for the same reason).
 
 2026-09-11: section 11 (THE LAUNCH PASS) supersedes anything above it that
 it contradicts — in particular the product list (8, no MMA), the canonical
@@ -28,7 +33,8 @@ host (lib/site.ts), the documents pipeline, and the type OPTION.
 Repo (canonical):
   C:\Users\cleve\Based_Agency\based-agncy_os\Web_Projects\squareone-website
 Remote:  github.com/apu21e800/SquareOne
-Branch:  s1-v2-prep-2   <- all work happens here. main is merged by Vern only.
+Branch:  s1-v2-prep-2   <- all work happens here. It reaches main only by a
+         PR that Vern has authorized (section 11, MERGE TO MAIN).
 Preview: https://square-one-git-s1-v2-prep-2-based-agency.vercel.app
          <- this is what the client reviews
 
@@ -52,12 +58,11 @@ Team:             team_7Rnb5FldTGPFFZ4Wo5u8BE5M
 The .vercel/project.json on C: is correct — verified 2026-09-09, reads
 {"projectId":"prj_D0j2acUvhY0ObF5lCMP6dnJrGer3","projectName":"square-one"}.
 
-THE NEAR-MISS. Two folders on D: holding Square One's code were linked to
-prj_b51aCXeI5eihTky167k0gToETRNg / "hubss-website". Verified 2026-09-09 via
-the Vercel API: that project has hubss.com AND www.hubss.com attached and
-live. A `vercel --prod` from either folder would have replaced HUB's
-production website with Square One's — on Based Agency's principal client
-relationship.
+THE NEAR-MISS. Two folders on D: holding Square One's code were linked to a
+DIFFERENT project in the same Vercel team — the one that serves hubss.com
+and www.hubss.com, live (verified 2026-09-09 via the Vercel API). A
+`vercel --prod` from either folder would have replaced HUB's production
+website with Square One's.
 
 Both were renamed to `.vercel.WRONG-hubss-link-20260908` on 2026-09-08.
 Verified 2026-09-09: D:\STUDIO-01\01-21E8\clients\squareone\site\ now shows
@@ -91,7 +96,8 @@ main tip:          3f6ece6  "chore: normalize line endings (eol=lf)"
 s1-v2-prep-2 is 164 commits AHEAD of main; main is 0 ahead of it.
 Merge-base is 3f6ece6. That is a clean fast-forward with no divergence.
 -> Everything the client is reviewing lives on a branch. The merge to main
-  is Vern's decision and has deliberately not been made.
+  is Vern's decision and had deliberately not been made as of 09-09.
+  (Made on 2026-09-11 with his authorization — section 11.)
 
 Build (run locally on the actual tip, 2026-09-09 — not just typecheck):
     tsc --noEmit      exit 0
@@ -114,16 +120,17 @@ anyone with the link can VIEW.
 4. WHERE IT STANDS WITH THE CLIENT — needs attention
 =======================================================================
 
-Vern emailed the review link on Fri 5 Sept 03:28 UTC to sydney@, cc jan@,
-samantha@, gord@ (Gmail thread 1a06e985e8974d2e). Addresses live in
-`claude/S1-client-email.md` and NEVER go on the website.
+Vern emailed the review link on Fri 5 Sept 03:28 UTC to the four client
+contacts. Their addresses live in `claude/S1-client-email.md` (project doc,
+with the thread reference) and NEVER go on the website or in this repo.
 
 A scheduled task ("S1 client notes watch", trig_01LC6jgXqMCNhJnYjwpBcZDH,
 every 2h, read-only) has checked Vercel comment threads and Gmail every two
 hours since. Last run 2026-09-09 00:33 UTC, succeeded.
 
 RESULT AFTER FOUR DAYS: zero comments, zero replies. The only inbound was
-Samantha's automated out-of-office (she returned 8 Sept; nothing since).
+one automated out-of-office reply (that person was back on 8 Sept; nothing
+since).
 
 The likely cause is not client silence — it is that they CANNOT comment.
 `claude/S1-client-notes.md` still marks the Vercel **Share** step as "STILL
@@ -214,16 +221,19 @@ CONTACT CANON — these and nothing else:
   505-20800 Lougheed Hwy, Maple Ridge, BC V2X 3P2
   Vancouver Island is a SERVICE REGION with its own line — never an office,
   address or "base". Ladysmith only ever as a service-area city.
-  Jan's mobile and jan@ never appear on the website (her name is fine).
+  The owners' personal mobiles and personal mailboxes never appear on the
+  website (their names are fine).
 
-FORBIDDEN STRINGS on the site: 604-612-6209, 604-309-8212, 416-540-9287,
-  info@hubss.com, cleve.stordy@hubss.com, America/Toronto, any HUBSS address.
-  Client email addresses never appear on the website.
+FORBIDDEN STRINGS on the site: the retired 604-612-6209, HUB's own lines
+  (604-309-8212, 416-540-9287, info@hubss.com, any @hubss.com mailbox, any
+  HUBSS address), America/Toronto. Client email addresses never appear on
+  the website. The personal numbers and mailboxes that must never appear are
+  listed only in the project doc and in scripts/lint-claims.private.json.
 
 HUB RELATIONSHIP — the site says plainly "Installer of HUB Surface Systems
-  products" and nothing more. There is an EYES-ONLY fact about S1's standing
-  with HUBSS that must never appear on the website; if you have not been
-  told it, you do not need it.
+  products" and nothing more. Do not characterise the relationship beyond
+  that sentence anywhere on the site; anything further is between Vern and
+  the client and is not written down in this repository.
 
 PRODUCTS — no repair products (ChipFill / AggreFill / FastPatch) and no
   AirMark / airport material on S1. Business hierarchy, in order:
@@ -255,10 +265,11 @@ VERN'S STANDING RULES — his words, 2026-09-09
   · Never invent a fact, figure, testimonial, location or client. If it is
     not in an S1 document, a filename or a folder name, it does not go on
     the site.
-  · All work on `s1-v2-prep-2`. `main` is Vern's to merge.
+  · All work on `s1-v2-prep-2`. `main` moves only by a PR Vern has
+    authorized.
 
 GIT
-  · main is untouched; Vern merges it.
+  · main moves only by PR, never by direct push (section 11).
   · Drift truth:
         git fetch -q origin s1-v2-prep-2 && git add -A && \
         git diff --cached --stat origin/s1-v2-prep-2
@@ -313,21 +324,20 @@ change is live and verified; reply in the thread first.
 2. Confirm the Vercel Share step, or the client cannot leave notes at all
    (section 4).
 
-3. Merge decision: s1-v2-prep-2 -> main, a clean 164-commit fast-forward.
-   Vern's call.
+3. Merge decision: s1-v2-prep-2 -> main. DONE 2026-09-11 (section 11).
 
-4. Google Drive folder "Square_One" (id 1660PGZPxjA21uZoLneD7vLpekTcGclRZ,
-   owned by vernon@hubss.com) is link-shared only, so cleveland.stordy@
-   gmail.com can resolve it but cannot list its contents. It needs sharing
-   with that address before any of its photos can be used. Samantha's
-   Dropbox photos likewise.
+4. The Google Drive folder "Square_One" (link in the project doc) is
+   link-shared only, so the agency's Gmail account can resolve it but cannot
+   list its contents. It needs sharing with that address before any of its
+   photos can be used. The client's Dropbox photos likewise.
 
 5. Held for Vern's yes: two hero swaps (/resources and /applications) and
    six "uncertain" photos where the location cannot be confirmed without
    inventing it. Listed in docs/PHOTO-PASS.md.
 
-6. /services/vapor-blasting hero is a placeholder — every vapour photo on
-   record is 524x315. Needs a real rig-at-work photograph from the client.
+6. /services/vapor-blasting — the placeholder holds are gone (section 11,
+   VAPOUR BLASTING PHOTOGRAPHY: the record's photos, upscaled). A real
+   rig-at-work photograph from the client is still the better answer.
 
 7. Sanity CMS is built but PARKED (sanity/, /studio, /api/revalidate,
    lib/cms.ts, scripts/cms-seed.ts, docs/CMS.md). Vern's email promised the
@@ -335,10 +345,9 @@ change is live and verified; reply in the thread first.
    client-facing commitment. Needs Vern to create the project and set the
    env vars — account creation and secrets are his, never an agent's.
 
-8. Design queue: the cards. "Three kinds of owner" and "Four services" are
-   still photo-plus-white-box with two lines and an arrow — the last
-   generic thing on the home page. hubss's equivalents carry application
-   tag chips and a spec link.
+8. Design queue: the cards. DONE 2026-09-11 — the audience band is three
+   tall photographs with chips and the service cards carry application
+   chips and a Specs link (section 11, HOME).
 
 9. Archive the April branches rather than merging them (section 9).
 
@@ -525,6 +534,25 @@ MENU + MOBILE. Services panel's "Where it goes" links carry each gallery's
 lead thumbnail (lib/app-leads.ts — a static map, because the root layout
 must never read the filesystem). The phone drawer opens with a swipeable
 photo rail of the five services and thumbnails on the applications.
+
+MERGE TO MAIN — 2026-09-11. Vern authorized taking the branch to production
+for launch week ("push it to production"). s1-v2-prep-2 was merged into
+main by pull request (a plain merge, no force, no rewrite), so Vercel's
+production deployment now tracks what the client reviewed. squareonepaving.com
+is not yet attached to the Vercel project — the domain attach and DNS cutover
+are Vern's. Working rule unchanged: all work on s1-v2-prep-2, and it reaches
+main only by PR.
+
+PUBLIC REPOSITORY — 2026-09-11. This repo is public. An accidental
+"Claude outputs/" folder (screenshots and a stale orientation copy) was
+committed with the launch push; its text was neutralised in place and the
+folder is gitignored, but the files stay in the tree until Vern runs
+`git rm -r --cached "Claude outputs"` and commits. Personal numbers and
+private wording were removed from this document and from
+scripts/lint-claims.mjs (they now load from the gitignored
+scripts/lint-claims.private.json — the content is in the project status doc).
+Older commits still contain them; purging history is a rewrite and therefore
+Vern's decision alone.
 
 STILL WITH VERN. Production domain (.com or .ca); geo + opening hours;
 which remaining HUB systems S1 actually installs; the ten templates; S1's

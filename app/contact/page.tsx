@@ -207,7 +207,7 @@ export default function ContactPage() {
                         autoComplete="email"
                         value={form.email}
                         onChange={(e) => setForm({ ...form, email: e.target.value })}
-                        placeholder="j.bell@coquitlam.ca"
+                        placeholder="jordan.bell@example.com"
                         className={field}
                       />
                     </div>
