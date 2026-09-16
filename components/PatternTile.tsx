@@ -1,11 +1,22 @@
 import type { PatternId } from "@/lib/palette"
 
 /**
- * StreetPrint template line art — drawn, not photographed. One 120×90
- * drawing per template family, hairline strokes in the current text colour,
- * so a tile reads as a plan drawing at rest and darkens on hover. Each
- * drawing is built from HUB's template geometry (brick 2:1, cobble rows,
- * ashlar courses, fans, scallops) and clipped to the tile.
+ * StreetPrint template line art — drawn, not photographed.
+ *
+ * Every drawing here is traced from Square One's own "Stamped Asphalt
+ * Patterns" sheet (public/docs/StreetPrint/SquareOne-StreetPrint-Patterns.pdf),
+ * which prints the nine templates Square One actually installs at their
+ * real module geometry. Redrawn 16 Sept 2026 — the previous set was built
+ * from HUB's general catalogue and carried four patterns Square One does
+ * not offer, and the client asked for the six on their own sheet by name.
+ *
+ * If a drawing is ever changed, open that PDF and check the module first:
+ * a template chip that does not match the casting is a promise the crew
+ * has to keep on site.
+ *
+ * Drawn as hairline strokes in currentColor on the dark asphalt tile — the
+ * inverse of HUB's printed black-on-white sheet, deliberately, so the two
+ * are not mistaken for each other.
  */
 
 export const W = 120
@@ -15,10 +26,13 @@ function rect(x: number, y: number, w: number, h: number, rx = 0) {
   return `<rect x="${x}" y="${y}" width="${w}" height="${h}"${rx ? ` rx="${rx}"` : ""}/>`
 }
 
+/* ---------------------------------------------------------------- fields */
+
+/** Running bond, brick module roughly 3:1 with a generous joint. */
 function offsetBrick(): string {
   const out: string[] = []
-  const bh = 15
-  const bw = 30
+  const bh = 13
+  const bw = 34
   for (let r = -1; r < H / bh + 1; r++) {
     const shift = r % 2 === 0 ? 0 : bw / 2
     for (let c = -1; c < W / bw + 1; c++) out.push(rect(c * bw + shift, r * bh, bw, bh))
@@ -26,7 +40,7 @@ function offsetBrick(): string {
   return out.join("")
 }
 
-/** 2:1 herringbone on the lattice t1 = (10,10), t2 = (−20,20). */
+/** 2:1 herringbone on the lattice t1 = (10,10), t2 = (-20,20). */
 function herringbone(): string {
   const out: string[] = []
   for (let i = -8; i <= 14; i++) {
@@ -40,14 +54,19 @@ function herringbone(): string {
   return out.join("")
 }
 
+/**
+ * Ashlar slate — courses of unequal height, blocks of unequal width, and
+ * the head joints never lining up between courses. The sheet mixes small
+ * squares into the larger blocks, so a few courses are split in two.
+ */
 function ashlarSlate(): string {
-  // Four courses of unequal height; the joints never line up.
   const courses: { y: number; h: number; widths: number[]; start: number }[] = [
-    { y: -4, h: 22, widths: [34, 22, 40, 26, 34], start: -12 },
-    { y: 18, h: 16, widths: [24, 40, 20, 36, 30], start: -6 },
-    { y: 34, h: 26, widths: [42, 26, 34, 22, 40], start: -20 },
-    { y: 60, h: 18, widths: [28, 36, 22, 40, 26], start: -10 },
-    { y: 78, h: 20, widths: [36, 24, 42, 30, 20], start: -16 },
+    { y: -5, h: 13, widths: [26, 14, 32, 18, 24, 14], start: -9 },
+    { y: 8, h: 19, widths: [18, 34, 14, 26, 20, 30], start: -14 },
+    { y: 27, h: 11, widths: [30, 16, 22, 34, 14, 24], start: -6 },
+    { y: 38, h: 22, widths: [22, 30, 16, 20, 34, 18], start: -18 },
+    { y: 60, h: 12, widths: [16, 26, 32, 14, 28, 20], start: -11 },
+    { y: 72, h: 18, widths: [34, 18, 24, 30, 14, 26], start: -4 },
   ]
   const out: string[] = []
   for (const c of courses) {
@@ -61,124 +80,139 @@ function ashlarSlate(): string {
   return out.join("")
 }
 
-function britishCobble(): string {
-  const out: string[] = []
-  const cw = 15
-  const ch = 11
-  for (let r = -1; r < H / ch + 1; r++) {
-    const shift = r % 2 === 0 ? 0 : cw / 2
-    for (let c = -1; c < W / cw + 1; c++) {
-      const wobble = ((r * 7 + c * 3) % 3) - 1
-      out.push(rect(c * cw + shift + 1, r * ch + 1, cw - 2 + wobble, ch - 2, 3))
-    }
-  }
-  return out.join("")
-}
-
+/**
+ * Random stone — the sheet's crazy paving: irregular rounded cobbles that
+ * tessellate with no gaps. Built on a jittered corner lattice so adjoining
+ * cells share their corners exactly, then each edge is bowed through a
+ * displaced midpoint so nothing reads as a straight cut. Deterministic:
+ * the same hash every render, so the drawing never shifts between builds.
+ */
 function randomStone(): string {
-  // Irregular flags, hand-set: a fixed layout that reads as random.
-  const flags: number[][][] = [
-    [[-6, -4], [30, -6], [36, 18], [22, 30], [-4, 26]],
-    [[32, -6], [70, -4], [66, 20], [40, 22]],
-    [[72, -6], [126, -4], [122, 16], [96, 26], [70, 22]],
-    [[-6, 30], [20, 34], [26, 56], [4, 62], [-8, 52]],
-    [[24, 26], [42, 24], [62, 40], [56, 60], [30, 58]],
-    [[44, 24], [68, 22], [98, 30], [92, 50], [64, 44]],
-    [[100, 30], [126, 20], [128, 56], [104, 58], [96, 52]],
-    [[-8, 56], [22, 60], [30, 82], [12, 96], [-8, 94]],
-    [[26, 62], [56, 64], [66, 84], [40, 96], [24, 90]],
-    [[60, 48], [90, 54], [100, 76], [78, 96], [58, 86]],
-    [[102, 60], [128, 60], [128, 96], [104, 96], [96, 80]],
+  const cols = 5
+  const rows = 4
+  const cw = (W + 24) / cols
+  const ch = (H + 20) / rows
+  const hash = (i: number, j: number, k: number) => {
+    const n = Math.sin(i * 127.1 + j * 311.7 + k * 74.7) * 43758.5453
+    return n - Math.floor(n) - 0.5 // -0.5..0.5
+  }
+  // Shared corner lattice — jittered once, reused by all four neighbours.
+  const P = (i: number, j: number): [number, number] => [
+    -12 + i * cw + hash(i, j, 1) * cw * 0.42,
+    -10 + j * ch + hash(i, j, 2) * ch * 0.42,
   ]
-  return flags
-    .map((pts) => `<polygon points="${pts.map(([x, y]) => `${x},${y}`).join(" ")}"/>`)
-    .join("")
-}
-
-function eurofan(): string {
+  // Shared edge midpoint, bowed off the chord — also reused by both cells.
+  const M = (a: [number, number], b: [number, number], i: number, j: number, k: number): [number, number] => {
+    const mx = (a[0] + b[0]) / 2
+    const my = (a[1] + b[1]) / 2
+    const dx = b[0] - a[0]
+    const dy = b[1] - a[1]
+    const bow = hash(i, j, k) * 0.36
+    return [mx - dy * bow, my + dx * bow]
+  }
   const out: string[] = []
-  const R = 26
-  const rows = [96, 70, 44, 18, -8]
-  rows.forEach((cy, i) => {
-    const shift = i % 2 === 0 ? 0 : R
-    for (let cx = -R + shift; cx < W + R; cx += 2 * R) {
-      for (const r of [8, 17, 26]) {
-        out.push(`<path d="M ${cx - r} ${cy} A ${r} ${r} 0 0 1 ${cx + r} ${cy}"/>`)
-      }
-      // Two radial joints per fan so the fan reads as set stone
-      for (const a of [-60, -120]) {
-        const rad = (a * Math.PI) / 180
-        out.push(`<line x1="${cx + 8 * Math.cos(rad)}" y1="${cy + 8 * Math.sin(rad)}" x2="${cx + R * Math.cos(rad)}" y2="${cy + R * Math.sin(rad)}"/>`)
-      }
-    }
-  })
-  return out.join("")
-}
-
-function scallop(): string {
-  const out: string[] = []
-  const r = 14
-  const rowH = 12
-  for (let row = -1; row < H / rowH + 2; row++) {
-    const cy = row * rowH
-    const shift = row % 2 === 0 ? 0 : r
-    for (let cx = -r + shift; cx < W + r; cx += 2 * r) {
-      out.push(`<path d="M ${cx - r} ${cy} A ${r} ${r} 0 0 1 ${cx + r} ${cy}"/>`)
+  for (let j = 0; j < rows; j++) {
+    for (let i = 0; i < cols; i++) {
+      const a = P(i, j)
+      const b = P(i + 1, j)
+      const c = P(i + 1, j + 1)
+      const d = P(i, j + 1)
+      const ab = M(a, b, i, j, 3)
+      const bc = M(b, c, i + 1, j, 4)
+      const cd = M(d, c, i, j + 1, 3)
+      const da = M(a, d, i, j, 4)
+      out.push(
+        `<path d="M ${a[0].toFixed(1)} ${a[1].toFixed(1)}` +
+          ` Q ${ab[0].toFixed(1)} ${ab[1].toFixed(1)} ${b[0].toFixed(1)} ${b[1].toFixed(1)}` +
+          ` Q ${bc[0].toFixed(1)} ${bc[1].toFixed(1)} ${c[0].toFixed(1)} ${c[1].toFixed(1)}` +
+          ` Q ${cd[0].toFixed(1)} ${cd[1].toFixed(1)} ${d[0].toFixed(1)} ${d[1].toFixed(1)}` +
+          ` Q ${da[0].toFixed(1)} ${da[1].toFixed(1)} ${a[0].toFixed(1)} ${a[1].toFixed(1)} Z"/>`,
+      )
     }
   }
   return out.join("")
 }
 
-function tileSets(): string {
-  // Square tiles on a regular grid — the catalogue's tile sets are square
-  // modules laid in courses, joints aligned.
+/** Standard tile — square modules, joints aligned both ways. */
+function standardTile(): string {
   const out: string[] = []
-  const s = 22
+  const s = 15
   for (let r = -1; r < H / s + 1; r++) {
-    for (let c = -1; c < W / s + 1; c++) out.push(rect(c * s + 2, r * s + 2, s, s))
+    for (let c = -1; c < W / s + 1; c++) out.push(rect(c * s, r * s, s, s))
   }
   return out.join("")
 }
 
-function border(): string {
-  // A soldier-course band framing a field — how a driveway border is
-  // actually laid: the field pattern inside, a running band of bricks
-  // around the edge.
+/**
+ * Offset tile — the same square module run in vertical columns, with every
+ * second column dropped half a tile, so the bed joints break across the
+ * run instead of gridding up. The sheet shows the columns reading as
+ * distinct vertical bands; the half-drop is what produces that.
+ */
+function offsetTile(): string {
   const out: string[] = []
-  const band = 14
-  const bw = 8
-  const inner = { x: band, y: band, w: W - 2 * band, h: H - 2 * band }
-  // field: offset brick, clipped to the inner rectangle
-  const bh = 12
-  const fw = 24
-  for (let r = 0; r * bh < inner.h + bh; r++) {
-    const shift = r % 2 === 0 ? 0 : fw / 2
-    for (let c = -1; c * fw < inner.w + fw; c++) {
-      const x = inner.x + c * fw + shift
-      const y = inner.y + r * bh
-      const x0 = Math.max(x, inner.x), x1 = Math.min(x + fw, inner.x + inner.w)
-      const y0 = Math.max(y, inner.y), y1 = Math.min(y + bh, inner.y + inner.h)
-      if (x1 > x0 && y1 > y0) out.push(rect(x0, y0, x1 - x0, y1 - y0))
-    }
+  const s = 15
+  for (let c = -1; c < W / s + 1; c++) {
+    const drop = c % 2 === 0 ? 0 : s / 2
+    for (let r = -1; r < H / s + 2; r++) out.push(rect(c * s, r * s + drop, s, s))
   }
-  // the band: soldier bricks standing on end, top and bottom
-  for (let x = 0; x < W; x += bw) { out.push(rect(x, 0, bw, band)); out.push(rect(x, H - band, bw, band)) }
-  // and lying along the two sides
-  for (let y = band; y < H - band; y += bw) { out.push(rect(0, y, band, bw)); out.push(rect(W - band, y, band, bw)) }
+  return out.join("")
+}
+
+/* --------------------------------------------------------------- borders */
+
+/**
+ * The three borders are edge courses, not fields. Each is drawn as its band
+ * repeated down the tile so the swatch shows the course itself rather than
+ * a single lonely strip.
+ */
+
+/** Soldier course — bricks stood on end between two thin header rails. */
+function soldierCourse(): string {
+  const out: string[] = []
+  const rail = 4
+  const soldier = 15
+  const band = rail * 2 + soldier
+  const bw = 7
+  for (let y = -6; y < H + band; y += band + 5) {
+    out.push(rect(-2, y, W + 4, rail))
+    out.push(rect(-2, y + rail + soldier, W + 4, rail))
+    for (let x = -bw; x < W + bw; x += bw) out.push(rect(x, y + rail, bw, soldier))
+  }
+  return out.join("")
+}
+
+/** Texas cobble — a single run of square setts. */
+function texasCobble(): string {
+  const out: string[] = []
+  const s = 13
+  for (let y = -4; y < H + s; y += s + 9) {
+    for (let x = -s; x < W + s; x += s) out.push(rect(x, y, s, s))
+  }
+  return out.join("")
+}
+
+/** Stacked brick — a single run of narrow bricks stood on end, no rails. */
+function stackedBrick(): string {
+  const out: string[] = []
+  const bh = 16
+  const bw = 6
+  for (let y = -4; y < H + bh; y += bh + 8) {
+    for (let x = -bw; x < W + bw; x += bw) out.push(rect(x, y, bw, bh))
+  }
   return out.join("")
 }
 
 export const DRAWINGS: Record<PatternId, () => { body: string; rotate?: number }> = {
+  "ashlar-slate": () => ({ body: ashlarSlate() }),
+  "random-stone": () => ({ body: randomStone() }),
   "offset-brick": () => ({ body: offsetBrick() }),
   herringbone: () => ({ body: herringbone() }),
-  "diagonal-herringbone": () => ({ body: herringbone(), rotate: 45 }),
-  "ashlar-slate": () => ({ body: ashlarSlate() }),
-  "british-cobble": () => ({ body: britishCobble() }),
-  stone: () => ({ body: randomStone() }),
-  eurofan: () => ({ body: eurofan() }),
-  scallop: () => ({ body: scallop() }),
-  "tile-sets": () => ({ body: tileSets() }),
-  border: () => ({ body: border() }),
+  "standard-tile": () => ({ body: standardTile() }),
+  "offset-tile": () => ({ body: offsetTile() }),
+  "soldier-course": () => ({ body: soldierCourse() }),
+  "texas-cobble": () => ({ body: texasCobble() }),
+  "stacked-brick": () => ({ body: stackedBrick() }),
 }
 
 export default function PatternTile({ id, className = "" }: { id: PatternId; className?: string }) {

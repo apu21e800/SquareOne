@@ -105,28 +105,52 @@ export const FEATURED_COLOURS: Swatch[] = [
 ].map(colour)
 
 /** The six that suit a driveway against siding and stone. */
+/**
+ * The shortlist the driveway composer opens with — StreetBond colours that
+ * actually get ordered for a house, ahead of the full 52.
+ *
+ * Expanded 16 Sept 2026 to the eleven the client named in review (bedrock,
+ * brick, granite, pewter, Sierra, black, concrete gray, burnt Sienna, brown
+ * suede, taupe, graphite). The point of their note is that the old
+ * shortlist leaned on the municipal palette — Marigold, Patriot Blue,
+ * Celtic Green are bike-lane and plaza colours, and nobody puts them on a
+ * driveway. Earth tones and greys first; every name here is on HUB's
+ * published chart and is checked against it by `colour()` below.
+ */
 export const DRIVEWAY_COLOURS: Swatch[] = [
   "Slate",
+  "Graphite",
   "Gun Metal",
+  "Pewter",
+  "Concrete Gray",
+  "Black",
+  "Bedrock",
+  "Granite",
   "Driftwood",
+  "Taupe",
   "Sandy Beige",
+  "Brown Suede",
+  "Sierra",
+  "Burnt Sienna",
   "Terra Cotta",
+  "Brick",
   "Sage",
 ].map(colour)
 
 export type PatternId =
+  | "ashlar-slate"
+  | "random-stone"
   | "offset-brick"
   | "herringbone"
-  | "diagonal-herringbone"
-  | "ashlar-slate"
-  | "british-cobble"
-  | "stone"
-  | "eurofan"
-  | "scallop"
-  | "tile-sets"
-  | "border"
+  | "standard-tile"
+  | "offset-tile"
+  | "soldier-course"
+  | "texas-cobble"
+  | "stacked-brick"
 
 export interface Pattern {
+  /** Field patterns cover the surface; borders run as an edge course. */
+  kind: "field" | "border"
   id: PatternId
   name: string
   /** HUB's template family, as printed in the catalogue. */
@@ -144,18 +168,42 @@ export interface Pattern {
  * "Random stone" was never a HUB name — section 6.0 is Stone Templates and
  * holds Random Slate, Thompson Stone and Random Cobble.
  */
+/**
+ * The patterns Square One actually installs — taken from Square One's own
+ * "Stamped Asphalt Patterns" sheet (public/docs/StreetPrint/
+ * SquareOne-StreetPrint-Patterns.pdf), not from HUB's full catalogue.
+ *
+ * This is the distinction that matters: HUB's Template Catalog lists
+ * fifteen sections because HUB sells all of them. Square One's own sheet
+ * prints six field patterns and three borders, and those are the nine that
+ * get ordered in BC. Showing a catalogue section Square One does not
+ * install is a promise the crew has to keep.
+ *
+ * Confirmed twice over on 16 Sept 2026: the client asked for exactly these
+ * additions in review (standard tile, offset tile, random stone,
+ * herringbone, soldier course, stacked brick) and for four removals, and
+ * the removals are precisely the sections absent from their own sheet —
+ * Diagonal Herringbone, British Cobble, Eurofan and Scallop.
+ *
+ * `family` records where each one sits in HUB's catalogue so the
+ * provenance stays traceable, and the names are spelled as Square One
+ * prints them. No part numbers: those are HUB's ordering codes and they
+ * date — the band links to HUB's live catalogue instead.
+ */
 export const STREETPRINT_PATTERNS: Pattern[] = [
-  { id: "offset-brick", name: "Offset Brick", family: "Section 1.0" },
-  { id: "diagonal-herringbone", name: "Diagonal Herringbone", family: "Section 2.0" },
-  { id: "herringbone", name: "Standard Herringbone", family: "Section 3.0" },
-  { id: "ashlar-slate", name: "Ashlar Slate", family: "Section 4.0" },
-  { id: "british-cobble", name: "British Cobble", family: "Section 5.0" },
-  { id: "stone", name: "Stone Templates", family: "Section 6.0 — Random Slate, Thompson Stone, Random Cobble" },
-  { id: "eurofan", name: "Eurofan Templates", family: "Section 7.0" },
-  { id: "scallop", name: "Scallop Templates", family: "Section 8.0" },
-  { id: "tile-sets", name: "Tile Sets", family: "Section 9.0" },
-  { id: "border", name: "Border Templates", family: "Section 10.0" },
+  { kind: "field", id: "ashlar-slate", name: "Ashlar Slate", family: "HUB Section 4.0" },
+  { kind: "field", id: "random-stone", name: "Random Stone", family: "HUB Section 6.0 — Stone Templates" },
+  { kind: "field", id: "offset-brick", name: "Offset Brick", family: "HUB Section 1.0" },
+  { kind: "field", id: "herringbone", name: "Standard Herringbone", family: "HUB Section 3.0" },
+  { kind: "field", id: "standard-tile", name: "Standard Tile", family: "HUB Section 9.0 — Tile Sets" },
+  { kind: "field", id: "offset-tile", name: "Offset Tile", family: "HUB Section 9.0 — Tile Sets" },
+  { kind: "border", id: "soldier-course", name: "Soldier Course", family: "HUB Section 10.0 — Border Templates" },
+  { kind: "border", id: "texas-cobble", name: "Texas Cobble", family: "HUB Section 10.0 — Border Templates" },
+  { kind: "border", id: "stacked-brick", name: "Stacked Brick", family: "HUB Section 10.0 — Border Templates" },
 ]
+
+/** Square One's own sheet, hosted here — the source for the list above. */
+export const SQUAREONE_PATTERNS_SHEET = "/docs/StreetPrint/SquareOne-StreetPrint-Patterns.pdf"
 
 /** HUB's public catalogue — linked, never hosted, so it is always the current one. */
 export const STREETPRINT_CATALOGUE_URL = "https://hubss.com/docs/streetprint/streetprint-template-catalog.pdf"

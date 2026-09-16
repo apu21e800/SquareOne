@@ -6,7 +6,7 @@ type TypeChoice = "poppins" | "futura"
 
 /**
  * The type switch — Poppins (the live face) against the Futura option
- * (Jost display, Inter text), on the real pages, for Vern and the client to
+ * (licensed Futura LT display, Inter text), on the real pages, for Vern and the client to
  * compare. It shows on preview deployments and in development, and on any
  * deployment reached with ?type= in the URL; production visitors never see
  * it unless they were sent a ?type= link. Choice persists per browser in
@@ -65,7 +65,7 @@ export default function TypeToggle() {
       className={`h-8 rounded-[2px] px-3 text-[12px] font-semibold tracking-[0.06em] transition-colors ${
         choice === value ? "bg-white text-[#1E1B18]" : "text-[#D6D0C7] hover:text-white"
       }`}
-      style={{ fontFamily: value === "futura" ? "var(--font-jost), Futura, sans-serif" : "var(--font-poppins), sans-serif" }}
+      style={{ fontFamily: value === "futura" ? "var(--font-futura), var(--font-poppins), sans-serif" : "var(--font-poppins), sans-serif" }}
     >
       {label}
     </button>

@@ -111,7 +111,21 @@ const stats: { number: string; label: string }[] = [
   { number: "Free", label: "site visit and written quote" },
 ]
 
-/** Real installations, labelled by the pattern actually shown. */
+/**
+ * Real installations, labelled by the pattern actually shown.
+ *
+ * Trimmed 16 Sept 2026 to the patterns Square One still offers. The client
+ * marked four of the six for removal in review — British cobble,
+ * Cobblestone, Two-tone brick and Circle medallion — and all four are
+ * templates absent from Square One's own patterns sheet, so the strip was
+ * advertising work that can no longer be ordered.
+ *
+ * The photographs themselves are real and stay in the record (the full
+ * gallery at #gallery still carries them); it is only this "what you can
+ * order" strip they have come off. RESTOCK: this wants four more shots
+ * showing Random Stone, Standard Herringbone, Standard Tile or Offset Tile
+ * as installed, from the incoming photo library.
+ */
 const patterns: (Shot & { label: string })[] = [
   {
     label: "Ashlar slate",
@@ -122,26 +136,6 @@ const patterns: (Shot & { label: string })[] = [
     label: "Offset brick",
     src: "/images/applications/driveways/victoria-offset-brick-driveway-streetprint-01.jpg",
     alt: "Offset Brick StreetPrint driveway in Victoria BC",
-  },
-  {
-    label: "British cobble",
-    src: "/images/applications/driveways/west-saanich-british-cobble-driveway-streetprint-01.jpg",
-    alt: "British Cobble StreetPrint driveway in West Saanich BC",
-  },
-  {
-    label: "Cobblestone",
-    src: `${FIO}/Cobblestone-stamped-asphalt-driveway-colose-up-at-Ellis-Point-Walkway-Victoria-BC-Canada.jpg`,
-    alt: "Cobblestone StreetPrint close-up at Ellis Point, Victoria BC",
-  },
-  {
-    label: "Two-tone brick",
-    src: `${FIO}/303-IMG_3928.JPG`,
-    alt: "Red brick soldier-course border on charcoal running bond — StreetPrint detail, installed by Square One Paving",
-  },
-  {
-    label: "Circle medallion",
-    src: `${DRV}/Number%202.jpg`,
-    alt: "Stamped asphalt driveway with a circle medallion, installed by Square One Paving",
   },
 ]
 
@@ -298,7 +292,7 @@ export default function DrivewaysPage() {
               <h2 className="mt-5">Patterns and colours</h2>
             </div>
             <p className="max-w-[48ch] text-[15px] leading-[1.6] text-ink-muted [text-wrap:pretty]">
-              Ten StreetPrint templates, any StreetBond&reg; colour. Put them together here, then
+              Nine StreetPrint templates, any StreetBond&reg; colour. Put them together here, then
               we bring the sample boards to your driveway and hold them against the house.
             </p>
           </div>
@@ -313,7 +307,7 @@ export default function DrivewaysPage() {
               Every driveway on record <span aria-hidden="true">&rarr;</span>
             </Link>
           </div>
-          <div className="mt-5 grid grid-cols-6 gap-4 max-[700px]:grid-cols-3 max-[480px]:grid-cols-2">
+          <div className="mt-5 grid grid-cols-3 gap-4 max-[700px]:grid-cols-2">
             {patterns.map((pattern) => (
               <div key={pattern.label}>
                 <div className="card relative aspect-[4/3] overflow-hidden rounded-[2px] border border-hairline bg-surface-stone">
@@ -336,7 +330,7 @@ export default function DrivewaysPage() {
       <section className="section relative overflow-hidden border-t border-hairline bg-surface">
 
         <div className="container-1280 relative z-[1]">
-          <h2>Three systems, one crew</h2>
+          <h2>Three systems, one standard</h2>
 
           <p className="mt-5 max-w-[56ch] text-[17px] leading-[1.6] text-ink-body [text-wrap:pretty]">
             Which one goes down depends on the condition of the surface you already have. We

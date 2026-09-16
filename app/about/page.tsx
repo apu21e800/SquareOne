@@ -109,17 +109,16 @@ const principles = [
    by the same helpers the home page stats use, so the two can never drift. */
 const timeline = [
   { year: "2000", event: "Square One Paving begins installing decorative pavement in British Columbia" },
-  { year: String(projects.length), event: "published case studies, from Nanaimo to Kelowna" },
-  { year: String(getWork().length), event: "site photographs on record, each captioned with the system and the place" },
+  { year: `${projects.length}+`, event: "published case studies, from Nanaimo to Kelowna" },
   { year: String(products.length), event: "HUB Surface Systems products installed, from StreetPrint to PreMark" },
-  { year: String(workCities().length), event: "BC communities in the work record" },
+  { year: `${workCities().length}+`, event: "BC communities with Square One work on the ground" },
 ]
 
 const process = [
   { step: "01", title: "Site walk", body: "We measure, photograph and flag substrate issues on site." },
   { step: "02", title: "Specification", body: "Pattern, colours and product matched to traffic and budget." },
   { step: "03", title: "Surface prep", body: "Cleaning, and vapour blasting where the surface needs it." },
-  { step: "04", title: "Application", body: "Installed by Square One's own crew, to the specification." },
+  { step: "04", title: "Application", body: "Installed by Square One's own crews, to the specification." },
   { step: "05", title: "Cure & walk-through", body: "Open to traffic on schedule; we walk the finished work with you." },
 ]
 
@@ -265,7 +264,7 @@ export default function AboutPage() {
           <div className="flex flex-wrap items-baseline justify-between gap-6">
             <div>
               <div className="eyebrow">What we install</div>
-              <h2 className="mt-4">Four trades, one crew</h2>
+              <h2 className="mt-4">Four trades, one standard</h2>
             </div>
             <Link href="/services" className="arrow-link whitespace-nowrap">
               All services <span>&rarr;</span>
@@ -308,11 +307,11 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── 6 · Five steps, one crew ──────── */}
+      {/* ── 6 · Five steps, every job ──────── */}
       <section className="section bg-surface">
         <div className="container-1280">
           <div className="eyebrow">From the site walk to the walk-through</div>
-          <h2 className="mt-4">Five steps, one crew</h2>
+          <h2 className="mt-4">Five steps, every job</h2>
 
           <div className="mt-10 grid grid-cols-1 gap-10 min-[701px]:grid-cols-2 min-[1001px]:grid-cols-5">
             {process.map((item) => (

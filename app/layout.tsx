@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
-import { Poppins, Jost, Inter } from 'next/font/google'
+import { Poppins, Inter } from 'next/font/google'
+import localFont from 'next/font/local'
 import "./globals.css"
 import "./mobile.css"
 import "./refine.css"
@@ -24,13 +25,35 @@ const poppins = Poppins({
   display: 'swap',
 })
 
-// The Futura option (11 Sept 2026, Vern: "let's see both"). Jost is the
-// open Futura-family cut; Inter is the complementary text face. Neither is
-// preloaded and neither renders unless <html data-type="futura"> is set
-// (components/TypeToggle, ?type=futura), so the default site pays nothing
-// for them. Swap Jost for a licensed Futura here when the client buys one:
-// the variable name is all the CSS knows.
-const jost = Jost({ subsets: ['latin'], variable: '--font-jost', display: 'swap', preload: false })
+// The Futura option (11 Sept 2026, Vern: "let's see both"; the licensed
+// faces arrived 16 Sept and replaced the open Jost stand-in). This is real
+// Futura LT — Book at 400 and Bold at 700, self-hosted from app/fonts as
+// WOFF2, so the files are served hashed out of _next/static/media and are
+// never sitting at a guessable path under public/. Inter is the
+// complementary text face. Nothing here is preloaded and nothing renders
+// unless <html data-type="futura"> is set (components/TypeToggle,
+// ?type=futura), so the default Poppins site pays nothing for them.
+//
+// COVERAGE — Futura LT is a 235-glyph cut. It has every mark this site
+// actually sets in display type (em dash, middle dot, ellipsis, (R), (TM),
+// the accented Latin in project titles) but it does NOT have U+2192 -> or
+// the Halkomelem orthography that appears in real project and blog
+// headings: c-with-comma-above, schwa, barred-l, k-with-line-below. Those
+// names are not decorative and must not render as tofu or in a face that
+// fights the heading around them, so the stack below falls through to
+// Poppins — already loaded, geometric, and the site's own face — before it
+// reaches anything from the system. Check coverage before swapping this
+// font again.
+const futura = localFont({
+  src: [
+    { path: './fonts/FuturaLT-Book.woff2', weight: '400', style: 'normal' },
+    { path: './fonts/FuturaLT-Bold.woff2', weight: '700', style: 'normal' },
+  ],
+  variable: '--font-futura',
+  display: 'swap',
+  preload: false,
+  fallback: ['Poppins', 'Century Gothic', 'system-ui', 'sans-serif'],
+})
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap', preload: false })
 
 /* Applies the saved type choice before first paint, so a page never flashes
@@ -74,7 +97,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${poppins.variable} ${jost.variable} ${inter.variable}`}>
+    <html lang="en" className={`${poppins.variable} ${futura.variable} ${inter.variable}`}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: TYPE_BOOT }} />
       </head>

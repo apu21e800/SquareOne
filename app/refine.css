@@ -225,14 +225,17 @@ h1, h2, h3, .display-xl, .display-statement { overflow-wrap: break-word; }
 }
 
 /* ── The Futura option (11 Sept 2026 — Vern: "let's see both") ──────────
-   <html data-type="futura"> swaps the display face to Jost (the open
-   Futura-family cut; a licensed Futura drops into the same variable in
-   app/layout.tsx) and the text face to Inter, and restores the Jost caps
-   tracking the site ran before 4 Sept (0.065em H1, 0.075em H2, 0.06em at
-   hero scale). Poppins stays the default; nothing here applies without the
+   <html data-type="futura"> swaps the display face to licensed Futura LT
+   (self-hosted, app/layout.tsx) and the text face to Inter, and restores
+   the caps tracking the site ran before 4 Sept (0.065em H1, 0.075em H2,
+   0.06em at hero scale). Poppins sits in the stack behind Futura on
+   purpose, not as a safety net: Futura LT has no U+2192 arrow and none of
+   the Halkomelem orthography in the project and blog titles, and those
+   glyphs must land in the site's own geometric face rather than in
+   whatever the OS offers. Poppins stays the default; nothing here applies without the
    attribute. Set by components/TypeToggle or ?type=futura. */
 html[data-type="futura"] {
-  --font-display: var(--font-jost), Futura, "Century Gothic", ui-sans-serif, sans-serif;
+  --font-display: var(--font-futura), var(--font-poppins), "Century Gothic", ui-sans-serif, sans-serif;
 }
 html[data-type="futura"] body {
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
@@ -254,3 +257,24 @@ html[data-type="futura"] h4 { letter-spacing: 0; }
 /* Search overlay — one clear control, ours; the browser's own is hidden. */
 .search-input::-webkit-search-cancel-button,
 .search-input::-webkit-search-decoration { -webkit-appearance: none; appearance: none; display: none; }
+
+/* ---- Photo cards that carry a contact-sheet label at the top edge.
+   `.scrim-rise` only darkens the bottom 60% of a card, so a label at the
+   top sat on raw photograph — over bright asphalt or a pale sky it fell
+   to roughly 3:1 and read as a smudge (Vern, 16 Sept: "top text hard to
+   read on homepage cards"). This is the matching settle for the top edge:
+   short, so it never greys the subject, and deep enough that 11px caps
+   clear AA on the worst case of a blown-out sky. ---- */
+.scrim-cap {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 132px;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(24, 21, 18, 0.68) 0%,
+    rgba(24, 21, 18, 0.34) 54%,
+    rgba(24, 21, 18, 0) 100%
+  );
+}

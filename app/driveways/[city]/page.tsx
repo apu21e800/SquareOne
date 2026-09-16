@@ -288,7 +288,7 @@ export default async function DrivewayCityPage({ params }: Props) {
             </p>
           </div>
           <div className="mt-10">
-            <DrivewayComposer city={c.name} initialColour={c.slug === "victoria" ? "Driftwood" : "Slate"} initialPattern={c.slug === "victoria" ? "british-cobble" : "ashlar-slate"} />
+            <DrivewayComposer city={c.name} initialColour={c.slug === "victoria" ? "Driftwood" : "Slate"} initialPattern={c.slug === "victoria" ? "random-stone" : "ashlar-slate"} />
           </div>
         </div>
       </section>

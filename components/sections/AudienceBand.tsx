@@ -12,6 +12,15 @@ import Link from "next/link"
  * with the promise, three of the things they actually order, and the way
  * in — the same voice as the mega-menu tiles, at band scale. Every
  * photograph is from the record and at least 2000px wide.
+ *
+ * 16 Sept 2026 — the copy block used to be absolutely positioned at the
+ * foot of a fixed aspect-ratio card. Below 900px the card became short and
+ * wide while the copy stayed the same height, so the block overflowed the
+ * top of the card, collided with the contact-sheet label and was clipped by
+ * overflow-hidden (Vern's screenshot: "weird overlapping text on these
+ * cards"). The card is now a flex column with a min-height: it keeps the
+ * tall look when copy is short and grows when it is not. A fixed aspect box
+ * with absolutely positioned copy inside it is the bug — do not reintroduce.
  */
 const audiences = [
   {
@@ -70,7 +79,7 @@ export default function AudienceBand() {
               key={audience.label}
               href={audience.href}
               data-reveal
-              className="group relative block aspect-[4/5] overflow-hidden rounded-[2px] bg-surface-stone max-[900px]:aspect-[16/10] max-[560px]:aspect-[4/5]"
+              className="group relative block overflow-hidden rounded-[2px] bg-surface-stone"
             >
               <Image
                 src={audience.image}
@@ -80,32 +89,44 @@ export default function AudienceBand() {
                 className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
                 style={{ objectPosition: audience.position }}
               />
+              <div aria-hidden className="scrim-cap" />
               <div aria-hidden className="scrim-rise" />
 
-              {/* The caption sits top-right, small, like a contact-sheet label */}
-              <span className="absolute top-4 right-4 text-[11px] font-semibold uppercase tracking-[0.1em] text-white/75" style={{ fontFamily: "var(--font-display)" }}>
-                {audience.caption}
-              </span>
-
-              <div className="absolute inset-x-0 bottom-0 p-7 max-[700px]:p-5">
-                <h3 className="text-[22px] leading-[1.15] text-white max-[700px]:text-[20px]">{audience.label}</h3>
-                <p className="mt-3 max-w-[40ch] text-[14.5px] leading-[1.55] text-white/85">{audience.desc}</p>
-                <ul className="mt-4 flex flex-wrap gap-2">
-                  {audience.chips.map((chip) => (
-                    <li
-                      key={chip}
-                      className="rounded-[2px] border border-white/25 bg-white/10 px-[9px] py-[4px] text-[11.5px] font-semibold tracking-[0.04em] text-white backdrop-blur-[2px]"
-                    >
-                      {chip}
-                    </li>
-                  ))}
-                </ul>
-                <span className="mt-5 inline-flex items-center gap-2 text-[13px] font-semibold uppercase tracking-[0.1em] text-white" style={{ fontFamily: "var(--font-display)" }}>
-                  {audience.cta}
-                  <span aria-hidden="true" className="transition-transform duration-200 group-hover:translate-x-1">
-                    &rarr;
-                  </span>
+              {/* The card is a flex column, not a fixed aspect box with text
+                  floated over it. min-height keeps the tall proportion when
+                  the copy is short; when the copy is long — a wide one-column
+                  card on a tablet, or a large type setting — the card grows
+                  instead of letting the block slide up under the label.
+                  The label is the first flex child and the copy carries
+                  mt-auto, so the two can never occupy the same space. */}
+              <div className="relative z-[1] flex min-h-[500px] flex-col max-[900px]:min-h-[360px] max-[560px]:min-h-[440px]">
+                <span
+                  className="px-5 pt-4 text-right text-[11px] font-semibold uppercase tracking-[0.1em] text-white/90"
+                  style={{ fontFamily: "var(--font-display)" }}
+                >
+                  {audience.caption}
                 </span>
+
+                <div className="mt-auto p-7 max-[700px]:p-5">
+                  <h3 className="text-[22px] leading-[1.15] text-white max-[700px]:text-[20px]">{audience.label}</h3>
+                  <p className="mt-3 max-w-[40ch] text-[14.5px] leading-[1.55] text-white/85">{audience.desc}</p>
+                  <ul className="mt-4 flex flex-wrap gap-2">
+                    {audience.chips.map((chip) => (
+                      <li
+                        key={chip}
+                        className="rounded-[2px] border border-white/25 bg-white/10 px-[9px] py-[4px] text-[11.5px] font-semibold tracking-[0.04em] text-white backdrop-blur-[2px]"
+                      >
+                        {chip}
+                      </li>
+                    ))}
+                  </ul>
+                  <span className="mt-5 inline-flex items-center gap-2 text-[13px] font-semibold uppercase tracking-[0.1em] text-white" style={{ fontFamily: "var(--font-display)" }}>
+                    {audience.cta}
+                    <span aria-hidden="true" className="transition-transform duration-200 group-hover:translate-x-1">
+                      &rarr;
+                    </span>
+                  </span>
+                </div>
               </div>
             </Link>
           ))}

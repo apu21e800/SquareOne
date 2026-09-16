@@ -8,7 +8,6 @@ import { products, getProductBySlug } from "@/lib/products"
 import { STREETBOND_COLOURS, COLOUR_RANGES } from "@/lib/palette"
 import { galleryWithFallback } from "@/lib/gallery"
 import { resourceGroups } from "@/lib/resources"
-import DocumentRail from "@/components/documents/DocumentRail"
 import { getWork, WORK_APPS } from "@/lib/work"
 import type { WorkAppMeta } from "@/lib/work"
 import WorkGallery from "@/components/WorkGallery"
@@ -444,20 +443,31 @@ export default async function ProductPage({ params }: Props) {
         </Band>
       )}
 
-      {/* ── Documents ──────── */}
+      {/* ── Documents ────────
+          The rail of spec sheets, TDS and guides that used to sit here came
+          off on 16 Sept 2026 at the client's request, made on three separate
+          product pages in review: "I think documents only on the resources
+          page, we can remove them here." The documents are not gone — every
+          one of them is on /resources with its page-one preview, and this
+          band now points there, anchored to this system. Keeping one library
+          in one place is also the easier thing to keep current, which is the
+          whole argument for hosting them at all.  ──────── */}
       {docs.length > 0 && (
         <Band tone={toneOf("documents")} id="documents">
           <div className="flex flex-wrap items-baseline justify-between gap-6">
             <div>
               <div className="eyebrow">Specify it</div>
               <h2 className="mt-4">{product.name} documents</h2>
+              <p className="mt-4 max-w-[52ch] text-[16px] leading-[1.65] text-ink-body [text-wrap:pretty]">
+                {docs.length} {product.name} document{docs.length === 1 ? "" : "s"} &mdash; specification,
+                technical data, safety data and colour &mdash; are kept with the rest of the
+                library, where they are previewed page by page and checked against HUB&rsquo;s
+                current editions.
+              </p>
             </div>
-            <Link href="/resources" className="arrow-link whitespace-nowrap">
-              The full library <span aria-hidden="true">&rarr;</span>
+            <Link href={`/resources#${product.slug}`} className="btn-secondary whitespace-nowrap">
+              Open the {product.name} documents
             </Link>
-          </div>
-          <div className="mt-10">
-            <DocumentRail docs={docs} product={product.name} />
           </div>
         </Band>
       )}
