@@ -134,7 +134,7 @@ export default function ContactPage() {
                 <h2 className="mt-4 text-[26px] normal-case tracking-normal">Thank you &mdash; we have your request.</h2>
                 <p className="mt-4 max-w-[52ch] text-[16px] leading-[1.65] text-ink-body">
                   We reply within one business day to arrange the site walk. If it is urgent, call{" "}
-                  <a href="tel:+16044669902" className="font-medium text-ink">604-466-9902</a> (Lower Mainland) or{" "}
+                  <a href="tel:+16046126209" className="font-medium text-ink">604-612-6209</a> (Lower Mainland) or{" "}
                   <a href="tel:+12503910270" className="font-medium text-ink">250-391-0270</a> (Vancouver Island).
                 </p>
               </div>
@@ -289,7 +289,7 @@ export default function ContactPage() {
                   </button>
                   <span className="text-[14px] leading-[1.5] text-ink-muted">
                     We reply within one business day, or call{" "}
-                    <a href="tel:+16044669902" className="font-medium text-ink-body">604-466-9902</a>.
+                    <a href="tel:+16046126209" className="font-medium text-ink-body">604-612-6209</a>.
                   </span>
                 </div>
               </form>
@@ -307,7 +307,7 @@ export default function ContactPage() {
 
             <RailBlock heading="Phone">
               <div className="mt-3 flex flex-col gap-[10px]">
-                <PhoneRow region="Lower Mainland" display="604-466-9902" href="tel:+16044669902" />
+                <PhoneRow region="Lower Mainland" display="604-612-6209" href="tel:+16046126209" />
                 <PhoneRow region="Vancouver Island" display="250-391-0270" href="tel:+12503910270" />
                 <PhoneRow region="Toll-free" display="1-877-391-0270" href="tel:+18773910270" />
               </div>

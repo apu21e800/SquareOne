@@ -13,7 +13,7 @@ const ORG_BASE = {
   logo: `${SITE_URL}/images/logo/SquareOne-wordmark-dark.svg`,
   image: `${SITE_URL}/images/og-image.png`,
   description: "BC's decorative pavement studio since 2000. Stamped asphalt, decorative coatings, preformed thermoplastic, and vapour blasting for municipalities, developers, and residential clients across British Columbia.",
-  telephone: "+1-604-466-9902",
+  telephone: "+1-604-612-6209",
   email: "office@squareonepaving.com",
   foundingDate: "2000",
   // No priceRange (would be invented), no founder (not stated anywhere on

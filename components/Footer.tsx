@@ -7,7 +7,7 @@ import { getSiteSettings } from "@/lib/cms"
    Three moves: one closing CTA; a four-part footer that reads left to right
    as who we are → what we do → where to go → how to reach us; one legal
    row. Products and applications are indexes, not lists — the mega menu
-   and the index pages carry those. Contact canon only: 604-466-9902 office,
+   and the index pages carry those. Contact canon only: 604-612-6209 office,
    250-391-0270 Vancouver Island, 1-877-391-0270 toll-free,
    office@squareonepaving.com, 505-20800 Lougheed Hwy, Maple Ridge. */
 
@@ -46,7 +46,7 @@ const company: FooterLink[] = [
   { label: "Contact", href: "/contact" },
 ]
 
-/** "604-466-9902" → "tel:+16044669902" */
+/** "604-612-6209" → "tel:+16046126209" */
 const tel = (display: string) => {
   const digits = display.replace(/\D/g, "")
   return `tel:+${digits.length === 10 ? "1" + digits : digits}`

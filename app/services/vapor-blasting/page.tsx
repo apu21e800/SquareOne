@@ -230,8 +230,8 @@ export default function VaporBlastingServicePage() {
               <Link href="/contact" className="btn-primary">
                 Request a quote
               </Link>
-              <a href="tel:+16044669902" className="btn-secondary">
-                604-466-9902
+              <a href="tel:+16046126209" className="btn-secondary">
+                604-612-6209
               </a>
             </div>
           </div>
@@ -525,8 +525,8 @@ export default function VaporBlastingServicePage() {
             <Link href="/contact" className="btn-primary">
               Request a quote
             </Link>
-            <a href="tel:+16044669902" className="btn-secondary">
-              604-466-9902
+            <a href="tel:+16046126209" className="btn-secondary">
+              604-612-6209
             </a>
           </div>
 

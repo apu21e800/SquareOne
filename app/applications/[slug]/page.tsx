@@ -31,7 +31,7 @@ interface Props {
   params: Promise<{ slug: string }>
 }
 
-const PHONE = "604-466-9902"
+const PHONE = "604-612-6209"
 
 interface AppCopy {
   headline: string

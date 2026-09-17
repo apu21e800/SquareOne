@@ -215,8 +215,14 @@ document, a filename, or a folder name, it does not go on the site.
   · S1 has NO TikTok on record. The TikTok button only renders when Site
     settings carries a real account link.
 
-CONTACT CANON — these and nothing else:
-  604-466-9902 (office) · 250-391-0270 (Vancouver Island) ·
+CONTACT CANON — these and nothing else. The office number changed on
+  2026-09-17: the client asked for 604-612-6209 in review on three pages and
+  Vern confirmed it. It had been listed as retired and forbidden; that was
+  wrong, and the lint guard for it was removed with this change. The number it
+  replaced, 604-466-9902, is still printed on Square One's own patterns sheet
+  in public/docs — the site and that PDF now disagree, and the PDF is the one
+  that needs reissuing.
+  604-612-6209 (office) · 250-391-0270 (Vancouver Island) ·
   1-877-391-0270 (toll-free) · office@squareonepaving.com ·
   505-20800 Lougheed Hwy, Maple Ridge, BC V2X 3P2
   Vancouver Island is a SERVICE REGION with its own line — never an office,
@@ -224,7 +230,7 @@ CONTACT CANON — these and nothing else:
   The owners' personal mobiles and personal mailboxes never appear on the
   website (their names are fine).
 
-FORBIDDEN STRINGS on the site: the retired 604-612-6209, HUB's own lines
+FORBIDDEN STRINGS on the site: HUB's own lines
   (604-309-8212, 416-540-9287, info@hubss.com, any @hubss.com mailbox, any
   HUBSS address), America/Toronto. Client email addresses never appear on
   the website. The personal numbers and mailboxes that must never appear are

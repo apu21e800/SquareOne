@@ -44,10 +44,10 @@ export default function CTASection() {
             <div className="mt-10 flex flex-wrap items-center justify-between gap-3 border-t border-[color:var(--hairline)] pt-7">
               <span className="label">Or call us directly</span>
               <a
-                href="tel:+16044669902"
+                href="tel:+16046126209"
                 className="text-[17px] font-semibold tracking-[-0.01em] text-ink"
               >
-                604-466-9902
+                604-612-6209
               </a>
             </div>
           </div>

@@ -17,7 +17,7 @@ export function GET() {
     "",
     "> BC decorative pavement installer since 2000 — stamped asphalt, decorative coatings, preformed thermoplastic and vapour blasting for municipalities, developers, strata and homeowners across the Lower Mainland and Vancouver Island. Square One installs HUB Surface Systems products; HUB manufactures them.",
     "",
-    "Office: 505-20800 Lougheed Hwy, Maple Ridge, BC V2X 3P2. Phone 604-466-9902 (Lower Mainland), 250-391-0270 (Vancouver Island), 1-877-391-0270 (toll-free). Email office@squareonepaving.com.",
+    "Office: 505-20800 Lougheed Hwy, Maple Ridge, BC V2X 3P2. Phone 604-612-6209 (Lower Mainland), 250-391-0270 (Vancouver Island), 1-877-391-0270 (toll-free). Email office@squareonepaving.com.",
     "Service area: Metro Vancouver, the Fraser Valley and Vancouver Island; elsewhere in BC by arrangement.",
     "Process: free site visit, then a written quote. Material is warranted by the manufacturer (HUB); workmanship by Square One.",
     "",

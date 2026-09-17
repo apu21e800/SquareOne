@@ -50,8 +50,8 @@ export default function ResourcesPage() {
           <p className="max-w-[56ch] text-[17px] leading-[1.65] text-[color:var(--ink-body)] [text-wrap:pretty]">
             Writing a specification and need help matching a system to your traffic loading and
             substrate? Call{" "}
-            <a href="tel:+16044669902" className="font-semibold text-[color:var(--ink)]">
-              604-466-9902
+            <a href="tel:+16046126209" className="font-semibold text-[color:var(--ink)]">
+              604-612-6209
             </a>{" "}
             or{" "}
             <Link href="/contact" className="font-semibold text-[color:var(--ink)] underline-offset-4 hover:underline">

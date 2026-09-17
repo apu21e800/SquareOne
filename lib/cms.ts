@@ -38,7 +38,7 @@ export interface SiteSettings {
 export const DEFAULT_SETTINGS: SiteSettings = {
   positioning:
     "Decorative pavement for BC since 2000. Installer of HUB Surface Systems products, based in Maple Ridge and working across the Lower Mainland and Vancouver Island.",
-  phoneOffice: "604-466-9902",
+  phoneOffice: "604-612-6209",
   phoneIsland: "250-391-0270",
   phoneTollFree: "1-877-391-0270",
   email: "office@squareonepaving.com",

@@ -58,7 +58,7 @@ const CITIES: Record<string, CityCopy> = {
       "StreetPrint stamped asphalt and StreetBond colour, installed over the driveway you already have — from West Vancouver to Langley, by the crew that has been doing it since 2000.",
     intro:
       "A Vancouver driveway lives in nine months of rain. Stamped asphalt handles that better than pavers or coloured concrete: it is one continuous surface, so there are no joints to heave, no sand to wash out and nothing for moss to take hold in. We imprint the pattern into your existing asphalt and seal it in a StreetBond colour — the driveway stays where it is.",
-    phone: "604-466-9902",
+    phone: "604-612-6209",
     phoneLabel: "Lower Mainland",
     communities: [
       "Vancouver", "West Vancouver", "North Vancouver", "Burnaby", "New Westminster", "Richmond",

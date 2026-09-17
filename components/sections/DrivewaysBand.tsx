@@ -119,7 +119,7 @@ export default function DrivewaysBand() {
                   Book a site visit
                 </Link>
                 <span className="inline-flex flex-wrap items-center gap-x-2 text-[13px] font-semibold tracking-[0.02em] text-white/85">
-                  <a href="tel:+16044669902" className="whitespace-nowrap text-white hover:text-white">604-466-9902</a>
+                  <a href="tel:+16046126209" className="whitespace-nowrap text-white hover:text-white">604-612-6209</a>
                   <span aria-hidden="true" className="text-white/50">&middot;</span>
                   <a href="tel:+12503910270" className="whitespace-nowrap text-white hover:text-white">250-391-0270</a>
                 </span>
