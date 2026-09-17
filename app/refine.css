@@ -286,13 +286,60 @@ h2:not(.label):not(.eyebrow) { letter-spacing: 0.07em; }
 .btn-primary, .btn-secondary, .btn-on-slate, .btn-on-image { letter-spacing: 0.12em; }
 h3, h4, h5, h6 { letter-spacing: 0; }
 
-/* The alternate, for comparison only: ?type=poppins. */
+/* ── The alternates (lib/typefaces.ts, components/TypeToggle) ──────────
+   The switch changes the DISPLAY face only — Inter carries running text in
+   every option — so the client is comparing the one thing in question and
+   not two changes at once.
+
+   Each block is the same four lines: the stack, the caps tracking the face
+   wants, and --fit-adj, the per-character width relative to Futura LT Bold
+   (measured in the browser, see lib/type.ts). Adding a face is one more
+   block; nothing else in this file knows how many there are. Reached with
+   ?type=<id>, kept in localStorage, applied before first paint by the boot
+   script in app/layout.tsx.
+   ------------------------------------------------------------------ */
+
+/* Jost — open Futura-alike. A little more x-height than Futura and very
+   slightly narrower caps at the tracking it wants.
+   Measured worst case (TRAFFICPATTERNSXD): 0.664 em/char vs Futura's 0.680. */
+html[data-type="jost"] {
+  --font-display: var(--font-jost), "Century Gothic", ui-sans-serif, sans-serif;
+  --fit-adj: 0.98;
+}
+html[data-type="jost"] h1 { letter-spacing: 0.05em; }
+html[data-type="jost"] h2:not(.label):not(.eyebrow) { letter-spacing: 0.065em; }
+html[data-type="jost"] .display-xl { letter-spacing: 0.045em; }
+html[data-type="jost"] .display-statement { letter-spacing: 0.055em; }
+html[data-type="jost"] .headline-sentence { letter-spacing: -0.01em; }
+
+/* Space Grotesk — a grotesque, not a geometric. Squarer bowls, sheared
+   terminals, drawn for screens. Wider caps than either Futura or Jost and
+   far more self-spacing built in, so the tracking comes down hard: a
+   grotesque set at Futura's tracking reads as a logo, not a headline.
+   Measured worst case: 0.593 em/char — much the narrowest of the four, so
+   it can carry the largest type in the same column. */
+html[data-type="space-grotesk"] {
+  --font-display: var(--font-space-grotesk), ui-sans-serif, sans-serif;
+  --fit-adj: 0.88;
+}
+html[data-type="space-grotesk"] h1 { letter-spacing: 0.015em; }
+html[data-type="space-grotesk"] h2:not(.label):not(.eyebrow) { letter-spacing: 0.03em; }
+html[data-type="space-grotesk"] .display-xl { letter-spacing: 0.012em; }
+html[data-type="space-grotesk"] .display-statement { letter-spacing: 0.02em; }
+html[data-type="space-grotesk"] .label,
+html[data-type="space-grotesk"] .eyebrow,
+html[data-type="space-grotesk"] .chip-name { letter-spacing: 0.11em; }
+html[data-type="space-grotesk"] .btn-primary,
+html[data-type="space-grotesk"] .btn-secondary,
+html[data-type="space-grotesk"] .btn-on-slate,
+html[data-type="space-grotesk"] .btn-on-image { letter-spacing: 0.09em; }
+html[data-type="space-grotesk"] .headline-sentence { letter-spacing: -0.018em; }
+
+/* Poppins — the face the site ran until 17 Sept. Round, tall x-height,
+   soft terminals. Measured worst case: 0.648 em/char. */
 html[data-type="poppins"] {
   --font-display: var(--font-poppins), "Century Gothic", ui-sans-serif, sans-serif;
-}
-html[data-type="poppins"] body {
-  font-family: var(--font-poppins), system-ui, -apple-system, sans-serif;
-  font-size: 16px;
+  --fit-adj: 0.96;
 }
 html[data-type="poppins"] h1 { letter-spacing: 0.02em; }
 html[data-type="poppins"] h2:not(.label):not(.eyebrow) { letter-spacing: 0.04em; }
@@ -305,6 +352,7 @@ html[data-type="poppins"] .btn-primary,
 html[data-type="poppins"] .btn-secondary,
 html[data-type="poppins"] .btn-on-slate,
 html[data-type="poppins"] .btn-on-image { letter-spacing: 0.1em; }
+html[data-type="poppins"] .headline-sentence { letter-spacing: -0.015em; }
 
 /* Search overlay — one clear control, ours; the browser's own is hidden. */
 .search-input::-webkit-search-cancel-button,
@@ -353,12 +401,20 @@ html[data-type="poppins"] .btn-on-image { letter-spacing: 0.1em; }
    occupy at 100% of that column, resolved by the browser continuously
    rather than at the three widths somebody thought to test. The em figure
    comes from lib/type.ts, which measures the line on the server.
+
+   `--fit-adj` is the one number that changes when the display face
+   changes: lib/type.ts measures in Futura LT Bold, and every other face in
+   the type switch is a different width per character AT THE TRACKING IT
+   WANTS — which is the figure that matters, not the raw glyph width. Each
+   value below was measured in the browser against the site's own worst-case
+   word, so the switch cannot break the fit. Re-measure with
+   `TRAFFICPATTERNSXD` if a face or its tracking changes.
    ---------------------------------------------------------------- */
 .fit-host { container-type: inline-size; }
 .display-fit {
   font-size: clamp(
     var(--fit-min, 1.5rem),
-    min(var(--fit-pref, 5vw), calc(100cqi / var(--fit-em, 12))),
+    min(var(--fit-pref, 5vw), calc(100cqi / (var(--fit-em, 12) * var(--fit-adj, 1)))),
     var(--fit-max, 4rem)
   );
 }

@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Poppins, Inter } from 'next/font/google'
+import { Poppins, Inter, Jost, Space_Grotesk } from 'next/font/google'
 import localFont from 'next/font/local'
 import "./globals.css"
 import "./mobile.css"
@@ -12,6 +12,7 @@ import MotionBreath from "@/components/MotionBreath"
 import TypeToggle from "@/components/TypeToggle"
 import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
+import { TYPEFACE_IDS, LIVE_TYPEFACE } from "@/lib/typefaces"
 
 // TYPE (canon §2.5 as amended 17 Sept 2026 — Vern: "this does not look
 // like futura, Futura has sharp edges"). He was looking at Poppins; the
@@ -25,7 +26,14 @@ import { clampDescription } from "@/lib/seo"
 //   Inter       running text. Futura's small x-height and tight
 //               apertures cost reading speed at 16px; Inter does not.
 //   Poppins     fallback only, and a working one — see COVERAGE below.
-//               Also what ?type=poppins puts back for a side-by-side.
+//               Also one of the alternates in the type switch.
+//
+// The switch itself (components/TypeToggle, lib/typefaces.ts) offers four
+// display faces on the real pages so the client chooses from their own site
+// rather than from a specimen. Only Futura is preloaded — the alternates
+// load on demand, when someone actually flips to them, so the shipping site
+// pays nothing for the comparison. Adding a face: a loader here, an entry in
+// lib/typefaces.ts, a tracking block in app/refine.css.
 //
 // COVERAGE — Futura LT is a 235-glyph cut. It has every mark this site
 // sets in display type (em dash, middle dot, ellipsis, ®, ™, the accented
@@ -50,6 +58,23 @@ const futura = localFont({
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' })
 
+// The alternates. Not preloaded: nothing renders in them unless the switch
+// sets html[data-type].
+const jost = Jost({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-jost',
+  display: 'swap',
+  preload: false,
+})
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-space-grotesk',
+  display: 'swap',
+  preload: false,
+})
+
 // Fallback and alternate only, so it is not preloaded. The static cuts the
 // site can still reach are listed; nothing renders below 400.
 const poppins = Poppins({
@@ -61,10 +86,12 @@ const poppins = Poppins({
 })
 
 /* Applies the saved type choice before first paint, so a page never flashes
-   from one face to the other. Futura is the default and needs no attribute;
-   ?type=poppins sets the alternate and localStorage keeps it. Nothing runs
-   on the server. */
-const TYPE_BOOT = `(function(){try{var q=new URLSearchParams(location.search).get('type');if(q==='poppins'||q==='futura'){localStorage.setItem('s1-type',q)}var t=q||localStorage.getItem('s1-type');if(t==='poppins'){document.documentElement.setAttribute('data-type','poppins')}}catch(e){}})();`
+   from one face to another. The live face needs no attribute; any other id
+   from lib/typefaces.ts sets html[data-type] and localStorage keeps it.
+   ?type=<id> overrides and persists. Unknown values are ignored rather than
+   written to the DOM. Nothing runs on the server. */
+const TYPE_IDS = JSON.stringify(TYPEFACE_IDS)
+const TYPE_BOOT = `(function(){try{var ids=${TYPE_IDS},live='${LIVE_TYPEFACE}';var q=new URLSearchParams(location.search).get('type');if(q&&ids.indexOf(q)>-1){localStorage.setItem('s1-type',q)}var t=q||localStorage.getItem('s1-type');if(t&&t!==live&&ids.indexOf(t)>-1){document.documentElement.setAttribute('data-type',t)}}catch(e){}})();`
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -102,7 +129,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${poppins.variable} ${futura.variable} ${inter.variable}`}>
+    <html lang="en" className={`${poppins.variable} ${futura.variable} ${inter.variable} ${jost.variable} ${spaceGrotesk.variable}`}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: TYPE_BOOT }} />
       </head>
