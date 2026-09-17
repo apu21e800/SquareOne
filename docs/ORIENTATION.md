@@ -224,7 +224,8 @@ CONTACT CANON — these and nothing else. The office number changed on
   that needs reissuing.
   604-612-6209 (office) · 250-391-0270 (Vancouver Island) ·
   1-877-391-0270 (toll-free) · office@squareonepaving.com ·
-  505-20800 Lougheed Hwy, Maple Ridge, BC V2X 3P2
+  19-11720 Stewart Crescent, Maple Ridge, BC   (no postal code: V2X 3P2
+  belonged to the old Lougheed address and must not be carried over)
   Vancouver Island is a SERVICE REGION with its own line — never an office,
   address or "base". Ladysmith only ever as a service-area city.
   The owners' personal mobiles and personal mailboxes never appear on the

@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Square One Paving — BC's trusted decorative pavement studio since 2000.
 Independent BC installer of HUB Surface Systems products, serving the Lower Mainland and Vancouver Island.
 **Installer, not manufacturer.** HUB makes StreetPrint, StreetBond, TrafficPatterns etc.; Square One installs them. Never "our StreetPrint", never "we developed"; performance figures are HUB's and are attributed; ® / ™ on first mention per page; HUB warrants the material, Square One warrants the workmanship; no pricing, lead times or stock claims.
-- Office: 505-20800 Lougheed Hwy, Maple Ridge, BC V2X 3P2 (office@squareonepaving.com / 604-612-6209)
+- Office: 19-11720 Stewart Crescent, Maple Ridge, BC (office@squareonepaving.com / 604-612-6209)
 - Vancouver Island is a service region with its own line (250-391-0270) — never an office, address or "base"
 - Toll-free 1-877-391-0270. No other phone numbers, emails or addresses belong on the site.
 

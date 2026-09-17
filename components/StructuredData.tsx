@@ -34,10 +34,9 @@ const ORG_BASE = {
   address: [
     {
       "@type": "PostalAddress",
-      streetAddress: "505 - 20800 Lougheed Hwy",
+      streetAddress: "19 - 11720 Stewart Crescent",
       addressLocality: "Maple Ridge",
       addressRegion: "BC",
-      postalCode: "V2X 3P2",
       addressCountry: "CA",
     },
   ],
