@@ -21,17 +21,16 @@ export const services: Service[] = [
     shortDescription:
       "Pattern and colour worked into the asphalt you already have. The stamped asphalt Square One installs is slip-resistant, snowplow safe and built for the 10–20 years of service HUB publishes for StreetPrint®.",
     fullDescription:
-      "Stamped asphalt is more than aesthetics — it's functional design that performs. Whether it's a vibrant crosswalk in downtown Vancouver or a subtle traffic pattern on Vancouver Island, HUB's StreetPrint® Imprinting System, installed by Square One crews, delivers precision, colour, and durability. Custom patterns, reflective options, and snowplow-safe surfaces make this the choice for municipalities and developers who demand both form and function.",
+      "Stamped asphalt is more than aesthetics — it's functional design that performs. Square One installs two kinds: HUB's StreetPrint® Imprinting System, which presses the pattern into the asphalt itself, and TrafficPatternsXD™, a heavy-duty preformed thermoplastic that is heated and stamped into the top layer of the asphalt. Whether it's a vibrant crosswalk in downtown Vancouver or a subtle traffic pattern on Vancouver Island, Square One crews deliver precision, colour, and durability. Custom patterns, reflective options, and snowplow-safe surfaces make this the choice for municipalities and developers who demand both form and function.",
     productsIncluded: [
-      "StreetPrint Asphalt Imprinting System",
-      "StreetBond colour and seal",
-      "Custom colour mixing",
+      "StreetPrint® Asphalt Imprinting System",
+      "TrafficPatternsXD™ impressed thermoplastic",
     ],
     applications: [
       "Crosswalks",
       "Roundabouts",
       "Traffic calming treatments",
-      "Driveways",
+      "Streetscapes and medians",
       "Commercial entries",
       "Parking lot design elements",
     ],
@@ -55,7 +54,7 @@ export const services: Service[] = [
       { q: "How long does StreetPrint last?", a: "HUB publishes a 10–20 year service life for StreetPrint under municipal traffic, and puts it more simply in its own FAQ: printed asphalt is as durable as the asphalt it is printed on." },
       { q: "Can it be installed over existing asphalt?", a: "Yes, when the asphalt is sound. The surface is reheated and stamped in place, then sealed in colour — no demolition and no new base. The site visit decides whether the existing surface will take a pattern." },
     ],
-    imageUrl: "/images/applications/driveways/saanich-ten-mile-point-driveway-streetprint-01.jpg",
+    imageUrl: "/images/applications/roundabouts/maple-ridge-roundabout-centre-streetprint-01.jpg",
   },
   {
     slug: "preformed-thermoplastic",
