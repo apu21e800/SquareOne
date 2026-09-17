@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
-import { DRAWINGS, W, H } from "@/components/PatternTile"
+import { PATTERN_ART } from "@/lib/pattern-art"
 import PatternTile from "@/components/PatternTile"
 import {
   STREETPRINT_PATTERNS,
@@ -32,12 +32,16 @@ import {
 const GRAIN = `<filter id="board-grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch" seed="7"/><feColorMatrix type="saturate" values="0"/><feComponentTransfer><feFuncA type="linear" slope="0.9"/></feComponentTransfer></filter><rect width="100%" height="100%" filter="url(#board-grain)"/>`
 
 function Board({ pattern, swatch }: { pattern: PatternId; swatch: Swatch }) {
-  const { body, rotate } = DRAWINGS[pattern]()
-  const inner = rotate ? `<g transform="rotate(${rotate} ${W / 2} ${H / 2})">${body}</g>` : body
+  // HUB's own template geometry (lib/pattern-art.ts), at that drawing's own
+  // frame — each sheet was drawn at its true module size, so the frame is
+  // per pattern rather than one constant.
+  const { w: W, h: H, sw, d } = PATTERN_ART[pattern]
+  const inner = `<path d="${d}"/>`
+  const off = sw * 0.45
   // The field is the colour; the joints are asphalt showing through the
   // seal — a dark line with a hair of highlight beside it, which is what a
   // stamped joint does under raking light.
-  const svg = `<clipPath id="board-clip"><rect width="${W}" height="${H}"/></clipPath><rect width="${W}" height="${H}" fill="${swatch.hex}"/><g clip-path="url(#board-clip)" fill="none" stroke-linejoin="round"><g transform="translate(0.5 0.5)" stroke="rgba(255,255,255,0.28)" stroke-width="0.55">${inner}</g><g stroke="rgba(24,21,18,0.7)" stroke-width="0.6">${inner}</g></g>`
+  const svg = `<clipPath id="board-clip"><rect width="${W}" height="${H}"/></clipPath><rect width="${W}" height="${H}" fill="${swatch.hex}"/><g clip-path="url(#board-clip)" fill="none" stroke-linejoin="round" stroke-linecap="round"><g transform="translate(${off} ${off})" stroke="rgba(255,255,255,0.28)" stroke-width="${sw}">${inner}</g><g stroke="rgba(24,21,18,0.7)" stroke-width="${sw}">${inner}</g></g>`
   return (
     <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[2px] bg-surface-stone shadow-[var(--shadow-rest)]">
       <svg

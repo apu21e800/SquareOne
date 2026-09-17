@@ -186,9 +186,13 @@ h1, h2, h3, .display-xl, .display-statement { overflow-wrap: break-word; }
    separates the TEMPLATE — the geometry of the casting — from the BOARD
    below it, which is the template over a real StreetBond colour and stays
    as the cast surface looks. The asphalt tile above is left in place: the
-   big board still uses it. */
+   big board still uses it.
+
+   Deepened 17 Sept when the drawings became HUB's own: their line is 0.19%
+   of the frame where the hand-drawn set ran 0.46%, so at the same ink the
+   real templates went faint. */
 .pattern-tile {
-  color: rgba(20, 22, 26, 0.5);
+  color: rgba(20, 22, 26, 0.72);
   background: #FFFFFF;
   border-color: var(--hairline);
 }

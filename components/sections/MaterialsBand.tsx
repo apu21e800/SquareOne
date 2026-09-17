@@ -77,10 +77,11 @@ export default function MaterialsBand() {
         </div>
 
         <p className="mt-8 max-w-[70ch] text-[13px] leading-[1.6] text-ink-muted">
-          The ten popular patterns from HUB&rsquo;s StreetPrint&reg; template catalogue, named as HUB
-          prints them &mdash; a selection, not the whole library; custom templates are cut to order,
-          ask us. Colour names and ranges as HUB publishes them; on-screen colour varies from the cast
-          colour. Every pattern and colour above is installed to the manufacturer&apos;s specification.
+          The nine StreetPrint&reg; templates on Square One&rsquo;s own patterns sheet, drawn from
+          HUB&rsquo;s template sheets at their true module dimensions &mdash; a selection, not the whole
+          library; custom templates are cut to order, ask us. Colour names and ranges as HUB publishes
+          them; on-screen colour varies from the cast colour. Every pattern and colour above is
+          installed to the manufacturer&apos;s specification.
         </p>
       </div>
     </section>
