@@ -9,6 +9,7 @@ import { products } from "@/lib/products"
 import WorkGallery from "@/components/WorkGallery"
 import ProjectCaption from "@/components/ui/ProjectCaption"
 import { SITE_URL } from "@/lib/site"
+import { fitVars } from "@/lib/type"
 import JsonLd, { breadcrumbSchema } from "@/components/JsonLd"
 import { clampDescription } from "@/lib/seo"
 
@@ -160,7 +161,9 @@ export default async function ApplicationPage({ params }: Props) {
             Applications · {meta.label}
           </Link>
 
-          <h1 className="stop mt-7 max-w-[22ch] [text-wrap:balance]">{copy.headline}</h1>
+          <div className="fit-host mt-7 max-w-[46rem]">
+            <h1 className="display-fit stop [text-wrap:balance]" style={fitVars(copy.headline)}>{copy.headline}</h1>
+          </div>
 
           <p className="mt-7 max-w-[60ch] text-[19px] leading-[1.65] text-[color:var(--ink-body)] [text-wrap:pretty] max-[700px]:text-[17px]">
             {copy.intro}

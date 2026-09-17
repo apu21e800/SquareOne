@@ -5,24 +5,25 @@ import { useEffect, useState } from "react"
 type TypeChoice = "poppins" | "futura"
 
 /**
- * The type switch — Poppins (the live face) against the Futura option
- * (licensed Futura LT display, Inter text), on the real pages, for Vern and the client to
- * compare. It shows on preview deployments and in development, and on any
- * deployment reached with ?type= in the URL; production visitors never see
- * it unless they were sent a ?type= link. Choice persists per browser in
- * localStorage; the root layout's boot script applies it before paint.
- * Retire this file, the two font loaders in app/layout.tsx and the
- * html[data-type] block in app/refine.css once the choice is made.
+ * The type switch — Futura LT (the live face, with Inter for text) against
+ * Poppins, the face the site ran until 17 Sept, on the real pages, so Vern
+ * and the client can see the change rather than take it on trust. It shows
+ * on preview deployments and in development, and on any deployment reached
+ * with ?type= in the URL; production visitors never see it unless they were
+ * sent a ?type= link. Choice persists per browser in localStorage; the root
+ * layout's boot script applies it before paint. Retire this file and the
+ * html[data-type="poppins"] block in app/refine.css once the client has
+ * signed off on the face.
  */
 export default function TypeToggle() {
-  const [choice, setChoice] = useState<TypeChoice>("poppins")
+  const [choice, setChoice] = useState<TypeChoice>("futura")
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
     try {
       const fromUrl = new URLSearchParams(window.location.search).get("type")
       const saved = window.localStorage.getItem("s1-type")
-      const current: TypeChoice = (fromUrl ?? saved) === "futura" ? "futura" : "poppins"
+      const current: TypeChoice = (fromUrl ?? saved) === "poppins" ? "poppins" : "futura"
       setChoice(current)
       const previewHost =
         process.env.NEXT_PUBLIC_VERCEL_ENV === "preview" ||
@@ -42,7 +43,7 @@ export default function TypeToggle() {
     } catch {
       /* ignore */
     }
-    if (next === "futura") document.documentElement.setAttribute("data-type", "futura")
+    if (next === "poppins") document.documentElement.setAttribute("data-type", "poppins")
     else document.documentElement.removeAttribute("data-type")
   }
 
@@ -78,8 +79,8 @@ export default function TypeToggle() {
       className="fixed bottom-4 left-4 z-[150] flex items-center gap-1 rounded-[3px] bg-[#1E1B18]/95 p-1 shadow-[0_8px_24px_rgba(24,21,18,0.35)] backdrop-blur max-[700px]:bottom-[76px]"
     >
       <span className="pl-2 pr-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#968F86]">Type</span>
-      {btn("poppins", "Poppins")}
       {btn("futura", "Futura")}
+      {btn("poppins", "Poppins")}
       <button
         type="button"
         onClick={dismiss}

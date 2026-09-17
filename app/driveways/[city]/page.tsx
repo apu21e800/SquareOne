@@ -8,6 +8,7 @@ import WorkGallery from "@/components/WorkGallery"
 import DrivewayComposer from "@/components/DrivewayComposer"
 import JsonLd, { breadcrumbSchema, faqSchema } from "@/components/JsonLd"
 import { SITE_URL } from "@/lib/site"
+import { fitVars } from "@/lib/type"
 import { clampDescription } from "@/lib/seo"
 
 /**
@@ -180,7 +181,9 @@ export default async function DrivewayCityPage({ params }: Props) {
             Driveways &middot; {c.regionLabel}
           </Link>
 
-          <h1 className="stop mt-7 max-w-[20ch] [text-wrap:balance]">{c.headline}</h1>
+          <div className="fit-host mt-7 max-w-[44rem]">
+            <h1 className="display-fit stop [text-wrap:balance]" style={fitVars(c.headline)}>{c.headline}</h1>
+          </div>
 
           <p className="mt-7 max-w-[58ch] text-[19px] leading-[1.65] text-[color:var(--ink-body)] [text-wrap:pretty] max-[700px]:text-[17px]">
             {c.lede}

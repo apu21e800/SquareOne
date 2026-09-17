@@ -13,37 +13,30 @@ import TypeToggle from "@/components/TypeToggle"
 import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
 
-// One-face system (canon §2.5 as amended 4 Sept 2026 — Vern's call, the
-// alternates stay on /type-test): Poppins carries display at 600 spaced
-// caps and body at 400/500. Poppins ships static cuts, so every weight the
-// site uses is listed here — nothing renders below 400 except the ghost
-// numerals at 300, the one sanctioned exception.
-const poppins = Poppins({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
-  variable: '--font-poppins',
-  display: 'swap',
-})
-
-// The Futura option (11 Sept 2026, Vern: "let's see both"; the licensed
-// faces arrived 16 Sept and replaced the open Jost stand-in). This is real
-// Futura LT — Book at 400 and Bold at 700, self-hosted from app/fonts as
-// WOFF2, so the files are served hashed out of _next/static/media and are
-// never sitting at a guessable path under public/. Inter is the
-// complementary text face. Nothing here is preloaded and nothing renders
-// unless <html data-type="futura"> is set (components/TypeToggle,
-// ?type=futura), so the default Poppins site pays nothing for them.
+// TYPE (canon §2.5 as amended 17 Sept 2026 — Vern: "this does not look
+// like futura, Futura has sharp edges"). He was looking at Poppins; the
+// toggle in his screenshots had Poppins selected. The licensed faces he
+// supplied on 16 Sept are now the site rather than an option:
+//
+//   Futura LT   display — headings, eyebrows, labels, buttons, numerals.
+//               The same face as the wordmark, so the page and the logo
+//               finally agree. Book at 400, Bold at 700; the CSS never
+//               asks for a weight between them.
+//   Inter       running text. Futura's small x-height and tight
+//               apertures cost reading speed at 16px; Inter does not.
+//   Poppins     fallback only, and a working one — see COVERAGE below.
+//               Also what ?type=poppins puts back for a side-by-side.
 //
 // COVERAGE — Futura LT is a 235-glyph cut. It has every mark this site
-// actually sets in display type (em dash, middle dot, ellipsis, (R), (TM),
-// the accented Latin in project titles) but it does NOT have U+2192 -> or
-// the Halkomelem orthography that appears in real project and blog
-// headings: c-with-comma-above, schwa, barred-l, k-with-line-below. Those
-// names are not decorative and must not render as tofu or in a face that
-// fights the heading around them, so the stack below falls through to
-// Poppins — already loaded, geometric, and the site's own face — before it
-// reaches anything from the system. Check coverage before swapping this
-// font again.
+// sets in display type (em dash, middle dot, ellipsis, ®, ™, the accented
+// Latin in project titles) but it does NOT have U+2192 → or the
+// Halkomelem orthography that appears in real project and blog headings:
+// c-with-comma-above, schwa, barred-l, k-with-line-below. Those names are
+// not decorative and must not render as tofu or in a face that fights the
+// heading around them, so Poppins — already in the bundle, geometric, and
+// the site's own second face — sits directly behind Futura in the stack
+// and the browser falls through per character. Check coverage before
+// swapping this font again.
 const futura = localFont({
   src: [
     { path: './fonts/FuturaLT-Book.woff2', weight: '400', style: 'normal' },
@@ -51,15 +44,27 @@ const futura = localFont({
   ],
   variable: '--font-futura',
   display: 'swap',
-  preload: false,
+  preload: true,
   fallback: ['Poppins', 'Century Gothic', 'system-ui', 'sans-serif'],
 })
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap', preload: false })
+
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' })
+
+// Fallback and alternate only, so it is not preloaded. The static cuts the
+// site can still reach are listed; nothing renders below 400.
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-poppins',
+  display: 'swap',
+  preload: false,
+})
 
 /* Applies the saved type choice before first paint, so a page never flashes
-   from one face to the other. ?type=poppins|futura sets it; localStorage
-   keeps it. Nothing runs on the server. */
-const TYPE_BOOT = `(function(){try{var q=new URLSearchParams(location.search).get('type');if(q==='poppins'||q==='futura'){localStorage.setItem('s1-type',q)}var t=q||localStorage.getItem('s1-type');if(t==='futura'){document.documentElement.setAttribute('data-type','futura')}}catch(e){}})();`
+   from one face to the other. Futura is the default and needs no attribute;
+   ?type=poppins sets the alternate and localStorage keeps it. Nothing runs
+   on the server. */
+const TYPE_BOOT = `(function(){try{var q=new URLSearchParams(location.search).get('type');if(q==='poppins'||q==='futura'){localStorage.setItem('s1-type',q)}var t=q||localStorage.getItem('s1-type');if(t==='poppins'){document.documentElement.setAttribute('data-type','poppins')}}catch(e){}})();`
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

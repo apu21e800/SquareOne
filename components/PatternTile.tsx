@@ -14,9 +14,15 @@ import type { PatternId } from "@/lib/palette"
  * a template chip that does not match the casting is a promise the crew
  * has to keep on site.
  *
- * Drawn as hairline strokes in currentColor on the dark asphalt tile — the
- * inverse of HUB's printed black-on-white sheet, deliberately, so the two
- * are not mistaken for each other.
+ * Drawn as hairline strokes in currentColor at HUB's own weight (0.55
+ * viewBox units). Inverted 17 Sept 2026 at Vern's call — "use the same
+ * patterns we have on the hubss site but make the patterns colour
+ * inverted, dark pattern on white background." HUB runs #e8edf4 hairlines
+ * on their dark site; these are the same drawings in ink on paper, which
+ * is Square One's ground. The colour lives in .pattern-tile, not here, so
+ * the same SVG serves the white template chip and the big sample board in
+ * components/DrivewayComposer, where the drawing sits on a real StreetBond
+ * colour and keeps its light-and-dark joint pair.
  */
 
 export const W = 120
@@ -220,8 +226,9 @@ export default function PatternTile({ id, className = "" }: { id: PatternId; cla
   const clip = `pt-${id}`
   const inner = rotate ? `<g transform="rotate(${rotate} ${W / 2} ${H / 2})">${body}</g>` : body
   // The drawing scales with the tile, so the stroke is set thin in viewBox
-  // units: about 1px at phone tile widths, 1.5px on a 27" monitor.
-  const svg = `<clipPath id="${clip}"><rect width="${W}" height="${H}"/></clipPath><g clip-path="url(#${clip})" fill="none" stroke="currentColor" stroke-width="0.6" stroke-linejoin="round">${inner}</g>`
+  // units — 0.55, the same weight HUB draws its own template line art at,
+  // which is about 1px at phone tile widths and 1.4px on a 27" monitor.
+  const svg = `<clipPath id="${clip}"><rect width="${W}" height="${H}"/></clipPath><g clip-path="url(#${clip})" fill="none" stroke="currentColor" stroke-width="0.55" stroke-linejoin="round">${inner}</g>`
   return (
     <svg
       aria-hidden="true"

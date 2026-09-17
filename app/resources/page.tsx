@@ -31,7 +31,7 @@ export default function ResourcesPage() {
         alt="Railroad-inspired TrafficPatternsXD crosswalk in the City of Langley, installed by Square One Paving"
         eyebrow="Resources"
         title="Specification library"
-        lede={`${resourceCount} documents for engineers and specifiers — specifications, technical data sheets, safety data sheets, colour cards, design manuals and brochures for every system we install. Preview in the browser, or download straight into your spec package.`}
+        lede={`${resourceCount} documents for engineers and specifiers — specifications, data sheets, colour cards and design manuals for every system we install. Preview one, or take it straight into the spec package.`}
         caption="City of Langley · TrafficPatternsXD"
         imagePosition="center 60%"
       />

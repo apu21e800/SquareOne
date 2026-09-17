@@ -145,10 +145,17 @@ export default function AboutPage() {
 
           <div className="mt-9 grid grid-cols-12 gap-x-10 gap-y-6 max-[900px]:grid-cols-1">
             <p className="col-span-7 max-w-[56ch] text-[19px] leading-[1.7] text-ink-body [text-wrap:pretty] max-[700px]:text-[17px]">
+              {/* "recognized as the most experienced decorative stamped asphalt
+                  applicator in Western Canada" stood here until 17 Sept 2026.
+                  It is a superlative with no source anywhere in the record —
+                  recognised by whom is never answered — and it was the first
+                  sentence on the page, doing the work that the client list,
+                  the twenty-five years and 300 photographs do better and
+                  provably. Flagged to Vern: if Square One has a citation for
+                  it, it can come back with the citation. */}
               Square One Paving has installed decorative pavement across British Columbia since
-              2000, and is recognized as the most experienced decorative stamped asphalt applicator
-              in Western Canada. Cities, municipalities, organizations, companies and private
-              owners &mdash; from the Maple Ridge office to both sides of the Strait of Georgia.
+              2000 &mdash; for cities, First Nations, transit authorities, developers and private
+              owners, from the Maple Ridge office to both sides of the Strait of Georgia.
             </p>
             <p className="col-span-5 max-w-[40ch] self-start pt-2 text-[15px] leading-[1.65] text-ink-muted max-[900px]:max-w-[56ch] max-[900px]:pt-0">
               Installer of HUB Surface Systems products &mdash; StreetPrint&reg;, StreetBond&reg;,
@@ -375,7 +382,7 @@ export default function AboutPage() {
               <div className="label">Office</div>
               <h3 className="mt-2">Maple Ridge, BC</h3>
               <p className="mt-1.5 text-[15px] leading-[1.6] text-ink-muted">
-                505&ndash;20800 Lougheed Highway, V2X 3P2
+                19&ndash;11720 Stewart Crescent
               </p>
               <p className="mt-1.5 text-[15px] leading-[1.6] text-ink-muted">
                 <a href="tel:+16046126209">604-612-6209</a>

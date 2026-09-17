@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Image from "next/image"
+import IndexImageHero from "@/components/IndexImageHero"
 
 /* Request a quote — rebuilt 11 Sept 2026 (Vern: "request page needs work").
    The form's state shape, field names, honeypot and the POST to
@@ -14,7 +15,17 @@ import Image from "next/image"
    project" and paired two-up on desktop, the office rail is one column of
    canon contact details with a note on what makes a quote faster, and a
    crew photograph from the record closes the rail. Office hours were
-   removed: nothing on record states them. */
+   removed: nothing on record states them.
+
+   Rebuilt again 17 Sept 2026 (Vern, relaying the client: "Request a quote
+   page just looks like a lot of text"). It was. Every other page on the
+   site opens on a photograph of the work; this one opened on beige, then
+   made the visitor read a headline, a lede, three numbered paragraphs and
+   a four-heading rail before reaching the one thing the page exists for.
+   Now: the same photographic opener the rest of the site uses, the three
+   steps compressed from three paragraphs to three lines on one hairline
+   strip, the form given the width, and the rail cut to contact facts —
+   the second photograph went, because the hero is the photograph. */
 
 const projectTypes = [
   "Residential Driveway",
@@ -27,10 +38,10 @@ const projectTypes = [
   "Other / Not Sure",
 ]
 
-const STEPS: { n: string; title: string; body: string }[] = [
-  { n: "01", title: "Tell us the job", body: "What you are building and where. A rough description is enough; drawings and areas make the quote faster." },
-  { n: "02", title: "We walk the site", body: "We look at the asphalt or concrete in place, bring the sample boards, and talk through the pattern and colour." },
-  { n: "03", title: "A written quote", body: "The system, the scope and the price, in writing, from the people who will install it." },
+const STEPS: { n: string; line: string }[] = [
+  { n: "01", line: "Tell us the job and where it is" },
+  { n: "02", line: "We walk the site with the sample boards" },
+  { n: "03", line: "A written quote from the crew who install it" },
 ]
 
 const field =
@@ -98,34 +109,32 @@ export default function ContactPage() {
   }, [])
 
   return (
-    <main className="bg-surface-warm pt-[calc(72px_+_5rem)] pb-28 max-[700px]:pt-[calc(72px_+_3rem)] max-[700px]:pb-16">
-      <div className="container-1280">
-        {/* ── Opener ──────── */}
-        <div className="max-w-[62ch]">
-          <div className="eyebrow">Contact &middot; Free site visit</div>
-          <h1 className="stop mt-5">Request a quote</h1>
-          <p className="mt-5 max-w-[52ch] text-[18px] leading-[1.6] text-ink-body [text-wrap:pretty]">
-            Tell us what you are building and where &mdash; a crosswalk, a plaza, a parking area,
-            a driveway. Drawings help, but a rough description and a location are enough to start.
-          </p>
-        </div>
+    <main className="bg-surface-warm pb-28 max-[700px]:pb-16">
+      {/* ── Opener — the work, like every other page ──────── */}
+      <IndexImageHero
+        src="/images/applications/driveways/maple-ridge-driveway-recoat-at-dusk-streetbond-01.jpg"
+        alt="A StreetBond driveway recoat in Maple Ridge photographed at dusk, installed by Square One Paving"
+        eyebrow="Contact · Free site visit"
+        title="Request a quote"
+        lede="Tell us what you are building and where — a crosswalk, a plaza, a parking area, a driveway. Drawings help, but a description and a location are enough to start."
+        caption="Maple Ridge · StreetBond"
+        imagePosition="center 62%"
+      />
 
-        {/* ── How it goes ──────── */}
-        <ol className="mt-12 grid grid-cols-3 gap-x-10 max-[640px]:grid-cols-1 max-[640px]:gap-y-6">
+      {/* ── How it goes — three lines on one rule, not three paragraphs ── */}
+      <div className="border-b border-hairline bg-surface">
+        <ol className="container-1280 flex flex-wrap gap-x-14 gap-y-4 py-[22px] max-[700px]:flex-col max-[700px]:gap-y-3 max-[700px]:py-5">
           {STEPS.map((s) => (
-            <li key={s.n} className="border-t border-[color:var(--hairline-strong)] pt-5">
-              <div className="flex items-baseline gap-3">
-                <span className="figure text-[18px] text-[color:var(--accent-deep)]">{s.n}</span>
-                <span className="text-[13px] font-semibold uppercase tracking-[0.08em] text-ink" style={{ fontFamily: "var(--font-display)" }}>
-                  {s.title}
-                </span>
-              </div>
-              <p className="mt-2 max-w-[40ch] text-[14px] leading-[1.6] text-ink-muted">{s.body}</p>
+            <li key={s.n} className="flex items-baseline gap-3">
+              <span className="label text-[color:var(--accent-deep)]">{s.n}</span>
+              <span className="text-[15px] leading-[1.45] text-ink">{s.line}</span>
             </li>
           ))}
         </ol>
+      </div>
 
-        <div className="mt-14 grid grid-cols-12 items-start gap-x-12 gap-y-14 max-[900px]:grid-cols-1 max-[700px]:mt-10">
+      <div className="container-1280">
+        <div className="mt-16 grid grid-cols-12 items-start gap-x-12 gap-y-14 max-[900px]:grid-cols-1 max-[700px]:mt-10">
           {/* ── Form ──────── */}
           <div className="col-span-7 max-[900px]:col-span-1">
             {submitted ? (
@@ -300,9 +309,9 @@ export default function ContactPage() {
           <aside className="col-span-5 max-[900px]:col-span-1">
             <RailBlock heading="Office">
               <address className="mt-[10px] text-[1.25rem] font-semibold not-italic leading-[1.4] tracking-[-0.015em] text-ink">
-                505&ndash;20800 Lougheed Highway
+                19&ndash;11720 Stewart Crescent
               </address>
-              <p className="mt-1 text-[14px] text-ink-muted">Maple Ridge, BC V2X 3P2</p>
+              <p className="mt-1 text-[14px] text-ink-muted">Maple Ridge, BC</p>
             </RailBlock>
 
             <RailBlock heading="Phone">
@@ -322,28 +331,16 @@ export default function ContactPage() {
               </a>
             </RailBlock>
 
-            <RailBlock heading="What makes a quote faster">
-              <ul className="mt-3 flex flex-col gap-2 text-[14.5px] leading-[1.55] text-ink-body">
-                <li className="flex gap-3"><span aria-hidden="true" className="mt-[9px] h-[5px] w-[5px] shrink-0 rounded-full bg-[color:var(--accent)]" />The site address, or a pin</li>
-                <li className="flex gap-3"><span aria-hidden="true" className="mt-[9px] h-[5px] w-[5px] shrink-0 rounded-full bg-[color:var(--accent)]" />A rough area in square metres</li>
-                <li className="flex gap-3"><span aria-hidden="true" className="mt-[9px] h-[5px] w-[5px] shrink-0 rounded-full bg-[color:var(--accent)]" />Drawings or a photo of the existing surface</li>
-                <li className="flex gap-3"><span aria-hidden="true" className="mt-[9px] h-[5px] w-[5px] shrink-0 rounded-full bg-[color:var(--accent)]" />When you need it done</li>
+            <RailBlock heading="Helps us quote faster">
+              <ul className="mt-3 grid grid-cols-2 gap-x-6 gap-y-[9px] text-[14px] leading-[1.4] text-ink-body max-[420px]:grid-cols-1">
+                <li>The site address, or a pin</li>
+                <li>A rough area in square metres</li>
+                <li>Drawings, or a photo of the surface</li>
+                <li>When you need it done</li>
               </ul>
             </RailBlock>
 
-            <div className="relative mt-8 aspect-[4/3] overflow-hidden rounded-[2px] bg-surface-stone">
-              <Image
-                src="/images/applications/parks-paths/west-vancouver-park-path-01.jpg"
-                alt="A Square One installer at work on a park path in West Vancouver"
-                fill
-                sizes="(max-width: 900px) 100vw, 40vw"
-                className="object-cover"
-              />
-              <div aria-hidden className="scrim scrim-light" />
-              <div className="caption">West Vancouver &middot; On site</div>
-            </div>
-
-            <div className="mt-6 flex items-center gap-4">
+            <div className="mt-7 flex items-center gap-4">
               <Image
                 src="/images/S1_update_v2/Old%20Square%20One%20Web%20Assets/Contact%20Page/BBB-Logo.png"
                 alt="BBB Accredited Business"

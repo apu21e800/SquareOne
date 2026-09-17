@@ -10,8 +10,18 @@ export interface Product {
   image: string
   galleryImages: string[]
   serviceSlug: string
-  /** Manufacturer/brand logo shown in the product hero */
-  logoImage?: string
+  /**
+   * The data-sheet rows on the product page. Every value here is a
+   * restatement of something the page already publishes — HUB's own
+   * figures, the substrate, the method — and nothing in it is inferred.
+   * Retired 17 Sept 2026: "System", "Category", "Installed by Square One
+   * Paving, since 2000", "7 applications listed below". Vern, relaying the
+   * client: "iMPROVE PRODUCT SPECIFICATIONS DETAILS. For example, we don't
+   * need to say 'Installed by Square One Paving, since 2000' that's
+   * obvious." A specification panel that restates the page's own furniture
+   * is furniture. Add a row only when a HUB document says so.
+   */
+  specs: { k: string; v: string }[]
   /** HUB's registered/trade mark, shown on first mention (the product page H1). Never appended to `name` — lib/work.ts matches on the bare name. */
   mark?: "®" | "™"
 }
@@ -19,14 +29,22 @@ export interface Product {
 export const products: Product[] = [
   {
     slug: "streetprint",
+    specs: [
+      { k: "Manufacturer", v: "HUB Surface Systems" },
+      { k: "Method", v: "Heated template imprinted into the asphalt" },
+      { k: "Substrate", v: "New or existing asphalt" },
+      { k: "Service life", v: "10–20 years, published by HUB" },
+      { k: "Surface", v: "Slip-resistant texture, snowplough and salt safe" },
+      { k: "Options", v: "Custom patterns and colours; retroreflective for crosswalks" },
+    ],
     mark: "®",
     name: "StreetPrint",
     tagline: "Stamped asphalt that looks like brick, cobblestone, or custom pattern.",
     category: "Stamped Asphalt",
     shortDescription:
-      "The industry standard for decorative stamped asphalt. StreetPrint imprints ordinary asphalt into patterned, durable surfaces that read as brick, cobble or slate.",
+      "HUB's decorative asphalt imprinting system, and the one most BC municipalities specify by name. StreetPrint presses ordinary asphalt into patterned, durable surfaces that read as brick, cobble or slate.",
     fullDescription:
-      "StreetPrint is the world's leading decorative asphalt imprinting system. Using heated templates pressed into fresh asphalt, it creates realistic brick, cobblestone, slate, and custom patterns that are built into the asphalt itself — not painted on. The surface holds its pattern and colour through wet coastal winters and freeze-thaw cycles inland.",
+      "StreetPrint works by pressing a heated steel template into fresh asphalt, so the brick, cobble, slate or custom pattern is built into the surface rather than painted onto it — there is nothing to peel, and nothing to re-lay. StreetBond colour is then rolled into the imprint. The surface holds its pattern and its colour through wet coastal winters and freeze-thaw cycles inland.",
     keyBenefits: [
       "Slip-resistant textured surface",
       "10–20 year published service life",
@@ -39,10 +57,18 @@ export const products: Product[] = [
     image: "/images/products/streetprint/streetprint-new-westminster-city-hall-01.jpg",
     galleryImages: ["/images/products/streetprint/streetprint-1.jpg"],
     serviceSlug: "stamped-asphalt",
-    logoImage: "/images/S1_update_v2/Old%20Square%20One%20Web%20Assets/Product%20Pages/StreetPrint/StreetPrint.png",
   },
   {
     slug: "streetbond",
+    specs: [
+      { k: "Manufacturer", v: "HUB Surface Systems" },
+      { k: "Type", v: "Water-based acrylic pavement coating" },
+      { k: "Substrate", v: "Asphalt or concrete" },
+      { k: "Colour", v: "50+ standard, custom mixing" },
+      { k: "Life cycle", v: "8+ years, refreshed rather than replaced" },
+      { k: "Surface", v: "Anti-skid aggregate" },
+      { k: "Options", v: "Retroreflective" },
+    ],
     mark: "®",
     name: "StreetBond",
     tagline: "Coloured pavement coating for bike lanes, plazas, courts, and driveways.",
@@ -68,10 +94,17 @@ export const products: Product[] = [
       "/images/products/streetbond/streetbond-multicolour-geometric-plaza-01.jpg",
     ],
     serviceSlug: "decorative-coatings",
-    logoImage: "/images/S1_update_v2/Old%20Square%20One%20Web%20Assets/Product%20Pages/StreetBond/StreetBond.png",
   },
   {
     slug: "trafficpatterns",
+    specs: [
+      { k: "Manufacturer", v: "HUB Surface Systems" },
+      { k: "Type", v: "Preformed thermoplastic, heat-fused to the pavement" },
+      { k: "Thickness", v: "125 mil" },
+      { k: "Surface", v: "Anti-skid elements throughout the sheet" },
+      { k: "Return to traffic", v: "Minutes after application" },
+      { k: "Made to", v: "The owner's marking standard" },
+    ],
     mark: "™",
     name: "TrafficPatterns",
     tagline: "Decorative preformed thermoplastic for crosswalks and pedestrian zones.",
@@ -92,10 +125,17 @@ export const products: Product[] = [
     image: "/images/products/traffic-patterns/trafficpatterns-ubc-musqueam-plate-01.jpg",
     galleryImages: ["/images/products/traffic-patterns/trafficpatterns-1.jpg"],
     serviceSlug: "preformed-thermoplastic",
-    logoImage: "/images/S1_update_v2/Old%20Square%20One%20Web%20Assets/Product%20Pages/TrafficPatterns/TrafficPatterns%20Logo.png",
   },
   {
     slug: "trafficpatterns-xd",
+    specs: [
+      { k: "Manufacturer", v: "HUB Surface Systems" },
+      { k: "Type", v: "Preformed thermoplastic, heat-fused to the pavement" },
+      { k: "Thickness", v: "150 mil — 125 mil on standard TrafficPatterns" },
+      { k: "Substrate", v: "Prepared asphalt" },
+      { k: "Surface", v: "New anti-skid elements exposed as the sheet wears" },
+      { k: "Range", v: "The TrafficPatterns patterns, borders and colours" },
+    ],
     mark: "™",
     name: "TrafficPatternsXD",
     tagline: "Heavy-duty thermoplastic for high-traffic intersections and transit corridors.",
@@ -115,10 +155,16 @@ export const products: Product[] = [
     image: "/images/hero/white-rock-marine-drive-wave-crosswalk.jpg",
     galleryImages: ["/images/products/traffic-patterns-xd/trafficpatterns-xd-1.jpg"],
     serviceSlug: "preformed-thermoplastic",
-    logoImage: "/images/S1_update_v2/Old%20Square%20One%20Web%20Assets/Product%20Pages/TrafficPatternsXD/traffic-patterns-xd.png",
   },
   {
     slug: "decomark",
+    specs: [
+      { k: "Manufacturer", v: "HUB Surface Systems" },
+      { k: "Type", v: "Preformed thermoplastic, heat-fused to the pavement" },
+      { k: "Artwork", v: "Fully custom — logos, emblems, wayfinding symbols" },
+      { k: "Colour", v: "Full spectrum" },
+      { k: "Durability", v: "As standard thermoplastic" },
+    ],
     name: "DecoMark",
     tagline: "Custom decorative graphics and logos in preformed thermoplastic.",
     category: "Thermoplastic",
@@ -137,10 +183,18 @@ export const products: Product[] = [
     image: "/images/products/decomark/decomark-victoria-harbour-01.jpg",
     galleryImages: ["/images/products/decomark/decomark-1.jpg"],
     serviceSlug: "preformed-thermoplastic",
-    logoImage: "/images/S1_update_v2/Old%20Square%20One%20Web%20Assets/Product%20Pages/DecoMark/DecoMark.png",
   },
   {
     slug: "durashield",
+    specs: [
+      { k: "Manufacturer", v: "HUB Surface Systems" },
+      { k: "Type", v: "Two-component waterborne epoxy-modified acrylic" },
+      { k: "Substrate", v: "Asphalt" },
+      { k: "Finish", v: "Black or Solar Gray" },
+      { k: "Solar reflectance", v: "0.33 initial, Solar Gray" },
+      { k: "VOC", v: "Low; no unpleasant odour during installation" },
+      { k: "End of life", v: "Recyclable with the asphalt" },
+    ],
     name: "DuraShield",
     tagline: "Two-component asphalt maintenance coating — black or solar-reflective grey.",
     category: "Surface Protection",
@@ -166,11 +220,19 @@ export const products: Product[] = [
   },
   {
     slug: "duratherm",
+    specs: [
+      { k: "Manufacturer", v: "HUB Surface Systems" },
+      { k: "Type", v: "Thermoplastic pavement marking" },
+      { k: "Application", v: "Inset or surface-applied" },
+      { k: "Substrate", v: "Asphalt or concrete" },
+      { k: "Optics", v: "Retroreflective" },
+      { k: "Standards", v: "TAC shapes and legends" },
+    ],
     name: "DuraTherm",
     tagline: "Standard thermoplastic road markings built for long service life.",
     category: "Thermoplastic",
     shortDescription:
-      "Professional thermoplastic pavement markings for stop bars, arrows, legends, and lane lines. High retroreflectivity and proven durability for BC municipalities.",
+      "Thermoplastic pavement markings for stop bars, arrows, legends and lane lines — retroreflective, and a service life well beyond paint.",
     fullDescription:
       "DuraTherm is the workhorse thermoplastic marking product for arrows, stop bars, crosswalk bars, legends, and zone markings. Applied using inset or surface-applied methods, DuraTherm provides the retroreflectivity and durability that BC municipalities demand, with a service life well beyond painted markings.",
     keyBenefits: [
@@ -184,10 +246,17 @@ export const products: Product[] = [
     image: "/images/products/duratherm/duratherm-maple-ridge-crosswalk-01.jpg",
     galleryImages: ["/images/products/duratherm/duratherm-1.jpg"],
     serviceSlug: "preformed-thermoplastic",
-    logoImage: "/images/S1_update_v2/Old%20Square%20One%20Web%20Assets/Product%20Pages/DuraTherm/DuraTherm%20logo%401x.png",
   },
   {
     slug: "premark",
+    specs: [
+      { k: "Manufacturer", v: "HUB Surface Systems" },
+      { k: "Type", v: "Preformed thermoplastic, heat-applied" },
+      { k: "Substrate", v: "Asphalt or concrete" },
+      { k: "Optics", v: "Embedded retroreflective glass beads" },
+      { k: "Tolerance", v: "Manufactured to exact dimensions — no irregular edges" },
+      { k: "Standards", v: "TAC arrows, legends and symbols" },
+    ],
     name: "PreMark",
     tagline: "Preformed thermoplastic arrows, legends, and symbols — fast installation.",
     category: "Thermoplastic",
@@ -209,7 +278,6 @@ export const products: Product[] = [
       "/images/products/premark/roadway-turn-arrows-pavement-marking-01.jpg",
     ],
     serviceSlug: "preformed-thermoplastic",
-    logoImage: "/images/S1_update_v2/Old%20Square%20One%20Web%20Assets/Product%20Pages/PreMark/PreMark.png",
   },
 ]
 

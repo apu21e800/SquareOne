@@ -102,7 +102,7 @@ export default function GalleriesPage() {
         alt="Red TrafficPatternsXD crosswalk leading to the White Rock Pier"
         eyebrow="Galleries"
         title="Photographs of our own work"
-        lede="Every gallery on this page is Square One's own installation photography, captioned with the system and the place. Open a gallery, then click any photograph to view it full screen — arrows, keyboard and swipe walk the set."
+        lede="Square One's own installation photography, captioned with the system and the place it was installed."
         caption="White Rock Pier · TrafficPatternsXD · 2019"
         imagePosition="center 62%"
       />

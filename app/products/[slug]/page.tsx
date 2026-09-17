@@ -12,6 +12,7 @@ import { getWork, WORK_APPS } from "@/lib/work"
 import type { WorkAppMeta } from "@/lib/work"
 import WorkGallery from "@/components/WorkGallery"
 import { SITE_URL } from "@/lib/site"
+import { fitVars } from "@/lib/type"
 import JsonLd, { breadcrumbSchema } from "@/components/JsonLd"
 import { clampDescription } from "@/lib/seo"
 
@@ -175,12 +176,20 @@ export default async function ProductPage({ params }: Props) {
         />
         <div aria-hidden="true" className="scrim-rise" />
         <div aria-hidden="true" className="scrim-top" />
-        <div className="container-1280 relative z-[1] w-full pb-12">
+        <div className="container-1280 relative z-[1] w-full pb-14 max-[700px]:pb-10">
           <div className="eyebrow eyebrow-on-image">{product.category}</div>
-          <h1 className="display-xl stop mt-4 max-w-[16ch] text-white [text-wrap:balance]">
-            {product.name}
-            {product.mark && <sup className="ml-[0.08em] text-[0.38em] font-medium align-super">{product.mark}</sup>}
-          </h1>
+          {/* fit-host + display-fit: the headline sizes itself against this
+              column, so a seventeen-character product name comes down a
+              step instead of spilling it (lib/type.ts). */}
+          <div className="fit-host mt-5 max-w-[46rem]">
+            <h1
+              className={`display-xl display-fit text-white [text-wrap:balance]${product.mark ? "" : " stop"}`}
+              style={fitVars(product.name)}
+            >
+              {product.name}
+              {product.mark && <sup className="ml-[0.08em] text-[0.34em] font-medium align-super">{product.mark}</sup>}
+            </h1>
+          </div>
         </div>
       </section>
 
@@ -194,23 +203,14 @@ export default async function ProductPage({ params }: Props) {
             &larr;&nbsp;All products
           </Link>
 
-          <div className="mt-7 flex flex-wrap items-center gap-[14px]">
-            <span className="tag">{product.category}</span>
-            <span className="text-[13px] text-ink-muted">
-              Installed by Square One since 2000
-            </span>
-          </div>
-
-          {product.logoImage && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={product.logoImage}
-              alt={`${product.name} wordmark`}
-              className="mt-8 h-9 w-auto object-contain max-[700px]:h-8"
-            />
-          )}
-
-          <p className="mt-2 max-w-[56ch] text-[19px] leading-[1.65] text-ink-body [text-wrap:pretty] max-[700px]:text-[17px]">
+          {/* The manufacturer wordmark used to sit here, and the row above it
+              said "Installed by Square One since 2000" beside a chip that
+              repeated the category already set in the hero. All three went on
+              17 Sept: the client asked for the logos to come off, the line is
+              the obvious one he named, and a decorative product logo on an
+              installer's page blurs exactly the distinction this site works
+              to keep — HUB manufactures, Square One installs. */}
+          <p className="mt-8 max-w-[52ch] text-[21px] leading-[1.55] text-ink [text-wrap:pretty] max-[700px]:mt-6 max-[700px]:text-[18px]">
             {product.tagline}
           </p>
 
@@ -254,35 +254,31 @@ export default async function ProductPage({ params }: Props) {
           </div>
 
           <div className="card-panel col-span-5 self-start !p-0 max-[900px]:col-span-1 max-[900px]:max-w-[560px]">
+            <div className="border-b border-hairline px-7 py-[18px] max-[700px]:px-5">
+              <div className="label">Specification</div>
+            </div>
             <dl className="m-0">
-            {[
-              { k: "System", v: product.name },
-              { k: "Category", v: product.category },
-              { k: "Installed by", v: "Square One Paving, since 2000" },
-              { k: "Applications", v: `${product.applications.length} listed below` },
-              ...(work.length > 0
-                ? [{ k: "On record", v: `${work.length} site photograph${work.length === 1 ? "" : "s"}` }]
-                : []),
-              ...(docs.length > 0
-                ? [{ k: "Documents", v: `${docs.length} in the specification library` }]
-                : []),
-            ].map((row) => (
+            {product.specs.map((row) => (
               <div
                 key={row.k}
-                className="grid grid-cols-[120px_1fr] items-baseline gap-x-6 border-b border-hairline px-7 py-[13px] last:border-b-0 max-[700px]:grid-cols-[100px_1fr] max-[700px]:px-5"
+                className="grid grid-cols-[140px_1fr] items-baseline gap-x-6 border-b border-hairline px-7 py-[15px] max-[700px]:grid-cols-1 max-[700px]:gap-y-[3px] max-[700px]:px-5"
               >
-                <dt className="label">{row.k}</dt>
-                <dd className="m-0 text-[15px] font-medium leading-[1.45] text-ink">{row.v}</dd>
+                <dt className="label pt-[3px]">{row.k}</dt>
+                <dd className="m-0 text-[15px] font-medium leading-[1.5] text-ink [text-wrap:pretty]">{row.v}</dd>
               </div>
             ))}
             </dl>
-            <div className="flex flex-wrap gap-x-6 gap-y-2 border-t border-hairline px-7 py-5 max-[700px]:px-5">
+            <p className="border-t border-hairline px-7 pt-5 text-[13px] leading-[1.6] text-ink-muted max-[700px]:px-5">
+              Figures are HUB Surface Systems&rsquo;, from the product&rsquo;s own data sheet.
+              Square One installs the system and warrants the workmanship.
+            </p>
+            <div className="flex flex-wrap gap-x-6 gap-y-2 px-7 pb-6 pt-4 max-[700px]:px-5">
               <Link href={`/services/${product.serviceSlug}`} className="arrow-link">
                 The service <span aria-hidden="true">&rarr;</span>
               </Link>
               {docs.length > 0 && (
                 <Link href="/resources" className="arrow-link">
-                  Specifications <span aria-hidden="true">&rarr;</span>
+                  {docs.length} document{docs.length === 1 ? "" : "s"} <span aria-hidden="true">&rarr;</span>
                 </Link>
               )}
             </div>

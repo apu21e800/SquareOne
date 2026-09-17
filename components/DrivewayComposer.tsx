@@ -136,7 +136,7 @@ export default function DrivewayComposer({
                     on ? "border-[color:var(--ink)]" : "border-[color:var(--hairline)] hover:border-[color:var(--hairline-strong)]"
                   }`}
                 >
-                  <span className="pattern-tile block aspect-[4/3] w-full overflow-hidden rounded-[1px] bg-[#1E1B18]">
+                  <span className="pattern-tile block aspect-[4/3] w-full overflow-hidden rounded-[1px]">
                     <PatternTile id={p.id} className="h-full w-full" />
                   </span>
                   <span className={`mt-[6px] block min-h-[26px] text-[9.5px] font-semibold uppercase leading-[1.25] tracking-[0.05em] ${on ? "text-ink" : "text-ink-muted"}`} style={{ fontFamily: "var(--font-display)" }}>
