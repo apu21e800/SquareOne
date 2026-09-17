@@ -33,7 +33,7 @@ const PRODUCT_DESCRIPTOR: Record<string, string> = {
   duratherm: "Inlaid textured surfaces",
   decomark: "Shapes, symbols, graphics",
   premark: "Standard legends and bars",
-  durashield: "Clear protective seal",
+  durashield: "Asphalt maintenance coating",
 }
 
 interface ProductColumn {

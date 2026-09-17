@@ -145,13 +145,13 @@ export const products: Product[] = [
     tagline: "Two-component asphalt maintenance coating — black or solar-reflective grey.",
     category: "Surface Protection",
     shortDescription:
-      "HUB's waterborne epoxy-modified acrylic maintenance coating for asphalt. It protects the pavement from UV oxidation, fuel, oil and de-icing agents and gives tired asphalt a uniform finish — in black or Solar Gray.",
+      "HUB's waterborne epoxy-modified acrylic maintenance coating for asphalt. It protects the pavement from UV oxidation, resists chemicals and gives tired asphalt a uniform finish — in black or Solar Gray.",
     fullDescription:
-      "DuraShield Pavement Coating is a two-component waterborne epoxy-modified acrylic formulated as an asphalt pavement maintenance coating — primarily for parking lots, and used on driveways, pathways, raised medians and pedestrian plazas. It balances flexibility, adhesion, colour stability and chemical resistance to preserve the asphalt while shielding it from UV oxidation. The Solar Gray version has a solar reflectance of 0.34, which keeps pavement cooler and helps mitigate urban heat island effects.",
+      "DuraShield Pavement Coating is a two-component waterborne epoxy-modified acrylic formulated as an asphalt pavement maintenance coating — primarily for parking lots, and used on driveways, pathways, raised medians and pedestrian plazas. It balances flexibility, adhesion, colour stability and chemical resistance to preserve the asphalt while shielding it from UV oxidation. The Solar Gray version has an initial solar reflectance of 0.33, which keeps pavement cooler and helps mitigate urban heat island effects.",
     keyBenefits: [
       "Protects asphalt from UV oxidation",
-      "Resists fuel, oil and de-icing agents",
-      "Black or Solar Gray (SR 0.34) finish",
+      "Excellent chemical resistance",
+      "Black or Solar Gray (initial SR 0.33) finish",
       "Friction suited to pedestrian and vehicle traffic",
       "Low VOC, no unpleasant odour during installation",
       "Fully recyclable with asphalt",

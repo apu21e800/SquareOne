@@ -127,7 +127,7 @@ function heroAlt(p: WorkPhoto): string {
 const SYSTEMS = [
   { name: "StreetPrint stamped asphalt", body: "Brick, cobble, slate and custom patterns imprinted into your existing asphalt — no excavation, no new base.", href: "/products/streetprint" },
   { name: "StreetBond colour coating", body: "The colour and the seal in one — UV-stable, slip-resistant, and the way an existing driveway gets refreshed.", href: "/products/streetbond" },
-  { name: "DuraShield maintenance coating", body: "For a driveway that is sound but faded — a protective black or solar-grey coating that shields the asphalt from UV, fuel and de-icers.", href: "/products/durashield" },
+  { name: "DuraShield maintenance coating", body: "For a driveway that is sound but faded — a protective black or solar-grey coating that shields the asphalt from UV and resists chemicals.", href: "/products/durashield" },
 ]
 
 export async function generateStaticParams() {
