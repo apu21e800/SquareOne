@@ -245,7 +245,7 @@ const EXTRAS: Extra[] = [
   ["fio", "502639628_1112360040926014_5391735583045489560_n.jpg", "crosswalks", ["TrafficPatternsXD"], "Rainbow intersection", "Nanaimo"],
   ["fio", "504448297_1112360024259349_5235743119624258372_n-1.jpg", "crosswalks", ["TrafficPatternsXD"], "Rainbow intersection — street level", "Nanaimo"],
   ["fio", "Photo-2025-04-03-1-57-51-PM-scaled.jpg", "streetscapes", ["StreetPrint", "StreetBond"], "Pewter herringbone stamped asphalt", "Mission"],
-  ["fio", "Photo-2023-05-19-5-56-47 PM-scaled (1).jpg", "streetscapes", ["StreetBond"], "Decorative fire lane", "Maplewoods Townhomes, North Vancouver"],
+  ["fio", "maplewoods-fire-lane-north-vancouver-streetbond-01.jpg", "streetscapes", ["StreetBond"], "Decorative fire lane", "Maplewoods Townhomes, North Vancouver"],
   ["fio", "Mask-Group-6.jpg", "streetscapes", ["StreetPrint"], "Red brick road median — installation", ""],
   ["fio", "Bowen-Island-asphalt-walkway-with-StreetBond150-scaled-1.jpg", "parks-paths", ["StreetBond"], "Snug Cove community walkway", "Bowen Island"],
   ["fio", "Photo-2023-05-25-12-55-19 PM-scaled.jpg", "parks-paths", ["StreetBond"], "Solar-reflective park pathway", "Osoyoos", true],

@@ -100,7 +100,7 @@ export const CURATION: Record<string, GalleryCuration> = {
   },
   "streetscapes": {
     lead: [
-      "Photo-2023-05-19-5-56-47 PM-scaled (1).jpg",
+      "maplewoods-fire-lane-north-vancouver-streetbond-01.jpg",
       "StreetPrint-—-Stamped-Asphalt-Decorative-Crosswalk-Windsor-Gate.jpg",
       "Photo-2025-04-03-1-57-51-PM-scaled.jpg",
       "DuraTherm St. Pauls Hospital, Comox Street, Vancouver BC.jpg",

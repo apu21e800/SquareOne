@@ -37,6 +37,7 @@ const ORG_BASE = {
       streetAddress: "19 - 11720 Stewart Crescent",
       addressLocality: "Maple Ridge",
       addressRegion: "BC",
+      postalCode: "V2X 9E7",
       addressCountry: "CA",
     },
   ],

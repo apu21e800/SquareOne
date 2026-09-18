@@ -17,6 +17,14 @@ import { fitVars } from "@/lib/type"
  * longer statement still lands on two lines (lib/type.ts), and the two
  * columns swap weight — 5 for the statement, 7 for the names in three
  * columns — so the band is one composition rather than two unequal halves.
+ *
+ * 18 Sept 2026, the client: "quite often we work for a contractor who is
+ * hired by the cities and/or these corporations so we have to remove this
+ * section before I confirm who we have actually worked for. Maybe we should
+ * just say 'installed at' vs 'Installed for'?" Her word, taken: the label is
+ * "Installed at" and the caption claims the ground and not the contract —
+ * the sites carry the work, whoever held the paper. If she still wants the
+ * band gone after seeing it, it is one component and comes out clean.
  */
 export default function EditorialBand({ statement = "Twenty-five years on BC ground" }: { statement?: string }) {
   return (
@@ -37,7 +45,7 @@ export default function EditorialBand({ statement = "Twenty-five years on BC gro
           </div>
 
           <div className="col-span-7 max-[900px]:col-span-1">
-            <div className="label label-on-slate">Installed for</div>
+            <div className="label label-on-slate">Installed at</div>
             {/* Three columns from 700px: twelve names in two columns ran six
                 rows deep against a two-line statement and left half of a dark
                 band empty. Four rows matches the statement's height, and the
@@ -54,7 +62,7 @@ export default function EditorialBand({ statement = "Twenty-five years on BC gro
               ))}
             </ul>
             <p className="mt-5 text-[13px] leading-[1.6] text-[color:var(--ink-on-slate-muted)]">
-              Owners and developers Square One has installed for, as published in its project record.
+              Owners and developers whose sites carry Square One&rsquo;s work, as published in its project record.
             </p>
           </div>
         </div>

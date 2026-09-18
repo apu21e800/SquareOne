@@ -124,7 +124,7 @@ docs.push({
   phoneTollFree: "1-877-391-0270",
   email: "office@squareonepaving.com",
   addressLine1: "19–11720 Stewart Crescent",
-  addressLine2: "Maple Ridge, BC",
+  addressLine2: "Maple Ridge, BC V2X 9E7",
   instagram: "https://www.instagram.com/squareonepaving/",
   facebook: "https://www.facebook.com/squareonepaving/",
   linkedin: "https://www.linkedin.com/company/square-one-paving-ltd/",

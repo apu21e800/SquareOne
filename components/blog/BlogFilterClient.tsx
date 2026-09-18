@@ -17,7 +17,7 @@ const TOPICS: ReadonlyArray<{ label: string; match: string }> = [
   { label: "Driveways", match: "Driveways" },
   { label: "Vapour blasting", match: "Vapour Blasting" },
   { label: "Public art", match: "Public Art" },
-  { label: "Case studies", match: "Case Studies" },
+  { label: "Project stories", match: "Case Studies" },
 ]
 
 const ALL = "all"

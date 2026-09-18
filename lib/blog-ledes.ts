@@ -30,7 +30,7 @@ export const LEDE: Record<string, string> = {
   "langley-events-centre-streetbond": `${FIO}/Langley-event-3-2048x1536.jpg`,
   "little-italy-vancouver-crosswalks": "/images/applications/commercial-spaces/little-italy-aerial-colourful-intersection-01.jpg",
   "mission-bc-streetscape": `${FIO}/Photo-2025-04-03-1-57-51-PM-scaled.jpg`,
-  "north-vancouver-maplewoods-decorative-fire-lane": `${FIO}/Photo-2023-05-19-5-56-47%E2%80%AFPM-scaled%20%281%29.jpg`,
+  "north-vancouver-maplewoods-decorative-fire-lane": `${FIO}/maplewoods-fire-lane-north-vancouver-streetbond-01.jpg`,
   "pictograph-crosswalk-sechelt": `${CROSSWALKS}/TrafficPatterns%20Custom%20Decorative%20Crosswalk%2C%20Sechelt%20BC.png`,
   "rainbow-crosswalk-squamish": `${CROSSWALKS}/TrafficPatterns%20%20Custom%20Decorative%20Crosswalk%2C%20Squamish%20BC.png`,
   "ralphs-farm-market-decorative-parking-lot": `${FIO}/Ralphs-Farm-Market-Parking-Lot-with-StreetPrint-Decorative-Stamped-Asphalt-in-Langley-BC-Canada.jpg`,

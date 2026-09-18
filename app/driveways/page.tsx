@@ -32,7 +32,7 @@ import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
 
 export const metadata: Metadata = {
-  title: "Stamped Asphalt Driveways Vancouver & Victoria",
+  title: "Stamped Asphalt Driveways in BC",
   description:
     clampDescription("Stamped asphalt driveways in Metro Vancouver and Greater Victoria — StreetPrint patterns and StreetBond colour installed over the driveway you already have, by Square One Paving since 2000. Free site visit and written quote."),
   keywords: [

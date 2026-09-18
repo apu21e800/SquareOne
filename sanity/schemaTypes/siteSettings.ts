@@ -12,7 +12,7 @@ export const siteSettings = defineType({
     defineField({ name: "phoneTollFree", type: "string", title: "Toll-free", initialValue: "1-877-391-0270" }),
     defineField({ name: "email", type: "string", title: "Email", initialValue: "office@squareonepaving.com" }),
     defineField({ name: "addressLine1", type: "string", title: "Address line 1", initialValue: "19–11720 Stewart Crescent" }),
-    defineField({ name: "addressLine2", type: "string", title: "Address line 2", initialValue: "Maple Ridge, BC" }),
+    defineField({ name: "addressLine2", type: "string", title: "Address line 2", initialValue: "Maple Ridge, BC V2X 9E7" }),
     defineField({ name: "instagram", type: "url", title: "Instagram", initialValue: "https://www.instagram.com/squareonepaving/" }),
     defineField({ name: "tiktok", type: "url", title: "TikTok", description: "Add the account link and the TikTok button appears on the home page and in the footer." }),
     defineField({ name: "facebook", type: "url", title: "Facebook", initialValue: "https://www.facebook.com/squareonepaving/" }),

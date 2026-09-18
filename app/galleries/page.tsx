@@ -153,10 +153,10 @@ export default function GalleriesPage() {
         </div>
       </section>
 
-      {/* ── Driveways and case studies ──────── */}
+      {/* ── Driveways and projects ──────── */}
       <section className="section border-t border-[color:var(--hairline)]" aria-labelledby="galleries-more">
         <div className="container-1280">
-          <div className="eyebrow">Driveways and case studies</div>
+          <div className="eyebrow">Driveways and projects</div>
           <h2 id="galleries-more" className="mt-4 [text-wrap:balance]">
             For homeowners, and for the full story
           </h2>
@@ -170,7 +170,7 @@ export default function GalleriesPage() {
               className="card-panel min-h-[240px] justify-between rounded-[2px]"
             >
               <div>
-                <div className="label">Case studies</div>
+                <div className="label">Projects</div>
                 <h3 className="mt-4 text-[22px] leading-[1.25]">Projects, told in full</h3>
                 <p className="mt-3 max-w-[40ch] text-[15px] leading-[1.6] text-[color:var(--ink-body)]">
                   Each with its photographs, the systems installed, the place and the year.

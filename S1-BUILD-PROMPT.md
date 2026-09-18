@@ -81,7 +81,7 @@ without asking first, even mid-phase.
 | Field | Value |
 |---|---|
 | Legal / display name | Square One Paving |
-| Office | 19-11720 Stewart Crescent, Maple Ridge, BC |
+| Office | 19-11720 Stewart Crescent, Maple Ridge, BC V2X 9E7 |
 | Office phone | 604-612-6209 |
 | Vancouver Island phone | 250-391-0270 |
 | Email | office@squareonepaving.com |

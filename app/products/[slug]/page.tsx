@@ -302,7 +302,6 @@ export default async function ProductPage({ params }: Props) {
         <ul className="mt-12 grid grid-cols-3 gap-x-10 max-[900px]:grid-cols-2 max-[600px]:grid-cols-1">
           {product.applications.map((application, i) => {
             const gallery = galleryFor(application)
-            const count = gallery ? getWork().filter((p) => p.app === gallery.slug).length : 0
             return (
               <li
                 key={application}
@@ -326,11 +325,9 @@ export default async function ProductPage({ params }: Props) {
                     </span>
                   )}
                 </div>
-                {gallery && count > 0 && (
-                  <span className="mt-1 block pl-8 text-[13px] text-[color:var(--ink-on-slate-muted)]">
-                    {count} photographs
-                  </span>
-                )}
+                {/* The photograph count came off 18 Sept — the client, on
+                    DuraShield: "these numbers don't add up". A count reads as
+                    a claim about volume, and the record is a sample. */}
               </li>
             )
           })}

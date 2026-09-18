@@ -109,7 +109,7 @@ const principles = [
    by the same helpers the home page stats use, so the two can never drift. */
 const timeline = [
   { year: "2000", event: "Square One Paving begins installing decorative pavement in British Columbia" },
-  { year: `${projects.length}+`, event: "published case studies, from Nanaimo to Kelowna" },
+  { year: `${projects.length}+`, event: "projects on record, from Nanaimo to Kelowna" },
   { year: String(products.length), event: "HUB Surface Systems products installed, from StreetPrint to PreMark" },
   { year: `${workCities().length}+`, event: "BC communities with Square One work on the ground" },
 ]
@@ -339,13 +339,13 @@ export default function AboutPage() {
         <div className="container-1280 relative z-[1]">
           <div className="grid grid-cols-12 gap-x-12 gap-y-12 max-[900px]:grid-cols-1">
             <div className="col-span-5 flex flex-col justify-center max-[900px]:col-span-1">
-              <div className="eyebrow eyebrow-on-image">Installed for</div>
+              <div className="eyebrow eyebrow-on-image">Installed at</div>
               <p className="display-statement stop m-0 mt-6 max-w-[22ch] text-white [text-wrap:balance]">
                 Won in the open, kept through winters
               </p>
               <p className="mt-6 max-w-[42ch] text-[15px] leading-[1.65] text-[color:var(--ink-on-slate-body)]">
                 Municipal work is won in open tenders and kept by holding up. These are the owners and
-                developers Square One has installed for, as published in its project record.
+                developers whose sites carry Square One&rsquo;s work, as published in its project record.
               </p>
             </div>
 
@@ -382,7 +382,7 @@ export default function AboutPage() {
               <div className="label">Office</div>
               <h3 className="mt-2">Maple Ridge, BC</h3>
               <p className="mt-1.5 text-[15px] leading-[1.6] text-ink-muted">
-                19&ndash;11720 Stewart Crescent
+                19&ndash;11720 Stewart Crescent, V2X 9E7
               </p>
               <p className="mt-1.5 text-[15px] leading-[1.6] text-ink-muted">
                 <a href="tel:+16046126209">604-612-6209</a>

@@ -311,7 +311,7 @@ export default function ContactPage() {
               <address className="mt-[10px] text-[1.25rem] font-semibold not-italic leading-[1.4] tracking-[-0.015em] text-ink">
                 19&ndash;11720 Stewart Crescent
               </address>
-              <p className="mt-1 text-[14px] text-ink-muted">Maple Ridge, BC</p>
+              <p className="mt-1 text-[14px] text-ink-muted">Maple Ridge, BC V2X 9E7</p>
             </RailBlock>
 
             <RailBlock heading="Phone">

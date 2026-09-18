@@ -20,7 +20,7 @@ import { clampDescription } from "@/lib/seo"
  *   01 Header      typographic — eyebrow, h1, lede, CTAs, record line   white
  *   02 The work    captioned tile gallery, system + region chips        white
  *   03 Systems     product cards for this application                   warm
- *   04 Case studies project cards where the application matches        white
+ *   04 Projects      project cards where the application matches        white
  *   05 Next        prev / next application                              white
  *   Close          slate — Footer, rendered once by app/layout.tsx
  *
@@ -186,7 +186,7 @@ export default async function ApplicationPage({ params }: Props) {
               </dd>
             </div>
             <div>
-              <dt className="label">Case studies</dt>
+              <dt className="label">Projects</dt>
               <dd className="mt-2 text-[17px] font-semibold text-[color:var(--ink)]">
                 {caseStudies.length > 0 ? caseStudies.length : "See the gallery"}
               </dd>
@@ -257,12 +257,12 @@ export default async function ApplicationPage({ params }: Props) {
         </div>
       </section>
 
-      {/* ── 04 Case studies ─────────────────────────────────────────────────────── */}
+      {/* ── 04 Projects ─────────────────────────────────────────────────────── */}
       {caseStudies.length > 0 && (
         <section className="section bg-[color:var(--surface)]">
           <div className="container-1280">
             <div className="flex flex-wrap items-baseline justify-between gap-6">
-              <h2>Case studies</h2>
+              <h2>Projects</h2>
               <Link href="/projects" className="arrow-link whitespace-nowrap">
                 All projects <span aria-hidden="true">&rarr;</span>
               </Link>
