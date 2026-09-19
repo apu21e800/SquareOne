@@ -10,7 +10,7 @@
 //
 //   01 Hero                       white — split 55/45, photo right
 //   02 Benefits                   warm, hairline top + bottom
-//   03 Patterns and colours  #patterns  white
+//   03 Patterns and colours  (held back 19 Sept — see the note in place)
 //   05 How it works               warm, hairline top + bottom
 //   06 Selected driveways         white
 //   07 Service area               warm, hairline top + bottom
@@ -26,7 +26,6 @@ import type { Metadata } from "next"
 
 import { workFor } from "@/lib/work"
 import WorkGallery from "@/components/WorkGallery"
-import DrivewayComposer from "@/components/DrivewayComposer"
 import JsonLd, { breadcrumbSchema, faqSchema } from "@/components/JsonLd"
 import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
@@ -128,6 +127,9 @@ const stats: { number: string; label: string }[] = [
  * library. Still wanted: Random Stone, Standard Tile and Offset Tile as
  * installed — only label a frame whose template Square One has named.
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- the strip is
+// held back with the templates section (19 Sept); the photographs are real
+// and come straight back with it.
 const patterns: (Shot & { label: string })[] = [
   {
     label: "Ashlar slate",
@@ -204,8 +206,8 @@ export default function DrivewaysPage() {
               <Link href="/contact" className="btn-primary">
                 Book a free site visit
               </Link>
-              <Link href="#patterns" className="btn-secondary">
-                See patterns and colours
+              <Link href="#gallery" className="btn-secondary">
+                See driveways we have done
               </Link>
             </div>
           </div>
@@ -241,48 +243,10 @@ export default function DrivewaysPage() {
       </section>
 
       {/* ── 03 Patterns and colours ──────── */}
-      <section id="patterns" className="section relative overflow-hidden bg-surface">
-
-        <div className="container-1280 relative z-[1]">
-          <div className="flex flex-wrap items-end justify-between gap-6">
-            <div>
-              <p className="eyebrow">Try it</p>
-              <h2 className="mt-5">Patterns and colours</h2>
-            </div>
-            <p className="max-w-[48ch] text-[15px] leading-[1.6] text-ink-muted [text-wrap:pretty]">
-              Nine StreetPrint templates, any StreetBond&reg; colour. Put them together here, then
-              we bring the sample boards to your driveway and hold them against the house.
-            </p>
-          </div>
-
-          <div className="mt-10">
-            <DrivewayComposer />
-          </div>
-
-          <div className="mt-14 flex items-baseline justify-between gap-6 border-t border-hairline pt-8">
-            <div className="label">As installed</div>
-            <Link href="#gallery" className="arrow-link">
-              Every driveway on record <span aria-hidden="true">&rarr;</span>
-            </Link>
-          </div>
-          <div className="mt-5 grid grid-cols-3 gap-4 max-[700px]:grid-cols-2">
-            {patterns.map((pattern) => (
-              <div key={pattern.label}>
-                <div className="card relative aspect-[4/3] overflow-hidden rounded-[2px] border border-hairline bg-surface-stone">
-                  <Image
-                    src={pattern.src}
-                    alt={pattern.alt}
-                    fill
-                    sizes="(max-width: 700px) 33vw, (max-width: 1280px) 16vw, 197px"
-                    className="object-cover"
-                  />
-                </div>
-                <div className="chip-name">{pattern.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* ── 03 Patterns and colours — HELD BACK (Vern, 19 Sept, launch night:
+             "remove the templates section for now"). The composer, the nine
+             template chips and the as-installed strip lived here; the section
+             is in git at 1dc134b and DrivewayComposer is untouched. ──────── */}
 
       {/* ── 05 How it works ──────── */}
       <section className="section relative overflow-hidden border-y border-hairline bg-surface-warm">
