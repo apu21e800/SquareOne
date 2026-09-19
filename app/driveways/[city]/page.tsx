@@ -231,8 +231,8 @@ export default async function DrivewayCityPage({ params }: Props) {
             <p className="mt-6 max-w-[52ch] text-[17px] leading-[1.7] text-[color:var(--ink-body)] [text-wrap:pretty]">
               {c.intro}
             </p>
-            <Link href="/driveways#gallery" className="arrow-link mt-8">
-              Driveways on record <span aria-hidden="true">&rarr;</span>
+            <Link href="/patterns" className="arrow-link mt-8">
+              The pattern library <span aria-hidden="true">&rarr;</span>
             </Link>
           </div>
 
