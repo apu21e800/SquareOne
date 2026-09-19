@@ -130,7 +130,7 @@ const SERVICE_TILES: { href: string; name: string; note: string; src: string; al
     href: "/services/vapor-blasting",
     name: "Vapour blasting",
     note: "Cleaning, priming, graffiti removal",
-    src: "/images/services/vapor-blasting/granville-island-vapour-blasting-01.jpg",
+    src: "/images/services/vapor-blasting/generated/gen-granville-island-vapour-blasting-01-enhanced.jpg",
     alt: "Square One crew vapour blasting at Granville Island",
   },
 ]

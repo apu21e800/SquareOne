@@ -40,7 +40,7 @@ const cardImage: Record<string, { src: string; alt: string }> = {
     alt: "Musqueam crosswalk artwork at UBC, Vancouver",
   },
   "vapor-blasting": {
-    src: "/images/services/vapor-blasting/granville-island-vapour-blasting-01.jpg",
+    src: "/images/services/vapor-blasting/generated/gen-granville-island-vapour-blasting-01-enhanced.jpg",
     alt: "Square One crew vapour blasting at Granville Island",
   },
 }

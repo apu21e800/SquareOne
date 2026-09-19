@@ -73,7 +73,7 @@ const trades: { name: string; line: string; href: string; src: string; alt: stri
     name: "Vapour blasting",
     line: "Surface cleaning, priming and graffiti removal with the mobile rig — the supporting service.",
     href: "/services/vapor-blasting",
-    src: "/images/services/vapor-blasting/granville-island-vapour-blasting-01.jpg",
+    src: "/images/services/vapor-blasting/generated/gen-granville-island-vapour-blasting-01-enhanced.jpg",
     alt: "Square One crew vapour blasting at Granville Island",
   },
 ]

@@ -54,7 +54,7 @@ const services = [
     name: "Vapour blasting",
     tagline: "Clean it, prime it, bring it back.",
     desc: "Surface cleaning, priming, graffiti and mould removal — mobile across the Lower Mainland and Vancouver Island, with up to 92% less dust than dry blasting.",
-    image: "/images/services/vapor-blasting/granville-island-vapour-blasting-01.jpg",
+    image: "/images/services/vapor-blasting/generated/gen-granville-island-vapour-blasting-01-enhanced.jpg",
     alt: "Square One crew vapour blasting at Granville Island",
     applications: ["Graffiti Removal", "Marking Removal", "Surface Prep", "Mould & Muck"],
   },

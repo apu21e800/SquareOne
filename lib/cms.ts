@@ -120,7 +120,7 @@ function fallbackTiles(profileUrl: string): SocialTile[] {
     },
     { slug: "langley-events-centre-streetbond", caption: "Circle of Life, Langley Events Centre · StreetBond" },
     {
-      src: "/images/services/vapor-blasting/granville-island-vapour-blasting-01.jpg",
+      src: "/images/services/vapor-blasting/generated/gen-granville-island-vapour-blasting-01-enhanced.jpg",
       alt: "Square One crew vapour blasting at Granville Island",
       caption: "Vapour blasting, Granville Island · surface prep",
     },
