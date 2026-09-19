@@ -407,6 +407,17 @@ h1, h2:not(.label):not(.eyebrow):not(.card-title) { text-wrap: balance; }
 .caption { font-size: 12.5px; letter-spacing: 0.02em; }
 .label, .eyebrow { font-size: 11.5px; }
 
+/* The bar's links were set in the darkest ink at 600 (Vern, 19 Sept, last
+   note of the night: "text in the main nav is too black"). They step down
+   to the reading ink (#3D4147) — a bar should be read past, not read — and
+   the active page and the hover keep the black. Weight stays Bold: Futura
+   is loaded in Book and Bold only, and Book at 15px is too thin for a bar.
+   The light bar over a photograph is unchanged. */
+.nav-link { color: var(--ink-body); font-weight: 600; letter-spacing: 0.012em; }
+.nav-link:hover, .nav-link-active { color: var(--ink); }
+.nav-light .nav-link { color: rgba(255, 255, 255, 0.96); }
+.nav-light .nav-link:hover, .nav-light .nav-link-active { color: #FFFFFF; }
+
 /* The small voice keeps its capitals and its air. */
 .label, .eyebrow, .chip-name { letter-spacing: 0.14em; }
 .btn-primary, .btn-secondary, .btn-on-slate, .btn-on-image { letter-spacing: 0.12em; }

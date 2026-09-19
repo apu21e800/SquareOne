@@ -72,7 +72,7 @@ export default function DrivewaysBand() {
                   </p>
                   <div className="mt-auto flex flex-wrap items-center justify-between gap-x-4 gap-y-2 pt-6">
                     <span aria-hidden="true" className="arrow-link">
-                      The {city.region} page <span>&rarr;</span>
+                      Driveways in {city.region} <span>&rarr;</span>
                     </span>
                     <a href={city.tel} className="relative z-[3] text-[13px] font-semibold tabular-nums text-ink-muted transition-colors hover:text-ink">
                       {city.line}

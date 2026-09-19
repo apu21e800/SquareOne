@@ -3,7 +3,8 @@ import { WORK_APPS } from "@/lib/work"
 import { fitVars } from "@/lib/type"
 
 /**
- * Editorial statement band — the page inhaling, now on slate.
+ * Editorial statement band — the page inhaling. On slate from 5 Sept; back
+ * on warm paper 19 Sept 2026 (Vern: "too much dark mode overall").
  *
  * 5 Sept 2026 (Vern: "everything is very white"; "selected clients is very
  * boring — weave that in somehow else"): the one display line moves onto
@@ -35,15 +36,15 @@ import { fitVars } from "@/lib/type"
  */
 export default function EditorialBand({ statement = "Twenty-five years on BC ground" }: { statement?: string }) {
   return (
-    <section className="relative overflow-hidden bg-surface-slate py-[6.5rem] max-[700px]:py-16">
+    <section className="relative overflow-hidden border-t border-hairline bg-surface-warm py-[6.5rem] max-[700px]:py-16">
       <div className="container-1280 relative z-[1]">
         <div className="grid grid-cols-12 items-start gap-x-14 gap-y-12 max-[900px]:grid-cols-1">
           <div className="col-span-5 max-[900px]:col-span-1">
-            <div className="eyebrow eyebrow-on-image">Since 2000</div>
+            <div className="eyebrow">Since 2000</div>
             <div className="fit-host mt-7">
               <p
                 data-reveal
-                className="display-statement display-fit stop m-0 text-white [text-wrap:balance]"
+                className="display-statement display-fit stop m-0 [text-wrap:balance]"
                 style={fitVars(statement, { max: "3.5rem", pref: "3.6vw" })}
               >
                 {/* A hyphenated word never splits at its hyphen — "Twenty-" /
@@ -59,7 +60,7 @@ export default function EditorialBand({ statement = "Twenty-five years on BC gro
           </div>
 
           <div className="col-span-7 max-[900px]:col-span-1">
-            <div className="label label-on-slate">The work</div>
+            <div className="label">The work</div>
             {/* Three columns from 700px, four rows — matches the statement's
                 height, so the band reads as one composition. */}
             <ul className="mt-4 grid grid-cols-3 gap-x-8 max-[700px]:grid-cols-2">
@@ -67,18 +68,18 @@ export default function EditorialBand({ statement = "Twenty-five years on BC gro
                 <li
                   key={app.slug}
                   className="border-t text-[15px] font-medium leading-[1.4]"
-                  style={{ borderColor: "var(--hairline-slate)" }}
+                  style={{ borderColor: "var(--hairline)" }}
                 >
                   <Link
                     href={app.slug === "driveways" ? "/driveways#gallery" : `/applications/${app.slug}`}
-                    className="block py-[11px] text-[color:var(--ink-on-slate-body)] transition-colors hover:text-white"
+                    className="block py-[11px] text-ink-body transition-colors hover:text-[color:var(--accent-deep)]"
                   >
                     {app.label}
                   </Link>
                 </li>
               ))}
             </ul>
-            <p className="mt-5 text-[13px] leading-[1.6] text-[color:var(--ink-on-slate-muted)]">
+            <p className="mt-5 text-[13px] leading-[1.6] text-ink-muted">
               Ten kinds of work across the Lower Mainland and Vancouver Island, each with its own gallery.
             </p>
           </div>

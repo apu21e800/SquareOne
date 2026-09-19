@@ -22,7 +22,7 @@ import { workMunicipalities } from "@/lib/work"
               beside it the office, the mailbox, what to send, and the two
               shortcuts (a homeowner to the patterns, a specifier to the
               library)
-     next     on slate: the three steps from a message to a written quote,
+     next     on white: the three steps from a message to a written quote,
               each with its line, against the StreetHeat rig mid-install at
               KB Woodward — how the work is actually done
      where    the two regions with their lines, each on a frame from the
@@ -229,18 +229,18 @@ export default function ContactPage() {
       </section>
 
       {/* ── What happens next — the three steps, and how the work is done ──────── */}
-      <section className="relative overflow-hidden bg-surface-slate py-[7rem] max-[900px]:py-16">
+      <section className="relative overflow-hidden border-t border-hairline bg-surface py-[7rem] max-[900px]:py-16">
         <div className="container-1280 relative z-[1] grid grid-cols-12 items-center gap-x-14 gap-y-12 max-[900px]:grid-cols-1">
           <div className="col-span-6 max-[900px]:col-span-1">
-            <p className="eyebrow eyebrow-on-image">What happens next</p>
-            <h2 className="mt-5 max-w-[18ch] text-white [text-wrap:balance]">From a message to a written quote</h2>
+            <p className="eyebrow">What happens next</p>
+            <h2 className="mt-5 max-w-[18ch] [text-wrap:balance]">From a message to a written quote</h2>
             <ol className="mt-10 flex flex-col">
               {STEPS.map((s) => (
-                <li key={s.n} className="grid grid-cols-[52px_1fr] gap-x-5 border-t py-7 first:pt-0 first:border-t-0 max-[420px]:grid-cols-[40px_1fr]" style={{ borderColor: "var(--hairline-slate)" }}>
-                  <span className="label pt-[3px] text-[color:var(--accent)]">{s.n}</span>
+                <li key={s.n} className="grid grid-cols-[52px_1fr] gap-x-5 border-t py-7 first:pt-0 first:border-t-0 max-[420px]:grid-cols-[40px_1fr]" style={{ borderColor: "var(--hairline)" }}>
+                  <span className="label pt-[3px] text-[color:var(--accent-deep)]">{s.n}</span>
                   <div>
-                    <h3 className="text-white">{s.title}</h3>
-                    <p className="mt-2 max-w-[46ch] text-[15.5px] leading-[1.6] text-[color:var(--ink-on-slate-body)] [text-wrap:pretty]">
+                    <h3>{s.title}</h3>
+                    <p className="mt-2 max-w-[46ch] text-[15.5px] leading-[1.6] text-ink-body [text-wrap:pretty]">
                       {s.body}
                     </p>
                   </div>
@@ -250,7 +250,7 @@ export default function ContactPage() {
           </div>
 
           <div className="col-span-6 max-[900px]:col-span-1">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-[2px] bg-black/25 shadow-[0_24px_60px_rgba(0,0,0,0.45)]">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-[2px] bg-surface-stone shadow-[0_18px_44px_rgba(20,22,26,0.14)]">
               <Image
                 src={PROCESS.src}
                 alt={PROCESS.alt}
@@ -266,7 +266,7 @@ export default function ContactPage() {
       </section>
 
       {/* ── Where we work — two regions, two lines, the record's cities ──────── */}
-      <section className="section border-t border-hairline bg-surface">
+      <section className="section border-t border-hairline bg-surface-warm">
         <div className="container-1280">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>

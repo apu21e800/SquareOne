@@ -353,15 +353,15 @@ export default function AboutPage() {
           Was the client list ("Installed at"). Off at the client's request,
           19 Sept 2026, until she confirms who Square One has worked for;
           lib/clients.ts keeps the names. */}
-      <section className="relative overflow-hidden bg-surface-slate py-[6.5rem] max-[700px]:py-14">
+      <section className="relative overflow-hidden border-y border-hairline bg-surface-warm py-[6.5rem] max-[700px]:py-14">
         <div className="container-1280 relative z-[1]">
           <div className="grid grid-cols-12 gap-x-12 gap-y-12 max-[900px]:grid-cols-1">
             <div className="col-span-5 flex flex-col justify-center max-[900px]:col-span-1">
-              <div className="eyebrow eyebrow-on-image">The work</div>
-              <p className="display-statement stop m-0 mt-6 max-w-[22ch] text-white [text-wrap:balance]">
+              <div className="eyebrow">The work</div>
+              <p className="display-statement stop m-0 mt-6 max-w-[22ch] [text-wrap:balance]">
                 Won in the open, kept through winters
               </p>
-              <p className="mt-6 max-w-[42ch] text-[15px] leading-[1.65] text-[color:var(--ink-on-slate-body)]">
+              <p className="mt-6 max-w-[42ch] text-[15px] leading-[1.65] text-ink-body">
                 Municipal work is won in open tenders and kept by holding up. Ten kinds of it, each
                 with a gallery of Square One&rsquo;s own installations.
               </p>
@@ -373,11 +373,11 @@ export default function AboutPage() {
                   <li
                     key={app.slug}
                     className="border-t text-[15px] font-medium leading-[1.4]"
-                    style={{ borderColor: "var(--hairline-slate)" }}
+                    style={{ borderColor: "var(--hairline)" }}
                   >
                     <Link
                       href={app.slug === "driveways" ? "/driveways#gallery" : `/applications/${app.slug}`}
-                      className="block py-[12px] text-[color:var(--ink-on-slate-body)] transition-colors hover:text-white"
+                      className="block py-[12px] text-ink-body transition-colors hover:text-[color:var(--accent-deep)]"
                     >
                       {app.label}
                     </Link>
