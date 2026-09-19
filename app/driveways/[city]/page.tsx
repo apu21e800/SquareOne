@@ -5,7 +5,6 @@ import { notFound } from "next/navigation"
 
 import { workForRegion, type WorkPhoto, type WorkRegion } from "@/lib/work"
 import WorkGallery from "@/components/WorkGallery"
-import DrivewayComposer from "@/components/DrivewayComposer"
 import JsonLd, { breadcrumbSchema, faqSchema } from "@/components/JsonLd"
 import { SITE_URL } from "@/lib/site"
 import { fitVars } from "@/lib/type"
@@ -232,8 +231,8 @@ export default async function DrivewayCityPage({ params }: Props) {
             <p className="mt-6 max-w-[52ch] text-[17px] leading-[1.7] text-[color:var(--ink-body)] [text-wrap:pretty]">
               {c.intro}
             </p>
-            <Link href="/driveways#patterns" className="arrow-link mt-8">
-              Patterns and colours <span aria-hidden="true">&rarr;</span>
+            <Link href="/driveways#gallery" className="arrow-link mt-8">
+              Driveways on record <span aria-hidden="true">&rarr;</span>
             </Link>
           </div>
 
@@ -277,24 +276,7 @@ export default async function DrivewayCityPage({ params }: Props) {
         </div>
       </section>
 
-      {/* ── 04b Try it — the composer, with the city on the enquiry ──────── */}
-      <section className="section border-t border-[color:var(--hairline)] bg-[color:var(--surface)]">
-        <div className="container-1280">
-          <div className="flex flex-wrap items-end justify-between gap-6">
-            <div>
-              <div className="eyebrow">Try it</div>
-              <h2 className="mt-4">Pattern and colour, before the site visit</h2>
-            </div>
-            <p className="max-w-[46ch] text-[15px] leading-[1.6] text-[color:var(--ink-muted)] [text-wrap:pretty]">
-              Put a StreetPrint template with a StreetBond colour. Your choice arrives with the
-              enquiry, and the sample boards come to {c.name} with us.
-            </p>
-          </div>
-          <div className="mt-10">
-            <DrivewayComposer city={c.name} initialColour={c.slug === "victoria" ? "Driftwood" : "Slate"} initialPattern={c.slug === "victoria" ? "random-stone" : "ashlar-slate"} />
-          </div>
-        </div>
-      </section>
+      {/* ── 04b Try it — HELD BACK with the templates (Vern, 19 Sept). ──────── */}
 
       {/* ── 05 Where ──────── */}
       <section className="section border-y border-[color:var(--hairline)] bg-[color:var(--surface-warm)]">

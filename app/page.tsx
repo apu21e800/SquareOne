@@ -5,7 +5,6 @@ import StatsBar from "@/components/sections/StatsBar"
 import AudienceBand from "@/components/sections/AudienceBand"
 import EditorialBand from "@/components/sections/EditorialBand"
 import ServicesGrid from "@/components/sections/ServicesGrid"
-import MaterialsBand from "@/components/sections/MaterialsBand"
 import ProjectsPreview from "@/components/sections/ProjectsPreview"
 import ApplicationsSection from "@/components/sections/ApplicationsSection"
 import DrivewaysBand from "@/components/sections/DrivewaysBand"
@@ -94,7 +93,10 @@ export default async function Home() {
 
       <ServicesGrid />
 
-      <MaterialsBand />
+      {/* MaterialsBand — the templates and colours — is held back (Vern, 19 Sept,
+          launch night: "remove the templates section for now, that is not ready
+          to go yet"). The component and lib/pattern-art.ts stay; this is one
+          line to restore. */}
 
       <ProjectsPreview />
 
