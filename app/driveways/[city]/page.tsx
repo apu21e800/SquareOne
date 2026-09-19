@@ -8,6 +8,7 @@ import WorkGallery from "@/components/WorkGallery"
 import DrivewayComposer from "@/components/DrivewayComposer"
 import JsonLd, { breadcrumbSchema, faqSchema } from "@/components/JsonLd"
 import { SITE_URL } from "@/lib/site"
+import { fitVars } from "@/lib/type"
 import { clampDescription } from "@/lib/seo"
 
 /**
@@ -58,7 +59,7 @@ const CITIES: Record<string, CityCopy> = {
       "StreetPrint stamped asphalt and StreetBond colour, installed over the driveway you already have — from West Vancouver to Langley, by the crew that has been doing it since 2000.",
     intro:
       "A Vancouver driveway lives in nine months of rain. Stamped asphalt handles that better than pavers or coloured concrete: it is one continuous surface, so there are no joints to heave, no sand to wash out and nothing for moss to take hold in. We imprint the pattern into your existing asphalt and seal it in a StreetBond colour — the driveway stays where it is.",
-    phone: "604-466-9902",
+    phone: "604-612-6209",
     phoneLabel: "Lower Mainland",
     communities: [
       "Vancouver", "West Vancouver", "North Vancouver", "Burnaby", "New Westminster", "Richmond",
@@ -127,7 +128,7 @@ function heroAlt(p: WorkPhoto): string {
 const SYSTEMS = [
   { name: "StreetPrint stamped asphalt", body: "Brick, cobble, slate and custom patterns imprinted into your existing asphalt — no excavation, no new base.", href: "/products/streetprint" },
   { name: "StreetBond colour coating", body: "The colour and the seal in one — UV-stable, slip-resistant, and the way an existing driveway gets refreshed.", href: "/products/streetbond" },
-  { name: "DuraShield maintenance coating", body: "For a driveway that is sound but faded — a protective black or solar-grey coating that shields the asphalt from UV, fuel and de-icers.", href: "/products/durashield" },
+  { name: "DuraShield maintenance coating", body: "For a driveway that is sound but faded — a protective black or solar-grey coating that shields the asphalt from UV and resists chemicals.", href: "/products/durashield" },
 ]
 
 export async function generateStaticParams() {
@@ -180,7 +181,9 @@ export default async function DrivewayCityPage({ params }: Props) {
             Driveways &middot; {c.regionLabel}
           </Link>
 
-          <h1 className="stop mt-7 max-w-[20ch] [text-wrap:balance]">{c.headline}</h1>
+          <div className="fit-host mt-7 max-w-[44rem]">
+            <h1 className="display-fit stop [text-wrap:balance]" style={fitVars(c.headline)}>{c.headline}</h1>
+          </div>
 
           <p className="mt-7 max-w-[58ch] text-[19px] leading-[1.65] text-[color:var(--ink-body)] [text-wrap:pretty] max-[700px]:text-[17px]">
             {c.lede}
@@ -288,7 +291,7 @@ export default async function DrivewayCityPage({ params }: Props) {
             </p>
           </div>
           <div className="mt-10">
-            <DrivewayComposer city={c.name} initialColour={c.slug === "victoria" ? "Driftwood" : "Slate"} initialPattern={c.slug === "victoria" ? "british-cobble" : "ashlar-slate"} />
+            <DrivewayComposer city={c.name} initialColour={c.slug === "victoria" ? "Driftwood" : "Slate"} initialPattern={c.slug === "victoria" ? "random-stone" : "ashlar-slate"} />
           </div>
         </div>
       </section>

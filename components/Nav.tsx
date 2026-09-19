@@ -33,7 +33,7 @@ const PRODUCT_DESCRIPTOR: Record<string, string> = {
   duratherm: "Inlaid textured surfaces",
   decomark: "Shapes, symbols, graphics",
   premark: "Standard legends and bars",
-  durashield: "Clear protective seal",
+  durashield: "Asphalt maintenance coating",
 }
 
 interface ProductColumn {
@@ -584,7 +584,7 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
 
       <div className="flex shrink-0 flex-wrap items-center gap-x-6 gap-y-1 border-t border-[#E7E3DC] px-6 py-4 text-[13px] text-[#767B82]">
         <span>
-          <a href="tel:+16044669902" className="font-medium text-[#14161A]">604-466-9902</a> Maple Ridge
+          <a href="tel:+16046126209" className="font-medium text-[#14161A]">604-612-6209</a> Maple Ridge
         </span>
         <span>
           <a href="tel:+12503910270" className="font-medium text-[#14161A]">250-391-0270</a> Vancouver Island

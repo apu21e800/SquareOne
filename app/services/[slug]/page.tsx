@@ -74,7 +74,12 @@ export default async function ServicePage({ params }: Props) {
 
   const otherServices = services.filter((s) => s.slug !== service.slug)
   const heroSrc = heroFor("services", service.slug, service.imageUrl) ?? service.imageUrl
-  const relatedProjects = projects.filter((p) => p.service === service.name).slice(0, 3)
+  // Client review, 16 Sept: stamped asphalt is sold here as commercial and
+  // municipal work — driveways have their own page.
+  const relatedProjects = projects
+    .filter((p) => p.service === service.name)
+    .filter((p) => service.slug !== "stamped-asphalt" || p.application !== "Driveways")
+    .slice(0, 3)
 
   const specColumns: { label: string; items: string[] }[] = [
     { label: "Applications", items: service.applications },

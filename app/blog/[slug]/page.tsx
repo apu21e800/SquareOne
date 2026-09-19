@@ -8,6 +8,7 @@ import { getPost, getPosts } from "@/lib/blog"
 import type { AnyPost, BlogPostMeta } from "@/lib/blog"
 import PortableBody from "@/components/blog/PortableBody"
 import { SITE_URL } from "@/lib/site"
+import { fitVars } from "@/lib/type"
 import { clampDescription } from "@/lib/seo"
 
 interface Props {
@@ -239,9 +240,14 @@ export default async function BlogPostPage({ params }: Props) {
             </div>
           )}
 
-          <h1 className={`stop ${post.category ? "mt-6" : "mt-8"} [text-wrap:balance]`}>
-            {post.title}
-          </h1>
+          <div className={`fit-host ${post.category ? "mt-6" : "mt-8"}`}>
+            <h1
+              className="display-fit headline-sentence stop [text-wrap:balance]"
+              style={fitVars(post.title, { max: "3.25rem", sentence: true })}
+            >
+              {post.title}
+            </h1>
+          </div>
 
           <div className="mt-[18px] text-[14px] text-[color:var(--ink-muted)]">
             By {post.author || "Square One Paving"}

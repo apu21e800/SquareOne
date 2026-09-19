@@ -8,6 +8,7 @@ import { galleryFor } from "@/lib/gallery"
 import { WORK_APPS } from "@/lib/work"
 import ProjectGallery from "@/components/ProjectGallery"
 import { SITE_URL } from "@/lib/site"
+import { fitVars } from "@/lib/type"
 import JsonLd, { breadcrumbSchema } from "@/components/JsonLd"
 import { clampDescription } from "@/lib/seo"
 
@@ -56,17 +57,6 @@ function applicationHref(label: string): string | undefined {
   return app.slug === "driveways" ? "/driveways" : `/applications/${app.slug}`
 }
 
-/**
- * The reference sizes the project H1 by character count so a long title never
- * outruns its measure. Done at build time — no client script, no observer.
- */
-function headlineSize(title: string): string | undefined {
-  const n = title.trim().length
-  if (n <= 28) return undefined // base layer H1
-  if (n <= 130) return "clamp(2rem, 3.4vw, 3rem)"
-  return "clamp(1.5rem, 2.4vw, 2.25rem)"
-}
-
 export async function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }))
 }
@@ -108,7 +98,6 @@ export default async function ProjectPage({ params }: Props) {
   const serviceSlug = serviceSlugMap[project.service] ?? "stamped-asphalt"
   const serviceName = serviceLabel[project.service] ?? project.service
   const caption = metaLine(project.city, project.systems, project.year)
-  const h1Size = headlineSize(project.title)
   const appHref = applicationHref(project.application)
 
   const facts: { label: string; value: string; href?: string }[] = [
@@ -149,12 +138,14 @@ export default async function ProjectPage({ params }: Props) {
             Projects
           </Link>
 
-          <h1
-            className="stop mt-7 max-w-[24ch] [text-wrap:balance]"
-            style={h1Size ? { fontSize: h1Size } : undefined}
-          >
-            {project.title}
-          </h1>
+          {/* One sizing mechanism, not two: lib/type.ts now carries both the
+              length judgement the old headlineSize() made and the longest-word
+              ceiling it could not make. */}
+          <div className="fit-host mt-7 max-w-[54rem]">
+            <h1 className="display-fit stop [text-wrap:balance]" style={fitVars(project.title)}>
+              {project.title}
+            </h1>
+          </div>
         </div>
 
         {project.heroWide ? (

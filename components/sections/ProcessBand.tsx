@@ -22,7 +22,7 @@ const steps: { num: string; title: string; body: string; meta: string }[] = [
   {
     num: "04",
     title: "Application",
-    body: "Hot imprint, coat, or thermoplastic — applied by the same crew that has done it for ten years. Municipal-spec discipline, residential-scale care.",
+    body: "Hot imprint, coat, or thermoplastic — applied by crews who have been laying it down for years. Municipal-spec discipline, residential-scale care.",
     meta: "Install Day 2–3",
   },
   {
@@ -40,12 +40,12 @@ export default function ProcessBand() {
         <div className="grid grid-cols-1 items-end gap-8 min-[901px]:grid-cols-[auto_1fr] min-[901px]:gap-16">
           <div>
             <div className="eyebrow">How we work</div>
-            <h2 className="stop mt-5">Five steps, one crew</h2>
+            <h2 className="stop mt-5">Five steps, every job</h2>
           </div>
 
           <p className="max-w-[56ch] text-[19px] leading-[1.65] text-ink-body">
             Our process hasn&apos;t changed since 2000 because the work hasn&apos;t. Every project,
-            municipal or residential, runs the same five steps with the same crew &mdash; the
+            municipal or residential, runs the same five steps to the same standard &mdash; the
             boring discipline that makes a pavement install last for a decade.
           </p>
         </div>

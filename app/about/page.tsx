@@ -109,17 +109,16 @@ const principles = [
    by the same helpers the home page stats use, so the two can never drift. */
 const timeline = [
   { year: "2000", event: "Square One Paving begins installing decorative pavement in British Columbia" },
-  { year: String(projects.length), event: "published case studies, from Nanaimo to Kelowna" },
-  { year: String(getWork().length), event: "site photographs on record, each captioned with the system and the place" },
+  { year: `${projects.length}+`, event: "projects on record, from Nanaimo to Kelowna" },
   { year: String(products.length), event: "HUB Surface Systems products installed, from StreetPrint to PreMark" },
-  { year: String(workCities().length), event: "BC communities in the work record" },
+  { year: `${workCities().length}+`, event: "BC communities with Square One work on the ground" },
 ]
 
 const process = [
   { step: "01", title: "Site walk", body: "We measure, photograph and flag substrate issues on site." },
   { step: "02", title: "Specification", body: "Pattern, colours and product matched to traffic and budget." },
   { step: "03", title: "Surface prep", body: "Cleaning, and vapour blasting where the surface needs it." },
-  { step: "04", title: "Application", body: "Installed by Square One's own crew, to the specification." },
+  { step: "04", title: "Application", body: "Installed by Square One's own crews, to the specification." },
   { step: "05", title: "Cure & walk-through", body: "Open to traffic on schedule; we walk the finished work with you." },
 ]
 
@@ -146,10 +145,17 @@ export default function AboutPage() {
 
           <div className="mt-9 grid grid-cols-12 gap-x-10 gap-y-6 max-[900px]:grid-cols-1">
             <p className="col-span-7 max-w-[56ch] text-[19px] leading-[1.7] text-ink-body [text-wrap:pretty] max-[700px]:text-[17px]">
+              {/* "recognized as the most experienced decorative stamped asphalt
+                  applicator in Western Canada" stood here until 17 Sept 2026.
+                  It is a superlative with no source anywhere in the record —
+                  recognised by whom is never answered — and it was the first
+                  sentence on the page, doing the work that the client list,
+                  the twenty-five years and 300 photographs do better and
+                  provably. Flagged to Vern: if Square One has a citation for
+                  it, it can come back with the citation. */}
               Square One Paving has installed decorative pavement across British Columbia since
-              2000, and is recognized as the most experienced decorative stamped asphalt applicator
-              in Western Canada. Cities, municipalities, organizations, companies and private
-              owners &mdash; from the Maple Ridge office to both sides of the Strait of Georgia.
+              2000 &mdash; for cities, First Nations, transit authorities, developers and private
+              owners, from the Maple Ridge office to both sides of the Strait of Georgia.
             </p>
             <p className="col-span-5 max-w-[40ch] self-start pt-2 text-[15px] leading-[1.65] text-ink-muted max-[900px]:max-w-[56ch] max-[900px]:pt-0">
               Installer of HUB Surface Systems products &mdash; StreetPrint&reg;, StreetBond&reg;,
@@ -265,7 +271,7 @@ export default function AboutPage() {
           <div className="flex flex-wrap items-baseline justify-between gap-6">
             <div>
               <div className="eyebrow">What we install</div>
-              <h2 className="mt-4">Four trades, one crew</h2>
+              <h2 className="mt-4">Four trades, one standard</h2>
             </div>
             <Link href="/services" className="arrow-link whitespace-nowrap">
               All services <span>&rarr;</span>
@@ -308,11 +314,11 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── 6 · Five steps, one crew ──────── */}
+      {/* ── 6 · Five steps, every job ──────── */}
       <section className="section bg-surface">
         <div className="container-1280">
           <div className="eyebrow">From the site walk to the walk-through</div>
-          <h2 className="mt-4">Five steps, one crew</h2>
+          <h2 className="mt-4">Five steps, every job</h2>
 
           <div className="mt-10 grid grid-cols-1 gap-10 min-[701px]:grid-cols-2 min-[1001px]:grid-cols-5">
             {process.map((item) => (
@@ -333,13 +339,13 @@ export default function AboutPage() {
         <div className="container-1280 relative z-[1]">
           <div className="grid grid-cols-12 gap-x-12 gap-y-12 max-[900px]:grid-cols-1">
             <div className="col-span-5 flex flex-col justify-center max-[900px]:col-span-1">
-              <div className="eyebrow eyebrow-on-image">Installed for</div>
+              <div className="eyebrow eyebrow-on-image">Installed at</div>
               <p className="display-statement stop m-0 mt-6 max-w-[22ch] text-white [text-wrap:balance]">
                 Won in the open, kept through winters
               </p>
               <p className="mt-6 max-w-[42ch] text-[15px] leading-[1.65] text-[color:var(--ink-on-slate-body)]">
                 Municipal work is won in open tenders and kept by holding up. These are the owners and
-                developers Square One has installed for, as published in its project record.
+                developers whose sites carry Square One&rsquo;s work, as published in its project record.
               </p>
             </div>
 
@@ -376,10 +382,10 @@ export default function AboutPage() {
               <div className="label">Office</div>
               <h3 className="mt-2">Maple Ridge, BC</h3>
               <p className="mt-1.5 text-[15px] leading-[1.6] text-ink-muted">
-                505&ndash;20800 Lougheed Highway, V2X 3P2
+                19&ndash;11720 Stewart Crescent, V2X 9E7
               </p>
               <p className="mt-1.5 text-[15px] leading-[1.6] text-ink-muted">
-                <a href="tel:+16044669902">604-466-9902</a>
+                <a href="tel:+16046126209">604-612-6209</a>
                 {" · "}
                 <a href="tel:+18773910270">1-877-391-0270</a>
               </p>

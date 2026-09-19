@@ -20,8 +20,12 @@ const EXT = new Set([".ts", ".tsx", ".mdx", ".md"])
 
 /** [pattern, reason]. Case-insensitive unless the pattern is a RegExp with its own flags. */
 const BANNED = [
-  // Not this company's contacts
-  ["604-612-6209", "retired number — not on the site"],
+  // Not this company's contacts.
+  // 604-612-6209 was on this list as a "retired number" until 17 Sept 2026,
+  // when the client asked for it in review on three pages and Vern confirmed.
+  // It is now the office line. 604-466-9902, the number it replaced, is NOT
+  // banned here: nobody has said it is dead, and Square One's own patterns
+  // sheet in public/docs still prints it. Ask before guarding it.
   ["604-309-8212", "HUB West number"],
   ["416-540-9287", "HUB East number"],
   ["info@hubss.com", "HUB email"],

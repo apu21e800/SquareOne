@@ -53,7 +53,7 @@ function GalleryCard({
       {photo && (
         <Image
           src={photo.src}
-          alt={`${title} — ${count} photographs`}
+          alt={`${title} — gallery of Square One installations`}
           fill
           priority={priority}
           sizes="(max-width: 700px) 100vw, (max-width: 1280px) 33vw, 411px"
@@ -61,7 +61,7 @@ function GalleryCard({
         />
       )}
       <div aria-hidden className="scrim" />
-      <ProjectCaption title={title} meta={`${count} photograph${count === 1 ? "" : "s"}`} />
+      <ProjectCaption title={title} meta="View the gallery" />
     </Link>
   )
 }
@@ -101,8 +101,8 @@ export default function GalleriesPage() {
         src="/images/hero/white-rock-pier-crosswalk-trafficpatternsxd.jpg"
         alt="Red TrafficPatternsXD crosswalk leading to the White Rock Pier"
         eyebrow="Galleries"
-        title={`${all.length} photographs of our own work`}
-        lede="Every gallery on this page is Square One's own installation photography, captioned with the system and the place. Open a gallery, then click any photograph to view it full screen — arrows, keyboard and swipe walk the set."
+        title="Photographs of our own work"
+        lede="Square One's own installation photography, captioned with the system and the place it was installed."
         caption="White Rock Pier · TrafficPatternsXD · 2019"
         imagePosition="center 62%"
       />
@@ -114,7 +114,7 @@ export default function GalleriesPage() {
             <div>
               <div className="eyebrow">By application</div>
               <h2 id="galleries-applications" className="mt-4 [text-wrap:balance]">
-                {byApplication.length} galleries, one for each kind of work
+                A gallery for each kind of work
               </h2>
             </div>
             <Link href="/applications" className="arrow-link whitespace-nowrap">
@@ -153,10 +153,10 @@ export default function GalleriesPage() {
         </div>
       </section>
 
-      {/* ── Driveways and case studies ──────── */}
+      {/* ── Driveways and projects ──────── */}
       <section className="section border-t border-[color:var(--hairline)]" aria-labelledby="galleries-more">
         <div className="container-1280">
-          <div className="eyebrow">Driveways and case studies</div>
+          <div className="eyebrow">Driveways and projects</div>
           <h2 id="galleries-more" className="mt-4 [text-wrap:balance]">
             For homeowners, and for the full story
           </h2>
@@ -170,8 +170,8 @@ export default function GalleriesPage() {
               className="card-panel min-h-[240px] justify-between rounded-[2px]"
             >
               <div>
-                <div className="label">Case studies</div>
-                <h3 className="mt-4 text-[22px] leading-[1.25]">{projects.length} projects, told in full</h3>
+                <div className="label">Projects</div>
+                <h3 className="mt-4 text-[22px] leading-[1.25]">Projects, told in full</h3>
                 <p className="mt-3 max-w-[40ch] text-[15px] leading-[1.6] text-[color:var(--ink-body)]">
                   Each with its photographs, the systems installed, the place and the year.
                 </p>
@@ -191,11 +191,11 @@ export default function GalleriesPage() {
             <div>
               <div className="eyebrow">Everything on record</div>
               <h2 id="galleries-all" className="mt-4 [text-wrap:balance]">
-                All {all.length} photographs
+                A selection from the record
               </h2>
             </div>
             <p className="max-w-[44ch] text-[15px] leading-[1.6] text-[color:var(--ink-muted)]">
-              Filter by system or region, then click any photograph to open the viewer.
+              A selection from years of work across BC, not the full list. Filter by system or region, then click any photograph to open the viewer.
             </p>
           </div>
           <div className="mt-10">

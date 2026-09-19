@@ -31,7 +31,7 @@ export default function ResourcesPage() {
         alt="Railroad-inspired TrafficPatternsXD crosswalk in the City of Langley, installed by Square One Paving"
         eyebrow="Resources"
         title="Specification library"
-        lede={`${resourceCount} documents for engineers and specifiers — specifications, technical data sheets, safety data sheets, colour cards, design manuals and brochures for every system we install. Preview in the browser, or download straight into your spec package.`}
+        lede={`${resourceCount} documents for engineers and specifiers — specifications, data sheets, colour cards and design manuals for every system we install. Preview one, or take it straight into the spec package.`}
         caption="City of Langley · TrafficPatternsXD"
         imagePosition="center 60%"
       />
@@ -50,8 +50,8 @@ export default function ResourcesPage() {
           <p className="max-w-[56ch] text-[17px] leading-[1.65] text-[color:var(--ink-body)] [text-wrap:pretty]">
             Writing a specification and need help matching a system to your traffic loading and
             substrate? Call{" "}
-            <a href="tel:+16044669902" className="font-semibold text-[color:var(--ink)]">
-              604-466-9902
+            <a href="tel:+16046126209" className="font-semibold text-[color:var(--ink)]">
+              604-612-6209
             </a>{" "}
             or{" "}
             <Link href="/contact" className="font-semibold text-[color:var(--ink)] underline-offset-4 hover:underline">

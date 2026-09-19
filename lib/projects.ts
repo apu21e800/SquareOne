@@ -357,7 +357,7 @@ const records: ProjectInput[] = [
     excerpt:
       "Blue StreetBond with white current lines across the emergency access lane at Maplewoods in North Vancouver — a fire lane that reads as a river instead of a no-parking zone.",
     images: [
-      `${FIO}/Photo-2023-05-19-5-56-47%E2%80%AFPM-scaled%20%281%29.jpg`,
+      `${FIO}/maplewoods-fire-lane-north-vancouver-streetbond-01.jpg`,
       `${FIO}/Photo-2023-05-19-5-59-11%E2%80%AFPM-scaled.jpg`,
     ],
     heroWide: true,

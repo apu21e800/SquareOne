@@ -160,7 +160,7 @@ const process = [
   { num: "01", title: "Photos and a postcode", body: "Send a couple of photos of the surface and where it is. We identify the substrate and what is on it." },
   { num: "02", title: "Written quote", body: "A written estimate with the approach — pressure, media, containment — and how long the site is affected." },
   { num: "03", title: "The rig on site", body: "Adjacent surfaces protected, runoff managed, the surface taken back to clean in passes." },
-  { num: "04", title: "Primed for what's next", body: "Ready for paint, coating, sealer or the decorative system we install ourselves — same crew, same day if it suits." },
+  { num: "04", title: "Primed for what's next", body: "Ready for paint, coating, sealer or the decorative system we install ourselves — same crews, same day if it suits." },
 ]
 
 // ── Substrates — from Square One's published application list ──────────────
@@ -230,8 +230,8 @@ export default function VaporBlastingServicePage() {
               <Link href="/contact" className="btn-primary">
                 Request a quote
               </Link>
-              <a href="tel:+16044669902" className="btn-secondary">
-                604-466-9902
+              <a href="tel:+16046126209" className="btn-secondary">
+                604-612-6209
               </a>
             </div>
           </div>
@@ -525,8 +525,8 @@ export default function VaporBlastingServicePage() {
             <Link href="/contact" className="btn-primary">
               Request a quote
             </Link>
-            <a href="tel:+16044669902" className="btn-secondary">
-              604-466-9902
+            <a href="tel:+16046126209" className="btn-secondary">
+              604-612-6209
             </a>
           </div>
 

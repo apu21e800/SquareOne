@@ -163,7 +163,7 @@ const STATIC_PAGES: SearchEntry[] = [
   { type: "page", title: "Driveways in Vancouver", subtitle: "Stamped asphalt driveways across Metro Vancouver", href: "/driveways/vancouver", keywords: "vancouver driveway lower mainland north shore burnaby richmond langley homeowner" },
   { type: "page", title: "Driveways in Victoria", subtitle: "Stamped asphalt driveways across Greater Victoria and the Island", href: "/driveways/victoria", keywords: "victoria driveway saanich oak bay sooke langford island homeowner" },
   { type: "page", title: "Vapour blasting", subtitle: "Cleaning, priming, graffiti and mould removal", href: "/services/vapor-blasting", keywords: "vapor blasting dustless restoration surface prep graffiti mould" },
-  { type: "page", title: "Projects", subtitle: "Selected work across BC", href: "/projects", keywords: "case studies portfolio work" },
+  { type: "page", title: "Projects", subtitle: "Selected work across BC", href: "/projects", keywords: "projects portfolio work" },
   { type: "page", title: "Blog", subtitle: "Guides and project stories from BC ground", href: "/blog", keywords: "blog articles guides news stories journal" },
   { type: "page", title: "Resources", subtitle: "90 specifications, colour cards, SDS and guides", href: "/resources", keywords: "documents specs specifications library downloads sds colour cards" },
   { type: "page", title: "About", subtitle: "The crew behind 25 years of BC surfaces", href: "/about", keywords: "company about team gord jan history" },

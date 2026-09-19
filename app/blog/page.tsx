@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     "StreetPrint project BC",
     "stamped asphalt guide Vancouver",
     "driveway paving tips BC",
-    "pavement project case study BC",
+    "pavement project stories BC",
     "decorative coatings guide",
   ],
   alternates: {

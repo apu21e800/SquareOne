@@ -3,12 +3,14 @@
 // Target keywords: "driveway paving Vancouver", "stamped asphalt driveway BC",
 // "decorative driveway Lower Mainland", "StreetPrint driveway BC"
 //
-// Visual layer ports docs/design-v2/Driveways Landing.dc.html:
+// Visual layer ports docs/design-v2/Driveways Landing.dc.html. The "Three
+// systems" band (StreetPrint / StreetBond / DuraShield cards) was removed in
+// client review, 16 Sept 2026: "only want the focus on driveways", StreetPrint
+// only. The pattern strip and composer carry the product story now.
 //
 //   01 Hero                       white — split 55/45, photo right
 //   02 Benefits                   warm, hairline top + bottom
 //   03 Patterns and colours  #patterns  white
-//   04 Systems                    white, hairline top
 //   05 How it works               warm, hairline top + bottom
 //   06 Selected driveways         white
 //   07 Service area               warm, hairline top + bottom
@@ -30,7 +32,7 @@ import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
 
 export const metadata: Metadata = {
-  title: "Stamped Asphalt Driveways Vancouver & Victoria",
+  title: "Stamped Asphalt Driveways in BC",
   description:
     clampDescription("Stamped asphalt driveways in Metro Vancouver and Greater Victoria — StreetPrint patterns and StreetBond colour installed over the driveway you already have, by Square One Paving since 2000. Free site visit and written quote."),
   keywords: [
@@ -111,7 +113,21 @@ const stats: { number: string; label: string }[] = [
   { number: "Free", label: "site visit and written quote" },
 ]
 
-/** Real installations, labelled by the pattern actually shown. */
+/**
+ * Real installations, labelled by the pattern actually shown.
+ *
+ * Trimmed 16 Sept 2026 to the patterns Square One still offers. The client
+ * marked four of the six for removal in review — British cobble,
+ * Cobblestone, Two-tone brick and Circle medallion — and all four are
+ * templates absent from Square One's own patterns sheet, so the strip was
+ * advertising work that can no longer be ordered.
+ *
+ * The photographs themselves are real and stay in the record (the full
+ * gallery at #gallery still carries them); it is only this "what you can
+ * order" strip they have come off. Herringbone restocked from the 2026
+ * library. Still wanted: Random Stone, Standard Tile and Offset Tile as
+ * installed — only label a frame whose template Square One has named.
+ */
 const patterns: (Shot & { label: string })[] = [
   {
     label: "Ashlar slate",
@@ -124,73 +140,9 @@ const patterns: (Shot & { label: string })[] = [
     alt: "Offset Brick StreetPrint driveway in Victoria BC",
   },
   {
-    label: "British cobble",
-    src: "/images/applications/driveways/west-saanich-british-cobble-driveway-streetprint-01.jpg",
-    alt: "British Cobble StreetPrint driveway in West Saanich BC",
-  },
-  {
-    label: "Cobblestone",
-    src: `${FIO}/Cobblestone-stamped-asphalt-driveway-colose-up-at-Ellis-Point-Walkway-Victoria-BC-Canada.jpg`,
-    alt: "Cobblestone StreetPrint close-up at Ellis Point, Victoria BC",
-  },
-  {
-    label: "Two-tone brick",
-    src: `${FIO}/303-IMG_3928.JPG`,
-    alt: "Red brick soldier-course border on charcoal running bond — StreetPrint detail, installed by Square One Paving",
-  },
-  {
-    label: "Circle medallion",
-    src: `${DRV}/Number%202.jpg`,
-    alt: "Stamped asphalt driveway with a circle medallion, installed by Square One Paving",
-  },
-]
-
-const systems: {
-  name: string
-  note: string
-  body: string
-  specs: string[]
-  href: string
-  cta: string
-}[] = [
-  {
-    name: "StreetPrint stamped asphalt",
-    note: "Most popular",
-    body: "StreetPrint imprints brick, cobblestone, slate and custom patterns into your existing asphalt — no excavation, no new base. Reheated and stamped in place.",
-    specs: [
-      "Stamped into new or existing asphalt — no demolition",
-      "Herringbone, offset brick, ashlar slate, British cobble and more",
-      "Textured surface, snowplow safe — flush, no raised edges",
-      "10–20 year published service life",
-    ],
-    href: "/products/streetprint",
-    cta: "StreetPrint details",
-  },
-  {
-    name: "StreetBond colour coating",
-    note: "Best value",
-    body: "StreetBond is HUB's epoxy-modified acrylic coating for asphalt and concrete: UV-stable, anti-skid, mixed in dozens of colours. It moves with the pavement instead of peeling or cracking — the simplest way to refresh and protect an existing driveway.",
-    specs: [
-      "Bonds to asphalt and concrete",
-      "UV-stable — 8+ year life cycle, easily refreshed",
-      "Anti-skid aggregate included",
-      "Standard colours plus custom mixing",
-    ],
-    href: "/products/streetbond",
-    cta: "StreetBond details",
-  },
-  {
-    name: "DuraShield maintenance coating",
-    note: "Protect and refresh",
-    body: "DuraShield is HUB's two-component asphalt maintenance coating, in black or a solar-reflective grey. It shields the pavement from UV oxidation, fuel, oil and de-icing agents and gives tired asphalt a clean, uniform finish — the right call when the driveway is sound but faded.",
-    specs: [
-      "Waterborne epoxy-modified acrylic, low VOC",
-      "Protects against UV oxidation and chemicals",
-      "Black or Solar Gray (SR 0.34) finish",
-      "Friction suited to foot and vehicle traffic",
-    ],
-    href: "/products/durashield",
-    cta: "DuraShield details",
+    label: "Herringbone",
+    src: "/images/applications/driveways/lower-mainland-bc-herringbone-driveway-and-walk-streetprint-01.jpg",
+    alt: "Herringbone StreetPrint driveway and walk in the Lower Mainland, installed by Square One Paving",
   },
 ]
 
@@ -298,7 +250,7 @@ export default function DrivewaysPage() {
               <h2 className="mt-5">Patterns and colours</h2>
             </div>
             <p className="max-w-[48ch] text-[15px] leading-[1.6] text-ink-muted [text-wrap:pretty]">
-              Ten StreetPrint templates, any StreetBond&reg; colour. Put them together here, then
+              Nine StreetPrint templates, any StreetBond&reg; colour. Put them together here, then
               we bring the sample boards to your driveway and hold them against the house.
             </p>
           </div>
@@ -313,7 +265,7 @@ export default function DrivewaysPage() {
               Every driveway on record <span aria-hidden="true">&rarr;</span>
             </Link>
           </div>
-          <div className="mt-5 grid grid-cols-6 gap-4 max-[700px]:grid-cols-3 max-[480px]:grid-cols-2">
+          <div className="mt-5 grid grid-cols-3 gap-4 max-[700px]:grid-cols-2">
             {patterns.map((pattern) => (
               <div key={pattern.label}>
                 <div className="card relative aspect-[4/3] overflow-hidden rounded-[2px] border border-hairline bg-surface-stone">
@@ -328,66 +280,6 @@ export default function DrivewaysPage() {
                 <div className="chip-name">{pattern.label}</div>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── 04 Systems ──────── */}
-      <section className="section relative overflow-hidden border-t border-hairline bg-surface">
-
-        <div className="container-1280 relative z-[1]">
-          <h2>Three systems, one crew</h2>
-
-          <p className="mt-5 max-w-[56ch] text-[17px] leading-[1.6] text-ink-body [text-wrap:pretty]">
-            Which one goes down depends on the condition of the surface you already have. We
-            specify it at the site visit, not from a price list.
-          </p>
-
-          <div className="mt-10 grid grid-cols-3 gap-6 max-[700px]:grid-cols-1">
-            {systems.map((system) => (
-              <article key={system.name} className="card card-panel">
-                <div className="text-[13px] font-semibold tracking-[0.08em] text-ink-muted">
-                  {system.note}
-                </div>
-
-                <h3 className="mt-6">{system.name}</h3>
-
-                <p className="mt-[10px] text-[15px] leading-[1.55] text-ink-body">{system.body}</p>
-
-                <ul className="mt-6 border-t border-hairline">
-                  {system.specs.map((spec) => (
-                    <li
-                      key={spec}
-                      className="border-b border-hairline py-[10px] text-[14px] leading-[1.5] text-ink-muted"
-                    >
-                      {spec}
-                    </li>
-                  ))}
-                </ul>
-
-                <Link href={system.href} className="arrow-link mt-auto pt-7">
-                  {system.cta} <span aria-hidden="true">&rarr;</span>
-                </Link>
-              </article>
-            ))}
-          </div>
-
-          <div className="mt-14 flex flex-wrap items-center justify-between gap-x-10 gap-y-4 border-t border-hairline pt-6">
-            <div className="flex flex-wrap gap-x-10 gap-y-2">
-              <span className="text-[13px] font-medium text-ink-muted">
-                Installer of HUB Surface Systems products
-              </span>
-              <span className="text-[13px] font-medium text-ink-muted">
-                StreetPrint &middot; StreetBond &middot; TrafficPatterns &middot; DecoMark
-              </span>
-              <span className="text-[13px] font-medium text-ink-muted">
-                Installed to manufacturer specification
-              </span>
-            </div>
-
-            <Link href="/products" className="arrow-link whitespace-nowrap">
-              All products <span aria-hidden="true">&rarr;</span>
-            </Link>
           </div>
         </div>
       </section>
@@ -425,7 +317,7 @@ export default function DrivewaysPage() {
             </div>
             <div className="max-w-[44ch]">
               <p className="text-[15px] leading-[1.6] text-ink-muted">
-                {gallery.length} Square One driveways on record — Saanich, Sooke, Duncan and Victoria on
+                Square One driveways from the record — Saanich, Sooke, Duncan and Victoria on
                 the Island; Vancouver, West Vancouver, Burnaby, Richmond, Langley and Maple Ridge on
                 the mainland. Filter by region, or go straight to your city.
               </p>

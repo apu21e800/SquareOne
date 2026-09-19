@@ -45,7 +45,7 @@ const applications: AppCard[] = [
     title: "Streetscapes",
     tag: "Municipal",
     desc: "Intersections, medians, lanes and civic frontages where the surface carries the design — pattern imprinted, colour that holds.",
-    image: `${FIO}/Photo-2023-05-19-5-56-47%E2%80%AFPM-scaled%20%281%29.jpg`,
+    image: `${FIO}/maplewoods-fire-lane-north-vancouver-streetbond-01.jpg`,
     alt: "Blue StreetBond decorative fire lane at Maplewoods Townhomes, North Vancouver",
     cta: "See the work",
     href: "/applications/streetscapes",

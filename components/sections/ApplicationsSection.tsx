@@ -75,19 +75,19 @@ export default function ApplicationsSection() {
               href={app.href}
               data-reveal
               style={{ borderColor: "var(--hairline-slate)" }}
-              className="app-row group grid grid-cols-[32px_96px_minmax(0,1fr)_auto] items-center gap-x-6 border-b py-4 first:border-t min-[1536px]:[&:nth-child(7)]:border-t max-[700px]:grid-cols-[72px_minmax(0,1fr)_auto] max-[700px]:gap-x-4 max-[700px]:py-3"
+              className="app-row group grid grid-cols-[32px_140px_minmax(0,1fr)_auto] items-center gap-x-7 border-b py-[18px] first:border-t min-[1536px]:[&:nth-child(7)]:border-t min-[1536px]:grid-cols-[32px_112px_minmax(0,1fr)_auto] max-[700px]:grid-cols-[84px_minmax(0,1fr)_auto] max-[700px]:gap-x-4 max-[700px]:py-3"
             >
               <span className="text-[12px] font-semibold tracking-[0.08em] text-[color:var(--ink-on-slate-faint)] max-[700px]:hidden">
                 {String(i + 1).padStart(2, "0")}
               </span>
 
-              <span className="relative block aspect-[4/3] w-full overflow-hidden rounded-[2px] bg-black/25">
+              <span className="relative block aspect-[3/2] w-full overflow-hidden rounded-[2px] bg-black/25">
                 {app.thumb && (
                   <Image
                     src={app.thumb}
                     alt={app.alt}
                     fill
-                    sizes="96px"
+                    sizes="(max-width: 700px) 84px, 140px"
                     className="object-cover transition-transform duration-500 group-hover:scale-[1.06]"
                   />
                 )}

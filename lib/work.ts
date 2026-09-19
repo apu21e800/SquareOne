@@ -1,6 +1,7 @@
 import fs from "node:fs"
 import path from "node:path"
 import { curate } from "@/lib/curation"
+import { WORK_CAPTIONS } from "@/lib/work-captions"
 
 /**
  * The work, on record — Square One's own site photography, captioned with the
@@ -16,6 +17,10 @@ import { curate } from "@/lib/curation"
  *       the studio's hi-res set. A file whose name matches a gallery tile
  *       replaces it (sharper original); the rest are listed in EXTRAS with a
  *       caption each, because a hi-res photo says nothing about where it is.
+ *   public/images/applications/<slug>/*
+ *       the 2026 photo library, 2400px and EXIF-stripped. Captions are known
+ *       exactly and live in lib/work-captions.ts, keyed by web path — never
+ *       parsed from the filename. A file with no caption entry is skipped.
  *
  * Rules of the road:
  *   - `place` is empty when Square One has not yet confirmed the location.
@@ -82,6 +87,7 @@ const PUBLIC = path.join(process.cwd(), "public")
 const GAL_REL = "images/S1_update_v2/Old Square One Web Assets/Galleries"
 const FIO_REL = "images/S1_update_v2/photos/Featured image options"
 const DRV_REL = "images/S1_update_v2/photos/Driveways"
+const APP_REL = "images/applications"
 
 const CATEGORY_DIRS: Record<string, WorkApp> = {
   "Bike Lanes": "bike-lanes",
@@ -121,7 +127,9 @@ const CITY_REGION: Record<string, WorkRegion> = {
   "Windsor Gate": "Lower Mainland", "Evelyn Heights": "Lower Mainland", Kingsway: "Lower Mainland", Steveston: "Lower Mainland", Katzie: "Lower Mainland",
   "Bowen Island": "Lower Mainland", "White Rock": "Lower Mainland", Mission: "Lower Mainland", "Port Coquitlam": "Lower Mainland",
   "Boundary Road": "Lower Mainland",
-  Kelowna: "Interior", Vernon: "Interior", "Salmon Arm": "Interior", Osoyoos: "Interior",
+  "Oak Bay": "Vancouver Island", "Greater Victoria": "Vancouver Island", Colwood: "Vancouver Island", Lantzville: "Vancouver Island",
+  Abbotsford: "Lower Mainland",
+  Kelowna: "Interior", Vernon: "Interior", "Salmon Arm": "Interior", Osoyoos: "Interior", Penticton: "Interior", Kamloops: "Interior",
   Sechelt: "Sunshine Coast", Squamish: "Sea to Sky",
 }
 
@@ -237,7 +245,7 @@ const EXTRAS: Extra[] = [
   ["fio", "502639628_1112360040926014_5391735583045489560_n.jpg", "crosswalks", ["TrafficPatternsXD"], "Rainbow intersection", "Nanaimo"],
   ["fio", "504448297_1112360024259349_5235743119624258372_n-1.jpg", "crosswalks", ["TrafficPatternsXD"], "Rainbow intersection — street level", "Nanaimo"],
   ["fio", "Photo-2025-04-03-1-57-51-PM-scaled.jpg", "streetscapes", ["StreetPrint", "StreetBond"], "Pewter herringbone stamped asphalt", "Mission"],
-  ["fio", "Photo-2023-05-19-5-56-47 PM-scaled (1).jpg", "streetscapes", ["StreetBond"], "Decorative fire lane", "Maplewoods Townhomes, North Vancouver"],
+  ["fio", "maplewoods-fire-lane-north-vancouver-streetbond-01.jpg", "streetscapes", ["StreetBond"], "Decorative fire lane", "Maplewoods Townhomes, North Vancouver"],
   ["fio", "Mask-Group-6.jpg", "streetscapes", ["StreetPrint"], "Red brick road median — installation", ""],
   ["fio", "Bowen-Island-asphalt-walkway-with-StreetBond150-scaled-1.jpg", "parks-paths", ["StreetBond"], "Snug Cove community walkway", "Bowen Island"],
   ["fio", "Photo-2023-05-25-12-55-19 PM-scaled.jpg", "parks-paths", ["StreetBond"], "Solar-reflective park pathway", "Osoyoos", true],
@@ -384,6 +392,31 @@ function build(): WorkPhoto[] {
     if (seen.has(src)) continue
     seen.add(src)
     photos.push({ src, w, h, app, systems, subject, place, region: regionFor(place), hires: true, ...(flag ? { flag: true } : {}) })
+  }
+
+  // The 2026 library — one folder per application, captions from the typed map
+  const uncaptioned: string[] = []
+  for (const app of order.keys()) {
+    const rel = `${APP_REL}/${app}`
+    for (const file of listFiles(path.join(PUBLIC, rel)).sort()) {
+      const src = webPath(rel, file)
+      const caption = WORK_CAPTIONS[src]
+      if (!caption) {
+        uncaptioned.push(src)
+        continue
+      }
+      if (seen.has(src)) continue
+      seen.add(src)
+      const [w, h] = dims(path.join(PUBLIC, rel, file))
+      if (w === 0) continue
+      photos.push({ src, w, h, app, ...caption, region: regionFor(caption.place), hires: true })
+    }
+  }
+  if (uncaptioned.length > 0) {
+    console.warn(
+      `[work] ${uncaptioned.length} file(s) in public/${APP_REL} have no entry in lib/work-captions.ts and were skipped: ` +
+        uncaptioned.map(decodeURIComponent).join(", "),
+    )
   }
 
   // The photo pass of 5 Sept 2026: lib/curation.ts decides which photographs

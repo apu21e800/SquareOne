@@ -68,22 +68,22 @@ input[type="text"], input[type="email"], input[type="tel"], input[type="search"]
    the statement carry Poppins 700 at tight tracking — a headline should
    land, not float. H2 stays 600. Stat numerals come down a size. ---- */
 h1 {
-  font-size: clamp(2.5rem, 4.2vw, 4.25rem);
+  font-size: clamp(2.125rem, 4vw, 3.5rem);
   font-weight: 700;
-  letter-spacing: 0.02em;
-  line-height: 1.02;
+  letter-spacing: 0.04em;
+  line-height: 1.04;
 }
 .display-xl {
-  font-size: clamp(2.6rem, 5vw, 5rem);
+  font-size: clamp(2.25rem, 4.6vw, 4rem);
   font-weight: 700;
-  letter-spacing: 0.02em;
-  line-height: 1;
+  letter-spacing: 0.035em;
+  line-height: 1.02;
 }
 .display-statement {
-  font-size: clamp(2rem, 2.8vw, 3rem);
+  font-size: clamp(1.875rem, 2.7vw, 2.75rem);
   font-weight: 700;
-  letter-spacing: 0.02em;
-  line-height: 1.08;
+  letter-spacing: 0.04em;
+  line-height: 1.1;
 }
 h2:not(.label):not(.eyebrow) {
   font-size: clamp(1.5rem, 2.4vw, 2.1rem);
@@ -178,6 +178,29 @@ h1, h2, h3, .display-xl, .display-statement { overflow-wrap: break-word; }
   border-color: rgba(246, 240, 232, 0.22);
 }
 
+/* Inverted 17 Sept 2026 (Vern: "Use the same patterns we have on the hubss
+   site but make the patterns colour inverted. dark pattern on white
+   background"). HUB draws these as hairlines in #e8edf4 on their dark
+   site; Square One's ground is paper, so the same drawings run in ink on
+   white at HUB's own stroke weight (0.55 viewBox units). The white also
+   separates the TEMPLATE — the geometry of the casting — from the BOARD
+   below it, which is the template over a real StreetBond colour and stays
+   as the cast surface looks. The asphalt tile above is left in place: the
+   big board still uses it.
+
+   Deepened 17 Sept when the drawings became HUB's own: their line is 0.19%
+   of the frame where the hand-drawn set ran 0.46%, so at the same ink the
+   real templates went faint. */
+.pattern-tile {
+  color: rgba(20, 22, 26, 0.72);
+  background: #FFFFFF;
+  border-color: var(--hairline);
+}
+.group:hover .pattern-tile {
+  color: var(--accent-deep);
+  border-color: var(--hairline-strong);
+}
+
 /* ---- The light bar over a photograph: a deeper, longer top settle so the
    links read against a bright sky or a pale plaza, not only against a dark
    one (Vern's screenshot: "the nav gets lost on the top right"). ---- */
@@ -224,33 +247,240 @@ h1, h2, h3, .display-xl, .display-statement { overflow-wrap: break-word; }
   }
 }
 
-/* ── The Futura option (11 Sept 2026 — Vern: "let's see both") ──────────
-   <html data-type="futura"> swaps the display face to Jost (the open
-   Futura-family cut; a licensed Futura drops into the same variable in
-   app/layout.tsx) and the text face to Inter, and restores the Jost caps
-   tracking the site ran before 4 Sept (0.065em H1, 0.075em H2, 0.06em at
-   hero scale). Poppins stays the default; nothing here applies without the
-   attribute. Set by components/TypeToggle or ?type=futura. */
-html[data-type="futura"] {
-  --font-display: var(--font-jost), Futura, "Century Gothic", ui-sans-serif, sans-serif;
+/* ── Futura LT is the face (17 Sept 2026) ──────────────────────────────
+   Vern, looking at the site: "this does not look like futura, Futura has
+   sharp edges." He was right, and he was looking at Poppins — the toggle
+   in the screenshots had Poppins selected. Poppins is a round humanist
+   geometric with a tall x-height and soft terminals; Futura is a sharp
+   constructed geometric with a small x-height and a pointed apex on A, M,
+   N, V and W. They are not the same shape and no amount of tracking makes
+   one read as the other.
+
+   So the licensed faces he bought stop being an option and become the
+   site. Futura LT carries every display surface — headings, eyebrows,
+   labels, buttons, numerals — which is also what the wordmark is set in,
+   so the page and the logo finally agree. Inter carries running text,
+   where Futura's small x-height and tight apertures would cost reading
+   speed at 16px.
+
+   Poppins stays loaded and stays first in the fallback behind Futura, not
+   as a safety net but as a working part of the stack: Futura LT is a
+   235-glyph cut with no U+2192 arrow and none of the Halkomelem
+   orthography in the project and blog titles, and the browser falls
+   through per character, so those marks land in the site's other
+   geometric rather than in whatever the OS offers.
+
+   ?type=poppins still puts the old face back for a side-by-side.
+   ------------------------------------------------------------------ */
+:root {
+  --font-display: var(--font-futura), var(--font-poppins), "Century Gothic", ui-sans-serif, sans-serif;
 }
-html[data-type="futura"] body {
-  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+body {
+  font-family: var(--font-inter), var(--font-poppins), system-ui, -apple-system, sans-serif;
   font-size: 16.5px;
 }
-html[data-type="futura"] h1 { letter-spacing: 0.065em; font-weight: 600; }
-html[data-type="futura"] h2 { letter-spacing: 0.075em; font-weight: 600; }
-html[data-type="futura"] .display-xl { letter-spacing: 0.06em; }
-html[data-type="futura"] .display-statement { letter-spacing: 0.065em; }
-html[data-type="futura"] .label,
-html[data-type="futura"] .eyebrow { letter-spacing: 0.14em; }
-html[data-type="futura"] .btn-primary,
-html[data-type="futura"] .btn-secondary,
-html[data-type="futura"] .btn-on-slate,
-html[data-type="futura"] .btn-on-image { letter-spacing: 0.12em; }
-html[data-type="futura"] h3,
-html[data-type="futura"] h4 { letter-spacing: 0; }
+
+/* Futura's caps have tight sidebearings and want more air than Poppins did;
+   the tracking still tightens as the size grows. */
+h1 { letter-spacing: 0.055em; }
+h2:not(.label):not(.eyebrow) { letter-spacing: 0.07em; }
+.display-xl { letter-spacing: 0.05em; }
+.display-statement { letter-spacing: 0.06em; }
+.label, .eyebrow, .chip-name { letter-spacing: 0.14em; }
+.btn-primary, .btn-secondary, .btn-on-slate, .btn-on-image { letter-spacing: 0.12em; }
+h3, h4, h5, h6 { letter-spacing: 0; }
+
+/* ── The alternates (lib/typefaces.ts, components/TypeToggle) ──────────
+   The switch changes the DISPLAY face only — Inter carries running text in
+   every option — so the client is comparing the one thing in question and
+   not two changes at once.
+
+   Each block is the same four lines: the stack, the caps tracking the face
+   wants, and --fit-adj, the per-character width relative to Futura LT Bold
+   (measured in the browser, see lib/type.ts). Adding a face is one more
+   block; nothing else in this file knows how many there are. Reached with
+   ?type=<id>, kept in localStorage, applied before first paint by the boot
+   script in app/layout.tsx.
+   ------------------------------------------------------------------ */
+
+/* Jost — open Futura-alike. A little more x-height than Futura and very
+   slightly narrower caps at the tracking it wants.
+   Measured worst case (TRAFFICPATTERNSXD): 0.664 em/char vs Futura's 0.680. */
+html[data-type="jost"] {
+  --font-display: var(--font-jost), "Century Gothic", ui-sans-serif, sans-serif;
+  --fit-adj: 0.98;
+}
+html[data-type="jost"] h1 { letter-spacing: 0.05em; }
+html[data-type="jost"] h2:not(.label):not(.eyebrow) { letter-spacing: 0.065em; }
+html[data-type="jost"] .display-xl { letter-spacing: 0.045em; }
+html[data-type="jost"] .display-statement { letter-spacing: 0.055em; }
+html[data-type="jost"] .headline-sentence { letter-spacing: -0.01em; }
+
+/* Space Grotesk — a grotesque, not a geometric. Squarer bowls, sheared
+   terminals, drawn for screens. Wider caps than either Futura or Jost and
+   far more self-spacing built in, so the tracking comes down hard: a
+   grotesque set at Futura's tracking reads as a logo, not a headline.
+   Measured worst case: 0.593 em/char — much the narrowest of the four, so
+   it can carry the largest type in the same column. */
+html[data-type="space-grotesk"] {
+  --font-display: var(--font-space-grotesk), ui-sans-serif, sans-serif;
+  --fit-adj: 0.88;
+}
+html[data-type="space-grotesk"] h1 { letter-spacing: 0.015em; }
+html[data-type="space-grotesk"] h2:not(.label):not(.eyebrow) { letter-spacing: 0.03em; }
+html[data-type="space-grotesk"] .display-xl { letter-spacing: 0.012em; }
+html[data-type="space-grotesk"] .display-statement { letter-spacing: 0.02em; }
+html[data-type="space-grotesk"] .label,
+html[data-type="space-grotesk"] .eyebrow,
+html[data-type="space-grotesk"] .chip-name { letter-spacing: 0.11em; }
+html[data-type="space-grotesk"] .btn-primary,
+html[data-type="space-grotesk"] .btn-secondary,
+html[data-type="space-grotesk"] .btn-on-slate,
+html[data-type="space-grotesk"] .btn-on-image { letter-spacing: 0.09em; }
+html[data-type="space-grotesk"] .headline-sentence { letter-spacing: -0.018em; }
+
+/* Poppins — the face the site ran until 17 Sept. Round, tall x-height,
+   soft terminals. Measured worst case: 0.648 em/char. */
+html[data-type="poppins"] {
+  --font-display: var(--font-poppins), "Century Gothic", ui-sans-serif, sans-serif;
+  --fit-adj: 0.96;
+}
+html[data-type="poppins"] h1 { letter-spacing: 0.02em; }
+html[data-type="poppins"] h2:not(.label):not(.eyebrow) { letter-spacing: 0.04em; }
+html[data-type="poppins"] .display-xl { letter-spacing: 0.02em; }
+html[data-type="poppins"] .display-statement { letter-spacing: 0.02em; }
+html[data-type="poppins"] .label,
+html[data-type="poppins"] .eyebrow,
+html[data-type="poppins"] .chip-name { letter-spacing: 0.12em; }
+html[data-type="poppins"] .btn-primary,
+html[data-type="poppins"] .btn-secondary,
+html[data-type="poppins"] .btn-on-slate,
+html[data-type="poppins"] .btn-on-image { letter-spacing: 0.1em; }
+html[data-type="poppins"] .headline-sentence { letter-spacing: -0.015em; }
 
 /* Search overlay — one clear control, ours; the browser's own is hidden. */
 .search-input::-webkit-search-cancel-button,
 .search-input::-webkit-search-decoration { -webkit-appearance: none; appearance: none; display: none; }
+
+/* ---- Photo cards that carry a contact-sheet label at the top edge.
+   `.scrim-rise` only darkens the bottom 60% of a card, so a label at the
+   top sat on raw photograph — over bright asphalt or a pale sky it fell
+   to roughly 3:1 and read as a smudge (Vern, 16 Sept: "top text hard to
+   read on homepage cards"). This is the matching settle for the top edge:
+   short, so it never greys the subject, and deep enough that 11px caps
+   clear AA on the worst case of a blown-out sky. ---- */
+.scrim-cap {
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 132px;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(24, 21, 18, 0.68) 0%,
+    rgba(24, 21, 18, 0.34) 54%,
+    rgba(24, 21, 18, 0) 100%
+  );
+}
+
+/* ============================================================
+   THE 17 SEPTEMBER PASS
+   Vern, with five screenshots: "client does not like this big orange
+   square do dark grey instead" · "seeing text outliers, maybe H1 is too
+   big" · "That H2 above the H1 is also very hard to read" · "It's feeling
+   like a AA website, aesthetically speaking. Let's make it as close to
+   AAAA as possible."
+   ============================================================ */
+
+/* ---- 1. A headline can never outgrow its column ----------------------
+   The old ramp topped out at 5rem and the product hero clamped its own
+   measure at 16ch, so "TRAFFICPATTERNSXD" — seventeen characters with
+   nowhere to wrap — was broken mid-word by the overflow guard on every
+   viewport under about 1100px, and badly on a phone. Shrinking the ramp
+   alone only moves the width at which it happens.
+
+   So the headline now sizes itself against the column it is standing in.
+   `.fit-host` makes the column a container; `.display-fit` takes the
+   SMALLER of the fluid preference and the width its longest word can
+   occupy at 100% of that column, resolved by the browser continuously
+   rather than at the three widths somebody thought to test. The em figure
+   comes from lib/type.ts, which measures the line on the server.
+
+   `--fit-adj` is the one number that changes when the display face
+   changes: lib/type.ts measures in Futura LT Bold, and every other face in
+   the type switch is a different width per character AT THE TRACKING IT
+   WANTS — which is the figure that matters, not the raw glyph width. Each
+   value below was measured in the browser against the site's own worst-case
+   word, so the switch cannot break the fit. Re-measure with
+   `TRAFFICPATTERNSXD` if a face or its tracking changes.
+   ---------------------------------------------------------------- */
+.fit-host { container-type: inline-size; }
+.display-fit {
+  font-size: clamp(
+    var(--fit-min, 1.5rem),
+    min(var(--fit-pref, 5vw), calc(100cqi / (var(--fit-em, 12) * var(--fit-adj, 1)))),
+    var(--fit-max, 4rem)
+  );
+}
+
+/* The hero line needs a floor on a phone the same way h1 does — it is a
+   .display-xl, so the 560px h1 rule never reached it. */
+@media (max-width: 560px) {
+  .display-xl:not(.display-fit) { font-size: clamp(1.75rem, 8vw, 2.25rem); }
+  .display-xl { letter-spacing: 0.04em; }
+  .display-statement { font-size: clamp(1.625rem, 7.4vw, 2rem); }
+}
+
+/* ---- 2. The eyebrow over photography ---------------------------------
+   Vern: "That H2 above the H1 is also very hard to read." It is the
+   eyebrow, and it was 11px of 78%-white caps sitting directly on a
+   photograph — around 3:1 against a bright sky, under AA for small text,
+   and the 6px accent square in front of it was orange on dark, which is
+   worse. Three moves: full white, a size up so the tracking has somewhere
+   to live, and a short shadow so it holds over the one frame in ten that
+   opens on concrete. The square goes white too — the accent is not
+   legible at 6px on photography and has other places to be.
+   ---------------------------------------------------------------- */
+.eyebrow, .label { font-size: 12px; }
+.eyebrow-on-image,
+.label-on-image {
+  color: #FFFFFF;
+  text-shadow: 0 1px 10px rgba(24, 21, 18, 0.55);
+}
+.eyebrow-on-image::before { background: #FFFFFF; }
+.eyebrow-on-image .eyebrow-num { color: #FFFFFF; }
+
+/* ---- 3. The orange square goes ---------------------------------------
+   "client does not like this big orange square do dark grey instead."
+   He is right, and the fix is not only the colour. A 400px block of
+   accent is the accent being used as a surface, which is the one thing
+   the palette says it is not for. The card goes charcoal — warm, a clear
+   step lighter than the near-black site close so it reads as a card and
+   not as the footer arriving early — and the orange moves to the button
+   inside it. Same amount of accent on the page, pointing at the thing to
+   click instead of filling a wall.
+   ---------------------------------------------------------------- */
+:root { --charcoal: #2E2A26; }
+.offer-card {
+  background: var(--charcoal);
+  border: 1px solid rgba(246, 240, 232, 0.08);
+}
+.offer-btn { background: var(--accent); color: #FFFFFF; }
+.offer-btn:hover { background: var(--accent-deep); color: #FFFFFF; }
+
+/* ---- 4. A long title is not a slogan --------------------------------
+   The display voice is spaced caps, which is right for a five-word
+   headline and wrong for a sixty-three-character article title: set in
+   caps, "Checkerboard Crosswalks Coquitlam: TrafficPatterns at Lougheed
+   Holly & Orchid" ran five lines and read as shouting rather than as a
+   headline. The canon already sends long-form headings inside .prose to
+   sentence case for reading; this is the same rule reaching the title
+   above them. Same face, same weight — caps off, and the tracking turns
+   negative, because Futura's lowercase needs closing up where its caps
+   needed opening out.
+   ---------------------------------------------------------------- */
+.headline-sentence {
+  text-transform: none;
+  letter-spacing: -0.012em;
+  line-height: 1.1;
+}

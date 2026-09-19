@@ -16,7 +16,7 @@ import { clampDescription } from "@/lib/seo"
  *   By use   the work by application — tile row           warm
  *   Close    slate — rendered once by app/layout.tsx (Footer)
  *
- * Every card is a case study Square One has published, with the studio's own
+ * Every card is a project Square One has published, with the studio's own
  * photography. The gallery-scale record (195 captioned site photos) lives on
  * the application pages, linked from the bottom row.
  */
@@ -26,7 +26,7 @@ const FIO = "/images/S1_update_v2/photos/Featured%20image%20options"
 export const metadata: Metadata = {
   title: "Decorative Pavement Projects Across BC",
   description:
-    clampDescription("Case studies from Square One Paving — crosswalks, public art, transit stations, spray parks, parking lots and driveways from Metro Vancouver to Vancouver Island and the Interior, since 2000."),
+    clampDescription("Projects from Square One Paving — crosswalks, public art, transit stations, spray parks, parking lots and driveways from Metro Vancouver to Vancouver Island and the Interior, since 2000."),
   alternates: { canonical: `${SITE_URL}/projects` },
 }
 
