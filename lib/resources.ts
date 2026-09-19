@@ -96,7 +96,7 @@ export const resourceGroups: ResourceGroup[] = [
       { name: "Asphalt Pavement Texturing Specification", href: "/docs/StreetPrint/StreetPrint_Asphalt_Pavement_Texturing_Specification_April-2020.pdf", type: "Specification", size: "777 KB" },
       { name: "Custom Stamping Template Guidelines", href: "/docs/StreetPrint/StreetPrint_Cutom-Stamping-Template-Guidlines.pdf", type: "Guide", size: "2.8 MB" },
       { name: "StreetPrint FAQ", href: "/docs/StreetPrint/STREETPRINT-FAQ-DOCUMENT.pdf", type: "Guide", size: "115 KB" },
-      { name: "StreetPrint Template Catalogue (HUB)", href: "/docs/StreetPrint/StreetPrint-Template-Catalog.pdf", hub: "https://hubss.com/docs/streetprint/streetprint-template-catalog.pdf", type: "Guide", size: "2.4 MB" },
+      // StreetPrint Template Catalogue (HUB) — off the library at the client's request, 19 Sept 2026 ("remove the hub template guide as per jan"). The PDF stays in public/docs.
     ],
   },
   {

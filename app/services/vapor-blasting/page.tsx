@@ -5,6 +5,7 @@ import { SITE_URL } from "@/lib/site"
 import JsonLd, { breadcrumbSchema, faqSchema } from "@/components/JsonLd"
 import IndexImageHero from "@/components/IndexImageHero"
 import BeforeAfter from "@/components/BeforeAfter"
+import FrameGallery from "@/components/FrameGallery"
 import { getServiceBySlug } from "@/lib/services"
 import { clampDescription } from "@/lib/seo"
 
@@ -174,29 +175,6 @@ const advantages = [
   },
 ]
 
-// ── Public realm — three scenes, captioned by surface and task ─────────────
-
-const scenes = [
-  {
-    src: `${GEN}/gen-road-marking-removal-01.jpg`,
-    alt: "Removing a painted road symbol from asphalt with the vapour blasting rig",
-    caption: "Road markings · asphalt",
-    position: "center 55%",
-  },
-  {
-    src: `${GEN}/gen-sidewalk-concrete-cleaning.jpg`,
-    alt: "Cleaning a concrete sidewalk beside a stone monument with the vapour blasting rig, the lane coned off",
-    caption: "Sidewalk · concrete",
-    position: "center 60%",
-  },
-  {
-    src: `${GEN}/gen-concrete-pier-graffiti.jpg`,
-    alt: "Vapour blasting graffiti off a cast-concrete bridge pier",
-    caption: "Graffiti · cast concrete",
-    position: "center 60%",
-  },
-]
-
 // ── Process — what actually happens, no invented paperwork ─────────────────
 
 const process = [
@@ -206,32 +184,91 @@ const process = [
   { num: "04", title: "Primed for what's next", body: "Ready for paint, coating, sealer or the decorative system we install ourselves — same crews, same day if it suits." },
 ]
 
-// ── From the record — the four photographs Square One holds ────────────────
+// ── Gallery — the record first, then the illustrations, each labelled ──────
+//    (Vern, 19 Sept: "add the images to the galleries section"). Opens the
+//    same full-screen viewer as /galleries; reached from the hub's card.
 
-const record = [
+const recordFrames = [
   {
-    src: `${DIR}/granville-island-vapour-blasting-01.jpg`,
-    alt: "Square One removing a painted marking from the Granville Island boardwalk, Vancouver — the original photograph behind the hero",
-    caption: "Granville Island · marking removal",
-    position: "38% 60%",
+    src: `${GEN}/gen-granville-island-vapour-blasting-01-enhanced.jpg`,
+    alt: "Square One removing a painted marking from the Granville Island boardwalk, Vancouver — AI-enhanced from the original photograph",
+    primary: "Granville Island, Vancouver",
+    secondary: "Marking removal · AI-enhanced from the original photograph",
   },
   {
     src: `${DIR}/parking-lot-vapour-blasting-01.jpg`,
     alt: "Square One removing painted parking symbols from an asphalt lot with the vapour blasting rig",
-    caption: "Commercial parking lot · marking removal",
-    position: "center 45%",
+    primary: "Commercial parking lot",
+    secondary: "Marking removal · asphalt",
   },
   {
     src: `${DIR}/walkway-vapour-blasting-01.jpg`,
     alt: "Square One stripping a red coating from a public walkway with the vapour blasting rig",
-    caption: "Public walkway · coating removal",
-    position: "center 55%",
+    primary: "Public walkway",
+    secondary: "Coating removal · concrete",
   },
   {
     src: `${DIR}/nozzle-pavers-01.jpg`,
     alt: "The vapour blasting nozzle mid-pass over pavers — the wet fan of abrasive and the clean line behind it",
-    caption: "The nozzle mid-pass · pavers",
-    position: "center",
+    primary: "The nozzle mid-pass",
+    secondary: "Cleaning · pavers",
+  },
+]
+
+const illustrationFrames = [
+  {
+    src: `${GEN}/gen-brick-graffiti-before.jpg`,
+    alt: "A face-brick wall covered in aerosol graffiti tags, before vapour blasting",
+    primary: "Graffiti, before",
+    secondary: "Face brick",
+  },
+  {
+    src: `${GEN}/gen-brick-graffiti-mid-pass.jpg`,
+    alt: "Vapour blasting aerosol graffiti off a face-brick wall — clean brick behind the nozzle, tags ahead of it",
+    primary: "Graffiti, mid-pass",
+    secondary: "Face brick",
+  },
+  {
+    src: `${GEN}/gen-brick-graffiti-after.jpg`,
+    alt: "The same face-brick wall after vapour blasting — clean brick, mortar joints intact",
+    primary: "Graffiti, after",
+    secondary: "Face brick",
+  },
+  {
+    src: `${GEN}/gen-concrete-pier-graffiti.jpg`,
+    alt: "Vapour blasting graffiti off a cast-concrete bridge pier",
+    primary: "Graffiti",
+    secondary: "Cast concrete",
+  },
+  {
+    src: `${GEN}/gen-road-marking-removal-01.jpg`,
+    alt: "Removing a painted road symbol from asphalt with the vapour blasting rig",
+    primary: "Road marking removal",
+    secondary: "Painted symbol · asphalt",
+  },
+  {
+    src: `${GEN}/gen-road-marking-removal-02.jpg`,
+    alt: "Vapour blasting a painted line off wet asphalt — the spray, and the water holding the dust down",
+    primary: "Line marking removal",
+    secondary: "Asphalt",
+  },
+  {
+    src: `${GEN}/gen-sidewalk-concrete-cleaning.jpg`,
+    alt: "Cleaning a concrete sidewalk beside a stone monument with the vapour blasting rig, the lane coned off",
+    primary: "Sidewalk cleaning",
+    secondary: "Concrete · lane coned off",
+  },
+  {
+    src: `${GEN}/gen-steel-railing-rust.jpg`,
+    alt: "Vapour blasting rust off a steel railing at the water's edge",
+    primary: "Rust and paint removal",
+    secondary: "Steel railing",
+  },
+  {
+    src: `${GEN}/gen-patio-pavers-nozzle.jpg`,
+    alt: "The vapour blasting nozzle mid-pass over patio pavers, lifting moss and grime from the joints",
+    primary: "Patio cleaning",
+    secondary: "Pavers · moss and grime",
   },
 ]
 
@@ -453,44 +490,8 @@ export default function VaporBlastingServicePage() {
         </div>
       </section>
 
-      {/* ── Public realm — three scenes ─────────────────────────────── */}
-      <section className="section border-t border-hairline bg-surface-warm">
-        <div className="container-1280">
-          <div className="flex flex-wrap items-end justify-between gap-x-12 gap-y-6">
-            <div>
-              <p className="eyebrow">Streets, sidewalks, piers</p>
-              <h2 className="mt-5">The public realm, kept open</h2>
-            </div>
-            <p className="max-w-[46ch] text-[17px] leading-[1.6] text-ink-body [text-wrap:pretty]">
-              The rig sets up on a sidewalk, a pier deck or a coned lane and the block stays in
-              use around it. Adjacent surfaces are protected and the runoff is managed.
-            </p>
-          </div>
-
-          <div className="mt-10 grid grid-cols-3 gap-6 max-[900px]:grid-cols-1">
-            {scenes.map((scene) => (
-              <div
-                key={scene.src}
-                className="relative aspect-[16/10] overflow-hidden rounded-[2px] bg-surface-stone"
-              >
-                <Image
-                  src={scene.src}
-                  alt={scene.alt}
-                  fill
-                  sizes="(max-width: 900px) 100vw, 410px"
-                  className="object-cover"
-                  style={{ objectPosition: scene.position }}
-                />
-                <div aria-hidden="true" className="scrim scrim-light" />
-                <div className="caption">{scene.caption}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ── Prep for our own installs ────────────────────────────────────── */}
-      <section className="section relative overflow-hidden border-t border-hairline bg-surface">
+      <section className="section relative overflow-hidden border-t border-hairline bg-surface-warm">
         <div className="container-1280 relative z-[1] grid grid-cols-2 gap-16 max-[900px]:grid-cols-1 max-[900px]:gap-10">
           <div>
             <p className="eyebrow">The supporting trade</p>
@@ -527,8 +528,8 @@ export default function VaporBlastingServicePage() {
         </div>
       </section>
 
-      {/* ── The method + the record ───────────────────────────────────── */}
-      <section className="section relative overflow-hidden border-t border-hairline bg-surface-warm">
+      {/* ── The method ───────────────────────────────────────────────── */}
+      <section className="section relative overflow-hidden border-t border-hairline bg-surface">
         <div className="container-1280 relative z-[1]">
           <p className="eyebrow">The method</p>
 
@@ -547,41 +548,38 @@ export default function VaporBlastingServicePage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
 
-          <div className="mt-14 border-t border-hairline pt-8">
-            <p className="label">From the record</p>
-
-            <div className="mt-6 grid grid-cols-4 gap-5 max-[900px]:grid-cols-2 max-[480px]:grid-cols-1">
-              {record.map((frame) => (
-                <div
-                  key={frame.src}
-                  className="relative aspect-[3/2] overflow-hidden rounded-[2px] bg-surface-stone"
-                >
-                  <Image
-                    src={frame.src}
-                    alt={frame.alt}
-                    fill
-                    sizes="(max-width: 480px) 100vw, (max-width: 900px) 50vw, 300px"
-                    className="object-cover"
-                    style={{ objectPosition: frame.position }}
-                  />
-                  <div aria-hidden="true" className="scrim scrim-light" />
-                  <div className="caption">{frame.caption}</div>
-                </div>
-              ))}
+      {/* ── Gallery — the record, then the illustrations ─────────────── */}
+      <section id="gallery" className="section scroll-mt-[72px] border-t border-hairline bg-surface-warm">
+        <div className="container-1280">
+          <div className="flex flex-wrap items-end justify-between gap-x-12 gap-y-6">
+            <div>
+              <p className="eyebrow">Gallery</p>
+              <h2 className="mt-5">On record, and in illustration</h2>
             </div>
+            <a href={YOUTUBE} target="_blank" rel="noopener noreferrer" className="arrow-link">
+              Demonstration videos on our YouTube channel <span aria-hidden="true">&rarr;</span>
+            </a>
+          </div>
 
-            <div className="mt-8 flex flex-wrap items-baseline justify-between gap-6">
-              <p className="max-w-[64ch] text-[15px] leading-[1.6] text-ink-muted [text-wrap:pretty]">
-                The four frames above are Square One&rsquo;s own jobs, from the record; the hero is
-                the first of them, AI-enhanced from the original photograph. The other scenes on
-                this page illustrate the service &mdash; the same rig, the kind of surfaces it
-                takes on &mdash; and are not records of specific jobs.
-              </p>
-              <a href={YOUTUBE} target="_blank" rel="noopener noreferrer" className="arrow-link">
-                Demonstration videos on our YouTube channel <span aria-hidden="true">&rarr;</span>
-              </a>
-            </div>
+          <div className="mt-10">
+            <FrameGallery
+              ariaLabel="Vapour blasting photographs"
+              groups={[
+                {
+                  label: "From the record",
+                  note: "Square One's own jobs. The first frame is the hero of this page, AI-enhanced from the original photograph.",
+                  photos: recordFrames,
+                },
+                {
+                  label: "Illustrations of the service",
+                  note: "Generated scenes of the rig at work — the surfaces and the method, not records of specific jobs.",
+                  photos: illustrationFrames,
+                },
+              ]}
+            />
           </div>
         </div>
       </section>

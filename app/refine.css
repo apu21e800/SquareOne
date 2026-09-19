@@ -40,16 +40,29 @@
 
 /* The scrims over photography follow the same warm black, so a hero does
    not cool off at its edges while the band below it is warm. */
-.scrim { background: linear-gradient(to top, rgba(24, 21, 18, 0.72), rgba(24, 21, 18, 0) 52%); }
-.scrim-light { background: linear-gradient(to top, rgba(24, 21, 18, 0.55), rgba(24, 21, 18, 0) 38%); }
+.scrim { background: linear-gradient(to top, rgba(24, 21, 18, 0.86) 0%, rgba(24, 21, 18, 0.5) 34%, rgba(24, 21, 18, 0) 62%); }
+.scrim-light { background: linear-gradient(to top, rgba(24, 21, 18, 0.66) 0%, rgba(24, 21, 18, 0.28) 30%, rgba(24, 21, 18, 0) 48%); }
+/* 19 Sept 2026: text over photographs must read on ANY frame (Vern). The
+   rise is deeper and darker where the type sits — 0.88 at the foot, still
+   0.55 a third of the way up — and every on-image line carries a soft
+   shadow. Cards that can put their words on a panel instead now do. */
 .scrim-rise {
   background: linear-gradient(
     to top,
-    rgba(24, 21, 18, 0.82) 0%,
-    rgba(24, 21, 18, 0.42) 32%,
-    rgba(24, 21, 18, 0) 60%
+    rgba(24, 21, 18, 0.88) 0%,
+    rgba(24, 21, 18, 0.62) 30%,
+    rgba(24, 21, 18, 0.28) 55%,
+    rgba(24, 21, 18, 0) 78%
   );
 }
+[data-nav-on-image] h1,
+[data-nav-on-image] .display-xl,
+[data-nav-on-image] p,
+.eyebrow-on-image,
+.caption,
+.thumb figcaption,
+.card .caption { text-shadow: 0 1px 2px rgba(24, 21, 18, 0.55), 0 2px 14px rgba(24, 21, 18, 0.35); }
+.caption { font-size: 12px; }
 .mega-scrim { background: rgba(24, 21, 18, 0.30); }
 
 /* ---- One soft radius. The utility classes stay in the markup; every
@@ -101,6 +114,10 @@ h2:not(.label):not(.eyebrow) {
    heading gets break-word as a permanent guard, which does nothing until a
    single word genuinely cannot fit its line. ---- */
 h1, h2, h3, .display-xl, .display-statement { overflow-wrap: break-word; }
+/* …except where the optical fit already guarantees the longest word fits its
+   column: there `text-wrap: balance` must not be handed in-word break points,
+   or Chromium balances "Twenty-five year / s on BC ground" (19 Sept 2026). */
+.display-fit { overflow-wrap: normal; }
 @media (max-width: 560px) {
   h1 { font-size: clamp(1.75rem, 8.6vw, 2.125rem); }
 }
@@ -230,10 +247,10 @@ h1, h2, h3, .display-xl, .display-statement { overflow-wrap: break-word; }
     --gutter: 56px;
     --section-y: 7.5rem;
   }
-  h1 { font-size: clamp(2.75rem, 3.9vw, 4.75rem); }
-  h2:not(.label):not(.eyebrow) { font-size: clamp(1.5rem, 2vw, 2.4rem); }
-  .display-xl { font-size: clamp(3rem, 4.8vw, 6rem); }
-  .display-statement { font-size: clamp(2.2rem, 2.8vw, 3.4rem); }
+  h1 { font-size: clamp(2.75rem, 3.9vw, 5rem); }
+  h2:not(.label):not(.eyebrow) { font-size: clamp(1.75rem, 2.1vw, 2.75rem); }
+  .display-xl { font-size: clamp(3rem, 4.8vw, 6.25rem); }
+  .display-statement { font-size: clamp(2.2rem, 2.8vw, 3.6rem); }
   .stat-num { font-size: 56px; }
   /* Mega panels and any 1280-capped block follow the container */
   [class*="max-w-[1280px]"] { max-width: var(--container); }
@@ -276,87 +293,159 @@ h1, h2, h3, .display-xl, .display-statement { overflow-wrap: break-word; }
   --font-display: var(--font-futura), var(--font-poppins), "Century Gothic", ui-sans-serif, sans-serif;
 }
 body {
-  font-family: var(--font-inter), var(--font-poppins), system-ui, -apple-system, sans-serif;
   font-size: 16.5px;
 }
 
-/* Futura's caps have tight sidebearings and want more air than Poppins did;
-   the tracking still tightens as the size grows. */
-h1 { letter-spacing: 0.055em; }
-h2:not(.label):not(.eyebrow) { letter-spacing: 0.07em; }
-.display-xl { letter-spacing: 0.05em; }
-.display-statement { letter-spacing: 0.06em; }
+/* ── Futura, quiet (19 Sept 2026) ─────────────────────────────────────
+   Vern, the day after launch: "it feels too blocky." It did — every
+   headline was Futura Bold in spaced capitals, and spaced caps in a
+   geometric face are a poster voice: they read as a shout at H2 and as
+   a slab at hero scale. The face was never the problem; the setting was.
+
+   So the display voice drops to sentence case and closes up. Futura's
+   lowercase — small x-height, round bowls, that long ascender — is the
+   elegant half of the face, and it wants slightly negative tracking
+   where the caps wanted air. The caps survive where they belong: the
+   small voice of eyebrows, labels and buttons, spaced wide, which is
+   what makes Futura sing at 11–13px.
+
+   Sizes come up a step to compensate: a sentence-case line is a third
+   narrower than the same words in caps, so the same rem reads smaller.
+   Weight stays Bold — Futura LT Book at display size is too light to
+   land a headline on a photograph; Bold in sentence case is the classic
+   setting (the one on every Futura specimen).
+
+   h3 joins the display voice at card scale so the hierarchy is one
+   family — Futura for every heading, Inter for every paragraph.
+   ------------------------------------------------------------------ */
+h1, .display-xl, .display-statement, h2:not(.label):not(.eyebrow) {
+  text-transform: none;
+  font-weight: 700;
+}
+h1 {
+  font-size: clamp(2.25rem, 4.2vw, 3.75rem);
+  letter-spacing: -0.018em;
+  line-height: 1.02;
+}
+.display-xl {
+  font-size: clamp(2.5rem, 5vw, 4.75rem);
+  letter-spacing: -0.022em;
+  line-height: 0.98;
+}
+.display-statement {
+  font-size: clamp(2rem, 2.9vw, 3.1rem);
+  letter-spacing: -0.015em;
+  line-height: 1.06;
+}
+h2:not(.label):not(.eyebrow) {
+  font-size: clamp(1.75rem, 2.7vw, 2.5rem);
+  letter-spacing: -0.012em;
+  line-height: 1.08;
+}
+h3 {
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  font-weight: 700;
+  letter-spacing: -0.008em;
+  line-height: 1.25;
+}
+h4, h5, h6 { letter-spacing: 0; }
+@media (max-width: 560px) {
+  h1 { font-size: clamp(1.875rem, 8.2vw, 2.375rem); }
+  h3 { font-size: 1.25rem; }
+}
+.offer-title {
+  font-size: 24px;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  line-height: 1.15;
+}
+@media (max-width: 700px) { .offer-title { font-size: 21px; } }
+
+/* The small voice keeps its capitals and its air. */
 .label, .eyebrow, .chip-name { letter-spacing: 0.14em; }
 .btn-primary, .btn-secondary, .btn-on-slate, .btn-on-image { letter-spacing: 0.12em; }
-h3, h4, h5, h6 { letter-spacing: 0; }
 
-/* ── The alternates (lib/typefaces.ts, components/TypeToggle) ──────────
-   The switch changes the DISPLAY face only — Inter carries running text in
-   every option — so the client is comparing the one thing in question and
-   not two changes at once.
+/* The full stop after a sentence-case line sits a hair smaller and closer. */
+.stop::after {
+  width: max(6px, 0.1em);
+  height: max(6px, 0.1em);
+  margin-left: max(10px, 0.16em);
+}
 
-   Each block is the same four lines: the stack, the caps tracking the face
-   wants, and --fit-adj, the per-character width relative to Futura LT Bold
-   (measured in the browser, see lib/type.ts). Adding a face is one more
-   block; nothing else in this file knows how many there are. Reached with
-   ?type=<id>, kept in localStorage, applied before first paint by the boot
-   script in app/layout.tsx.
+/* ── The type settings (lib/typefaces.ts, components/TypeToggle) ──────
+   Second round, 19 Sept 2026. The live setting is "Futura, quiet" above
+   and needs no attribute. Each block below is one alternate SETTING of
+   the same face: what changes is case, weight, tracking, size and the
+   reading text — never the wordmark's face. Reached with ?type=<id> on a
+   preview deployment, kept in localStorage, applied before first paint by
+   the boot script in app/layout.tsx. Production never sets the attribute.
+
+   --fit-adj is the per-character width of the setting relative to the
+   live one (lib/type.ts measures sentence-case Futura Bold at 0.52 em per
+   character); the optical fit reads it so a long word still lands in its
+   column under every setting.
    ------------------------------------------------------------------ */
 
-/* Jost — open Futura-alike. A little more x-height than Futura and very
-   slightly narrower caps at the tracking it wants.
-   Measured worst case (TRAFFICPATTERNSXD): 0.664 em/char vs Futura's 0.680. */
-html[data-type="jost"] {
-  --font-display: var(--font-jost), "Century Gothic", ui-sans-serif, sans-serif;
-  --fit-adj: 0.98;
-}
-html[data-type="jost"] h1 { letter-spacing: 0.05em; }
-html[data-type="jost"] h2:not(.label):not(.eyebrow) { letter-spacing: 0.065em; }
-html[data-type="jost"] .display-xl { letter-spacing: 0.045em; }
-html[data-type="jost"] .display-statement { letter-spacing: 0.055em; }
-html[data-type="jost"] .headline-sentence { letter-spacing: -0.01em; }
+/* The reading face, as a variable, so one setting can swap it. */
+:root { --font-text: var(--font-inter), var(--font-poppins), system-ui, -apple-system, sans-serif; }
+body { font-family: var(--font-text); }
 
-/* Space Grotesk — a grotesque, not a geometric. Squarer bowls, sheared
-   terminals, drawn for screens. Wider caps than either Futura or Jost and
-   far more self-spacing built in, so the tracking comes down hard: a
-   grotesque set at Futura's tracking reads as a logo, not a headline.
-   Measured worst case: 0.593 em/char — much the narrowest of the four, so
-   it can carry the largest type in the same column. */
-html[data-type="space-grotesk"] {
-  --font-display: var(--font-space-grotesk), ui-sans-serif, sans-serif;
-  --fit-adj: 0.88;
+/* Futura, capitals — the launch setting. Bold spaced caps at every display
+   size; the small voice is unchanged. Caps run 0.72 em per character
+   against sentence case's 0.52, so the fit is adjusted by 1.38. */
+html[data-type="futura-caps"] { --fit-adj: 1.38; }
+html[data-type="futura-caps"] h1,
+html[data-type="futura-caps"] .display-xl,
+html[data-type="futura-caps"] .display-statement,
+html[data-type="futura-caps"] h2:not(.label):not(.eyebrow) { text-transform: uppercase; }
+html[data-type="futura-caps"] h1 { font-size: clamp(2.125rem, 4vw, 3.5rem); letter-spacing: 0.055em; line-height: 1.04; }
+html[data-type="futura-caps"] .display-xl { font-size: clamp(2.25rem, 4.6vw, 4rem); letter-spacing: 0.05em; line-height: 1.02; }
+html[data-type="futura-caps"] .display-statement { font-size: clamp(1.875rem, 2.7vw, 2.75rem); letter-spacing: 0.06em; line-height: 1.1; }
+html[data-type="futura-caps"] h2:not(.label):not(.eyebrow) { font-size: clamp(1.5rem, 2.4vw, 2.1rem); letter-spacing: 0.07em; line-height: 1.12; }
+html[data-type="futura-caps"] h3 { font-family: var(--font-text); font-size: 1.25rem; font-weight: 600; letter-spacing: -0.01em; line-height: 1.4; }
+html[data-type="futura-caps"] .headline-sentence { text-transform: none; letter-spacing: -0.012em; }
+html[data-type="futura-caps"] .offer-title { text-transform: uppercase; font-size: 22px; letter-spacing: 0.03em; }
+html[data-type="futura-caps"] .stop::after { width: max(6px, 0.11em); height: max(6px, 0.11em); margin-left: max(12px, 0.2em); }
+@media (max-width: 560px) {
+  html[data-type="futura-caps"] h1 { font-size: clamp(1.75rem, 8.6vw, 2.125rem); }
 }
-html[data-type="space-grotesk"] h1 { letter-spacing: 0.015em; }
-html[data-type="space-grotesk"] h2:not(.label):not(.eyebrow) { letter-spacing: 0.03em; }
-html[data-type="space-grotesk"] .display-xl { letter-spacing: 0.012em; }
-html[data-type="space-grotesk"] .display-statement { letter-spacing: 0.02em; }
-html[data-type="space-grotesk"] .label,
-html[data-type="space-grotesk"] .eyebrow,
-html[data-type="space-grotesk"] .chip-name { letter-spacing: 0.11em; }
-html[data-type="space-grotesk"] .btn-primary,
-html[data-type="space-grotesk"] .btn-secondary,
-html[data-type="space-grotesk"] .btn-on-slate,
-html[data-type="space-grotesk"] .btn-on-image { letter-spacing: 0.09em; }
-html[data-type="space-grotesk"] .headline-sentence { letter-spacing: -0.018em; }
 
-/* Poppins — the face the site ran until 17 Sept. Round, tall x-height,
-   soft terminals. Measured worst case: 0.648 em/char. */
-html[data-type="poppins"] {
-  --font-display: var(--font-poppins), "Century Gothic", ui-sans-serif, sans-serif;
-  --fit-adj: 0.96;
+/* Futura + serif — the quiet setting with Source Serif 4 carrying the
+   reading text. A serif at 17px wants a touch more size and lead than
+   Inter at 16.5; the headlines are untouched. */
+html[data-type="futura-serif"] { --font-text: var(--font-source-serif), Georgia, "Times New Roman", serif; }
+html[data-type="futura-serif"] body { font-size: 17.5px; }
+html[data-type="futura-serif"] p { line-height: 1.6; }
+html[data-type="futura-serif"] h3 { font-family: var(--font-display); }
+html[data-type="futura-serif"] .label,
+html[data-type="futura-serif"] .eyebrow,
+html[data-type="futura-serif"] .chip-name,
+html[data-type="futura-serif"] .caption,
+html[data-type="futura-serif"] .btn-primary,
+html[data-type="futura-serif"] .btn-secondary,
+html[data-type="futura-serif"] .btn-on-slate,
+html[data-type="futura-serif"] .btn-on-image,
+html[data-type="futura-serif"] .tag,
+html[data-type="futura-serif"] .chip { font-family: var(--font-display); }
+
+/* Futura, light — Futura Book at display size, a step larger, tracking
+   back to zero: the Book weight is drawn with more air than the Bold and
+   closes up badly. Sub-heads keep the Bold so the hierarchy still reads.
+   Book is a little narrower than Bold: fit adjusted by 0.95. */
+html[data-type="futura-light"] { --fit-adj: 0.95; }
+html[data-type="futura-light"] h1,
+html[data-type="futura-light"] .display-xl,
+html[data-type="futura-light"] .display-statement,
+html[data-type="futura-light"] h2:not(.label):not(.eyebrow) { font-weight: 400; letter-spacing: 0; }
+html[data-type="futura-light"] h1 { font-size: clamp(2.5rem, 4.6vw, 4.25rem); line-height: 1.04; }
+html[data-type="futura-light"] .display-xl { font-size: clamp(2.75rem, 5.5vw, 5.25rem); line-height: 1; }
+html[data-type="futura-light"] .display-statement { font-size: clamp(2.125rem, 3.1vw, 3.4rem); line-height: 1.08; }
+html[data-type="futura-light"] h2:not(.label):not(.eyebrow) { font-size: clamp(1.875rem, 2.9vw, 2.75rem); line-height: 1.1; }
+html[data-type="futura-light"] .offer-title { font-weight: 400; font-size: 26px; letter-spacing: 0; }
+@media (max-width: 560px) {
+  html[data-type="futura-light"] h1 { font-size: clamp(2rem, 8.8vw, 2.5rem); }
 }
-html[data-type="poppins"] h1 { letter-spacing: 0.02em; }
-html[data-type="poppins"] h2:not(.label):not(.eyebrow) { letter-spacing: 0.04em; }
-html[data-type="poppins"] .display-xl { letter-spacing: 0.02em; }
-html[data-type="poppins"] .display-statement { letter-spacing: 0.02em; }
-html[data-type="poppins"] .label,
-html[data-type="poppins"] .eyebrow,
-html[data-type="poppins"] .chip-name { letter-spacing: 0.12em; }
-html[data-type="poppins"] .btn-primary,
-html[data-type="poppins"] .btn-secondary,
-html[data-type="poppins"] .btn-on-slate,
-html[data-type="poppins"] .btn-on-image { letter-spacing: 0.1em; }
-html[data-type="poppins"] .headline-sentence { letter-spacing: -0.015em; }
 
 /* Search overlay — one clear control, ours; the browser's own is hidden. */
 .search-input::-webkit-search-cancel-button,

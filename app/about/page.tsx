@@ -1,29 +1,30 @@
 import Image from "next/image"
 import Link from "next/link"
 import type { Metadata } from "next"
-import { getWork, workCities } from "@/lib/work"
-import { projects } from "@/lib/projects"
 import { products } from "@/lib/products"
-import { CLIENTS } from "@/lib/clients"
+import { services } from "@/lib/services"
+import { WORK_APPS } from "@/lib/work"
 import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
 
 export const metadata: Metadata = {
-  title: "About Us | Decorative Pavement Since 2000",
+  // One separator: the root template adds " | Square One Paving" (58 chars all in).
+  title: "About — Decorative Pavement Since 2000",
   description:
-    clampDescription("Square One Paving has installed decorative pavement across British Columbia since 2000 — installer of HUB Surface Systems products, serving Metro Vancouver, the Fraser Valley and Vancouver Island."),
+    clampDescription("Decorative pavement installers in BC since 2000 — stamped asphalt, coatings and thermoplastic from Maple Ridge, for the Lower Mainland and Vancouver Island."),
   keywords: [
     "Square One Paving BC",
-    "HUB Surface Systems installer BC",
+    "decorative pavement installer BC",
     "decorative pavement contractor BC",
     "stamped asphalt contractor Vancouver",
+    "stamped asphalt contractor Victoria",
   ],
   alternates: { canonical: `${SITE_URL}/about` },
   openGraph: {
-    title: "About Us | Decorative Pavement Since 2000 | Square One Paving",
+    title: "About — Decorative Pavement Since 2000 | Square One Paving",
     description:
-      clampDescription("Square One Paving has installed decorative pavement across British Columbia since 2000 — cities, municipalities, developers and homeowners."),
-    images: [{ url: "/images/hero/white-rock-marine-drive-wave-crosswalk.jpg", width: 1600, height: 1067, alt: "Artist-designed crosswalk on Marine Drive, White Rock, installed by Square One Paving" }],
+      clampDescription("Square One Paving has installed decorative pavement across British Columbia since 2000 — municipal, commercial and residential work, Lower Mainland and Vancouver Island."),
+    images: [{ url: "/images/hero/white-rock-marine-drive-wave-crosswalk.jpg", width: 1600, height: 1067, alt: "Artist-designed crosswalk of waves, sand and sky in TrafficPatterns on Marine Drive, White Rock, installed by Square One Paving" }],
   },
 }
 
@@ -50,76 +51,85 @@ export const metadata: Metadata = {
 const trades: { name: string; line: string; href: string; src: string; alt: string }[] = [
   {
     name: "Stamped asphalt",
-    line: "StreetPrint patterns pressed into hot asphalt — brick, cobble, slate and custom templates.",
+    line: "StreetPrint patterns pressed into the asphalt itself — brick, cobble, slate and custom templates — and TrafficPatternsXD for the busiest crossings.",
     href: "/services/stamped-asphalt",
     src: "/images/hero/victoria-ellis-point-walkway-streetprint.jpg",
-    alt: "British Cobble StreetPrint walkway at Ellis Point, Victoria",
+    alt: "Brick-red cobble StreetPrint stamped asphalt walkway beside a timber rail at Ellis Point, Victoria",
   },
   {
     name: "Decorative coatings",
-    line: "StreetBond colour systems for asphalt and concrete — plazas, lanes, spray parks, driveways.",
+    line: "StreetBond colour on asphalt and concrete — bike lanes, plazas, spray parks, courts and driveways.",
     href: "/services/decorative-coatings",
     src: "/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg",
-    alt: "StreetBond multicolour plaza at Joyce Station, Vancouver",
+    alt: "Multicolour StreetBond plaza under the SkyTrain guideway at Joyce Station, Vancouver, at dusk",
   },
   {
     name: "Preformed thermoplastic",
-    line: "TrafficPatterns, DecoMark, DuraTherm and PreMark — crosswalks, symbols and public art fused into the road.",
+    line: "TrafficPatterns, DecoMark, DuraTherm and PreMark — crosswalks, symbols and public art heat-fused into the road.",
     href: "/services/preformed-thermoplastic",
     src: "/images/projects/ubc-musqueam-crosswalk/ubc-musqueam-crosswalk-trafficpatterns-01.jpg",
-    alt: "Musqueam crosswalk artwork at UBC, Vancouver",
+    alt: "A bus crossing the blue and green TrafficPatterns crosswalk of the UBC and Musqueam crests at University Boulevard, Vancouver",
   },
   {
     name: "Vapour blasting",
-    line: "Surface cleaning, priming and graffiti removal with the mobile rig — the supporting service.",
+    line: "Surface cleaning, priming, and graffiti and marking removal with the mobile rig — the supporting service.",
     href: "/services/vapor-blasting",
     src: "/images/services/vapor-blasting/generated/gen-granville-island-vapour-blasting-01-enhanced.jpg",
     alt: "Square One crew vapour blasting at Granville Island",
   },
 ]
 
+/* Six things a specifier or a homeowner can hold Square One to. Every line
+   restates something on the record — HUB's published product facts
+   (lib/products.ts, attributed), the contact canon, or the warranty split —
+   and nothing about crews, budgets or timelines that Square One has not
+   published. */
 const principles = [
   {
-    title: "BC climate, by design",
-    body: "Every system we install is specified for BC weather — wet winters, freeze-thaw cycles, marine UV. The right product in the wrong climate is a five-year repair bill.",
+    title: "Built for BC weather",
+    body: "Every system Square One installs has published performance from its manufacturer: StreetPrint's textured surface is slip-resistant and safe for snowploughs and de-icing salt, and StreetBond is UV-stable with an anti-skid aggregate for wet surfaces.",
   },
   {
-    title: "Precision installation",
-    body: "Our team focuses on precision installation, proven materials and surface solutions engineered for long-term performance in real-world conditions.",
+    title: "Two kinds of stamped asphalt",
+    body: "StreetPrint presses the pattern into the asphalt itself. TrafficPatternsXD is the heavy-duty kind — aggregate-reinforced thermoplastic, heated and stamped into the top of the asphalt for the busiest intersections and transit corridors. The site decides which.",
   },
   {
     title: "Both sides of the Strait",
-    body: "One office in Maple Ridge, with crews serving the Lower Mainland and Vancouver Island. Most BC projects don't need a travel budget, and the mobile vapour blasting rig goes wherever the job is.",
+    body: "One office in Maple Ridge, with crews serving the Lower Mainland and Vancouver Island — and a line of its own for the Island, 250-391-0270. The mobile vapour blasting rig goes wherever the job is.",
   },
   {
     title: "Municipal discipline, residential care",
-    body: "We build to the owner's specification on civic projects — layout, colour and tolerances signed off before the first pass — then bring the same discipline to a private driveway.",
+    body: "Civic work goes in to the owner's marking standard — colours, layout and symbols as specified. A private driveway gets the same crews and the same manufacturer's specification.",
   },
   {
-    title: "Specified, not improvised",
-    body: "HUB warrants the material — StreetBond carries HUB's limited warranty against manufacturing defects. Square One is responsible for the workmanship: every system goes down to HUB's published specification, by Square One's own crews.",
+    title: "Two warranties, one installer",
+    body: "The manufacturer warrants the material, under its limited warranty against manufacturing defects. Square One warrants the workmanship: every system goes down to the manufacturer's published specification, by Square One's own crews.",
   },
   {
-    title: "End-to-end accountability",
-    body: "Surface prep through final cure. One company, one phone number, one accountable team — from the site walk to the walk-through.",
+    title: "From the site visit to the walk-through",
+    body: "Surface prep through final cure is one company's responsibility. The site visit is free, the quote is written, and we walk the finished surface with you before we leave it.",
   },
 ]
 
-/* On the record — every figure below is counted from what this site publishes,
-   by the same helpers the home page stats use, so the two can never drift. */
+/* On the record — facts about the company, not a tally of its work. The
+   client struck the photograph count on 10 Sept 2026 ("we have done 1000s of
+   jobs and it makes it seem like we have only done 194"), and the project
+   and community counts read the same way, so they are gone: nothing here
+   counts what Square One has done. The three catalogue figures are read
+   from lib/ so they can never drift from the pages. */
 const timeline = [
   { year: "2000", event: "Square One Paving begins installing decorative pavement in British Columbia" },
-  { year: `${projects.length}+`, event: "projects on record, from Nanaimo to Kelowna" },
-  { year: String(products.length), event: "HUB Surface Systems products installed, from StreetPrint to PreMark" },
-  { year: `${workCities().length}+`, event: "BC communities with Square One work on the ground" },
+  { year: String(services.length).padStart(2, "0"), event: "services — stamped asphalt, decorative coatings, preformed thermoplastic and vapour blasting" },
+  { year: String(products.length).padStart(2, "0"), event: "pavement systems installed, from StreetPrint to PreMark" },
+  { year: String(WORK_APPS.length).padStart(2, "0"), event: "kinds of work, each with a gallery of Square One's own photographs" },
 ]
 
 const process = [
-  { step: "01", title: "Site walk", body: "We measure, photograph and flag substrate issues on site." },
-  { step: "02", title: "Specification", body: "Pattern, colours and product matched to traffic and budget." },
+  { step: "01", title: "Site visit", body: "We measure, photograph and flag substrate issues on site. The visit is free." },
+  { step: "02", title: "Specification", body: "Pattern, colours and system matched to the surface and its traffic, in a written quote." },
   { step: "03", title: "Surface prep", body: "Cleaning, and vapour blasting where the surface needs it." },
-  { step: "04", title: "Application", body: "Installed by Square One's own crews, to the specification." },
-  { step: "05", title: "Cure & walk-through", body: "Open to traffic on schedule; we walk the finished work with you." },
+  { step: "04", title: "Application", body: "Installed by Square One's own crews, to the manufacturer's specification." },
+  { step: "05", title: "Cure & walk-through", body: "Once the surface has cured, we walk the finished work with you." },
 ]
 
 const serviceRegions = [
@@ -140,7 +150,7 @@ export default function AboutPage() {
           <div className="eyebrow">About Square One</div>
 
           <h1 className="stop mt-7 max-w-[18ch] [text-wrap:balance]">
-            Decorative pavement since 2000
+            Decorative pavement in BC since 2000
           </h1>
 
           <div className="mt-9 grid grid-cols-12 gap-x-10 gap-y-6 max-[900px]:grid-cols-1">
@@ -154,13 +164,15 @@ export default function AboutPage() {
                   provably. Flagged to Vern: if Square One has a citation for
                   it, it can come back with the citation. */}
               Square One Paving has installed decorative pavement across British Columbia since
-              2000 &mdash; for cities, First Nations, transit authorities, developers and private
-              owners, from the Maple Ridge office to both sides of the Strait of Georgia.
+              2000 &mdash; municipal crosswalks and streetscapes, transit plazas, school grounds,
+              parks, commercial sites and private driveways, from one office in Maple Ridge to
+              both sides of the Strait of Georgia.
             </p>
             <p className="col-span-5 max-w-[40ch] self-start pt-2 text-[15px] leading-[1.65] text-ink-muted max-[900px]:max-w-[56ch] max-[900px]:pt-0">
-              Installer of HUB Surface Systems products &mdash; StreetPrint&reg;, StreetBond&reg;,
-              TrafficPatterns&trade;, TrafficPatternsXD&trade;, DecoMark, DuraTherm, PreMark and DuraShield
-              &mdash; every one installed to its manufacturer&apos;s specification.
+              Decorative pavement installers &mdash; stamped asphalt, coatings and preformed
+              thermoplastic &mdash; since 2000: StreetPrint&reg;, StreetBond&reg;, TrafficPatterns&trade;,
+              TrafficPatternsXD&trade;, DecoMark, DuraTherm, PreMark and DuraShield, every one
+              installed to its manufacturer&apos;s specification.
             </p>
           </div>
         </div>
@@ -192,22 +204,25 @@ export default function AboutPage() {
               <div className="mt-8 space-y-5 text-[16px] leading-[1.7] text-ink-body">
                 <p>
                   Square One Paving started in 2000 doing one thing: decorative pavement, in BC,
-                  through BC weather. Twenty-five years on, the work has earned a longstanding
-                  reputation for quality installations of stamped asphalt, StreetBond coatings and
-                  decorative preformed thermoplastics &mdash; and the people who quote a job are
-                  still the people who stand behind it.
+                  through BC weather. Twenty-five years on it still does one thing &mdash; stamped
+                  asphalt, StreetBond coatings and preformed thermoplastic, installed by its own
+                  crews &mdash; and it warrants the workmanship of every installation.
                 </p>
                 <p>
-                  The practice has settled around four trades &mdash; stamped asphalt, decorative
-                  coatings, preformed thermoplastic and, as the supporting service, vapour
-                  blasting. Every system we install is specified for Canadian conditions and goes
-                  down to its manufacturer&apos;s specification.
+                  The practice has settled around four trades &mdash;{" "}
+                  <Link href="/services/stamped-asphalt" className="font-medium text-ink underline-offset-4 hover:underline">stamped asphalt</Link>,{" "}
+                  <Link href="/services/decorative-coatings" className="font-medium text-ink underline-offset-4 hover:underline">decorative coatings</Link>,{" "}
+                  <Link href="/services/preformed-thermoplastic" className="font-medium text-ink underline-offset-4 hover:underline">preformed thermoplastic</Link>{" "}
+                  and, as the supporting service,{" "}
+                  <Link href="/services/vapor-blasting" className="font-medium text-ink underline-offset-4 hover:underline">vapour blasting</Link>.
+                  Every pavement system goes down to its manufacturer&apos;s published
+                  specification.
                 </p>
                 <p>
                   Today Square One works out of Maple Ridge, with crews serving the Lower Mainland
-                  and Vancouver Island &mdash; TransLink, UBC, the cities and districts, the
-                  developers, the strata councils, the families. The mobile vapour blasting rig
-                  goes wherever the surface is.
+                  and Vancouver Island &mdash; municipal streets and plazas, campuses and school
+                  grounds, strata lanes and family driveways. The mobile vapour blasting rig goes
+                  wherever the surface is.
                 </p>
               </div>
 
@@ -250,14 +265,14 @@ export default function AboutPage() {
 
                 <blockquote className="m-0 mt-5 p-0">
                   <p className="quote-display m-0 text-[24px] leading-[1.4] text-ink [text-wrap:pretty] max-[700px]:text-[21px]">
-                    &ldquo;Build surfaces that perform as good as they look &mdash; and last.&rdquo;
+                    &ldquo;Build surfaces that perform as well as they look &mdash; and last.&rdquo;
                   </p>
                 </blockquote>
 
                 <p className="mt-6 text-[15px] leading-[1.65] text-ink-body">
                   Decorative pavement is the part of public infrastructure thousands of people
-                  cross every day without noticing. We notice. And we make sure it&apos;s the part
-                  of the streetscape that gets better with time.
+                  cross every day without noticing. We notice &mdash; and we install it to hold
+                  its pattern and its colour for the service life the manufacturer publishes.
                 </p>
               </div>
             </div>
@@ -334,30 +349,38 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── 7 · Clients ──────── */}
+      {/* ── 7 · The work ──────── 
+          Was the client list ("Installed at"). Off at the client's request,
+          19 Sept 2026, until she confirms who Square One has worked for;
+          lib/clients.ts keeps the names. */}
       <section className="relative overflow-hidden bg-surface-slate py-[6.5rem] max-[700px]:py-14">
         <div className="container-1280 relative z-[1]">
           <div className="grid grid-cols-12 gap-x-12 gap-y-12 max-[900px]:grid-cols-1">
             <div className="col-span-5 flex flex-col justify-center max-[900px]:col-span-1">
-              <div className="eyebrow eyebrow-on-image">Installed at</div>
+              <div className="eyebrow eyebrow-on-image">The work</div>
               <p className="display-statement stop m-0 mt-6 max-w-[22ch] text-white [text-wrap:balance]">
                 Won in the open, kept through winters
               </p>
               <p className="mt-6 max-w-[42ch] text-[15px] leading-[1.65] text-[color:var(--ink-on-slate-body)]">
-                Municipal work is won in open tenders and kept by holding up. These are the owners and
-                developers whose sites carry Square One&rsquo;s work, as published in its project record.
+                Municipal work is won in open tenders and kept by holding up. Ten kinds of it, each
+                with a gallery of Square One&rsquo;s own installations.
               </p>
             </div>
 
             <div className="col-span-7 self-center max-[900px]:col-span-1">
               <ul className="grid grid-cols-3 gap-x-8 max-[700px]:grid-cols-2">
-                {CLIENTS.map((client) => (
+                {WORK_APPS.map((app) => (
                   <li
-                    key={client}
-                    className="border-t py-[12px] text-[15px] font-medium leading-[1.4] text-[color:var(--ink-on-slate-body)]"
+                    key={app.slug}
+                    className="border-t text-[15px] font-medium leading-[1.4]"
                     style={{ borderColor: "var(--hairline-slate)" }}
                   >
-                    {client}
+                    <Link
+                      href={app.slug === "driveways" ? "/driveways#gallery" : `/applications/${app.slug}`}
+                      className="block py-[12px] text-[color:var(--ink-on-slate-body)] transition-colors hover:text-white"
+                    >
+                      {app.label}
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -374,7 +397,15 @@ export default function AboutPage() {
           <p className="mt-7 max-w-[56ch] text-[17px] leading-[1.65] text-ink-body [text-wrap:pretty]">
             One office in Maple Ridge, crews on both sides of the Strait. Vancouver, Surrey,
             Burnaby, Richmond, Victoria, Nanaimo and Ladysmith are among the communities we serve &mdash;
-            and the mobile vapour blasting rig goes wherever the surface is.
+            and the mobile vapour blasting rig goes wherever the surface is. The{" "}
+            <Link href="/galleries" className="font-medium text-ink underline-offset-4 hover:underline">
+              galleries
+            </Link>{" "}
+            show the work by system and by region, and the{" "}
+            <Link href="/projects" className="font-medium text-ink underline-offset-4 hover:underline">
+              projects
+            </Link>{" "}
+            tell it in full.
           </p>
 
           <div className="mt-11 grid grid-cols-1 gap-12 min-[701px]:grid-cols-2 min-[701px]:gap-6">

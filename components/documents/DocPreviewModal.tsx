@@ -12,8 +12,8 @@ export interface PreviewTarget {
 
 /**
  * The document, opened in place: page one pre-rendered at 1000px, with the
- * three things a specifier does next — download the PDF, open it in the
- * browser, or fetch HUB's current edition. No PDF is rendered client-side,
+ * two things a specifier does next — download the PDF, or open it in the
+ * browser. No PDF is rendered client-side,
  * so this is instant on a phone and never depends on a plugin.
  *
  * Accessibility: role=dialog, labelled by the title, Escape and the scrim
@@ -133,27 +133,12 @@ export default function DocPreviewModal({ target, onClose }: { target: PreviewTa
           </div>
 
           <div className="mt-auto px-7 pb-7 pt-8 max-[900px]:px-5 max-[900px]:pb-5">
-            {/* Only where the same file is verified on hubss.com — no
-                attribution is written for the rest, because not every
-                document here is HUB's own (some carry the thermoplastic
-                maker's name), and we do not guess. */}
-            {doc.hub ? (
-              <p className="text-[13px] leading-[1.6] text-[color:var(--ink-muted)]">
-                HUB Surface Systems keeps the current edition of this document on their site.{" "}
-                <a
-                  href={doc.hub}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-semibold text-[color:var(--ink)] underline-offset-4 hover:underline"
-                >
-                  Current edition at HUB&nbsp;&#8599;
-                </a>
-              </p>
-            ) : (
-              <p className="text-[13px] leading-[1.6] text-[color:var(--ink-muted)]">
-                Page one shown. The PDF carries the full document.
-              </p>
-            )}
+            {/* The "current edition" link to the manufacturer's site came off
+                on 19 Sept 2026: the manufacturer is not named or linked
+                anywhere on the site. `doc.hub` stays in the data, unrendered. */}
+            <p className="text-[13px] leading-[1.6] text-[color:var(--ink-muted)]">
+              Page one shown. The PDF carries the full document.
+            </p>
           </div>
         </div>
       </div>

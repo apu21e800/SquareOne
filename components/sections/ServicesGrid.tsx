@@ -27,17 +27,19 @@ const cardMeta: Record<string, { chips: string[]; specs?: { href: string; label:
 }
 
 const cardImage: Record<string, { src: string; alt: string }> = {
+  // 19 Sept 2026: every tile is a frame from the record (lib/work-captions.ts),
+  // none of them repeated in the hero reel or in Selected Work below.
   "stamped-asphalt": {
-    src: "/images/hero/victoria-ellis-point-walkway-streetprint.jpg",
-    alt: "British Cobble StreetPrint walkway at Ellis Point, Victoria",
+    src: "/images/applications/streetscapes/victoria-town-centre-crossing-streetprint-01.jpg",
+    alt: "A red brick StreetPrint town centre crossing between trees in Victoria",
   },
   "decorative-coatings": {
-    src: "/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg",
-    alt: "StreetBond multicolour plaza at Joyce Station, Vancouver",
+    src: "/images/applications/public-art/north-vancouver-lynn-valley-plaza-streetbond-01.jpg",
+    alt: "Lynn Valley plaza, North Vancouver — a red StreetBond field with black and white line art",
   },
   "preformed-thermoplastic": {
-    src: "/images/projects/ubc-musqueam-crosswalk/ubc-musqueam-crosswalk-trafficpatterns-01.jpg",
-    alt: "Musqueam crosswalk artwork at UBC, Vancouver",
+    src: "/images/applications/public-art/burnaby-union-street-thunderbird-decomark-01.jpg",
+    alt: "A DecoMark thunderbird on the Union Street greenway in Burnaby, seen from above",
   },
   "vapor-blasting": {
     src: "/images/services/vapor-blasting/generated/gen-granville-island-vapour-blasting-01-enhanced.jpg",

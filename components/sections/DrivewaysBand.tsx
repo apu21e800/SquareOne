@@ -16,24 +16,24 @@ import Link from "next/link"
 
 const LEAD = {
   src: "/images/S1_update_v2/photos/Driveways/Ten Mile Point Driveway I.jpg",
-  alt: "StreetPrint stamped asphalt driveway at Ten Mile Point, Saanich, installed by Square One",
+  alt: "Grey ashlar StreetPrint stamped asphalt driveway with a charcoal border, running up to a stone-and-timber entry at Ten Mile Point, Saanich",
   caption: "Ten Mile Point, Saanich · StreetPrint",
 }
 
 const STRIP: { src: string; alt: string; caption: string }[] = [
   {
     src: "/images/S1_update_v2/photos/Driveways/Number 1.jpg",
-    alt: "Ashlar slate StreetPrint driveway installed by Square One",
+    alt: "Grey ashlar slate StreetPrint stamped asphalt driveway in front of a three-car garage, installed by Square One",
     caption: "Ashlar slate",
   },
   {
     src: "/images/S1_update_v2/photos/Driveways/Number 2.jpg",
-    alt: "StreetPrint driveway with a circle medallion, installed by Square One",
+    alt: "Brown StreetPrint stamped asphalt driveway with a circle medallion and radiating bands, seen from above, installed by Square One",
     caption: "Circle medallion",
   },
   {
     src: "/images/S1_update_v2/photos/Driveways/Number 3.jpg",
-    alt: "Charcoal cobble StreetPrint driveway installed by Square One",
+    alt: "Charcoal cobble StreetPrint stamped asphalt driveway beside stone steps and a shingled house, installed by Square One",
     caption: "Charcoal cobble",
   },
 ]
@@ -103,7 +103,8 @@ export default function DrivewaysBand() {
             <p className="mt-5 max-w-[46ch] text-[16px] leading-[1.65] text-ink-body [text-wrap:pretty]">
               StreetPrint patterns pressed into your existing asphalt and sealed in StreetBond
               colour &mdash; one continuous surface, no joints to heave, nothing for weeds to take
-              hold in. Installed by the crews that do our municipal work, on both sides of the Strait.
+              hold in. Installed by the same crews that do our municipal work, on both sides of the
+              Strait.
             </p>
 
             {/* The offer card — the page's one accent block. */}
@@ -111,8 +112,8 @@ export default function DrivewaysBand() {
               <div className="label text-white/75">Free site visit</div>
               <p className="offer-title mt-3">We walk it before we quote it</p>
               <p className="mt-3 max-w-[40ch] text-[14.5px] leading-[1.6] text-white/85">
-                We assess the asphalt on site, bring the sample boards, and come back with a written
-                quote. No demolition, no new base.
+                We assess the asphalt on site, bring colour and pattern samples, and come back with
+                a written quote. No demolition, no new base.
               </p>
               <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
                 <Link href="/contact" className="btn-on-slate offer-btn">
@@ -127,8 +128,8 @@ export default function DrivewaysBand() {
             </div>
 
             <p className="mt-6 max-w-[46ch] text-[13.5px] leading-[1.6] text-ink-muted">
-              HUB Surface Systems publishes a 10&ndash;20 year service life for StreetPrint under
-              municipal traffic.
+              The manufacturer publishes a 10&ndash;20 year service life for StreetPrint under
+              municipal traffic. The manufacturer warrants the material; Square One warrants the workmanship.
             </p>
 
             <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
@@ -140,6 +141,9 @@ export default function DrivewaysBand() {
               </Link>
               <Link href="/driveways/victoria" className="arrow-link">
                 Victoria <span aria-hidden="true">&rarr;</span>
+              </Link>
+              <Link href="/patterns" className="arrow-link">
+                Patterns <span aria-hidden="true">&rarr;</span>
               </Link>
             </div>
           </div>

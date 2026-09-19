@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Poppins, Inter, Jost, Space_Grotesk } from 'next/font/google'
+import { Poppins, Inter, Source_Serif_4 } from 'next/font/google'
 import localFont from 'next/font/local'
 import "./globals.css"
 import "./mobile.css"
@@ -58,19 +58,15 @@ const futura = localFont({
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' })
 
-// The alternates. Not preloaded: nothing renders in them unless the switch
-// sets html[data-type].
-const jost = Jost({
+// The one alternate that brings its own font: Source Serif 4 carries the
+// reading text in the "Futura + serif" setting (lib/typefaces.ts). Not
+// preloaded — nothing requests it unless html[data-type="futura-serif"] is
+// set, which production never does.
+const sourceSerif = Source_Serif_4({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-jost',
-  display: 'swap',
-  preload: false,
-})
-const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-space-grotesk',
+  weight: ['400', '600'],
+  style: ['normal', 'italic'],
+  variable: '--font-source-serif',
   display: 'swap',
   preload: false,
 })
@@ -86,10 +82,16 @@ const poppins = Poppins({
 })
 
 /* Applies the saved type choice before first paint, so a page never flashes
-   from one face to another. The live face needs no attribute; any other id
-   from lib/typefaces.ts sets html[data-type] and localStorage keeps it.
-   ?type=<id> overrides and persists. Unknown values are ignored rather than
-   written to the DOM. Nothing runs on the server. */
+   from one setting to another. The live setting needs no attribute; any
+   other id from lib/typefaces.ts sets html[data-type] and localStorage keeps
+   it. ?type=<id> overrides and persists. Unknown values are ignored rather
+   than written to the DOM. Nothing runs on the server.
+
+   PRODUCTION NEVER RUNS IT. The switch is for the preview deployments the
+   client reviews on (Vern, 19 Sept 2026: "a branch that only us and the
+   client can see"); the live site ships one setting and cannot be left on
+   an alternate by a shared link. */
+const TYPE_SWITCH_ENABLED = process.env.NEXT_PUBLIC_VERCEL_ENV !== "production"
 const TYPE_IDS = JSON.stringify(TYPEFACE_IDS)
 const TYPE_BOOT = `(function(){try{var ids=${TYPE_IDS},live='${LIVE_TYPEFACE}';var q=new URLSearchParams(location.search).get('type');if(q&&ids.indexOf(q)>-1){localStorage.setItem('s1-type',q)}var t=q||localStorage.getItem('s1-type');if(t&&t!==live&&ids.indexOf(t)>-1){document.documentElement.setAttribute('data-type',t)}}catch(e){}})();`
 
@@ -125,13 +127,21 @@ export const metadata: Metadata = {
   },
   alternates: { canonical: SITE_URL },
   robots: { index: true, follow: true },
+  // Search Console / Bing ownership tokens, if the client verifies by meta
+  // tag rather than by a DNS TXT record: paste the token into Vercel as
+  // GOOGLE_SITE_VERIFICATION / BING_SITE_VERIFICATION and redeploy. Absent
+  // by default, so nothing renders until one is set.
+  verification: {
+    ...(process.env.GOOGLE_SITE_VERIFICATION ? { google: process.env.GOOGLE_SITE_VERIFICATION } : {}),
+    ...(process.env.BING_SITE_VERIFICATION ? { other: { "msvalidate.01": process.env.BING_SITE_VERIFICATION } } : {}),
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${poppins.variable} ${futura.variable} ${inter.variable} ${jost.variable} ${spaceGrotesk.variable}`}>
+    <html lang="en" className={`${poppins.variable} ${futura.variable} ${inter.variable} ${sourceSerif.variable}`}>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: TYPE_BOOT }} />
+        {TYPE_SWITCH_ENABLED && <script dangerouslySetInnerHTML={{ __html: TYPE_BOOT }} />}
       </head>
       <body className="antialiased">
         <StructuredData />
@@ -140,7 +150,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Footer />
         <MobileStickyCTA />
         <MotionBreath />
-        <TypeToggle />
+        {TYPE_SWITCH_ENABLED && <TypeToggle />}
       </body>
     </html>
   )

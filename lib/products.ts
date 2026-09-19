@@ -8,6 +8,13 @@ export interface Product {
   keyBenefits: string[]
   applications: string[]
   image: string
+  /**
+   * What the hero photograph shows — the surface, the system and the place
+   * where the record carries it (the filename, lib/work-captions.ts or
+   * lib/projects.ts). Never "installed by Square One" unless the record says
+   * the frame is Square One's own.
+   */
+  imageAlt: string
   galleryImages: string[]
   serviceSlug: string
   /**
@@ -26,67 +33,81 @@ export interface Product {
   mark?: "®" | "™"
 }
 
+/*
+ * Copy rules for every entry (the 19 Sept 2026 editorial pass):
+ *   - HUB Surface Systems manufactures; Square One installs. Performance
+ *     figures are HUB's and say so.
+ *   - shortDescription is the meta description (≤ 158 characters through
+ *     clampDescription) and the aside on project pages: system, region,
+ *     one concrete benefit.
+ *   - fullDescription names only places that are on the record in
+ *     lib/projects.ts or lib/work.ts as Square One's own installs.
+ *   - The product's own mark rides the H1; other systems named in the copy
+ *     carry theirs on first mention.
+ */
 export const products: Product[] = [
   {
     slug: "streetprint",
     specs: [
-      { k: "Manufacturer", v: "HUB Surface Systems" },
-      { k: "Method", v: "Heated template imprinted into the asphalt" },
-      { k: "Substrate", v: "New or existing asphalt" },
-      { k: "Service life", v: "10–20 years, published by HUB" },
-      { k: "Surface", v: "Slip-resistant texture, snowplough and salt safe" },
+      { k: "Method", v: "Heated steel template pressed into the asphalt" },
+      { k: "Substrate", v: "New asphalt, or sound existing asphalt" },
+      { k: "Colour", v: "StreetBond coating, rolled into the imprint" },
+      { k: "Service life", v: "10–20 years, published by the manufacturer" },
+      { k: "Surface", v: "Slip-resistant texture; snowplough and de-icing salt safe" },
       { k: "Options", v: "Custom patterns and colours; retroreflective for crosswalks" },
     ],
     mark: "®",
     name: "StreetPrint",
-    tagline: "Stamped asphalt that looks like brick, cobblestone, or custom pattern.",
+    tagline: "Stamped asphalt in brick, cobble or slate — pressed into the asphalt itself.",
     category: "Stamped Asphalt",
     shortDescription:
-      "HUB's decorative asphalt imprinting system, and the one most BC municipalities specify by name. StreetPrint presses ordinary asphalt into patterned, durable surfaces that read as brick, cobble or slate.",
+      "Brick, cobble or slate pressed into the asphalt — the imprinting system Square One installs across the Lower Mainland and Vancouver Island; 10–20 year service life, per the manufacturer.",
     fullDescription:
-      "StreetPrint works by pressing a heated steel template into fresh asphalt, so the brick, cobble, slate or custom pattern is built into the surface rather than painted onto it — there is nothing to peel, and nothing to re-lay. StreetBond colour is then rolled into the imprint. The surface holds its pattern and its colour through wet coastal winters and freeze-thaw cycles inland.",
+      "StreetPrint is an asphalt imprinting system — the regular kind of stamped asphalt Square One installs; TrafficPatternsXD™ is the heavy-duty kind. The asphalt — new, or existing and sound — is reheated and a steel template is pressed into it, so the brick, cobble, slate or custom pattern is part of the surface rather than a layer on top of it: nothing to peel, nothing to re-lay, no demolition and no new base. StreetBond® colour is then rolled into the imprint. The textured surface is slip-resistant and safe for snowploughs and de-icing salt, and the manufacturer publishes a 10–20 year service life for it. Square One installs StreetPrint across the Lower Mainland and Vancouver Island — the school crosswalk at Grandview Heights in Surrey, the parking lot walkways at Ralph's Farm Market in Langley and the pewter herringbone streetscape in Mission are all on the record.",
     keyBenefits: [
+      "10–20 year service life, published by the manufacturer",
       "Slip-resistant textured surface",
-      "10–20 year published service life",
-      "Snowplow and de-icing salt safe",
-      "Custom patterns and colours available",
-      "Retroreflective options for crosswalks",
-      "Minimal road closure time",
+      "Snowplough and de-icing salt safe",
+      "Goes into new or sound existing asphalt — no demolition, no new base",
+      "Custom patterns, coloured with StreetBond",
+      "Retroreflective option for crosswalks",
     ],
-    applications: ["Crosswalks", "Roundabouts", "Traffic Calming", "Decorative Driveways", "Plaza Entries", "Commercial Streetscapes"],
+    applications: ["Crosswalks", "Roundabouts", "Traffic Calming", "Commercial Streetscapes", "Parking Lots", "Plaza Entries", "Decorative Driveways"],
     image: "/images/products/streetprint/streetprint-new-westminster-city-hall-01.jpg",
+    imageAlt: "A red brick-pattern StreetPrint walkway crossing the parking lot to the front doors of New Westminster City Hall",
     galleryImages: ["/images/products/streetprint/streetprint-1.jpg"],
     serviceSlug: "stamped-asphalt",
   },
   {
     slug: "streetbond",
     specs: [
-      { k: "Manufacturer", v: "HUB Surface Systems" },
       { k: "Type", v: "Water-based acrylic pavement coating" },
-      { k: "Substrate", v: "Asphalt or concrete" },
+      { k: "Versions", v: "StreetBond 150; StreetBond SR, solar-reflective" },
+      { k: "Substrate", v: "Asphalt or concrete, each with its own primer" },
       { k: "Colour", v: "50+ standard, custom mixing" },
-      { k: "Life cycle", v: "8+ years, refreshed rather than replaced" },
+      { k: "Life cycle", v: "8+ years, published by the manufacturer; recoated rather than replaced" },
       { k: "Surface", v: "Anti-skid aggregate" },
       { k: "Options", v: "Retroreflective" },
     ],
     mark: "®",
     name: "StreetBond",
-    tagline: "Coloured pavement coating for bike lanes, plazas, courts, and driveways.",
+    tagline: "Coloured pavement coating for bike lanes, plazas, spray parks, courts and driveways.",
     category: "Decorative Coatings",
     shortDescription:
-      "High-performance water-based coating system available in dozens of colours. Anti-skid, UV stable, and engineered for both municipal and residential applications.",
+      "Coloured pavement coating for asphalt and concrete across the Lower Mainland and Vancouver Island — 50+ colours, anti-skid, 8+ year life cycle per the manufacturer.",
     fullDescription:
-      "StreetBond is HUB's coloured pavement coating, specified across North America; we install it across BC for bike lanes, bus priority corridors, driveways, sports courts, and public plazas. The water-based formula keeps application simple, and the anti-skid aggregate holds grip through wet BC winters. Retroreflective options support nighttime visibility where the owner requires it.",
+      "StreetBond is a coloured pavement coating: a UV-stable, water-based acrylic that bonds to asphalt and to concrete, with the appropriate primer for each. It comes in more than fifty standard colours with custom mixing, in two versions — StreetBond 150, and the solar-reflective StreetBond SR — and carries an anti-skid aggregate for wet surfaces, with a retroreflective option where the owner needs night visibility. The manufacturer publishes an 8+ year life cycle, and a worn surface is recoated rather than rebuilt. Square One installs it across the Lower Mainland and Vancouver Island on bike lanes, bus priority corridors, spray parks, plazas, sports courts, school zones and driveways, and as the colour on StreetPrint® stamped asphalt: the Circle of Life plaza at Langley Events Centre, the public art at Joyce Station in Vancouver, the spray parks in Maple Ridge and Burnaby and a decorative fire lane in North Vancouver are on the record.",
     keyBenefits: [
-      "50+ standard colours + custom mixing",
+      "50+ standard colours, plus custom mixing",
       "Anti-skid aggregate for wet surfaces",
-      "UV-stable acrylic — 8+ year life cycle, easily refreshed",
-      "Retroreflective options available",
-      "Eco-friendly water-based formula",
-      "Works on asphalt and concrete",
+      "8+ year life cycle, published by the manufacturer — recoated, not rebuilt",
+      "UV-stable, water-based acrylic",
+      "Bonds to asphalt and concrete, with the right primer for each",
+      "Retroreflective and solar-reflective (SR) versions",
     ],
-    applications: ["Bike Lanes", "Bus Priority Corridors", "Decorative Driveways", "Sports Courts", "Plazas", "School Zones", "Parking Lots"],
+    applications: ["Bike Lanes", "Bus Priority Corridors", "Spray Parks", "Plazas", "Sports Courts", "School Zones", "Parking Lots", "Decorative Driveways"],
     image: "/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg",
+    imageAlt: "Multicolour StreetBond plaza in stripes of yellow, orange, red and green under the SkyTrain guideway at Joyce Station, Vancouver, at dusk",
     galleryImages: [
       "/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg",
       "/images/products/streetbond/streetbond-multicolour-plaza-green-circles-01.jpg",
@@ -98,39 +119,39 @@ export const products: Product[] = [
   {
     slug: "trafficpatterns",
     specs: [
-      { k: "Manufacturer", v: "HUB Surface Systems" },
       { k: "Type", v: "Preformed thermoplastic, heat-fused to the pavement" },
       { k: "Thickness", v: "125 mil" },
       { k: "Surface", v: "Anti-skid elements throughout the sheet" },
       { k: "Return to traffic", v: "Minutes after application" },
+      { k: "Design", v: "Patterns, borders and custom artwork, cut to the drawing" },
       { k: "Made to", v: "The owner's marking standard" },
     ],
     mark: "™",
     name: "TrafficPatterns",
-    tagline: "Decorative preformed thermoplastic for crosswalks and pedestrian zones.",
+    tagline: "Decorative preformed thermoplastic for crosswalks, transit stops and pedestrian zones.",
     category: "Thermoplastic",
     shortDescription:
-      "Preformed thermoplastic patterns that combine visual interest with high-durability road marking performance. No spray drift, no inconsistency.",
+      "Decorative preformed thermoplastic for crosswalks, heat-fused in place across the Lower Mainland and Vancouver Island — open to traffic in minutes.",
     fullDescription:
-      "TrafficPatterns preformed thermoplastic delivers decorative crosswalk, transit stop, and pedestrian zone markings with precision impossible to achieve with spray paint. Each element is manufactured to specification and heat-fused to the pavement surface for a bond that lasts. Available in a wide range of colours and patterns.",
+      "TrafficPatterns is a decorative preformed thermoplastic. Each sheet is manufactured to the design — a brick pattern, a border, an artist's crosswalk, a community graphic — and cut before it reaches the site, so the placement is precise and there is no spray drift or overspray. Square One heat-fuses the 125-mil sheets to the pavement, and the crossing is open to traffic within minutes of application. Anti-skid elements run through the whole sheet, and the colours and symbols follow the owner's marking standard. It is the system behind decorative crosswalks, transit stop platforms and pedestrian zones across the Lower Mainland and Vancouver Island, including the UBC and Musqueam crosswalk on University Boulevard, the Musqueam crossing on Granville Street, the artist-designed crosswalk in White Rock and the Every Child Matters crossing in New Westminster.",
     keyBenefits: [
-      "No spray drift or overspray",
-      "Precise placement every time",
-      "Anti-skid elements throughout the 125-mil sheet",
+      "Manufactured to the design — precise placement, no overspray",
       "Open to traffic within minutes of application",
-      "Made to the owner's marking standard",
-      "Fast installation, minimal downtime",
+      "Anti-skid elements throughout the 125-mil sheet",
+      "Colours and symbols to the owner's marking standard",
+      "Patterns, borders and custom artwork",
+      "Heat-fused to the pavement in place — short closures",
     ],
-    applications: ["Decorative Crosswalks", "Transit Stop Platforms", "Pedestrian Zones", "School Entrances", "Plaza Accents"],
+    applications: ["Decorative Crosswalks", "Transit Stop Platforms", "Pedestrian Zones", "School Entrances", "Plaza Accents", "Public Art"],
     image: "/images/products/traffic-patterns/trafficpatterns-ubc-musqueam-plate-01.jpg",
+    imageAlt: "Musqueam artwork in blue, green and gold TrafficPatterns thermoplastic on the crosswalk beside the UBC letters on University Boulevard, Vancouver",
     galleryImages: ["/images/products/traffic-patterns/trafficpatterns-1.jpg"],
     serviceSlug: "preformed-thermoplastic",
   },
   {
     slug: "trafficpatterns-xd",
     specs: [
-      { k: "Manufacturer", v: "HUB Surface Systems" },
-      { k: "Type", v: "Preformed thermoplastic, heat-fused to the pavement" },
+      { k: "Type", v: "Aggregate-reinforced preformed thermoplastic, heated and stamped into the asphalt" },
       { k: "Thickness", v: "150 mil — 125 mil on standard TrafficPatterns" },
       { k: "Substrate", v: "Prepared asphalt" },
       { k: "Surface", v: "New anti-skid elements exposed as the sheet wears" },
@@ -138,60 +159,68 @@ export const products: Product[] = [
     ],
     mark: "™",
     name: "TrafficPatternsXD",
-    tagline: "Heavy-duty thermoplastic for high-traffic intersections and transit corridors.",
-    category: "Thermoplastic",
+    tagline: "The heavy-duty kind of stamped asphalt — for the busiest intersections and transit corridors.",
+    // Sold beside StreetPrint as the second kind of stamped asphalt (Jan, via
+    // the client's review, 10 and 19 Sept 2026): StreetPrint is the regular
+    // system, TrafficPatternsXD the durable one. What it is made of stays
+    // exact in the specs and the copy — a preformed thermoplastic, heated
+    // and stamped into the top of the asphalt rather than pressed from it.
+    category: "Stamped Asphalt",
     shortDescription:
-      "Extra-durable version of TrafficPatterns engineered for the highest-wear environments — major intersections, transit hubs, and arterial crosswalks.",
+      "Heavy-duty stamped asphalt across the Lower Mainland and Vancouver Island: 150-mil aggregate-reinforced thermoplastic, heated and stamped into the asphalt.",
     fullDescription:
-      "TrafficPatternsXD is the heavy-duty version of TrafficPatterns: 150-mil sheets instead of 125, positioned on prepared asphalt and heat-fused, for BC's busiest intersections and transit corridors where the standard material would wear faster. As the surface wears, new anti-skid elements are exposed.",
+      "Square One installs two kinds of stamped asphalt. StreetPrint® presses the pattern into the asphalt itself; TrafficPatternsXD is the heavy-duty alternative from the same manufacturer — 150-mil aggregate-reinforced preformed thermoplastic sheets, 25 mil thicker than standard TrafficPatterns™, heated and stamped into the top layer of prepared asphalt. As the surface wears, new anti-skid elements are exposed. It takes the same patterns, borders and colours as TrafficPatterns, and it is the material Square One puts down where the traffic is heaviest across the Lower Mainland and Vancouver Island: the rainbow intersection in Nanaimo, the railroad-inspired crosswalk in the City of Langley, the Brighouse Station crossings in Richmond, the Little Italy crosswalks on Commercial Drive, the White Rock Pier crosswalk and the Granville Island crosswalk, photographed two years on.",
     keyBenefits: [
-      "150-mil sheets — heavier than standard TrafficPatterns",
-      "New anti-skid elements exposed as the material wears",
-      "Fast installation, minimal traffic downtime",
+      "150-mil sheets — 25 mil heavier than standard TrafficPatterns",
+      "New anti-skid elements exposed as the surface wears",
+      "Heated and stamped into the asphalt",
       "Same patterns, borders and colours as TrafficPatterns",
-      "Built for transit hubs and major intersections",
+      "Fast installation, short traffic closures",
+      "For transit hubs, arterial crosswalks and major intersections",
     ],
-    applications: ["Major Intersections", "Transit Hubs", "Arterial Crosswalks", "Bus Stops", "High-Volume Pedestrian Zones"],
-    image: "/images/hero/white-rock-marine-drive-wave-crosswalk.jpg",
+    applications: ["Major Intersections", "Arterial Crosswalks", "Transit Hubs", "Bus Stops", "Traffic Calming", "High-Volume Pedestrian Zones"],
+    image: "/images/applications/crosswalks/langley-railways-crossing-at-the-heritage-block-trafficpatternsxd-01.jpg",
+    imageAlt: "Artist-designed crosswalk of waves, sand and sky on Marine Drive, White Rock, with yellow tactile plates at the curb and red brick-pattern curb extensions either side",
     galleryImages: ["/images/products/traffic-patterns-xd/trafficpatterns-xd-1.jpg"],
-    serviceSlug: "preformed-thermoplastic",
+    serviceSlug: "stamped-asphalt",
   },
   {
     slug: "decomark",
     specs: [
-      { k: "Manufacturer", v: "HUB Surface Systems" },
       { k: "Type", v: "Preformed thermoplastic, heat-fused to the pavement" },
-      { k: "Artwork", v: "Fully custom — logos, emblems, wayfinding symbols" },
+      { k: "Artwork", v: "Fully custom — logos, emblems, wayfinding symbols, artist's designs" },
       { k: "Colour", v: "Full spectrum" },
       { k: "Durability", v: "As standard thermoplastic" },
     ],
+    mark: "®",
     name: "DecoMark",
     tagline: "Custom decorative graphics and logos in preformed thermoplastic.",
     category: "Thermoplastic",
     shortDescription:
-      "Fully custom preformed thermoplastic graphics — municipality logos, school mascots, wayfinding icons, and any complex design imaginable.",
+      "Custom preformed thermoplastic — logos, emblems and artwork heat-fused into the pavement across the Lower Mainland and Vancouver Island.",
     fullDescription:
-      "DecoMark takes preformed thermoplastic beyond standard crosswalk patterns into fully custom graphic territory. Community logos, school district emblems, wayfinding symbols, and complex artistic designs can be reproduced in thermoplastic with the same durability as standard road markings. Used extensively for community identity projects across Canada.",
+      "DecoMark is a custom preformed thermoplastic. The artwork is fully custom — a municipal logo, a school emblem, a wayfinding or accessibility symbol, an artist's design — cut in a full spectrum of colour and heat-fused to the pavement with the durability of standard thermoplastic. Square One installs it across the Lower Mainland and Vancouver Island for community branding, school grounds and public art: the Little Italy branding on Commercial Drive in Vancouver, the oak-leaf sidewalk decals at Reunion in Murrayville, the sensory play pathway at South Langford Elementary and the whorl and canoes at Victoria High School are on the record.",
     keyBenefits: [
-      "Any custom design or logo",
-      "Full colour spectrum available",
+      "Fully custom artwork — logos, emblems, wayfinding symbols",
+      "Full colour spectrum",
       "Same durability as standard thermoplastic",
-      "Used for community identity projects",
-      "Wayfinding and accessibility symbol options",
+      "Heat-fused to the pavement",
+      "Community branding, school and public art projects across BC",
+      "Wayfinding and accessibility symbols",
     ],
-    applications: ["Community Logos", "School Zone Graphics", "Wayfinding Symbols", "Public Art", "Event Markings"],
+    applications: ["Branding & Wayfinding", "Community Logos", "School Zone Graphics", "Public Art", "Parks & Paths", "Event Markings"],
     image: "/images/products/decomark/decomark-victoria-harbour-01.jpg",
+    imageAlt: "A DecoMark sun emblem in orange on a white disc, set into a grey stone-pattern surface under a timber play structure at Victoria harbour",
     galleryImages: ["/images/products/decomark/decomark-1.jpg"],
     serviceSlug: "preformed-thermoplastic",
   },
   {
     slug: "durashield",
     specs: [
-      { k: "Manufacturer", v: "HUB Surface Systems" },
       { k: "Type", v: "Two-component waterborne epoxy-modified acrylic" },
       { k: "Substrate", v: "Asphalt" },
       { k: "Finish", v: "Black or Solar Gray" },
-      { k: "Solar reflectance", v: "0.33 initial, Solar Gray" },
+      { k: "Solar reflectance", v: "0.33 initial, Solar Gray, per the manufacturer" },
       { k: "VOC", v: "Low; no unpleasant odour during installation" },
       { k: "End of life", v: "Recyclable with the asphalt" },
     ],
@@ -199,19 +228,20 @@ export const products: Product[] = [
     tagline: "Two-component asphalt maintenance coating — black or solar-reflective grey.",
     category: "Surface Protection",
     shortDescription:
-      "HUB's waterborne epoxy-modified acrylic maintenance coating for asphalt. It protects the pavement from UV oxidation, resists chemicals and gives tired asphalt a uniform finish — in black or Solar Gray.",
+      "Asphalt maintenance coating, black or Solar Gray, shielding asphalt from UV oxidation — installed across the Lower Mainland and Vancouver Island.",
     fullDescription:
-      "DuraShield Pavement Coating is a two-component waterborne epoxy-modified acrylic formulated as an asphalt pavement maintenance coating — primarily for parking lots, and used on driveways, pathways, raised medians and pedestrian plazas. It balances flexibility, adhesion, colour stability and chemical resistance to preserve the asphalt while shielding it from UV oxidation. The Solar Gray version has an initial solar reflectance of 0.33, which keeps pavement cooler and helps mitigate urban heat island effects.",
+      "DuraShield Pavement Coating is an asphalt maintenance coating: a two-component waterborne epoxy-modified acrylic formulated to preserve the asphalt beneath it — flexibility, adhesion, colour stability and chemical resistance in one coat — while shielding it from UV oxidation. It is made primarily for parking lots, and goes on driveways, pathways, raised medians and pedestrian plazas as well, with a friction level suited to pedestrian and vehicle traffic. It comes in black or in Solar Gray, which the manufacturer rates at an initial solar reflectance of 0.33 to keep the pavement cooler and reduce the urban heat island effect. It is low in VOCs, has no unpleasant odour during installation, and is recyclable with the asphalt at the end of its life. Square One installs it across the Lower Mainland and Vancouver Island.",
     keyBenefits: [
-      "Protects asphalt from UV oxidation",
-      "Excellent chemical resistance",
-      "Black or Solar Gray (initial SR 0.33) finish",
+      "Shields asphalt from UV oxidation",
+      "Black or Solar Gray — initial solar reflectance 0.33, per the manufacturer",
+      "Chemical resistance, flexibility and adhesion in one coat",
       "Friction suited to pedestrian and vehicle traffic",
-      "Low VOC, no unpleasant odour during installation",
-      "Fully recyclable with asphalt",
+      "Low VOC — no unpleasant odour during installation",
+      "Recyclable with the asphalt",
     ],
-    applications: ["Parking Lots", "Residential Driveways", "Pathways", "Raised Medians", "Pedestrian Plazas", "Pavement Restoration"],
+    applications: ["Parking Lots", "Residential Driveways", "Pathways", "Raised Medians", "Pedestrian Plazas"],
     image: "/images/products/durashield/durashield-rejuvenated-driveway-02.jpg",
+    imageAlt: "A residential driveway freshly coated black with DuraShield, running up to a carport beside a shrub garden",
     galleryImages: [
       "/images/products/durashield/durashield-parking-lot-sealcoat-01.jpg",
       "/images/products/durashield/durashield-residential-driveway-01.jpg",
@@ -221,58 +251,62 @@ export const products: Product[] = [
   {
     slug: "duratherm",
     specs: [
-      { k: "Manufacturer", v: "HUB Surface Systems" },
       { k: "Type", v: "Thermoplastic pavement marking" },
       { k: "Application", v: "Inset or surface-applied" },
       { k: "Substrate", v: "Asphalt or concrete" },
       { k: "Optics", v: "Retroreflective" },
       { k: "Standards", v: "TAC shapes and legends" },
     ],
+    mark: "®",
     name: "DuraTherm",
-    tagline: "Standard thermoplastic road markings built for long service life.",
+    tagline: "Thermoplastic road markings — stop bars, arrows and legends, inset or surface-applied.",
     category: "Thermoplastic",
     shortDescription:
-      "Thermoplastic pavement markings for stop bars, arrows, legends and lane lines — retroreflective, and a service life well beyond paint.",
+      "Thermoplastic road marking — retroreflective, inset or surface-applied on asphalt and concrete across the Lower Mainland and Vancouver Island.",
     fullDescription:
-      "DuraTherm is the workhorse thermoplastic marking product for arrows, stop bars, crosswalk bars, legends, and zone markings. Applied using inset or surface-applied methods, DuraTherm provides the retroreflectivity and durability that BC municipalities demand, with a service life well beyond painted markings.",
+      "DuraTherm is a thermoplastic pavement marking for the markings a road cannot do without: stop bars, turn arrows, crosswalk bars, speed legends, lane lines and zone markings, in TAC-standard shapes and legends. It is applied inset into the pavement or on the surface, on asphalt or concrete, and it is retroreflective; the manufacturer puts its service life well beyond painted markings. Square One installs it across the Lower Mainland and Vancouver Island, for standard markings and for decorative crosswalks — the St. Paul's Hospital crossing on Comox Street in Vancouver and crosswalks in Maple Ridge and Chilliwack are on the record.",
     keyBenefits: [
-      "Superior retroreflectivity vs. paint",
-      "Inset or surface-applied options",
-      "Works on asphalt and concrete",
+      "Retroreflective — night visibility built in",
+      "Inset or surface-applied",
+      "Asphalt or concrete",
       "TAC-standard shapes and legends",
-      "Resistant to BC freeze-thaw cycles",
+      "Service life well beyond paint, per the manufacturer",
+      "Standard markings and decorative crosswalks",
     ],
-    applications: ["Stop Bars", "Turn Arrows", "Crosswalk Bars", "Speed Legends", "Lane Lines", "Yield Triangles"],
+    applications: ["Decorative Crosswalks", "Stop Bars", "Turn Arrows", "Crosswalk Bars", "Speed Legends", "Lane Lines", "Yield Triangles"],
     image: "/images/products/duratherm/duratherm-maple-ridge-crosswalk-01.jpg",
+    imageAlt: "Black and white circle-pattern DuraTherm crosswalks meeting at a signalled intersection in Maple Ridge, wet after rain",
     galleryImages: ["/images/products/duratherm/duratherm-1.jpg"],
     serviceSlug: "preformed-thermoplastic",
   },
   {
     slug: "premark",
     specs: [
-      { k: "Manufacturer", v: "HUB Surface Systems" },
       { k: "Type", v: "Preformed thermoplastic, heat-applied" },
       { k: "Substrate", v: "Asphalt or concrete" },
       { k: "Optics", v: "Embedded retroreflective glass beads" },
       { k: "Tolerance", v: "Manufactured to exact dimensions — no irregular edges" },
       { k: "Standards", v: "TAC arrows, legends and symbols" },
     ],
+    mark: "®",
     name: "PreMark",
-    tagline: "Preformed thermoplastic arrows, legends, and symbols — fast installation.",
+    tagline: "Preformed thermoplastic arrows, legends, bicycle symbols and green bike-lane markings.",
     category: "Thermoplastic",
     shortDescription:
-      "Industry-standard preformed thermoplastic pavement markings for arrows, symbols, and legends. Consistent quality, fast deployment, long service life.",
+      "Preformed thermoplastic arrows, legends and symbols, cut to exact dimensions and heat-applied across the Lower Mainland and Vancouver Island.",
     fullDescription:
-      "PreMark preformed thermoplastic markings are manufactured to exact dimensions for arrows, legends, symbols, and specialty markings used on BC roads. Unlike spray-applied alternatives, PreMark ensures dimensional consistency every time — no irregular edges, no spray overspray. Heat-applied to pavement for a permanent bond with embedded retroreflective glass beads.",
+      "PreMark is a preformed thermoplastic for the symbols and legends on BC roads: turn arrows, speed legends, bicycle and accessible-parking symbols, school zone and bus stop markings, in TAC-standard shapes. Every piece is manufactured to exact dimensions, so there are no irregular edges and no overspray, and it is heat-applied to asphalt or concrete with retroreflective glass beads embedded in the material — faster to install than spray marking. Square One installs it across the Lower Mainland and Vancouver Island, on its own and alongside green bike lanes and TrafficPatterns™ crossings.",
     keyBenefits: [
-      "Consistent dimensions — no irregular edges",
+      "Manufactured to exact dimensions — no irregular edges, no overspray",
       "Embedded retroreflective glass beads",
-      "Faster installation than spray marking",
-      "Available in all standard arrow/legend types",
+      "Heat-applied to asphalt or concrete",
       "TAC-standard arrows, legends and symbols",
+      "Faster to install than spray marking",
+      "Bicycle symbols and green bike-lane markings",
     ],
-    applications: ["Turn Arrows", "Speed Legends", "Bicycle Symbols", "Accessible Parking Symbols", "School Zone Markings", "Bus Stop Markings"],
+    applications: ["Turn Arrows", "Speed Legends", "Bicycle Symbols", "Bike Lanes", "Accessible Parking Symbols", "School Zone Markings", "Bus Stop Markings"],
     image: "/images/products/premark/premark-north-vancouver-green-bike-lane-01.jpg",
+    imageAlt: "A white bicycle symbol in PreMark preformed thermoplastic being heat-applied to a green bike lane in North Vancouver, the heater rig over the marking",
     galleryImages: [
       "/images/products/premark/premark-arrows-installation-intersection-01.jpg",
       "/images/products/premark/roadway-turn-arrows-pavement-marking-01.jpg",

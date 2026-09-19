@@ -18,7 +18,7 @@ import DocPreviewModal, { type PreviewTarget } from "@/components/documents/DocP
  *   Rows      page one of the document as a thumbnail (pre-rendered, see
  *             lib/doc-previews), the document, its system · type · size,
  *             and two actions: Preview (opens the page in place, with
- *             Download / Open / HUB's current edition) and Download
+ *             Download / Open) and Download
  *             (same-origin /docs/, so `download` is honoured)
  *
  * Browsing is grouped by system with a sticky heading per group; a type
@@ -145,7 +145,7 @@ export default function ResourceLibrary({ groups }: { groups: ResourceGroup[] })
           </ul>
 
           <p className="mt-9 max-w-[26ch] text-[13px] leading-[1.6] text-[color:var(--ink-muted)]">
-            Preview opens page one of the document. Where HUB Surface Systems keeps a current edition online, the preview links to it.
+            Preview opens page one of the document. The PDF carries the full document.
           </p>
         </div>
       </aside>

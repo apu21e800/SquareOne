@@ -2,9 +2,9 @@ import Image from "next/image"
 import Link from "next/link"
 
 /**
- * Audience band — the hubss.com persona-routing move, ordered by the
- * business hierarchy (canon, 30 Aug): municipal/commercial owners lead,
- * homeowners close. Carries no ghost-index — like StatsBar and
+ * Audience band — the persona-routing move, ordered by the business
+ * hierarchy (canon, 30 Aug): municipal/commercial owners lead, homeowners
+ * close. Carries no ghost-index — like StatsBar and
  * EditorialBand it sits between the numbered content sections.
  *
  * Rebuilt 11 Sept 2026 (Vern: the photo-plus-white-box cards were "the
@@ -21,38 +21,48 @@ import Link from "next/link"
  * cards"). The card is now a flex column with a min-height: it keeps the
  * tall look when copy is short and grows when it is not. A fixed aspect box
  * with absolutely positioned copy inside it is the bug — do not reintroduce.
+ *
+ * 19 Sept 2026 (evening ruling: the site sells the service, to specifiers)
+ * — specifier-first. The people who draw it lead, the people who build it
+ * follow, homeowners close. The Langley crosswalk stays on the first card
+ * (a design drawn, then installed as drawn); the second card's townhome
+ * laneway gave way to the Spirit Trail crossing in West Vancouver with the
+ * crew on site, because that card is about crews and keeping a road open.
+ * Every line is on record: the pattern library, the colour chart, the
+ * specification library, the free site walk, Square One's own crews, the
+ * warranty split (app/about, app/patterns, app/resources).
  */
 const audiences = [
   {
-    label: "Cities & municipalities",
-    desc: "Crosswalks, transit lanes, plazas and parks — specified to survive tenders, plows and BC winters.",
-    chips: ["Crosswalks", "Transit lanes", "Parks & plazas"],
-    href: "/applications",
-    cta: "See municipal work",
+    label: "Specifiers",
+    desc: "Landscape architects and engineers: template sheets, the colour chart, specifications and sample boards at the site walk — what you need to draw it and put it to tender.",
+    chips: ["Template sheets", "Colour chart", "Specifications"],
+    href: "/specifiers",
+    cta: "For specifiers",
     image: "/images/S1_update_v2/photos/Featured%20image%20options/Photo-2025-03-07-2-54-05-PM-scaled.jpg",
-    alt: "Railroad-inspired TrafficPatternsXD crosswalk in the City of Langley, installed by Square One",
+    alt: "Rail ties in tan TrafficPatternsXD thermoplastic set into dark stamped asphalt — the railroad-inspired crosswalk in the City of Langley",
     caption: "City of Langley · TrafficPatternsXD",
     position: "center 60%",
   },
   {
-    label: "Commercial & strata",
-    desc: "Parking areas, retail thresholds and strata lanes that keep their colour under daily traffic.",
-    chips: ["Parking lots", "Entrances", "Strata lanes"],
-    href: "/applications/parking-lots",
-    cta: "See commercial work",
-    image: "/images/S1_update_v2/photos/Featured%20image%20options/Photo-2023-09-29-4-48-15%E2%80%AFPM-1-scaled.jpg",
-    alt: "Ashlar slate StreetPrint laneway at a townhome development, installed by Square One",
-    caption: "Townhome laneway · StreetPrint",
+    label: "Owners & contractors",
+    desc: "Municipalities, developers and general contractors: a site walk, a written quote, installation by Square One's own crews to the published specification, and the workmanship warranted.",
+    chips: ["Site walk", "Own crews", "Workmanship warranty"],
+    href: "/services",
+    cta: "See the services",
+    image: "/images/applications/crosswalks/richmond-crossing-with-tactile-edge-trafficpatternsxd-01.jpg",
+    alt: "A TrafficPatternsXD crossing with a yellow tactile edge between towers in Richmond, installed by Square One",
+    caption: "Richmond · TrafficPatternsXD",
     position: "center 55%",
   },
   {
     label: "Homeowners",
-    desc: "Stamped driveways for Victoria and Vancouver homes — brick, cobble and slate, over the asphalt you already have.",
-    chips: ["Driveways", "Walkways", "Patios"],
+    desc: "Stamped asphalt driveways for Vancouver and Victoria homes — brick, cobble and slate patterns pressed into the asphalt you already have.",
+    chips: ["Driveways", "Walkways", "Laneways"],
     href: "/driveways",
     cta: "Explore driveways",
     image: "/images/S1_update_v2/photos/Driveways/Number%201.jpg",
-    alt: "Ashlar slate StreetPrint driveway installed by Square One",
+    alt: "Grey ashlar slate StreetPrint stamped asphalt driveway in front of a three-car garage, installed by Square One",
     caption: "Ashlar slate · StreetPrint driveway",
     position: "center 70%",
   },
@@ -64,12 +74,14 @@ export default function AudienceBand() {
       <div className="container-1280">
         <div data-reveal className="flex flex-wrap items-end justify-between gap-6">
           <div>
-            <p className="eyebrow">Who we build for</p>
-            <h2 className="mt-5">Three kinds of owner, one standard of work</h2>
+            <p className="eyebrow">Who we work for</p>
+            <h2 className="mt-5">Specifiers, owners, homeowners</h2>
           </div>
           <p className="max-w-[40ch] text-[15px] leading-[1.6] text-ink-muted">
-            Same crews, same manufacturer&rsquo;s specification, whether the job is a transit
-            corridor or a forty-foot driveway.
+            Drawings and specifications for the people who draw it, a site walk and a written
+            quote for the people who build it, and the same crews and the same published
+            specification for a forty-foot driveway &mdash; across the Lower Mainland and
+            Vancouver Island.
           </p>
         </div>
 
@@ -79,54 +91,39 @@ export default function AudienceBand() {
               key={audience.label}
               href={audience.href}
               data-reveal
-              className="group relative block overflow-hidden rounded-[2px] bg-surface-stone"
+              className="card group flex flex-col overflow-hidden rounded-[2px] border border-hairline bg-surface"
             >
-              <Image
-                src={audience.image}
-                alt={audience.alt}
-                fill
-                sizes="(max-width: 900px) 100vw, (max-width: 1280px) 33vw, 411px"
-                className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-                style={{ objectPosition: audience.position }}
-              />
-              <div aria-hidden className="scrim-cap" />
-              <div aria-hidden className="scrim-rise" />
+              {/* 19 Sept 2026 (Vern: "make sure all text is readable if it's on
+                  images, or find a better solution"). The better solution: the
+                  photograph is the top of the card and carries only its
+                  caption; every word sits on the solid panel below it. No
+                  scrim has to win against a busy frame. */}
+              <div className="relative aspect-[4/3] overflow-hidden bg-surface-stone">
+                <Image
+                  src={audience.image}
+                  alt={audience.alt}
+                  fill
+                  sizes="(max-width: 900px) 100vw, (max-width: 1280px) 33vw, 411px"
+                  className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                  style={{ objectPosition: audience.position }}
+                />
+                <div aria-hidden className="scrim scrim-light" />
+                <div className="caption">{audience.caption}</div>
+              </div>
 
-              {/* The card is a flex column, not a fixed aspect box with text
-                  floated over it. min-height keeps the tall proportion when
-                  the copy is short; when the copy is long — a wide one-column
-                  card on a tablet, or a large type setting — the card grows
-                  instead of letting the block slide up under the label.
-                  The label is the first flex child and the copy carries
-                  mt-auto, so the two can never occupy the same space. */}
-              <div className="relative z-[1] flex min-h-[500px] flex-col max-[900px]:min-h-[360px] max-[560px]:min-h-[440px]">
-                <span
-                  className="px-5 pt-4 text-right text-[11px] font-semibold uppercase tracking-[0.1em] text-white/90"
-                  style={{ fontFamily: "var(--font-display)" }}
-                >
-                  {audience.caption}
+              <div className="flex flex-1 flex-col p-7 max-[700px]:p-5">
+                <h3 className="text-[22px] leading-[1.15] text-ink max-[700px]:text-[20px]">{audience.label}</h3>
+                <p className="mt-3 max-w-[40ch] text-[14.5px] leading-[1.55] text-ink-body">{audience.desc}</p>
+                <ul className="mt-4 flex flex-wrap gap-2">
+                  {audience.chips.map((chip) => (
+                    <li key={chip} className="tag">
+                      {chip}
+                    </li>
+                  ))}
+                </ul>
+                <span className="arrow-link mt-auto pt-6">
+                  {audience.cta} <span aria-hidden="true">&rarr;</span>
                 </span>
-
-                <div className="mt-auto p-7 max-[700px]:p-5">
-                  <h3 className="text-[22px] leading-[1.15] text-white max-[700px]:text-[20px]">{audience.label}</h3>
-                  <p className="mt-3 max-w-[40ch] text-[14.5px] leading-[1.55] text-white/85">{audience.desc}</p>
-                  <ul className="mt-4 flex flex-wrap gap-2">
-                    {audience.chips.map((chip) => (
-                      <li
-                        key={chip}
-                        className="rounded-[2px] border border-white/25 bg-white/10 px-[9px] py-[4px] text-[11.5px] font-semibold tracking-[0.04em] text-white backdrop-blur-[2px]"
-                      >
-                        {chip}
-                      </li>
-                    ))}
-                  </ul>
-                  <span className="mt-5 inline-flex items-center gap-2 text-[13px] font-semibold uppercase tracking-[0.1em] text-white" style={{ fontFamily: "var(--font-display)" }}>
-                    {audience.cta}
-                    <span aria-hidden="true" className="transition-transform duration-200 group-hover:translate-x-1">
-                      &rarr;
-                    </span>
-                  </span>
-                </div>
               </div>
             </Link>
           ))}

@@ -1,7 +1,7 @@
 import Image from "next/image"
 import ProjectCaption from "@/components/ui/ProjectCaption"
 import Link from "next/link"
-import { getFeaturedProjects, projects } from "@/lib/projects"
+import { getFeaturedProjects } from "@/lib/projects"
 
 /** "Vancouver, BC" → "Vancouver" — the caption carries the city, not the province. */
 function cityName(city: string): string {
@@ -38,8 +38,10 @@ export default function ProjectsPreview() {
             </div>
             <h2 className="mt-5">Selected work</h2>
           </div>
+          {/* No project count here: a published count reads as a ceiling on
+              the work (the client, 10 Sept 2026: "we have done 1000s of jobs"). */}
           <Link href="/projects" className="arrow-link whitespace-nowrap">
-            All {projects.length} projects <span>&rarr;</span>
+            All projects <span>&rarr;</span>
           </Link>
         </div>
 
@@ -51,6 +53,10 @@ export default function ProjectsPreview() {
               .filter((part): part is string => Boolean(part))
               .join(" · ")
 
+            // What the photograph shows, from the record: the project, the
+            // system installed and the place.
+            const alt = `${project.title} — ${project.systems.join(" and ")} installed by Square One in ${project.city}`
+
             return (
               <Link
                 key={project.slug}
@@ -60,7 +66,7 @@ export default function ProjectsPreview() {
               >
                 <Image
                   src={src}
-                  alt={project.title}
+                  alt={alt}
                   fill
                   sizes="(max-width: 700px) 100vw, (max-width: 1280px) 50vw, 616px"
                   className="object-cover"

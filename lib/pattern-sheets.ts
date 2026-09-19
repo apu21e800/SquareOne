@@ -48,19 +48,19 @@ export interface PatternSheet {
 export const PATTERN_SHEETS: PatternSheet[] = [
   // ── Fields ────────────────────────────────────────────────────────────
   { slug: "herringbone", name: "Standard Herringbone", note: "The classic interlock — strongest visual texture per pass", kind: "field", offered: true },
-  { slug: "diagonal-herringbone", name: "Diagonal Herringbone", note: "45° set — dynamic movement across the surface", kind: "field", offered: false },
+  { slug: "diagonal-herringbone", name: "Diagonal Herringbone", note: "45° set — dynamic movement across the surface", kind: "field", offered: true },
   { slug: "herringbone-stacked-border", name: "Herringbone + Stacked Border", note: "Standard field with a stacked-brick frame", kind: "field", offered: true, squareOneName: "Stacked Brick border" },
-  { slug: "herringbone-tile-border", name: "Herringbone + Tile Border", note: "Standard field with a square-tile frame", kind: "field", offered: false },
-  { slug: "diagonal-herringbone-tile-border", name: "Diagonal Herringbone + Tile Border", note: "Diagonal field, framed", kind: "field", offered: false },
+  { slug: "herringbone-tile-border", name: "Herringbone + Tile Border", note: "Standard field with a square-tile frame", kind: "field", offered: true },
+  { slug: "diagonal-herringbone-tile-border", name: "Diagonal Herringbone + Tile Border", note: "Diagonal field, framed", kind: "field", offered: true },
   { slug: "offset-brick", name: "Offset Brick", note: "Running bond — the street-brick standard", kind: "field", offered: true },
   { slug: "offset-brick-border", name: "Offset Brick + Border", note: "Running bond with a soldier-course frame", kind: "field", offered: true, squareOneName: "Soldier Course border" },
   { slug: "ashlar-slate", name: "Ashlar Slate", note: "Mixed-size cut stone — natural randomness", kind: "field", offered: true },
-  { slug: "british-cobble", name: "British Cobble", note: "Tight sett-stone texture", kind: "field", offered: false },
+  { slug: "british-cobble", name: "British Cobble", note: "Tight sett-stone texture", kind: "field", offered: true },
   { slug: "tiles-6in", name: "6″ Tiles", note: "Fine square grid", kind: "field", offered: true, squareOneName: "Standard Tile" },
-  { slug: "tiles-8in", name: "8″ Tiles", note: "Standard square grid", kind: "field", offered: false },
+  { slug: "tiles-8in", name: "8″ Tiles", note: "Standard square grid", kind: "field", offered: true },
   { slug: "offset-tile-8in", name: "8″ Offset Tile", note: "Square tile, running-bond offset", kind: "field", offered: true, squareOneName: "Offset Tile" },
   // ── Borders ───────────────────────────────────────────────────────────
-  { slug: "double-tile-border", name: "Double Tile Border", note: "Two-course tile edging", kind: "border", offered: false },
+  { slug: "double-tile-border", name: "Double Tile Border", note: "Two-course tile edging", kind: "border", offered: true },
   { slug: "flexible-tile-border", name: "Flexible Tile Border", note: "Tile edging that follows curves", kind: "border", offered: true, squareOneName: "Texas Cobble" },
 ]
 

@@ -1,4 +1,5 @@
-import { CLIENTS } from "@/lib/clients"
+import Link from "next/link"
+import { WORK_APPS } from "@/lib/work"
 import { fitVars } from "@/lib/type"
 
 /**
@@ -25,6 +26,12 @@ import { fitVars } from "@/lib/type"
  * "Installed at" and the caption claims the ground and not the contract —
  * the sites carry the work, whoever held the paper. If she still wants the
  * band gone after seeing it, it is one component and comes out clean.
+ *
+ * 19 Sept 2026: she does — "we have to remove this section before I confirm
+ * who we have actually worked for." The names are out until she confirms
+ * the list (lib/clients.ts keeps it). In their place, the index the band was
+ * always for: the ten kinds of work, each a link to its gallery — which is
+ * what Jan shows clients. Swapping the names back is one import.
  */
 export default function EditorialBand({ statement = "Twenty-five years on BC ground" }: { statement?: string }) {
   return (
@@ -39,30 +46,40 @@ export default function EditorialBand({ statement = "Twenty-five years on BC gro
                 className="display-statement display-fit stop m-0 text-white [text-wrap:balance]"
                 style={fitVars(statement, { max: "3.5rem", pref: "3.6vw" })}
               >
-                {statement}
+                {/* A hyphenated word never splits at its hyphen — "Twenty-" /
+                    "five" read as a typo when balance chose that break. */}
+                {statement.split(" ").map((word, i, all) => (
+                  <span key={i} className={word.includes("-") ? "whitespace-nowrap" : undefined}>
+                    {word}
+                    {i < all.length - 1 ? " " : ""}
+                  </span>
+                ))}
               </p>
             </div>
           </div>
 
           <div className="col-span-7 max-[900px]:col-span-1">
-            <div className="label label-on-slate">Installed at</div>
-            {/* Three columns from 700px: twelve names in two columns ran six
-                rows deep against a two-line statement and left half of a dark
-                band empty. Four rows matches the statement's height, and the
-                band stops being a caption beside a table. */}
+            <div className="label label-on-slate">The work</div>
+            {/* Three columns from 700px, four rows — matches the statement's
+                height, so the band reads as one composition. */}
             <ul className="mt-4 grid grid-cols-3 gap-x-8 max-[700px]:grid-cols-2">
-              {CLIENTS.map((client) => (
+              {WORK_APPS.map((app) => (
                 <li
-                  key={client}
-                  className="border-t py-[11px] text-[15px] font-medium leading-[1.4] text-[color:var(--ink-on-slate-body)]"
+                  key={app.slug}
+                  className="border-t text-[15px] font-medium leading-[1.4]"
                   style={{ borderColor: "var(--hairline-slate)" }}
                 >
-                  {client}
+                  <Link
+                    href={app.slug === "driveways" ? "/driveways#gallery" : `/applications/${app.slug}`}
+                    className="block py-[11px] text-[color:var(--ink-on-slate-body)] transition-colors hover:text-white"
+                  >
+                    {app.label}
+                  </Link>
                 </li>
               ))}
             </ul>
             <p className="mt-5 text-[13px] leading-[1.6] text-[color:var(--ink-on-slate-muted)]">
-              Owners and developers whose sites carry Square One&rsquo;s work, as published in its project record.
+              Ten kinds of work across the Lower Mainland and Vancouver Island, each with its own gallery.
             </p>
           </div>
         </div>

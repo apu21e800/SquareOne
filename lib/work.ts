@@ -69,16 +69,16 @@ export interface WorkAppMeta {
 }
 
 export const WORK_APPS: WorkAppMeta[] = [
-  { slug: "crosswalks", label: "Crosswalks", blurb: "Decorative and high-visibility crossings in preformed thermoplastic and stamped asphalt." },
-  { slug: "streetscapes", label: "Streetscapes", blurb: "Intersections, medians, lanes and civic corridors with pattern and colour built into the road surface." },
-  { slug: "roundabouts", label: "Roundabouts & traffic calming", blurb: "Truck aprons, medians, speed tables and calming devices that read as streetscape, not hardware." },
-  { slug: "parking-lots", label: "Parking lots", blurb: "Thresholds, walkways and crosswalks that organise retail, strata and institutional lots." },
-  { slug: "parks-paths", label: "Parks & paths", blurb: "Greenways, park walkways and spray parks with colour and pattern underfoot." },
-  { slug: "schools-sports-courts", label: "Schools & sports courts", blurb: "Play surfaces, courts and school-zone markings that hold up to recess and rain." },
-  { slug: "bike-lanes", label: "Bike lanes", blurb: "Green and red priority surfacing that keeps its colour under daily traffic." },
-  { slug: "public-art", label: "Public art", blurb: "Artist-designed pavement — First Nations artwork, murals and community pieces, rendered durably in the surface." },
-  { slug: "branding-wayfinding", label: "Branding & wayfinding", blurb: "Logos, legends and decals fused into the pavement for campuses, retail and civic sites." },
-  { slug: "driveways", label: "Driveways", blurb: "Stamped asphalt and StreetBond driveways for homes across the Lower Mainland and Vancouver Island." },
+  { slug: "crosswalks", label: "Crosswalks", blurb: "Decorative and high-visibility crosswalks in preformed thermoplastic and StreetPrint stamped asphalt." },
+  { slug: "streetscapes", label: "Streetscapes", blurb: "Intersections, medians, laneways and civic forecourts with the pattern pressed into the asphalt and the colour coated on." },
+  { slug: "roundabouts", label: "Roundabouts & traffic calming", blurb: "Roundabout aprons, traffic islands, medians and calming devices that read as streetscape, not hardware." },
+  { slug: "parking-lots", label: "Parking lots", blurb: "Thresholds, walkways and crosswalks that organise retail, strata and commercial lots." },
+  { slug: "parks-paths", label: "Parks & paths", blurb: "Park paths, greenways, plazas and spray parks with StreetBond colour and stamped pattern underfoot." },
+  { slug: "schools-sports-courts", label: "Schools & sports courts", blurb: "Sports courts, school crosswalks and play markings that hold up to recess and rain." },
+  { slug: "bike-lanes", label: "Bike lanes", blurb: "Green bike lanes and red bus lanes in PreMark thermoplastic and StreetBond — colour that holds under daily traffic." },
+  { slug: "public-art", label: "Public art", blurb: "Artist-designed pavement — First Nations artwork, murals and community pieces, rendered in thermoplastic and StreetBond coatings." },
+  { slug: "branding-wayfinding", label: "Branding & wayfinding", blurb: "Logos, wayfinding symbols and decals heat-fused into the pavement for schools, retail centres and civic sites." },
+  { slug: "driveways", label: "Driveways", blurb: "StreetPrint stamped asphalt and StreetBond colour over the driveway you already have — homes across the Lower Mainland and Vancouver Island." },
 ]
 
 // ── Sources ────────────────────────────────────────────────────────────────

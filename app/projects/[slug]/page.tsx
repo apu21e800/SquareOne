@@ -4,6 +4,8 @@ import Image from "next/image"
 import type { Metadata } from "next"
 
 import { projects, getProjectBySlug } from "@/lib/projects"
+import { products } from "@/lib/products"
+import { getPostBySlug } from "@/lib/blog"
 import { galleryFor } from "@/lib/gallery"
 import { WORK_APPS } from "@/lib/work"
 import ProjectGallery from "@/components/ProjectGallery"
@@ -97,13 +99,24 @@ export default async function ProjectPage({ params }: Props) {
 
   const serviceSlug = serviceSlugMap[project.service] ?? "stamped-asphalt"
   const serviceName = serviceLabel[project.service] ?? project.service
+
+  // The systems installed, from the catalogue — HUB's own description and
+  // figures, attributed on the page. "StreetBond150" and the like resolve to
+  // the StreetBond entry.
+  const installed = project.systems
+    .map((name) => products.find((p) => p.name === name || (name.startsWith("StreetBond") && p.name === "StreetBond")))
+    .filter((p, i, all): p is NonNullable<typeof p> => Boolean(p) && all.indexOf(p) === i)
+
+  // The blog post that tells this project in full, when the record has one.
+  const post = getPostBySlug(project.post ?? slug)
   const caption = metaLine(project.city, project.systems, project.year)
   const appHref = applicationHref(project.application)
 
   const facts: { label: string; value: string; href?: string }[] = [
     { label: "Location", value: project.city },
     ...(project.year ? [{ label: "Year", value: project.year }] : []),
-    ...(project.client ? [{ label: "Client", value: project.client }] : []),
+    // No "Client" row: the client's rule (18–19 Sept 2026) is that the site
+    // claims the ground and not the contract — "installed at", never "for".
     { label: project.systems.length > 1 ? "Systems" : "System", value: project.systems.join(", ") },
     { label: "Application", value: project.application, href: appHref },
   ]
@@ -205,16 +218,68 @@ export default async function ProjectPage({ params }: Props) {
       {/* ── 02 Narrative ──────── */}
       <section className="section bg-[color:var(--surface)] pb-28 max-[700px]:pb-14">
         <div className="container-1280">
-          <p className="max-w-[60ch] text-[17px] leading-[1.75] text-[color:var(--ink-body)] [text-wrap:pretty]">
-            {project.excerpt}
-          </p>
+          <div className="grid grid-cols-12 gap-x-12 gap-y-12 max-[900px]:grid-cols-1">
+            <div className="col-span-7 max-[900px]:col-span-1">
+              <p className="max-w-[60ch] text-[19px] leading-[1.65] text-[color:var(--ink)] [text-wrap:pretty]">
+                {project.excerpt}
+              </p>
 
-          {project.artist && (
-            <p className="mt-6 max-w-[60ch] text-[15px] leading-[1.6] text-[color:var(--ink-muted)]">
-              <span className="label mr-3">Design</span>
-              {project.artist}
-            </p>
-          )}
+              {project.story?.map((paragraph, i) => (
+                <p
+                  key={i}
+                  className={`max-w-[60ch] text-[17px] leading-[1.75] text-[color:var(--ink-body)] [text-wrap:pretty] ${i === 0 ? "mt-8" : "mt-5"}`}
+                >
+                  {paragraph}
+                </p>
+              ))}
+
+              {project.artist && (
+                <p className="mt-8 max-w-[60ch] text-[15px] leading-[1.6] text-[color:var(--ink-muted)]">
+                  <span className="label mr-3">Design</span>
+                  {project.artist}
+                </p>
+              )}
+
+              {post && (
+                <p className="mt-8">
+                  <Link href={`/blog/${post.slug}`} className="arrow-link">
+                    Read the full story: {post.title} <span aria-hidden="true">&rarr;</span>
+                  </Link>
+                </p>
+              )}
+            </div>
+
+            {installed.length > 0 && (
+              <aside className="col-span-5 max-[900px]:col-span-1">
+                <div className="rounded-[2px] border border-[color:var(--hairline)] bg-[color:var(--surface-warm)] p-8 max-[700px]:p-6">
+                  <p className="label">{installed.length > 1 ? "The systems installed" : "The system installed"}</p>
+                  {installed.map((product) => (
+                    <div key={product.slug} className="mt-6 border-t border-[color:var(--hairline)] pt-5 first:mt-4">
+                      <h3>
+                        {product.name}
+                        {product.mark && <sup className="ml-[1px] text-[0.55em] font-normal">{product.mark}</sup>}
+                      </h3>
+                      <p className="mt-2 text-[15px] leading-[1.6] text-[color:var(--ink-body)]">{product.shortDescription}</p>
+                      <ul className="mt-4">
+                        {product.keyBenefits.slice(0, 3).map((benefit) => (
+                          <li key={benefit} className="border-t border-[color:var(--hairline)] py-[9px] text-[14px] leading-[1.5] text-[color:var(--ink-body)]">
+                            {benefit}
+                          </li>
+                        ))}
+                      </ul>
+                      <Link href={`/products/${product.slug}`} className="arrow-link mt-4 inline-flex gap-[0.35em]">
+                        {product.name} <span aria-hidden="true">&rarr;</span>
+                      </Link>
+                    </div>
+                  ))}
+                  <p className="mt-6 text-[12.5px] leading-[1.55] text-[color:var(--ink-muted)]">
+                    Descriptions and figures are the manufacturer&rsquo;s. Square One
+                    installs the system and warrants the workmanship.
+                  </p>
+                </div>
+              </aside>
+            )}
+          </div>
 
           <div className="mt-11 flex flex-wrap items-center gap-x-8 gap-y-4">
             <Link href="/contact" className="btn-primary">
@@ -256,7 +321,7 @@ export default async function ProjectPage({ params }: Props) {
             <div className="flex flex-wrap items-baseline justify-between gap-6">
               <h2>More projects</h2>
               <Link href="/projects" className="arrow-link whitespace-nowrap">
-                All {projects.length} projects <span>&rarr;</span>
+                All projects <span>&rarr;</span>
               </Link>
             </div>
 

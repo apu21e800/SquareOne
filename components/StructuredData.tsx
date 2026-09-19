@@ -16,11 +16,21 @@ const ORG_BASE = {
   telephone: "+1-604-612-6209",
   email: "office@squareonepaving.com",
   foundingDate: "2000",
+  // The three published lines (CLAUDE.md contact canon) — the office is the
+  // primary `telephone`; the Island and toll-free lines ride as contact
+  // points so the schema says exactly what the footer says, and no more.
+  contactPoint: [
+    { "@type": "ContactPoint", telephone: "+1-604-612-6209", contactType: "customer service", areaServed: "Lower Mainland, BC", availableLanguage: "en" },
+    { "@type": "ContactPoint", telephone: "+1-250-391-0270", contactType: "customer service", areaServed: "Vancouver Island, BC", availableLanguage: "en" },
+    { "@type": "ContactPoint", telephone: "+1-877-391-0270", contactType: "customer service", areaServed: "CA", availableLanguage: "en" },
+  ],
   // No priceRange (would be invented), no founder (not stated anywhere on
   // record), no geo / openingHours until Vern supplies them — a wrong
   // coordinate or opening hour is worse than none.
   areaServed: [
     { "@type": "AdministrativeArea", name: "British Columbia" },
+    { "@type": "AdministrativeArea", name: "Lower Mainland" },
+    { "@type": "AdministrativeArea", name: "Vancouver Island" },
     { "@type": "City", name: "Vancouver" },
     { "@type": "City", name: "Victoria" },
     { "@type": "City", name: "Surrey" },
@@ -34,7 +44,7 @@ const ORG_BASE = {
   address: [
     {
       "@type": "PostalAddress",
-      streetAddress: "19 - 11720 Stewart Crescent",
+      streetAddress: "19-11720 Stewart Crescent",
       addressLocality: "Maple Ridge",
       addressRegion: "BC",
       postalCode: "V2X 9E7",
@@ -53,10 +63,10 @@ const ORG_BASE = {
     "@type": "OfferCatalog",
     name: "Decorative Pavement Services",
     itemListElement: [
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Stamped Asphalt", description: "StreetPrint stamped asphalt installations across BC." } },
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Decorative Coatings", description: "StreetBond decorative coatings for transit, public realm, and residential surfaces." } },
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Preformed Thermoplastic", description: "TrafficPatterns, DecoMark, and PreMark thermoplastic markings." } },
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Vapour Blasting", description: "Mobile vapour blasting for surface preparation and graffiti removal." } },
+      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Stamped Asphalt", url: `${SITE_URL}/services/stamped-asphalt`, description: "StreetPrint and TrafficPatternsXD stamped asphalt installations across BC." } },
+      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Decorative Coatings", url: `${SITE_URL}/services/decorative-coatings`, description: "StreetBond and DuraShield coatings for transit, public realm, commercial and residential surfaces." } },
+      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Preformed Thermoplastic", url: `${SITE_URL}/services/preformed-thermoplastic`, description: "TrafficPatterns, DecoMark, DuraTherm and PreMark thermoplastic markings." } },
+      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Vapour Blasting", url: `${SITE_URL}/services/vapor-blasting`, description: "Mobile vapour blasting for surface preparation, and graffiti and marking removal." } },
     ],
   },
 }

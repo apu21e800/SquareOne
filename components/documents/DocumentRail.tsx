@@ -55,7 +55,6 @@ export function DocRow({
         <span className="mt-[2px] block text-[12.5px] leading-[1.5] text-[color:var(--ink-muted)]">
           {showProduct ? <>{product} &middot; </> : null}
           {doc.type} &middot; {doc.size}
-          {doc.hub ? <> &middot; current at HUB</> : null}
         </span>
       </button>
 

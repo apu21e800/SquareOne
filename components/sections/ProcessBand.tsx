@@ -1,35 +1,40 @@
 import Link from "next/link"
 
+/* Not rendered on any page at present (app/page.tsx dropped it in the
+   5 Sept 2026 composition; /about carries its own five steps). The copy is
+   kept honest all the same, so it can return without a review: no day
+   counts — Square One publishes no lead times — and nothing about crews
+   that the client has asked not to advertise. */
 const steps: { num: string; title: string; body: string; meta: string }[] = [
   {
     num: "01",
-    title: "Site Walk",
-    body: "We meet you on site. Substrate condition, drainage, traffic loading, sight lines, neighbour considerations — all logged before a quote ever lands.",
-    meta: "Day 1",
+    title: "Site visit",
+    body: "We meet you on site and look at the asphalt — its condition, the drainage, the traffic it carries — before anything is quoted. The visit is free.",
+    meta: "Before the quote",
   },
   {
     num: "02",
     title: "Specification",
-    body: "We pick the system that fits the surface — StreetPrint, StreetBond, TrafficPatterns. The wrong product on the right surface is a five-year repair bill.",
-    meta: "Day 2–3",
+    body: "Pattern, colour and system matched to the surface and the traffic — StreetPrint, StreetBond or TrafficPatterns — and set out in a written quote.",
+    meta: "Before the quote",
   },
   {
     num: "03",
-    title: "Surface Prep",
-    body: "Vapour blasting, sweep, prime. Adhesion is decided before the first colour goes down. We don't shortcut the boring step — that's why ours last.",
-    meta: "Install Day 1",
+    title: "Surface prep",
+    body: "Cleaning, and vapour blasting where the surface needs it. Adhesion is decided here, before the first colour goes down.",
+    meta: "On site",
   },
   {
     num: "04",
     title: "Application",
-    body: "Hot imprint, coat, or thermoplastic — applied by crews who have been laying it down for years. Municipal-spec discipline, residential-scale care.",
-    meta: "Install Day 2–3",
+    body: "Heated template, coating or thermoplastic, installed by Square One's own crews to the manufacturer's specification.",
+    meta: "On site",
   },
   {
     num: "05",
-    title: "Cure & Walk-Through",
-    body: "Cure to spec. Final inspection with you. Maintenance schedule handed over so the surface still looks installed in year eight.",
-    meta: "Final Day",
+    title: "Cure and walk-through",
+    body: "The surface cures, then we walk the finished work with you. The manufacturer warrants the material; Square One warrants the workmanship.",
+    meta: "Handover",
   },
 ]
 
@@ -44,9 +49,9 @@ export default function ProcessBand() {
           </div>
 
           <p className="max-w-[56ch] text-[19px] leading-[1.65] text-ink-body">
-            Our process hasn&apos;t changed since 2000 because the work hasn&apos;t. Every project,
-            municipal or residential, runs the same five steps to the same standard &mdash; the
-            boring discipline that makes a pavement install last for a decade.
+            Every project, municipal or residential, runs the same five steps &mdash; a site visit
+            before the quote, the surface prepared before the colour, and a walk-through before we
+            leave. It is the discipline that makes decorative pavement last.
           </p>
         </div>
 
@@ -73,10 +78,11 @@ export default function ProcessBand() {
 
         <div className="mt-10 flex flex-wrap items-center justify-between gap-4">
           <p className="text-[15px] leading-[1.55] text-ink-muted">
-            Same crew, same standard, every project &mdash; municipal or residential.
+            The same five steps on every project, municipal or residential, across the Lower
+            Mainland and Vancouver Island.
           </p>
           <Link href="/contact" className="arrow-link whitespace-nowrap">
-            Start your site walk <span aria-hidden="true">&rarr;</span>
+            Book a site visit <span aria-hidden="true">&rarr;</span>
           </Link>
         </div>
       </div>

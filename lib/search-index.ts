@@ -44,8 +44,8 @@ const TOKEN_CASE: Record<string, string> = {
   bc: "BC",
   rbc: "RBC",
   hoa: "HOA",
-  translink: "TransLink",
   skytrain: "SkyTrain",
+  translink: "TransLink",
 }
 
 function humanize(fileBase: string): string {
@@ -97,7 +97,7 @@ function imageEntries(): SearchEntry[] {
         subtitle: `Project — ${project.city.split(",")[0].trim()}`,
         href: `/projects/${project.slug}`,
         image,
-        keywords: `${project.systems.join(" ")} ${project.application} ${project.city} ${project.client ?? ""}`,
+        keywords: `${project.systems.join(" ")} ${project.application} ${project.city}`,
       })
     })
   }
@@ -165,8 +165,9 @@ const STATIC_PAGES: SearchEntry[] = [
   { type: "page", title: "Vapour blasting", subtitle: "Cleaning, priming, graffiti and mould removal", href: "/services/vapor-blasting", keywords: "vapor blasting dustless restoration surface prep graffiti mould" },
   { type: "page", title: "Projects", subtitle: "Selected work across BC", href: "/projects", keywords: "projects portfolio work" },
   { type: "page", title: "Blog", subtitle: "Guides and project stories from BC ground", href: "/blog", keywords: "blog articles guides news stories journal" },
-  { type: "page", title: "Patterns", subtitle: "StreetPrint templates, as HUB draws them", href: "/patterns", keywords: "patterns templates herringbone offset brick ashlar slate tiles border streetprint stamped" },
-  { type: "page", title: "Resources", subtitle: "90 specifications, colour cards, SDS and guides", href: "/resources", keywords: "documents specs specifications library downloads sds colour cards" },
+  { type: "page", title: "Patterns", subtitle: "StreetPrint template sheets, dimensioned", href: "/patterns", keywords: "patterns templates herringbone offset brick ashlar slate tiles border streetprint stamped" },
+  { type: "page", title: "Resources", subtitle: "Specifications, colour cards, SDS and guides", href: "/resources", keywords: "documents specs specifications library downloads sds colour cards" },
+  { type: "page", title: "For specifiers", subtitle: "Drawings, specifications and samples for landscape architects and engineers", href: "/specifiers", keywords: "specifiers landscape architect engineer municipal tender specification drawings template sheets colour chart sample boards precedent" },
   { type: "page", title: "About", subtitle: "The crew behind 25 years of BC surfaces", href: "/about", keywords: "company about team gord jan history" },
   { type: "page", title: "Contact", subtitle: "Free site visit and written quote", href: "/contact", keywords: "quote request phone email contact maple ridge" },
 ]
@@ -215,7 +216,7 @@ export function buildSearchIndex(): SearchEntry[] {
     subtitle: [p.city.split(",")[0].trim(), p.systems.join(" + "), p.year].filter(Boolean).join(" · "),
     href: `/projects/${p.slug}`,
     image: p.imageUrl,
-    keywords: `${p.excerpt} ${p.application} ${p.region} ${p.client ?? ""} ${p.artist ?? ""}`,
+    keywords: `${p.excerpt} ${p.application} ${p.region} ${p.artist ?? ""}`,
   }))
 
   const postEntries: SearchEntry[] = getAllPosts().map((post) => ({

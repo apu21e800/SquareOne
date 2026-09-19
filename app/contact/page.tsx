@@ -40,8 +40,8 @@ const projectTypes = [
 
 const STEPS: { n: string; line: string }[] = [
   { n: "01", line: "Tell us the job and where it is" },
-  { n: "02", line: "We walk the site with the sample boards" },
-  { n: "03", line: "A written quote from the crew who install it" },
+  { n: "02", line: "We visit the site, free, with colour and pattern samples" },
+  { n: "03", line: "You get a written quote" },
 ]
 
 const field =
@@ -113,10 +113,10 @@ export default function ContactPage() {
       {/* ── Opener — the work, like every other page ──────── */}
       <IndexImageHero
         src="/images/applications/driveways/maple-ridge-driveway-recoat-at-dusk-streetbond-01.jpg"
-        alt="A StreetBond driveway recoat in Maple Ridge photographed at dusk, installed by Square One Paving"
+        alt="A StreetBond driveway recoat between brick gateposts with lit lanterns, photographed at dusk in Maple Ridge, installed by Square One Paving"
         eyebrow="Contact · Free site visit"
         title="Request a quote"
-        lede="Tell us what you are building and where — a crosswalk, a plaza, a parking area, a driveway. Drawings help, but a description and a location are enough to start."
+        lede="Tell us what you are building and where — a crosswalk, a plaza, a parking lot, a driveway. A few photos and a postal code are enough to start; drawings help."
         caption="Maple Ridge · StreetBond"
         imagePosition="center 62%"
       />
@@ -142,9 +142,10 @@ export default function ContactPage() {
                 <div className="label">Received</div>
                 <h2 className="mt-4 text-[26px] normal-case tracking-normal">Thank you &mdash; we have your request.</h2>
                 <p className="mt-4 max-w-[52ch] text-[16px] leading-[1.65] text-ink-body">
-                  We reply within one business day to arrange the site walk. If it is urgent, call{" "}
-                  <a href="tel:+16046126209" className="font-medium text-ink">604-612-6209</a> (Lower Mainland) or{" "}
-                  <a href="tel:+12503910270" className="font-medium text-ink">250-391-0270</a> (Vancouver Island).
+                  We will be in touch to arrange the site visit. If it is urgent, call{" "}
+                  <a href="tel:+16046126209" className="font-medium text-ink">604-612-6209</a> (Lower Mainland),{" "}
+                  <a href="tel:+12503910270" className="font-medium text-ink">250-391-0270</a> (Vancouver Island) or{" "}
+                  <a href="tel:+18773910270" className="font-medium text-ink">1-877-391-0270</a> (toll-free).
                 </p>
               </div>
             ) : (
@@ -200,7 +201,7 @@ export default function ContactPage() {
                         autoComplete="organization"
                         value={form.company}
                         onChange={(e) => setForm({ ...form, company: e.target.value })}
-                        placeholder="City of Coquitlam"
+                        placeholder="Municipality, developer, strata or contractor"
                         className={field}
                       />
                     </div>
@@ -258,7 +259,7 @@ export default function ContactPage() {
                         type="text"
                         value={form.location}
                         onChange={(e) => setForm({ ...form, location: e.target.value })}
-                        placeholder="Street and city, or the site name"
+                        placeholder="Address or postal code, or the site name"
                         className={field}
                       />
                     </div>
@@ -269,7 +270,7 @@ export default function ContactPage() {
                         rows={5}
                         value={form.message}
                         onChange={(e) => setForm({ ...form, message: e.target.value })}
-                        placeholder="Two decorative crosswalks and a plaza recoat, roughly 400 m². Timeline and any drawings help too."
+                        placeholder="Two decorative crosswalks and a plaza recoat, roughly 400 m². When you need it done, and any drawings, help too."
                         className={`${field} h-auto min-h-[150px] resize-y py-[14px]`}
                       />
                     </div>
@@ -297,8 +298,11 @@ export default function ContactPage() {
                     {loading ? "Sending…" : "Send the request"}
                   </button>
                   <span className="text-[14px] leading-[1.5] text-ink-muted">
-                    We reply within one business day, or call{" "}
-                    <a href="tel:+16046126209" className="font-medium text-ink-body">604-612-6209</a>.
+                    Or call{" "}
+                    <a href="tel:+16046126209" className="font-medium text-ink-body">604-612-6209</a>
+                    {" "}(Lower Mainland) or{" "}
+                    <a href="tel:+12503910270" className="font-medium text-ink-body">250-391-0270</a>
+                    {" "}(Vancouver Island).
                   </span>
                 </div>
               </form>
@@ -331,19 +335,25 @@ export default function ContactPage() {
               </a>
             </RailBlock>
 
-            <RailBlock heading="Helps us quote faster">
+            <RailBlock heading="What to send">
               <ul className="mt-3 grid grid-cols-2 gap-x-6 gap-y-[9px] text-[14px] leading-[1.4] text-ink-body max-[420px]:grid-cols-1">
-                <li>The site address, or a pin</li>
+                <li>Photos of the surface as it is</li>
+                <li>The address or postal code</li>
+                <li>Drawings or a sketch, if you have them</li>
                 <li>A rough area in square metres</li>
-                <li>Drawings, or a photo of the surface</li>
                 <li>When you need it done</li>
               </ul>
+              <p className="mt-4 text-[13px] leading-[1.5] text-ink-muted">
+                Photos and drawings go by email to{" "}
+                <a href="mailto:office@squareonepaving.com" className="font-medium text-ink-body">office@squareonepaving.com</a>
+                {" "}&mdash; put the site address in the subject line.
+              </p>
             </RailBlock>
 
             <div className="mt-7 flex items-center gap-4">
               <Image
                 src="/images/S1_update_v2/Old%20Square%20One%20Web%20Assets/Contact%20Page/BBB-Logo.png"
-                alt="BBB Accredited Business"
+                alt="BBB Accredited Business seal"
                 width={131}
                 height={51}
                 className="h-8 w-auto flex-shrink-0"

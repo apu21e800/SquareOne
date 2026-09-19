@@ -2,6 +2,7 @@ export interface Service {
   slug: string
   name: string
   tagline: string
+  /** The intro paragraph on the service page and its meta description (≤ 158 characters through clampDescription): the systems, the region, one concrete benefit. */
   shortDescription: string
   fullDescription: string
   productsIncluded: string[]
@@ -9,140 +10,250 @@ export interface Service {
   idealClients: string[]
   benefits: string[]
   imageUrl: string
+  /** What the hero photograph (imageUrl) shows — system, surface and place, as the record captions it. */
+  imageAlt: string
   /** Questions answered on the service page, in the site's own words — nothing here that the page does not already say. */
   faqs: { q: string; a: string }[]
 }
 
+/*
+ * Copy rules (the 19 Sept 2026 editorial pass, evening rulings): the three
+ * pillar services sell the SERVICE, to specifiers — the site walk, the help
+ * specifying (template sheets, colour chart, sample boards, the documents in
+ * the specification library), the written quote, installation by Square
+ * One's own crews to the published specification, the workmanship warranty,
+ * both regions. The systems are the means and are named; the manufacturer
+ * is never named — its figures are "published by the manufacturer", and
+ * "the manufacturer warrants the material; Square One warrants the
+ * workmanship". ® / ™ ride the first mention of a system on the page (the
+ * tagline names no system; the shortDescription comes first, then
+ * fullDescription). Every place named is a Square One install on record in
+ * lib/projects.ts or lib/work.ts; every process step is on record in
+ * app/about, app/contact or app/driveways. idealClients is the specifier
+ * list — homeowners appear on stamped asphalt only, last. The FAQs restate
+ * the page — they feed the FAQPage schema.
+ */
 export const services: Service[] = [
   {
     slug: "stamped-asphalt",
     name: "Stamped Asphalt",
-    tagline: "Brick, cobble and slate — pressed into the asphalt you already have.",
+    tagline: "Specified from a dimensioned template sheet, pressed into the asphalt already there by our own crews.",
     shortDescription:
-      "Pattern and colour worked into the asphalt you already have. The stamped asphalt Square One installs is slip-resistant, snowplow safe and built for the 10–20 years of service HUB publishes for StreetPrint®.",
+      "StreetPrint® and TrafficPatternsXD™ stamped asphalt, specified from template sheets and installed by our own crews on the Lower Mainland and Vancouver Island.",
     fullDescription:
-      "Stamped asphalt is more than aesthetics — it's functional design that performs. Square One installs two kinds: HUB's StreetPrint® Imprinting System, which presses the pattern into the asphalt itself, and TrafficPatternsXD™, a heavy-duty preformed thermoplastic that is heated and stamped into the top layer of the asphalt. Whether it's a vibrant crosswalk in downtown Vancouver or a subtle traffic pattern on Vancouver Island, Square One crews deliver precision, colour, and durability. Custom patterns, reflective options, and snowplow-safe surfaces make this the choice for municipalities and developers who demand both form and function.",
+      "Square One takes a stamped asphalt surface from the drawing to the road. It starts with a free site walk: we look at the asphalt that is there — its condition, its drainage and the traffic it carries — and bring the sample boards, so pattern and colour are chosen against the real site. Every template is a dimensioned sheet — herringbone, offset brick, ashlar slate, tiles and borders, in the pattern library — so a landscape architect or engineer can name the sheet on the drawing, and the manufacturer's asphalt pavement texturing specification, the colour card and the custom template guidelines are in the specification library for the tender package. The written quote sets out the system, the template and the colour for the surface you have; if the asphalt is not sound enough to take a stamp, we say so.\n\nSquare One installs two kinds, with its own crews and to the published specification, across the Lower Mainland and Vancouver Island. StreetPrint is the regular kind: the asphalt is reheated, a steel template is pressed into it and StreetBond® colour is rolled into the imprint — no demolition and no new base, so closures are short. TrafficPatternsXD is the heavy-duty kind: a 150-mil aggregate-reinforced preformed thermoplastic, heated and stamped into the top layer of the asphalt for the crossings that take the most traffic, exposing new anti-skid elements as it wears. The manufacturer publishes a 10–20 year service life for StreetPrint and rates its textured surface slip-resistant and safe for snowploughs and de-icing salt. The manufacturer warrants the material; Square One warrants the workmanship.\n\nCrosswalks, roundabout aprons, medians, traffic calming, commercial entries and parking lot walkways — the school crosswalk at Grandview Heights in Surrey, the walkways at Ralph's Farm Market in Langley and the rainbow intersection in Nanaimo are on the record.",
     productsIncluded: [
-      "StreetPrint® Asphalt Imprinting System",
-      "TrafficPatternsXD™ impressed thermoplastic",
+      "StreetPrint® asphalt imprinting system — the regular kind",
+      "TrafficPatternsXD™ aggregate-reinforced thermoplastic — the heavy-duty kind",
+      "StreetBond® colour, rolled into the imprint",
     ],
     applications: [
       "Crosswalks",
       "Roundabouts",
-      "Traffic calming treatments",
-      "Streetscapes and medians",
-      "Commercial entries",
-      "Parking lot design elements",
+      "Traffic Calming",
+      "Streetscapes and Medians",
+      "Commercial Entries",
+      "Parking Lots and Walkways",
     ],
     idealClients: [
-      "BC municipalities",
-      "Developers",
       "Landscape architects",
-      "Property managers",
-      "School districts",
+      "Civil and traffic engineers",
+      "Municipal project specifiers",
+      "Developers and their project managers",
+      "General contractors",
+      "Strata and property managers",
+      "Homeowners",
     ],
     benefits: [
-      "Slip-resistant textured surface",
-      "10–20 year published service life",
-      "Snowplow safe",
-      "Custom patterns available",
-      "Retroreflective options",
-      "Fast installation",
+      "Free site walk with the sample boards, then a written quote",
+      "Templates drawn as dimensioned sheets, in the pattern library",
+      "Texturing specification, colour card and template guidelines in the library",
+      "Installed by Square One's own crews to the published specification",
+      "No demolition, no new base — short closures",
+      "10–20 year StreetPrint service life, published by the manufacturer",
+      "Slip-resistant texture; snowplough and de-icing salt safe",
+      "Material warranted by the manufacturer; workmanship by Square One",
     ],
     faqs: [
-      { q: "Is stamped asphalt slip-resistant?", a: "Yes. The imprinted surface is textured, so it gives tyres and shoes more to hold than smooth asphalt, and the impression depth is designed to be snowplow safe." },
-      { q: "How long does StreetPrint last?", a: "HUB publishes a 10–20 year service life for StreetPrint under municipal traffic, and puts it more simply in its own FAQ: printed asphalt is as durable as the asphalt it is printed on." },
-      { q: "Can it be installed over existing asphalt?", a: "Yes, when the asphalt is sound. The surface is reheated and stamped in place, then sealed in colour — no demolition and no new base. The site visit decides whether the existing surface will take a pattern." },
+      {
+        q: "Can I get the pattern drawn for my plans?",
+        a: "Yes. Every StreetPrint template is a dimensioned sheet — herringbone, offset brick, ashlar slate, tiles and borders — in the pattern library, so the template can be named on the drawing by its sheet name. The manufacturer cuts custom templates to order, and its custom stamping template guidelines are in the specification library.",
+      },
+      {
+        q: "What goes in the tender?",
+        a: "The system — StreetPrint for the regular kind, TrafficPatternsXD for the heavy-duty kind — the template by its sheet name, and the StreetBond colour from the chart. The manufacturer's asphalt pavement texturing specification, the colour card and the template guidelines are in the specification library, and Square One's written quote sets out the system, the template and the colour for the surface you have.",
+      },
+      {
+        q: "Who installs it, and where?",
+        a: "Square One's own crews, to the manufacturer's published specification, across the Lower Mainland and Vancouver Island — one office in Maple Ridge, and a line of its own for the Island, 250-391-0270.",
+      },
+      {
+        q: "How much of the road has to close?",
+        a: "Less than a rebuild. There is no demolition and no new base — the pattern goes into the asphalt that is already there — so closures are short. Where a road could not close, the TrafficPatternsXD crossings on record went in in overnight windows: at Brighouse Station in Richmond, and intersection by intersection on Commercial Drive in Vancouver.",
+      },
+      {
+        q: "What is warranted, and by whom?",
+        a: "The manufacturer warrants the material, under its limited warranty against manufacturing defects. Square One warrants the workmanship: every system goes down to the published specification, by Square One's own crews, and we walk the finished surface with you before we leave it.",
+      },
+      {
+        q: "What is the difference between StreetPrint and TrafficPatternsXD?",
+        a: "They are the two kinds of stamped asphalt Square One installs. StreetPrint is the regular kind: the asphalt is reheated, a steel template is pressed into it and StreetBond colour is rolled into the imprint. TrafficPatternsXD is the heavy-duty kind: a 150-mil aggregate-reinforced preformed thermoplastic, heated and stamped into the top layer of the asphalt, for the crossings that take the most traffic.",
+      },
+      {
+        q: "Can it go over the asphalt we already have, and how long does it last?",
+        a: "Yes, when the asphalt is sound — we assess that at the site walk, and if it is not sound enough to take a stamp we say so. The manufacturer publishes a 10–20 year service life for StreetPrint and rates the textured surface slip-resistant and safe for snowploughs and de-icing salt. TrafficPatternsXD is the heavier material, and as its surface wears new anti-skid elements are exposed.",
+      },
     ],
-    imageUrl: "/images/applications/roundabouts/maple-ridge-roundabout-centre-streetprint-01.jpg",
+    imageUrl: "/images/applications/roundabouts/abbotsford-roundabout-wide-streetprint-01.jpg",
+    imageAlt: "A brick-red StreetPrint apron around a planted roundabout in Abbotsford, cones still out and the road open",
   },
   {
     slug: "preformed-thermoplastic",
     name: "Preformed Thermoplastic",
-    tagline: "Crosswalks, symbols and street art, fused into the road.",
+    tagline: "Cut to your drawing, to the owner's marking standard, and fused into the road by our own crews.",
     shortDescription:
-      "Custom thermoplastic markings and inset graphics for roads, parking lots, and commercial spaces. Preformed sheets, cut to the design and heat-fused in place — no spray overspray, no inconsistency.",
+      "TrafficPatterns™, DecoMark®, DuraTherm® and PreMark® markings, cut to the design and heat-fused by our own crews on the Lower Mainland and Vancouver Island.",
     fullDescription:
-      "Thermoplastic markings are the gold standard for precision. The preformed systems Square One installs — TrafficPatterns and DecoMark — deliver custom logos, arrows, crosswalks, and graphics that integrate seamlessly with surrounding surfaces. In BC's wet climate, thermoplastic's durability and retroreflective properties make it the choice for municipalities demanding long service life and minimal maintenance.",
+      "Preformed thermoplastic is the service for a marking that has to be exactly what was drawn — a crosswalk pattern, an arrow, a logo, an artist's design — and Square One takes it from the drawing to the road. Send the drawing or the artist's file with a site address. The site walk is free: we look at the substrate, the traffic and the layout against the owner's marking standard before anything is cut. The manufacturer's design manuals, custom design guidelines, colour palettes and specifications for each system are in the specification library for the spec package, and the written quote sets out the system, the colours and the layout.\n\nThe sheets are manufactured to the design and cut before they reach the site, so the placement is precise and there is no spray drift or overspray; Square One's own crews heat-fuse them to the pavement in place, to the published specification, across the Lower Mainland and Vancouver Island. Four systems cover the work. TrafficPatterns is the decorative system for crosswalks, transit stops and pedestrian zones — patterns, borders and custom designs, open to traffic within minutes of application. DecoMark is fully custom: logos, emblems, wayfinding symbols and artwork. DuraTherm is the retroreflective marking for stop bars, arrows, legends and lane lines, inset or surface-applied. PreMark is arrows, legends and symbols cut to exact dimensions with retroreflective glass beads embedded. DuraTherm and PreMark follow TAC-standard shapes and legends; TrafficPatterns colours and symbols follow the owner's marking standard.\n\nWhere a street cannot close, the work is phased: the Little Italy crossings on Commercial Drive went in intersection by intersection, in overnight blocks. The record runs from the UBC and Musqueam crosswalk in Vancouver and the Every Child Matters crossing in New Westminster to the sensory play pathway at South Langford Elementary. The manufacturer warrants the material; Square One warrants the workmanship.",
     productsIncluded: [
-      "TrafficPatterns thermoplastic",
-      "DecoMark custom graphics",
-      "PreMark preformed markings",
-      "DuraTherm inset system",
+      "TrafficPatterns™ decorative crosswalks",
+      "DecoMark® custom graphics and logos",
+      "DuraTherm® road markings",
+      "PreMark® arrows, legends and symbols",
     ],
     applications: [
-      "Crosswalk markings",
-      "School zone graphics",
-      "Custom logos and branding",
-      "Stop bars and arrows",
-      "Parking lot layout markings",
-      "Transit stop graphics",
+      "Decorative Crosswalks",
+      "Public Art",
+      "Branding & Wayfinding",
+      "School Zone Graphics",
+      "Stop Bars and Arrows",
+      "Parking Lots",
+      "Transit Stop Graphics",
     ],
     idealClients: [
-      "BC municipalities",
-      "School districts",
-      "Commercial properties",
-      "Transit authorities",
-      "Parking operators",
+      "Civil and traffic engineers",
+      "Municipal project specifiers",
+      "Landscape architects",
+      "Developers and their project managers",
+      "General contractors",
+      "Strata and property managers",
     ],
     benefits: [
-      "Retroreflective for night visibility",
-      "Quick installation (minimal road closure)",
-      "Colours and symbols to the owner's marking standard",
-      "Custom shapes and logos",
-      "Long service life, minimal maintenance",
-      "No spray drift or overspray",
+      "Cut to the drawing before it reaches the site — precise placement, no overspray",
+      "Colours and symbols to the owner's marking standard; TAC-standard shapes for DuraTherm and PreMark",
+      "Design manuals, design guidelines, colour palettes and specifications in the library",
+      "Installed by Square One's own crews to the published specification",
+      "Open to traffic within minutes of application (TrafficPatterns)",
+      "Retroreflective markings for night visibility (DuraTherm, PreMark)",
+      "Phased overnight work on record where a street could not close",
+      "Material warranted by the manufacturer; workmanship by Square One",
     ],
     faqs: [
-      { q: "Can you do custom logos and artwork?", a: "Yes. TrafficPatterns and DecoMark are cut to the design — logos, crosswalk art, wayfinding graphics, community branding — and installed in the owner's marking colours." },
-      { q: "How much road closure does a thermoplastic crosswalk need?", a: "Little. The preformed sheets are heat-fused to the pavement in place, so installation is quick and closures are short." },
-      { q: "Does preformed thermoplastic hold up in BC's wet climate?", a: "It is specified for it. Durability and retroreflective options are why BC municipalities choose thermoplastic over paint for markings that have to last with minimal maintenance." },
+      {
+        q: "Can you work from our drawing or the artist's file?",
+        a: "Yes. The sheets are manufactured to the design and cut before they reach the site, so what goes into the road is what was drawn — a crosswalk pattern, a logo, an artist's design. Send the drawing or the artist's file with the site address; the manufacturer's custom design guidelines for TrafficPatterns and DecoMark are in the specification library.",
+      },
+      {
+        q: "What goes in the tender?",
+        a: "The system — TrafficPatterns for decorative crossings, DecoMark for custom graphics, DuraTherm for standard road markings, PreMark for arrows, legends and symbols — with the colours from the palette and the layout to the owner's marking standard. The manufacturer's specifications, design manuals and colour palettes for each system are in the specification library, and Square One's written quote sets out the system, the colours and the layout.",
+      },
+      {
+        q: "Who installs it, and where?",
+        a: "Square One's own crews heat-fuse the sheets to the pavement in place, to the manufacturer's published specification, across the Lower Mainland and Vancouver Island — one office in Maple Ridge, and a line of its own for the Island, 250-391-0270.",
+      },
+      {
+        q: "How much road closure does it need?",
+        a: "Little. The sheets are heat-fused to the pavement in place, and a TrafficPatterns crossing is open to traffic within minutes of application. Where a street cannot close, the work is phased — the Little Italy crossings on Commercial Drive went in intersection by intersection, in overnight blocks.",
+      },
+      {
+        q: "What is warranted, and by whom?",
+        a: "The manufacturer warrants the material, under its limited warranty against manufacturing defects. Square One warrants the workmanship: every system goes down to the published specification, by Square One's own crews, and we walk the finished surface with you before we leave it.",
+      },
+      {
+        q: "Which system is right for standard road markings, and is it retroreflective?",
+        a: "DuraTherm for stop bars, arrows, legends and lane lines, inset or surface-applied on asphalt or concrete, and retroreflective. PreMark for arrows, legends and symbols cut to exact dimensions, with retroreflective glass beads embedded. Both follow TAC-standard shapes and legends. TrafficPatterns and DecoMark colours and symbols follow the owner's marking standard.",
+      },
+      {
+        q: "Where has Square One installed it?",
+        a: "Across the Lower Mainland and Vancouver Island — the UBC and Musqueam crosswalk in Vancouver, the Every Child Matters crossing in New Westminster, the sensory play pathway at South Langford Elementary, and the projects on this page.",
+      },
     ],
     imageUrl: "/images/S1_update_v2/photos/Featured%20image%20options/UBC-crosswalk-3-300dpi.jpg",
+    imageAlt: "Musqueam artwork in blue, green and gold TrafficPatterns thermoplastic on the crosswalk beside the UBC letters on University Boulevard, Vancouver",
   },
   {
     slug: "decorative-coatings",
     name: "Decorative Coatings",
-    tagline: "Colour that holds under buses, bikes and BC winters.",
+    tagline: "Specified off the colour chart, proved on a sample board, coated in place by our own crews.",
     shortDescription:
-      "High-performance coatings that add colour and safety to any asphalt or concrete surface. From spray parks to parking lots, the StreetBond system — 150 and the solar-reflective SR — delivers both aesthetics and function.",
+      "StreetBond® coatings in fifty-plus colours and DuraShield asphalt protection, installed by our own crews across the Lower Mainland and Vancouver Island.",
     fullDescription:
-      "Decorative coatings are the workhorse of modern urban infrastructure. The StreetBond system provides colour, contrast and critical safety features to high-traffic surfaces. Whether it's a spray park in Burnaby, a public art plaza at Langley Events Centre or a decorative fire lane in North Vancouver, StreetBond coatings are designed to perform in harsh climates, resist UV fading and integrate seamlessly with surrounding pavement.",
+      "A decorative coating gives an asphalt or concrete surface colour, contrast and grip without rebuilding it, and Square One carries the job from the colour chart to the cured surface. The site walk is free: we look at the substrate — asphalt or concrete, its condition and the traffic it carries — and bring the sample boards, because on-screen colour is a reference and the board is what decides. Colour is specified straight off the published StreetBond® chart of more than fifty standard colours, or matched to a reference you send. The manufacturer's specifications for coated asphalt and coated concrete, flat and stamped, the technical data sheets, the SDS and the colour guide are in the specification library for the spec package, and the written quote sets out the system and the colours for the surface you have.\n\nSquare One installs with its own crews, to the published specification, across the Lower Mainland and Vancouver Island. The system is StreetBond, a UV-stable, water-based acrylic that bonds to asphalt and to concrete with the appropriate primer for each, in two versions — StreetBond 150 and the solar-reflective StreetBond SR — with an anti-skid aggregate for wet conditions and a retroreflective option for night visibility. The manufacturer publishes an 8+ year life cycle, and a worn surface is recoated rather than rebuilt. For plain asphalt protection there is DuraShield, the manufacturer's two-component maintenance coating for asphalt, in black or Solar Gray.\n\nOn the record: bike lanes and bus corridors, spray parks in Maple Ridge and Burnaby, the Circle of Life plaza at Langley Events Centre, the public art at Joyce SkyTrain Station in Vancouver — coated in phased overnight windows outside operating hours, so the station never closed — and a decorative fire lane in North Vancouver. The manufacturer warrants the material; Square One warrants the workmanship.",
     productsIncluded: [
-      "StreetBond 150 and StreetBond SR coatings",
-      "Retroreflective aggregate",
-      "Anti-skid formulations",
+      "StreetBond® 150 and the solar-reflective StreetBond SR",
+      "DuraShield asphalt maintenance coating",
+      "Anti-skid aggregate and retroreflective options",
       "Custom colour matching",
     ],
     applications: [
-      "Bike lanes",
-      "Bus rapid transit corridors",
-      "Parking lots and stalls",
-      "Community spaces",
-      "School zones",
-      "Accessible parking areas",
+      "Bike Lanes",
+      "Bus Rapid Transit Corridors",
+      "Spray Parks",
+      "Plazas and Public Art",
+      "Parking Lots and Stalls",
+      "Sports Courts and School Zones",
+      "Accessible Parking Areas",
     ],
     idealClients: [
-      "BC municipalities",
-      "TransLink and transit agencies",
-      "Developers",
-      "Strata councils",
       "Landscape architects",
+      "Municipal project specifiers",
+      "Civil and traffic engineers",
+      "Developers and their project managers",
+      "General contractors",
+      "Strata and property managers",
     ],
     benefits: [
-      "Retroreflective for night visibility",
-      "UV-stable — 8+ year life cycle, easily refreshed",
-      "Anti-skid aggregate for wet conditions",
-      "High-visibility colour for safety applications",
-      "Eco-friendly water-based options",
-      "Cost-effective for large areas",
+      "Colour specified off the published chart — fifty-plus standard colours, custom matching",
+      "Sample boards at the site walk, then a written quote",
+      "Coated-asphalt and coated-concrete specifications, data sheets and SDS in the library",
+      "Installed by Square One's own crews to the published specification",
+      "Anti-skid aggregate; UV-stable, water-based acrylic",
+      "8+ year life cycle, published by the manufacturer — recoated, not rebuilt",
+      "Phased overnight work on record where a site could not close",
+      "Material warranted by the manufacturer; workmanship by Square One",
     ],
     faqs: [
-      { q: "How long does a StreetBond coating last?", a: "HUB publishes an 8+ year life cycle for StreetBond, and a worn surface is recoated rather than rebuilt." },
-      { q: "Is a coloured coating slippery when wet?", a: "No — StreetBond carries an anti-skid aggregate for wet conditions, which is why it is specified for bike lanes, transit lanes and spray parks." },
-      { q: "Does it work on concrete as well as asphalt?", a: "Yes. StreetBond bonds to asphalt and to concrete, with the appropriate primer for each." },
+      {
+        q: "How do I specify the colour?",
+        a: "Straight off the published StreetBond chart — more than fifty standard colours — or send a colour reference and we will match it. The colour guide is in the specification library, and the sample boards come to the site walk, because on-screen colour is a reference and the board is what decides.",
+      },
+      {
+        q: "What goes in the spec package?",
+        a: "The manufacturer's specifications for coated asphalt and coated concrete, flat and stamped, with the technical data sheets, the SDS and the colour guide — all in the specification library. Square One's written quote sets out the system and the colours for the surface you have.",
+      },
+      {
+        q: "Who installs it, and where?",
+        a: "Square One's own crews, to the manufacturer's published specification, across the Lower Mainland and Vancouver Island — one office in Maple Ridge, and a line of its own for the Island, 250-391-0270.",
+      },
+      {
+        q: "Can the site stay open?",
+        a: "Where it has to. The coating goes onto the surface in place — no rebuild — and where a site could not close the work has been phased: the public art at Joyce SkyTrain Station in Vancouver was coated in overnight windows outside operating hours. A worn surface is recoated rather than rebuilt, which keeps a later closure short.",
+      },
+      {
+        q: "What is warranted, and by whom?",
+        a: "The manufacturer warrants the material, under its limited warranty against manufacturing defects. Square One warrants the workmanship: every system goes down to the published specification, by Square One's own crews, and we walk the finished surface with you before we leave it.",
+      },
+      {
+        q: "Does it work on concrete as well as asphalt, and how long does it last?",
+        a: "Yes. StreetBond bonds to asphalt and to concrete, with the appropriate primer for each, and carries an anti-skid aggregate for wet conditions. The manufacturer publishes an 8+ year life cycle, and a worn surface is recoated rather than rebuilt. DuraShield is a maintenance coating for asphalt.",
+      },
+      {
+        q: "What is the difference between StreetBond and DuraShield?",
+        a: "StreetBond is the coloured decorative coating — fifty-plus colours, anti-skid aggregate, for asphalt and concrete. DuraShield is a two-component maintenance coating for asphalt, in black or Solar Gray, made to protect the pavement rather than decorate it.",
+      },
     ],
     imageUrl: "/images/S1_update_v2/photos/Featured%20image%20options/Langley-event-3-2048x1536.jpg",
+    imageAlt: "'Circle of Life' by Drew & Elinor Atkins in orange, blue and green StreetBond colour on the plaza at Langley Events Centre, Langley",
   },
   {
     slug: "vapor-blasting",
@@ -193,6 +304,7 @@ export const services: Service[] = [
       { q: "Do you come to the site?", a: "Yes. The rig is mobile across the Lower Mainland and Vancouver Island, and it is how Square One prepares surfaces for its own coating and thermoplastic work." },
     ],
     imageUrl: "/images/services/vapor-blasting/generated/gen-granville-island-vapour-blasting-01-enhanced.jpg",
+    imageAlt: "A Square One operator vapour blasting a painted marking off the boardwalk at Granville Island, Vancouver",
   },
 ]
 

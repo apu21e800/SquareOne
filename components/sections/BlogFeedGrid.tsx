@@ -66,8 +66,6 @@ export default function BlogFeedGrid({ posts }: { posts: BlogPostMeta[] }) {
                 />
 
                 <div aria-hidden className="scrim scrim-light" />
-
-                <div className="caption">{post.author}</div>
               </div>
 
               {post.category && (

@@ -61,10 +61,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 function formatDate(dateStr: string) {
+  // Front-matter dates are plain "YYYY-MM-DD" strings, which parse as UTC
+  // midnight; formatting in UTC keeps the day the author wrote.
   return new Date(dateStr).toLocaleDateString("en-CA", {
     year: "numeric",
     month: "long",
     day: "numeric",
+    timeZone: "UTC",
   })
 }
 
@@ -188,10 +191,11 @@ export default async function BlogPostPage({ params }: Props) {
     image: post.featured_image ?? "",
     datePublished: post.date,
     dateModified: post.date,
-    author: {
-      "@type": "Person",
-      name: post.author ?? "Square One Paving",
-    },
+    // A named author is a Person; the company byline is the Organization.
+    author:
+      post.author && post.author !== "Square One Paving"
+        ? { "@type": "Person", name: post.author }
+        : { "@type": "Organization", name: "Square One Paving", url: SITE_URL },
     publisher: {
       "@type": "Organization",
       name: "Square One Paving",
@@ -284,8 +288,20 @@ export default async function BlogPostPage({ params }: Props) {
           <aside className="card-panel mt-16">
             <div className="eyebrow">Planning something similar?</div>
             <p className="mt-4 text-[16px] leading-[1.6] text-[color:var(--ink-body)]">
-              We work across the Lower Mainland and Vancouver Island. Free site visit,
-              written quote.
+              Square One installs across the Lower Mainland and Vancouver Island. Free site
+              visit, written quote. More of the work is in the{" "}
+              <Link href="/projects" className="font-medium text-[color:var(--ink)] underline-offset-4 hover:underline">
+                projects
+              </Link>{" "}
+              and the{" "}
+              <Link href="/galleries" className="font-medium text-[color:var(--ink)] underline-offset-4 hover:underline">
+                galleries
+              </Link>
+              ; the systems are under{" "}
+              <Link href="/services" className="font-medium text-[color:var(--ink)] underline-offset-4 hover:underline">
+                services
+              </Link>
+              .
             </p>
             <Link href="/contact" className="btn-primary mt-7 self-start">
               Request a quote
@@ -312,7 +328,7 @@ export default async function BlogPostPage({ params }: Props) {
           {/* ── Related notes ──────── */}
           {related.length > 0 && (
             <section className="mt-14">
-              <h2>Related notes</h2>
+              <h2>Related posts</h2>
 
               <div className="mt-8 grid grid-cols-2 gap-6 max-[700px]:grid-cols-1 max-[700px]:gap-10">
                 {related.map((entry) => (

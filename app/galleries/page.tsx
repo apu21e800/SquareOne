@@ -4,7 +4,6 @@ import Image from "next/image"
 
 import { WORK_APPS, getWork, workFor, workForRegion, type WorkPhoto } from "@/lib/work"
 import { products } from "@/lib/products"
-import { projects } from "@/lib/projects"
 import IndexImageHero from "@/components/IndexImageHero"
 import WorkGallery from "@/components/WorkGallery"
 import ProjectCaption from "@/components/ui/ProjectCaption"
@@ -18,12 +17,24 @@ import { clampDescription } from "@/lib/seo"
  * products and applications"). The old site's /galleries lives on here:
  * its ten galleries are the first grid, one for one. Every tile on every
  * gallery page opens full screen (components/WorkGallery).
+ *
+ * No photograph counts on this page (the client, 16 Sept 2026: "don't love
+ * saying the numbers"); the counts are used only to decide which cards
+ * exist and in what order.
  */
 
 export const metadata: Metadata = {
-  title: "Image Galleries | Work Across BC",
+  // One separator: the root template adds " | Square One Paving" (56 chars all in).
+  title: "Photo Galleries — Our Work Across BC",
   description:
-    clampDescription("Photographs of Square One Paving's own work across BC — crosswalks, streetscapes, parks, schools, public art, parking lots, bike lanes, branding and driveways — by application, by system and by region."),
+    clampDescription("Square One Paving’s own photographs of decorative pavement in BC — crosswalks, parks, schools, public art, parking lots and driveways, by system and region."),
+  keywords: [
+    "stamped asphalt photos BC",
+    "decorative crosswalk photos",
+    "StreetPrint gallery",
+    "StreetBond gallery",
+    "decorative pavement gallery BC",
+  ],
   alternates: { canonical: `${SITE_URL}/galleries` },
 }
 
@@ -40,7 +51,7 @@ function GalleryCard({
   priority = false,
 }: {
   href: string
-  photo?: WorkPhoto
+  photo?: Pick<WorkPhoto, "src">
   title: string
   count: number
   priority?: boolean
@@ -80,6 +91,18 @@ export default function GalleriesPage() {
     }
   }).filter((g) => g.count > 0)
 
+  // The supporting service gets its own card (Vern, 19 Sept: "add the images
+  // to the galleries section"). Its frames are not all from the record, so
+  // they live on the service page in labelled groups rather than in
+  // lib/work.ts; the cover is Square One's own Granville Island job.
+  const vapour = {
+    slug: "vapour-blasting",
+    label: "Vapour blasting",
+    href: "/services/vapor-blasting#gallery",
+    count: 0,
+    photo: { src: "/images/services/vapor-blasting/generated/gen-granville-island-vapour-blasting-01-enhanced.jpg" },
+  }
+
   const bySystem = products
     .map((p) => {
       const photos = all.filter((photo) =>
@@ -99,10 +122,10 @@ export default function GalleriesPage() {
     <main className="bg-[color:var(--surface)]">
       <IndexImageHero
         src="/images/hero/white-rock-pier-crosswalk-trafficpatternsxd.jpg"
-        alt="Red TrafficPatternsXD crosswalk leading to the White Rock Pier"
+        alt="Red brick-pattern TrafficPatternsXD crosswalk with white edge lines, leading across the road to the White Rock Pier and the beach"
         eyebrow="Galleries"
         title="Photographs of our own work"
-        lede="Square One's own installation photography, captioned with the system and the place it was installed."
+        lede="Square One's own installation photography across the Lower Mainland and Vancouver Island, captioned with the system and the place it was installed — by application, by system and by region."
         caption="White Rock Pier · TrafficPatternsXD · 2019"
         imagePosition="center 62%"
       />
@@ -126,6 +149,7 @@ export default function GalleriesPage() {
             {byApplication.map((g, i) => (
               <GalleryCard key={g.slug} href={g.href} photo={g.photo} title={g.label} count={g.count} priority={i < 3} />
             ))}
+            <GalleryCard key={vapour.slug} href={vapour.href} photo={vapour.photo} title={vapour.label} count={vapour.count} />
           </div>
         </div>
       </section>
@@ -173,7 +197,8 @@ export default function GalleriesPage() {
                 <div className="label">Projects</div>
                 <h3 className="mt-4 text-[22px] leading-[1.25]">Projects, told in full</h3>
                 <p className="mt-3 max-w-[40ch] text-[15px] leading-[1.6] text-[color:var(--ink-body)]">
-                  Each with its photographs, the systems installed, the place and the year.
+                  Each with its photographs, the systems installed and the place &mdash; and the
+                  story behind the crossing, the plaza or the driveway.
                 </p>
               </div>
               <span className="arrow-link mt-6">
@@ -189,13 +214,13 @@ export default function GalleriesPage() {
         <div className="container-1280">
           <div className="flex flex-wrap items-baseline justify-between gap-6">
             <div>
-              <div className="eyebrow">Everything on record</div>
+              <div className="eyebrow">All the galleries, together</div>
               <h2 id="galleries-all" className="mt-4 [text-wrap:balance]">
-                A selection from the record
+                A selection from years of work across BC
               </h2>
             </div>
             <p className="max-w-[44ch] text-[15px] leading-[1.6] text-[color:var(--ink-muted)]">
-              A selection from years of work across BC, not the full list. Filter by system or region, then click any photograph to open the viewer.
+              A sample of the work, not the full list. Filter by system or region, then click any photograph to open the viewer.
             </p>
           </div>
           <div className="mt-10">

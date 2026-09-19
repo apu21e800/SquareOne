@@ -1,83 +1,87 @@
 /**
- * The typeface switch — the registry.
+ * The type switch — the registry.
  *
- * A client cannot choose a face from a name, and they cannot choose one from
- * a specimen sheet either: they choose it from their own site, with their own
- * words in it. So the switch runs the real pages in each candidate and lets
- * them flip. Adding a fourth face is one entry here, one loader in
- * app/layout.tsx and one block in app/refine.css — nothing else knows how
- * many faces there are.
+ * A client cannot choose type from a name, and they cannot choose it from a
+ * specimen sheet either: they choose it from their own site, with their own
+ * words and photographs in it. So the switch runs the real pages in each
+ * candidate and lets them flip.
  *
- * ONE VARIABLE AT A TIME. The switch changes the DISPLAY face only. Inter
- * carries running text in every option, so what the client is comparing is
- * the thing actually in question — the voice of the headlines — and not a
- * second change smuggled in underneath it. Say so in the UI; a comparison
- * that moves two things at once teaches nothing.
+ * 19 Sept 2026 — SECOND ROUND. The first round compared four FACES (Futura,
+ * Jost, Space Grotesk, Poppins) and settled on Futura on the 17th. The day
+ * after launch Vern's note was "it feels too blocky" — and the blockiness
+ * was never the face, it was the SETTING: every headline in Futura Bold
+ * spaced capitals. So this round compares four SETTINGS of the face that
+ * was chosen: case, weight, tracking and the body text beside it. The three
+ * open faces are retired from the switch (one entry each in git if they are
+ * ever wanted back).
  *
- * The face marked `live` is what the site ships and needs no attribute on
- * <html>. Every other face sets html[data-type="<id>"], which app/refine.css
- * turns into a --font-display swap plus its own tracking.
+ * Each option is a complete system — display face and weight, case,
+ * tracking, running text — because that is what a reader experiences. The
+ * switch says so in its footer.
  *
- * THREE ARE OPEN, ONE IS LICENSED, and that is deliberate: the client can see
- * what their money buys rather than take it on trust. To add a second
- * licensed cut — Futura PT, Futura ND, Futura Now, or anything else — drop
- * the .woff2 files in app/fonts/, add a localFont() loader in app/layout.tsx,
- * add an entry here, and add a tracking block in app/refine.css. Four steps,
- * no other file changes. Licensed faces cannot be fetched by an agent; the
- * files have to come from whoever holds the licence.
+ * The entry marked `live` is what the site ships and needs no attribute on
+ * <html>. Every other id sets html[data-type="<id>"], which app/refine.css
+ * turns into the overrides for that system. Adding a system is one entry
+ * here, one block in app/refine.css and — only if it brings a new font —
+ * one loader in app/layout.tsx.
  *
- * THE FOURTH SLOT ASKS A DIFFERENT QUESTION. Futura, Jost and Poppins are all
- * geometric sans with a shared lineage — choosing between them is choosing a
- * shade. Space Grotesk is a grotesque, not a geometric: squarer bowls,
- * sheared terminals, drawn for screens. If every option is a Futura the
- * comparison only ever confirms Futura, so one option is not.
+ * Where the switch shows is decided in components/TypeToggle.tsx and the
+ * boot script in app/layout.tsx: preview deployments, development and
+ * localhost. Production never renders it and never honours ?type=, so a
+ * shared link can never leave a visitor's browser stuck on an alternate.
  */
 
-export type TypefaceId = "futura" | "jost" | "space-grotesk" | "poppins"
+export type TypefaceId = "futura" | "futura-caps" | "futura-serif" | "futura-light"
 
 export interface Typeface {
   id: TypefaceId
   /** What the switch calls it. */
   label: string
-  /** One line under the label — the reason this face is in the running. */
+  /** One line under the label — what this setting is and why it is here. */
   note: string
   /** The stack the switch's own button is set in, so each label wears its face. */
   preview: string
+  /** Extra inline style for the button, so the label also wears its setting. */
+  previewStyle?: { fontWeight?: number; textTransform?: "uppercase" | "none"; letterSpacing?: string }
   /** Licensing, because it is half the decision and the client should see it. */
   licence: "Licensed" | "Open"
-  /** The face the site ships. Exactly one entry has this. */
+  /** The setting the site ships. Exactly one entry has this. */
   live?: boolean
 }
 
 export const TYPEFACES: Typeface[] = [
   {
     id: "futura",
-    label: "Futura",
-    note: "Futura LT — the wordmark's own face. Sharp apexes, small x-height.",
+    label: "Futura, quiet",
+    note: "Futura Bold in sentence case, closed up. Inter for reading. The wordmark's face, set the way the classic specimens set it.",
     preview: "var(--font-futura), var(--font-poppins), sans-serif",
+    previewStyle: { fontWeight: 700, letterSpacing: "-0.01em" },
     licence: "Licensed",
     live: true,
   },
   {
-    id: "jost",
-    label: "Jost",
-    note: "Open Futura-alike. Geometric and sharp, a little more x-height.",
-    preview: "var(--font-jost), sans-serif",
-    licence: "Open",
+    id: "futura-caps",
+    label: "Futura, capitals",
+    note: "The launch setting — Futura Bold in spaced capitals. Poster voice: strong at a glance, loud over a long page.",
+    preview: "var(--font-futura), var(--font-poppins), sans-serif",
+    previewStyle: { fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em" },
+    licence: "Licensed",
   },
   {
-    id: "space-grotesk",
-    label: "Space Grotesk",
-    note: "Not a geometric at all — a contemporary grotesque, squarer and more civic.",
-    preview: "var(--font-space-grotesk), sans-serif",
-    licence: "Open",
+    id: "futura-serif",
+    label: "Futura + serif",
+    note: "The quiet setting with Source Serif for the reading text. Warmer and more editorial; the headlines stay geometric.",
+    preview: "var(--font-futura), var(--font-poppins), sans-serif",
+    previewStyle: { fontWeight: 700, letterSpacing: "-0.01em" },
+    licence: "Licensed",
   },
   {
-    id: "poppins",
-    label: "Poppins",
-    note: "The face the site ran until 17 Sept. Round, tall x-height, soft.",
-    preview: "var(--font-poppins), sans-serif",
-    licence: "Open",
+    id: "futura-light",
+    label: "Futura, light",
+    note: "Futura Book at display size, sentence case, a step larger. The architectural setting — elegant, and it leans on the photographs.",
+    preview: "var(--font-futura), var(--font-poppins), sans-serif",
+    previewStyle: { fontWeight: 400, letterSpacing: "0" },
+    licence: "Licensed",
   },
 ]
 

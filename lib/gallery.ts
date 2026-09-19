@@ -21,6 +21,22 @@ export type GalleryKind = "projects" | "products" | "applications" | "services" 
 const IMAGE_EXT = /\.(jpe?g|png|webp|avif|gif)$/i
 const PUBLIC_DIR = path.join(process.cwd(), "public")
 
+/**
+ * Frames the client has asked off a page, by basename. They stay on disk
+ * until Vern removes the files (deletions are his); nothing here renders.
+ *
+ *   19 Sept 2026, /products/streetbond gallery, office-2887: "not ours -
+ *   remove photo" ×3 — the second, third and fourth tiles.
+ */
+const HELD = new Set([
+  "streetbond-blue-ev-charging-stall-01.jpg",
+  "streetbond-blue-schoolyard-pattern-01.jpg",
+  "streetbond-blue-track-schoolyard-01.jpg",
+  // byte-identical to streetbond-dark-red-brick-pattern-driveway-01.jpg — the
+  // same roundabout rendered twice in one grid
+  "streetbond-driveway.jpg",
+])
+
 /** Natural sort so "shot-2.jpg" precedes "shot-10.jpg". */
 function naturalCompare(a: string, b: string): number {
   return a.localeCompare(b, "en", { numeric: true, sensitivity: "base" })
@@ -43,7 +59,7 @@ export function galleryFor(kind: GalleryKind, slug: string): string[] {
   }
 
   return entries
-    .filter((e) => e.isFile() && IMAGE_EXT.test(e.name) && !e.name.startsWith("."))
+    .filter((e) => e.isFile() && IMAGE_EXT.test(e.name) && !e.name.startsWith(".") && !HELD.has(e.name))
     .map((e) => e.name)
     .sort(naturalCompare)
     .map((name) => `/images/${kind}/${slug}/${encodeURIComponent(name)}`)

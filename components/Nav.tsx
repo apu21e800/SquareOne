@@ -78,7 +78,7 @@ interface PrimaryLink {
     reads as a sentence: what we do, what we install, the proof, the
     specs, the company. */
 const PRIMARY_LINKS: PrimaryLink[] = [
-  { label: "Services", href: "/services", match: ["/services", "/applications", "/driveways", "/galleries"], menu: "services" },
+  { label: "Services", href: "/services", match: ["/services", "/applications", "/driveways", "/galleries", "/specifiers"], menu: "services" },
   { label: "Products", href: "/products", match: ["/products"], menu: "products" },
   { label: "Projects", href: "/projects", match: ["/projects"] },
   { label: "Resources", href: "/resources", match: ["/resources"] },
@@ -324,6 +324,9 @@ function ServicesMega({ onNavigate, onMouseEnter, onMouseLeave }: MegaPanelProps
           All services <span>&rarr;</span>
         </Link>
         <div className="flex flex-wrap items-center gap-x-8 gap-y-2">
+          <Link href="/specifiers" onClick={onNavigate} className="arrow-link">
+            For specifiers <span>&rarr;</span>
+          </Link>
           <Link href="/galleries" onClick={onNavigate} className="arrow-link">
             Image galleries <span>&rarr;</span>
           </Link>
@@ -551,6 +554,9 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
           <Link href="/driveways" onClick={onClose} className="py-[9px] text-[16px] font-medium text-[#3D4147]">
             Driveways
           </Link>
+          <Link href="/specifiers" onClick={onClose} className="py-[9px] text-[16px] font-medium text-[#3D4147]">
+            For specifiers
+          </Link>
         </div>
 
         <div className="label mt-8">Applications</div>
@@ -611,6 +617,7 @@ export default function Nav() {
   const pathname = usePathname()
   const [scrolled, setScrolled] = useState(false)
   const [onImage, setOnImage] = useState(false)
+  const [atFooter, setAtFooter] = useState(false)
   const [menu, setMenu] = useState<MenuKey | null>(null)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
@@ -662,6 +669,21 @@ export default function Nav() {
     window.addEventListener("scroll", onScroll, { passive: true })
     return () => window.removeEventListener("scroll", onScroll)
   }, [])
+
+  // The bar steps off the page once the footer is in view — the footer
+  // carries its own wordmark, and two logos on one screen looked wrong
+  // (Vern, 19 Sept 2026). Any open panel keeps the bar; it comes back the
+  // moment the footer leaves the viewport.
+  useEffect(() => {
+    const footer = document.querySelector("footer")
+    if (!footer || !("IntersectionObserver" in window)) return
+    const io = new IntersectionObserver(
+      (entries) => setAtFooter(entries.some((e) => e.isIntersecting)),
+      { threshold: 0 },
+    )
+    io.observe(footer)
+    return () => io.disconnect()
+  }, [pathname])
 
   // Over-hero state: only a page that opens on a full-bleed photograph
   // ([data-nav-on-image]) gets the transparent, light bar. Everywhere
@@ -723,6 +745,8 @@ export default function Nav() {
   const solid = scrolled || menu !== null || !onImage
   // Menus and the drawer sit on white, so the light treatment yields to them
   const light = onImage && !scrolled && menu === null
+  // Hidden only while nothing is open and the footer is on screen.
+  const hidden = atFooter && menu === null && !drawerOpen && !searchOpen
 
   return (
     // reducedMotion="user": the CSS kill switch cannot stop framer's JS
@@ -731,12 +755,15 @@ export default function Nav() {
     <div ref={rootRef}>
       <header
         className={`fixed top-0 right-0 left-0 z-50${light ? " nav-light" : ""}`}
+        aria-hidden={hidden || undefined}
         style={{
           background: solid ? "#FFFFFF" : "rgba(255,255,255,0)",
           backdropFilter: solid ? "blur(8px)" : "none",
           WebkitBackdropFilter: solid ? "blur(8px)" : "none",
           borderBottom: `1px solid ${solid ? HAIRLINE : "rgba(231,227,220,0)"}`,
-          transition: "background 0.25s ease, border-color 0.25s ease",
+          transform: hidden ? "translateY(-100%)" : "translateY(0)",
+          pointerEvents: hidden ? "none" : "auto",
+          transition: "background 0.25s ease, border-color 0.25s ease, transform 0.32s cubic-bezier(0.4, 0, 0.2, 1)",
         }}
       >
         <div className="container-1280 flex h-[72px] min-w-0 items-center gap-x-6">

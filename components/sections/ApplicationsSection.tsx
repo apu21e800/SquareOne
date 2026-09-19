@@ -103,9 +103,8 @@ export default function ApplicationsSection() {
               </span>
 
               <span className="flex items-center gap-4 justify-self-end">
-                {app.count > 0 && (
-                  <span className="label label-on-slate whitespace-nowrap max-[700px]:hidden">{app.count} photos</span>
-                )}
+                {/* No photo counts — the client reads a number as a claim
+                    about the whole body of work (10 and 18 Sept). */}
                 <span aria-hidden="true" className="arrow-link text-[color:var(--ink-on-slate-faint)]">
                   <span>&rarr;</span>
                 </span>

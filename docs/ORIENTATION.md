@@ -442,7 +442,7 @@ Special-purpose sections were left out on purpose. No part numbers. The
 materials band links to HUB's hosted catalogue. Vern confirms the set.
 
 CANONICAL HOST. lib/site.ts exports SITE_URL (default
-https://squareonepaving.com, overridable with NEXT_PUBLIC_SITE_URL). Every
+https://www.squareonepaving.com since 19 Sept 2026 — the host Vercel serves and the host the old index held — overridable with NEXT_PUBLIC_SITE_URL). Every
 canonical, sitemap, robots, schema and OG URL derives from it — 25 files
 were rewritten; the old .ca/.com split is gone. Do not hard-code a host.
 Which domain is production is still Vern's call. Preview deployments are

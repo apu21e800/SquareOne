@@ -57,7 +57,7 @@ FAQPage / BreadcrumbList / Service JSON-LD via `components/JsonLd.tsx`; `/llms.t
 Copy .env.local.example → .env.local and fill in:
 - RESEND_API_KEY — from resend.com (required for contact form)
 - CONTACT_EMAIL — receiving address (defaults to office@squareonepaving.com)
-- NEXT_PUBLIC_SITE_URL — public site URL for canonical/sitemap/robots/schema/OG (defaults to https://squareonepaving.com in `lib/site.ts`; every absolute URL derives from `SITE_URL` there — never hard-code the host)
+- NEXT_PUBLIC_SITE_URL — public site URL for canonical/sitemap/robots/schema/OG (defaults to https://www.squareonepaving.com in `lib/site.ts` — www, because Vercel serves production on www and the old site's whole Google index was www; every absolute URL derives from `SITE_URL` there — never hard-code the host)
 
 ## Architecture
 
@@ -202,4 +202,4 @@ npm run start   # Run production build locally
 - **Repo**: Connected to GitHub
 - **Auto-deploy**: Push to `main` branch triggers production deployment
 - **Environment variables**: Set in Vercel dashboard (RESEND_API_KEY, CONTACT_EMAIL, NEXT_PUBLIC_SITE_URL)
-- **Domain**: squareonepaving.com is the canonical host in code (`lib/site.ts`). Which of .com / .ca is production and which redirects is Vern's call — set NEXT_PUBLIC_SITE_URL in Vercel if it is not .com.
+- **Domain**: www.squareonepaving.com is the canonical host in code (`lib/site.ts`); the bare domain 308s to it on Vercel. Live since 19 Sept 2026. If production ever moves to the bare domain, set NEXT_PUBLIC_SITE_URL in Vercel and redeploy.
