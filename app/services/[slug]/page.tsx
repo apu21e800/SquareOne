@@ -12,6 +12,7 @@ import { WORK_APPS } from "@/lib/work"
 import type { WorkApp, WorkAppMeta } from "@/lib/work"
 import { SITE_URL } from "@/lib/site"
 import JsonLd, { breadcrumbSchema, faqSchema } from "@/components/JsonLd"
+import IndexImageHero from "@/components/IndexImageHero"
 import { clampDescription } from "@/lib/seo"
 
 interface Props {
@@ -252,46 +253,34 @@ export default async function ServicePage({ params }: Props) {
           ]),
         ]}
       />
-      {/* ── Service header — what Square One delivers, in one breath ───── */}
-      <section className="section bg-surface">
+      {/* ── Opener — the service on real ground, then what Square One
+             delivers, in one breath (19 Sept 2026: every pillar page now
+             opens on a photograph from the record) ───── */}
+      <IndexImageHero
+        src={heroSrc}
+        alt={heroAlt}
+        eyebrow={`Service · One of ${numberWord(services.length)}, Lower Mainland and Vancouver Island`}
+        title={name}
+        lede={service.tagline}
+        caption={heroSrc === service.imageUrl ? service.imageCaption : undefined}
+        imagePosition={service.imagePosition ?? "center"}
+      />
+
+      <section className="bg-surface pt-14 pb-16 max-[700px]:pt-10 max-[700px]:pb-12">
         <div className="container-1280">
-          <div className="flex flex-wrap items-center gap-[14px]">
-            <span className="tag">Service</span>
-            <span className="text-[13px] text-ink-muted">
-              One of {numberWord(services.length)} services, Lower Mainland and Vancouver Island
-            </span>
-          </div>
-
-          <h1 className="stop mt-8 max-w-[24ch] text-balance">{name}</h1>
-
-          <p className="mt-6 max-w-[56ch] text-[19px] leading-[1.65] text-ink-body">
-            {service.tagline}
-          </p>
-
           {/* The intro carries the systems and the region — the same sentence
               search engines and the Service schema read as the description. */}
-          <p className="mt-4 max-w-[60ch] text-[17px] leading-[1.65] text-ink-muted [text-wrap:pretty]">
+          <p className="max-w-[60ch] text-[19px] leading-[1.65] text-ink-body [text-wrap:pretty] max-[700px]:text-[17px]">
             {service.shortDescription}
           </p>
 
-          <div className="mt-10 flex flex-wrap items-center gap-[14px]">
+          <div className="mt-9 flex flex-wrap items-center gap-[14px]">
             <Link href="/contact" className="btn-primary">
               Request a site visit
             </Link>
             <Link href="/specifiers" className="btn-secondary">
               For specifiers
             </Link>
-          </div>
-
-          <div className="pattern-running-bond relative mt-14 aspect-[21/9] overflow-hidden rounded-[2px] max-[700px]:mt-10 max-[700px]:aspect-[4/3]">
-            <Image
-              src={heroSrc}
-              alt={heroAlt}
-              fill
-              priority
-              sizes="(max-width: 1280px) 100vw, 1200px"
-              className="object-cover"
-            />
           </div>
         </div>
       </section>

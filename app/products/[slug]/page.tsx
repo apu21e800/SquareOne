@@ -281,6 +281,7 @@ export default async function ProductPage({ params }: Props) {
           priority
           sizes="100vw"
           className="object-cover"
+          style={{ objectPosition: product.heroPosition ?? "center" }}
         />
         <div aria-hidden="true" className="scrim-rise" />
         <div aria-hidden="true" className="scrim-top" />

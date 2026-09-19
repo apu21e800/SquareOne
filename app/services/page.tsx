@@ -81,13 +81,13 @@ export default function ServicesPage() {
     <main className="bg-[color:var(--surface)]">
       {/* ---- Header — full-bleed image band (Rockstar Part 4) ---- */}
       <IndexImageHero
-        src="/images/hero/granville-island-crosswalk-streetprint.jpg"
-        alt="Brick-red TrafficPatternsXD crosswalk on wet pavement outside Granville Island Brewing, Vancouver"
+        src="/images/applications/public-art/new-westminster-boundary-pump-station-full-field-streetbond-01.jpg"
+        alt="The Boundary Road pump station in New Westminster from above — a quilt of red, blue, yellow, pink, black and white StreetBond squares across the whole plaza, installed by Square One"
         eyebrow="What we do"
         title="What Square One does for a project"
-        lede="A free site walk, help specifying — template sheets, colour chart, sample boards, the manufacturer's specifications — a written quote, and installation by our own crews. Four services, Lower Mainland and Vancouver Island, since 2000."
-        caption="Granville Island · TrafficPatternsXD"
-        imagePosition="center 70%"
+        lede="A free site walk, help specifying — template sheets, colour chart, sample boards, the manufacturer's specifications — a written quote, and installation by our own crews. Three ways to change a surface and one to clean it, Lower Mainland and Vancouver Island, since 2000."
+        caption="New Westminster · Boundary Road pump station · StreetBond"
+        imagePosition="center 45%"
       />
 
       {/* ---- The four services ---- */}

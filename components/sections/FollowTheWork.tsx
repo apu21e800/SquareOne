@@ -47,7 +47,7 @@ export default function FollowTheWork({ settings, tiles }: { settings: SiteSetti
         <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-6">
           <div data-reveal>
             <div className="eyebrow">
-              <span className="eyebrow-num">07</span>On Instagram &middot; {handle}
+              <span className="eyebrow-num">08</span>On Instagram &middot; {handle}
             </div>
             <h2 id="follow-heading" className="mt-4 [text-wrap:balance]">
               {settings.socialHeading}

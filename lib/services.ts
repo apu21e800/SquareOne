@@ -10,6 +10,10 @@ export interface Service {
   idealClients: string[]
   benefits: string[]
   imageUrl: string
+  /** place · subject · system, from the record — shown on the opener. */
+  imageCaption?: string
+  /** object-position for the opener's crop. */
+  imagePosition?: string
   /** What the hero photograph (imageUrl) shows — system, surface and place, as the record captions it. */
   imageAlt: string
   /** Questions answered on the service page, in the site's own words — nothing here that the page does not already say. */
@@ -104,8 +108,10 @@ export const services: Service[] = [
         a: "Yes, when the asphalt is sound — we assess that at the site walk, and if it is not sound enough to take a stamp we say so. The manufacturer publishes a 10–20 year service life for StreetPrint and rates the textured surface slip-resistant and safe for snowploughs and de-icing salt. TrafficPatternsXD is the heavier material, and as its surface wears new anti-skid elements are exposed.",
       },
     ],
-    imageUrl: "/images/applications/roundabouts/abbotsford-roundabout-wide-streetprint-01.jpg",
-    imageAlt: "A brick-red StreetPrint apron around a planted roundabout in Abbotsford, cones still out and the road open",
+    imageUrl: "/images/applications/crosswalks/langley-railways-crossing-at-the-heritage-block-trafficpatternsxd-01.jpg",
+    imageAlt: "A railway-tie pattern crossing in tan and charcoal stamped asphalt at the heritage block in Langley, townhomes behind, installed by Square One",
+    imageCaption: "Langley · Railways crossing at the heritage block · TrafficPatternsXD",
+    imagePosition: "center 68%",
   },
   {
     slug: "preformed-thermoplastic",
@@ -180,6 +186,8 @@ export const services: Service[] = [
     ],
     imageUrl: "/images/S1_update_v2/photos/Featured%20image%20options/UBC-crosswalk-3-300dpi.jpg",
     imageAlt: "Musqueam artwork in blue, green and gold TrafficPatterns thermoplastic on the crosswalk beside the UBC letters on University Boulevard, Vancouver",
+    imageCaption: "Vancouver · UBC and Musqueam crosswalk · TrafficPatterns",
+    imagePosition: "center 62%",
   },
   {
     slug: "decorative-coatings",
@@ -252,8 +260,10 @@ export const services: Service[] = [
         a: "StreetBond is the coloured decorative coating — fifty-plus colours, anti-skid aggregate, for asphalt and concrete. DuraShield is a two-component maintenance coating for asphalt, in black or Solar Gray, made to protect the pavement rather than decorate it.",
       },
     ],
-    imageUrl: "/images/S1_update_v2/photos/Featured%20image%20options/Langley-event-3-2048x1536.jpg",
-    imageAlt: "'Circle of Life' by Drew & Elinor Atkins in orange, blue and green StreetBond colour on the plaza at Langley Events Centre, Langley",
+    imageUrl: "/images/applications/parks-paths/surrey-marine-spray-park-streetbond-01.jpg",
+    imageAlt: "A marine spray park in Surrey — a swirl of blue StreetBond water through lime-green and yellow leaf shapes, orange fish in the current, installed by Square One",
+    imageCaption: "Surrey · Marine spray park · StreetBond",
+    imagePosition: "center 55%",
   },
   {
     slug: "vapor-blasting",

@@ -40,11 +40,19 @@ export default function BlogFeedGrid({ posts }: { posts: BlogPostMeta[] }) {
       className="grain-paper section relative overflow-hidden border-t border-[color:var(--hairline)] bg-[color:var(--surface-warm)]"
     >
       <div className="container-1280 relative z-[1]">
-        <div data-reveal>
-          <div className="eyebrow">
-            <span className="eyebrow-num">06</span>Field notes
+        <div data-reveal className="flex flex-wrap items-baseline justify-between gap-6">
+          {/* Named for what the posts are — project stories and guides — not
+              for the route they live on (Vern, 19 Sept: "we say 'from the
+              blog' but it's not the blog"). /blog's own H1 says the same. */}
+          <div>
+            <div className="eyebrow">
+              <span className="eyebrow-num">07</span>Recently written
+            </div>
+            <h2 className="mt-5">Project stories and guides</h2>
           </div>
-          <h2 className="mt-5">From the blog</h2>
+          <Link href="/blog" className="arrow-link whitespace-nowrap">
+            All stories and guides <span>&rarr;</span>
+          </Link>
         </div>
 
         <div data-reveal-group className="rail-m mt-10 grid grid-cols-1 gap-6 min-[701px]:grid-cols-3">

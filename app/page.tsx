@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Hero from "@/components/sections/Hero"
 import { HERO_SLIDES } from "@/lib/hero-slides"
-import StatsBar from "@/components/sections/StatsBar"
+import ProofLine from "@/components/sections/ProofLine"
 import AudienceBand from "@/components/sections/AudienceBand"
 import EditorialBand from "@/components/sections/EditorialBand"
 import ServicesGrid from "@/components/sections/ServicesGrid"
@@ -9,6 +9,7 @@ import MaterialsBand from "@/components/sections/MaterialsBand"
 import ProjectsPreview from "@/components/sections/ProjectsPreview"
 import ApplicationsSection from "@/components/sections/ApplicationsSection"
 import DrivewaysBand from "@/components/sections/DrivewaysBand"
+import VapourBand from "@/components/sections/VapourBand"
 import BlogFeed from "@/components/sections/BlogFeed"
 import FollowTheWork from "@/components/sections/FollowTheWork"
 import { getSiteSettings, getSlots, getSocialPosts, slotImage, slotText } from "@/lib/cms"
@@ -90,7 +91,10 @@ export default async function Home() {
     <main>
       <Hero slides={slides} eyebrow={eyebrow || undefined} title={title || undefined} />
 
-      <StatsBar />
+      {/* One quiet line of facts under the hero (19 Sept: the stats band
+          read as chunky — Vern). components/sections/StatsBar.tsx stays for
+          /about. */}
+      <ProofLine />
 
       <AudienceBand />
 
@@ -113,6 +117,9 @@ export default async function Home() {
       <EditorialBand statement={slotText(slots, "home.statement", "Twenty-five years on BC ground")} />
 
       <DrivewaysBand />
+
+      {/* Vapour blasting, its own band (Vern, 19 Sept) — the wipe, on the slate. */}
+      <VapourBand />
 
       <BlogFeed />
 

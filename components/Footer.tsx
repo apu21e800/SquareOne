@@ -1,5 +1,6 @@
 import Link from "next/link"
 import BrandMark from "@/components/BrandMark"
+import FooterClose from "@/components/FooterClose"
 import { getSiteSettings } from "@/lib/cms"
 
 /* Site close — the one dark region on every page (docs/design-v2 Site Close),
@@ -93,7 +94,8 @@ export default async function Footer() {
 
   return (
     <div className="bg-[color:var(--surface-slate)]">
-      {/* ── Closing CTA — the single dark close for every page ──────── */}
+      {/* ── Closing CTA — the single dark close for every page but /contact ──────── */}
+      <FooterClose>
       <section className="section text-center">
         <div className="container-1280">
           <p className="eyebrow eyebrow-center text-[#9BA1A9]">Start a project</p>
@@ -123,6 +125,7 @@ export default async function Footer() {
           </div>
         </div>
       </section>
+      </FooterClose>
 
       {/* ── Footer proper ──────── */}
       <footer className="border-t" style={{ borderColor: hairline }}>

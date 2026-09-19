@@ -91,7 +91,7 @@ export default function AudienceBand() {
               key={audience.label}
               href={audience.href}
               data-reveal
-              className="card group flex flex-col overflow-hidden rounded-[2px] border border-hairline bg-surface"
+              className="card group flex flex-col overflow-hidden rounded-[2px] bg-surface"
             >
               {/* 19 Sept 2026 (Vern: "make sure all text is readable if it's on
                   images, or find a better solution"). The better solution: the
@@ -111,7 +111,7 @@ export default function AudienceBand() {
                 <div className="caption">{audience.caption}</div>
               </div>
 
-              <div className="flex flex-1 flex-col p-7 max-[700px]:p-5">
+              <div className="flex flex-1 flex-col border-b border-hairline pt-6 pb-7 max-[700px]:pt-5 max-[700px]:pb-6">
                 <h3 className="text-[22px] leading-[1.15] text-ink max-[700px]:text-[20px]">{audience.label}</h3>
                 <p className="mt-3 max-w-[40ch] text-[14.5px] leading-[1.55] text-ink-body">{audience.desc}</p>
                 <ul className="mt-4 flex flex-wrap gap-2">

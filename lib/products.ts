@@ -15,6 +15,9 @@ export interface Product {
    * the frame is Square One's own.
    */
   imageAlt: string
+  /** object-position for the product page's opening band — keeps the
+      surface, not the sky or a parked truck, in the 60vh crop. */
+  heroPosition?: string
   galleryImages: string[]
   serviceSlug: string
   /**
@@ -73,8 +76,9 @@ export const products: Product[] = [
       "Retroreflective option for crosswalks",
     ],
     applications: ["Crosswalks", "Roundabouts", "Traffic Calming", "Commercial Streetscapes", "Parking Lots", "Plaza Entries", "Decorative Driveways"],
-    image: "/images/products/streetprint/streetprint-new-westminster-city-hall-01.jpg",
-    imageAlt: "A red brick-pattern StreetPrint walkway crossing the parking lot to the front doors of New Westminster City Hall",
+    image: "/images/applications/roundabouts/maple-ridge-roundabout-centre-streetprint-01.jpg",
+    imageAlt: "A brick-red StreetPrint roundabout apron under a clear sky in Maple Ridge, installed by Square One",
+    heroPosition: "center 62%",
     galleryImages: ["/images/products/streetprint/streetprint-1.jpg"],
     serviceSlug: "stamped-asphalt",
   },
@@ -106,8 +110,9 @@ export const products: Product[] = [
       "Retroreflective and solar-reflective (SR) versions",
     ],
     applications: ["Bike Lanes", "Spray Parks", "Plazas", "Sports Courts", "School Zones", "Parking Lots", "Decorative Driveways"],
-    image: "/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg",
-    imageAlt: "Multicolour StreetBond plaza in stripes of yellow, orange, red and green under the SkyTrain guideway at Joyce Station, Vancouver, at dusk",
+    image: "/images/applications/public-art/new-westminster-boundary-pump-station-plaza-streetbond-01.jpg",
+    imageAlt: "The Boundary Road pump station plaza in New Westminster — a quilt of red, blue, yellow, pink, black and white StreetBond squares under the SkyTrain guideway, installed by Square One",
+    heroPosition: "center 60%",
     galleryImages: [
       "/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg",
       "/images/products/streetbond/streetbond-multicolour-plaza-green-circles-01.jpg",
@@ -179,8 +184,9 @@ export const products: Product[] = [
       "For transit hubs, arterial crosswalks and major intersections",
     ],
     applications: ["Major Intersections", "Arterial Crosswalks", "Transit Hubs", "Bus Stops", "Traffic Calming", "High-Volume Pedestrian Zones"],
-    image: "/images/applications/crosswalks/langley-railways-crossing-at-the-heritage-block-trafficpatternsxd-01.jpg",
-    imageAlt: "Artist-designed crosswalk of waves, sand and sky on Marine Drive, White Rock, with yellow tactile plates at the curb and red brick-pattern curb extensions either side",
+    image: "/images/applications/crosswalks/north-vancouver-townhome-street-crossing-wide-trafficpatternsxd-01.jpg",
+    imageAlt: "A plum-and-cream brick-pattern TrafficPatternsXD crossing between two townhome blocks on a North Vancouver street, installed by Square One",
+    heroPosition: "center 64%",
     galleryImages: ["/images/products/traffic-patterns-xd/trafficpatterns-xd-1.jpg"],
     serviceSlug: "stamped-asphalt",
   },
@@ -209,8 +215,9 @@ export const products: Product[] = [
       "Wayfinding and accessibility symbols",
     ],
     applications: ["Branding & Wayfinding", "Community Logos", "School Zone Graphics", "Public Art", "Parks & Paths", "Event Markings"],
-    image: "/images/products/decomark/decomark-victoria-harbour-01.jpg",
-    imageAlt: "A DecoMark sun emblem in orange on a white disc, set into a grey stone-pattern surface under a timber play structure at Victoria harbour",
+    image: "/images/applications/public-art/burnaby-union-street-thunderbird-decomark-01.jpg",
+    imageAlt: "A white thunderbird in DecoMark thermoplastic on the black asphalt of the Union Street greenway in Burnaby, seen from above, installed by Square One",
+    heroPosition: "center 55%",
     galleryImages: ["/images/products/decomark/decomark-1.jpg"],
     serviceSlug: "preformed-thermoplastic",
   },
@@ -242,6 +249,7 @@ export const products: Product[] = [
     applications: ["Parking Lots", "Residential Driveways", "Pathways", "Raised Medians", "Pedestrian Plazas"],
     image: "/images/products/durashield/durashield-rejuvenated-driveway-02.jpg",
     imageAlt: "A residential driveway freshly coated black with DuraShield, running up to a carport beside a shrub garden",
+    heroPosition: "center 72%",
     galleryImages: [
       "/images/products/durashield/durashield-parking-lot-sealcoat-01.jpg",
       "/images/products/durashield/durashield-residential-driveway-01.jpg",
@@ -276,6 +284,7 @@ export const products: Product[] = [
     applications: ["Decorative Crosswalks", "Stop Bars", "Turn Arrows", "Crosswalk Bars", "Speed Legends", "Lane Lines", "Yield Triangles"],
     image: "/images/products/duratherm/duratherm-maple-ridge-crosswalk-01.jpg",
     imageAlt: "Black and white circle-pattern DuraTherm crosswalks meeting at a signalled intersection in Maple Ridge, wet after rain",
+    heroPosition: "center 72%",
     galleryImages: ["/images/products/duratherm/duratherm-1.jpg"],
     serviceSlug: "preformed-thermoplastic",
   },

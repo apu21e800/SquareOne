@@ -450,6 +450,26 @@ export function workLabel(p: WorkPhoto): string {
   return [p.systems.join(" + "), p.subject].filter(Boolean).join(" · ")
 }
 
+/* The municipalities among CITY_REGION's keys — the keys also carry
+   neighbourhoods, landmarks and catch-alls (Steveston, Kingsway, GVRD)
+   that a "where we work" list must not print as towns. */
+const MUNICIPAL = new Set([
+  "Vancouver", "Burnaby", "Richmond", "Surrey", "Delta", "Coquitlam", "Port Moody", "New Westminster",
+  "North Vancouver", "West Vancouver", "Maple Ridge", "Langley", "Chilliwack", "Agassiz", "Bowen Island",
+  "White Rock", "Mission", "Port Coquitlam", "Abbotsford",
+  "Victoria", "Saanich", "North Saanich", "Sooke", "Duncan", "Mill Bay", "Nanaimo", "Parksville",
+  "North Cowichan", "Lake Cowichan", "View Royal", "Langford", "Tofino", "Oak Bay", "Colwood", "Lantzville",
+  "Kelowna", "Vernon", "Salmon Arm", "Osoyoos", "Penticton", "Kamloops", "Sechelt", "Squamish",
+])
+
+/** Municipalities on the record within one region, most-photographed first —
+    the contact page's "where we work" lists, drawn from the photographs. */
+export function workMunicipalities(region: WorkRegion): string[] {
+  return workCities()
+    .filter(({ city }) => MUNICIPAL.has(city) && CITY_REGION[city] === region)
+    .map(({ city }) => city)
+}
+
 /** Distinct cities in the record, most-photographed first. */
 export function workCities(): { city: string; count: number }[] {
   const counts = new Map<string, number>()

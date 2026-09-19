@@ -240,7 +240,7 @@ export default function SpecifiersPage() {
             <div>
               <div className="eyebrow">The services</div>
               <h2 id="specifiers-services" className="mt-4 [text-wrap:balance]">
-                Four services, and what each is used for
+                Three ways to change a surface, one to clean it &mdash; and what each is specified for
               </h2>
             </div>
             <Link href="/services" className="arrow-link whitespace-nowrap">

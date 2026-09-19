@@ -4,12 +4,13 @@ import Image from "next/image"
 import { notFound } from "next/navigation"
 
 import { WORK_APPS, workAppMeta, workFor, type WorkApp } from "@/lib/work"
+import { APP_HEROES } from "@/lib/app-heroes"
+import IndexImageHero from "@/components/IndexImageHero"
 import { getProjectsByApplication } from "@/lib/projects"
 import { products } from "@/lib/products"
 import WorkGallery from "@/components/WorkGallery"
 import ProjectCaption from "@/components/ui/ProjectCaption"
 import { SITE_URL } from "@/lib/site"
-import { fitVars } from "@/lib/type"
 import JsonLd, { breadcrumbSchema } from "@/components/JsonLd"
 import { clampDescription } from "@/lib/seo"
 
@@ -17,8 +18,11 @@ import { clampDescription } from "@/lib/seo"
  * Application page — one template, nine pages (driveways has its own pillar
  * at /driveways and is excluded here).
  *
- *   01 Header      typographic — eyebrow, h1, intro, related links, CTAs,
- *                  record line (systems · projects · regions)             white
+ *   01 Opener      the record's frame for this kind of work, full bleed,
+ *                  eyebrow + h1 over it (lib/app-heroes.ts; 19 Sept 2026 —
+ *                  before that these nine pages opened on text alone)
+ *   01b Intro      the paragraphs, related links, CTAs and the record line
+ *                  (systems · projects · regions)                          white
  *   02 The work    captioned tile gallery, system + region chips        white
  *   03 Systems     product cards for this application                   warm
  *   04 Projects    project cards where the application matches          white
@@ -232,6 +236,7 @@ export default async function ApplicationPage({ params }: Props) {
   if (!meta || slug === "driveways") notFound()
 
   const copy = COPY[slug as keyof typeof COPY]
+  const hero = APP_HEROES[slug as keyof typeof APP_HEROES]
   const photos = workFor(meta.slug)
   const caseStudies = getProjectsByApplication(meta.label)
   const systems = copy.products
@@ -256,26 +261,32 @@ export default async function ApplicationPage({ params }: Props) {
   return (
     <main className="bg-[color:var(--surface)]">
       <JsonLd data={[breadcrumbSchema(SITE_URL, [{ name: "Applications", path: "/applications" }, { name: meta.label, path: `/applications/${slug}` }])]} />
-      {/* ── 01 Header ─────────────────────────────────────────────────────────────── */}
-      <section className="section bg-[color:var(--surface)] pt-28 pb-16 max-[700px]:pt-[88px] max-[700px]:pb-12">
+      {/* ── 01 Opener — the record's frame for this kind of work ─────────────────── */}
+      <IndexImageHero
+        src={hero.src}
+        alt={hero.alt}
+        eyebrow={`Applications · ${meta.label}`}
+        title={copy.headline}
+        caption={hero.caption}
+        imagePosition={hero.position}
+      />
+
+      {/* ── 01b Intro ─────────────────────────────────────────────────────────────── */}
+      <section className="bg-[color:var(--surface)] pt-16 pb-16 max-[700px]:pt-10 max-[700px]:pb-12">
         <div className="container-1280">
           <Link
             href="/applications"
-            className="eyebrow w-fit transition-colors hover:text-[color:var(--ink)]"
+            className="arrow-link w-fit text-[14px] transition-colors hover:text-[color:var(--ink)]"
           >
-            Applications · {meta.label}
+            <span aria-hidden="true" className="mr-[0.35em] inline-block">&larr;</span>All applications
           </Link>
-
-          <div className="fit-host mt-7 max-w-[46rem]">
-            <h1 className="display-fit stop [text-wrap:balance]" style={fitVars(copy.headline)}>{copy.headline}</h1>
-          </div>
 
           {copy.intro.map((para, i) => (
             <p
               key={i}
               className={
                 i === 0
-                  ? "mt-7 max-w-[60ch] text-[19px] leading-[1.65] text-[color:var(--ink-body)] [text-wrap:pretty] max-[700px]:text-[17px]"
+                  ? "mt-6 max-w-[60ch] text-[19px] leading-[1.65] text-[color:var(--ink-body)] [text-wrap:pretty] max-[700px]:text-[17px]"
                   : "mt-5 max-w-[60ch] text-[17px] leading-[1.7] text-[color:var(--ink-body)] [text-wrap:pretty] max-[700px]:text-[16px]"
               }
             >

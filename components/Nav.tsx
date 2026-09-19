@@ -7,7 +7,6 @@ import { usePathname } from "next/navigation"
 import { AnimatePresence, MotionConfig, motion, type Transition } from "framer-motion"
 import BrandMark from "@/components/BrandMark"
 import SearchOverlay from "@/components/SearchOverlay"
-import { products } from "@/lib/products"
 import { services, type Service } from "@/lib/services"
 import { APP_LEADS } from "@/lib/app-leads"
 
@@ -17,17 +16,6 @@ import { APP_LEADS } from "@/lib/app-leads"
 
 type MenuKey = "applications" | "services"
 
-/** Short nav-only descriptor. Falls back to the product tagline. */
-const PRODUCT_DESCRIPTOR: Record<string, string> = {
-  streetprint: "Patterned hot asphalt pavers",
-  streetbond: "Water-based colour coating",
-  trafficpatterns: "Preformed pattern sheets",
-  "trafficpatterns-xd": "Heavy-duty intersections",
-  duratherm: "Inlaid textured surfaces",
-  decomark: "Shapes, symbols, graphics",
-  premark: "Standard legends and bars",
-  durashield: "Asphalt maintenance coating",
-}
 
 const SERVICE_ORDER = [
   "stamped-asphalt",
@@ -60,8 +48,10 @@ interface PrimaryLink {
     work more like a sales funnel for contractors. Applications etc."):
     where the work goes → what we do → the proof → the people who draw it →
     the company. Products left the bar the same night — the client was not
-    sure they belonged there; the eight systems live inside the Services
-    panel, the footer and /products, one click deeper. */
+    sure they belonged there; the eight systems live one click deeper, on
+    /products, reached by a single link in the Services panel, the drawer
+    and the footer (Vern, 19 Sept: "lead potential clients towards
+    services"). */
 const PRIMARY_LINKS: PrimaryLink[] = [
   { label: "Applications", href: "/applications", match: ["/applications", "/driveways", "/galleries"], menu: "applications" },
   { label: "Services", href: "/services", match: ["/services", "/products"], menu: "services" },
@@ -77,7 +67,6 @@ const DRAWER_LINKS: { label: string; href: string }[] = [
   { label: "Projects", href: "/projects" },
   { label: "Specifiers", href: "/specifiers" },
   { label: "Resources", href: "/resources" },
-  { label: "Products", href: "/products" },
   { label: "Galleries", href: "/galleries" },
   { label: "Blog", href: "/blog" },
   { label: "About", href: "/about" },
@@ -278,46 +267,17 @@ function ServicesMega({ onNavigate, onMouseEnter, onMouseLeave }: MegaPanelProps
         ))}
       </div>
 
-      {/* ── The systems we install — the eight products, one row, one click
-             deeper than the bar (19 Sept 2026) ──────── */}
-      <div className="mt-7 border-t border-[#E7E3DC] pt-5">
-        <div className="flex items-baseline justify-between gap-6">
-          <div className="label">The systems we install</div>
-          <Link href="/products" onClick={onNavigate} data-mega-item className="arrow-link text-[13px]">
-            All systems <span>&rarr;</span>
-          </Link>
-        </div>
-        <ul className="mt-3 grid grid-cols-4 gap-x-6 gap-y-1">
-          {products.map((product) => (
-            <li key={product.slug}>
-              <Link
-                href={`/products/${product.slug}`}
-                onClick={onNavigate}
-                data-mega-item
-                className="group -mx-2 flex items-center justify-between gap-3 rounded-[2px] px-2 py-[7px] transition-colors hover:bg-[#FAF8F5]"
-              >
-                <span className="min-w-0">
-                  <span className="block text-[13px] font-semibold uppercase tracking-[0.08em] text-[#3D4147] group-hover:text-[#14161A]" style={{ fontFamily: "var(--font-display)" }}>
-                    {product.name}
-                  </span>
-                  <span className="mt-[1px] block truncate text-[12px] leading-[1.4] text-[#767B82]">
-                    {PRODUCT_DESCRIPTOR[product.slug] ?? product.tagline}
-                  </span>
-                </span>
-                <span aria-hidden="true" className="text-[#A9A297] opacity-0 transition-all duration-200 group-hover:translate-x-1 group-hover:opacity-100 group-hover:text-[#14161A]">
-                  &rarr;
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
-
       <div className="mt-5 flex flex-wrap items-center justify-between gap-x-8 gap-y-3 border-t border-[#E7E3DC] pt-5">
         <Link href="/services" onClick={onNavigate} className="arrow-link">
           All services <span>&rarr;</span>
         </Link>
         <div className="flex flex-wrap items-center gap-x-8 gap-y-2">
+          {/* The eight systems live one click deeper (the client, 19 Sept:
+              not sure Products belongs in the menu; Vern: "lead potential
+              clients towards services") — a single quiet link, not a grid. */}
+          <Link href="/products" onClick={onNavigate} className="arrow-link">
+            The systems we install <span>&rarr;</span>
+          </Link>
           <Link href="/specifiers" onClick={onNavigate} className="arrow-link">
             For specifiers <span>&rarr;</span>
           </Link>
@@ -446,6 +406,9 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
           <Link href="/specifiers" onClick={onClose} className="py-[9px] text-[16px] font-medium text-[#3D4147]">
             For specifiers
           </Link>
+          <Link href="/products" onClick={onClose} className="py-[9px] text-[16px] font-medium text-[#3D4147]">
+            The systems we install
+          </Link>
         </div>
 
         <div className="label mt-8">Applications</div>
@@ -462,19 +425,6 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
           ))}
         </div>
 
-        <div className="label mt-8">Products</div>
-        <div className="mt-3 grid grid-cols-2 gap-x-6">
-          {products.map((product) => (
-            <Link
-              key={product.slug}
-              href={`/products/${product.slug}`}
-              onClick={onClose}
-              className="py-[9px] text-[16px] font-medium text-[#3D4147]"
-            >
-              {product.name}
-            </Link>
-          ))}
-        </div>
       </nav>
 
       <div className="flex shrink-0 flex-wrap items-center gap-x-6 gap-y-1 border-t border-[#E7E3DC] px-6 py-4 text-[13px] text-[#767B82]">

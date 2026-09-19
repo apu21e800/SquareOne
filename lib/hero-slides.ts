@@ -18,7 +18,7 @@ export const HERO_SLIDES: Slide[] = [
   // 19 Sept 2026 (Vern: "choose better images for the homepage — the old
   // site had more current images"). Five frames from the 2026 library,
   // every one on the record (lib/work-captions.ts): the core service first,
-  // then the range — civic art, a crossing, a park, a home. Nothing here
+  // then the range — civic art, a crossing, a park, a laneway. Nothing here
   // repeats a frame that Selected Work or the services grid already shows.
   {
     src: "/images/applications/roundabouts/maple-ridge-roundabout-centre-streetprint-01.jpg",
@@ -49,10 +49,13 @@ export const HERO_SLIDES: Slide[] = [
     position: "center 55%",
   },
   {
-    src: "/images/applications/driveways/maple-ridge-driveway-recoat-at-dusk-streetbond-01.jpg",
-    alt: "A StreetBond driveway recoat at dusk between brick gateposts with lit lanterns, Maple Ridge",
-    place: "Maple Ridge",
-    system: "StreetBond",
-    position: "center 58%",
+    // 19 Sept, later: the dusk driveway read as mud at a glance (Vern: "no
+    // sucky images") — the wet Oxford laneway carries the residential note
+    // in daylight, sharp to the drain.
+    src: "/images/applications/driveways/new-westminster-oxford-strata-laneway-wet-streetprint-01.jpg",
+    alt: "A wet herringbone StreetPrint strata laneway between two rows of townhomes in New Westminster, a white band across the drain",
+    place: "New Westminster",
+    system: "StreetPrint",
+    position: "center 60%",
   },
 ]

@@ -14,27 +14,32 @@ import Link from "next/link"
    strip into /driveways, the offer card is plain, and the only figure left
    is the one HUB publishes. Captions come from lib/work.ts — never guessed. */
 
-const LEAD = {
-  src: "/images/S1_update_v2/photos/Driveways/Ten Mile Point Driveway I.jpg",
-  alt: "Grey ashlar StreetPrint stamped asphalt driveway with a charcoal border, running up to a stone-and-timber entry at Ten Mile Point, Saanich",
-  caption: "Ten Mile Point, Saanich · StreetPrint",
-}
-
-const STRIP: { src: string; alt: string; caption: string }[] = [
+/** The two city pages, featured (Vern, 19 Sept 2026: "feature Vancouver
+    and Victoria driveways"). Each card is one frame from that region's
+    driveway record — the same frame its page opens on — and the
+    communities its page names. */
+const CITIES: { href: string; name: string; region: string; src: string; alt: string; caption: string; communities: string; line: string; tel: string }[] = [
   {
-    src: "/images/S1_update_v2/photos/Driveways/Number 1.jpg",
-    alt: "Grey ashlar slate StreetPrint stamped asphalt driveway in front of a three-car garage, installed by Square One",
-    caption: "Ashlar slate",
+    href: "/driveways/vancouver",
+    name: "Vancouver driveways",
+    region: "Metro Vancouver",
+    src: "/images/applications/driveways/richmond-brick-driveway-streetprint-01.jpg",
+    alt: "A red-brown brick-pattern StreetPrint driveway in front of a stucco bungalow in Richmond, installed by Square One",
+    caption: "Richmond · StreetPrint",
+    communities: "West Vancouver and Richmond to New Westminster, Surrey, Langley and Maple Ridge",
+    line: "604-612-6209",
+    tel: "tel:+16046126209",
   },
   {
-    src: "/images/S1_update_v2/photos/Driveways/Number 2.jpg",
-    alt: "Brown StreetPrint stamped asphalt driveway with a circle medallion and radiating bands, seen from above, installed by Square One",
-    caption: "Circle medallion",
-  },
-  {
-    src: "/images/S1_update_v2/photos/Driveways/Number 3.jpg",
-    alt: "Charcoal cobble StreetPrint stamped asphalt driveway beside stone steps and a shingled house, installed by Square One",
-    caption: "Charcoal cobble",
+    href: "/driveways/victoria",
+    name: "Victoria driveways",
+    region: "Greater Victoria",
+    src: "/images/S1_update_v2/photos/Driveways/Ten%20Mile%20Point%20Driveway%20I.jpg",
+    alt: "Grey ashlar StreetPrint stamped asphalt driveway with a charcoal border, running up to a stone-and-timber entry at Ten Mile Point, Saanich",
+    caption: "Ten Mile Point, Saanich · StreetPrint",
+    communities: "Victoria, Saanich, the Peninsula, Sooke and the Cowichan Valley",
+    line: "250-391-0270",
+    tel: "tel:+12503910270",
   },
 ]
 
@@ -43,51 +48,39 @@ export default function DrivewaysBand() {
     <section className="section relative overflow-hidden bg-surface">
       <div className="container-1280 relative z-[1]">
         <div className="grid grid-cols-12 gap-x-12 gap-y-10 max-[900px]:grid-cols-1">
-          {/* ── The photographs ──────── */}
-          <div className="col-span-7 max-[900px]:col-span-1">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-[2px] bg-surface-stone">
-              <Image
-                src={LEAD.src}
-                alt={LEAD.alt}
-                fill
-                sizes="(max-width: 900px) 100vw, 58vw"
-                className="object-cover"
-              />
-              <div aria-hidden className="scrim scrim-light" />
-              <div className="caption">{LEAD.caption}</div>
-            </div>
-
-            <ul className="mt-4 grid grid-cols-3 gap-4 max-[560px]:gap-3">
-              {STRIP.map((photo) => (
-                <li key={photo.src}>
-                  <Link
-                    href="/driveways"
-                    className="group relative block aspect-[4/3] overflow-hidden rounded-[2px] bg-surface-stone"
-                    aria-label={`${photo.caption} — more driveways`}
-                  >
-                    <Image
-                      src={photo.src}
-                      alt={photo.alt}
-                      fill
-                      sizes="(max-width: 900px) 33vw, 19vw"
-                      className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                    />
-                    <span aria-hidden="true" className="scrim scrim-light" />
-                    <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-2 p-3">
-                      <span
-                        className="text-[11px] font-semibold uppercase tracking-[0.1em] text-white max-[560px]:hidden"
-                        style={{ fontFamily: "var(--font-display)" }}
-                      >
-                        {photo.caption}
-                      </span>
-                      <span aria-hidden="true" className="text-[14px] leading-none text-white/80 transition-transform duration-200 group-hover:translate-x-1">
-                        &rarr;
-                      </span>
+          {/* ── The two city pages ──────── */}
+          <div className="col-span-7 grid grid-cols-2 gap-6 max-[900px]:col-span-1 max-[560px]:grid-cols-1">
+            {CITIES.map((city) => (
+              <article key={city.href} className="card relative flex flex-col overflow-hidden rounded-[2px] bg-surface">
+                <Link href={city.href} aria-label={city.name} className="absolute inset-0 z-[2]" />
+                <div className="relative aspect-[4/3] overflow-hidden bg-surface-stone">
+                  <Image
+                    src={city.src}
+                    alt={city.alt}
+                    fill
+                    sizes="(max-width: 560px) 100vw, (max-width: 900px) 50vw, 300px"
+                    className="object-cover [object-position:center_70%]"
+                  />
+                  <div aria-hidden className="scrim scrim-light" />
+                  <div className="caption">{city.caption}</div>
+                </div>
+                <div className="flex flex-1 flex-col border-b border-hairline pt-5 pb-6">
+                  <div className="label">{city.region}</div>
+                  <h3 className="mt-2">{city.name}</h3>
+                  <p className="mt-[10px] text-[14.5px] leading-[1.55] text-ink-body [text-wrap:pretty]">
+                    On record from {city.communities}.
+                  </p>
+                  <div className="mt-auto flex flex-wrap items-center justify-between gap-x-4 gap-y-2 pt-6">
+                    <span aria-hidden="true" className="arrow-link">
+                      The {city.region} page <span>&rarr;</span>
                     </span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
+                    <a href={city.tel} className="relative z-[3] text-[13px] font-semibold tabular-nums text-ink-muted transition-colors hover:text-ink">
+                      {city.line}
+                    </a>
+                  </div>
+                </div>
+              </article>
+            ))}
           </div>
 
           {/* ── The line, and the offer ──────── */}
@@ -135,12 +128,6 @@ export default function DrivewaysBand() {
             <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
               <Link href="/driveways" className="arrow-link">
                 Driveways <span aria-hidden="true">&rarr;</span>
-              </Link>
-              <Link href="/driveways/vancouver" className="arrow-link">
-                Vancouver <span aria-hidden="true">&rarr;</span>
-              </Link>
-              <Link href="/driveways/victoria" className="arrow-link">
-                Victoria <span aria-hidden="true">&rarr;</span>
               </Link>
               <Link href="/patterns" className="arrow-link">
                 Patterns <span aria-hidden="true">&rarr;</span>

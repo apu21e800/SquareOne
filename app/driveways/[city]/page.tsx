@@ -54,6 +54,8 @@ interface CityCopy {
   communities: string[]
   faqs: { q: string; a: string }[]
   other: string
+  /** The opening figure, from the region's record — chosen by eye (19 Sept 2026). */
+  heroSrc?: string
 }
 
 const CITIES: Record<string, CityCopy> = {
@@ -62,6 +64,7 @@ const CITIES: Record<string, CityCopy> = {
     name: "Vancouver",
     region: "Lower Mainland",
     regionLabel: "Metro Vancouver",
+    heroSrc: "/images/applications/driveways/richmond-brick-driveway-streetprint-01.jpg",
     title: "Stamped Asphalt Driveways in Vancouver",
     description:
       "Stamped asphalt driveways in Vancouver and the Lower Mainland: StreetPrint patterns, StreetBond colour, over the driveway you have. Free site visit and quote.",
@@ -104,6 +107,7 @@ const CITIES: Record<string, CityCopy> = {
     name: "Victoria",
     region: "Vancouver Island",
     regionLabel: "Greater Victoria",
+    heroSrc: "/images/S1_update_v2/photos/Driveways/Ten%20Mile%20Point%20Driveway%20I.jpg",
     title: "Stamped Asphalt Driveways in Victoria",
     description:
       "Stamped asphalt driveways in Victoria, Saanich and Sooke: StreetPrint patterns, StreetBond colour, over the driveway you have. Free site visit and quote.",
@@ -186,7 +190,7 @@ export default async function DrivewayCityPage({ params }: Props) {
   if (!c) notFound()
 
   const photos = workForRegion("driveways", c.region)
-  const hero = photos.find((p) => p.hires && p.w >= 1600)
+  const hero = photos.find((p) => p.src === c.heroSrc) ?? photos.find((p) => p.hires && p.w >= 1600)
   const gallery = hero ? photos.filter((p) => p.src !== hero.src) : photos
   const other = CITIES[c.other]
 
@@ -240,7 +244,7 @@ export default async function DrivewayCityPage({ params }: Props) {
                   fill
                   priority
                   sizes="(max-width: 1120px) 100vw, 1080px"
-                  className="object-cover [object-position:center_100%]"
+                  className="object-cover [object-position:center_78%]"
                 />
               </div>
               <figcaption className="label mt-3">

@@ -57,12 +57,13 @@ export default function ProductsPage() {
   return (
     <main className="bg-[color:var(--surface)]">
       <IndexImageHero
-        src="/images/projects/langley-events-centre-streetbond/langley-events-centre-streetbond-01.jpg"
-        alt="'Circle of Life' by Drew & Elinor Atkins in orange, blue and green StreetBond colour on the plaza at Langley Events Centre, Langley"
+        src="/images/applications/crosswalks/new-westminster-agnes-greenway-crossing-with-bike-lane-trafficpatternsxd-01.jpg"
+        alt="Three systems in one frame on the Agnes Greenway, New Westminster: a green coated bike lane, a white TrafficPatternsXD crossing and yellow tactile plates at the kerb, a tower beyond"
         eyebrow="Products"
         title="The right system for the surface"
         lede="Eight pavement systems, installed by Square One across the Lower Mainland and Vancouver Island — from pattern to protection. If it is not listed here, we do not install it."
-        caption="Langley Events Centre · StreetBond"
+        caption="New Westminster · Agnes Greenway · TrafficPatternsXD"
+        imagePosition="center 78%"
       />
 
       {/* One photographic wall — eight systems, no half-empty category rows.
