@@ -5,7 +5,6 @@ import StatsBar from "@/components/sections/StatsBar"
 import AudienceBand from "@/components/sections/AudienceBand"
 import EditorialBand from "@/components/sections/EditorialBand"
 import ServicesGrid from "@/components/sections/ServicesGrid"
-import MaterialsBand from "@/components/sections/MaterialsBand"
 import ProjectsPreview from "@/components/sections/ProjectsPreview"
 import ApplicationsSection from "@/components/sections/ApplicationsSection"
 import DrivewaysBand from "@/components/sections/DrivewaysBand"
@@ -94,7 +93,12 @@ export default async function Home() {
 
       <ServicesGrid />
 
-      <MaterialsBand />
+      {/* No materials band here (Vern, 19 Sept, live: "maybe colour and
+          templates don't belong on the landing page"). They don't — the home
+          page routes, it doesn't specify. The pattern library is /patterns,
+          reached from StreetPrint, the driveways pages and search; the
+          colours are on /products/streetbond. MaterialsBand is kept for
+          those pages should it be wanted. */}
 
       <ProjectsPreview />
 

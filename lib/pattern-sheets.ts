@@ -66,6 +66,12 @@ export const PATTERN_SHEETS: PatternSheet[] = [
 
 export const OFFERED_SHEETS = PATTERN_SHEETS.filter((p) => p.offered)
 
+/** The three the home page and the driveways page lead with — three
+ *  genuinely different geometries, not two herringbones and a brick. */
+export const FEATURED_SHEETS = ["herringbone", "offset-brick", "ashlar-slate"]
+  .map((slug) => PATTERN_SHEETS.find((p) => p.slug === slug)!)
+  .filter(Boolean)
+
 export const sheetSrc = (slug: string) => `/images/patterns/${slug}.webp`
 
 /** The rendered sheets are all the same drawing frame, trimmed the same way. */

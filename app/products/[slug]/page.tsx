@@ -221,6 +221,11 @@ export default async function ProductPage({ params }: Props) {
             <Link href={`/services/${product.serviceSlug}`} className="btn-secondary">
               See the service
             </Link>
+            {product.slug === "streetprint" && (
+              <Link href="/patterns" className="arrow-link">
+                The pattern library <span aria-hidden="true">&rarr;</span>
+              </Link>
+            )}
           </div>
         </div>
       </section>

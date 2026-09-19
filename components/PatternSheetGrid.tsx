@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import { OFFERED_SHEETS, sheetSrc, SHEET_W, SHEET_H, type PatternSheet } from "@/lib/pattern-sheets"
+import { OFFERED_SHEETS, FEATURED_SHEETS, sheetSrc, SHEET_W, SHEET_H, type PatternSheet } from "@/lib/pattern-sheets"
 
 /**
  * The pattern library grid — HUB's card, on paper.
@@ -19,11 +19,15 @@ export default function PatternSheetGrid({
   limit,
   priority = false,
   columns = 3,
+  /** Square One's name for the template, where HUB's differs. Off on the
+      home band — it wraps in a card and the library is where names matter. */
+  subnames = true,
 }: {
   sheets?: PatternSheet[]
   limit?: number
   priority?: boolean
   columns?: 2 | 3
+  subnames?: boolean
 }) {
   const shown = limit ? sheets.slice(0, limit) : sheets
   const cols = columns === 2 ? "grid-cols-2" : "grid-cols-3"
@@ -45,8 +49,8 @@ export default function PatternSheetGrid({
           <div className="px-5 pb-5 pt-4">
             <div className="text-[16px] font-semibold leading-[1.3] text-ink">
               {p.name}
-              {p.squareOneName && (
-                <span className="ml-2 text-[12px] font-medium text-ink-muted">{p.squareOneName}</span>
+              {subnames && p.squareOneName && (
+                <span className="mt-[2px] block text-[12px] font-medium text-ink-muted">Square One&rsquo;s sheet: {p.squareOneName}</span>
               )}
             </div>
             <p className="mt-1 text-[13.5px] leading-[1.5] text-ink-muted">{p.note}</p>
@@ -61,7 +65,7 @@ export default function PatternSheetGrid({
 export function PatternSheetTeaser() {
   return (
     <>
-      <PatternSheetGrid limit={3} />
+      <PatternSheetGrid sheets={FEATURED_SHEETS} subnames={false} />
       <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3">
         <Link href="/patterns" className="arrow-link">
           The pattern library <span aria-hidden="true">&rarr;</span>

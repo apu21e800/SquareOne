@@ -1,7 +1,7 @@
 import Link from "next/link"
 import PatternSheetGrid from "@/components/PatternSheetGrid"
 import { FEATURED_COLOURS } from "@/lib/palette"
-import { OFFERED_SHEETS } from "@/lib/pattern-sheets"
+import { OFFERED_SHEETS, FEATURED_SHEETS } from "@/lib/pattern-sheets"
 
 /**
  * The materials board — patterns and colours, on the home page.
@@ -46,7 +46,7 @@ export default function MaterialsBand() {
 
         {/* ── Three of the sheets, as HUB draws them ──────── */}
         <div data-reveal className="mt-12">
-          <PatternSheetGrid limit={3} />
+          <PatternSheetGrid sheets={FEATURED_SHEETS} subnames={false} priority />
         </div>
 
         {/* ── Colours, by their published names ──────── */}
