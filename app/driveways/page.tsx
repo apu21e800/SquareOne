@@ -10,7 +10,7 @@
 //
 //   01 Hero                       white — split 55/45, photo right
 //   02 Benefits                   warm, hairline top + bottom
-//   03 Patterns and colours  (held back 19 Sept — see the note in place)
+//   03 Patterns               #patterns  white   HUB's sheets, three + library
 //   05 How it works               warm, hairline top + bottom
 //   06 Selected driveways         white
 //   07 Service area               warm, hairline top + bottom
@@ -22,6 +22,7 @@
 
 import Link from "next/link"
 import Image from "next/image"
+import { PatternSheetTeaser } from "@/components/PatternSheetGrid"
 import type { Metadata } from "next"
 
 import { workFor } from "@/lib/work"
@@ -206,8 +207,8 @@ export default function DrivewaysPage() {
               <Link href="/contact" className="btn-primary">
                 Book a free site visit
               </Link>
-              <Link href="#gallery" className="btn-secondary">
-                See driveways we have done
+              <Link href="#patterns" className="btn-secondary">
+                See the patterns
               </Link>
             </div>
           </div>
@@ -243,10 +244,26 @@ export default function DrivewaysPage() {
       </section>
 
       {/* ── 03 Patterns and colours ──────── */}
-      {/* ── 03 Patterns and colours — HELD BACK (Vern, 19 Sept, launch night:
-             "remove the templates section for now"). The composer, the nine
-             template chips and the as-installed strip lived here; the section
-             is in git at 1dc134b and DrivewayComposer is untouched. ──────── */}
+      {/* ── 03 Patterns — HUB's template sheets, three of them and the library.
+             (The composer that lived here is held back — 19 Sept — and is
+             untouched in components/DrivewayComposer.tsx.) ──────── */}
+      <section id="patterns" className="section relative overflow-hidden bg-surface">
+        <div className="container-1280 relative z-[1]">
+          <div className="flex flex-wrap items-end justify-between gap-6">
+            <div>
+              <p className="eyebrow">Patterns</p>
+              <h2 className="mt-5">The templates, as HUB draws them</h2>
+            </div>
+            <p className="max-w-[48ch] text-[15px] leading-[1.6] text-ink-muted [text-wrap:pretty]">
+              Every StreetPrint template is a dimensioned drawing before it is a driveway. These are
+              the sheets; the sample boards come to your driveway and get held against the house.
+            </p>
+          </div>
+          <div className="mt-10">
+            <PatternSheetTeaser />
+          </div>
+        </div>
+      </section>
 
       {/* ── 05 How it works ──────── */}
       <section className="section relative overflow-hidden border-y border-hairline bg-surface-warm">

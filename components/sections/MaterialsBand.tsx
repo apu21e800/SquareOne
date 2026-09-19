@@ -1,24 +1,22 @@
 import Link from "next/link"
-import PatternTile from "@/components/PatternTile"
-import { FEATURED_COLOURS, STREETPRINT_PATTERNS, STREETPRINT_CATALOGUE_URL } from "@/lib/palette"
+import PatternSheetGrid from "@/components/PatternSheetGrid"
+import { FEATURED_COLOURS } from "@/lib/palette"
+import { OFFERED_SHEETS, FEATURED_SHEETS } from "@/lib/pattern-sheets"
 
 /**
- * The materials board — replaces the field panorama (5 Sept 2026, Vern:
- * "not a fan of the huge useless image on the front page"). Where the
- * photograph only breathed, this band works: the StreetPrint templates as
- * plan drawings, and a dozen StreetBond colours by their published names,
- * each tile a route into the product page.
+ * The materials board — patterns and colours, on the home page.
  *
- * 7 Sept 2026: the template drawings were hairline-strong (#A9A297) on white
- * inside a stone band — pale on pale, and effectively invisible. The tile is
- * now asphalt and the template is the joint line pressed into it, which is
- * what StreetPrint actually leaves behind. The band still reads as a drawing
- * rather than a photograph; now it reads at all.
+ * 19 Sept 2026, third time: Vern, with the site live, "the templates still
+ * look like shit … should look exactly like HUBSS hubss.com/patterns." The
+ * first version drew the nine templates by hand; the second cropped a
+ * window out of HUB's real drawings and showed it as a chip — a small grid
+ * on a white square, which is graph paper. HUB shows the WHOLE SHEET: the
+ * drawing border, the coordinate markers, the dimensions, the title block.
+ * That is the entire difference, and this band now does the same — three
+ * full sheets in HUB's card, on paper, and the way into the library.
  *
- * 17 Sept 2026: inverted to ink on white at Vern's call, matching the way
- * HUB draws the same templates (app/refine.css .pattern-tile). On the stone
- * band the white chips now read as what they are — the template sheet, laid
- * out on the table.
+ * Colours stay: a dozen StreetBond swatches by their published names, each
+ * a route to the StreetBond page. lib/pattern-sheets.ts is the registry.
  */
 export default function MaterialsBand() {
   return (
@@ -37,34 +35,24 @@ export default function MaterialsBand() {
             </p>
           </div>
           <div className="flex flex-wrap gap-x-8 gap-y-2 pb-1">
-            <Link href="/products/streetprint" className="arrow-link whitespace-nowrap">
-              StreetPrint patterns <span>&rarr;</span>
+            <Link href="/patterns" className="arrow-link whitespace-nowrap">
+              All {OFFERED_SHEETS.length} templates <span>&rarr;</span>
             </Link>
-            <a href={STREETPRINT_CATALOGUE_URL} target="_blank" rel="noopener" className="arrow-link whitespace-nowrap">
-              HUB&rsquo;s template catalogue <span>&#8599;</span>
-            </a>
             <Link href="/products/streetbond" className="arrow-link whitespace-nowrap">
               StreetBond colours <span>&rarr;</span>
             </Link>
           </div>
         </div>
 
-        {/* ── Templates, drawn ──────── */}
-        <div data-reveal-group className="mt-12 grid grid-cols-5 gap-4 max-[1100px]:grid-cols-5 max-[700px]:grid-cols-2 max-[700px]:gap-3">
-          {STREETPRINT_PATTERNS.map((pattern) => (
-            <Link key={pattern.id} href={`/driveways?pattern=${pattern.id}#patterns`} data-reveal className="group block" title={`See ${pattern.name} in colour`}>
-              <div className="pattern-tile relative aspect-[4/3] overflow-hidden rounded-[2px] border">
-                <PatternTile id={pattern.id} className="absolute inset-0 h-full w-full" />
-              </div>
-              <div className="chip-name">{pattern.name}</div>
-            </Link>
-          ))}
+        {/* ── Three of the sheets, as HUB draws them ──────── */}
+        <div data-reveal className="mt-12">
+          <PatternSheetGrid sheets={FEATURED_SHEETS} subnames={false} priority />
         </div>
 
         {/* ── Colours, by their published names ──────── */}
-        <div data-reveal-group className="mt-10 grid grid-cols-12 gap-3 max-[1100px]:grid-cols-6 max-[560px]:grid-cols-4 max-[560px]:gap-2">
+        <div data-reveal-group className="mt-12 grid grid-cols-12 gap-3 max-[1100px]:grid-cols-6 max-[560px]:grid-cols-4 max-[560px]:gap-2">
           {FEATURED_COLOURS.map((swatch) => (
-            <Link key={swatch.name} href={`/driveways?colour=${encodeURIComponent(swatch.name)}#patterns`} data-reveal className="group block" title={`See ${swatch.name} on a pattern`}>
+            <Link key={swatch.name} href="/products/streetbond" data-reveal className="group block" title={`${swatch.name} — StreetBond ${swatch.range}`}>
               <div
                 aria-hidden="true"
                 className="chip h-14 transition-transform duration-200 group-hover:-translate-y-[2px]"
@@ -77,11 +65,10 @@ export default function MaterialsBand() {
         </div>
 
         <p className="mt-8 max-w-[70ch] text-[13px] leading-[1.6] text-ink-muted">
-          The nine StreetPrint&reg; templates on Square One&rsquo;s own patterns sheet, drawn from
-          HUB&rsquo;s template sheets at their true module dimensions &mdash; a selection, not the whole
-          library; custom templates are cut to order, ask us. Colour names and ranges as HUB publishes
-          them; on-screen colour varies from the cast colour. Every pattern and colour above is
-          installed to the manufacturer&apos;s specification.
+          Template drawings are HUB Surface Systems&rsquo; own, dimensioned to the inch &mdash; a
+          selection, not the whole library; custom templates are cut to order, ask us. Colour names
+          and ranges as HUB publishes them; on-screen colour varies from the cast colour. Every
+          pattern and colour above is installed to the manufacturer&apos;s specification.
         </p>
       </div>
     </section>

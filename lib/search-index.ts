@@ -165,6 +165,7 @@ const STATIC_PAGES: SearchEntry[] = [
   { type: "page", title: "Vapour blasting", subtitle: "Cleaning, priming, graffiti and mould removal", href: "/services/vapor-blasting", keywords: "vapor blasting dustless restoration surface prep graffiti mould" },
   { type: "page", title: "Projects", subtitle: "Selected work across BC", href: "/projects", keywords: "projects portfolio work" },
   { type: "page", title: "Blog", subtitle: "Guides and project stories from BC ground", href: "/blog", keywords: "blog articles guides news stories journal" },
+  { type: "page", title: "Patterns", subtitle: "StreetPrint templates, as HUB draws them", href: "/patterns", keywords: "patterns templates herringbone offset brick ashlar slate tiles border streetprint stamped" },
   { type: "page", title: "Resources", subtitle: "90 specifications, colour cards, SDS and guides", href: "/resources", keywords: "documents specs specifications library downloads sds colour cards" },
   { type: "page", title: "About", subtitle: "The crew behind 25 years of BC surfaces", href: "/about", keywords: "company about team gord jan history" },
   { type: "page", title: "Contact", subtitle: "Free site visit and written quote", href: "/contact", keywords: "quote request phone email contact maple ridge" },

@@ -93,10 +93,12 @@ export default async function Home() {
 
       <ServicesGrid />
 
-      {/* MaterialsBand — the templates and colours — is held back (Vern, 19 Sept,
-          launch night: "remove the templates section for now, that is not ready
-          to go yet"). The component and lib/pattern-art.ts stay; this is one
-          line to restore. */}
+      {/* No materials band here (Vern, 19 Sept, live: "maybe colour and
+          templates don't belong on the landing page"). They don't — the home
+          page routes, it doesn't specify. The pattern library is /patterns,
+          reached from StreetPrint, the driveways pages and search; the
+          colours are on /products/streetbond. MaterialsBand is kept for
+          those pages should it be wanted. */}
 
       <ProjectsPreview />
 
