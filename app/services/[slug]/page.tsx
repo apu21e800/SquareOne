@@ -194,6 +194,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: pageTitle[service.slug] ?? `${service.name} in BC`,
     description: clampDescription(service.shortDescription),
+    openGraph: { title: service.name, description: clampDescription(service.shortDescription), images: [{ url: service.imageUrl, alt: service.imageAlt }] },
     alternates: { canonical: `${SITE_URL}/services/${service.slug}` },
   }
 }

@@ -161,6 +161,7 @@ export default function ContactPage() {
             alt={OPENER.alt}
             fill
             priority
+            fetchPriority="high"
             sizes="(max-width: 900px) 100vw, 48vw"
             className="object-cover [object-position:8%_62%]"
           />

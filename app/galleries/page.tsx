@@ -24,6 +24,7 @@ import { clampDescription } from "@/lib/seo"
  */
 
 export const metadata: Metadata = {
+  openGraph: { title: "Photo Galleries — Our Work Across BC", images: [{ url: "/images/hero/white-rock-pier-crosswalk-trafficpatternsxd.jpg" }] },
   // One separator: the root template adds " | Square One Paving" (56 chars all in).
   title: "Photo Galleries — Our Work Across BC",
   description:

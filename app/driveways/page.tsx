@@ -32,6 +32,7 @@ import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
 
 export const metadata: Metadata = {
+  openGraph: { title: "Stamped Asphalt Driveways in BC", images: [{ url: "/images/S1_update_v2/photos/Driveways/Ten%20Mile%20Point%20Driveway%20I.jpg" }] },
   title: "Stamped Asphalt Driveways in BC",
   description:
     clampDescription("Stamped asphalt driveways in Metro Vancouver and Greater Victoria: StreetPrint patterns and StreetBond colour over the asphalt you have. Free site visit."),
@@ -228,6 +229,7 @@ export default function DrivewaysPage() {
             alt={HERO.alt}
             fill
             priority
+            fetchPriority="high"
             sizes="(max-width: 700px) 100vw, 45vw"
             className="object-cover [object-position:center_70%]"
           />

@@ -418,6 +418,35 @@ h1, h2:not(.label):not(.eyebrow):not(.card-title) { text-wrap: balance; }
 .nav-light .nav-link { color: rgba(255, 255, 255, 0.96); }
 .nav-light .nav-link:hover, .nav-light .nav-link-active { color: #FFFFFF; }
 
+/* ── Water — the vapour blasting accent (Vern, 19 Sept: "add some blue
+   accent to the vapour blasting section"). One cool colour for the one
+   trade that works in water, used the way the orange is used elsewhere:
+   the eyebrow's square, the numerals, the button, the wipe's handle, a
+   tinted band. Never on a pavement page. ── */
+:root { --water: #1F6FB2; --water-deep: #17568C; --water-tint: #EAF2FA; --water-hairline: #CFDFF0; }
+.eyebrow-water::before { background: var(--water); }
+.eyebrow-water .eyebrow-num { color: var(--water-deep); }
+.text-water { color: var(--water-deep); }
+.stat-water .stat-num { color: var(--water-deep); }
+.stat-rule.stat-water { border-left-color: var(--water); }
+.btn-water { background: var(--water); color: #FFFFFF; }
+.btn-water:hover { background: var(--water-deep); color: #FFFFFF; }
+.band-water { background: var(--water-tint); border-color: var(--water-hairline); }
+
+/* ── Contrast, measured (19 Sept 2026, Lighthouse on the built home page).
+   White on the brand orange (#F26430) is 3.2:1 — under AA for button
+   text — and the muted ink was 4.1:1 on the stone surfaces. The orange
+   square, the accent that is seen not read, keeps the brand colour; the
+   fills that carry words and the deep-orange text step to #C4471A
+   (4.9:1 on white); the muted ink steps to #5F646B (4.8:1 on the darkest
+   paper, 6:1 on white). ── */
+:root { --accent-deep: #C4471A; --ink-muted: #5F646B; }
+.btn-primary, .offer-btn, .btn-water { color: #FFFFFF; }
+.btn-primary { background: var(--accent-deep); }
+.btn-primary:hover { background: #B03D15; }
+.offer-btn { background: var(--accent-deep); }
+.offer-btn:hover { background: #B03D15; }
+
 /* The small voice keeps its capitals and its air. */
 .label, .eyebrow, .chip-name { letter-spacing: 0.14em; }
 .btn-primary, .btn-secondary, .btn-on-slate, .btn-on-image { letter-spacing: 0.12em; }
@@ -629,3 +658,8 @@ html[data-type="futura-light"] .offer-title { font-weight: 400; font-size: 26px;
   letter-spacing: -0.012em;
   line-height: 1.1;
 }
+
+/* Last word on the offer button — the late rule above it set the brand
+   orange back; white on it is 3.2:1 (Lighthouse, 19 Sept). */
+.offer-btn { background: var(--accent-deep); color: #FFFFFF; }
+.offer-btn:hover { background: #B03D15; color: #FFFFFF; }

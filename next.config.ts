@@ -215,6 +215,10 @@ const nextConfig: NextConfig = {
     ];
   },
   images: {
+    // AVIF first (19 Sept 2026, Lighthouse: "increase the compression"):
+    // a quarter to a third smaller than WebP for the same photograph, and
+    // every modern browser reads it; WebP stays as the fallback.
+    formats: ["image/avif", "image/webp"],
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },
       // Sanity's image CDN — photographs the marketing team uploads in the Studio

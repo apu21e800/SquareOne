@@ -9,7 +9,7 @@ import type { AnyPost, BlogPostMeta } from "@/lib/blog"
 import PortableBody from "@/components/blog/PortableBody"
 import { SITE_URL } from "@/lib/site"
 import { fitVars } from "@/lib/type"
-import { clampDescription } from "@/lib/seo"
+import { clampDescription, pageTitle } from "@/lib/seo"
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -35,14 +35,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await getPost(slug)
   if (!post) return {}
 
-  // The H1 keeps the post's full title; the <title> tag has ~65 characters
-  // before it is cut, so a long "Place: what happened" title is shortened to
-  // its first clause here — metadata only, the post itself is untouched.
-  const short = (post.title.length + 20 > 66 && post.title.includes(":") ? post.title.split(":")[0] : post.title).trim()
-  // "| Blog" keeps a post's tag distinct from the project page of the same job.
-  const tag = `${short} | Blog`
+  // The H1 keeps the post's full title; the <title> fits the 60 characters
+  // a result shows (lib/seo.ts pageTitle), and "| Blog" keeps a post's tag
+  // distinct from the project page of the same job.
   return {
-    title: tag.length + 20 > 72 ? { absolute: tag } : tag,
+    title: { absolute: pageTitle(post.title, "Blog") },
     description: clampDescription(post.description),
     alternates: {
       canonical: `${SITE_URL}/blog/${slug}`,

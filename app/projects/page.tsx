@@ -28,6 +28,7 @@ import { clampDescription } from "@/lib/seo"
 const FIO = "/images/S1_update_v2/photos/Featured%20image%20options"
 
 export const metadata: Metadata = {
+  openGraph: { title: "Decorative Pavement Projects Across BC", description: clampDescription("Square One Paving projects across BC — crosswalks, public art, spray parks, parking lots and driveways, each with the system installed and the place."), images: [{ url: "/images/S1_update_v2/photos/Featured%20image%20options/502639628_1112360040926014_5391735583045489560_n.jpg" }] },
   title: "Decorative Pavement Projects Across BC",
   description:
     clampDescription("Square One Paving projects across BC — crosswalks, public art, spray parks, parking lots and driveways, each with the system installed and the place."),

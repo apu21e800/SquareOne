@@ -74,7 +74,7 @@ export default function DrivewaysBand() {
                     <span aria-hidden="true" className="arrow-link">
                       Driveways in {city.region} <span>&rarr;</span>
                     </span>
-                    <a href={city.tel} className="relative z-[3] text-[13px] font-semibold tabular-nums text-ink-muted transition-colors hover:text-ink">
+                    <a href={city.tel} className="relative z-[3] inline-flex min-h-[44px] items-center text-[13px] font-semibold tabular-nums text-ink-muted transition-colors hover:text-ink">
                       {city.line}
                     </a>
                   </div>

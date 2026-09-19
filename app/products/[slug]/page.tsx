@@ -34,7 +34,7 @@ export async function generateStaticParams() {
 const pageTitle: Record<string, string> = {
   streetprint: "StreetPrint® Stamped Asphalt | BC",
   streetbond: "StreetBond® Pavement Coating | BC",
-  trafficpatterns: "TrafficPatterns™ Preformed Thermoplastic | BC",
+  trafficpatterns: "TrafficPatterns™ Thermoplastic | BC",
   "trafficpatterns-xd": "TrafficPatternsXD™ Stamped Asphalt | BC",
   decomark: "DecoMark® Thermoplastic Graphics | BC",
   durashield: "DuraShield Pavement Coating | BC",
@@ -62,6 +62,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: pageTitle[product.slug] ?? `${product.name} | Pavement Systems BC`,
     description: clampDescription(product.shortDescription),
     alternates: { canonical: `${SITE_URL}/products/${product.slug}` },
+    openGraph: { title: product.name, description: clampDescription(product.shortDescription), images: [{ url: product.image, alt: product.imageAlt }] },
   }
 }
 
@@ -279,6 +280,7 @@ export default async function ProductPage({ params }: Props) {
           alt={product.imageAlt}
           fill
           priority
+          fetchPriority="high"
           sizes="100vw"
           className="object-cover"
           style={{ objectPosition: product.heroPosition ?? "center" }}

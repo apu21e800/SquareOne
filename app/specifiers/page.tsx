@@ -28,8 +28,9 @@ import { clampDescription } from "@/lib/seo"
  */
 
 export const metadata: Metadata = {
+  openGraph: { title: "For Specifiers — Drawings & Samples", images: [{ url: "/images/applications/streetscapes/victoria-town-centre-crossing-streetprint-01.jpg" }] },
   // One separator: the root template adds " | Square One Paving".
-  title: "For Specifiers — Drawings, Specs & Samples",
+  title: "For Specifiers — Drawings & Samples",
   description: clampDescription(
     "For landscape architects, engineers and municipal specifiers in BC: StreetPrint template sheets, the StreetBond colour chart, specifications, sample boards and installed precedent.",
   ),

@@ -6,6 +6,7 @@ import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
 
 export const metadata: Metadata = {
+  openGraph: { title: "Decorative Pavement Services in BC", description: clampDescription("Stamped asphalt, decorative coatings, preformed thermoplastic and vapour blasting — specified with you and installed by our own crews across the Lower Mainland and Vancouver Island since 2000."), images: [{ url: "/images/applications/public-art/new-westminster-boundary-pump-station-full-field-streetbond-01.jpg" }] },
   title: "Decorative Pavement Services in BC",
   description:
     clampDescription("Stamped asphalt, decorative coatings, preformed thermoplastic and vapour blasting — specified with you and installed by our own crews across the Lower Mainland and Vancouver Island since 2000."),
@@ -58,8 +59,8 @@ const services = [
     name: "Vapour blasting",
     tagline: "Clean it, prime it, bring it back.",
     desc: "The supporting service: surface cleaning and priming ahead of a coating or thermoplastic install, and graffiti, mould and marking removal on its own — mobile across the Lower Mainland and Vancouver Island, with up to 92% less dust than dry blasting.",
-    image: "/images/services/vapor-blasting/generated/gen-granville-island-vapour-blasting-01-enhanced.jpg",
-    alt: "A Square One operator vapour blasting a painted marking off the boardwalk at Granville Island, Vancouver",
+    image: "/images/services/vapor-blasting/generated/gen-sidewalk-concrete-cleaning.jpg",
+    alt: "Cleaning a concrete sidewalk beside a stone monument with the vapour blasting rig, the lane coned off — an illustration of the service",
     applications: ["Graffiti Removal", "Marking Removal", "Surface Prep", "Mould & Muck"],
   },
 ]

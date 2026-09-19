@@ -32,6 +32,7 @@ export default function BeforeAfter({
   className = "",
   priority = false,
   sizes = "(max-width: 1280px) 100vw, 1280px",
+  tone = "ink",
 }: {
   before: { src: string; alt: string }
   after: { src: string; alt: string }
@@ -41,6 +42,8 @@ export default function BeforeAfter({
   className?: string
   priority?: boolean
   sizes?: string
+  /** "water" colours the handle in the vapour blue (the only place it is used). */
+  tone?: "ink" | "water"
 }) {
   const [pos, setPos] = useState(100)
   const [touched, setTouched] = useState(false)
@@ -149,7 +152,10 @@ export default function BeforeAfter({
         style={{ left: `${clamp}%` }}
       >
         <div className="absolute inset-y-0 -left-px w-[2px] bg-white/95 shadow-[0_0_0_1px_rgba(24,21,18,0.25)]" />
-        <div className="absolute top-1/2 left-1/2 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/70 bg-[rgba(24,21,18,0.62)] text-white shadow-[0_4px_18px_rgba(24,21,18,0.35)] backdrop-blur-[2px] transition-transform duration-150 group-hover:scale-105 group-active:scale-95">
+        <div
+          className="absolute top-1/2 left-1/2 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/70 text-white shadow-[0_4px_18px_rgba(24,21,18,0.35)] backdrop-blur-[2px] transition-transform duration-150 group-hover:scale-105 group-active:scale-95"
+          style={{ background: tone === "water" ? "rgba(31,111,178,0.88)" : "rgba(24,21,18,0.62)" }}
+        >
           <svg width="22" height="14" viewBox="0 0 22 14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
             <path d="M6 1 1 7l5 6" />
             <path d="m16 1 5 6-5 6" />

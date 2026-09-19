@@ -173,6 +173,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: c.title,
     description: clampDescription(c.description),
+    ...(c.heroSrc ? { openGraph: { title: c.headline, description: clampDescription(c.description), images: [{ url: c.heroSrc, alt: c.headline }] } } : {}),
     keywords: [
       `stamped asphalt driveway ${c.name}`,
       `decorative driveway ${c.name}`,
@@ -243,6 +244,7 @@ export default async function DrivewayCityPage({ params }: Props) {
                   alt={heroAlt(hero)}
                   fill
                   priority
+                  fetchPriority="high"
                   sizes="(max-width: 1120px) 100vw, 1080px"
                   className="object-cover [object-position:center_78%]"
                 />

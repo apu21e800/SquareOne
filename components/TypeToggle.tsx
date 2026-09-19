@@ -125,7 +125,7 @@ export default function TypeToggle() {
         <span
           className={`shrink-0 rounded-[2px] px-[5px] py-[1px] text-[9.5px] font-semibold uppercase tracking-[0.1em] ${
             current.licence === "Licensed"
-              ? "bg-[color:var(--accent)] text-white"
+              ? "bg-[color:var(--accent-deep)] text-white"
               : "bg-white/12 text-[#D6D0C7]"
           }`}
         >
@@ -134,7 +134,7 @@ export default function TypeToggle() {
         <span>{current.note}</span>
       </p>
 
-      <p className="mt-2 border-t border-white/10 pt-2 text-[10.5px] leading-[1.45] text-[#8F877E]">
+      <p className="mt-2 border-t border-white/10 pt-2 text-[10.5px] leading-[1.45] text-[#A39B92]">
         Four settings of Futura &mdash; case, weight, spacing and the reading text beside
         it &mdash; on the real pages. Your choice follows you around the site.
       </p>

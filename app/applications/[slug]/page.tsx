@@ -221,6 +221,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: copy.title,
     description: clampDescription(copy.seo),
+    openGraph: { title: copy.headline, description: clampDescription(copy.seo), images: [{ url: APP_HEROES[slug as keyof typeof APP_HEROES].src, alt: APP_HEROES[slug as keyof typeof APP_HEROES].alt }] },
     alternates: { canonical: `${SITE_URL}/applications/${slug}` },
   }
 }

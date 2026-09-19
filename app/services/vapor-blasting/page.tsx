@@ -88,8 +88,7 @@ const tiers = [
   {
     eyebrow: "01 · Commercial & municipal",
     title: "Storefronts, plazas, roads",
-    body:
-      "Graffiti, gum, mould and soot off brick, concrete and stone. Road-marking removal ahead of a new layout. Fire and smoke damage cleaned back to the substrate. Steel and concrete prepared for the next coat — faster than grinding, without the dust cloud of dry blasting.",
+    body: "Graffiti, gum, mould and old markings off brick, concrete, stone and asphalt — without the dust cloud of dry blasting.",
     bullets: [
       "Graffiti, gum, mould and soot removal",
       "Road marking removal",
@@ -108,8 +107,7 @@ const tiers = [
   {
     eyebrow: "02 · Residential",
     title: "Driveways, patios, railings",
-    body:
-      "Paint and stain off wood, concrete and steel. Limestone, marble and stucco stains lifted without etching. Iron fences and railings taken back to bare metal before paint. Brick and patio surfaces cleaned, then primed for whatever comes next.",
+    body: "Paint, stain, moss and grime off patios, driveways, stone and railings — cleaned, then primed for whatever comes next.",
     bullets: [
       "Paint and stain removal",
       "Wood, concrete and steel cleaning",
@@ -128,8 +126,7 @@ const tiers = [
   {
     eyebrow: "03 · Marine & industrial",
     title: "Hulls, decks, equipment",
-    body:
-      "Polyurethane deck coating removal for yachts. On-board coating removal and surface preparation. Steel taken to a clean profile without the heat that warps thin sections — the water does the cooling.",
+    body: "Deck and on-board coatings off, steel taken to a clean profile without the heat that warps thin sections.",
     bullets: [
       "Polyurethane deck coating removal (yachting)",
       "Marine on-board coating removal",
@@ -148,41 +145,9 @@ const tiers = [
 
 // ── Why wet — each point traces to Square One's own description ────────────
 
-const advantages = [
-  {
-    num: "01",
-    title: "Up to 92% less dust",
-    body:
-      "The abrasive travels in water, so the particulate that makes dry blasting a shutdown job stays on the ground. Occupied buildings and busy frontages keep operating around the work.",
-  },
-  {
-    num: "02",
-    title: "Little to no heat",
-    body:
-      "No friction heat at the surface — no warping thin steel, no scorching stone, no glazing the substrate you are trying to save.",
-  },
-  {
-    num: "03",
-    title: "Less water, less impact",
-    body:
-      "Less water than pressure washing, less environmental impact than chemical stripping. The finish is a clean, primed surface — not a chemical residue.",
-  },
-  {
-    num: "04",
-    title: "Faster, and it comes to you",
-    body:
-      "A portable rig that gets the job done faster than the alternatives, dispatched across the Lower Mainland and Vancouver Island. Nothing gets trucked to a shop.",
-  },
-]
 
 // ── Process — what actually happens, no invented paperwork ─────────────────
 
-const process = [
-  { num: "01", title: "Photos and a postcode", body: "Send a couple of photos of the surface and where it is. We identify the substrate and what is on it." },
-  { num: "02", title: "Written quote", body: "A written estimate with the approach — pressure, media, containment — and how long the site is affected." },
-  { num: "03", title: "The rig on site", body: "Adjacent surfaces protected, runoff managed, the surface taken back to clean in passes." },
-  { num: "04", title: "Primed for what's next", body: "Ready for paint, coating, sealer or the decorative system we install ourselves — same crews, same day if it suits." },
-]
 
 // ── Gallery — the record first, then the illustrations, each labelled ──────
 //    (Vern, 19 Sept: "add the images to the galleries section"). Opens the
@@ -217,6 +182,30 @@ const recordFrames = [
 
 const illustrationFrames = [
   {
+    src: `${GEN}/gen-sidewalk-concrete-cleaning.jpg`,
+    alt: "Cleaning a concrete sidewalk beside a stone monument with the vapour blasting rig, the lane coned off",
+    primary: "Sidewalk cleaning",
+    secondary: "Concrete · lane coned off",
+  },
+  {
+    src: `${GEN}/gen-concrete-pier-graffiti.jpg`,
+    alt: "Vapour blasting graffiti off a cast-concrete bridge pier",
+    primary: "Graffiti",
+    secondary: "Cast concrete",
+  },
+  {
+    src: `${GEN}/gen-road-marking-removal-02.jpg`,
+    alt: "Vapour blasting a painted line off wet asphalt — the spray, and the water holding the dust down",
+    primary: "Line marking removal",
+    secondary: "Asphalt",
+  },
+  {
+    src: `${GEN}/gen-road-marking-removal-01.jpg`,
+    alt: "Removing a painted road symbol from asphalt with the vapour blasting rig",
+    primary: "Road marking removal",
+    secondary: "Painted symbol · asphalt",
+  },
+  {
     src: `${GEN}/gen-brick-graffiti-before.jpg`,
     alt: "A face-brick wall covered in aerosol graffiti tags, before vapour blasting",
     primary: "Graffiti, before",
@@ -235,30 +224,6 @@ const illustrationFrames = [
     secondary: "Face brick",
   },
   {
-    src: `${GEN}/gen-concrete-pier-graffiti.jpg`,
-    alt: "Vapour blasting graffiti off a cast-concrete bridge pier",
-    primary: "Graffiti",
-    secondary: "Cast concrete",
-  },
-  {
-    src: `${GEN}/gen-road-marking-removal-01.jpg`,
-    alt: "Removing a painted road symbol from asphalt with the vapour blasting rig",
-    primary: "Road marking removal",
-    secondary: "Painted symbol · asphalt",
-  },
-  {
-    src: `${GEN}/gen-road-marking-removal-02.jpg`,
-    alt: "Vapour blasting a painted line off wet asphalt — the spray, and the water holding the dust down",
-    primary: "Line marking removal",
-    secondary: "Asphalt",
-  },
-  {
-    src: `${GEN}/gen-sidewalk-concrete-cleaning.jpg`,
-    alt: "Cleaning a concrete sidewalk beside a stone monument with the vapour blasting rig, the lane coned off",
-    primary: "Sidewalk cleaning",
-    secondary: "Concrete · lane coned off",
-  },
-  {
     src: `${GEN}/gen-steel-railing-rust.jpg`,
     alt: "Vapour blasting rust off a steel railing at the water's edge",
     primary: "Rust and paint removal",
@@ -269,6 +234,30 @@ const illustrationFrames = [
     alt: "The vapour blasting nozzle mid-pass over patio pavers, lifting moss and grime from the joints",
     primary: "Patio cleaning",
     secondary: "Pavers · moss and grime",
+  },
+]
+
+// ── The rig in the city — three illustrations, captioned by task and
+//    surface (no place: they are illustrations, not the record) ────────────
+
+const cityFrames = [
+  {
+    src: `${GEN}/gen-sidewalk-concrete-cleaning.jpg`,
+    alt: "Cleaning a concrete sidewalk beside a stone monument with the vapour blasting rig, the lane coned off",
+    caption: "Sidewalk cleaning · concrete · lane coned off",
+    position: "center 60%",
+  },
+  {
+    src: `${GEN}/gen-concrete-pier-graffiti.jpg`,
+    alt: "Vapour blasting graffiti off a cast-concrete bridge pier",
+    caption: "Graffiti · cast concrete",
+    position: "center 55%",
+  },
+  {
+    src: `${GEN}/gen-road-marking-removal-02.jpg`,
+    alt: "Vapour blasting a painted line off wet asphalt — the spray, and the water holding the dust down",
+    caption: "Line marking removal · asphalt",
+    position: "center 60%",
   },
 ]
 
@@ -328,7 +317,7 @@ export default function VaporBlastingServicePage() {
         align="right"
       >
         <div className="mt-9 flex flex-wrap items-center gap-[14px]">
-          <Link href="/contact" className="btn-primary">
+          <Link href="/contact" className="btn-primary btn-water">
             Request a quote
           </Link>
           <a href="tel:+16046126209" className="btn-on-image">
@@ -338,10 +327,10 @@ export default function VaporBlastingServicePage() {
       </IndexImageHero>
 
       {/* ── Facts ───────────────────────────────────────────────────── */}
-      <section className="section border-b border-hairline bg-surface-warm">
+      <section className="band-water section border-b">
         <div className="container-1280 grid grid-cols-3 gap-10 max-[700px]:grid-cols-1 max-[700px]:gap-9">
           {facts.map((fact) => (
-            <div key={fact.label} className="stat-rule">
+            <div key={fact.label} className="stat-rule stat-water">
               <div className="stat-num">{fact.number}</div>
               <div className="mt-[14px] text-[15px] text-ink-muted">{fact.label}</div>
             </div>
@@ -354,7 +343,7 @@ export default function VaporBlastingServicePage() {
         <div className="container-1280">
           <div className="flex flex-wrap items-end justify-between gap-x-12 gap-y-6">
             <div>
-              <p className="eyebrow">Before and after</p>
+              <p className="eyebrow eyebrow-water">Before and after</p>
               <h2 className="mt-5">Drag the line</h2>
             </div>
             <p className="max-w-[46ch] text-[17px] leading-[1.6] text-ink-body [text-wrap:pretty]">
@@ -365,6 +354,7 @@ export default function VaporBlastingServicePage() {
           </div>
 
           <BeforeAfter
+            tone="water"
             className="mt-10 aspect-[16/9] max-[700px]:aspect-[4/3]"
             before={{
               src: `${GEN}/gen-brick-graffiti-before.jpg`,
@@ -387,10 +377,44 @@ export default function VaporBlastingServicePage() {
         </div>
       </section>
 
+      {/* ── The rig in the city — the three illustrations Vern and the
+             client worked hardest on, at full width, captioned by task and
+             surface only (illustrations of the service, never a place) ──── */}
+      <section className="section relative overflow-hidden border-t border-hairline bg-surface">
+        <div className="container-1280 relative z-[1]">
+          <div className="flex flex-wrap items-end justify-between gap-x-12 gap-y-6">
+            <div>
+              <p className="eyebrow eyebrow-water">One rig, any surface</p>
+              <h2 className="mt-5 max-w-[20ch] [text-wrap:balance]">Sidewalks, piers, lines &mdash; wherever the paint is</h2>
+            </div>
+            <p className="max-w-[44ch] text-[15px] leading-[1.6] text-ink-muted [text-wrap:pretty]">
+              Illustrations of the service. The real frames are in the gallery below.
+            </p>
+          </div>
+
+          <div className="mt-10 grid grid-cols-3 gap-6 max-[900px]:grid-cols-1">
+            {cityFrames.map((frame) => (
+              <figure key={frame.src} className="thumb relative aspect-[16/10] overflow-hidden rounded-[2px] bg-surface-stone">
+                <Image
+                  src={frame.src}
+                  alt={frame.alt}
+                  fill
+                  sizes="(max-width: 900px) 100vw, 400px"
+                  className="object-cover"
+                  style={{ objectPosition: frame.position }}
+                />
+                <div aria-hidden="true" className="scrim scrim-light" />
+                <figcaption className="caption">{frame.caption}</figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── What it handles — three tiers, commercial first ──────── */}
       <section className="section relative overflow-hidden border-t border-hairline bg-surface-warm">
         <div className="container-1280 relative z-[1]">
-          <p className="eyebrow">What it handles</p>
+          <p className="eyebrow eyebrow-water">What it handles</p>
 
           <h2 className="mt-5">From storefront to drydock</h2>
 
@@ -443,110 +467,28 @@ export default function VaporBlastingServicePage() {
               </article>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* ── Why wet ──────────────────────────────────────────────────── */}
-      <section className="section relative overflow-hidden border-t border-hairline bg-surface">
-        <div className="container-1280 relative z-[1] grid grid-cols-[1fr_1.15fr] gap-16 max-[900px]:grid-cols-1 max-[900px]:gap-10">
-          <div>
-            <p className="eyebrow">Why wet beats dry</p>
-
-            <h2 className="mt-5">The dust stays on the ground</h2>
-
-            <p className="mt-6 max-w-[48ch] text-[17px] leading-[1.6] text-ink-body [text-wrap:pretty]">
-              Dry sandblasting turns a cleaning job into a shutdown. Because the abrasive travels
-              in water, vapour blasting takes a surface back to clean while the building beside it
-              stays open — and leaves it primed rather than scarred.
-            </p>
-
-            <div className="relative mt-8 aspect-[4/3] overflow-hidden rounded-[2px] bg-surface-stone">
-              <Image
-                src={`${GEN}/gen-road-marking-removal-02.jpg`}
-                alt="Vapour blasting a painted line off wet asphalt — the spray, and the water holding the dust down"
-                fill
-                sizes="(max-width: 900px) 100vw, 560px"
-                className="object-cover"
-                style={{ objectPosition: "42% center" }}
-              />
-              <div aria-hidden="true" className="scrim scrim-light" />
-              <div className="caption">Marking removal &middot; asphalt</div>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-x-12 gap-y-2 max-[700px]:grid-cols-1">
-            {advantages.map((advantage) => (
-              <div key={advantage.num} className="border-t border-hairline py-7">
-                <div className="text-[13px] font-semibold tracking-[0.08em] text-ink-muted">
-                  {advantage.num}
-                </div>
-                <h3 className="mt-4">{advantage.title}</h3>
-                <p className="mt-[10px] max-w-[40ch] text-[15px] leading-[1.55] text-ink-body">
-                  {advantage.body}
-                </p>
+          {/* Surfaces and the service area, on one rule — what the Scope
+              section used to say in three columns (trimmed 19 Sept 2026,
+              Vern: "too much text on the vapour blasting page"). */}
+          <div className="mt-12 grid grid-cols-12 gap-x-12 gap-y-6 border-t border-hairline pt-7 max-[900px]:grid-cols-1">
+            <div className="col-span-7 max-[900px]:col-span-1">
+              <p className="label">Surfaces</p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {substrates.map((substrate) => (
+                  <span key={substrate} className="tag">
+                    {substrate}
+                  </span>
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Prep for our own installs ────────────────────────────────────── */}
-      <section className="section relative overflow-hidden border-t border-hairline bg-surface-warm">
-        <div className="container-1280 relative z-[1] grid grid-cols-2 gap-16 max-[900px]:grid-cols-1 max-[900px]:gap-10">
-          <div>
-            <p className="eyebrow">The supporting trade</p>
-
-            <h2 className="mt-5">The same rig primes our own work</h2>
-
-            <p className="mt-6 max-w-[52ch] text-[17px] leading-[1.6] text-ink-body [text-wrap:pretty]">
-              Before StreetBond goes on a spray pad or DecoMark goes on a plaza, the surface has to
-              be clean and open. Vapour blasting is how we get there on our own installs — which is
-              why we offer it to everyone else as a service in its own right.
-            </p>
-
-            <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3">
-              <Link href="/services/decorative-coatings" className="arrow-link">
-                Decorative coatings <span aria-hidden="true">&rarr;</span>
-              </Link>
-              <Link href="/services/preformed-thermoplastic" className="arrow-link">
-                Preformed thermoplastic <span aria-hidden="true">&rarr;</span>
-              </Link>
             </div>
-          </div>
-
-          <div className="relative aspect-[3/2] overflow-hidden rounded-[2px] bg-surface-stone">
-            <Image
-              src="/images/S1_update_v2/photos/Featured%20image%20options/Photo-2025-07-28-2-10-43-PM-scaled.jpg"
-              alt="A finished StreetBond retail plaza entrance installed by Square One"
-              fill
-              sizes="(max-width: 900px) 100vw, 600px"
-              className="object-cover"
-            />
-            <div aria-hidden="true" className="scrim scrim-light" />
-            <div className="caption">Retail plaza entrance &middot; StreetBond, over a prepared surface</div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── The method ───────────────────────────────────────────────── */}
-      <section className="section relative overflow-hidden border-t border-hairline bg-surface">
-        <div className="container-1280 relative z-[1]">
-          <p className="eyebrow">The method</p>
-
-          <h2 className="mt-5">Photos to primed surface, four steps</h2>
-
-          <div className="mt-10 grid grid-cols-4 gap-10 border-t border-hairline max-[700px]:grid-cols-1 max-[700px]:gap-8">
-            {process.map((step) => (
-              <div key={step.num} className="pt-7">
-                <div className="text-[13px] font-semibold tracking-[0.08em] text-ink-muted">
-                  {step.num}
-                </div>
-                <h3 className="mt-4">{step.title}</h3>
-                <p className="mt-[10px] max-w-[44ch] text-[15px] leading-[1.55] text-ink-body">
-                  {step.body}
-                </p>
-              </div>
-            ))}
+            <div className="col-span-5 max-[900px]:col-span-1">
+              <p className="label">Service area</p>
+              <p className="mt-4 text-[15px] leading-[1.6] text-ink-body">
+                Lower Mainland and Vancouver Island &mdash; the rig is mobile, and it comes to the site.
+              </p>
+              <p className="mt-2 text-[14px] leading-[1.6] text-ink-muted">{cities.join(" · ")}</p>
+            </div>
           </div>
         </div>
       </section>
@@ -556,7 +498,7 @@ export default function VaporBlastingServicePage() {
         <div className="container-1280">
           <div className="flex flex-wrap items-end justify-between gap-x-12 gap-y-6">
             <div>
-              <p className="eyebrow">Gallery</p>
+              <p className="eyebrow eyebrow-water">Gallery</p>
               <h2 className="mt-5">On record, and in illustration</h2>
             </div>
             <a href={YOUTUBE} target="_blank" rel="noopener noreferrer" className="arrow-link">
@@ -584,57 +526,12 @@ export default function VaporBlastingServicePage() {
         </div>
       </section>
 
-      {/* ── Scope: substrates, environment, service area ──────── */}
-      <section className="section relative overflow-hidden border-t border-hairline bg-surface">
-        <div className="container-1280 relative z-[1]">
-          <p className="eyebrow">Scope</p>
-
-          <h2 className="mt-5">What we take on, and where</h2>
-
-          <div className="mt-10 grid grid-cols-3 gap-12 max-[900px]:grid-cols-1 max-[900px]:gap-10">
-            <div className="border-t border-hairline pt-6">
-              <p className="label">Surfaces</p>
-              <div className="mt-5 flex flex-wrap gap-2">
-                {substrates.map((substrate) => (
-                  <span key={substrate} className="tag">
-                    {substrate}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div className="border-t border-hairline pt-6">
-              <p className="label">Environment</p>
-              <p className="mt-5 text-[15px] leading-[1.6] text-ink-body">
-                Less water than pressure washing, up to 92% less dust than dry blasting, and less
-                environmental impact than chemical stripping — with little to no heat at the
-                surface.
-              </p>
-              <p className="mt-4 text-[15px] leading-[1.6] text-ink-muted">
-                Adjacent surfaces are protected and runoff is managed on every job. Ask for the
-                approach in writing with your quote.
-              </p>
-            </div>
-
-            <div className="border-t border-hairline pt-6">
-              <p className="label">Service area</p>
-              <p className="mt-5 text-[15px] leading-[1.6] text-ink-body">
-                Lower Mainland and Vancouver Island — the rig is mobile, and it comes to the site.
-              </p>
-              <p className="mt-4 text-[15px] leading-[1.6] text-ink-muted">
-                {cities.join(" · ")}
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* ── Questions ────────────────────────────────────────────── */}
       <section className="section border-t border-hairline bg-surface">
         <div className="container-1280">
           <div className="grid grid-cols-12 gap-x-12 gap-y-8 max-[900px]:grid-cols-1">
             <div className="col-span-4 max-[900px]:col-span-1">
-              <p className="eyebrow">Questions</p>
+              <p className="eyebrow eyebrow-water">Questions</p>
               <h2 className="mt-5 [text-wrap:balance]">What people ask about vapour blasting</h2>
             </div>
             <div className="col-span-8 border-t border-hairline max-[900px]:col-span-1">
@@ -658,7 +555,7 @@ export default function VaporBlastingServicePage() {
       {/* ── Close ───────────────────────────────────────────────────── */}
       <section className="section border-t border-hairline bg-surface-warm">
         <div className="container-1280">
-          <p className="eyebrow">Get a quote</p>
+          <p className="eyebrow eyebrow-water">Get a quote</p>
 
           <h2 className="stop mt-5 max-w-[20ch]">Send us a photo, we send back a quote</h2>
 

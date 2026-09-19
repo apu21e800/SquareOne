@@ -185,6 +185,7 @@ export default function AboutPage() {
           alt="Artist-designed crosswalk of waves, sand and sky in TrafficPatterns on Marine Drive, White Rock, installed by Square One Paving"
           fill
           priority
+          fetchPriority="high"
           sizes="100vw"
           className="object-cover [object-position:center_60%]"
         />

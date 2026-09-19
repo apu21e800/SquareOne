@@ -6,6 +6,7 @@ import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
 
 export const metadata: Metadata = {
+  openGraph: { title: "Decorative Pavement Applications in BC", description: clampDescription("Decorative pavement across BC — crosswalks, streetscapes, parking lots, parks, schools, bike lanes, public art and driveways in stamped asphalt and coatings."), images: [{ url: "/images/hero/white-rock-marine-drive-wave-crosswalk.jpg" }] },
   title: "Decorative Pavement Applications in BC",
   description:
     clampDescription("Decorative pavement across BC — crosswalks, streetscapes, parking lots, parks, schools, bike lanes, public art and driveways in stamped asphalt and coatings."),

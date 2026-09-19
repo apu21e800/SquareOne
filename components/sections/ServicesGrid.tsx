@@ -11,7 +11,9 @@ import { services } from "@/lib/services"
  * per card, twenty across the row. Now each card is one verb, one trade and
  * one plain line, and the heading tells the visitor how to hold the four:
  * three ways we change a surface, and one way we clean it. The specs live
- * on the service pages and under Specifiers.
+ * on the service pages and under Specifiers. Later the same day the four
+ * photograph blocks came out too ("garish, take up too much space") — the
+ * row is four columns of type on one rule, a 72px thumbnail each.
  *
  * Display copy only. Routes and slugs come from lib/services.ts untouched —
  * "vapor-blasting" stays the slug, "Vapour blasting" is what the card reads.
@@ -79,49 +81,43 @@ export default function ServicesGrid() {
           </Link>
         </div>
 
-        <div data-reveal-group className="rail-m mt-12 grid grid-cols-4 gap-6 max-[900px]:grid-cols-2 max-[560px]:grid-cols-1">
+        {/* Four columns of type on one rule — no photograph blocks (Vern,
+            19 Sept: "the 4 big image blocks… are garish, take up too much
+            space"). The applications index above already carries the
+            photographs; this row carries the words. Each column is a small
+            thumbnail from the record, the trade, the verb, one line. */}
+        <ol data-reveal-group className="mt-12 grid grid-cols-4 gap-x-8 border-t border-hairline max-[900px]:grid-cols-2 max-[560px]:grid-cols-1">
           {services.map((service, i) => {
             const img = cardImage[service.slug]
             const card = CARD[service.slug]
             const href = `/services/${service.slug}`
             return (
-              <article
-                key={service.slug}
-                data-reveal
-                className="card group relative flex flex-col overflow-hidden rounded-[2px] bg-surface"
-              >
+              <li key={service.slug} data-reveal className="group relative border-b border-hairline py-7 max-[900px]:py-6">
                 <Link href={href} aria-label={`${card?.trade ?? service.name} — the service`} className="absolute inset-0 z-[2]" />
-
-                {img && (
-                  <div className="relative block aspect-[16/11] overflow-hidden">
-                    <Image
-                      src={img.src}
-                      alt={img.alt}
-                      fill
-                      sizes="(max-width: 560px) 100vw, (max-width: 900px) 50vw, 296px"
-                      className="object-cover"
-                    />
-                    <div aria-hidden="true" className="scrim scrim-light" />
-                    <div className="caption">{String(i + 1).padStart(2, "0")}</div>
+                <div className="flex items-start gap-4">
+                  {img && (
+                    <span className="thumb relative block h-[56px] w-[72px] shrink-0 overflow-hidden rounded-[2px] bg-surface-stone">
+                      <Image src={img.src} alt="" fill sizes="72px" className="object-cover" />
+                    </span>
+                  )}
+                  <div className="min-w-0">
+                    <div className="label">
+                      <span className="mr-2 text-[color:var(--accent-deep)]">{String(i + 1).padStart(2, "0")}</span>
+                      {card?.trade ?? service.name}
+                    </div>
+                    <h3 className="mt-[6px] transition-colors group-hover:text-[color:var(--accent-deep)]">{card?.verb ?? service.name}</h3>
                   </div>
-                )}
-
-                <div className="flex flex-1 flex-col border-b border-hairline pt-5 pb-6">
-                  <div className="label">{card?.trade ?? service.name}</div>
-                  <h3 className="mt-2 transition-colors group-hover:text-[color:var(--accent-deep)]">{card?.verb ?? service.name}</h3>
-
-                  <p className="mt-[10px] text-[15px] leading-[1.6] text-ink-body [text-wrap:pretty]">
-                    {card?.line ?? service.tagline}
-                  </p>
-
-                  <span aria-hidden="true" className="arrow-link mt-auto pt-6">
-                    The service <span>&rarr;</span>
-                  </span>
                 </div>
-              </article>
+                <p className="mt-4 max-w-[30ch] text-[15px] leading-[1.6] text-ink-body [text-wrap:pretty]">
+                  {card?.line ?? service.tagline}
+                </p>
+                <span aria-hidden="true" className="arrow-link mt-4 inline-flex gap-[0.35em]">
+                  The service <span>&rarr;</span>
+                </span>
+              </li>
             )
           })}
-        </div>
+        </ol>
       </div>
     </section>
   )

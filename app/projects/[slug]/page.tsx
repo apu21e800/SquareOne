@@ -12,7 +12,7 @@ import ProjectGallery from "@/components/ProjectGallery"
 import { SITE_URL } from "@/lib/site"
 import { fitVars } from "@/lib/type"
 import JsonLd, { breadcrumbSchema } from "@/components/JsonLd"
-import { clampDescription } from "@/lib/seo"
+import { clampDescription, pageTitle } from "@/lib/seo"
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -68,11 +68,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const project = getProjectBySlug(slug)
   if (!project) return {}
   return {
-    title: { absolute: `${project.title} | Square One Paving` },
+    title: { absolute: pageTitle(project.title) },
     description: clampDescription(project.excerpt),
     alternates: { canonical: `${SITE_URL}/projects/${slug}` },
     openGraph: {
-      title: `${project.title} | Square One Paving`,
+      title: project.title,
       description: clampDescription(project.excerpt),
       images: [project.imageUrl],
     },
@@ -252,7 +252,7 @@ export default async function ProjectPage({ params }: Props) {
             {installed.length > 0 && (
               <aside className="col-span-5 max-[900px]:col-span-1">
                 <div className="rounded-[2px] border border-[color:var(--hairline)] bg-[color:var(--surface-warm)] p-8 max-[700px]:p-6">
-                  <p className="label">{installed.length > 1 ? "The systems installed" : "The system installed"}</p>
+                  <h2 className="label">{installed.length > 1 ? "The systems installed" : "The system installed"}</h2>
                   {installed.map((product) => (
                     <div key={product.slug} className="mt-6 border-t border-[color:var(--hairline)] pt-5 first:mt-4">
                       <h3>
