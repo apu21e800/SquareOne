@@ -75,7 +75,7 @@ export const WORK_APPS: WorkAppMeta[] = [
   { slug: "parking-lots", label: "Parking lots", blurb: "Thresholds, walkways and crosswalks that organise retail, strata and commercial lots." },
   { slug: "parks-paths", label: "Parks & paths", blurb: "Park paths, greenways, plazas and spray parks with StreetBond colour and stamped pattern underfoot." },
   { slug: "schools-sports-courts", label: "Schools & sports courts", blurb: "Sports courts, school crosswalks and play markings that hold up to recess and rain." },
-  { slug: "bike-lanes", label: "Bike lanes", blurb: "Green bike lanes and red bus lanes in PreMark thermoplastic and StreetBond — colour that holds under daily traffic." },
+  { slug: "bike-lanes", label: "Bike lanes", blurb: "Green bike lanes and multi-use paths in PreMark thermoplastic, StreetBond and StreetPrint — colour that holds under daily traffic." },
   { slug: "public-art", label: "Public art", blurb: "Artist-designed pavement — First Nations artwork, murals and community pieces, rendered in thermoplastic and StreetBond coatings." },
   { slug: "branding-wayfinding", label: "Branding & wayfinding", blurb: "Logos, wayfinding symbols and decals heat-fused into the pavement for schools, retail centres and civic sites." },
   { slug: "driveways", label: "Driveways", blurb: "StreetPrint stamped asphalt and StreetBond colour over the driveway you already have — homes across the Lower Mainland and Vancouver Island." },

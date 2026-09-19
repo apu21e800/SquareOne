@@ -90,7 +90,7 @@ const applications: AppCard[] = [
   {
     title: "Bike lanes",
     tag: "Municipal",
-    desc: "Green bike lanes in PreMark thermoplastic and red bus priority lanes in StreetBond — colour that holds under buses, bikes and BC winters.",
+    desc: "Green bike lanes and multi-use paths in PreMark thermoplastic, StreetBond and StreetPrint — colour that holds under daily traffic.",
     image: `${FIO}/Photo-2024-07-04-10-58-08-AM-scaled.jpg`,
     alt: "Red brick StreetPrint stamped asphalt multi-use path with bike lane markings",
     cta: "See the work",

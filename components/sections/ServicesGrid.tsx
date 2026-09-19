@@ -53,7 +53,7 @@ export default function ServicesGrid() {
       <div className="container-1280 relative z-[1]">
         <div data-reveal>
           <div className="eyebrow">
-            <span className="eyebrow-num">01</span>What we do
+            <span className="eyebrow-num">02</span>What we do
           </div>
           <h2 className="mt-5">Four services, one standard</h2>
         </div>

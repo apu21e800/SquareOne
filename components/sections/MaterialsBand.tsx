@@ -68,7 +68,7 @@ export default function MaterialsBand() {
         {/* ── The argument, and the colours ──────── */}
         <div className="col-span-6 max-[900px]:col-span-1">
           <div className="eyebrow eyebrow-on-image">
-            <span className="eyebrow-num">02</span>Patterns and colours
+            <span className="eyebrow-num">03</span>Patterns and colours
           </div>
           <h2 className="mt-5 max-w-[16ch] text-white [text-wrap:balance]">Specified from a drawing, matched from a card</h2>
           <p className="mt-6 max-w-[48ch] text-[17px] leading-[1.65] text-[color:var(--ink-on-slate-body)] [text-wrap:pretty]">

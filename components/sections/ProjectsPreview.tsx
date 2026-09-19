@@ -34,7 +34,7 @@ export default function ProjectsPreview() {
         <div data-reveal className="flex flex-wrap items-baseline justify-between gap-6">
           <div>
             <div className="eyebrow">
-              <span className="eyebrow-num">03</span>Projects
+              <span className="eyebrow-num">04</span>Projects
             </div>
             <h2 className="mt-5">Selected work</h2>
           </div>

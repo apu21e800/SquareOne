@@ -94,7 +94,10 @@ export default async function Home() {
 
       <AudienceBand />
 
-      <EditorialBand statement={slotText(slots, "home.statement", "Twenty-five years on BC ground")} />
+      {/* The funnel's front door (Vern, 19 Sept evening: "work more like a
+          sales funnel for contractors. Applications etc."): where the work
+          goes comes before what we do. */}
+      <ApplicationsSection />
 
       <ServicesGrid />
 
@@ -107,7 +110,7 @@ export default async function Home() {
 
       <ProjectsPreview />
 
-      <ApplicationsSection />
+      <EditorialBand statement={slotText(slots, "home.statement", "Twenty-five years on BC ground")} />
 
       <DrivewaysBand />
 

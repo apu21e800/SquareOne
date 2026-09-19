@@ -84,6 +84,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 const GALLERY_LIMIT = 9
 
+/** The system's published colour chart, cropped to its swatches. Keyed by product slug. */
+const COLOUR_CARD_IMAGE: Record<string, { preview: string; w: number; h: number }> = {
+  "trafficpatterns": { preview: "/images/colour-cards/trafficpatterns.webp", w: 678, h: 680 },
+  "decomark": { preview: "/images/colour-cards/decomark.webp", w: 688, h: 696 },
+  "duratherm": { preview: "/images/colour-cards/duratherm.webp", w: 696, h: 591 },
+  "premark": { preview: "/images/colour-cards/premark.webp", w: 231, h: 605 },
+  "trafficpatterns-xd": { preview: "/images/colour-cards/trafficpatterns-xd.webp", w: 695, h: 632 },
+}
+
 type BandTone = "white" | "warm" | "slate"
 
 type BandKey = "overview" | "applications" | "work" | "colours" | "gallery" | "documents" | "related"
@@ -224,9 +233,20 @@ export default async function ProductPage({ params }: Props) {
   // colours, which HUB publishes separately — never assume this chart covers them.
   const showColours = product.name === "StreetBond"
 
+  // The system's own colour card from the library, shown as page one with a
+  // link to the PDF — for every system that is not StreetBond (which gets the
+  // full chart below). 19 Sept 2026, the client on TrafficPatterns: "link
+  // directly to colour chart somewhere or show the colour chart".
+  const colourCard = !showColours
+    ? docs.find((d) => d.type === "Colour card" && /colou?r (palette|guide|card)/i.test(d.name)) ?? docs.find((d) => d.type === "Colour card")
+    : undefined
+  // The chart itself, cropped to the swatches (public/images/colour-cards):
+  // the manufacturer's block on the card is not shown on the site.
+  const colourPreview = colourCard ? COLOUR_CARD_IMAGE[product.slug] : undefined
+
   const bands: BandKey[] = ["overview", "applications"]
   if (work.length > 0) bands.push("work")
-  if (showColours) bands.push("colours")
+  if (showColours || colourCard) bands.push("colours")
   if (gallery.length > 0) bands.push("gallery")
   if (docs.length > 0) bands.push("documents")
   if (related.length > 0) bands.push("related")
@@ -445,6 +465,60 @@ export default async function ProductPage({ params }: Props) {
           </div>
           <div className="mt-10">
             <WorkGallery photos={work} initial={8} ariaLabel={`${product.name} installation photographs`} />
+          </div>
+        </Band>
+      )}
+
+      {/* ── Colour card — the system's own palette, page one, and the PDF ──────── */}
+      {!showColours && colourCard && (
+        <Band tone={toneOf("colours")} id="colours">
+          <div className="grid grid-cols-12 items-center gap-x-12 gap-y-10 max-[900px]:grid-cols-1">
+            <div className="col-span-5 max-[900px]:col-span-1">
+              <div className="eyebrow">Colours</div>
+              <h2 className="mt-4 max-w-[22ch]">{product.name} colours, off the published card</h2>
+              <p className="mt-5 max-w-[44ch] text-[15px] leading-[1.65] text-ink-body">
+                {product.name} carries its own colour range, published by the manufacturer as a
+                colour card. Name the colour on the drawing; the sample comes to the site visit,
+                because a screen is not the material.
+              </p>
+              <div className="mt-7 flex flex-wrap items-center gap-x-8 gap-y-3">
+                <a href={colourCard.href} target="_blank" rel="noopener" className="btn-primary">
+                  Open the colour card
+                </a>
+                <Link href={docsHref} className="arrow-link">
+                  All {product.name} documents <span aria-hidden="true">&rarr;</span>
+                </Link>
+              </div>
+              <p className="mt-4 text-[12.5px] text-ink-muted">
+                {colourCard.name} &middot; PDF{colourCard.size ? ` · ${colourCard.size}` : ""}
+              </p>
+            </div>
+            <div className="col-span-7 max-[900px]:col-span-1">
+              {colourPreview ? (
+                <a
+                  href={colourCard.href}
+                  target="_blank"
+                  rel="noopener"
+                  className="card block overflow-hidden rounded-[2px] border border-hairline bg-white"
+                  aria-label={`Open ${colourCard.name} (PDF)`}
+                >
+                  <Image
+                    src={colourPreview.preview}
+                    alt={`Page one of the ${product.name} colour card`}
+                    width={colourPreview.w}
+                    height={colourPreview.h}
+                    sizes="(max-width: 900px) 100vw, 700px"
+                    className="h-auto w-full"
+                    unoptimized
+                  />
+                </a>
+              ) : (
+                <a href={colourCard.href} target="_blank" rel="noopener" className="card-panel block">
+                  <span className="label">Colour card</span>
+                  <span className="mt-3 block text-[18px] font-semibold">{colourCard.name}</span>
+                </a>
+              )}
+            </div>
           </div>
         </Band>
       )}

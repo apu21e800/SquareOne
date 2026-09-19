@@ -719,21 +719,23 @@ const records: ProjectInput[] = [
     heroWide: true,
   },
   {
-    title: "Windsor Gate — townhouse driveways, Coquitlam",
+    title: "Windsor Gate — strata laneways, Coquitlam",
     slug: "windsor-gate-coquitlam",
     service: "Stamped Asphalt",
-    application: "Driveways",
+    // 19 Sept 2026, the client on the projects card: "not a driveway" — a
+    // strata's laneways and crossings, filed with the streetscapes.
+    application: "Streetscapes",
     city: "Coquitlam, BC",
     region: "Lower Mainland",
     systems: ["StreetPrint", "StreetBond"],
     client: "Polygon Realty",
     excerpt:
-      "Stamped asphalt driveways and crossings across the Windsor Gate master-planned community in Coquitlam — coloured and sealed with the StreetBond coating system.",
+      "Stamped asphalt laneways and crossings across the Windsor Gate master-planned community in Coquitlam — coloured and sealed with the StreetBond coating system.",
     story: [
-      "Windsor Gate is a master-planned community in Coquitlam, a development with a high bar for exterior finishes and common areas. Square One was specified to deliver the driveway surfaces for the townhouse component, and returned for a second phase across additional lots. The brief asked for a surface that felt considered: stamped asphalt with a colour coating, not bare concrete or painted asphalt.",
+      "Windsor Gate is a master-planned community in Coquitlam, a development with a high bar for exterior finishes and common areas. Square One was specified to deliver the laneway and crossing surfaces for the townhouse component, and returned for a second phase across additional lots. The brief asked for a surface that felt considered: stamped asphalt with a colour coating, not bare concrete or painted asphalt.",
       "The work starts after the paving crew has placed and compacted the asphalt. StreetPrint, the asphalt imprinting system, presses the pattern into the hot asphalt with a heated steel template while the material is still workable; once it has cooled, StreetBond colour is applied and bonds into the texture of the imprint. The manufacturer publishes a 10–20 year service life for StreetPrint, slip resistance and snowplough safety, and an 8+ year life cycle for the StreetBond coating, recoated rather than replaced.",
       "The second phase raised the question every phased project raises: colour. The StreetBond formulations had to match the first phase exactly, because a drift between phases shows when they are seen together. Square One keeps batch records and colour specifications from every phase for this reason, and the match was exact.",
-      "The photographs show a full street of brick-pattern stamped asphalt in a red-brown tone, with a cream crossing bordered in charcoal and a small motif set at its centre. A developer specifying driveways for a multi-phase community should ask the installer to keep batch and colour records from phase one, so the later phases match.",
+      "The photographs show a full street of brick-pattern stamped asphalt in a red-brown tone, with a cream crossing bordered in charcoal and a small motif set at its centre. A developer specifying stamped asphalt for a multi-phase community should ask the installer to keep batch and colour records from phase one, so the later phases match.",
     ],
     post: "windsor-gate-townhouse-driveway",
     images: [
@@ -763,10 +765,12 @@ const records: ProjectInput[] = [
     heroWide: true,
   },
   {
-    title: "Cobblestone stamped asphalt — Ellis Point, Victoria",
+    title: "British Cobble walkway — Ellis Point, Victoria",
     slug: "ellis-point-cobblestone-victoria",
     service: "Stamped Asphalt",
-    application: "Driveways",
+    // 19 Sept 2026, the client on the projects card: "not a driveway" — a
+    // walkway, filed with the parks and paths.
+    application: "Parks & paths",
     city: "Victoria, BC",
     region: "Vancouver Island",
     systems: ["StreetPrint"],

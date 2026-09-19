@@ -154,19 +154,19 @@ const COPY: Record<Exclude<WorkApp, "driveways">, AppCopy> = {
     ],
   },
   "bike-lanes": {
-    title: "Bike Lane & Bus Lane Coatings in BC",
-    headline: "Bike lanes and bus lanes that keep their colour",
+    title: "Bike Lane Coatings & Markings in BC",
+    headline: "Bike lanes that keep their colour",
     intro: [
-      "A green bike lane or a red bus lane is only useful while it is still green or red. Square One installs the lane surface itself: PreMark preformed thermoplastic, manufactured to exact dimensions with embedded retroreflective glass beads and heat-applied for a permanent bond, and StreetBond®, a water-based acrylic coating with an anti-skid aggregate for wet conditions, UV-stable colour and a manufacturer-published 8+ year life cycle that is refreshed with a recoat. The bicycle symbols and arrows go down in PreMark to the owner's marking standard, and StreetPrint® stamped asphalt gives a multi-use path a brick pattern with the manufacturer's published 10–20 year service life.",
-      "Green PreMark bike lanes in North Vancouver, a blue bike lane in Richmond, the Cowrie and Trail lane and crossing in Sechelt, a StreetPrint bike path on 32nd Avenue in Surrey, and a BC Transit priority lane through Victoria coated StreetBond red in 2022 — the record covers both regions. Municipalities and transit agencies commission the work; Square One installs it across the Lower Mainland and Vancouver Island.",
+      "A green bike lane is only useful while it is still green. Square One installs the lane surface itself: PreMark preformed thermoplastic, manufactured to exact dimensions with embedded retroreflective glass beads and heat-applied for a permanent bond, and StreetBond®, a water-based acrylic coating with an anti-skid aggregate for wet conditions, UV-stable colour and a manufacturer-published 8+ year life cycle that is refreshed with a recoat. The bicycle symbols and arrows go down in PreMark to the owner's marking standard, and StreetPrint® stamped asphalt gives a multi-use path a brick pattern with the manufacturer's published 10–20 year service life.",
+      "Green PreMark bike lanes in North Vancouver, a blue bike lane in Richmond, the Cowrie and Trail lane and crossing in Sechelt, a StreetPrint bike path on 32nd Avenue in Surrey — the record covers both regions. Municipalities commission the work; Square One installs it across the Lower Mainland and Vancouver Island.",
     ],
     products: ["premark", "streetbond", "trafficpatterns", "streetprint"],
-    seo: "Green bike lanes and red bus lanes in PreMark thermoplastic and StreetBond coatings, Lower Mainland and Vancouver Island. A published 8+ year life cycle.",
-    work: "Bike lanes and bus lanes across BC",
+    seo: "Green bike lanes and multi-use paths in PreMark thermoplastic, StreetBond coatings and StreetPrint, Lower Mainland and Vancouver Island. A published 8+ year life cycle.",
+    work: "Bike lanes across BC",
     links: [
       { label: "Decorative coatings", href: "/services/decorative-coatings" },
       { label: "PreMark", href: "/products/premark" },
-      { label: "Why BC's bus priority lanes are going red", href: "/blog/bc-transit-priority-lanes-red-coatings" },
+      { label: "Why green means more than visibility", href: "/blog/why-green-means-more-than-visibility" },
     ],
   },
   "public-art": {

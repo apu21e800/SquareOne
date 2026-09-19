@@ -105,7 +105,7 @@ export const products: Product[] = [
       "Bonds to asphalt and concrete, with the right primer for each",
       "Retroreflective and solar-reflective (SR) versions",
     ],
-    applications: ["Bike Lanes", "Bus Priority Corridors", "Spray Parks", "Plazas", "Sports Courts", "School Zones", "Parking Lots", "Decorative Driveways"],
+    applications: ["Bike Lanes", "Spray Parks", "Plazas", "Sports Courts", "School Zones", "Parking Lots", "Decorative Driveways"],
     image: "/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg",
     imageAlt: "Multicolour StreetBond plaza in stripes of yellow, orange, red and green under the SkyTrain guideway at Joyce Station, Vancouver, at dusk",
     galleryImages: [

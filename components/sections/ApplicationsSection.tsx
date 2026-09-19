@@ -57,7 +57,7 @@ export default function ApplicationsSection() {
         <div data-reveal className="flex flex-wrap items-baseline justify-between gap-6">
           <div>
             <p className="eyebrow eyebrow-on-image">
-              <span className="eyebrow-num">04</span>Applications
+              <span className="eyebrow-num">01</span>Applications
             </p>
             <h2 className="mt-5 text-white">Where these systems are specified</h2>
           </div>
