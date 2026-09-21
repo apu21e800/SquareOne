@@ -49,10 +49,14 @@ const pageTitle: Record<string, string> = {
 }
 
 /** The service heading — what Square One delivers, in the words a specifier uses. */
+/* 21 Sept 2026: each of these opened by repeating the service name, which
+   the H1 two sections above and the eyebrow beside them already carry — and
+   the extra words pushed a 40px headline into six lines in a 20rem column.
+   The name comes out, the promise stays. */
 const serviceHeading: Record<string, string> = {
-  "stamped-asphalt": "Stamped asphalt, specified with you and installed by our own crews",
-  "decorative-coatings": "A decorative coating, from the colour chart to the cured surface",
-  "preformed-thermoplastic": "Preformed thermoplastic, from your drawing to the road",
+  "stamped-asphalt": "Specified with you, installed by our own crews",
+  "decorative-coatings": "From the colour chart to the cured surface",
+  "preformed-thermoplastic": "From your drawing to the road",
 }
 
 /** The heading over the systems cards. */
@@ -289,11 +293,11 @@ export default async function ServicePage({ params }: Props) {
       {/* ── The service ────────────────────────────────────────── */}
       <section className="section border-y border-[color:var(--hairline)] bg-surface-warm">
         <div className="container-1280">
-          <div className="grid grid-cols-1 gap-10 min-[901px]:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] min-[901px]:gap-20">
+          <div className="grid grid-cols-1 gap-10 min-[901px]:grid-cols-[minmax(0,26rem)_minmax(0,1fr)] min-[901px]:gap-16">
             <div>
               <p className="eyebrow">What Square One delivers</p>
               <h2 className="mt-5 [text-wrap:balance]">
-                {serviceHeading[service.slug] ?? `${name}, specified with you and installed by our own crews`}
+                {serviceHeading[service.slug] ?? "Specified with you, installed by our own crews"}
               </h2>
             </div>
 

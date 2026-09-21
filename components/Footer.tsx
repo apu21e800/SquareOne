@@ -77,7 +77,7 @@ export default async function Footer() {
   const year = new Date().getFullYear()
   const site = await getSiteSettings()
   const phones = [
-    { label: "Office · Maple Ridge", display: site.phoneOffice, href: tel(site.phoneOffice) },
+    { label: "Office", display: site.phoneOffice, href: tel(site.phoneOffice) },
     { label: "Vancouver Island", display: site.phoneIsland, href: tel(site.phoneIsland) },
     { label: "Toll-free", display: site.phoneTollFree, href: tel(site.phoneTollFree) },
   ]
@@ -172,28 +172,35 @@ export default async function Footer() {
             {/* How to reach us */}
             <div className="min-[701px]:col-span-2 lg:col-span-3">
               <div className="label label-on-slate">Talk to us</div>
-              <ul className="mt-5 flex flex-col gap-[14px]">
+              <dl className="mt-5 grid grid-cols-[minmax(0,auto)_1fr] items-baseline gap-x-[14px] gap-y-[14px]">
                 {phones.map((p) => (
-                  <li key={p.href} className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
-                    <span className="text-[13px] text-[#8A9098]">{p.label}</span>
-                    <a
-                      href={p.href}
-                      className="text-[17px] font-medium tracking-[0.01em] text-white transition-colors hover:text-[#C6CBD1] tabular-nums"
-                    >
-                      {p.display}
-                    </a>
-                  </li>
+                  <div key={p.href} className="contents">
+                    <dt className="text-[12.5px] leading-[1.4] text-[#8A9098]">{p.label}</dt>
+                    <dd>
+                      <a
+                        href={p.href}
+                        className="whitespace-nowrap text-[16px] font-medium tabular-nums text-white transition-colors hover:text-[#C6CBD1]"
+                      >
+                        {p.display}
+                      </a>
+                    </dd>
+                  </div>
                 ))}
-                <li className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
-                  <span className="text-[13px] text-[#8A9098]">Email</span>
-                  <a
-                    href={`mailto:${site.email}`}
-                    className="text-[15px] font-medium text-white transition-colors hover:text-[#C6CBD1] [overflow-wrap:anywhere]"
-                  >
-                    {site.email}
-                  </a>
-                </li>
-              </ul>
+              </dl>
+
+              {/* The mailbox is a different shape of value — a 26-character
+                  address will not sit beside a label in a quarter-width
+                  column without breaking mid-word, so it takes its own line
+                  under the numbers rather than wrecking their alignment. */}
+              <div className="mt-[14px]">
+                <div className="text-[12.5px] leading-[1.4] text-[#8A9098]">Email</div>
+                <a
+                  href={`mailto:${site.email}`}
+                  className="mt-[3px] inline-block text-[15px] font-medium text-white transition-colors hover:text-[#C6CBD1] [overflow-wrap:anywhere]"
+                >
+                  {site.email}
+                </a>
+              </div>
               <address className="mt-6 border-t pt-5 text-[14px] not-italic leading-[1.6] text-[#8A9098]" style={{ borderColor: hairline }}>
                 {site.addressLine1}
                 <br />
@@ -240,9 +247,6 @@ export default async function Footer() {
               </Link>
               <Link href="/terms" className="text-[#7E848C] transition-colors hover:text-white">
                 Terms
-              </Link>
-              <Link href="/search" className="text-[#7E848C] transition-colors hover:text-white">
-                Search
               </Link>
             </div>
           </div>

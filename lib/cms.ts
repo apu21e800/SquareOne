@@ -37,7 +37,10 @@ export interface SiteSettings {
 
 export const DEFAULT_SETTINGS: SiteSettings = {
   positioning:
-    "Decorative pavement installers — stamped asphalt, coatings and preformed thermoplastic — since 2000, based in Maple Ridge and working across the Lower Mainland and Vancouver Island.",
+    // 21 Sept 2026: the three trades were listed here and again in the
+    // "What we do" column beside it — the same words twice, in one glance.
+    // The line carries what the column cannot: how long, and where.
+    "Decorative pavement across British Columbia since 2000 — one office in Maple Ridge, crews on both sides of the Strait.",
   phoneOffice: "604-612-6209",
   phoneIsland: "250-391-0270",
   phoneTollFree: "1-877-391-0270",

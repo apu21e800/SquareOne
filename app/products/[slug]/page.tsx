@@ -94,7 +94,7 @@ const COLOUR_CARD_IMAGE: Record<string, { preview: string; w: number; h: number 
   "trafficpatterns-xd": { preview: "/images/colour-cards/trafficpatterns-xd.webp", w: 695, h: 632 },
 }
 
-type BandTone = "white" | "warm" | "slate"
+type BandTone = "white" | "warm" | "stone" | "slate"
 
 type BandKey = "overview" | "applications" | "work" | "colours" | "gallery" | "documents" | "related"
 
@@ -121,9 +121,11 @@ function Band({
       className={[
         tone === "slate"
           ? "section relative overflow-hidden bg-surface-slate"
-          : tone === "warm"
-            ? "section border-y border-hairline bg-surface-warm"
-            : "section bg-surface",
+          : tone === "stone"
+            ? "section border-y border-hairline bg-surface-stone"
+            : tone === "warm"
+              ? "section border-y border-hairline bg-surface-warm"
+              : "section bg-surface",
         tightTop ? "!pt-2" : "",
       ]
         .filter(Boolean)
@@ -252,9 +254,9 @@ export default async function ProductPage({ params }: Props) {
   if (docs.length > 0) bands.push("documents")
   if (related.length > 0) bands.push("related")
 
-  // "applications" is fixed slate — the page's one dark beat — so it sits out of
-  // the light alternation. Because it separates its neighbours, the bands either
-  // side of it may share a surface without touching.
+  // "applications" has its own surface (stone), so it sits out of the
+  // white/warm alternation. Because it separates its neighbours, the bands
+  // either side of it may share a surface without touching.
   const lightTones = new Map<BandKey, BandTone>()
   let next: BandTone = "white"
   for (const key of bands) {
@@ -405,14 +407,18 @@ export default async function ProductPage({ params }: Props) {
         </div>
       </Band>
 
-      {/* ── Where it is specified — the page's one dark beat ──────── */}
-      <Band tone="slate" id="applications">
+      {/* ── Where it is specified ────────
+             Was the page's one dark beat; on stone since 21 Sept 2026 — the
+             last slate section outside the footer and the photograph
+             openers (Vern, 19 Sept: "too much dark mode… a clean light
+             theme; the footer and the cinema backdrops are fine"). */}
+      <Band tone="stone" id="applications">
         <div className="flex flex-wrap items-baseline justify-between gap-6">
           <div>
-            <div className="eyebrow eyebrow-on-image">Applications</div>
-            <h2 className="mt-4 max-w-[22ch] text-white">Where {product.name} is specified</h2>
+            <div className="eyebrow">Applications</div>
+            <h2 className="mt-4 max-w-[22ch]">Where {product.name} is specified</h2>
           </div>
-          <p className="max-w-[36ch] text-[15px] leading-[1.6] text-[color:var(--ink-on-slate-muted)]">
+          <p className="max-w-[36ch] text-[15px] leading-[1.6] text-ink-muted">
             The surfaces Square One installs it on. The linked ones open the
             photographs on record for that kind of work.
           </p>
@@ -424,22 +430,21 @@ export default async function ProductPage({ params }: Props) {
             return (
               <li
                 key={application}
-                className="border-t py-5"
-                style={{ borderColor: "var(--hairline-slate)" }}
+                className="border-t border-hairline py-5"
               >
                 <div className="flex items-baseline gap-3">
-                  <span className="text-[12px] font-medium tabular-nums text-[color:var(--ink-on-slate-muted)]">
+                  <span className="text-[12px] font-medium tabular-nums text-ink-muted">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   {gallery ? (
                     <Link
                       href={galleryHref(gallery)}
-                      className="text-[17px] font-medium leading-[1.3] text-white no-underline transition-colors hover:text-accent"
+                      className="text-[17px] font-medium leading-[1.3] text-ink no-underline transition-colors hover:text-[color:var(--accent-deep)]"
                     >
                       {application}
                     </Link>
                   ) : (
-                    <span className="text-[17px] font-medium leading-[1.3] text-white">
+                    <span className="text-[17px] font-medium leading-[1.3] text-ink">
                       {application}
                     </span>
                   )}
