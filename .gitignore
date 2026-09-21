@@ -46,6 +46,11 @@ next-env.d.ts
 .superpowers/
 .claude/worktrees/
 
+# Removed files, held instead of deleted (the device bridge cannot rm).
+# Nothing here is ever committed — this repository is public and the folder
+# collects whatever was taken off the site, plus stale git HEAD.lock files.
+/_to_delete/
+
 # Image staging queue — contents never committed, never served.
 # The README is kept so the folder structure survives a clone.
 /_image-queue/*

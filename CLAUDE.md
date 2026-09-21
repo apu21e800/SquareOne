@@ -218,3 +218,101 @@ npm run start   # Run production build locally
 - **Auto-deploy**: Push to `main` branch triggers production deployment
 - **Environment variables**: Set in Vercel dashboard (RESEND_API_KEY, CONTACT_EMAIL, NEXT_PUBLIC_SITE_URL)
 - **Domain**: www.squareonepaving.com is the canonical host in code (`lib/site.ts`); the bare domain 308s to it on Vercel. Live since 19 Sept 2026. If production ever moves to the bare domain, set NEXT_PUBLIC_SITE_URL in Vercel and redeploy.
+
+## Working copy and handoff
+
+Two checkouts exist and they are not equals.
+
+- **The repository on the maintainer's machine is the source of truth.** A cloud
+  session reaches it through the device bridge; it is the only checkout whose
+  commits can ever reach GitHub.
+- **The cloud sandbox copy is a build and test rig** — `next build`, `npm run
+  check`, Playwright, Lighthouse, image work. It is disposable.
+
+### The sandbox cannot push. Do not look for a way around it.
+
+Verified 21 Sept 2026, not inferred:
+
+```
+remote: access denied by the git proxy: apu21e800/SquareOne is not in this
+session's authorized repository set, so the proxy will not inject a credential
+for it. To fix, add the repository to the session's sources.
+fatal: unable to access 'https://github.com/apu21e800/SquareOne.git/': 403
+```
+
+There is no product control that adds a repository to that set — the proxy names
+a remedy the UI does not implement (anthropics/claude-code#84581, open, last
+reproduced 4 Sept 2026). Do not spend a session hunting for the setting.
+
+The device VM can *fetch* (this repository is public, so anonymous HTTPS read
+works) but cannot *push*: no `credential.helper`, no `GH_TOKEN`/`GITHUB_TOKEN`,
+no `gh`, and no askpass device — `fatal: could not read Username for
+'https://github.com': No such device or address`. Its `$HOME` is session-scoped
+(`/sessions/rcw-…/`), so nothing installed there survives; only the mounted
+folder persists. It does carry node 22, npm 10, git, tar and rsync, and the
+repository's `node_modules` is already on disk.
+
+**Never route around the block with the GitHub MCP** (`push_files`,
+`create_or_update_file`). Those build a commit server-side out of file contents:
+the tree may match but the SHA and parentage do not, so the local branch
+diverges from `origin` permanently — in a repository that auto-deploys to
+production, that is an expensive mess for no gain.
+
+So: **pushing is the maintainer's step, and `main` moves only by a pull request
+they have authorised.** That second half is deliberate, not friction.
+
+### The handoff rule
+
+Never leave a commit that exists only in the sandbox. In the same turn:
+
+1. `git diff --name-only` (or `--name-status` across the range) in the sandbox.
+2. Write those paths into the device checkout — file by file for a normal
+   changeset; a tarball only when the change is large or carries binaries past
+   the bridge's per-call caps.
+3. Commit there, then prove the two checkouts agree:
+   `git rev-parse HEAD^{tree}` must return the same hash on both sides.
+
+Step 3 is the whole point. Matching trees mean nothing is stranded; skip it and
+a week of work can sit in a sandbox that gets reclaimed.
+
+A write across the bridge can report success and change nothing — it did exactly
+that on 21 Sept 2026, while this section was being written. So checksum every
+landed file before committing it, and keep the tree comparison as the backstop
+that catches whatever the checksum misses.
+
+### The sandbox's branch is a parallel line — its "unpushed" count is meaningless
+
+The sandbox commits the same work separately from the device, so the two
+branches never share SHAs even when their trees are identical. A hook counting
+`origin/main..HEAD` in the sandbox will report a dozen or more "unpushed"
+commits that are already merged into `main` under different hashes. Ignore it.
+**The only count that matters is the one in the device checkout.**
+
+Reads through the proxy do work, incidentally: `git fetch` succeeds (verified 21
+Sept), so the sandbox's `origin/main` can be kept current and diffed against.
+Only *writes* are refused. If the sandbox's remote-tracking ref looks stale,
+fetch it rather than assuming the whole remote is unreachable.
+
+### Git in the connected folder needs delete permission — ask for it first
+
+By default the device bridge refuses `rm`/`unlink` inside a connected folder, and
+git cannot clean up after itself: every commit leaves `.git/index.lock`,
+`.git/HEAD.lock` and `.git/objects/*/tmp_obj_*` behind, and the *next* git
+command dies with `Unable to create '.git/index.lock': File exists`. It looks
+like a crashed git process. It is not — it is the delete block.
+
+So before the first commit of a session, request delete permission for the
+repository folder (one prompt, granted for the rest of the session). Then git
+behaves normally. If a session starts with a stale lock already in place, clear
+`.git/*.lock` and the `tmp_obj_*` files once and carry on.
+
+Never let this turn into deleting anything else. Files taken off the site still
+go to `_to_delete/` and stay there for the maintainer to remove.
+
+### Two sandbox rules that cost real time to rediscover
+
+- Killing `next-server` and starting a new one must be **two separate** shell
+  calls. In one call the new server dies with the old.
+- Never run two Playwright sweeps, or a sweep and Lighthouse, concurrently. The
+  box saturates, the image optimizer wedges, and routes time out — which reads
+  as a site bug and is not one.
