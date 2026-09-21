@@ -14,16 +14,15 @@ import { WORK_APPS, workFor, type WorkPhoto } from "@/lib/work"
    the row is now a photograph, a name and one quiet line; two columns from
    1536px so the index sits in a single screen on a big monitor.
 
-   Moved onto slate 7 Sept 2026: after the statement band the page ran seven
-   light sections in a row, which is what "everything is very white" was
-   pointing at. This is the back half's dark beat, and the ten lead
-   photographs carry far more on it. */
+   Moved onto slate 7 Sept 2026, and back onto warm paper 19 Sept 2026 (Vern:
+   "too much dark mode overall — a clean light theme; the footer and the
+   cinema backdrops are fine"). The ten lead photographs carry the row. */
 
 const VAPOUR = {
   label: "Vapour blasting",
   desc: "Surface cleaning, priming, graffiti and mould removal — mobile, dustless, no substrate damage. The supporting service.",
   href: "/services/vapor-blasting",
-  thumb: "/images/services/vapor-blasting/granville-island-vapour-blasting-01.jpg",
+  thumb: "/images/services/vapor-blasting/generated/gen-granville-island-vapour-blasting-01-enhanced.jpg",
   alt: "Square One crew vapour blasting at Granville Island",
 }
 
@@ -51,17 +50,17 @@ export default function ApplicationsSection() {
 
   return (
     <section
-      className="section relative overflow-hidden bg-surface-slate"
+      className="section relative overflow-hidden border-t border-hairline bg-surface-warm"
     >
       <div className="container-1280 relative z-[1]">
         <div data-reveal className="flex flex-wrap items-baseline justify-between gap-6">
           <div>
-            <p className="eyebrow eyebrow-on-image">
-              <span className="eyebrow-num">04</span>Applications
+            <p className="eyebrow">
+              <span className="eyebrow-num">01</span>Applications
             </p>
-            <h2 className="mt-5 text-white">Where these systems are specified</h2>
+            <h2 className="mt-5">Where these systems are specified</h2>
           </div>
-          <Link href="/galleries" className="arrow-link whitespace-nowrap text-[color:var(--ink-on-slate-body)] hover:text-[color:var(--accent)]">
+          <Link href="/galleries" className="arrow-link whitespace-nowrap">
             Every photograph, by application <span>&rarr;</span>
           </Link>
         </div>
@@ -74,14 +73,14 @@ export default function ApplicationsSection() {
               key={app.href}
               href={app.href}
               data-reveal
-              style={{ borderColor: "var(--hairline-slate)" }}
+              style={{ borderColor: "var(--hairline)" }}
               className="app-row group grid grid-cols-[32px_140px_minmax(0,1fr)_auto] items-center gap-x-7 border-b py-[18px] first:border-t min-[1536px]:[&:nth-child(7)]:border-t min-[1536px]:grid-cols-[32px_112px_minmax(0,1fr)_auto] max-[700px]:grid-cols-[84px_minmax(0,1fr)_auto] max-[700px]:gap-x-4 max-[700px]:py-3"
             >
-              <span className="text-[12px] font-semibold tracking-[0.08em] text-[color:var(--ink-on-slate-faint)] max-[700px]:hidden">
+              <span className="text-[12px] font-semibold tracking-[0.08em] text-ink-muted max-[700px]:hidden">
                 {String(i + 1).padStart(2, "0")}
               </span>
 
-              <span className="relative block aspect-[3/2] w-full overflow-hidden rounded-[2px] bg-black/25">
+              <span className="relative block aspect-[3/2] w-full overflow-hidden rounded-[2px] bg-surface-stone">
                 {app.thumb && (
                   <Image
                     src={app.thumb}
@@ -94,19 +93,18 @@ export default function ApplicationsSection() {
               </span>
 
               <span className="min-w-0">
-                <span className="block text-[17px] font-semibold leading-[1.3] text-white transition-colors duration-200 group-hover:text-[color:var(--accent)] max-[700px]:text-[16px]">
+                <span className="block text-[17px] font-semibold leading-[1.3] text-ink transition-colors duration-200 group-hover:text-[color:var(--accent-deep)] max-[700px]:text-[16px]">
                   {app.label}
                 </span>
-                <span className="mt-[3px] line-clamp-2 block text-[14px] leading-[1.5] text-[color:var(--ink-on-slate-muted)] max-[700px]:hidden">
+                <span className="mt-[3px] line-clamp-2 block text-[14px] leading-[1.5] text-ink-muted max-[700px]:hidden">
                   {app.desc}
                 </span>
               </span>
 
               <span className="flex items-center gap-4 justify-self-end">
-                {app.count > 0 && (
-                  <span className="label label-on-slate whitespace-nowrap max-[700px]:hidden">{app.count} photos</span>
-                )}
-                <span aria-hidden="true" className="arrow-link text-[color:var(--ink-on-slate-faint)]">
+                {/* No photo counts — the client reads a number as a claim
+                    about the whole body of work (10 and 18 Sept). */}
+                <span aria-hidden="true" className="arrow-link text-ink-muted">
                   <span>&rarr;</span>
                 </span>
               </span>

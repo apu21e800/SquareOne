@@ -53,8 +53,13 @@ type FitOptions = {
   max?: string
   /** Override the length-derived fluid preference. */
   pref?: string
-  /** The headline is set in sentence case, not the display caps. */
+  /** The headline is set in sentence case, not the display caps. Since
+      19 Sept 2026 this is the site's default; the flag is kept for callers
+      and `caps: true` is the opt-out. */
   sentence?: boolean
+  /** The headline is set in the display capitals (the pre-19-Sept voice,
+      and the `futura-caps` alternate in lib/typefaces.ts). */
+  caps?: boolean
 }
 
 /** The fluid preference a line of this many characters wants. */
@@ -72,7 +77,7 @@ export function fitVars(text: string, opts: FitOptions = {}): CSSProperties {
   const longest = clean.split(/\s+/).reduce((n, word) => Math.max(n, word.length), 1)
 
   return {
-    "--fit-em": (longest * (opts.sentence ? MIXED_EM : CAP_EM)).toFixed(2),
+    "--fit-em": (longest * (opts.caps && !opts.sentence ? CAP_EM : MIXED_EM)).toFixed(2),
     "--fit-min": opts.min ?? "1.5rem",
     "--fit-max": opts.max ?? "4rem",
     "--fit-pref": opts.pref ?? prefForLength(clean.length),

@@ -32,7 +32,16 @@ export default function Hero({ slides, eyebrow, title }: HeroProps) {
   const [held, setHeld] = useState(false)
   const [playing, setPlaying] = useState(true)
   const [reduced, setReduced] = useState(false)
+  // The four frames behind the first are mounted a beat after load, so the
+  // opening paint competes with one hero-size image, not five (19 Sept
+  // 2026 — Lighthouse on a simulated phone: every slide was fetched at once).
+  const [warm, setWarm] = useState(false)
   const touchX = useRef<number | null>(null)
+
+  useEffect(() => {
+    const t = window.setTimeout(() => setWarm(true), 1200)
+    return () => window.clearTimeout(t)
+  }, [])
 
   const go = useCallback(
     (n: number) => setPos((p) => ({ index: (p.index + n + count) % count, prev: p.index })),
@@ -107,15 +116,18 @@ export default function Hero({ slides, eyebrow, title }: HeroProps) {
             }`}
             style={{ transitionDuration: `${FADE}ms` }}
           >
-            <Image
-              src={s.src}
-              alt={s.alt}
-              fill
-              priority={i === 0}
-              sizes="100vw"
-              className={`reel-frame object-cover${active ? " reel-frame-active" : ""}`}
-              style={{ objectPosition: s.position }}
-            />
+            {(i === 0 || warm) && (
+              <Image
+                src={s.src}
+                alt={s.alt}
+                fill
+                priority={i === 0}
+                fetchPriority={i === 0 ? "high" : undefined}
+                sizes="100vw"
+                className={`reel-frame object-cover${active ? " reel-frame-active" : ""}`}
+                style={{ objectPosition: s.position }}
+              />
+            )}
           </div>
         )
       })}

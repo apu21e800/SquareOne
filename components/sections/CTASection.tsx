@@ -13,13 +13,13 @@ export default function CTASection() {
           <div className="relative aspect-[4/3] overflow-hidden rounded-[2px] bg-surface-stone min-[901px]:aspect-auto min-[901px]:min-h-[520px]">
             <Image
               src="/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg"
-              alt="Decorative pavement plaza at dusk"
+              alt="Multicolour StreetBond plaza in yellow, orange, red and green under the SkyTrain guideway at Joyce Station, Vancouver, at dusk"
               fill
               sizes="(max-width: 900px) 100vw, 50vw"
               className="object-cover"
             />
             <div aria-hidden className="scrim" />
-            <div className="caption">SkyTrain plaza &middot; Metro Vancouver</div>
+            <div className="caption">Joyce Station, Vancouver &middot; StreetBond</div>
           </div>
 
           <div>
@@ -28,8 +28,9 @@ export default function CTASection() {
             <h2 className="stop mt-5">Let&apos;s build something worth looking at</h2>
 
             <p className="mt-6 max-w-[56ch] text-[19px] leading-[1.65] text-ink-body">
-              Municipal crosswalk, commercial plaza, or your own driveway
-              &mdash; we bring 25 years of BC expertise to every square metre.
+              A municipal crosswalk, a commercial plaza or your own driveway &mdash; decorative
+              pavement installed across the Lower Mainland and Vancouver Island since 2000. Free
+              site visit, written quote.
             </p>
 
             <div className="mt-9 flex flex-wrap gap-3">

@@ -32,9 +32,10 @@ import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
 
 export const metadata: Metadata = {
+  openGraph: { title: "Stamped Asphalt Driveways in BC", images: [{ url: "/images/S1_update_v2/photos/Driveways/Ten%20Mile%20Point%20Driveway%20I.jpg" }] },
   title: "Stamped Asphalt Driveways in BC",
   description:
-    clampDescription("Stamped asphalt driveways in Metro Vancouver and Greater Victoria — StreetPrint patterns and StreetBond colour installed over the driveway you already have, by Square One Paving since 2000. Free site visit and written quote."),
+    clampDescription("Stamped asphalt driveways in Metro Vancouver and Greater Victoria: StreetPrint patterns and StreetBond colour over the asphalt you have. Free site visit."),
   keywords: [
     "decorative driveway BC",
     "stamped asphalt driveway Vancouver",
@@ -50,30 +51,37 @@ export const metadata: Metadata = {
   },
 }
 
+/* Every answer restates something already on this page or in the record —
+   lib/products.ts, lib/services.ts, lib/pattern-sheets.ts, lib/palette.ts.
+   Performance figures are HUB's and say so. */
 const faqs = [
   {
-    q: "Can you install over my existing driveway?",
-    a: "Yes — StreetPrint is stamped into asphalt in good condition, reheated in place, and StreetBond is coated straight over asphalt or concrete, so there's no demolition of the base. We assess the surface at the site visit first: the asphalt has to be sound before it takes a pattern.",
+    q: "Can you install stamped asphalt over my existing driveway?",
+    a: "Yes, when the asphalt is sound. StreetPrint is stamped into asphalt in good condition, reheated in place, and StreetBond is coated straight over asphalt or concrete, so there is no demolition and no new base. We assess the surface at the site visit first: the asphalt has to be sound before it takes a pattern, and if it is not, we say so.",
   },
   {
-    q: "How long does a decorative driveway last?",
-    a: "HUB publishes a 10–20 year service life for StreetPrint in Canadian municipal service, and an 8+ year life cycle for StreetBond, which is easily refreshed with a recoat. A driveway carries a fraction of the traffic a road does.",
+    q: "How long does a stamped asphalt driveway last?",
+    a: "The manufacturer publishes a 10–20 year service life for StreetPrint under municipal traffic, and an 8+ year life cycle for StreetBond, which is refreshed with a recoat rather than replaced. A driveway carries a fraction of the traffic a road does.",
+  },
+  {
+    q: "Which patterns and colours can I choose?",
+    a: "The StreetPrint templates on Square One's own sheet: ashlar slate, offset brick, standard herringbone, random stone, standard tile and offset tile, with soldier-course, stacked-brick and Texas cobble borders. The manufacturer draws the templates as dimensioned sheets — three are shown above, the rest are in the pattern library. StreetBond colour comes from the published chart of more than fifty; for a house that usually means the greys and earth tones — pewter, graphite, bedrock, granite, taupe, brick, burnt sienna. Sample boards come to the site visit.",
   },
   {
     q: "Is stamped asphalt safe in BC winters?",
-    a: "Absolutely. StreetPrint's textured surface is slip-resistant, and the impression depth is designed to be snowplow safe. The product has been installed across BC — including areas with regular freeze-thaw cycles — for over 25 years.",
+    a: "Yes. The imprinted surface is textured, so tyres and shoes have more to hold than on smooth asphalt, and the manufacturer rates StreetPrint snowplow and de-icing salt safe. Square One has installed it across BC since 2000, through wet coastal winters and the freeze-thaw cycles inland.",
   },
   {
     q: "How do I get a quote?",
-    a: "Contact us with your address and a description of the work. We'll schedule a free site visit, assess the surface, and follow up with a written quote.",
+    a: "Contact us with your address and a description of the work, or a photo of the driveway. We schedule a free site visit, assess the surface, and follow up with a written quote.",
   },
   {
-    q: "Do you serve Vancouver Island?",
-    a: "Yes — we serve both the Lower Mainland and Vancouver Island. Crews are dispatched across both regions, so no job site in the covered areas is out of reach.",
+    q: "Do you install driveways on Vancouver Island?",
+    a: "Yes. Vancouver Island is a Square One service region with its own line, 250-391-0270. The Island driveways on this page — Saanich, North and West Saanich, Sooke, Duncan, Mill Bay and Victoria — were all installed by Square One.",
   },
   {
     q: "Do you work outside the Lower Mainland and Vancouver Island?",
-    a: "For the right project, yes. Okanagan and Interior installations are in our project record. Send the address and a description and we will tell you straight away whether it makes sense for both of us.",
+    a: "For the right project, yes. Okanagan and Interior installations are in the project record. Send the address and a description and we will tell you straight away whether it makes sense for both of us.",
   },
 ]
 
@@ -107,8 +115,9 @@ const HERO: Shot & { caption: string } = {
   caption: "StreetPrint · Ashlar slate · Square One install",
 }
 
+/* The hero lede above carries the first mention of StreetPrint® and StreetBond® on this page. */
 const stats: { number: string; label: string }[] = [
-  { number: "10–20", label: "year StreetPrint® service life, as published by HUB" },
+  { number: "10–20", label: "year StreetPrint service life, as published by the manufacturer" },
   { number: "25+", label: "years installing decorative pavement in BC" },
   { number: "Free", label: "site visit and written quote" },
 ]
@@ -152,23 +161,23 @@ const patterns: (Shot & { label: string })[] = [
 const steps: { num: string; title: string; desc: string }[] = [
   {
     num: "01",
-    title: "Site visit",
-    desc: "Jan visits your property, assesses the existing asphalt, and walks you through pattern and colour options.",
+    title: "Free site visit",
+    desc: "We come to the house, assess the existing asphalt and walk you through the pattern and colour options with the sample boards against your own siding and stone.",
   },
   {
     num: "02",
     title: "Written quote",
-    desc: "A detailed written quote after the visit. No surprises: we specify the right system for the surface you have.",
+    desc: "A written quote follows the visit, specifying the system and the pattern for the surface you have. The asphalt has to be sound before it takes a pattern; if it is not, we say so.",
   },
   {
     num: "03",
     title: "Installation",
-    desc: "Our own crew handles prep, stamping, colour and finishing, and confirms the schedule with your quote.",
+    desc: "Square One handles the preparation, the stamping, the StreetBond colour and the finishing, and confirms the schedule with your quote. No demolition and no new base.",
   },
   {
     num: "04",
     title: "Built for BC winters",
-    desc: "Flush, snowplow-safe surfaces installed to the manufacturer's specification — StreetBond material is covered by HUB's limited warranty; workmanship is Square One's, installed to HUB's specification.",
+    desc: "A flush, textured surface the manufacturer rates snowplow and de-icing salt safe, installed to its specification. The manufacturer warrants the material; Square One warrants the workmanship.",
   },
 ]
 
@@ -195,12 +204,12 @@ export default function DrivewaysPage() {
               Residential driveways &middot; Metro Vancouver &amp; Greater Victoria
             </div>
 
-            <h1 className="stop mt-7">Make an entrance</h1>
+            <h1 className="stop mt-7">Stamped asphalt driveways for BC homes</h1>
 
             <p className="mt-7 max-w-[56ch] text-[19px] leading-[1.65] text-ink-body [text-wrap:pretty] max-[700px]:text-[17px]">
-              The look of stone or pavers, the wear of asphalt —
-              imprinted and coated over the driveway you already have. No demolition, no new
-              base.
+              The look of brick or stone with the wear of asphalt: a StreetPrint&reg; pattern
+              pressed into the driveway you already have and sealed in StreetBond&reg; colour.
+              No demolition, no new base &mdash; and a free site visit before anything is quoted.
             </p>
 
             <div className="mt-11 flex flex-wrap items-center gap-[14px]">
@@ -220,6 +229,7 @@ export default function DrivewaysPage() {
             alt={HERO.alt}
             fill
             priority
+            fetchPriority="high"
             sizes="(max-width: 700px) 100vw, 45vw"
             className="object-cover [object-position:center_70%]"
           />
@@ -252,11 +262,12 @@ export default function DrivewaysPage() {
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div>
               <p className="eyebrow">Patterns</p>
-              <h2 className="mt-5">The templates, as HUB draws them</h2>
+              <h2 className="mt-5">StreetPrint driveway patterns, as the manufacturer draws them</h2>
             </div>
             <p className="max-w-[48ch] text-[15px] leading-[1.6] text-ink-muted [text-wrap:pretty]">
-              Every StreetPrint template is a dimensioned drawing before it is a driveway. These are
-              the sheets; the sample boards come to your driveway and get held against the house.
+              Every StreetPrint template is a dimensioned drawing before it is a driveway. Three of
+              the sheets are here; the rest are in the pattern library, and the sample boards come to
+              your driveway and get held against the house.
             </p>
           </div>
           <div className="mt-10">
@@ -269,7 +280,7 @@ export default function DrivewaysPage() {
       <section className="section relative overflow-hidden border-y border-hairline bg-surface-warm">
 
         <div className="container-1280 relative z-[1]">
-          <h2>How it works</h2>
+          <h2>How a stamped asphalt driveway is installed</h2>
 
           <div className="mt-10 grid grid-cols-4 gap-x-12 gap-y-10 border-t border-hairline max-[700px]:grid-cols-1">
             {steps.map((step) => (
@@ -284,6 +295,18 @@ export default function DrivewaysPage() {
               </div>
             ))}
           </div>
+
+          <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-3">
+            <Link href="/services/stamped-asphalt" className="arrow-link">
+              Stamped asphalt, the service <span aria-hidden="true">&rarr;</span>
+            </Link>
+            <Link href="/products/streetbond" className="arrow-link">
+              StreetBond colour <span aria-hidden="true">&rarr;</span>
+            </Link>
+            <Link href="/projects" className="arrow-link">
+              Driveway projects <span aria-hidden="true">&rarr;</span>
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -294,13 +317,14 @@ export default function DrivewaysPage() {
           <div className="flex flex-wrap items-baseline justify-between gap-6">
             <div>
               <div className="eyebrow">Photographed on site</div>
-              <h2 className="stop stop-tight mt-4">Driveways from Victoria to Vancouver</h2>
+              <h2 className="stop stop-tight mt-4">Stamped asphalt driveways from Victoria to Vancouver</h2>
             </div>
             <div className="max-w-[44ch]">
               <p className="text-[15px] leading-[1.6] text-ink-muted">
-                Square One driveways from the record — Saanich, Sooke, Duncan and Victoria on
-                the Island; Vancouver, West Vancouver, Burnaby, Richmond, Langley and Maple Ridge on
-                the mainland. Filter by region, or go straight to your city.
+                Square One driveways from the record &mdash; Saanich, Sooke, Duncan, Mill Bay and
+                Victoria on the Island; Vancouver, West Vancouver, Burnaby, New Westminster,
+                Richmond, Surrey, Langley and Maple Ridge on the mainland. Filter by region, or go
+                straight to your city.
               </p>
               <div className="mt-4 flex flex-wrap gap-x-7 gap-y-2">
                 <Link href="/driveways/vancouver" className="arrow-link">
@@ -325,11 +349,11 @@ export default function DrivewaysPage() {
         <div className="container-1280 relative z-[1]">
           <p className="eyebrow">Service area</p>
 
-          <h2 className="mt-5">We come to you</h2>
+          <h2 className="mt-5">Where we install driveways</h2>
 
           <p className="mt-5 max-w-[52ch] text-[17px] leading-[1.6] text-ink-body [text-wrap:pretty]">
-            Mobile crews across the Lower Mainland and Vancouver Island. If you are in one of
-            the areas below, we come to you.
+            Across the Lower Mainland and Vancouver Island, from one office in Maple Ridge and
+            the Island&rsquo;s own line. If you are in one of the areas below, we come to you.
           </p>
           <p className="mt-4 max-w-[52ch] text-[15px] leading-[1.6] text-ink-muted [text-wrap:pretty]">
             Elsewhere in BC &mdash; the Okanagan and the Interior are already in our project
@@ -355,7 +379,7 @@ export default function DrivewaysPage() {
       <section className="section relative overflow-hidden border-t border-hairline bg-surface">
 
         <div className="container-1280 relative z-[1]">
-          <h2>Questions we hear</h2>
+          <h2>Questions about stamped asphalt driveways</h2>
 
           <div className="mt-10 max-w-[760px] border-t border-hairline">
             {faqs.map((faq, i) => (

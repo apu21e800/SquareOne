@@ -47,7 +47,7 @@ export default function FollowTheWork({ settings, tiles }: { settings: SiteSetti
         <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-6">
           <div data-reveal>
             <div className="eyebrow">
-              <span className="eyebrow-num">07</span>On Instagram &middot; {handle}
+              <span className="eyebrow-num">08</span>On Instagram &middot; {handle}
             </div>
             <h2 id="follow-heading" className="mt-4 [text-wrap:balance]">
               {settings.socialHeading}
@@ -73,7 +73,7 @@ export default function FollowTheWork({ settings, tiles }: { settings: SiteSetti
 
         <ul
           data-reveal-group
-          aria-label={live ? "Latest social posts" : "Square One installs"}
+          aria-label={live ? "Latest social posts" : "Square One installations"}
           className="mt-10 grid grid-cols-6 gap-3 max-[1000px]:grid-cols-3 max-[700px]:gap-2"
         >
           {tiles.slice(0, 6).map((tile, i) => (
@@ -116,7 +116,7 @@ export default function FollowTheWork({ settings, tiles }: { settings: SiteSetti
         </ul>
 
         <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-[13px] text-[color:var(--ink-muted)]">
-          <span>{live ? "Newest first." : "Photographs from the record. Posts from the marketing team appear here as they go up."}</span>
+          <span>{live ? "Newest first." : "Square One's own installation photographs. New posts appear here as they go up."}</span>
           <span className="flex flex-wrap items-center gap-x-5">
             {(
               [

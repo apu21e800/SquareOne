@@ -117,7 +117,7 @@ export default function DrivewayComposer({
             <span className="text-ink-muted"> &middot; StreetBond {swatch.range}</span>
           </p>
           <p className="max-w-[44ch] text-[12.5px] leading-[1.5] text-ink-muted">
-            A drawing of HUB&rsquo;s template in HUB&rsquo;s published colour, not a photograph.
+            A drawing of the manufacturer&rsquo;s template in its published colour, not a photograph.
             On-screen colour varies from the cast colour; the sample boards decide.
           </p>
         </div>

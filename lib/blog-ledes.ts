@@ -48,11 +48,13 @@ export const LEDE: Record<string, string> = {
   // sends the photograph.
   "traffic-pattern-crosswalk-upgrade-for-tsain-ko-centre": `${TP_GALLERY}/TrafficPatterns%20Decorative%20Crosswalk%2C%20Sechelt%20BC.jpg`,
   "lickman-interchange": "",
-  "new-westminster-oxford-townhomes": "",
-  "parc-riviera-mews-streetbond-asphalt-walkway": "",
-  "townhouse-driveway-natures-walk": "",
+  // 19 Sept 2026: four of those now have honest frames — the captioned 2026
+  // library (Oxford, Wesburn) and the old site's own post images.
+  "new-westminster-oxford-townhomes": "/images/applications/driveways/new-westminster-oxford-strata-laneway-streetprint-01.jpg",
+  "parc-riviera-mews-streetbond-asphalt-walkway": "/images/blog/parc-riviera-streetbond-walkway/featured.jpg",
+  "townhouse-driveway-natures-walk": "/images/blog/roadway-accents-natures-walk/featured.jpg",
   "tsuyuki-park-maple-ridge": "",
-  "wesburn-water-park-burnaby": "",
+  "wesburn-water-park-burnaby": "/images/applications/parks-paths/burnaby-wesburn-park-surface-streetbond-01.jpg",
   "west-vancouver-rainbow-crosswalk": "",
 }
 

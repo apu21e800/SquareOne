@@ -1,5 +1,6 @@
 import Link from "next/link"
 import BrandMark from "@/components/BrandMark"
+import FooterClose from "@/components/FooterClose"
 import { getSiteSettings } from "@/lib/cms"
 
 /* Site close — the one dark region on every page (docs/design-v2 Site Close),
@@ -33,6 +34,7 @@ const whatWeDo: FooterLink[] = [
   { label: "Preformed thermoplastic", href: "/services/preformed-thermoplastic" },
   { label: "Vapour blasting", href: "/services/vapor-blasting" },
   { label: "Driveways", href: "/driveways" },
+  { label: "StreetPrint patterns", href: "/patterns" },
 ]
 
 const company: FooterLink[] = [
@@ -92,7 +94,8 @@ export default async function Footer() {
 
   return (
     <div className="bg-[color:var(--surface-slate)]">
-      {/* ── Closing CTA — the single dark close for every page ──────── */}
+      {/* ── Closing CTA — the single dark close for every page but /contact ──────── */}
+      <FooterClose>
       <section className="section text-center">
         <div className="container-1280">
           <p className="eyebrow eyebrow-center text-[#9BA1A9]">Start a project</p>
@@ -102,8 +105,8 @@ export default async function Footer() {
           </h2>
 
           <p className="mx-auto mt-5 max-w-[50ch] text-[16px] leading-[1.7] text-[#9BA1A9] [text-wrap:pretty]">
-            Send drawings, a site address, or a rough description. We will walk the site before
-            we quote it.
+            Send a few photos, a site address or drawings. We walk the site before we quote it
+            &mdash; Lower Mainland and Vancouver Island, free.
           </p>
 
           <div className="mt-10 flex flex-wrap items-center justify-center gap-x-7 gap-y-4">
@@ -122,6 +125,7 @@ export default async function Footer() {
           </div>
         </div>
       </section>
+      </FooterClose>
 
       {/* ── Footer proper ──────── */}
       <footer className="border-t" style={{ borderColor: hairline }}>
@@ -199,11 +203,13 @@ export default async function Footer() {
           </div>
 
           {/* Service area — one quiet line */}
+          {/* Every place named here is on the record in lib/work.ts or
+              lib/projects.ts. Courtenay was not, so it came off on 19 Sept 2026. */}
           <p className="mt-14 text-[13px] leading-[1.8] text-[#7E848C] max-[700px]:mt-10">
             <span className="label label-on-slate mr-3">Serving</span>
             Vancouver, Burnaby, Richmond, Surrey, Langley, Maple Ridge and the Fraser Valley
-            &middot; Victoria, Nanaimo, Courtenay and Vancouver Island &middot; Okanagan and
-            Interior projects on record
+            &middot; Victoria, Nanaimo, Duncan, Comox and Vancouver Island &middot; Sunshine Coast,
+            Sea to Sky and Okanagan projects on record
           </p>
 
           {/* Legal row */}

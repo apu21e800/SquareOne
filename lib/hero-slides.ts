@@ -15,40 +15,46 @@ export interface Slide {
 }
 
 export const HERO_SLIDES: Slide[] = [
+  // 19 Sept 2026 (Vern: "choose better images for the homepage — the old
+  // site had more current images"). Five frames from the 2026 library,
+  // every one on the record (lib/work-captions.ts): the core service first,
+  // then the range — civic art, a crossing, a park, a laneway. Nothing here
+  // repeats a frame that Selected Work or the services grid already shows.
   {
-    src: "/images/hero/white-rock-pier-crosswalk-trafficpatternsxd.jpg",
-    alt: "Red TrafficPatternsXD crosswalk leading to the White Rock Pier, Semiahmoo Bay at low tide beyond",
-    place: "White Rock Pier",
-    system: "TrafficPatternsXD",
-    year: "2019",
+    src: "/images/applications/roundabouts/maple-ridge-roundabout-centre-streetprint-01.jpg",
+    alt: "A brick-red StreetPrint roundabout apron under a clear sky in Maple Ridge, installed by Square One",
+    place: "Maple Ridge",
+    system: "StreetPrint",
     position: "center 62%",
   },
   {
-    src: "/images/hero/white-rock-marine-drive-wave-crosswalk.jpg",
-    alt: "Artist-designed crosswalk of waves, sand and sky in TrafficPatterns on Marine Drive, White Rock",
-    place: "Marine Drive, White Rock",
-    system: "TrafficPatterns",
-    year: "2025",
-    position: "center 60%",
-  },
-  {
-    src: "/images/hero/granville-island-crosswalk-streetprint.jpg",
-    alt: "Brick-red TrafficPatternsXD crosswalk outside Granville Island Brewing, Vancouver",
-    place: "Granville Island, Vancouver",
-    system: "TrafficPatternsXD",
-    position: "center 66%",
-  },
-  {
-    src: "/images/hero/bowen-island-polka-dot-walkway-streetbond.jpg",
-    alt: "Polka-dot StreetBond walkway with a bald eagle asking a question, Snug Cove, Bowen Island",
-    place: "Snug Cove, Bowen Island",
+    src: "/images/applications/public-art/oak-bay-village-intersection-wide-streetbond-01.jpg",
+    alt: "A painted medallion of a heron and a salmon in StreetBond filling the Oak Bay Village intersection, seen from above",
+    place: "Oak Bay Village",
     system: "StreetBond",
-    position: "center 50%",
+    position: "center 52%",
   },
   {
-    src: "/images/hero/victoria-ellis-point-walkway-streetprint.jpg",
-    alt: "British Cobble StreetPrint walkway in a warm brick tone at Ellis Point, Victoria",
-    place: "Ellis Point, Victoria",
+    src: "/images/applications/crosswalks/delta-gateway-casino-brick-crossing-trafficpatterns-01.jpg",
+    alt: "A red brick-pattern TrafficPatterns crossing with white edge lines running toward the fields in Delta",
+    place: "Delta",
+    system: "TrafficPatterns",
+    position: "center 64%",
+  },
+  {
+    src: "/images/applications/parks-paths/surrey-marine-spray-park-from-above-streetbond-01.jpg",
+    alt: "A spray park in Surrey from above — a river of blue StreetBond through green and yellow leaf shapes",
+    place: "Surrey",
+    system: "StreetBond",
+    position: "center 55%",
+  },
+  {
+    // 19 Sept, later: the dusk driveway read as mud at a glance (Vern: "no
+    // sucky images") — the wet Oxford laneway carries the residential note
+    // in daylight, sharp to the drain.
+    src: "/images/applications/driveways/new-westminster-oxford-strata-laneway-wet-streetprint-01.jpg",
+    alt: "A wet herringbone StreetPrint strata laneway between two rows of townhomes in New Westminster, a white band across the drain",
+    place: "New Westminster",
     system: "StreetPrint",
     position: "center 60%",
   },

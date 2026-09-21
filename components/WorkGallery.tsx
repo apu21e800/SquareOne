@@ -318,8 +318,11 @@ export default function WorkGallery({
             </div>
           )}
 
-          <span className="label ml-auto whitespace-nowrap" aria-live="polite">
-            {filtered.length} photo{filtered.length !== 1 ? "s" : ""}
+          {/* No count — the client reads a number as a claim about the whole
+              body of work (10 and 18 Sept 2026). The live region still tells
+              a screen reader the filter took. */}
+          <span className="sr-only" aria-live="polite">
+            {filtered.length} photograph{filtered.length !== 1 ? "s" : ""} shown
           </span>
         </div>
       )}
@@ -391,9 +394,8 @@ export default function WorkGallery({
       {hidden > 0 && (
         <div className="mt-10 flex items-center gap-6 max-[700px]:mt-8 max-[700px]:flex-col max-[700px]:items-stretch max-[700px]:gap-3">
           <button type="button" onClick={() => setExpanded(true)} className="btn-secondary">
-            Show all {filtered.length}
+            Show all
           </button>
-          <span className="label max-[700px]:text-center">{hidden} more</span>
         </div>
       )}
       {expanded && filtered.length > initial && (

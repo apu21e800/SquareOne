@@ -5,11 +5,12 @@ import type { ReactNode } from "react"
 import type { Metadata } from "next"
 
 import { products, getProductBySlug } from "@/lib/products"
+import type { Product } from "@/lib/products"
 import { STREETBOND_COLOURS, COLOUR_RANGES } from "@/lib/palette"
 import { galleryWithFallback } from "@/lib/gallery"
 import { resourceGroups } from "@/lib/resources"
 import { getWork, WORK_APPS } from "@/lib/work"
-import type { WorkAppMeta } from "@/lib/work"
+import type { WorkApp, WorkAppMeta } from "@/lib/work"
 import WorkGallery from "@/components/WorkGallery"
 import { SITE_URL } from "@/lib/site"
 import { fitVars } from "@/lib/type"
@@ -24,14 +25,44 @@ export async function generateStaticParams() {
   return products.map((p) => ({ slug: p.slug }))
 }
 
+/**
+ * Page titles: the system with its mark, what it is, the region — the root
+ * template appends "| Square One Paving". Kept to 45 characters or fewer so
+ * the whole tag survives a search result. A product without an entry falls
+ * back to "<Name> | Pavement Systems BC".
+ */
+const pageTitle: Record<string, string> = {
+  streetprint: "StreetPrint® Stamped Asphalt | BC",
+  streetbond: "StreetBond® Pavement Coating | BC",
+  trafficpatterns: "TrafficPatterns™ Thermoplastic | BC",
+  "trafficpatterns-xd": "TrafficPatternsXD™ Stamped Asphalt | BC",
+  decomark: "DecoMark® Thermoplastic Graphics | BC",
+  durashield: "DuraShield Pavement Coating | BC",
+  duratherm: "DuraTherm® Thermoplastic Markings | BC",
+  premark: "PreMark® Thermoplastic Markings | BC",
+}
+
+/** The overview heading, in searcher language; the H1 above it already carries the mark. */
+const overviewHeading: Record<string, string> = {
+  streetprint: "What StreetPrint stamped asphalt is, and how it goes in",
+  streetbond: "What StreetBond pavement coating is, and where it goes",
+  trafficpatterns: "What TrafficPatterns preformed thermoplastic is",
+  "trafficpatterns-xd": "What TrafficPatternsXD is, and how it differs from StreetPrint",
+  decomark: "What DecoMark custom thermoplastic is",
+  durashield: "What DuraShield asphalt coating is, and what it protects",
+  duratherm: "What DuraTherm thermoplastic marking is",
+  premark: "What PreMark preformed markings are",
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const product = getProductBySlug(slug)
   if (!product) return {}
   return {
-    title: `${product.name} | Pavement Systems BC`,
+    title: pageTitle[product.slug] ?? `${product.name} | Pavement Systems BC`,
     description: clampDescription(product.shortDescription),
     alternates: { canonical: `${SITE_URL}/products/${product.slug}` },
+    openGraph: { title: product.name, description: clampDescription(product.shortDescription), images: [{ url: product.image, alt: product.imageAlt }] },
   }
 }
 
@@ -53,6 +84,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
  */
 
 const GALLERY_LIMIT = 9
+
+/** The system's published colour chart, cropped to its swatches. Keyed by product slug. */
+const COLOUR_CARD_IMAGE: Record<string, { preview: string; w: number; h: number }> = {
+  "trafficpatterns": { preview: "/images/colour-cards/trafficpatterns.webp", w: 678, h: 680 },
+  "decomark": { preview: "/images/colour-cards/decomark.webp", w: 688, h: 696 },
+  "duratherm": { preview: "/images/colour-cards/duratherm.webp", w: 696, h: 591 },
+  "premark": { preview: "/images/colour-cards/premark.webp", w: 231, h: 605 },
+  "trafficpatterns-xd": { preview: "/images/colour-cards/trafficpatterns-xd.webp", w: 695, h: 632 },
+}
 
 type BandTone = "white" | "warm" | "slate"
 
@@ -98,14 +138,68 @@ function Band({
  * Applications that name one of the ten galleries get a link into it; anything
  * else renders plain. Matching is on the flattened label, so "Decorative
  * Driveways" finds Driveways and "Bus Priority Corridors" correctly finds
- * nothing rather than guessing.
+ * nothing rather than guessing. Two hints cover what the labels cannot say:
+ * spray parks live in Parks & paths, and anything with "school" or "sports
+ * court" in it lives in Schools & sports courts.
  */
+const GALLERY_HINTS: [RegExp, WorkApp][] = [
+  [/spray ?park/i, "parks-paths"],
+  [/school|sports? ?court/i, "schools-sports-courts"],
+]
+
 function galleryFor(application: string): WorkAppMeta | undefined {
+  const hint = GALLERY_HINTS.find(([re]) => re.test(application))
+  if (hint) return WORK_APPS.find((app) => app.slug === hint[1])
   const key = application.toLowerCase().replace(/[^a-z]/g, "")
   return WORK_APPS.find((app) => {
     const label = app.label.toLowerCase().replace(/[^a-z]/g, "")
     return key === label || key.includes(label) || label.includes(key)
   })
+}
+
+/** Driveways have their own pillar page; /applications/driveways only redirects there. */
+function galleryHref(app: WorkAppMeta): string {
+  return app.slug === "driveways" ? "/driveways" : `/applications/${app.slug}`
+}
+
+/** Display casing for brand and place tokens inside a reference photograph's filename. */
+const TOKEN_CASE: Record<string, string> = {
+  streetprint: "StreetPrint",
+  streetbond: "StreetBond",
+  streetbondsr: "StreetBond SR",
+  trafficpatterns: "TrafficPatterns",
+  trafficpatternsxd: "TrafficPatternsXD",
+  decomark: "DecoMark",
+  duratherm: "DuraTherm",
+  durashield: "DuraShield",
+  premark: "PreMark",
+  ubc: "UBC",
+  bc: "BC",
+  ev: "EV",
+  gvrd: "GVRD",
+  yvr: "YVR",
+}
+
+/**
+ * Alt text for a reference frame, read off its filename — the only caption
+ * these files carry. "streetbond-multicolour-plaza-green-circles-01.jpg" reads
+ * "StreetBond — Multicolour Plaza Green Circles"; a file named only for the
+ * system ("streetprint-1.jpg") falls back to a numbered reference frame.
+ */
+function galleryAlt(product: Product, src: string, index: number): string {
+  const base = decodeURIComponent(src.split("/").pop() ?? "").replace(/\.[a-z0-9]+$/i, "")
+  const tokens = base.split(/[-_]+/).filter((t) => t.length > 0 && !/^\d+$/.test(t))
+  const own = product.name.toLowerCase().replace(/[^a-z]/g, "")
+  // Drop the leading product tokens ("trafficpatterns", "xd") so the subject reads alone.
+  let i = 0
+  while (i < tokens.length && own.startsWith(tokens.slice(0, i + 1).join("").toLowerCase())) i += 1
+  const subject = tokens
+    .slice(i)
+    .map((t) => TOKEN_CASE[t.toLowerCase()] ?? t.charAt(0).toUpperCase() + t.slice(1))
+    .join(" ")
+  return subject
+    ? `${product.name} reference photograph — ${subject}`
+    : `${product.name} reference photograph ${index + 1}`
 }
 
 export default async function ProductPage({ params }: Props) {
@@ -130,15 +224,30 @@ export default async function ProductPage({ params }: Props) {
   const work = getWork().filter((photo) =>
     photo.systems.some((system) => system === product.name || (product.name === "StreetBond" && system.startsWith("StreetBond"))),
   )
-  const docs = resourceGroups.find((group) => group.product === product.name)?.docs ?? []
+  // The library groups documents by product name; its anchor slug is its own
+  // ("traffic-patterns" for TrafficPatterns), so the link reads it from the group.
+  const docGroup = resourceGroups.find((group) => group.product === product.name)
+  const docs = docGroup?.docs ?? []
+  const docsHref = `/resources#${docGroup?.slug ?? product.slug}`
 
   // The colour card is StreetBond's. The thermoplastic systems carry their own
   // colours, which HUB publishes separately — never assume this chart covers them.
   const showColours = product.name === "StreetBond"
 
+  // The system's own colour card from the library, shown as page one with a
+  // link to the PDF — for every system that is not StreetBond (which gets the
+  // full chart below). 19 Sept 2026, the client on TrafficPatterns: "link
+  // directly to colour chart somewhere or show the colour chart".
+  const colourCard = !showColours
+    ? docs.find((d) => d.type === "Colour card" && /colou?r (palette|guide|card)/i.test(d.name)) ?? docs.find((d) => d.type === "Colour card")
+    : undefined
+  // The chart itself, cropped to the swatches (public/images/colour-cards):
+  // the manufacturer's block on the card is not shown on the site.
+  const colourPreview = colourCard ? COLOUR_CARD_IMAGE[product.slug] : undefined
+
   const bands: BandKey[] = ["overview", "applications"]
   if (work.length > 0) bands.push("work")
-  if (showColours) bands.push("colours")
+  if (showColours || colourCard) bands.push("colours")
   if (gallery.length > 0) bands.push("gallery")
   if (docs.length > 0) bands.push("documents")
   if (related.length > 0) bands.push("related")
@@ -168,11 +277,13 @@ export default async function ProductPage({ params }: Props) {
       >
         <Image
           src={product.image}
-          alt={`${product.name} installed by Square One Paving`}
+          alt={product.imageAlt}
           fill
           priority
+          fetchPriority="high"
           sizes="100vw"
           className="object-cover"
+          style={{ objectPosition: product.heroPosition ?? "center" }}
         />
         <div aria-hidden="true" className="scrim-rise" />
         <div aria-hidden="true" className="scrim-top" />
@@ -237,6 +348,9 @@ export default async function ProductPage({ params }: Props) {
         <div className="grid grid-cols-12 gap-x-12 gap-y-10 max-[900px]:grid-cols-1">
           <div className="col-span-7 max-[900px]:col-span-1">
             <div className="eyebrow">Overview</div>
+            <h2 className="mt-4 max-w-[24ch] [text-wrap:balance]">
+              {overviewHeading[product.slug] ?? `What ${product.name} is, and how it is installed`}
+            </h2>
             <p className="mt-6 max-w-[60ch] text-[17px] leading-[1.75] text-ink-body [text-wrap:pretty]">
               {product.fullDescription}
             </p>
@@ -274,15 +388,15 @@ export default async function ProductPage({ params }: Props) {
             ))}
             </dl>
             <p className="border-t border-hairline px-7 pt-5 text-[13px] leading-[1.6] text-ink-muted max-[700px]:px-5">
-              Figures are HUB Surface Systems&rsquo;, from the product&rsquo;s own data sheet.
-              Square One installs the system and warrants the workmanship.
+              Figures are the manufacturer&rsquo;s, from the product&rsquo;s own data sheet.
+              The manufacturer warrants the material; Square One installs the system and warrants the workmanship.
             </p>
             <div className="flex flex-wrap gap-x-6 gap-y-2 px-7 pb-6 pt-4 max-[700px]:px-5">
               <Link href={`/services/${product.serviceSlug}`} className="arrow-link">
                 The service <span aria-hidden="true">&rarr;</span>
               </Link>
               {docs.length > 0 && (
-                <Link href="/resources" className="arrow-link">
+                <Link href={docsHref} className="arrow-link">
                   {docs.length} document{docs.length === 1 ? "" : "s"} <span aria-hidden="true">&rarr;</span>
                 </Link>
               )}
@@ -299,8 +413,8 @@ export default async function ProductPage({ params }: Props) {
             <h2 className="mt-4 max-w-[22ch] text-white">Where {product.name} is specified</h2>
           </div>
           <p className="max-w-[36ch] text-[15px] leading-[1.6] text-[color:var(--ink-on-slate-muted)]">
-            The surfaces Square One installs it on, each one linked to the
-            photographs on record.
+            The surfaces Square One installs it on. The linked ones open the
+            photographs on record for that kind of work.
           </p>
         </div>
 
@@ -319,7 +433,7 @@ export default async function ProductPage({ params }: Props) {
                   </span>
                   {gallery ? (
                     <Link
-                      href={`/applications/${gallery.slug}`}
+                      href={galleryHref(gallery)}
                       className="text-[17px] font-medium leading-[1.3] text-white no-underline transition-colors hover:text-accent"
                     >
                       {application}
@@ -345,15 +459,69 @@ export default async function ProductPage({ params }: Props) {
           <div className="flex flex-wrap items-baseline justify-between gap-6">
             <div>
               <div className="eyebrow">Photographed on site</div>
-              <h2 className="mt-4 [text-wrap:balance]">{product.name} on the record</h2>
+              <h2 className="mt-4 [text-wrap:balance]">Square One&rsquo;s {product.name} installations across BC</h2>
             </div>
             <p className="max-w-[44ch] text-[15px] leading-[1.6] text-ink-muted">
-              {work.length} Square One installations of {product.name} across BC, captioned with the
-              community and the surface. Filter by region or by the systems installed alongside it.
+              Square One installations of {product.name}, captioned with the community
+              and the surface. Filter by region or by the systems installed alongside it.
             </p>
           </div>
           <div className="mt-10">
             <WorkGallery photos={work} initial={8} ariaLabel={`${product.name} installation photographs`} />
+          </div>
+        </Band>
+      )}
+
+      {/* ── Colour card — the system's own palette, page one, and the PDF ──────── */}
+      {!showColours && colourCard && (
+        <Band tone={toneOf("colours")} id="colours">
+          <div className="grid grid-cols-12 items-center gap-x-12 gap-y-10 max-[900px]:grid-cols-1">
+            <div className="col-span-5 max-[900px]:col-span-1">
+              <div className="eyebrow">Colours</div>
+              <h2 className="mt-4 max-w-[22ch]">{product.name} colours, off the published card</h2>
+              <p className="mt-5 max-w-[44ch] text-[15px] leading-[1.65] text-ink-body">
+                {product.name} carries its own colour range, published by the manufacturer as a
+                colour card. Name the colour on the drawing; the sample comes to the site visit,
+                because a screen is not the material.
+              </p>
+              <div className="mt-7 flex flex-wrap items-center gap-x-8 gap-y-3">
+                <a href={colourCard.href} target="_blank" rel="noopener" className="btn-primary">
+                  Open the colour card
+                </a>
+                <Link href={docsHref} className="arrow-link">
+                  All {product.name} documents <span aria-hidden="true">&rarr;</span>
+                </Link>
+              </div>
+              <p className="mt-4 text-[12.5px] text-ink-muted">
+                {colourCard.name} &middot; PDF{colourCard.size ? ` · ${colourCard.size}` : ""}
+              </p>
+            </div>
+            <div className="col-span-7 max-[900px]:col-span-1">
+              {colourPreview ? (
+                <a
+                  href={colourCard.href}
+                  target="_blank"
+                  rel="noopener"
+                  className="card block overflow-hidden rounded-[2px] border border-hairline bg-white"
+                  aria-label={`Open ${colourCard.name} (PDF)`}
+                >
+                  <Image
+                    src={colourPreview.preview}
+                    alt={`Page one of the ${product.name} colour card`}
+                    width={colourPreview.w}
+                    height={colourPreview.h}
+                    sizes="(max-width: 900px) 100vw, 700px"
+                    className="h-auto w-full"
+                    unoptimized
+                  />
+                </a>
+              ) : (
+                <a href={colourCard.href} target="_blank" rel="noopener" className="card-panel block">
+                  <span className="label">Colour card</span>
+                  <span className="mt-3 block text-[18px] font-semibold">{colourCard.name}</span>
+                </a>
+              )}
+            </div>
           </div>
         </Band>
       )}
@@ -365,11 +533,11 @@ export default async function ProductPage({ params }: Props) {
             <div>
               <div className="eyebrow">Colours</div>
               <h2 className="mt-4 max-w-[26ch]">
-                Fifty-two standard colours, plus custom matching
+                Fifty-two standard StreetBond colours, plus custom matching
               </h2>
             </div>
             <p className="max-w-[34ch] text-[14px] leading-[1.65] text-ink-muted">
-              Read off HUB&rsquo;s StreetBond colour chart. On-screen colour is a
+              Read off the published StreetBond colour chart. On-screen colour is a
               reference only &mdash; the sample board we bring to the site visit is
               what decides.
             </p>
@@ -406,7 +574,12 @@ export default async function ProductPage({ params }: Props) {
 
           <p className="mt-10 max-w-[62ch] text-[15px] leading-[1.6] text-ink-body">
             Standard colours can be specified straight off the chart. For anything
-            outside it, send us a colour reference and we will match it.
+            outside it, send us a colour reference and we will match it. The colour
+            card itself is in{" "}
+            <Link href={docsHref} className="font-semibold text-ink underline-offset-4 hover:underline">
+              the document library
+            </Link>
+            .
           </p>
         </Band>
       )}
@@ -414,8 +587,18 @@ export default async function ProductPage({ params }: Props) {
       {/* ── Gallery ──────── */}
       {gallery.length > 0 && (
         <Band tone={toneOf("gallery")} id="gallery">
-          <div className="flex flex-wrap items-baseline justify-between gap-6">
-            <h2>{product.name} in place</h2>
+          <div className="flex flex-wrap items-end justify-between gap-6">
+            <div>
+              <h2>{product.name} reference photography</h2>
+              {/* Reference frames, not the record: the client flagged three of
+                  these as "not ours" (19 Sept 2026), so the band says what it is. */}
+              <p className="mt-3 max-w-[56ch] text-[14px] leading-[1.55] text-ink-muted">
+                Reference photography of the system from the manufacturer.{" "}
+                {work.length > 0
+                  ? `Square One's own ${product.name} jobs are the frames on the record above.`
+                  : `These frames show the system as the manufacturer photographs it, not Square One's own jobs.`}
+              </p>
+            </div>
             <Link href="/projects" className="arrow-link whitespace-nowrap">
               See our projects <span aria-hidden="true">&rarr;</span>
             </Link>
@@ -429,7 +612,7 @@ export default async function ProductPage({ params }: Props) {
               >
                 <Image
                   src={src}
-                  alt={`${product.name} installation ${i + 1}`}
+                  alt={galleryAlt(product, src, i)}
                   fill
                   sizes="(max-width: 700px) 100vw, (max-width: 1280px) 33vw, 411px"
                   className="object-cover"
@@ -455,15 +638,15 @@ export default async function ProductPage({ params }: Props) {
           <div className="flex flex-wrap items-baseline justify-between gap-6">
             <div>
               <div className="eyebrow">Specify it</div>
-              <h2 className="mt-4">{product.name} documents</h2>
+              <h2 className="mt-4">{product.name} specifications and data sheets</h2>
               <p className="mt-4 max-w-[52ch] text-[16px] leading-[1.65] text-ink-body [text-wrap:pretty]">
                 {docs.length} {product.name} document{docs.length === 1 ? "" : "s"} &mdash; specification,
                 technical data, safety data and colour &mdash; are kept with the rest of the
-                library, where they are previewed page by page and checked against HUB&rsquo;s
-                current editions.
+                library, where they are previewed page by page and checked against the
+                manufacturer&rsquo;s current editions.
               </p>
             </div>
-            <Link href={`/resources#${product.slug}`} className="btn-secondary whitespace-nowrap">
+            <Link href={docsHref} className="btn-secondary whitespace-nowrap">
               Open the {product.name} documents
             </Link>
           </div>
@@ -473,7 +656,7 @@ export default async function ProductPage({ params }: Props) {
       {/* ── Related systems ──────── */}
       {related.length > 0 && (
         <Band tone={relatedTone}>
-          <h2>Related systems</h2>
+          <h2>Related systems we install</h2>
 
           <div
             className={`mt-10 grid gap-6 max-[700px]:grid-cols-1 ${
@@ -489,7 +672,10 @@ export default async function ProductPage({ params }: Props) {
               >
                 <div className="label">{p.category}</div>
 
-                <h3 className="mt-[18px]">{p.name}</h3>
+                <h3 className="mt-[18px]">
+                  {p.name}
+                  {p.mark && <sup className="ml-[1px] text-[0.55em] font-normal">{p.mark}</sup>}
+                </h3>
 
                 <p className="mt-2 max-w-[52ch] text-[15px] leading-[1.55] text-ink-body">
                   {p.tagline}

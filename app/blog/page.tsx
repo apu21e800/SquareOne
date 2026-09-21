@@ -17,24 +17,26 @@ import { clampDescription } from "@/lib/seo"
 export const revalidate = 3600
 
 export const metadata: Metadata = {
-  title: "Blog | Project Stories & Guides",
+  // One separator: the root template adds " | Square One Paving" (59 chars all in).
+  title: "Blog — Guides & Project Stories from BC",
   description:
-    clampDescription("Project stories, product deep-dives and practical guides from Square One Paving — stamped asphalt, StreetBond coatings, preformed thermoplastic and vapour blasting across BC since 2000."),
+    clampDescription("Project stories and practical guides from Square One Paving — stamped asphalt, StreetBond coatings, thermoplastic and vapour blasting across BC since 2000."),
   keywords: [
     "decorative pavement blog BC",
     "StreetPrint project BC",
     "stamped asphalt guide Vancouver",
+    "stamped asphalt vs concrete driveway BC",
     "driveway paving tips BC",
-    "pavement project stories BC",
+    "decorative crosswalk projects BC",
     "decorative coatings guide",
   ],
   alternates: {
     canonical: `${SITE_URL}/blog`,
   },
   openGraph: {
-    title: "Blog | Project Stories & Guides | Square One Paving",
+    title: "Blog — Guides & Project Stories from BC | Square One Paving",
     description:
-      clampDescription("Project stories, product deep-dives and practical guides from Square One Paving across BC since 2000."),
+      clampDescription("Project stories and practical guides from Square One Paving — decorative pavement across BC since 2000."),
     images: [{ url: "/images/og-image.png", width: 1200, height: 600, alt: "Square One Paving" }],
   },
 }
@@ -47,10 +49,10 @@ export default async function BlogPage() {
       {/* ---- Header — full-bleed image band (Rockstar Part 4) ---- */}
       <IndexImageHero
         src="/images/hero/bowen-island-polka-dot-walkway-streetbond.jpg"
-        alt="Polka-dot StreetBond walkway along a road on Bowen Island"
+        alt="Blue, green, yellow and grey StreetBond dots along the Snug Cove walkway on Bowen Island, with an eagle asking 'Will you see me before I see you?'"
         eyebrow="Blog"
         title="Guides and project stories"
-        lede="From the crews and the estimating desk: materials, methods, and what holds up on BC pavement."
+        lede="Materials, methods and what holds up on BC pavement — stamped asphalt, StreetBond coatings and thermoplastic markings, told project by project."
         caption="Bowen Island · StreetBond"
         imagePosition="center 40%"
       />

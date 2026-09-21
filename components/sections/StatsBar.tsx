@@ -1,21 +1,28 @@
-import { workCities } from "@/lib/work"
+import { products } from "@/lib/products"
 
-/* Every figure here is provable: Square One has installed since 2000, and the
-   community count is read off the photographed work record at build time.
+/* Every figure here is provable from the record and none of them counts the
+   body of work: since 2000 (CLAUDE.md), four services (lib/services.ts), the
+   systems catalogue (lib/products.ts — the manufacturer is never named on the
+   site, 19 Sept 2026), and the free site visit Square One itself published (content/blog/stamped-asphalt-vs-concrete-driveways-bc).
  *
  * 16 Sept 2026 — the client struck two of these in review. The photograph
  * count ("194 site photographs") read as a job total and undersold twenty-five
  * years badly: "we have done 1000s of jobs and it makes it seem like we have
  * only done 194." And "one crew" was advertising the company as smaller than
- * it is. The community figure keeps a "+" for the same reason: the work
- * record is a sample of the work, not a ledger of it. Do not put a bare
- * count of anything countable back into this band.
+ * it is.
+ *
+ * 19 Sept 2026 — the community count went the same way. It was read off the
+ * photographed record at build time, which made it a count of the sample and
+ * not of the work (and the raw figure counted "UBC", "Lower Mainland" and
+ * "White Rock Pier" as communities). Do not put a count of anything
+ * countable back into this band; every number here is a fact about the
+ * company, not a tally of what it has done.
  */
 const stats: { number: string; label: string }[] = [
-  { number: "25+", label: "years installing decorative pavement in BC" },
-  { number: `${workCities().length}+`, label: "BC communities with Square One work on the ground" },
-  { number: "04", label: "specialist services, municipal to residential" },
-  { number: "Free", label: "site visit and written quote" },
+  { number: "25+", label: "years installing decorative pavement across BC" },
+  { number: "04", label: "services: stamped asphalt, coatings, thermoplastic, vapour blasting" },
+  { number: String(products.length).padStart(2, "0"), label: "pavement systems installed — StreetPrint®, StreetBond® and TrafficPatterns™ among them" },
+  { number: "Free", label: "site visit and written quote, Lower Mainland and Vancouver Island" },
 ]
 
 export default function StatsBar() {

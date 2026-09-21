@@ -12,22 +12,24 @@ import { TYPEFACES, LIVE_TYPEFACE, isTypefaceId, type TypefaceId } from "@/lib/t
  * them flip between them, and it is the pattern to reuse on the next brand
  * that needs the same decision made.
  *
- * Two rules keep it honest. It changes the DISPLAY face only — Inter carries
- * running text in every option, so what is being compared is the one thing
- * in question. And it says which faces are licensed and which are open,
- * because that is half the decision and the client should not have to ask.
+ * Second round, 19 Sept 2026: the options are SETTINGS of Futura — case,
+ * weight, tracking and the reading text beside it — not faces (see
+ * lib/typefaces.ts). Each is a complete system, and the footer says so.
  *
- * Where it shows: preview deployments, development, and any deployment
- * reached with ?type= in the URL. Production visitors never see it unless
- * they were sent a ?type= link. The choice persists per browser in
- * localStorage and the root layout's boot script applies it before paint, so
- * a page never flashes from one face to another.
+ * Where it shows: preview deployments, development and localhost. The root
+ * layout does not render it on production at all, and the boot script that
+ * honours ?type= is not emitted there either, so the live site ships one
+ * setting and a shared link cannot leave a visitor stuck on an alternate.
+ * The choice persists per browser in localStorage and the boot script
+ * applies it before paint, so a page never flashes from one setting to
+ * another.
  *
- * Adding a face: one entry in lib/typefaces.ts, one loader in
- * app/layout.tsx, one block in app/refine.css. This file never changes.
+ * Adding a setting: one entry in lib/typefaces.ts, one block in
+ * app/refine.css, a loader in app/layout.tsx only if it brings a new font.
+ * This file never changes.
  *
- * Retire the whole mechanism — this file, the alternates' loaders, and the
- * html[data-type] blocks — once the client has signed off on a face.
+ * Retire the whole mechanism — this file, the html[data-type] blocks and
+ * the serif loader — once the client has signed off on a setting.
  */
 export default function TypeToggle() {
   const [choice, setChoice] = useState<TypefaceId>(LIVE_TYPEFACE)
@@ -44,8 +46,9 @@ export default function TypeToggle() {
         process.env.NEXT_PUBLIC_VERCEL_ENV === "preview" ||
         process.env.NODE_ENV === "development" ||
         window.location.hostname === "localhost"
+      const production = process.env.NEXT_PUBLIC_VERCEL_ENV === "production"
       const dismissed = window.localStorage.getItem("s1-type-ui") === "off"
-      setVisible((previewHost || fromUrl !== null) && !dismissed)
+      setVisible(!production && (previewHost || fromUrl !== null) && !dismissed)
     } catch {
       /* storage unavailable — the switch simply stays hidden */
     }
@@ -78,17 +81,17 @@ export default function TypeToggle() {
   return (
     <div
       role="group"
-      aria-label="Display typeface"
+      aria-label="Type setting"
       className="fixed bottom-4 left-4 z-[150] w-[min(420px,calc(100vw-2rem))] rounded-[6px] bg-[#1E1B18]/95 p-3 shadow-[0_10px_34px_rgba(24,21,18,0.42)] backdrop-blur max-[700px]:bottom-[76px]"
     >
       <div className="flex items-center justify-between gap-3">
         <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[#968F86]">
-          Display type
+          Type setting
         </span>
         <button
           type="button"
           onClick={dismiss}
-          aria-label="Hide the typeface switch"
+          aria-label="Hide the type switch"
           className="-mr-1 flex h-6 w-6 cursor-pointer items-center justify-center rounded-[3px] text-[#968F86] transition-colors hover:text-white"
         >
           <svg aria-hidden="true" width="11" height="11" viewBox="0 0 12 12">
@@ -107,8 +110,8 @@ export default function TypeToggle() {
               onClick={() => apply(face.id)}
               aria-pressed={on}
               title={face.note}
-              style={{ fontFamily: face.preview }}
-              className={`h-8 cursor-pointer rounded-[3px] px-[11px] text-[13px] font-semibold transition-colors ${
+              style={{ fontFamily: face.preview, ...face.previewStyle }}
+              className={`h-8 cursor-pointer rounded-[3px] px-[11px] text-[13px] transition-colors ${
                 on ? "bg-white text-[#1E1B18]" : "text-[#D6D0C7] hover:bg-white/10 hover:text-white"
               }`}
             >
@@ -122,7 +125,7 @@ export default function TypeToggle() {
         <span
           className={`shrink-0 rounded-[2px] px-[5px] py-[1px] text-[9.5px] font-semibold uppercase tracking-[0.1em] ${
             current.licence === "Licensed"
-              ? "bg-[color:var(--accent)] text-white"
+              ? "bg-[color:var(--accent-deep)] text-white"
               : "bg-white/12 text-[#D6D0C7]"
           }`}
         >
@@ -131,9 +134,9 @@ export default function TypeToggle() {
         <span>{current.note}</span>
       </p>
 
-      <p className="mt-2 border-t border-white/10 pt-2 text-[10.5px] leading-[1.45] text-[#8F877E]">
-        Headings only &mdash; body text stays Inter in every option, so you are
-        comparing one thing.
+      <p className="mt-2 border-t border-white/10 pt-2 text-[10.5px] leading-[1.45] text-[#A39B92]">
+        Four settings of Futura &mdash; case, weight, spacing and the reading text beside
+        it &mdash; on the real pages. Your choice follows you around the site.
       </p>
     </div>
   )

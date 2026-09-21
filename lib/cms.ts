@@ -37,7 +37,7 @@ export interface SiteSettings {
 
 export const DEFAULT_SETTINGS: SiteSettings = {
   positioning:
-    "Decorative pavement for BC since 2000. Installer of HUB Surface Systems products, based in Maple Ridge and working across the Lower Mainland and Vancouver Island.",
+    "Decorative pavement installers — stamped asphalt, coatings and preformed thermoplastic — since 2000, based in Maple Ridge and working across the Lower Mainland and Vancouver Island.",
   phoneOffice: "604-612-6209",
   phoneIsland: "250-391-0270",
   phoneTollFree: "1-877-391-0270",
@@ -120,7 +120,7 @@ function fallbackTiles(profileUrl: string): SocialTile[] {
     },
     { slug: "langley-events-centre-streetbond", caption: "Circle of Life, Langley Events Centre · StreetBond" },
     {
-      src: "/images/services/vapor-blasting/granville-island-vapour-blasting-01.jpg",
+      src: "/images/services/vapor-blasting/generated/gen-granville-island-vapour-blasting-01-enhanced.jpg",
       alt: "Square One crew vapour blasting at Granville Island",
       caption: "Vapour blasting, Granville Island · surface prep",
     },

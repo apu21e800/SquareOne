@@ -184,6 +184,8 @@ const nextConfig: NextConfig = {
       { source: "/streetscapes/:path*", destination: "/applications/streetscapes", permanent: true },
       { source: "/category/:path*", destination: "/blog", permanent: true },
       { source: "/tag/:path*", destination: "/blog", permanent: true },
+      // 19 Sept 2026, the client: "remove article - we have never done them. they are MMA by line painters."
+      { source: "/blog/bc-transit-priority-lanes-red-coatings", destination: "/blog", permanent: true },
       { source: "/author/:path*", destination: "/blog", permanent: true },
       // WP pages: galleries, product galleries, product slugs, documents, service landings
       { source: "/galleries/streetscapes", destination: "/applications/streetscapes", permanent: true },
@@ -213,6 +215,10 @@ const nextConfig: NextConfig = {
     ];
   },
   images: {
+    // AVIF first (19 Sept 2026, Lighthouse: "increase the compression"):
+    // a quarter to a third smaller than WebP for the same photograph, and
+    // every modern browser reads it; WebP stays as the fallback.
+    formats: ["image/avif", "image/webp"],
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },
       // Sanity's image CDN — photographs the marketing team uploads in the Studio

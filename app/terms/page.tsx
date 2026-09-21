@@ -5,7 +5,7 @@ import { clampDescription } from "@/lib/seo"
 export const metadata: Metadata = {
   title: "Terms of Use",
   description:
-    clampDescription("Terms of use for squareonepaving.com — governing law, intellectual property, and disclaimer of warranties."),
+    clampDescription("Terms of use for squareonepaving.com — permitted use, intellectual property, disclaimer of warranties and governing law in British Columbia."),
   alternates: { canonical: `${SITE_URL}/terms` },
 }
 
@@ -20,7 +20,7 @@ const sections = [
   },
   {
     heading: "3. Intellectual Property",
-    body: `All content on this Site — including text, images, service descriptions, logos, graphics, and design — is the property of Square One Paving or its licensors and is protected by Canadian and international copyright law.\n\nProduct names including TrafficPatterns, StreetPrint, StreetBond, DecoMark, DuraTherm, and other referenced product systems may be trademarks of their respective owners. Nothing on this Site grants any license or right to use any trademark without prior written permission.`,
+    body: `All content on this Site — including text, images, service descriptions, logos, graphics, and design — is the property of Square One Paving or its licensors and is protected by Canadian and international copyright law.\n\nProduct names including StreetPrint®, StreetBond®, TrafficPatterns™, TrafficPatternsXD™, DecoMark, DuraTherm, PreMark and DuraShield are trademarks of their respective manufacturers, whose products Square One Paving installs; other referenced names may be trademarks of their respective owners. Nothing on this Site grants any license or right to use any trademark without prior written permission.`,
   },
   {
     heading: "4. Service Information",
@@ -44,7 +44,7 @@ const sections = [
   },
   {
     heading: "9. Contact",
-    body: `Questions about these Terms of Use may be directed to:\n\nSquare One Paving\nMaple Ridge, British Columbia\noffice@squareonepaving.com | 604-612-6209`,
+    body: `Questions about these Terms of Use may be directed to:\n\nSquare One Paving\n19–11720 Stewart Crescent\nMaple Ridge, BC V2X 9E7\noffice@squareonepaving.com | 604-612-6209 | 1-877-391-0270`,
   },
 ]
 
@@ -58,7 +58,7 @@ export default function TermsPage() {
         <h1 className="text-4xl sm:text-5xl font-bold text-[#2D2D2D] mb-3">
           Terms of Use
         </h1>
-        <p className="text-sm text-[#626262] mb-12">Last updated: March 2026</p>
+        <p className="text-sm text-[#626262] mb-12">Last updated: September 2026</p>
 
         <p className="text-[#626262] leading-relaxed mb-12">
           Please read these Terms of Use carefully before using

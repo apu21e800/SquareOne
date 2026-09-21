@@ -69,16 +69,16 @@ export interface WorkAppMeta {
 }
 
 export const WORK_APPS: WorkAppMeta[] = [
-  { slug: "crosswalks", label: "Crosswalks", blurb: "Decorative and high-visibility crossings in preformed thermoplastic and stamped asphalt." },
-  { slug: "streetscapes", label: "Streetscapes", blurb: "Intersections, medians, lanes and civic corridors with pattern and colour built into the road surface." },
-  { slug: "roundabouts", label: "Roundabouts & traffic calming", blurb: "Truck aprons, medians, speed tables and calming devices that read as streetscape, not hardware." },
-  { slug: "parking-lots", label: "Parking lots", blurb: "Thresholds, walkways and crosswalks that organise retail, strata and institutional lots." },
-  { slug: "parks-paths", label: "Parks & paths", blurb: "Greenways, park walkways and spray parks with colour and pattern underfoot." },
-  { slug: "schools-sports-courts", label: "Schools & sports courts", blurb: "Play surfaces, courts and school-zone markings that hold up to recess and rain." },
-  { slug: "bike-lanes", label: "Bike lanes", blurb: "Green and red priority surfacing that keeps its colour under daily traffic." },
-  { slug: "public-art", label: "Public art", blurb: "Artist-designed pavement — First Nations artwork, murals and community pieces, rendered durably in the surface." },
-  { slug: "branding-wayfinding", label: "Branding & wayfinding", blurb: "Logos, legends and decals fused into the pavement for campuses, retail and civic sites." },
-  { slug: "driveways", label: "Driveways", blurb: "Stamped asphalt and StreetBond driveways for homes across the Lower Mainland and Vancouver Island." },
+  { slug: "crosswalks", label: "Crosswalks", blurb: "Decorative and high-visibility crosswalks in preformed thermoplastic and StreetPrint stamped asphalt." },
+  { slug: "streetscapes", label: "Streetscapes", blurb: "Intersections, medians, laneways and civic forecourts with the pattern pressed into the asphalt and the colour coated on." },
+  { slug: "roundabouts", label: "Roundabouts & traffic calming", blurb: "Roundabout aprons, traffic islands, medians and calming devices that read as streetscape, not hardware." },
+  { slug: "parking-lots", label: "Parking lots", blurb: "Thresholds, walkways and crosswalks that organise retail, strata and commercial lots." },
+  { slug: "parks-paths", label: "Parks & paths", blurb: "Park paths, greenways, plazas and spray parks with StreetBond colour and stamped pattern underfoot." },
+  { slug: "schools-sports-courts", label: "Schools & sports courts", blurb: "Sports courts, school crosswalks and play markings that hold up to recess and rain." },
+  { slug: "bike-lanes", label: "Bike lanes", blurb: "Green bike lanes and multi-use paths in PreMark thermoplastic, StreetBond and StreetPrint — colour that holds under daily traffic." },
+  { slug: "public-art", label: "Public art", blurb: "Artist-designed pavement — First Nations artwork, murals and community pieces, rendered in thermoplastic and StreetBond coatings." },
+  { slug: "branding-wayfinding", label: "Branding & wayfinding", blurb: "Logos, wayfinding symbols and decals heat-fused into the pavement for schools, retail centres and civic sites." },
+  { slug: "driveways", label: "Driveways", blurb: "StreetPrint stamped asphalt and StreetBond colour over the driveway you already have — homes across the Lower Mainland and Vancouver Island." },
 ]
 
 // ── Sources ────────────────────────────────────────────────────────────────
@@ -448,6 +448,26 @@ export function workAppMeta(slug: string): WorkAppMeta | undefined {
 /** "TrafficPatternsXD · Decorative crosswalk" — the caption's first line. */
 export function workLabel(p: WorkPhoto): string {
   return [p.systems.join(" + "), p.subject].filter(Boolean).join(" · ")
+}
+
+/* The municipalities among CITY_REGION's keys — the keys also carry
+   neighbourhoods, landmarks and catch-alls (Steveston, Kingsway, GVRD)
+   that a "where we work" list must not print as towns. */
+const MUNICIPAL = new Set([
+  "Vancouver", "Burnaby", "Richmond", "Surrey", "Delta", "Coquitlam", "Port Moody", "New Westminster",
+  "North Vancouver", "West Vancouver", "Maple Ridge", "Langley", "Chilliwack", "Agassiz", "Bowen Island",
+  "White Rock", "Mission", "Port Coquitlam", "Abbotsford",
+  "Victoria", "Saanich", "North Saanich", "Sooke", "Duncan", "Mill Bay", "Nanaimo", "Parksville",
+  "North Cowichan", "Lake Cowichan", "View Royal", "Langford", "Tofino", "Oak Bay", "Colwood", "Lantzville",
+  "Kelowna", "Vernon", "Salmon Arm", "Osoyoos", "Penticton", "Kamloops", "Sechelt", "Squamish",
+])
+
+/** Municipalities on the record within one region, most-photographed first —
+    the contact page's "where we work" lists, drawn from the photographs. */
+export function workMunicipalities(region: WorkRegion): string[] {
+  return workCities()
+    .filter(({ city }) => MUNICIPAL.has(city) && CITY_REGION[city] === region)
+    .map(({ city }) => city)
 }
 
 /** Distinct cities in the record, most-photographed first. */

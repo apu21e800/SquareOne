@@ -7,7 +7,6 @@ import { usePathname } from "next/navigation"
 import { AnimatePresence, MotionConfig, motion, type Transition } from "framer-motion"
 import BrandMark from "@/components/BrandMark"
 import SearchOverlay from "@/components/SearchOverlay"
-import { products, type Product } from "@/lib/products"
 import { services, type Service } from "@/lib/services"
 import { APP_LEADS } from "@/lib/app-leads"
 
@@ -15,36 +14,8 @@ import { APP_LEADS } from "@/lib/app-leads"
    Data — derived from lib/, never duplicated.
    ------------------------------------------------------------------ */
 
-type MenuKey = "services" | "products"
+type MenuKey = "applications" | "services"
 
-const PRODUCT_CATEGORIES = [
-  "Stamped Asphalt",
-  "Decorative Coatings",
-  "Thermoplastic",
-  "Surface Protection",
-] as const
-
-/** Short nav-only descriptor. Falls back to the product tagline. */
-const PRODUCT_DESCRIPTOR: Record<string, string> = {
-  streetprint: "Patterned hot asphalt pavers",
-  streetbond: "Water-based colour coating",
-  trafficpatterns: "Preformed pattern sheets",
-  "trafficpatterns-xd": "Heavy-duty intersections",
-  duratherm: "Inlaid textured surfaces",
-  decomark: "Shapes, symbols, graphics",
-  premark: "Standard legends and bars",
-  durashield: "Asphalt maintenance coating",
-}
-
-interface ProductColumn {
-  category: (typeof PRODUCT_CATEGORIES)[number]
-  items: Product[]
-}
-
-const productColumns: ProductColumn[] = PRODUCT_CATEGORIES.map((category) => ({
-  category,
-  items: products.filter((p) => p.category === category),
-}))
 
 const SERVICE_ORDER = [
   "stamped-asphalt",
@@ -72,27 +43,32 @@ interface PrimaryLink {
   menu?: MenuKey
 }
 
-/** Five items (Vern, 5 Sept 2026: "too many items across the top").
-    Applications and Driveways live inside the Services panel — the four
-    trades, the residential line, and where the work goes — so the bar
-    reads as a sentence: what we do, what we install, the proof, the
-    specs, the company. */
+/** Five items (Vern, 5 Sept 2026: "too many items across the top"), in the
+    order a contractor or specifier actually shops (Vern, 19 Sept: "needs to
+    work more like a sales funnel for contractors. Applications etc."):
+    where the work goes → what we do → the proof → the people who draw it →
+    the company. Products left the bar the same night — the client was not
+    sure they belonged there; the eight systems live one click deeper, on
+    /products, reached by a single link in the Services panel, the drawer
+    and the footer (Vern, 19 Sept: "lead potential clients towards
+    services"). */
 const PRIMARY_LINKS: PrimaryLink[] = [
-  { label: "Services", href: "/services", match: ["/services", "/applications", "/driveways", "/galleries"], menu: "services" },
-  { label: "Products", href: "/products", match: ["/products"], menu: "products" },
+  { label: "Applications", href: "/applications", match: ["/applications", "/driveways", "/galleries"], menu: "applications" },
+  { label: "Services", href: "/services", match: ["/services", "/products"], menu: "services" },
   { label: "Projects", href: "/projects", match: ["/projects"] },
-  { label: "Resources", href: "/resources", match: ["/resources"] },
+  { label: "Specifiers", href: "/specifiers", match: ["/specifiers", "/resources"] },
   { label: "About", href: "/about", match: ["/about"] },
 ]
 
 /** The drawer keeps every route the desktop panels reach. */
 const DRAWER_LINKS: { label: string; href: string }[] = [
+  { label: "Applications", href: "/applications" },
   { label: "Services", href: "/services" },
-  { label: "Products", href: "/products" },
   { label: "Projects", href: "/projects" },
+  { label: "Specifiers", href: "/specifiers" },
+  { label: "Resources", href: "/resources" },
   { label: "Galleries", href: "/galleries" },
   { label: "Blog", href: "/blog" },
-  { label: "Resources", href: "/resources" },
   { label: "About", href: "/about" },
 ]
 
@@ -130,8 +106,8 @@ const SERVICE_TILES: { href: string; name: string; note: string; src: string; al
     href: "/services/vapor-blasting",
     name: "Vapour blasting",
     note: "Cleaning, priming, graffiti removal",
-    src: "/images/services/vapor-blasting/granville-island-vapour-blasting-01.jpg",
-    alt: "Square One crew vapour blasting at Granville Island",
+    src: "/images/services/vapor-blasting/generated/gen-road-marking-removal-02.jpg",
+    alt: "Vapour blasting a painted line off wet asphalt — an illustration of the service",
   },
 ]
 
@@ -291,44 +267,19 @@ function ServicesMega({ onNavigate, onMouseEnter, onMouseLeave }: MegaPanelProps
         ))}
       </div>
 
-      {/* ── Where the work goes — the same ten applications the galleries
-             and the home page carry, as one band under the photographs ──────── */}
-      <div className="mt-7 border-t border-[#E7E3DC] pt-5">
-        <div className="label">Where it goes</div>
-        <ul className="mt-3 grid grid-cols-5 gap-x-6 gap-y-1">
-          {APPLICATIONS.map((a) => (
-            <li key={a.href}>
-              <Link
-                href={a.href}
-                onClick={onNavigate}
-                data-mega-item
-                className="group -mx-2 flex items-center gap-3 rounded-[2px] px-2 py-[6px] text-[13.5px] font-medium text-[#3D4147] transition-colors hover:bg-[#FAF8F5] hover:text-[#14161A]"
-              >
-                {APP_LEADS[a.slug] && (
-                  <span className="relative block h-[34px] w-[46px] shrink-0 overflow-hidden rounded-[2px] bg-[#F1EEE9]">
-                    <Image src={APP_LEADS[a.slug]} alt="" fill sizes="46px" className="object-cover transition-transform duration-500 group-hover:scale-[1.06]" />
-                  </span>
-                )}
-                <span className="min-w-0 truncate">{a.label}</span>
-                <span aria-hidden="true" className="ml-auto text-[#A9A297] opacity-0 transition-all duration-200 group-hover:translate-x-1 group-hover:opacity-100 group-hover:text-[#14161A]">
-                  &rarr;
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
-
       <div className="mt-5 flex flex-wrap items-center justify-between gap-x-8 gap-y-3 border-t border-[#E7E3DC] pt-5">
         <Link href="/services" onClick={onNavigate} className="arrow-link">
           All services <span>&rarr;</span>
         </Link>
         <div className="flex flex-wrap items-center gap-x-8 gap-y-2">
-          <Link href="/galleries" onClick={onNavigate} className="arrow-link">
-            Image galleries <span>&rarr;</span>
+          {/* The eight systems live one click deeper (the client, 19 Sept:
+              not sure Products belongs in the menu; Vern: "lead potential
+              clients towards services") — a single quiet link, not a grid. */}
+          <Link href="/products" onClick={onNavigate} className="arrow-link">
+            The systems we install <span>&rarr;</span>
           </Link>
-          <Link href="/applications" onClick={onNavigate} className="arrow-link">
-            All applications <span>&rarr;</span>
+          <Link href="/specifiers" onClick={onNavigate} className="arrow-link">
+            For specifiers <span>&rarr;</span>
           </Link>
           <Link href="/resources" onClick={onNavigate} className="arrow-link">
             Specifications &amp; documents <span>&rarr;</span>
@@ -339,138 +290,39 @@ function ServicesMega({ onNavigate, onMouseEnter, onMouseLeave }: MegaPanelProps
   )
 }
 
-function ProductsMega({ onNavigate, onMouseEnter, onMouseLeave }: MegaPanelProps) {
-  // Every system is on the list at once — nothing hides behind a category.
-  // Pointing at a row swaps the photograph; the row itself is the link.
-  const [active, setActive] = useState<Product>(products[0])
-  const panelRef = useRef<HTMLDivElement>(null)
-
-  const onKeyDown = (e: React.KeyboardEvent) => {
-    const panel = panelRef.current
-    if (!panel) return
-    const items = Array.from(panel.querySelectorAll<HTMLElement>("[data-mega-item]"))
-    const el = document.activeElement as HTMLElement | null
-    if (!el || !items.includes(el)) return
-    const i = items.indexOf(el)
-    if (e.key === "ArrowDown") { e.preventDefault(); items[Math.min(i + 1, items.length - 1)]?.focus() }
-    if (e.key === "ArrowUp") { e.preventDefault(); items[Math.max(i - 1, 0)]?.focus() }
-  }
-
+function ApplicationsMega({ onNavigate, onMouseEnter, onMouseLeave }: MegaPanelProps) {
+  // Where the work goes — the ten kinds of work as photographs, two rows of
+  // five, each the lead frame of its gallery. This is the front door of the
+  // funnel: a contractor or specifier shops by application, not by system.
   return (
-    <Panel label="Products menu" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
-      <div ref={panelRef} onKeyDown={onKeyDown} className="grid grid-cols-12 gap-x-10">
-        {/* ── Cols 1–6: every system, grouped by trade — two balanced columns ──────── */}
-        <div className="col-span-6 grid grid-cols-2 gap-x-8 gap-y-6 border-r border-[#E7E3DC] pr-10">
-          {[
-            productColumns.filter((c) => c.category !== "Thermoplastic"),
-            productColumns.filter((c) => c.category === "Thermoplastic"),
-          ].map((groups, gi) => (
-            <div key={gi} className="flex flex-col gap-6">
-              {groups.map((col) => (
-                <div key={col.category}>
-                  <div className="label">{col.category}</div>
-                  <ul className="mt-2">
-                    {col.items.map((product) => {
-                      const on = active.slug === product.slug
-                      return (
-                        <li key={product.slug}>
-                          <Link
-                            href={`/products/${product.slug}`}
-                            onClick={onNavigate}
-                            data-mega-item
-                            onMouseEnter={() => setActive(product)}
-                            onFocus={() => setActive(product)}
-                            className={`group -mx-3 flex items-center justify-between gap-3 rounded-[2px] px-3 py-[9px] transition-colors duration-150 ${
-                              on ? "bg-[#FAF8F5]" : "hover:bg-[#FAF8F5]"
-                            }`}
-                          >
-                            <span className="min-w-0">
-                              <span
-                                className={`block text-[13px] font-semibold uppercase tracking-[0.08em] ${on ? "text-[#14161A]" : "text-[#3D4147]"}`}
-                                style={{ fontFamily: "var(--font-display)" }}
-                              >
-                                {product.name}
-                              </span>
-                              <span className="mt-[2px] block whitespace-nowrap text-[12.5px] leading-[1.4] text-[#767B82]">
-                                {PRODUCT_DESCRIPTOR[product.slug] ?? product.tagline}
-                              </span>
-                            </span>
-                            <span
-                              aria-hidden="true"
-                              className={`shrink-0 text-[15px] leading-none transition-all duration-200 ${
-                                on ? "translate-x-0 text-[#14161A] opacity-100" : "-translate-x-1 text-[#A9A297] opacity-0 group-hover:opacity-100"
-                              }`}
-                            >
-                              &rarr;
-                            </span>
-                          </Link>
-                        </li>
-                      )
-                    })}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          ))}
-          <div className="col-span-2 flex flex-wrap items-center gap-x-8 gap-y-2 border-t border-[#E7E3DC] pt-5">
-            <Link href="/products" onClick={onNavigate} className="arrow-link">
-              All products <span>&rarr;</span>
-            </Link>
-            <Link href="/resources" onClick={onNavigate} className="arrow-link">
-              Specifications &amp; documents <span>&rarr;</span>
-            </Link>
-          </div>
-        </div>
-
-        {/* ── Cols 7–12: the active system, photographed ──────── */}
-        <div className="col-span-6">
-          <Link
-            href={`/products/${active.slug}`}
-            onClick={onNavigate}
-            className="group relative block aspect-[16/9] overflow-hidden rounded-[2px] bg-[#F1EEE9]"
-            tabIndex={-1}
-            aria-hidden="true"
-          >
-            <AnimatePresence initial={false}>
-              <motion.span
-                key={active.slug}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.22, ease: "easeOut" }}
-                className="absolute inset-0"
-              >
-                <Image
-                  src={active.image}
-                  alt=""
-                  fill
-                  sizes="(max-width: 1280px) 50vw, 620px"
-                  className="object-cover transition-transform duration-700 group-hover:scale-[1.02]"
-                />
-              </motion.span>
-            </AnimatePresence>
-            <span aria-hidden="true" className="scrim" />
-            <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-6 p-6">
-              <span className="min-w-0">
-                <span className="block text-[11px] font-semibold uppercase tracking-[0.14em] text-white/70" style={{ fontFamily: "var(--font-display)" }}>
-                  {active.category}
-                </span>
-                <span className="mt-2 block text-[22px] font-semibold uppercase leading-[1.1] tracking-[0.05em] text-white" style={{ fontFamily: "var(--font-display)" }}>
-                  {active.name}
-                  {active.mark && <sup className="ml-[0.1em] text-[0.45em] font-medium align-super">{active.mark}</sup>}
-                </span>
-                <span className="mt-2 block max-w-[46ch] text-[13.5px] leading-[1.5] text-white/80">
-                  {active.tagline}
-                </span>
-              </span>
-              <span
-                aria-hidden="true"
-                className="mb-1 shrink-0 text-[13px] font-semibold uppercase tracking-[0.1em] text-white/80 transition-colors group-hover:text-white"
-                style={{ fontFamily: "var(--font-display)" }}
-              >
-                See the system &rarr;
-              </span>
-            </span>
+    <Panel label="Applications menu" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+      <div className="grid grid-cols-5 gap-4">
+        {APPLICATIONS.map((a) => (
+          <MegaTile
+            key={a.href}
+            href={a.href}
+            src={APP_LEADS[a.slug] ?? "/images/og-image.png"}
+            alt=""
+            name={a.label}
+            aspect="aspect-[16/10]"
+            compact
+            onNavigate={onNavigate}
+          />
+        ))}
+      </div>
+      <div className="mt-5 flex flex-wrap items-center justify-between gap-x-8 gap-y-3 border-t border-[#E7E3DC] pt-5">
+        <Link href="/applications" onClick={onNavigate} className="arrow-link">
+          All applications <span>&rarr;</span>
+        </Link>
+        <div className="flex flex-wrap items-center gap-x-8 gap-y-2">
+          <Link href="/galleries" onClick={onNavigate} className="arrow-link">
+            Image galleries <span>&rarr;</span>
+          </Link>
+          <Link href="/projects" onClick={onNavigate} className="arrow-link">
+            Projects <span>&rarr;</span>
+          </Link>
+          <Link href="/specifiers" onClick={onNavigate} className="arrow-link">
+            For specifiers <span>&rarr;</span>
           </Link>
         </div>
       </div>
@@ -551,6 +403,12 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
           <Link href="/driveways" onClick={onClose} className="py-[9px] text-[16px] font-medium text-[#3D4147]">
             Driveways
           </Link>
+          <Link href="/specifiers" onClick={onClose} className="py-[9px] text-[16px] font-medium text-[#3D4147]">
+            For specifiers
+          </Link>
+          <Link href="/products" onClick={onClose} className="py-[9px] text-[16px] font-medium text-[#3D4147]">
+            The systems we install
+          </Link>
         </div>
 
         <div className="label mt-8">Applications</div>
@@ -567,19 +425,6 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
           ))}
         </div>
 
-        <div className="label mt-8">Products</div>
-        <div className="mt-3 grid grid-cols-2 gap-x-6">
-          {products.map((product) => (
-            <Link
-              key={product.slug}
-              href={`/products/${product.slug}`}
-              onClick={onClose}
-              className="py-[9px] text-[16px] font-medium text-[#3D4147]"
-            >
-              {product.name}
-            </Link>
-          ))}
-        </div>
       </nav>
 
       <div className="flex shrink-0 flex-wrap items-center gap-x-6 gap-y-1 border-t border-[#E7E3DC] px-6 py-4 text-[13px] text-[#767B82]">
@@ -611,6 +456,7 @@ export default function Nav() {
   const pathname = usePathname()
   const [scrolled, setScrolled] = useState(false)
   const [onImage, setOnImage] = useState(false)
+  const [atFooter, setAtFooter] = useState(false)
   const [menu, setMenu] = useState<MenuKey | null>(null)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
@@ -662,6 +508,21 @@ export default function Nav() {
     window.addEventListener("scroll", onScroll, { passive: true })
     return () => window.removeEventListener("scroll", onScroll)
   }, [])
+
+  // The bar steps off the page once the footer is in view — the footer
+  // carries its own wordmark, and two logos on one screen looked wrong
+  // (Vern, 19 Sept 2026). Any open panel keeps the bar; it comes back the
+  // moment the footer leaves the viewport.
+  useEffect(() => {
+    const footer = document.querySelector("footer")
+    if (!footer || !("IntersectionObserver" in window)) return
+    const io = new IntersectionObserver(
+      (entries) => setAtFooter(entries.some((e) => e.isIntersecting)),
+      { threshold: 0 },
+    )
+    io.observe(footer)
+    return () => io.disconnect()
+  }, [pathname])
 
   // Over-hero state: only a page that opens on a full-bleed photograph
   // ([data-nav-on-image]) gets the transparent, light bar. Everywhere
@@ -723,6 +584,8 @@ export default function Nav() {
   const solid = scrolled || menu !== null || !onImage
   // Menus and the drawer sit on white, so the light treatment yields to them
   const light = onImage && !scrolled && menu === null
+  // Hidden only while nothing is open and the footer is on screen.
+  const hidden = atFooter && menu === null && !drawerOpen && !searchOpen
 
   return (
     // reducedMotion="user": the CSS kill switch cannot stop framer's JS
@@ -731,12 +594,15 @@ export default function Nav() {
     <div ref={rootRef}>
       <header
         className={`fixed top-0 right-0 left-0 z-50${light ? " nav-light" : ""}`}
+        aria-hidden={hidden || undefined}
         style={{
           background: solid ? "#FFFFFF" : "rgba(255,255,255,0)",
           backdropFilter: solid ? "blur(8px)" : "none",
           WebkitBackdropFilter: solid ? "blur(8px)" : "none",
           borderBottom: `1px solid ${solid ? HAIRLINE : "rgba(231,227,220,0)"}`,
-          transition: "background 0.25s ease, border-color 0.25s ease",
+          transform: hidden ? "translateY(-100%)" : "translateY(0)",
+          pointerEvents: hidden ? "none" : "auto",
+          transition: "background 0.25s ease, border-color 0.25s ease, transform 0.32s cubic-bezier(0.4, 0, 0.2, 1)",
         }}
       >
         <div className="container-1280 flex h-[72px] min-w-0 items-center gap-x-6">
@@ -868,10 +734,10 @@ export default function Nav() {
       </AnimatePresence>
 
       <AnimatePresence>
-        {menu === "products" && (
-          <ProductsMega
+        {menu === "applications" && (
+          <ApplicationsMega
             onNavigate={closeAll}
-            onMouseEnter={() => openMenu("products")}
+            onMouseEnter={() => openMenu("applications")}
             onMouseLeave={scheduleClose}
           />
         )}

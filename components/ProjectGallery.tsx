@@ -47,7 +47,7 @@ export default function ProjectGallery({
             <button
               type="button"
               onClick={() => show(i + 1)}
-              aria-label={`View photograph ${i + 2} of ${photos.length} full screen`}
+              aria-label={`${caption} — view full screen (photograph ${i + 2} of ${photos.length})`}
               className="thumb group relative block w-full aspect-[4/3] overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)] text-left"
             >
               <Image

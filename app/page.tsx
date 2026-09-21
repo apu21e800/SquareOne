@@ -1,13 +1,15 @@
 import type { Metadata } from "next"
 import Hero from "@/components/sections/Hero"
 import { HERO_SLIDES } from "@/lib/hero-slides"
-import StatsBar from "@/components/sections/StatsBar"
+import ProofLine from "@/components/sections/ProofLine"
 import AudienceBand from "@/components/sections/AudienceBand"
 import EditorialBand from "@/components/sections/EditorialBand"
 import ServicesGrid from "@/components/sections/ServicesGrid"
+import MaterialsBand from "@/components/sections/MaterialsBand"
 import ProjectsPreview from "@/components/sections/ProjectsPreview"
 import ApplicationsSection from "@/components/sections/ApplicationsSection"
 import DrivewaysBand from "@/components/sections/DrivewaysBand"
+import VapourBand from "@/components/sections/VapourBand"
 import BlogFeed from "@/components/sections/BlogFeed"
 import FollowTheWork from "@/components/sections/FollowTheWork"
 import { getSiteSettings, getSlots, getSocialPosts, slotImage, slotText } from "@/lib/cms"
@@ -15,27 +17,31 @@ import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
 
 export const metadata: Metadata = {
-  title: { absolute: "Decorative Pavement Installers in BC | Square One Paving" },
+  // Absolute (the root template would add the brand twice) and 60 characters
+  // even: the two phrases people search, then the province, then the name.
+  title: { absolute: "BC Stamped Asphalt & Decorative Pavement | Square One Paving" },
   description:
-    clampDescription("Stamped asphalt, decorative coatings and thermoplastic markings for BC cities, developers and homeowners — Lower Mainland and Vancouver Island. Installer of HUB Surface Systems products since 2000."),
+    clampDescription("Stamped asphalt, coloured coatings and thermoplastic crosswalks for BC cities, developers and homeowners — specified, installed and warranted by Square One since 2000."),
   keywords: [
     "decorative pavement BC",
+    "stamped asphalt BC",
+    "stamped asphalt Vancouver",
+    "stamped asphalt Victoria",
     "decorative paving Vancouver",
     "decorative paving Victoria",
-    "stamped asphalt BC",
     "StreetPrint Vancouver",
     "StreetBond BC",
+    "decorative crosswalks BC",
     "decorative driveway Vancouver",
-    "pavement applicator BC",
     "decorative paving Lower Mainland",
   ],
   alternates: { canonical: SITE_URL },
   openGraph: {
-    title: "Decorative Pavement Installers in BC | Square One Paving",
+    title: "BC Stamped Asphalt & Decorative Pavement | Square One Paving",
     description:
-      clampDescription("Stamped asphalt, decorative coatings and thermoplastic markings for BC cities, developers and homeowners — Lower Mainland and Vancouver Island, since 2000."),
+      clampDescription("Stamped asphalt, StreetBond coatings and thermoplastic crosswalks for BC cities, developers and homeowners — Lower Mainland and Vancouver Island, since 2000."),
     images: [
-      { url: "/images/og-image.png", width: 1200, height: 600, alt: "Square One Paving — BC Decorative Pavement Specialists" },
+      { url: "/images/og-image.png", width: 1200, height: 600, alt: "Square One Paving — stamped asphalt and decorative pavement installers in BC" },
     ],
   },
 }
@@ -85,26 +91,35 @@ export default async function Home() {
     <main>
       <Hero slides={slides} eyebrow={eyebrow || undefined} title={title || undefined} />
 
-      <StatsBar />
+      {/* One quiet line of facts under the hero (19 Sept: the stats band
+          read as chunky — Vern). components/sections/StatsBar.tsx stays for
+          /about. */}
+      <ProofLine />
 
       <AudienceBand />
 
-      <EditorialBand statement={slotText(slots, "home.statement", "Twenty-five years on BC ground")} />
+      {/* The funnel's front door (Vern, 19 Sept evening: "work more like a
+          sales funnel for contractors. Applications etc."): where the work
+          goes comes before what we do. */}
+      <ApplicationsSection />
 
       <ServicesGrid />
 
-      {/* No materials band here (Vern, 19 Sept, live: "maybe colour and
-          templates don't belong on the landing page"). They don't — the home
-          page routes, it doesn't specify. The pattern library is /patterns,
-          reached from StreetPrint, the driveways pages and search; the
-          colours are on /products/streetbond. MaterialsBand is kept for
-          those pages should it be wanted. */}
+      {/* Patterns and colours — back on the home page, 19 Sept evening
+          (Vern: "the client did like some semblance of the colours and
+          patterns on the homepage"), as the specifier's composition: three
+          drawing sheets fanned on the slate, eight named colours, two ways
+          in. Not a catalogue. */}
+      <MaterialsBand />
 
       <ProjectsPreview />
 
-      <ApplicationsSection />
+      <EditorialBand statement={slotText(slots, "home.statement", "Twenty-five years on BC ground")} />
 
       <DrivewaysBand />
+
+      {/* Vapour blasting, its own band (Vern, 19 Sept) — the wipe, on the slate. */}
+      <VapourBand />
 
       <BlogFeed />
 

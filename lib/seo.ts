@@ -11,6 +11,29 @@ const clampTitle = (str: string, max = 60) =>
 const clampDesc = (str: string, max = 155) => clampDescription(str, max)
 
 /**
+ * A <title> that fits the 60 characters search results show, keeping as
+ * much of the brand as fits: "Title | Square One Paving", then "Title |
+ * Square One", then the title alone, then the title cut at a word. A
+ * "Place: what happened" title falls back to its first clause first.
+ * (19 Sept 2026 — thirty project and post titles ran to 61–72 characters.)
+ */
+export function pageTitle(title: string, section?: string, max = 60): string {
+  const base = title.replace(/\s+/g, " ").trim()
+  const candidates = [base]
+  if (base.includes(":")) candidates.push(base.split(":")[0].trim())
+  if (base.includes(" — ")) candidates.push(base.split(" — ")[0].trim())
+  for (const t of candidates) {
+    const withSection = section ? `${t} | ${section}` : t
+    for (const suffix of [" | Square One Paving", " | Square One", ""]) {
+      const full = `${withSection}${suffix}`
+      if (full.length <= max) return full
+    }
+  }
+  const cut = base.slice(0, max - 1)
+  return cut.slice(0, cut.lastIndexOf(" ")) + "…"
+}
+
+/**
  * Meta descriptions are cut by search engines at roughly 155–160 characters.
  * Prefer the last full sentence that fits; otherwise the last whole word
  * plus an ellipsis. Everything on the site funnels through this so no page

@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 
 import { projects } from "@/lib/projects"
-import { WORK_APPS, workFor } from "@/lib/work"
+import { WORK_APPS } from "@/lib/work"
 import IndexImageHero from "@/components/IndexImageHero"
 import ProjectsIndexClient, { type ProjectCard } from "./ProjectsIndexClient"
 import { SITE_URL } from "@/lib/site"
@@ -17,16 +17,21 @@ import { clampDescription } from "@/lib/seo"
  *   Close    slate — rendered once by app/layout.tsx (Footer)
  *
  * Every card is a project Square One has published, with the studio's own
- * photography. The gallery-scale record (195 captioned site photos) lives on
- * the application pages, linked from the bottom row.
+ * photography. The gallery-scale record lives on the application pages,
+ * linked from the bottom row.
+ *
+ * No counts anywhere on this page — not of projects, not of photographs.
+ * The client, 10 Sept 2026: "we have done 1000s of jobs and it makes it
+ * seem like we have only done 194." A published count reads as a ceiling.
  */
 
 const FIO = "/images/S1_update_v2/photos/Featured%20image%20options"
 
 export const metadata: Metadata = {
+  openGraph: { title: "Decorative Pavement Projects Across BC", description: clampDescription("Square One Paving projects across BC — crosswalks, public art, spray parks, parking lots and driveways, each with the system installed and the place."), images: [{ url: "/images/S1_update_v2/photos/Featured%20image%20options/502639628_1112360040926014_5391735583045489560_n.jpg" }] },
   title: "Decorative Pavement Projects Across BC",
   description:
-    clampDescription("Projects from Square One Paving — crosswalks, public art, transit stations, spray parks, parking lots and driveways from Metro Vancouver to Vancouver Island and the Interior, since 2000."),
+    clampDescription("Square One Paving projects across BC — crosswalks, public art, spray parks, parking lots and driveways, each with the system installed and the place."),
   alternates: { canonical: `${SITE_URL}/projects` },
 }
 
@@ -47,18 +52,18 @@ export default function ProjectsPage() {
     src: project.imageUrl,
   }))
 
-  const byUse = WORK_APPS.map((a) => ({ ...a, count: workFor(a.slug).length, href: APP_HREF[a.slug] }))
+  const byUse = WORK_APPS.map((a) => ({ ...a, href: APP_HREF[a.slug] }))
 
   return (
     <main className="bg-[color:var(--surface)]">
       <IndexImageHero
-        src={`${FIO}/UBC-crosswalk-3-300dpi.jpg`}
-        alt="UBC and Musqueam crosswalk in TrafficPatterns, installed by Square One Paving"
+        src={`${FIO}/502639628_1112360040926014_5391735583045489560_n.jpg`}
+        alt="The rainbow intersection in Nanaimo from above — the whole crossing in bands of red, orange, yellow, green, blue and purple TrafficPatternsXD, installed by Square One Paving"
         eyebrow="Projects"
-        title={projects.length + " projects across BC"}
-        lede="Municipal, institutional, commercial and residential work from the Lower Mainland to Vancouver Island and the Interior — installed by Square One since 2000."
-        caption="UBC · TrafficPatterns"
-        imagePosition="center 55%"
+        title="Decorative pavement projects across BC"
+        lede="Municipal, institutional, commercial and residential work from the Lower Mainland to Vancouver Island and the Interior — installed by Square One since 2000, each with the system and the place on record."
+        caption="Nanaimo · Rainbow intersection · TrafficPatternsXD"
+        imagePosition="center 50%"
       />
 
       <ProjectsIndexClient projects={cards} />
@@ -68,11 +73,11 @@ export default function ProjectsPage() {
         <div className="container-1280">
           <div className="flex flex-wrap items-baseline justify-between gap-6">
             <div>
-              <div className="eyebrow">The record</div>
+              <div className="eyebrow">The galleries</div>
               <h2 className="mt-4 [text-wrap:balance]">The work, by application</h2>
             </div>
             <Link href="/galleries" className="arrow-link max-w-full">
-              All {byUse.reduce((n, a) => n + a.count, 0)} photographs, by application and system{" "}
+              Every photograph, by application and system{" "}
               <span aria-hidden="true">&rarr;</span>
             </Link>
           </div>
@@ -87,7 +92,7 @@ export default function ProjectsPage() {
                   <span className="text-[15px] font-semibold text-[color:var(--ink)] group-hover:text-[color:var(--accent-deep)]">
                     {a.label}
                   </span>
-                  <span className="label whitespace-nowrap">{a.count} photos</span>
+                  <span className="label whitespace-nowrap">Gallery &rarr;</span>
                 </Link>
               </li>
             ))}
