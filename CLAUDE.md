@@ -55,7 +55,18 @@ FAQPage / BreadcrumbList / Service JSON-LD via `components/JsonLd.tsx`; `/llms.t
 
 ## Environment Variables
 Copy .env.local.example → .env.local and fill in:
-- RESEND_API_KEY — from resend.com (required for contact form)
+- RESEND_API_KEY — from resend.com. **Required in production.** With no key the
+  route answers 503 and the visitor is given the office's phone lines and a
+  mailto carrying what they typed; it never returns a false "thank you". (It
+  did until 21 Sept 2026, and every enquiry from launch to that date went
+  nowhere — recoverable only from the Vercel runtime logs.)
+- CONTACT_FROM — the sending identity, e.g. `Square One <noreply@send.squareonepaving.com>`.
+  Resend only sends from a domain verified in the account. The **root**
+  squareonepaving.com carries Google Workspace MX and `v=spf1
+  include:_spf.google.com ~all`; **never edit those** or the client loses their
+  email. Verify the subdomain `send.squareonepaving.com` in Resend instead and
+  point this at it. Defaults to `noreply@squareonepaving.com` (root), which only
+  works if the root itself is verified.
 - CONTACT_EMAIL — receiving address (defaults to office@squareonepaving.com)
 - NEXT_PUBLIC_SITE_URL — public site URL for canonical/sitemap/robots/schema/OG (defaults to https://www.squareonepaving.com in `lib/site.ts` — www, because Vercel serves production on www and the old site's whole Google index was www; every absolute URL derives from `SITE_URL` there — never hard-code the host)
 
@@ -134,10 +145,14 @@ When adding new content, check `next.config.ts` redirects first to avoid conflic
 
 ### API Routes
 **POST /api/contact** — Contact form submission
-- Sends email via Resend to `process.env.CONTACT_EMAIL`
-- Honeypot field (`website`) for spam protection — if filled, silently succeeds without sending
-- Dev fallback: logs to console when RESEND_API_KEY is missing
-- Email format: HTML table with form fields + PT timezone timestamp
+- Sends via Resend from `CONTACT_FROM` to `CONTACT_EMAIL`, reply-to the enquirer
+- Honeypot field (`website`) — if filled, answers success without sending
+- Validates the email, caps every field, best-effort per-IP throttle (5 / 10 min)
+- **Never fails silently.** No key in production → 503; Resend rejection → 502;
+  both carry the phone lines, and the form shows a mailto with what they typed.
+  Every failure path logs the whole enquiry so a lead is recoverable.
+- Dev (NODE_ENV !== production) with no key: logs and succeeds
+- Email format: HTML table + a plain-text part, PT timezone timestamp
 
 ## Adding Content
 

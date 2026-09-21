@@ -3,6 +3,14 @@ import { Resend } from "resend"
 
 const TO_EMAIL = process.env.CONTACT_EMAIL ?? "office@squareonepaving.com"
 
+/* Who the enquiry is sent as. Resend will only send from a domain verified
+   in the account, and the safe way to verify is a subdomain — the root of
+   squareonepaving.com carries Google Workspace MX and a Google SPF record
+   that must not be edited. So a `send.` subdomain is verified instead, and
+   the from address follows it. Configurable so verifying a different
+   subdomain (or the root, later) is an env change, not a deploy. */
+const FROM_EMAIL = process.env.CONTACT_FROM ?? "Square One <noreply@squareonepaving.com>"
+
 /** What the office can be reached on when the send itself fails. */
 const FALLBACK = "Call 604-612-6209 (Lower Mainland) or 250-391-0270 (Vancouver Island), or email office@squareonepaving.com."
 
@@ -148,7 +156,7 @@ export async function POST(req: NextRequest) {
 
     const resend = new Resend(process.env.RESEND_API_KEY)
     const { error } = await resend.emails.send({
-      from: "Square One <noreply@squareonepaving.com>",
+      from: FROM_EMAIL,
       to: [TO_EMAIL],
       replyTo: email,
       subject: `New enquiry — ${clean.name ?? "Unknown"}${clean.company ? ` @ ${clean.company}` : ""}${clean.projectType ? ` · ${clean.projectType}` : ""}`,
