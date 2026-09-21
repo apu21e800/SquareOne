@@ -16,6 +16,11 @@ const FEATURED_ORDER = [
   "nanaimo-rainbow-intersection", // warm — full spectrum
   "white-rock-custom-crosswalk", // cool — sea blues
   "langley-events-centre-streetbond", // warm — orange and sand
+  // Two more, 21 Sept 2026 (Vern: "add two more to selected work"). Both were
+  // already featured in lib/projects.ts and neither repeats a place or a
+  // system pairing already in the four above: a transit plaza and a street.
+  "richmond-brighouse-translink", // cool — grey and steel
+  "little-italy-vancouver-crosswalks", // warm — Commercial Drive
 ]
 
 export default function ProjectsPreview() {
@@ -23,7 +28,7 @@ export default function ProjectsPreview() {
   const curated = FEATURED_ORDER.map((slug) =>
     featured.find((p) => p.slug === slug),
   ).filter((p): p is NonNullable<typeof p> => Boolean(p))
-  const featuredProjects = (curated.length === 4 ? curated : featured).slice(0, 4)
+  const featuredProjects = (curated.length === 6 ? curated : featured).slice(0, 6)
 
   return (
     <section
@@ -45,7 +50,7 @@ export default function ProjectsPreview() {
           </Link>
         </div>
 
-        <div data-reveal-group className="rail-m mt-12 grid grid-cols-1 gap-8 min-[701px]:grid-cols-2">
+        <div data-reveal-group className="rail-m mt-12 grid grid-cols-1 gap-7 min-[701px]:grid-cols-2 min-[1100px]:grid-cols-3">
           {featuredProjects.map((project) => {
             const src = project.imageUrl
 
@@ -68,13 +73,13 @@ export default function ProjectsPreview() {
                   src={src}
                   alt={alt}
                   fill
-                  sizes="(max-width: 700px) 100vw, (max-width: 1280px) 50vw, 616px"
+                  sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 410px"
                   className="object-cover"
                 />
 
                 <div aria-hidden className="scrim" />
 
-                <ProjectCaption large title={project.title} meta={meta} />
+                <ProjectCaption title={project.title} meta={meta} />
               </Link>
             )
           })}

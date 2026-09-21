@@ -280,6 +280,45 @@ that on 21 Sept 2026, while this section was being written. So checksum every
 landed file before committing it, and keep the tree comparison as the backstop
 that catches whatever the checksum misses.
 
+### Image files change in transit across the bridge — generate them on the device
+
+`device_commit_files` does not deliver an image byte-for-byte. A C2PA content
+credentials manifest is injected on the way, so the file that lands is larger
+than the one sent and its checksum is different every time:
+
+```
+app/icon.svg   681 bytes sent  →  8,455 landed   <svg … xmlns:c2pa="http://c2pa.org/manifest"><metadata>…
+app/icon.png   9,366          →  15,136
+app/apple-icon.png 1,527      →  7,297
+```
+
+The picture survives intact — the SVG still renders and the PNGs keep their
+dimensions and colour — but the bytes do not, so the checksum step of the
+handoff rule fails for images and the two checkouts' tree hashes can never
+agree. Text files are unaffected; this is images only.
+
+So **icons and other generated images are produced on the device**, by running
+the same generator there (`python3` 3.10 with Pillow, and node 22, are
+installed in the VM). Then both sides run identical code on identical inputs
+and the bytes match. Verified 21 Sept 2026: the same eight-line Pillow script
+run in each place produced four identical files.
+
+A photograph that only exists in the sandbox still has to cross, and will pick
+up a manifest. That is acceptable for content images — just do not expect its
+checksum to match, and do not chase the mismatch.
+
+### Every write across the bridge needs its own fresh staged path
+
+Writing twice to the same `devicePath` from the same `stagedPath` silently does
+nothing the second time: the call reports the file written, and the device still
+holds the old bytes. It happened three times on 21 Sept 2026 — twice on
+`CLAUDE.md`, once on a batch of icons — and `force: true` does not prevent it.
+
+So stage each write under a path that has never been used, for example
+`/mnt/user-data/outputs/<name>-$(date +%s)/`, and checksum the landed file
+before committing. That check is the only thing standing between a stale write
+and a commit that claims work it does not contain.
+
 ### The sandbox's branch is a parallel line — its "unpushed" count is meaningless
 
 The sandbox commits the same work separately from the device, so the two
@@ -308,6 +347,31 @@ behaves normally. If a session starts with a stale lock already in place, clear
 
 Never let this turn into deleting anything else. Files taken off the site still
 go to `_to_delete/` and stay there for the maintainer to remove.
+
+### `app/icon.png` must stay above ~8 KB or the build panics
+
+Replacing the favicon with a smaller file breaks `next build` with a Turbopack
+panic that names nothing useful:
+
+```
+FATAL: An unexpected Turbopack error occurred.
+Error [TurbopackInternalError]: Dependency tracking is disabled so invalidation
+is not allowed at turbo-tasks-backend/src/backend/mod.rs:1526:13
+```
+
+Bisected on 21 Sept 2026: it is `app/icon.png` alone. The same image at 512px
+(4,130 bytes) panics; at 1024px (9,366 bytes) it builds. `app/favicon.ico`,
+`app/icon.svg` and `app/apple-icon.png` are all small and all fine — only
+`icon.png` trips it, apparently on an asset-inlining path.
+
+So the icon ships at 1024px. If a future pass shrinks or re-encodes it and the
+build starts panicking about dependency tracking, this is why: check the file
+size before looking anywhere else.
+
+`app/favicon.ico` has its own rule: its sub-images must be **RGBA**. Written in
+RGB the build fails with `Format error decoding Ico: The PNG is not in RGBA
+format!` — a clearer message than the panic above, but the same class of trap.
+The PNGs alongside it are RGB and that is fine; only the .ico cares.
 
 ### Two sandbox rules that cost real time to rediscover
 

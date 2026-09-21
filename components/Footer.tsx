@@ -172,35 +172,44 @@ export default async function Footer() {
             {/* How to reach us */}
             <div className="min-[701px]:col-span-2 lg:col-span-3">
               <div className="label label-on-slate">Talk to us</div>
-              <dl className="mt-5 grid grid-cols-[minmax(0,auto)_1fr] items-baseline gap-x-[14px] gap-y-[14px]">
+              {/* 21 Sept 2026 (Vern: "footer 'talk to us' section still looks
+                  bonkers"). The 19 Sept pass put labels and numbers in two
+                  columns and got the numbers onto one left edge, which was
+                  the bug it set out to fix — but the labels run from six
+                  characters to sixteen, so between the short ones and the
+                  numbers sat a river of empty space, and the mailbox was too
+                  long to join the table at all and had to be exiled below it.
+                  A quarter-width column is not wide enough for a two-column
+                  table. Stacked, every line is its own tidy unit, the mailbox
+                  rejoins the list, and it matches the proof line under the
+                  hero, which was rebuilt the same way on the same day. */}
+              <dl className="mt-5 flex flex-col gap-y-[13px]">
                 {phones.map((p) => (
-                  <div key={p.href} className="contents">
-                    <dt className="text-[12.5px] leading-[1.4] text-[#8A9098]">{p.label}</dt>
+                  <div key={p.href}>
+                    <dt className="text-[12px] leading-[1.4] tracking-[0.015em] text-[#8A9098]">{p.label}</dt>
                     <dd>
                       <a
                         href={p.href}
-                        className="whitespace-nowrap text-[16px] font-medium tabular-nums text-white transition-colors hover:text-[#C6CBD1]"
+                        className="mt-[2px] inline-block whitespace-nowrap text-[15.5px] font-medium tabular-nums text-white transition-colors hover:text-[#C6CBD1]"
                       >
                         {p.display}
                       </a>
                     </dd>
                   </div>
                 ))}
+                <div>
+                  <dt className="text-[12px] leading-[1.4] tracking-[0.015em] text-[#8A9098]">Email</dt>
+                  <dd>
+                    <a
+                      href={`mailto:${site.email}`}
+                      className="mt-[2px] inline-block text-[15px] font-medium text-white transition-colors hover:text-[#C6CBD1] [overflow-wrap:anywhere]"
+                    >
+                      {site.email}
+                    </a>
+                  </dd>
+                </div>
               </dl>
 
-              {/* The mailbox is a different shape of value — a 26-character
-                  address will not sit beside a label in a quarter-width
-                  column without breaking mid-word, so it takes its own line
-                  under the numbers rather than wrecking their alignment. */}
-              <div className="mt-[14px]">
-                <div className="text-[12.5px] leading-[1.4] text-[#8A9098]">Email</div>
-                <a
-                  href={`mailto:${site.email}`}
-                  className="mt-[3px] inline-block text-[15px] font-medium text-white transition-colors hover:text-[#C6CBD1] [overflow-wrap:anywhere]"
-                >
-                  {site.email}
-                </a>
-              </div>
               <address className="mt-6 border-t pt-5 text-[14px] not-italic leading-[1.6] text-[#8A9098]" style={{ borderColor: hairline }}>
                 {site.addressLine1}
                 <br />
@@ -228,14 +237,17 @@ export default async function Footer() {
               <span>&copy; {year} Square One Paving</span>
               <span>BBB Accredited Business</span>
               <span className="flex items-center gap-2">
-                <svg viewBox="0 0 32 16" width="18" height="9" aria-hidden="true" className="flex-shrink-0">
-                  <rect x="0" y="0" width="8" height="16" fill="#D80621" />
-                  <rect x="8" y="0" width="16" height="16" fill="#FFFFFF" />
-                  <rect x="24" y="0" width="8" height="16" fill="#D80621" />
-                  <path
-                    d="M16 3.2 L16.55 5.4 L18.25 4.95 L17.55 6.55 L19 7.55 L17.4 8.05 L17.85 9.65 L16.5 8.55 L16 10.7 L15.5 8.55 L14.15 9.65 L14.6 8.05 L13 7.55 L14.45 6.55 L13.75 4.95 L15.45 5.4 Z"
-                    fill="#D80621"
-                  />
+                <svg viewBox="0 0 44 22" width="22" height="11" aria-hidden="true" className="flex-shrink-0">
+                  {/* 21 Sept 2026 (Vern: "Canadian flag in footer does not
+                      show maple leaf properly"). The old glyph was an
+                      eight-pointed star drawn freehand, rendered 18px wide —
+                      at that size it read as a red smudge. This is an
+                      eleven-point leaf with the sinuses cut deep enough to
+                      survive the reduction, and the flag is a fifth larger. */}
+                  <rect x="0" y="0" width="11" height="22" fill="#D80621" />
+                  <rect x="11" y="0" width="22" height="22" fill="#FFFFFF" />
+                  <rect x="33" y="0" width="11" height="22" fill="#D80621" />
+                  <path d="M 22.00 2.00 L 23.44 7.04 L 26.32 5.96 L 25.60 9.56 L 30.46 8.48 L 27.76 11.36 L 28.84 13.88 L 24.52 13.16 L 25.60 17.12 L 22.90 15.68 L 23.26 20.00 L 20.74 20.00 L 21.10 15.68 L 18.40 17.12 L 19.48 13.16 L 15.16 13.88 L 16.24 11.36 L 13.54 8.48 L 18.40 9.56 L 17.68 5.96 L 20.56 7.04 L 22.00 2.00 Z" fill="#D80621" />
                 </svg>
                 Proudly Canadian
               </span>

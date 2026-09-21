@@ -64,6 +64,14 @@ export default function BrandMark({
   return (
     <span className="flex items-center gap-[10px]">
       <BrandIcon tone={tone} height={iconH} />
+      {/* 21 Sept 2026 (Vern: "the white version of the logo looks like a
+          thinner typeface"). It is the same weight — Futura LT ships 400 and
+          700 only, so 600 resolves to Bold either way. What changes is the
+          rendering: the body carries -webkit-font-smoothing: antialiased, and
+          grayscale antialiasing makes light-on-dark lettering shed apparent
+          weight that dark-on-light keeps. A hairline stroke in the same
+          colour puts it back, which is the usual optical correction and is
+          cheaper than shipping a second cut. */}
       <span
         className={tone === "light" ? "text-white" : "text-[#14161A]"}
         style={{
@@ -72,6 +80,9 @@ export default function BrandMark({
           letterSpacing: "0.12em",
           textTransform: "uppercase",
           whiteSpace: "nowrap",
+          ...(tone === "light"
+            ? { WebkitTextStroke: "0.4px currentColor", paintOrder: "stroke fill" as const }
+            : null),
         }}
       >
         Square&nbsp;One
