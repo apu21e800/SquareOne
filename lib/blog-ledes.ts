@@ -36,6 +36,8 @@ export const LEDE: Record<string, string> = {
   "ralphs-farm-market-decorative-parking-lot": `${FIO}/Ralphs-Farm-Market-Parking-Lot-with-StreetPrint-Decorative-Stamped-Asphalt-in-Langley-BC-Canada.jpg`,
   "richmond-brighouse-translink": `${FIO}/IMG_3178-scaled-e1590114559108.jpeg`,
   "school-crosswalk-for-high-visibility": `${FIO}/visible-school-crosswalk-for-safety-6.jpg`,
+  // The front-matter frame is one the client marked "not ours" (19 Sept); the post is about South Langford Elementary.
+  "school-zone-thermoplastic-bc": `${FIO}/Photo-2025-09-25-3-48-33-PM-scaled.jpg`,
   "south-langford-elementary": `${FIO}/Photo-2025-09-25-3-48-33-PM-scaled.jpg`,
   "sport-court-asphalt-paving": `${FIO}/StreetBond-Sports-Court-Brookmere-Park-Coquitlam-BC.jpg`,
   "ubc-musqueam-crosswalk": `${FIO}/UBC-crosswalk-3-300dpi.jpg`,

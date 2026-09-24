@@ -36,6 +36,11 @@ function cityName(city: string): string {
   return city.split(",")[0].trim()
 }
 
+/**
+ * Options ordered by how often each value appears, but never labelled with the
+ * count: the client, three times (the home counter, /galleries, this page's
+ * headline), "it comes across this is all of our jobs but we have 1000s".
+ */
 function options(values: string[], all: string) {
   const counts = new Map<string, number>()
   for (const v of values) counts.set(v, (counts.get(v) ?? 0) + 1)
@@ -43,7 +48,7 @@ function options(values: string[], all: string) {
     { value: ALL, label: all },
     ...[...counts.entries()]
       .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
-      .map(([value, count]) => ({ value, label: value, count })),
+      .map(([value]) => ({ value, label: value })),
   ]
 }
 
@@ -85,7 +90,7 @@ export default function ProjectsIndexClient({ projects }: ProjectsIndexClientPro
         <div className="mt-12">
           <FilterBar
             filters={filters}
-            summary={`${filtered.length} project${filtered.length !== 1 ? "s" : ""}`}
+            summary={active ? [app, region, system].filter((v) => v !== ALL).join(" · ") : "Selected work"}
             onClear={clear}
             active={active}
           />

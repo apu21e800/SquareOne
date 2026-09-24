@@ -281,7 +281,7 @@ const EXTRAS: Extra[] = [
   ["drv", "Number 4.jpg", "driveways", ["StreetPrint"], "Ashlar garden walkway", ""],
   ["drv", "Ten Mile Point Driveway I.jpg", "driveways", ["StreetPrint"], "Ten Mile Point driveway", "Saanich"],
   ["fio", "IMG_9161.jpg", "driveways", ["StreetPrint"], "Herringbone driveway with circle medallion", ""],
-  ["fio", "Cobblestone-stamped-asphalt-driveway-colose-up-at-Ellis-Point-Walkway-Victoria-BC-Canada.jpg", "driveways", ["StreetPrint"], "Cobblestone close-up, Ellis Point", "Victoria"],
+  ["fio", "Cobblestone-stamped-asphalt-driveway-colose-up-at-Ellis-Point-Walkway-Victoria-BC-Canada.jpg", "parks-paths", ["StreetPrint"], "Cobblestone close-up, Ellis Point", "Victoria"],
   ["fio", "Photo-2023-09-29-4-48-15 PM-1-scaled.jpg", "driveways", ["StreetPrint"], "Townhome laneway, ashlar slate", ""],
   ["fio", "townhouse-driveway.png", "driveways", ["StreetPrint"], "Townhouse driveway grid", ""],
   ["fio", "303-IMG_3928.JPG", "driveways", ["StreetPrint"], "Red brick with charcoal border — detail", ""],

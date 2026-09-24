@@ -77,7 +77,8 @@ const SERVICE_TILES: { href: string; name: string; note: string; src: string; al
   {
     href: "/services/stamped-asphalt",
     name: "Stamped asphalt",
-    note: "Patterns pressed into hot asphalt",
+    // Jan, 19 Sept: two kinds under stamped asphalt — StreetPrint regular, TrafficPatternsXD durable.
+    note: "StreetPrint and TrafficPatternsXD",
     src: "/images/hero/victoria-ellis-point-walkway-streetprint.jpg",
     alt: "British Cobble StreetPrint walkway at Ellis Point, Victoria",
   },
