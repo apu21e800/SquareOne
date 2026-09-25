@@ -121,6 +121,6 @@ PDF spec sheets, brochures, and technical documents served directly from the web
 ## Master Copies
 
 Original/master PDF files (not for direct web use) live in:
-`Based_Agency/clients/hubss/catalogue/`
+`D:\STUDIO-01\02-HUBSS\catalogue\`
 
 The files in `/public/docs/` are the web-optimized copies linked on the site.
