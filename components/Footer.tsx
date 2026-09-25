@@ -76,8 +76,12 @@ function Column({ heading, links }: { heading: string; links: FooterLink[] }) {
 export default async function Footer() {
   const year = new Date().getFullYear()
   const site = await getSiteSettings()
+  // 25 Sept 2026, Vern, on the live footer: "drop the phone numbers down a
+  // line, same is top text: Office · Maple Ridge / 604-612-6209". Every line
+  // is label over number (the <dl> below); the office keeps its town, which
+  // also says the Island line is a region and not a second office.
   const phones = [
-    { label: "Office", display: site.phoneOffice, href: tel(site.phoneOffice) },
+    { label: "Office · Maple Ridge", display: site.phoneOffice, href: tel(site.phoneOffice) },
     { label: "Vancouver Island", display: site.phoneIsland, href: tel(site.phoneIsland) },
     { label: "Toll-free", display: site.phoneTollFree, href: tel(site.phoneTollFree) },
   ]
