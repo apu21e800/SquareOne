@@ -3,13 +3,11 @@ import BrandMark from "@/components/BrandMark"
 import FooterClose from "@/components/FooterClose"
 import { getSiteSettings } from "@/lib/cms"
 
-/* Site close — the one dark region on every page (docs/design-v2 Site Close),
-   rebuilt 4 Sept 2026 at Vern's call ("just looks like a jumble of text").
-   Three moves: one closing CTA; a four-part footer that reads left to right
-   as who we are → what we do → where to go → how to reach us; one legal
-   row. Products and applications are indexes, not lists — the mega menu
-   and the index pages carry those. Contact canon only: 604-612-6209 office,
-   250-391-0270 Vancouver Island, 1-877-391-0270 toll-free,
+/* Site close — rebuilt 4 Sept 2026 at Vern's call ("just looks like a jumble
+   of text") as a dark CTA into a four-column footer; rebuilt again 26 Sept
+   2026 as the own-company close (docs/OWN-COMPANY-BRIEF.md §3.7): a light
+   closing band, then the letterhead. Contact canon only: 604-612-6209
+   office, 250-391-0270 Vancouver Island, 1-877-391-0270 toll-free,
    office@squareonepaving.com, 19-11720 Stewart Crescent, Maple Ridge. */
 
 const TIKTOK_PATH =
@@ -56,30 +54,13 @@ const tel = (display: string) => {
 
 const hairline = "var(--hairline-slate)"
 
-function Column({ heading, links }: { heading: string; links: FooterLink[] }) {
-  return (
-    <div>
-      <div className="label label-on-slate">{heading}</div>
-      <ul className="mt-5 flex flex-col gap-[11px]">
-        {links.map((link) => (
-          <li key={link.href}>
-            <Link href={link.href} className="foot-link">
-              {link.label}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
-}
-
 export default async function Footer() {
   const year = new Date().getFullYear()
   const site = await getSiteSettings()
   // 25 Sept 2026, Vern, on the live footer: "drop the phone numbers down a
   // line, same is top text: Office · Maple Ridge / 604-612-6209". Every line
-  // is label over number (the <dl> below); the office keeps its town, which
-  // also says the Island line is a region and not a second office.
+  // is label over number; the office keeps its town, which also says the
+  // Island line is a region and not a second office.
   const phones = [
     { label: "Office · Maple Ridge", display: site.phoneOffice, href: tel(site.phoneOffice) },
     { label: "Vancouver Island", display: site.phoneIsland, href: tel(site.phoneIsland) },
@@ -96,138 +77,130 @@ export default async function Footer() {
     ...(site.tiktok ? [{ label: "TikTok", href: site.tiktok, path: TIKTOK_PATH }] : []),
   ]
 
+  /* 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.7, §9.12–13): the closing
+     band goes LIGHT — the line, one button and the office number on paper —
+     and the footer proper is the site's one dark band, set as a letterhead:
+     the mark, the address and the lines as one text block, then one row of
+     links, then the legal line. HUB closes on a dark CTA into a four-column
+     footer; this does neither. FooterClose keeps the /contact rule. */
   return (
-    <div className="bg-[color:var(--surface-slate)]">
-      {/* ── Closing CTA — the single dark close for every page but /contact ──────── */}
+    <div>
+      {/* ── The close — light, for every page but /contact ──────── */}
       <FooterClose>
-      <section className="section text-center">
-        <div className="container-1280">
-          <p className="eyebrow eyebrow-center text-[#9BA1A9]">Start a project</p>
-
-          <h2 className="mx-auto mt-6 max-w-[20ch] text-white [text-wrap:balance]">
-            Let&rsquo;s build something worth looking at
-          </h2>
-
-          <p className="mx-auto mt-5 max-w-[50ch] text-[16px] leading-[1.7] text-[#9BA1A9] [text-wrap:pretty]">
-            Send a few photos, a site address or drawings. We walk the site before we quote it
-            &mdash; Lower Mainland and Vancouver Island, free.
-          </p>
-
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-x-7 gap-y-4">
-            <Link href="/contact" className="btn-on-slate">
-              Request a quote
-            </Link>
-            <span className="text-[15px] text-[#8A9098]">
-              or call{" "}
-              <a
-                href={tel(site.phoneOffice)}
-                className="font-medium text-[#C6CBD1] transition-colors hover:text-white"
-              >
-                {site.phoneOffice}
-              </a>
-            </span>
+        <section className="sec bg-surface-warm py-[5.5rem] max-[700px]:py-14">
+          <div className="container-1280">
+            <div className="sec-grid">
+              <div className="sec-label">
+                <span className="label">Start a project</span>
+              </div>
+              <div className="sec-body">
+                <h2 className="max-w-[20ch] [text-wrap:balance]">Send a few photos and a site address</h2>
+                <p className="mt-5 max-w-[52ch] text-ink-body [text-wrap:pretty]">
+                  Drawings help if you have them. We walk the site before we quote it &mdash;
+                  Lower Mainland and Vancouver Island, free.
+                </p>
+                <div className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-4">
+                  <Link href="/contact" className="btn-primary">
+                    Get a quote
+                  </Link>
+                  <span className="text-[16px] text-ink-muted">
+                    or call{" "}
+                    <a href={tel(site.phoneOffice)} className="link">
+                      {site.phoneOffice}
+                    </a>
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
       </FooterClose>
 
-      {/* ── Footer proper ──────── */}
-      <footer className="border-t" style={{ borderColor: hairline }}>
+      {/* ── The letterhead ──────── */}
+      <footer className="bg-[color:var(--surface-slate)] text-[color:var(--ink-on-slate-body)]">
         <div className="container-1280 pt-16 pb-8 max-[700px]:pt-12">
-          <div className="grid grid-cols-1 gap-x-10 gap-y-12 min-[701px]:grid-cols-2 lg:grid-cols-12">
-            {/* Who we are */}
-            <div className="min-[701px]:col-span-2 lg:col-span-4">
+          <div className="grid grid-cols-12 gap-x-10 gap-y-12 max-[900px]:grid-cols-1">
+            {/* The mark and the line */}
+            <div className="col-span-5 max-[900px]:col-span-1">
               <Link href="/" className="inline-flex items-center" aria-label="Square One Paving — home">
                 <BrandMark tone="light" size="footer" />
               </Link>
-
-              <p className="mt-6 max-w-[34ch] text-[15px] leading-[1.7] text-[#9BA1A9] [text-wrap:pretty]">
+              <p className="mt-7 max-w-[38ch] text-[16.5px] leading-[1.6] text-[color:var(--ink-on-slate-body)] [text-wrap:pretty]">
                 {site.positioning}
               </p>
-
-              <div className="-ml-[11px] mt-6 flex items-center gap-1">
-                {networks.map((s) => (
-                  <a
-                    key={s.label}
-                    href={s.href}
-                    aria-label={s.label}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex h-9 w-9 items-center justify-center rounded-[2px] text-[#8A9098] transition-colors hover:text-white"
-                  >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                      <path d={s.path} />
-                    </svg>
-                  </a>
-                ))}
-              </div>
             </div>
 
-            {/* What we do */}
-            <div className="lg:col-span-3">
-              <Column heading="What we do" links={whatWeDo} />
-            </div>
-
-            {/* Where to go */}
-            <div className="lg:col-span-2">
-              <Column heading="Company" links={company} />
-            </div>
-
-            {/* How to reach us */}
-            <div className="min-[701px]:col-span-2 lg:col-span-3">
-              <div className="label label-on-slate">Talk to us</div>
-              {/* 21 Sept 2026 (Vern: "footer 'talk to us' section still looks
-                  bonkers"). The 19 Sept pass put labels and numbers in two
-                  columns and got the numbers onto one left edge, which was
-                  the bug it set out to fix — but the labels run from six
-                  characters to sixteen, so between the short ones and the
-                  numbers sat a river of empty space, and the mailbox was too
-                  long to join the table at all and had to be exiled below it.
-                  A quarter-width column is not wide enough for a two-column
-                  table. Stacked, every line is its own tidy unit, the mailbox
-                  rejoins the list, and it matches the proof line under the
-                  hero, which was rebuilt the same way on the same day. */}
-              <dl className="mt-5 flex flex-col gap-y-[13px]">
+            {/* The address and the lines, as one block — the way a letterhead sets them */}
+            <address className="col-span-4 not-italic max-[900px]:col-span-1">
+              <span className="label-on-slate">Square One Paving</span>
+              <p className="mt-3 text-[16.5px] leading-[1.6] text-white">
+                {site.addressLine1}
+                <br />
+                {site.addressLine2}
+              </p>
+              <dl className="mt-5 flex flex-col gap-y-[6px]">
                 {phones.map((p) => (
-                  <div key={p.href}>
-                    <dt className="text-[12px] leading-[1.4] tracking-[0.015em] text-[#8A9098]">{p.label}</dt>
+                  <div key={p.href} className="flex flex-wrap items-baseline gap-x-3">
+                    <dt className="text-[15px] italic text-[color:var(--ink-on-slate-muted)]">{p.label}</dt>
                     <dd>
-                      <a
-                        href={p.href}
-                        className="mt-[2px] inline-block whitespace-nowrap text-[15.5px] font-medium tabular-nums text-white transition-colors hover:text-[#C6CBD1]"
-                      >
+                      <a href={p.href} className="whitespace-nowrap text-[16.5px] tabular-nums text-white transition-colors hover:text-[color:var(--ink-on-slate-body)]">
                         {p.display}
                       </a>
                     </dd>
                   </div>
                 ))}
-                <div>
-                  <dt className="text-[12px] leading-[1.4] tracking-[0.015em] text-[#8A9098]">Email</dt>
+                <div className="flex flex-wrap items-baseline gap-x-3">
+                  <dt className="text-[15px] italic text-[color:var(--ink-on-slate-muted)]">Email</dt>
                   <dd>
-                    <a
-                      href={`mailto:${site.email}`}
-                      className="mt-[2px] inline-block text-[15px] font-medium text-white transition-colors hover:text-[#C6CBD1] [overflow-wrap:anywhere]"
-                    >
+                    <a href={`mailto:${site.email}`} className="text-[16.5px] text-white transition-colors hover:text-[color:var(--ink-on-slate-body)] [overflow-wrap:anywhere]">
                       {site.email}
                     </a>
                   </dd>
                 </div>
               </dl>
+            </address>
 
-              <address className="mt-6 border-t pt-5 text-[14px] not-italic leading-[1.6] text-[#8A9098]" style={{ borderColor: hairline }}>
-                {site.addressLine1}
-                <br />
-                {site.addressLine2}
-              </address>
+            {/* Where else we are */}
+            <div className="col-span-3 max-[900px]:col-span-1">
+              <span className="label-on-slate">Elsewhere</span>
+              <ul className="mt-3 flex flex-col gap-y-[6px]">
+                {networks.map((s) => (
+                  <li key={s.label}>
+                    <a
+                      href={s.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="foot-link inline-flex items-center gap-[9px]"
+                    >
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d={s.path} />
+                      </svg>
+                      {s.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
 
-          {/* Service area — one quiet line */}
-          {/* Every place named here is on the record in lib/work.ts or
-              lib/projects.ts. Courtenay was not, so it came off on 19 Sept 2026. */}
-          <p className="mt-14 text-[13px] leading-[1.8] text-[#7E848C] max-[700px]:mt-10">
-            <span className="label label-on-slate mr-3">Serving</span>
-            Vancouver, Burnaby, Richmond, Surrey, Langley, Maple Ridge and the Fraser Valley
+          {/* One row of links */}
+          <nav aria-label="Footer" className="mt-14 border-t pt-6 max-[700px]:mt-10" style={{ borderColor: hairline }}>
+            <ul className="flex flex-wrap gap-x-7 gap-y-2">
+              {[...whatWeDo, ...company].map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="foot-link">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          {/* Service area — one quiet line. Every place named here is on the
+              record in lib/work.ts or lib/projects.ts. Courtenay was not, so
+              it came off on 19 Sept 2026. */}
+          <p className="mt-8 text-[14.5px] italic leading-[1.7] text-[color:var(--ink-on-slate-muted)]">
+            Working across Vancouver, Burnaby, Richmond, Surrey, Langley, Maple Ridge and the Fraser Valley
             &middot; Victoria, Nanaimo, Duncan, Comox and Vancouver Island &middot; Sunshine Coast,
             Sea to Sky and Okanagan projects on record
           </p>
@@ -237,17 +210,14 @@ export default async function Footer() {
             className="mt-6 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-t pt-6"
             style={{ borderColor: hairline }}
           >
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] text-[#7E848C]">
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[14px] text-[color:var(--ink-on-slate-legal)]">
               <span>&copy; {year} Square One Paving</span>
               <span>BBB Accredited Business</span>
               <span className="flex items-center gap-2">
                 <svg viewBox="0 0 44 22" width="22" height="11" aria-hidden="true" className="flex-shrink-0">
                   {/* 21 Sept 2026 (Vern: "Canadian flag in footer does not
-                      show maple leaf properly"). The old glyph was an
-                      eight-pointed star drawn freehand, rendered 18px wide —
-                      at that size it read as a red smudge. This is an
-                      eleven-point leaf with the sinuses cut deep enough to
-                      survive the reduction, and the flag is a fifth larger. */}
+                      show maple leaf properly"). An eleven-point leaf with the
+                      sinuses cut deep enough to survive the reduction. */}
                   <rect x="0" y="0" width="11" height="22" fill="#D80621" />
                   <rect x="11" y="0" width="22" height="22" fill="#FFFFFF" />
                   <rect x="33" y="0" width="11" height="22" fill="#D80621" />
@@ -257,11 +227,11 @@ export default async function Footer() {
               </span>
             </div>
 
-            <div className="flex gap-6 text-[13px]">
-              <Link href="/privacy" className="text-[#7E848C] transition-colors hover:text-white">
+            <div className="flex gap-6 text-[14px]">
+              <Link href="/privacy" className="text-[color:var(--ink-on-slate-legal)] transition-colors hover:text-white">
                 Privacy
               </Link>
-              <Link href="/terms" className="text-[#7E848C] transition-colors hover:text-white">
+              <Link href="/terms" className="text-[color:var(--ink-on-slate-legal)] transition-colors hover:text-white">
                 Terms
               </Link>
             </div>

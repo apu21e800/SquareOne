@@ -2,19 +2,18 @@
 
 import { useCallback, useEffect, useRef, useState } from "react"
 import Link from "next/link"
-import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { AnimatePresence, MotionConfig, motion, type Transition } from "framer-motion"
 import BrandMark from "@/components/BrandMark"
 import SearchOverlay from "@/components/SearchOverlay"
 import { services, type Service } from "@/lib/services"
-import { APP_LEADS } from "@/lib/app-leads"
+import { BUYERS } from "@/lib/buyers"
 
 /* ------------------------------------------------------------------
    Data — derived from lib/, never duplicated.
    ------------------------------------------------------------------ */
 
-type MenuKey = "applications" | "services"
+type MenuKey = "services" | "buyers"
 
 
 const SERVICE_ORDER = [
@@ -43,76 +42,31 @@ interface PrimaryLink {
   menu?: MenuKey
 }
 
-/** Five items (Vern, 5 Sept 2026: "too many items across the top"), in the
-    order a contractor or specifier actually shops (Vern, 19 Sept: "needs to
-    work more like a sales funnel for contractors. Applications etc."):
-    where the work goes → what we do → the proof → the people who draw it →
-    the company. Products left the bar the same night — the client was not
-    sure they belonged there; the eight systems live one click deeper, on
-    /products, reached by a single link in the Services panel, the drawer
-    and the footer (Vern, 19 Sept: "lead potential clients towards
-    services"). */
+/** 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.1): services lead, text
+    menus, no mega menu. What we do → Who we work with → Projects → For
+    specifiers → About, the office number, Get a quote. A contractor's site
+    is organised by what it does and who it does it for; a supplier's by
+    catalogue. The application galleries are all still here, grouped under
+    the four buyers (BUYERS, shared with the home page). */
 const PRIMARY_LINKS: PrimaryLink[] = [
-  { label: "Applications", href: "/applications", match: ["/applications", "/driveways", "/galleries"], menu: "applications" },
-  { label: "Services", href: "/services", match: ["/services", "/products"], menu: "services" },
+  { label: "What we do", href: "/services", match: ["/services", "/products", "/driveways", "/patterns"], menu: "services" },
+  { label: "Who we work with", href: "/applications", match: ["/applications", "/galleries"], menu: "buyers" },
   { label: "Projects", href: "/projects", match: ["/projects"] },
-  { label: "Specifiers", href: "/specifiers", match: ["/specifiers", "/resources"] },
-  { label: "About", href: "/about", match: ["/about"] },
+  { label: "For specifiers", href: "/specifiers", match: ["/specifiers", "/resources"] },
+  { label: "About", href: "/about", match: ["/about", "/blog"] },
 ]
 
-/** The drawer keeps every route the desktop panels reach. */
-const DRAWER_LINKS: { label: string; href: string }[] = [
-  { label: "Applications", href: "/applications" },
-  { label: "Services", href: "/services" },
-  { label: "Projects", href: "/projects" },
-  { label: "Specifiers", href: "/specifiers" },
-  { label: "Resources", href: "/resources" },
-  { label: "Galleries", href: "/galleries" },
-  { label: "Blog", href: "/blog" },
-  { label: "About", href: "/about" },
+/** What we do — the four trades, the residential line, and the systems, one click deeper. */
+const SERVICE_ITEMS: { href: string; name: string; note: string }[] = [
+  // Jan, 19 Sept: two kinds under stamped asphalt — StreetPrint regular, TrafficPatternsXD durable.
+  { href: "/services/stamped-asphalt", name: "Stamped asphalt", note: "StreetPrint and TrafficPatternsXD" },
+  { href: "/services/decorative-coatings", name: "Decorative coatings", note: "Colour that holds under traffic" },
+  { href: "/services/preformed-thermoplastic", name: "Preformed thermoplastic", note: "Crosswalks, symbols, civic art" },
+  { href: "/services/vapor-blasting", name: "Vapour blasting", note: "Cleaning, priming, graffiti removal" },
+  { href: "/driveways", name: "Driveways", note: "For homeowners — Vancouver and Victoria" },
 ]
 
-/** Services panel — the four trades and the residential line as photo tiles. */
-const SERVICE_TILES: { href: string; name: string; note: string; src: string; alt: string }[] = [
-  {
-    href: "/services/stamped-asphalt",
-    name: "Stamped asphalt",
-    // Jan, 19 Sept: two kinds under stamped asphalt — StreetPrint regular, TrafficPatternsXD durable.
-    note: "StreetPrint and TrafficPatternsXD",
-    src: "/images/hero/victoria-ellis-point-walkway-streetprint.jpg",
-    alt: "British Cobble StreetPrint walkway at Ellis Point, Victoria",
-  },
-  {
-    href: "/services/decorative-coatings",
-    name: "Decorative coatings",
-    note: "Colour that holds under traffic",
-    src: "/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg",
-    alt: "StreetBond multicolour plaza at Joyce Station, Vancouver",
-  },
-  {
-    href: "/services/preformed-thermoplastic",
-    name: "Preformed thermoplastic",
-    note: "Crosswalks, symbols, civic art",
-    src: "/images/projects/ubc-musqueam-crosswalk/ubc-musqueam-crosswalk-trafficpatterns-01.jpg",
-    alt: "Musqueam crosswalk artwork at UBC, Vancouver",
-  },
-  {
-    href: "/driveways",
-    name: "Driveways",
-    note: "For homeowners — Vancouver & Victoria",
-    src: "/images/S1_update_v2/photos/Driveways/Number%201.jpg",
-    alt: "Ashlar slate StreetPrint driveway installed by Square One",
-  },
-  {
-    href: "/services/vapor-blasting",
-    name: "Vapour blasting",
-    note: "Cleaning, priming, graffiti removal",
-    src: "/images/services/vapor-blasting/generated/gen-road-marking-removal-02.jpg",
-    alt: "Vapour blasting a painted line off wet asphalt — an illustration of the service",
-  },
-]
-
-/** Where the work goes — the ten application galleries (mirrors lib/work.ts WORK_APPS), each with its gallery's lead photograph. */
+/** Where the work goes — the ten application galleries (mirrors lib/work.ts WORK_APPS). */
 const APPLICATIONS: { label: string; href: string; slug: string }[] = [
   { label: "Crosswalks", href: "/applications/crosswalks", slug: "crosswalks" },
   { label: "Streetscapes", href: "/applications/streetscapes", slug: "streetscapes" },
@@ -124,7 +78,16 @@ const APPLICATIONS: { label: string; href: string; slug: string }[] = [
   { label: "Public art", href: "/applications/public-art", slug: "public-art" },
   { label: "Branding & wayfinding", href: "/applications/branding-wayfinding", slug: "branding-wayfinding" },
   { label: "Driveways", href: "/driveways", slug: "driveways" },
+  { label: "Vapour blasting", href: "/services/vapor-blasting", slug: "vapour" },
 ]
+
+const byslug = (slug: string) => APPLICATIONS.find((a) => a.slug === slug)
+
+/** The four buyers, each with its galleries (the same grouping as the home page's ApplicationsSection). */
+const BUYER_GROUPS = BUYERS.map((b) => ({
+  label: b.label,
+  items: b.slugs.map(byslug).filter((a): a is NonNullable<typeof a> => Boolean(a)),
+}))
 
 const HAIRLINE = "#E7E3DC"
 
@@ -147,83 +110,22 @@ function Wordmark({ onClick, light = false }: { onClick?: () => void; light?: bo
   )
 }
 
-/** One photographic tile — the shared voice of both panels. */
-function MegaTile({
-  href,
-  src,
-  alt,
-  name,
-  note,
-  aspect = "aspect-[16/10]",
-  compact = false,
-  onNavigate,
-}: {
-  href: string
-  src: string
-  alt: string
-  name: string
-  note?: string
-  aspect?: string
-  /** Five-across tiles: a smaller name below 1536px, and the note only from 1536px up. */
-  compact?: boolean
-  onNavigate: () => void
-}) {
-  return (
-    <Link
-      href={href}
-      onClick={onNavigate}
-      data-mega-item
-      className={`group relative block overflow-hidden rounded-[2px] bg-[#F1EEE9] ${aspect}`}
-    >
-      <Image
-        src={src}
-        alt={alt}
-        fill
-        sizes="(max-width: 1280px) 33vw, 420px"
-        className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-      />
-      <span aria-hidden="true" className="scrim" />
-      <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-4">
-        <span className="min-w-0">
-          <span
-            className={`block font-semibold uppercase text-white ${
-              compact ? "text-[12px] tracking-[0.08em] min-[1536px]:text-[13px] min-[1536px]:tracking-[0.1em]" : "text-[13px] tracking-[0.1em]"
-            }`}
-            style={{ fontFamily: "var(--font-display)" }}
-          >
-            {name}
-          </span>
-          {note && (
-            <span className={`mt-[3px] block text-[12px] leading-[1.45] text-white/75 ${compact ? "max-[1535px]:hidden" : ""}`}>
-              {note}
-            </span>
-          )}
-        </span>
-        <span
-          aria-hidden="true"
-          className="mb-[1px] shrink-0 text-[15px] leading-none text-white/70 transition-transform duration-200 group-hover:translate-x-1 group-hover:text-white"
-        >
-          &rarr;
-        </span>
-      </span>
-    </Link>
-  )
-}
-
-interface MegaPanelProps {
+interface PanelProps {
   onNavigate: () => void
   onMouseEnter: () => void
   onMouseLeave: () => void
 }
 
-/** The panel frame — fixed under the bar, the site's container width. */
+/** A text panel under its bar item — the site's container is not involved. */
 function Panel({
   label,
+  wide = false,
   children,
   onMouseEnter,
   onMouseLeave,
 }: {
   label: string
+  wide?: boolean
   children: React.ReactNode
   onMouseEnter: () => void
   onMouseLeave: () => void
@@ -232,100 +134,79 @@ function Panel({
     <motion.div
       role="region"
       aria-label={label}
-      initial={{ opacity: 0, y: 6 }}
+      initial={{ opacity: 0, y: 4 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 6 }}
+      exit={{ opacity: 0, y: 4 }}
       transition={panelTransition}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      className="fixed top-[72px] right-0 left-0 z-40 hidden border-t border-b border-[#E7E3DC] bg-white min-[1024px]:block"
+      className={`menu-panel hidden min-[1024px]:block${wide ? " menu-panel-wide" : ""}`}
     >
-      <div className="mx-auto py-8" style={{ maxWidth: "var(--container)", paddingInline: "var(--gutter)" }}>
-        {children}
-      </div>
+      {children}
     </motion.div>
   )
 }
 
-function ServicesMega({ onNavigate, onMouseEnter, onMouseLeave }: MegaPanelProps) {
+function ServicesPanel({ onNavigate, onMouseEnter, onMouseLeave }: PanelProps) {
   return (
-    <Panel label="Services menu" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
-      {/* ── The trades, the residential line, and the supporting service —
-             one row of five photographs, in the business order ──────── */}
-      <div className="grid grid-cols-5 gap-4">
-        {SERVICE_TILES.map((tile) => (
-          <MegaTile
-            key={tile.href}
-            href={tile.href}
-            src={tile.src}
-            alt={tile.alt}
-            name={tile.name}
-            note={tile.note}
-            aspect="aspect-[4/3]"
-            compact
-            onNavigate={onNavigate}
-          />
-        ))}
-      </div>
-
-      <div className="mt-5 flex flex-wrap items-center justify-between gap-x-8 gap-y-3 border-t border-[#E7E3DC] pt-5">
-        <Link href="/services" onClick={onNavigate} className="arrow-link">
-          All services <span>&rarr;</span>
+    <Panel label="What we do" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+      {SERVICE_ITEMS.map((item) => (
+        <Link key={item.href} href={item.href} onClick={onNavigate} className="menu-item">
+          {item.name}
+          <span className="menu-note">{item.note}</span>
         </Link>
-        <div className="flex flex-wrap items-center gap-x-8 gap-y-2">
-          {/* The eight systems live one click deeper (the client, 19 Sept:
-              not sure Products belongs in the menu; Vern: "lead potential
-              clients towards services") — a single quiet link, not a grid. */}
-          <Link href="/products" onClick={onNavigate} className="arrow-link">
-            The systems we install <span>&rarr;</span>
-          </Link>
-          <Link href="/specifiers" onClick={onNavigate} className="arrow-link">
-            For specifiers <span>&rarr;</span>
-          </Link>
-          <Link href="/resources" onClick={onNavigate} className="arrow-link">
-            Specifications &amp; documents <span>&rarr;</span>
-          </Link>
-        </div>
+      ))}
+      <div className="menu-foot">
+        {/* The eight systems live one click deeper (the client, 19 Sept: not
+            sure Products belongs in the menu; Vern: "lead potential clients
+            towards services"). */}
+        <Link href="/products" onClick={onNavigate} className="link">
+          The systems we install
+        </Link>
+        <Link href="/services" onClick={onNavigate} className="link">
+          All services
+        </Link>
       </div>
     </Panel>
   )
 }
 
-function ApplicationsMega({ onNavigate, onMouseEnter, onMouseLeave }: MegaPanelProps) {
-  // Where the work goes — the ten kinds of work as photographs, two rows of
-  // five, each the lead frame of its gallery. This is the front door of the
-  // funnel: a contractor or specifier shops by application, not by system.
+function BuyersPanel({ onNavigate, onMouseEnter, onMouseLeave }: PanelProps) {
   return (
-    <Panel label="Applications menu" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
-      <div className="grid grid-cols-5 gap-4">
-        {APPLICATIONS.map((a) => (
-          <MegaTile
-            key={a.href}
-            href={a.href}
-            src={APP_LEADS[a.slug] ?? "/images/og-image.png"}
-            alt=""
-            name={a.label}
-            aspect="aspect-[16/10]"
-            compact
-            onNavigate={onNavigate}
-          />
-        ))}
-      </div>
-      <div className="mt-5 flex flex-wrap items-center justify-between gap-x-8 gap-y-3 border-t border-[#E7E3DC] pt-5">
-        <Link href="/applications" onClick={onNavigate} className="arrow-link">
-          All applications <span>&rarr;</span>
-        </Link>
-        <div className="flex flex-wrap items-center gap-x-8 gap-y-2">
-          <Link href="/galleries" onClick={onNavigate} className="arrow-link">
-            Image galleries <span>&rarr;</span>
-          </Link>
-          <Link href="/projects" onClick={onNavigate} className="arrow-link">
-            Projects <span>&rarr;</span>
-          </Link>
-          <Link href="/specifiers" onClick={onNavigate} className="arrow-link">
-            For specifiers <span>&rarr;</span>
-          </Link>
+    <Panel label="Who we work with" wide onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+      <div className="grid grid-cols-2 gap-x-10">
+        <div>
+          {BUYER_GROUPS.slice(0, 1).map((g) => (
+            <div key={g.label} className="menu-group">
+              <span className="label">{g.label}</span>
+              {g.items.map((a) => (
+                <Link key={a.href} href={a.href} onClick={onNavigate} className="menu-item">
+                  {a.label}
+                </Link>
+              ))}
+            </div>
+          ))}
         </div>
+        <div>
+          {BUYER_GROUPS.slice(1).map((g) => (
+            <div key={g.label} className="menu-group">
+              <span className="label">{g.label}</span>
+              {g.items.map((a) => (
+                <Link key={a.href} href={a.href} onClick={onNavigate} className="menu-item">
+                  {a.label}
+                </Link>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="menu-foot">
+        <Link href="/galleries" onClick={onNavigate} className="link">
+          Every photograph, by application
+        </Link>
+        <Link href="/projects" onClick={onNavigate} className="link">
+          Projects
+        </Link>
       </div>
     </Panel>
   )
@@ -333,6 +214,8 @@ function ApplicationsMega({ onNavigate, onMouseEnter, onMouseLeave }: MegaPanelP
 
 function MobileDrawer({ onClose }: { onClose: () => void }) {
   const pathname = usePathname()
+  const row = "block border-b border-[#E7E3DC] py-[16px] text-[22px] leading-tight font-bold tracking-[-0.01em] text-[#14161A]"
+  const sub = "block py-[8px] text-[16px] text-[#3D4147]"
   return (
     <motion.div
       role="dialog"
@@ -356,80 +239,57 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
         </button>
       </div>
 
+      {/* The same list as the bar, one level deep, as text (26 Sept 2026). */}
       <nav aria-label="Mobile" className="flex-1 overflow-auto px-6 pt-2 pb-6">
-        {/* The five services as a swipeable photo rail — the desktop panel's
-            first row, one thumb-width at a time. */}
-        <div className="-mx-6 flex snap-x snap-mandatory gap-3 overflow-x-auto px-6 pt-3 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {SERVICE_TILES.map((tile) => (
-            <Link
-              key={tile.href}
-              href={tile.href}
-              onClick={onClose}
-              className="relative block aspect-[4/3] w-[62vw] max-w-[260px] shrink-0 snap-start overflow-hidden rounded-[2px] bg-[#F1EEE9]"
-            >
-              <Image src={tile.src} alt={tile.alt} fill sizes="62vw" className="object-cover" />
-              <span aria-hidden="true" className="scrim" />
-              <span className="absolute inset-x-0 bottom-0 p-3">
-                <span className="block text-[12px] font-semibold uppercase tracking-[0.1em] text-white" style={{ fontFamily: "var(--font-display)" }}>
-                  {tile.name}
-                </span>
-                <span className="mt-[2px] block text-[12px] text-white/75">{tile.note}</span>
-              </span>
-            </Link>
-          ))}
-        </div>
-
-        {DRAWER_LINKS.map((link) => (
-          <Link
-            key={link.href}
-            href={link.href}
-            onClick={onClose}
-            className="block border-b border-[#E7E3DC] py-[18px] text-[24px] leading-tight font-medium tracking-[-0.02em] text-[#14161A]"
-          >
-            {link.label}
-          </Link>
-        ))}
-
-        <div className="label mt-9">Services</div>
-        <div className="mt-3 flex flex-col">
+        <Link href="/services" onClick={onClose} className={row} style={{ fontFamily: "var(--font-display)" }}>
+          What we do
+        </Link>
+        <div className="border-b border-[#E7E3DC] py-2">
           {serviceLinks.map((service) => (
-            <Link
-              key={service.slug}
-              href={`/services/${service.slug}`}
-              onClick={onClose}
-              className="py-[9px] text-[16px] font-medium text-[#3D4147]"
-            >
+            <Link key={service.slug} href={`/services/${service.slug}`} onClick={onClose} className={sub}>
               {SERVICE_LABEL[service.slug] ?? service.name}
             </Link>
           ))}
-          <Link href="/driveways" onClick={onClose} className="py-[9px] text-[16px] font-medium text-[#3D4147]">
+          <Link href="/driveways" onClick={onClose} className={sub}>
             Driveways
           </Link>
-          <Link href="/specifiers" onClick={onClose} className="py-[9px] text-[16px] font-medium text-[#3D4147]">
-            For specifiers
-          </Link>
-          <Link href="/products" onClick={onClose} className="py-[9px] text-[16px] font-medium text-[#3D4147]">
+          <Link href="/products" onClick={onClose} className={sub}>
             The systems we install
           </Link>
         </div>
 
-        <div className="label mt-8">Applications</div>
-        <div className="mt-3 grid grid-cols-2 gap-x-4">
-          {APPLICATIONS.filter((a) => a.href !== "/driveways").map((a) => (
-            <Link key={a.href} href={a.href} onClick={onClose} className="flex items-center gap-3 py-[7px] text-[15px] font-medium text-[#3D4147]">
-              {APP_LEADS[a.slug] && (
-                <span className="relative block h-[30px] w-[40px] shrink-0 overflow-hidden rounded-[2px] bg-[#F1EEE9]">
-                  <Image src={APP_LEADS[a.slug]} alt="" fill sizes="40px" className="object-cover" />
-                </span>
-              )}
-              <span className="min-w-0 leading-[1.25]">{a.label}</span>
-            </Link>
+        <Link href="/applications" onClick={onClose} className={row} style={{ fontFamily: "var(--font-display)" }}>
+          Who we work with
+        </Link>
+        <div className="border-b border-[#E7E3DC] py-2">
+          {BUYER_GROUPS.map((g) => (
+            <div key={g.label} className="py-2">
+              <span className="label">{g.label}</span>
+              <div className="grid grid-cols-2 gap-x-4">
+                {g.items.map((a) => (
+                  <Link key={a.href} href={a.href} onClick={onClose} className={sub}>
+                    {a.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
           ))}
         </div>
 
+        {[
+          { label: "Projects", href: "/projects" },
+          { label: "For specifiers", href: "/specifiers" },
+          { label: "Blog", href: "/blog" },
+          { label: "About", href: "/about" },
+          { label: "Contact", href: "/contact" },
+        ].map((link) => (
+          <Link key={link.href} href={link.href} onClick={onClose} className={row} style={{ fontFamily: "var(--font-display)" }}>
+            {link.label}
+          </Link>
+        ))}
       </nav>
 
-      <div className="flex shrink-0 flex-wrap items-center gap-x-6 gap-y-1 border-t border-[#E7E3DC] px-6 py-4 text-[13px] text-[#767B82]">
+      <div className="flex shrink-0 flex-wrap items-center gap-x-6 gap-y-1 border-t border-[#E7E3DC] px-6 py-4 text-[14px] text-[#5F646B]">
         <span>
           <a href="tel:+16046126209" className="font-medium text-[#14161A]">604-612-6209</a> Maple Ridge
         </span>
@@ -441,10 +301,10 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
       <Link
         href={pathname === "/contact" ? "/contact#quote" : "/contact"}
         onClick={onClose}
-        className="flex h-16 shrink-0 items-center justify-center bg-[#F26430] text-[13px] font-semibold tracking-[0.12em] uppercase text-white transition-colors hover:bg-[#D8511F] hover:text-white"
+        className="flex h-16 shrink-0 items-center justify-center bg-[color:var(--accent-deep)] text-[15px] font-bold text-white transition-colors hover:bg-[#B03D15] hover:text-white"
         style={{ fontFamily: "var(--font-display)" }}
       >
-        Request a quote
+        Get a quote
       </Link>
     </motion.div>
   )
@@ -612,7 +472,7 @@ export default function Nav() {
 
           <nav
             aria-label="Primary"
-            className="ml-auto hidden items-center gap-6 min-[1024px]:flex min-[1280px]:gap-8"
+            className="ml-auto hidden items-center gap-6 min-[1024px]:flex min-[1280px]:gap-7"
           >
             {PRIMARY_LINKS.map((link) => {
               const menuKey = link.menu
@@ -662,10 +522,23 @@ export default function Nav() {
                       <path d="M1 1l3 3 3-3" stroke="currentColor" strokeWidth="1.5" fill="none" />
                     </svg>
                   </Link>
+                  <AnimatePresence>
+                    {menu === menuKey && menuKey === "services" && (
+                      <ServicesPanel onNavigate={closeAll} onMouseEnter={() => openMenu("services")} onMouseLeave={scheduleClose} />
+                    )}
+                    {menu === menuKey && menuKey === "buyers" && (
+                      <BuyersPanel onNavigate={closeAll} onMouseEnter={() => openMenu("buyers")} onMouseLeave={scheduleClose} />
+                    )}
+                  </AnimatePresence>
                 </div>
               )
             })}
           </nav>
+
+          {/* The office number, in the bar (26 Sept 2026, the brief §3.1). */}
+          <a href="tel:+16046126209" className="nav-phone ml-6 hidden min-[1180px]:inline-block">
+            604-612-6209
+          </a>
 
           <button
             type="button"
@@ -689,9 +562,9 @@ export default function Nav() {
             href={pathname === "/contact" ? "/contact#quote" : "/contact"}
             onClick={closeAll}
             style={{ fontFamily: "var(--font-display)" }}
-            className="nav-cta ml-2 hidden shrink-0 rounded-[2px] border px-[19px] py-[11px] text-[12px] font-semibold tracking-[0.1em] uppercase transition-colors min-[1024px]:inline-block"
+            className="nav-cta ml-2 hidden shrink-0 border transition-colors min-[1024px]:inline-block"
           >
-            Request a quote
+            Get a quote
           </Link>
 
           <button
@@ -721,41 +594,6 @@ export default function Nav() {
           </button>
         </div>
       </header>
-
-      {/* The page steps back while a panel is open; a click on it closes the panel */}
-      <AnimatePresence>
-        {menu && (
-          <motion.div
-            aria-hidden="true"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
-            onClick={closeMenu}
-            className="mega-scrim hidden min-[1024px]:block"
-          />
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {menu === "applications" && (
-          <ApplicationsMega
-            onNavigate={closeAll}
-            onMouseEnter={() => openMenu("applications")}
-            onMouseLeave={scheduleClose}
-          />
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {menu === "services" && (
-          <ServicesMega
-            onNavigate={closeAll}
-            onMouseEnter={() => openMenu("services")}
-            onMouseLeave={scheduleClose}
-          />
-        )}
-      </AnimatePresence>
 
       <AnimatePresence>
         {drawerOpen && <MobileDrawer onClose={closeAll} />}
