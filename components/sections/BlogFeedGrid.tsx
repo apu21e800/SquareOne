@@ -1,5 +1,6 @@
-import Image from "next/image"
 import Link from "next/link"
+import Frame from "@/components/ui/Frame"
+import { Section } from "@/components/ui/Container"
 import type { BlogPostMeta } from "@/lib/blog"
 
 const FALLBACK_IMAGE =
@@ -33,64 +34,37 @@ function formatDate(value: string): string {
   return `${MONTHS[parsed.getUTCMonth()]} ${parsed.getUTCDate()}, ${parsed.getUTCFullYear()}`
 }
 
+/**
+ * Project stories and guides — 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §9.10):
+ * the same three posts as a hairline list — a small frame, the title, one
+ * line of category and date — no cards. Named for what the posts are, not
+ * for the route they live on (Vern, 19 Sept: "we say 'from the blog' but
+ * it's not the blog"); /blog's own H1 says the same.
+ */
 export default function BlogFeedGrid({ posts }: { posts: BlogPostMeta[] }) {
   return (
-    <section
+    <Section
       id="journal"
-      className="grain-paper section relative overflow-hidden border-t border-[color:var(--hairline)] bg-[color:var(--surface-warm)]"
+      label="Recently written"
+      title="Project stories and guides"
+      link={{ href: "/blog", label: "All stories and guides" }}
+      tone="warm"
     >
-      <div className="container-1280 relative z-[1]">
-        <div data-reveal className="flex flex-wrap items-baseline justify-between gap-6">
-          {/* Named for what the posts are — project stories and guides — not
-              for the route they live on (Vern, 19 Sept: "we say 'from the
-              blog' but it's not the blog"). /blog's own H1 says the same. */}
-          <div>
-            <div className="eyebrow">
-              <span className="eyebrow-num">07</span>Recently written
-            </div>
-            <h2 className="mt-5">Project stories and guides</h2>
-          </div>
-          <Link href="/blog" className="arrow-link whitespace-nowrap">
-            All stories and guides <span>&rarr;</span>
-          </Link>
-        </div>
-
-        <div data-reveal-group className="rail-m mt-10 grid grid-cols-1 gap-6 min-[701px]:grid-cols-3">
-          {posts.map((post) => (
-            <article key={post.slug} data-reveal className="card relative">
-              <Link
-                href={`/blog/${post.slug}`}
-                aria-label={post.title}
-                className="absolute inset-0 z-[2]"
-              />
-
-              <div className="pattern-running-bond relative aspect-[16/10] overflow-hidden rounded-[2px]">
-                <Image
-                  src={post.featured_image || FALLBACK_IMAGE}
-                  alt=""
-                  fill
-                  sizes="(max-width: 700px) 100vw, (max-width: 1280px) 33vw, 411px"
-                  className="object-cover"
-                />
-
-                <div aria-hidden className="scrim scrim-light" />
-              </div>
-
-              {post.category && (
-                <div className="mt-6">
-                  <span className="tag">{post.category}</span>
-                </div>
-              )}
-
-              <h3 className="mt-[14px]">{post.title}</h3>
-
-              <div className="mt-[10px] text-[13px] text-[var(--ink-muted)]">
+      <ul>
+        {posts.map((post) => (
+          <li key={post.slug} className="row row-compact relative">
+            <Link href={`/blog/${post.slug}`} aria-label={post.title} className="absolute inset-0 z-[2]" />
+            <Frame src={post.featured_image || FALLBACK_IMAGE} alt="" aspect="aspect-[3/2]" sizes="132px" />
+            <div className="min-w-0">
+              <h3 className="[text-wrap:pretty]">{post.title}</h3>
+              <p className="mt-2 text-[15px] italic text-ink-muted">
+                {post.category ? `${post.category} · ` : ""}
                 {formatDate(post.date)}
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
+              </p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </Section>
   )
 }

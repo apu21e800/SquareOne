@@ -136,28 +136,29 @@ export default function Hero({ slides, eyebrow, title }: HeroProps) {
       <div aria-hidden="true" className="scrim-rise z-[1]" />
       <div aria-hidden="true" className="scrim-top z-[1]" />
 
-      {/* ── Headline block, bottom-left ──────── */}
+      {/* ── Headline block, bottom-left ────────
+          26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §9.2): the reel is exactly
+          as it was; over it, the headline alone in sentence case, one line
+          in the serif, one button. No eyebrow, no orange full stop, no second
+          button — the second action is the reel itself. The `eyebrow` slot
+          (a CMS field) now renders as the line under the headline. */}
       <div className="absolute inset-x-0 bottom-0 z-[2]">
         <div className="container-1280 pb-[72px] max-[1100px]:pb-[84px] max-[700px]:pb-[80px]">
-          {eyebrow ? (
-            <div className="eyebrow eyebrow-on-image">{eyebrow}</div>
-          ) : (
-            <div className="eyebrow eyebrow-on-image">
-              <span className="max-[600px]:hidden">BC&rsquo;s decorative pavement studio &middot; Since 2000</span>
-              <span className="hidden max-[600px]:inline">Decorative pavement &middot; BC &middot; Since 2000</span>
-            </div>
-          )}
-
-          <h1 className="display-xl stop mt-6 max-w-[15ch] text-white [text-wrap:balance]">
+          <h1 className="display-xl max-w-[14ch] text-white [text-wrap:balance]">
             {title ?? "Surfaces that define a place"}
           </h1>
 
-          <div className="mt-10 flex flex-wrap items-center gap-[14px] max-[700px]:mt-8 max-[700px]:gap-3">
+          <p className="mt-6 max-w-[46ch] text-[19px] leading-[1.5] text-white/90 [text-wrap:pretty] max-[700px]:mt-5 max-[700px]:text-[17px]">
+            {eyebrow ?? (
+              <>
+                Lower Mainland and Vancouver Island since 2000. One office in Maple Ridge, crews on both sides of the Strait.
+              </>
+            )}
+          </p>
+
+          <div className="mt-9 max-[700px]:mt-7">
             <Link href="/contact" className="btn-primary">
-              Request a quote
-            </Link>
-            <Link href="/projects" className="btn-on-image">
-              See our work
+              Get a quote
             </Link>
           </div>
         </div>

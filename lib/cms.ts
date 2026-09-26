@@ -37,10 +37,11 @@ export interface SiteSettings {
 
 export const DEFAULT_SETTINGS: SiteSettings = {
   positioning:
-    // 21 Sept 2026: the three trades were listed here and again in the
-    // "What we do" column beside it — the same words twice, in one glance.
-    // The line carries what the column cannot: how long, and where.
-    "Decorative pavement across British Columbia since 2000 — one office in Maple Ridge, crews on both sides of the Strait.",
+    // 26 Sept 2026: the footer is a letterhead now (components/Footer.tsx),
+    // with one row of links instead of a "What we do" column, so the line
+    // can name the trades again without saying them twice. Plain, local,
+    // "we" — the site's voice (docs/OWN-COMPANY-BRIEF.md §3.10).
+    "We stamp, coat and mark asphalt and concrete across the Lower Mainland and Vancouver Island, and have since 2000. One office in Maple Ridge; our own crews on both sides of the Strait.",
   phoneOffice: "604-612-6209",
   phoneIsland: "250-391-0270",
   phoneTollFree: "1-877-391-0270",
@@ -51,8 +52,11 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   facebook: "https://www.facebook.com/squareonepaving/",
   linkedin: "https://www.linkedin.com/company/square-one-paving-ltd/",
   youtube: "https://www.youtube.com/channel/UCBDvB4vgdahH67BmP6FeccQ",
-  socialHeading: "Follow the work",
-  socialLede: "Installs as they happen, before-and-afters, and the crews at work.",
+  // 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.10): "Follow the work" was
+  // hubss.com's heading too. A value saved in the Studio's Site settings
+  // still overrides these two.
+  socialHeading: "Recent, on Instagram",
+  socialLede: "The crews at work, installs as they finish, and the odd before-and-after.",
 }
 
 const SETTINGS_QUERY = groq`*[_type == "siteSettings" && _id == "siteSettings"][0]{

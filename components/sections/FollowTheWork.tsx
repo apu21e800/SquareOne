@@ -37,37 +37,38 @@ export default function FollowTheWork({ settings, tiles }: { settings: SiteSetti
   const handle = handleFrom(settings.instagram) || "@squareonepaving"
   const live = tiles.some((t) => !t.fallback)
 
+  /* 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.10, §9.11): the strip stays;
+     the header is the margin voice — the handle as the label, the heading
+     from Site settings ("Recent, on Instagram" is the fallback in
+     lib/cms.ts), the Instagram button an underlined word. */
   return (
     <section
       id="follow"
       aria-labelledby="follow-heading"
-      className="section relative overflow-hidden border-t border-[color:var(--hairline)] bg-[color:var(--surface)]"
+      className="sec section relative overflow-hidden bg-[color:var(--surface)]"
     >
       <div className="container-1280 relative z-[1]">
-        <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-6">
-          <div data-reveal>
-            <div className="eyebrow">
-              <span className="eyebrow-num">08</span>On Instagram &middot; {handle}
-            </div>
-            <h2 id="follow-heading" className="mt-4 [text-wrap:balance]">
-              {settings.socialHeading}
-            </h2>
-            <p className="mt-4 max-w-[52ch] text-[16px] leading-[1.65] text-[color:var(--ink-body)]">
-              {settings.socialLede}
-            </p>
+        <div className="sec-grid">
+          <div className="sec-label">
+            <span className="label">On Instagram &middot; {handle}</span>
           </div>
-
-          <div className="flex flex-wrap items-center gap-3 max-[700px]:w-full">
-            <a href={settings.instagram} target="_blank" rel="noopener" className="btn-primary inline-flex items-center gap-[10px]">
-              <Glyph platform="Instagram" />
-              Instagram
-            </a>
-            {settings.tiktok && (
-              <a href={settings.tiktok} target="_blank" rel="noopener" className="btn-secondary inline-flex items-center gap-[10px]">
-                <Glyph platform="TikTok" />
-                TikTok
-              </a>
-            )}
+          <div className="sec-body">
+            <div className="sec-head">
+              <h2 id="follow-heading">{settings.socialHeading}</h2>
+              <span className="flex flex-wrap items-center gap-x-6 gap-y-2">
+                <a href={settings.instagram} target="_blank" rel="noopener" className="link inline-flex items-center gap-[8px] whitespace-nowrap">
+                  <Glyph platform="Instagram" />
+                  Follow {handle}
+                </a>
+                {settings.tiktok && (
+                  <a href={settings.tiktok} target="_blank" rel="noopener" className="link inline-flex items-center gap-[8px] whitespace-nowrap">
+                    <Glyph platform="TikTok" />
+                    TikTok
+                  </a>
+                )}
+              </span>
+            </div>
+            <p className="mt-5 max-w-[52ch] text-ink-body">{settings.socialLede}</p>
           </div>
         </div>
 
@@ -83,14 +84,14 @@ export default function FollowTheWork({ settings, tiles }: { settings: SiteSetti
                 target="_blank"
                 rel="noopener"
                 aria-label={tile.fallback ? `${tile.caption} — Square One on Instagram` : `${tile.caption} — view on ${tile.platform}`}
-                className="thumb group relative block aspect-square overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)]"
+                className="thumb group relative block aspect-square overflow-hidden bg-[color:var(--surface-stone)]"
               >
                 <Image
                   src={tile.src}
                   alt={tile.alt}
                   fill
                   sizes="(max-width: 700px) 33vw, (max-width: 1000px) 33vw, 200px"
-                  className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                  className="object-cover"
                 />
                 <span
                   aria-hidden="true"
@@ -115,7 +116,7 @@ export default function FollowTheWork({ settings, tiles }: { settings: SiteSetti
           ))}
         </ul>
 
-        <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-[13px] text-[color:var(--ink-muted)]">
+        <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-[14.5px] italic text-[color:var(--ink-muted)]">
           <span>{live ? "Newest first." : "Square One's own installation photographs. New posts appear here as they go up."}</span>
           <span className="flex flex-wrap items-center gap-x-5">
             {(
@@ -125,7 +126,7 @@ export default function FollowTheWork({ settings, tiles }: { settings: SiteSetti
                 ["YouTube", settings.youtube],
               ] as [SocialTile["platform"], string][]
             ).map(([platform, href]) => (
-              <a key={platform} href={href} target="_blank" rel="noopener" className="inline-flex items-center gap-[6px] font-semibold text-[color:var(--ink)] transition-colors hover:text-[color:var(--accent-deep)]">
+              <a key={platform} href={href} target="_blank" rel="noopener" className="link inline-flex items-center gap-[6px] text-[14.5px]">
                 <Glyph platform={platform} size={13} />
                 {platform}
               </a>

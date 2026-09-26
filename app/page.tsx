@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Hero from "@/components/sections/Hero"
 import { HERO_SLIDES } from "@/lib/hero-slides"
 import ProofLine from "@/components/sections/ProofLine"
+import HowAJobGoes from "@/components/sections/HowAJobGoes"
 import AudienceBand from "@/components/sections/AudienceBand"
 import EditorialBand from "@/components/sections/EditorialBand"
 import ServicesGrid from "@/components/sections/ServicesGrid"
@@ -47,6 +48,12 @@ export const metadata: Metadata = {
 }
 
 /**
+ * 26 Sept 2026 — the own-company restyle (docs/OWN-COMPANY-BRIEF.md §9).
+ * Same bands, same order, one added (How a job goes, after the proof line);
+ * every band drawn on the new primitives (components/ui/Container.tsx
+ * Section and Row, components/ui/Frame.tsx) and the surface in app/own.css.
+ * The reel is exactly as it was.
+ *
  * Homepage composition — the character pass, 5 Sept 2026 (Vern: "everything
  * is very white", "the huge useless image", "the free site walk section
  * blends together", "weave the clients in somehow else").
@@ -95,6 +102,12 @@ export default async function Home() {
           read as chunky — Vern). components/sections/StatsBar.tsx stays for
           /about. */}
       <ProofLine />
+
+      {/* 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §9.3): the proof only an
+          installer has — the same four steps on every job — comes before
+          who we work for. One component, one wording, shared with the
+          service pages, /about, /specifiers and /contact. */}
+      <HowAJobGoes tone="paper" />
 
       <AudienceBand />
 
