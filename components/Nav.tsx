@@ -77,7 +77,8 @@ const SERVICE_TILES: { href: string; name: string; note: string; src: string; al
   {
     href: "/services/stamped-asphalt",
     name: "Stamped asphalt",
-    note: "Patterns pressed into hot asphalt",
+    // Jan, 19 Sept: two kinds under stamped asphalt — StreetPrint regular, TrafficPatternsXD durable.
+    note: "StreetPrint and TrafficPatternsXD",
     src: "/images/hero/victoria-ellis-point-walkway-streetprint.jpg",
     alt: "British Cobble StreetPrint walkway at Ellis Point, Victoria",
   },
@@ -331,6 +332,7 @@ function ApplicationsMega({ onNavigate, onMouseEnter, onMouseLeave }: MegaPanelP
 }
 
 function MobileDrawer({ onClose }: { onClose: () => void }) {
+  const pathname = usePathname()
   return (
     <motion.div
       role="dialog"
@@ -437,7 +439,7 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
       </div>
 
       <Link
-        href="/contact"
+        href={pathname === "/contact" ? "/contact#quote" : "/contact"}
         onClick={onClose}
         className="flex h-16 shrink-0 items-center justify-center bg-[#F26430] text-[13px] font-semibold tracking-[0.12em] uppercase text-white transition-colors hover:bg-[#D8511F] hover:text-white"
         style={{ fontFamily: "var(--font-display)" }}
@@ -681,8 +683,10 @@ export default function Nav() {
             </svg>
           </button>
 
+          {/* 21 Sept 2026: on /contact this used to link to /contact, so the
+              page's loudest button did nothing. It now goes to the form. */}
           <Link
-            href="/contact"
+            href={pathname === "/contact" ? "/contact#quote" : "/contact"}
             onClick={closeAll}
             style={{ fontFamily: "var(--font-display)" }}
             className="nav-cta ml-2 hidden shrink-0 rounded-[2px] border px-[19px] py-[11px] text-[12px] font-semibold tracking-[0.1em] uppercase transition-colors min-[1024px]:inline-block"

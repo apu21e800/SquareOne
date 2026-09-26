@@ -84,34 +84,41 @@ export default function ServicesGrid() {
         {/* Four columns of type on one rule — no photograph blocks (Vern,
             19 Sept: "the 4 big image blocks… are garish, take up too much
             space"). The applications index above already carries the
-            photographs; this row carries the words. Each column is a small
-            thumbnail from the record, the trade, the verb, one line. */}
+            photographs; this row carries the words. Each column is one
+            left edge: a small frame from the record, the trade, the verb, one
+            line, and the link on a shared bottom rule. 21 Sept 2026: it used to
+            set the thumbnail beside the heading and the paragraph beneath it,
+            so every card had two left edges and the four verbs sat at
+            different heights — Vern, "looks like a jumble of text". */}
         <ol data-reveal-group className="mt-12 grid grid-cols-4 gap-x-8 border-t border-hairline max-[900px]:grid-cols-2 max-[560px]:grid-cols-1">
-          {services.map((service, i) => {
+          {services.map((service) => {
             const img = cardImage[service.slug]
             const card = CARD[service.slug]
             const href = `/services/${service.slug}`
             return (
-              <li key={service.slug} data-reveal className="group relative border-b border-hairline py-7 max-[900px]:py-6">
+              <li key={service.slug} data-reveal className="group relative flex flex-col border-b border-hairline py-7 max-[900px]:py-6">
                 <Link href={href} aria-label={`${card?.trade ?? service.name} — the service`} className="absolute inset-0 z-[2]" />
-                <div className="flex items-start gap-4">
-                  {img && (
-                    <span className="thumb relative block h-[56px] w-[72px] shrink-0 overflow-hidden rounded-[2px] bg-surface-stone">
-                      <Image src={img.src} alt="" fill sizes="72px" className="object-cover" />
-                    </span>
-                  )}
-                  <div className="min-w-0">
-                    <div className="label">
-                      <span className="mr-2 text-[color:var(--accent-deep)]">{String(i + 1).padStart(2, "0")}</span>
-                      {card?.trade ?? service.name}
-                    </div>
-                    <h3 className="mt-[6px] transition-colors group-hover:text-[color:var(--accent-deep)]">{card?.verb ?? service.name}</h3>
-                  </div>
+                {img && (
+                  <span className="thumb relative block aspect-[16/10] w-[96px] shrink-0 overflow-hidden rounded-[2px] bg-surface-stone">
+                    <Image src={img.src} alt="" fill sizes="96px" className="object-cover" />
+                  </span>
+                )}
+                {/* "Preformed thermoplastic" is the one name long enough to
+                    wrap, and it is not shortened — the trade is called what it
+                    is. Between 900 and 1024 the four columns are narrow enough
+                    that it takes two lines, so the label reserves two there and
+                    the four verbs stay on one baseline; above 1024 every name
+                    fits on one line and the reserve would only be dead air. */}
+                <div className="label mt-5 block min-h-0 max-[900px]:mt-4 min-[900px]:min-h-[2.8em] min-[1024px]:min-h-0">
+                  {card?.trade ?? service.name}
                 </div>
-                <p className="mt-4 max-w-[30ch] text-[15px] leading-[1.6] text-ink-body [text-wrap:pretty]">
+                <h3 className="mt-[2px] transition-colors group-hover:text-[color:var(--accent-deep)]">
+                  {card?.verb ?? service.name}
+                </h3>
+                <p className="mt-[10px] text-[15px] leading-[1.6] text-ink-body [text-wrap:pretty]">
                   {card?.line ?? service.tagline}
                 </p>
-                <span aria-hidden="true" className="arrow-link mt-4 inline-flex gap-[0.35em]">
+                <span aria-hidden="true" className="arrow-link mt-auto inline-flex gap-[0.35em] pt-6">
                   The service <span>&rarr;</span>
                 </span>
               </li>

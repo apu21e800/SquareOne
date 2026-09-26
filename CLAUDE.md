@@ -55,7 +55,18 @@ FAQPage / BreadcrumbList / Service JSON-LD via `components/JsonLd.tsx`; `/llms.t
 
 ## Environment Variables
 Copy .env.local.example → .env.local and fill in:
-- RESEND_API_KEY — from resend.com (required for contact form)
+- RESEND_API_KEY — from resend.com. **Required in production.** With no key the
+  route answers 503 and the visitor is given the office's phone lines and a
+  mailto carrying what they typed; it never returns a false "thank you". (It
+  did until 21 Sept 2026, and every enquiry from launch to that date went
+  nowhere — recoverable only from the Vercel runtime logs.)
+- CONTACT_FROM — the sending identity, e.g. `Square One <noreply@send.squareonepaving.com>`.
+  Resend only sends from a domain verified in the account. The **root**
+  squareonepaving.com carries Google Workspace MX and `v=spf1
+  include:_spf.google.com ~all`; **never edit those** or the client loses their
+  email. Verify the subdomain `send.squareonepaving.com` in Resend instead and
+  point this at it. Defaults to `noreply@squareonepaving.com` (root), which only
+  works if the root itself is verified.
 - CONTACT_EMAIL — receiving address (defaults to office@squareonepaving.com)
 - NEXT_PUBLIC_SITE_URL — public site URL for canonical/sitemap/robots/schema/OG (defaults to https://www.squareonepaving.com in `lib/site.ts` — www, because Vercel serves production on www and the old site's whole Google index was www; every absolute URL derives from `SITE_URL` there — never hard-code the host)
 
@@ -134,10 +145,14 @@ When adding new content, check `next.config.ts` redirects first to avoid conflic
 
 ### API Routes
 **POST /api/contact** — Contact form submission
-- Sends email via Resend to `process.env.CONTACT_EMAIL`
-- Honeypot field (`website`) for spam protection — if filled, silently succeeds without sending
-- Dev fallback: logs to console when RESEND_API_KEY is missing
-- Email format: HTML table with form fields + PT timezone timestamp
+- Sends via Resend from `CONTACT_FROM` to `CONTACT_EMAIL`, reply-to the enquirer
+- Honeypot field (`website`) — if filled, answers success without sending
+- Validates the email, caps every field, best-effort per-IP throttle (5 / 10 min)
+- **Never fails silently.** No key in production → 503; Resend rejection → 502;
+  both carry the phone lines, and the form shows a mailto with what they typed.
+  Every failure path logs the whole enquiry so a lead is recoverable.
+- Dev (NODE_ENV !== production) with no key: logs and succeeds
+- Email format: HTML table + a plain-text part, PT timezone timestamp
 
 ## Adding Content
 
@@ -203,3 +218,165 @@ npm run start   # Run production build locally
 - **Auto-deploy**: Push to `main` branch triggers production deployment
 - **Environment variables**: Set in Vercel dashboard (RESEND_API_KEY, CONTACT_EMAIL, NEXT_PUBLIC_SITE_URL)
 - **Domain**: www.squareonepaving.com is the canonical host in code (`lib/site.ts`); the bare domain 308s to it on Vercel. Live since 19 Sept 2026. If production ever moves to the bare domain, set NEXT_PUBLIC_SITE_URL in Vercel and redeploy.
+
+## Working copy and handoff
+
+Two checkouts exist and they are not equals.
+
+- **The repository on the maintainer's machine is the source of truth.** A cloud
+  session reaches it through the device bridge; it is the only checkout whose
+  commits can ever reach GitHub.
+- **The cloud sandbox copy is a build and test rig** — `next build`, `npm run
+  check`, Playwright, Lighthouse, image work. It is disposable.
+
+### The sandbox cannot push. Do not look for a way around it.
+
+Verified 21 Sept 2026, not inferred:
+
+```
+remote: access denied by the git proxy: apu21e800/SquareOne is not in this
+session's authorized repository set, so the proxy will not inject a credential
+for it. To fix, add the repository to the session's sources.
+fatal: unable to access 'https://github.com/apu21e800/SquareOne.git/': 403
+```
+
+There is no product control that adds a repository to that set — the proxy names
+a remedy the UI does not implement (anthropics/claude-code#84581, open, last
+reproduced 4 Sept 2026). Do not spend a session hunting for the setting.
+
+The device VM can *fetch* (this repository is public, so anonymous HTTPS read
+works) but cannot *push*: no `credential.helper`, no `GH_TOKEN`/`GITHUB_TOKEN`,
+no `gh`, and no askpass device — `fatal: could not read Username for
+'https://github.com': No such device or address`. Its `$HOME` is session-scoped
+(`/sessions/rcw-…/`), so nothing installed there survives; only the mounted
+folder persists. It does carry node 22, npm 10, git, tar and rsync, and the
+repository's `node_modules` is already on disk.
+
+**Never route around the block with the GitHub MCP** (`push_files`,
+`create_or_update_file`). Those build a commit server-side out of file contents:
+the tree may match but the SHA and parentage do not, so the local branch
+diverges from `origin` permanently — in a repository that auto-deploys to
+production, that is an expensive mess for no gain.
+
+So: **pushing is the maintainer's step, and `main` moves only by a pull request
+they have authorised.** That second half is deliberate, not friction.
+
+### The handoff rule
+
+Never leave a commit that exists only in the sandbox. In the same turn:
+
+1. `git diff --name-only` (or `--name-status` across the range) in the sandbox.
+2. Write those paths into the device checkout — file by file for a normal
+   changeset; a tarball only when the change is large or carries binaries past
+   the bridge's per-call caps.
+3. Commit there, then prove the two checkouts agree:
+   `git rev-parse HEAD^{tree}` must return the same hash on both sides.
+
+Step 3 is the whole point. Matching trees mean nothing is stranded; skip it and
+a week of work can sit in a sandbox that gets reclaimed.
+
+A write across the bridge can report success and change nothing — it did exactly
+that on 21 Sept 2026, while this section was being written. So checksum every
+landed file before committing it, and keep the tree comparison as the backstop
+that catches whatever the checksum misses.
+
+### Image files change in transit across the bridge — generate them on the device
+
+`device_commit_files` does not deliver an image byte-for-byte. A C2PA content
+credentials manifest is injected on the way, so the file that lands is larger
+than the one sent and its checksum is different every time:
+
+```
+app/icon.svg   681 bytes sent  →  8,455 landed   <svg … xmlns:c2pa="http://c2pa.org/manifest"><metadata>…
+app/icon.png   9,366          →  15,136
+app/apple-icon.png 1,527      →  7,297
+```
+
+The picture survives intact — the SVG still renders and the PNGs keep their
+dimensions and colour — but the bytes do not, so the checksum step of the
+handoff rule fails for images and the two checkouts' tree hashes can never
+agree. Text files are unaffected; this is images only.
+
+So **icons and other generated images are produced on the device**, by running
+the same generator there (`python3` 3.10 with Pillow, and node 22, are
+installed in the VM). Then both sides run identical code on identical inputs
+and the bytes match. Verified 21 Sept 2026: the same eight-line Pillow script
+run in each place produced four identical files.
+
+A photograph that only exists in the sandbox still has to cross, and will pick
+up a manifest. That is acceptable for content images — just do not expect its
+checksum to match, and do not chase the mismatch.
+
+### Every write across the bridge needs its own fresh staged path
+
+Writing twice to the same `devicePath` from the same `stagedPath` silently does
+nothing the second time: the call reports the file written, and the device still
+holds the old bytes. It happened three times on 21 Sept 2026 — twice on
+`CLAUDE.md`, once on a batch of icons — and `force: true` does not prevent it.
+
+So stage each write under a path that has never been used, for example
+`/mnt/user-data/outputs/<name>-$(date +%s)/`, and checksum the landed file
+before committing. That check is the only thing standing between a stale write
+and a commit that claims work it does not contain.
+
+### The sandbox's branch is a parallel line — its "unpushed" count is meaningless
+
+The sandbox commits the same work separately from the device, so the two
+branches never share SHAs even when their trees are identical. A hook counting
+`origin/main..HEAD` in the sandbox will report a dozen or more "unpushed"
+commits that are already merged into `main` under different hashes. Ignore it.
+**The only count that matters is the one in the device checkout.**
+
+Reads through the proxy do work, incidentally: `git fetch` succeeds (verified 21
+Sept), so the sandbox's `origin/main` can be kept current and diffed against.
+Only *writes* are refused. If the sandbox's remote-tracking ref looks stale,
+fetch it rather than assuming the whole remote is unreachable.
+
+### Git in the connected folder needs delete permission — ask for it first
+
+By default the device bridge refuses `rm`/`unlink` inside a connected folder, and
+git cannot clean up after itself: every commit leaves `.git/index.lock`,
+`.git/HEAD.lock` and `.git/objects/*/tmp_obj_*` behind, and the *next* git
+command dies with `Unable to create '.git/index.lock': File exists`. It looks
+like a crashed git process. It is not — it is the delete block.
+
+So before the first commit of a session, request delete permission for the
+repository folder (one prompt, granted for the rest of the session). Then git
+behaves normally. If a session starts with a stale lock already in place, clear
+`.git/*.lock` and the `tmp_obj_*` files once and carry on.
+
+Never let this turn into deleting anything else. Files taken off the site still
+go to `_to_delete/` and stay there for the maintainer to remove.
+
+### `app/icon.png` must stay above ~8 KB or the build panics
+
+Replacing the favicon with a smaller file breaks `next build` with a Turbopack
+panic that names nothing useful:
+
+```
+FATAL: An unexpected Turbopack error occurred.
+Error [TurbopackInternalError]: Dependency tracking is disabled so invalidation
+is not allowed at turbo-tasks-backend/src/backend/mod.rs:1526:13
+```
+
+Bisected on 21 Sept 2026: it is `app/icon.png` alone. The same image at 512px
+(4,130 bytes) panics; at 1024px (9,366 bytes) it builds. `app/favicon.ico`,
+`app/icon.svg` and `app/apple-icon.png` are all small and all fine — only
+`icon.png` trips it, apparently on an asset-inlining path.
+
+So the icon ships at 1024px. If a future pass shrinks or re-encodes it and the
+build starts panicking about dependency tracking, this is why: check the file
+size before looking anywhere else.
+
+`app/favicon.ico` has its own rule: its sub-images must be **RGBA**. Written in
+RGB the build fails with `Format error decoding Ico: The PNG is not in RGBA
+format!` — a clearer message than the panic above, but the same class of trap.
+The PNGs alongside it are RGB and that is fine; only the .ico cares.
+
+### Two sandbox rules that cost real time to rediscover
+
+- Killing `next-server` and starting a new one must be **two separate** shell
+  calls. In one call the new server dies with the old.
+- Never run two Playwright sweeps, or a sweep and Lighthouse, concurrently. The
+  box saturates, the image optimizer wedges, and routes time out — which reads
+  as a site bug and is not one.

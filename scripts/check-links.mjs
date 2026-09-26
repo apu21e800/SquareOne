@@ -114,6 +114,22 @@ for (const file of [...walk(path.join(ROOT, "app"), new Set([".tsx"])), ...walk(
   }
 }
 
+// ── Markdown links inside post bodies ────────
+/* 21 Sept 2026: three dead links shipped inside two posts — the Windsor Gate
+   pieces were retitled from "driveway" to "laneways" and their body links
+   were retargeted to a /laneways gallery that does not exist, and to a post
+   slug that was never renamed. The checker only read .tsx hrefs, so nothing
+   caught it. It reads the post bodies now. */
+for (const file of walk(path.join(ROOT, "content"), new Set([".mdx", ".md"]))) {
+  const src = fs.readFileSync(file, "utf8")
+  for (const m of src.matchAll(/\]\((\/[^)\s"']*)/g)) {
+    const h = m[1].split("#")[0].split("?")[0]
+    if (!h || h === "/") continue
+    if (h.startsWith("/images/") || h.startsWith("/docs/")) continue // covered by the asset pass
+    if (!routeExists(h)) errors.push(`${rel(file)}: markdown link ${h} is not a route`)
+  }
+}
+
 for (const w of warnings) console.warn(`warn  ${w}`)
 if (errors.length) {
   console.error(`\ncheck-links: ${errors.length} error${errors.length === 1 ? "" : "s"}`)

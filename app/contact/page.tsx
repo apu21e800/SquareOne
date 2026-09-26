@@ -122,31 +122,29 @@ export default function ContactPage() {
               crew who install it.
             </p>
 
-            <dl className="mt-11 grid grid-cols-[auto_1fr] gap-x-6 gap-y-3 border-t border-hairline pt-8 max-[420px]:grid-cols-1 max-[420px]:gap-y-1">
-              {LINES.map((l) => (
-                <div key={l.href} className="contents">
-                  <dt className="self-baseline text-[13px] font-medium tracking-[0.02em] text-ink-muted max-[420px]:mt-3">{l.region}</dt>
+            {/* 21 Sept 2026 (Vern: "contact page text too big in some
+                areas"). The four lines were set at 26px Futura Bold — h3 size
+                for a telephone number — in a two-column table whose labels ran
+                from eight characters to sixteen, so a river of space opened
+                between the short labels and their numbers and the mailbox had
+                to drop a size of its own to fit. Stacked pairs, two up: the
+                numbers stay the loudest thing in the block without shouting,
+                the mailbox sets at the same size as the rest, and it reads the
+                same way as the footer and the proof line. */}
+            <dl className="mt-10 grid grid-cols-3 gap-x-7 gap-y-6 border-t border-hairline pt-8 max-[700px]:grid-cols-2 max-[420px]:grid-cols-1 max-[420px]:gap-y-5">
+              {[...LINES, { region: "Email", display: "office@squareonepaving.com", href: "mailto:office@squareonepaving.com" }].map((l) => (
+                <div key={l.href} className={l.region === "Email" ? "col-span-3 min-w-0 max-[700px]:col-span-2 max-[420px]:col-span-1" : "min-w-0"}>
+                  <dt className="text-[12px] leading-[1.4] font-medium tracking-[0.02em] text-ink-muted">{l.region}</dt>
                   <dd>
                     <a
                       href={l.href}
-                      className="font-[family-name:var(--font-display)] text-[1.625rem] font-bold leading-[1.15] tracking-[-0.015em] tabular-nums text-ink transition-colors hover:text-[color:var(--accent-deep)] max-[700px]:text-[1.375rem]"
+                      className="mt-[3px] inline-block font-[family-name:var(--font-display)] text-[19px] leading-[1.25] font-bold tracking-[-0.01em] tabular-nums text-ink transition-colors hover:text-[color:var(--accent-deep)] [overflow-wrap:anywhere] max-[700px]:text-[17.5px]"
                     >
                       {l.display}
                     </a>
                   </dd>
                 </div>
               ))}
-              <div className="contents">
-                <dt className="self-baseline text-[13px] font-medium tracking-[0.02em] text-ink-muted max-[420px]:mt-3">Email</dt>
-                <dd>
-                  <a
-                    href="mailto:office@squareonepaving.com"
-                    className="font-[family-name:var(--font-display)] text-[1.375rem] font-bold leading-[1.2] tracking-[-0.01em] text-ink transition-colors hover:text-[color:var(--accent-deep)] max-[700px]:text-[1.1875rem] max-[420px]:break-all"
-                  >
-                    office@squareonepaving.com
-                  </a>
-                </dd>
-              </div>
             </dl>
 
             <div className="mt-9">

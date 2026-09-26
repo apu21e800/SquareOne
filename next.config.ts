@@ -25,6 +25,8 @@ const nextConfig: NextConfig = {
       { source: "/streetbond", destination: "/products/streetbond", permanent: true },
       { source: "/streetbondsr", destination: "/products/streetbond", permanent: true },
       { source: "/mmax-2", destination: "/products", permanent: true },
+      // 10 Sept 2026, the client, on /products/mmax: "remove this page. we don't do MMA"
+      { source: "/products/mmax", destination: "/products", permanent: true },
       { source: "/decomark", destination: "/products/decomark", permanent: true },
       { source: "/duratherm-2", destination: "/products/duratherm", permanent: true },
       { source: "/durashield", destination: "/products/durashield", permanent: true },
