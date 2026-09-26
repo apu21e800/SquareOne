@@ -57,7 +57,6 @@ export const TYPEFACES: Typeface[] = [
     preview: "var(--font-futura), var(--font-poppins), sans-serif",
     previewStyle: { fontWeight: 700, letterSpacing: "-0.01em" },
     licence: "Licensed",
-    live: true,
   },
   {
     id: "futura-caps",
@@ -68,12 +67,16 @@ export const TYPEFACES: Typeface[] = [
     licence: "Licensed",
   },
   {
+    // Live since 26 Sept 2026 — the own-company surface (app/own.css): the
+    // serif is the site's reading face and its small voice. Needs no
+    // attribute; "futura" is now the alternate that puts Inter back.
     id: "futura-serif",
     label: "Futura + serif",
     note: "The quiet setting with Source Serif for the reading text. Warmer and more editorial; the headlines stay geometric.",
     preview: "var(--font-futura), var(--font-poppins), sans-serif",
     previewStyle: { fontWeight: 700, letterSpacing: "-0.01em" },
     licence: "Licensed",
+    live: true,
   },
   {
     id: "futura-light",

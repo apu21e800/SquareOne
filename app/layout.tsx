@@ -4,6 +4,9 @@ import localFont from 'next/font/local'
 import "./globals.css"
 import "./mobile.css"
 import "./refine.css"
+// The own-company surface (26 Sept 2026) — loads last, wins last. See the
+// head of the file and docs/OWN-COMPANY-BRIEF.md §3.7.
+import "./own.css"
 import Nav from "@/components/Nav"
 import Footer from "@/components/Footer"
 import StructuredData from "@/components/StructuredData"
@@ -56,19 +59,19 @@ const futura = localFont({
   fallback: ['Poppins', 'Century Gothic', 'system-ui', 'sans-serif'],
 })
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' })
+// 26 Sept 2026: the reading face is Source Serif 4 (the "Futura + serif"
+// setting went live with the own-company surface, app/own.css). Inter stays
+// loaded for the switch's "Futura, quiet" alternate and is no longer
+// preloaded; the serif is.
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap', preload: false })
 
-// The one alternate that brings its own font: Source Serif 4 carries the
-// reading text in the "Futura + serif" setting (lib/typefaces.ts). Not
-// preloaded — nothing requests it unless html[data-type="futura-serif"] is
-// set, which production never does.
 const sourceSerif = Source_Serif_4({
   subsets: ['latin'],
   weight: ['400', '600'],
   style: ['normal', 'italic'],
   variable: '--font-source-serif',
   display: 'swap',
-  preload: false,
+  preload: true,
 })
 
 // Fallback and alternate only, so it is not preloaded. The static cuts the

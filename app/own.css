@@ -1,0 +1,404 @@
+/* ============================================================
+   Square One, its own company — the surface (26 Sept 2026).
+
+   HUB reviewed hubss.com on 25 Sept and said it looks too much like the
+   new Square One site. The audit agreed: the copy is Square One's (1%
+   shared) and the code is Square One's (4–17%), but the SHAPE was HUB's —
+   the tracked-caps eyebrow with its orange square, the orange full stop,
+   photo cards with chips and arrows, captions over gradients, rounded
+   buttons with arrows, a photo-tile mega menu, a dark CTA band into a
+   four-column footer. Vern's steer: share the photographs, keep the hero
+   reel, keep every page's skeleton, change the surface, stay ultra
+   professional. docs/OWN-COMPANY-BRIEF.md §3.7 is the table this file
+   implements.
+
+   This sheet loads last (app/layout.tsx) and is unlayered, so it wins over
+   globals.css, mobile.css, refine.css and every utility class at equal
+   specificity. Where a rule below retires one above, the older rule is
+   left in place as history and simply never renders — the retired
+   signatures are neutralised here, not deleted there.
+
+   The system, in one breath:
+     square      — the company is called Square One; every corner is 0.
+     paper       — a faint warm ground, never web-white, never HUB's dark.
+     two faces   — Futura Bold in sentence case for display, Source Serif 4
+                   for everything read; the small voice is the serif in
+                   italic, not spaced capitals.
+     hairlines   — rows divided by rules, not cards in boxes.
+     captions    — under the frame, never over it.
+     one orange  — the primary button, and the copper in the mark. Links
+                   are ink, underlined.
+     margin      — a section's label sits in a 3-of-12 left column beside
+                   its content; the one layout move.
+     numerals    — a big Futura figure only where the content is a real
+                   sequence (how a job goes).
+     motion      — a fade. Nothing zooms, nothing slides, nothing sticks
+                   but the phone's quote bar; the reel keeps its pace.
+   ============================================================ */
+
+/* ---- Tokens ------------------------------------------------------------- */
+:root {
+  --radius: 0px;
+
+  /* Paper. The base surface warms a hair off white so the whole site
+     reads as a printed sheet; the two deeper papers keep their step. */
+  --surface:        #FCFBF8;
+  --surface-warm:   #F5F1EA;
+  --surface-stone:  #ECE6DC;
+  --hairline:       #E2DCD2;
+  --hairline-strong:#9C9488;
+
+  /* The reading face is the serif; the switch's "Futura, quiet" puts
+     Inter back (html[data-type="futura"] below). */
+  --font-text: var(--font-source-serif), Georgia, "Times New Roman", serif;
+
+  /* The small voice — labels, captions, notes — as one size. */
+  --small: 15px;
+}
+
+/* ---- Square. Every corner. -------------------------------------------- */
+[class*="rounded-["], .rounded, .rounded-sm, .rounded-md, .rounded-lg,
+.card-panel, .btn-primary, .btn-secondary, .btn-on-slate, .btn-on-image, .chip, .tag, .reel-btn,
+.offer-card, .nav-cta,
+input[type="text"], input[type="email"], input[type="tel"], input[type="search"], select, textarea, button {
+  border-radius: 0;
+}
+.eyebrow::before, .stop::after { border-radius: 0; }
+
+/* ---- Type --------------------------------------------------------------- */
+body {
+  font-family: var(--font-text);
+  font-size: 17.5px;
+  line-height: 1.6;
+}
+p { line-height: 1.6; }
+@media (max-width: 700px) { body { font-size: 16.5px; } }
+
+/* Display: Futura Bold, sentence case, closed up. The hero line is the one
+   place for scale; section headings sit a clear step under it. */
+h1, .display-xl, .display-statement, h2:not(.label):not(.eyebrow) {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: none;
+}
+h1 {
+  font-size: clamp(2.25rem, 4.4vw, 3.9rem);
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+}
+.display-xl {
+  font-size: clamp(2.6rem, 5.4vw, 4.75rem);
+  letter-spacing: -0.026em;
+  line-height: 0.97;
+}
+.display-statement {
+  font-size: clamp(2rem, 3.1vw, 3.25rem);
+  letter-spacing: -0.02em;
+  line-height: 1.04;
+  color: var(--ink);
+}
+h2:not(.label):not(.eyebrow):not(.card-title) {
+  font-size: clamp(1.75rem, 2.7vw, 2.375rem);
+  letter-spacing: -0.018em;
+  line-height: 1.08;
+}
+h3 {
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  font-weight: 700;
+  letter-spacing: -0.012em;
+  line-height: 1.22;
+}
+@media (max-width: 560px) {
+  h1 { font-size: clamp(2rem, 8.6vw, 2.5rem); }
+  .display-xl:not(.display-fit) { font-size: clamp(2.125rem, 9.4vw, 2.75rem); letter-spacing: -0.02em; }
+  .display-statement { font-size: clamp(1.75rem, 7.6vw, 2.125rem); }
+  h3 { font-size: 1.25rem; }
+}
+@media (min-width: 1536px) {
+  h1 { font-size: clamp(2.75rem, 4vw, 4.5rem); }
+  .display-xl { font-size: clamp(3rem, 5.2vw, 5.75rem); }
+  .display-statement { font-size: clamp(2.25rem, 2.9vw, 3.75rem); }
+  h2:not(.label):not(.eyebrow):not(.card-title) { font-size: clamp(1.875rem, 2.2vw, 2.75rem); }
+}
+
+/* The small voice: the serif, italic, sentence case. This is what the
+   tracked-caps eyebrow and label become — every existing .eyebrow and
+   .label on the site reads this way from here on, with no square. */
+.eyebrow, .label, .chip-name, .label-on-slate {
+  font-family: var(--font-text);
+  font-style: italic;
+  font-size: var(--small);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.4;
+  text-transform: none;
+  color: var(--ink-muted);
+  display: block;
+}
+.eyebrow::before { content: none; }
+.eyebrow-num { display: none; }               /* the section index retires */
+.eyebrow-center { text-align: center; }
+.label-on-slate { color: var(--ink-on-slate-muted); }
+.eyebrow-on-image, .label-on-image {
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 1px 10px rgba(24, 21, 18, 0.55);
+}
+.eyebrow-on-image::before { content: none; }
+
+/* The orange full stop after a headline — retired. */
+.stop::after, .stop-tight::after { content: none; display: none; }
+
+/* Captions read in the serif. Over a photograph (the hero reel, the
+   openers) they stay white; in rows and galleries the components set them
+   under the frame with .cap. */
+.caption {
+  font-family: var(--font-text);
+  font-style: italic;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.cap {
+  font-family: var(--font-text);
+  font-style: italic;
+  font-size: 14.5px;
+  line-height: 1.45;
+  color: var(--ink-muted);
+  margin-top: 10px;
+}
+.cap-on-slate { color: var(--ink-on-slate-muted); }
+
+/* Reading text a step larger where a page opens with an intro. */
+.lede { font-size: 20px; line-height: 1.5; color: var(--ink-body); }
+@media (max-width: 700px) { .lede { font-size: 18px; } }
+
+/* ---- Colour discipline -------------------------------------------------- */
+a:hover { color: var(--ink); }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.prose blockquote { border-left-color: var(--ink); }
+.pattern-tile { color: rgba(20, 22, 26, 0.72); }
+.group:hover .pattern-tile { color: var(--ink); border-color: var(--hairline-strong); }
+
+/* Links are ink, underlined; the underline is the hairline until hovered. */
+.link, .arrow-link, .btn-secondary, .foot-link {
+  font-family: var(--font-text);
+  font-style: italic;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 5px;
+  text-decoration-color: var(--hairline-strong);
+  transition: text-decoration-color 0.15s ease, color 0.15s ease;
+}
+.link:hover, .arrow-link:hover, .btn-secondary:hover, .foot-link:hover {
+  color: var(--ink);
+  text-decoration-color: var(--ink);
+}
+.arrow-link > span[aria-hidden="true"],
+.arrow-link > span:not([class]):last-child { display: none; }  /* the → glyph */
+.arrow-link span { transform: none; }
+.arrow-link:hover span { transform: none; }
+.btn-secondary { border: 0; padding: 0; background: none; display: inline-block; }
+.btn-secondary:hover { border: 0; }
+.foot-link { color: var(--ink-on-slate-body); font-style: normal; font-size: 15.5px; text-decoration-color: transparent; }
+.foot-link:hover { color: #FFFFFF; text-decoration-color: var(--ink-on-slate-muted); }
+
+/* ---- Buttons: square, sentence case, no arrow, one per view ------------- */
+.btn-primary, .btn-on-slate, .btn-on-image, .btn-water, .offer-btn, .nav-cta {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.005em;
+  text-transform: none;
+  line-height: 1.2;
+  padding: 15px 26px;
+  border-radius: 0;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.btn-primary { background: var(--accent-deep); color: #FFFFFF; }
+.btn-primary:hover { background: #B03D15; color: #FFFFFF; }
+.btn-on-slate { background: #FFFFFF; color: var(--ink); }
+.btn-on-slate:hover { background: var(--surface-stone); color: var(--ink); }
+.btn-on-image { border: 1px solid rgba(255, 255, 255, 0.7); color: #FFFFFF; padding: 14px 25px; }
+.btn-on-image:hover { border-color: #FFFFFF; background: rgba(255, 255, 255, 0.08); }
+/* The ink button — the second fill the site allows, for the bar and for a
+   view that already spent its orange. */
+.btn-ink { display: inline-block; background: var(--ink); color: #FFFFFF; font-family: var(--font-display); font-size: 15px; font-weight: 700; line-height: 1.2; padding: 15px 26px; }
+.btn-ink:hover { background: #000000; color: #FFFFFF; }
+@media (max-width: 700px) {
+  .btn-primary, .btn-on-slate, .btn-on-image, .btn-ink { display: flex; width: 100%; justify-content: center; text-align: center; padding-block: 17px; }
+  .btn-secondary { display: inline-block; width: auto; padding: 0; }
+}
+
+/* The bar's quote button is ink; over a photograph it is white. */
+.nav-cta { background: var(--ink); border-color: var(--ink); color: #FFFFFF; font-size: 14px; padding: 11px 18px; }
+.nav-cta:hover { background: #000000; border-color: #000000; color: #FFFFFF; }
+.nav-light .nav-cta { background: #FFFFFF; border-color: #FFFFFF; color: var(--ink); }
+.nav-light .nav-cta:hover { background: var(--surface-stone); border-color: var(--surface-stone); color: var(--ink); }
+.nav-link { font-size: 15px; font-weight: 700; letter-spacing: 0; color: var(--ink-body); }
+
+/* ---- Rows, not cards ---------------------------------------------------- */
+.card-panel {
+  background: transparent;
+  border: 0;
+  border-top: 1px solid var(--hairline);
+  padding: 22px 0 0;
+  box-shadow: none;
+}
+.card-panel:hover { box-shadow: none; }
+.card { border-radius: 0; }
+.card:hover { border-color: var(--hairline); }
+.card img, .thumb img { filter: none; }
+.card img, .card [data-zoom] { transition: none; }
+.card:hover img, .card:hover [data-zoom] { transform: none; }
+[class*="group-hover:scale"] { scale: none !important; }
+[class*="group-hover:-translate"], [class*="group-hover:translate"] { translate: none !important; }
+
+/* Chips become words: the serif, a middle dot between them. */
+.tag {
+  display: inline;
+  background: none;
+  padding: 0;
+  font-family: var(--font-text);
+  font-style: italic;
+  font-size: var(--small);
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--ink-muted);
+}
+.tag + .tag::before { content: "\00A0\00B7\00A0"; color: var(--hairline-strong); }
+.chip { border-color: var(--hairline); }
+
+/* The section header: a hairline, the label in the margin column, the
+   heading and its one link in the content column. Stacks under 900px. */
+.sec { border-top: 1px solid var(--hairline); }
+.sec-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: 40px;
+  row-gap: 20px;
+  align-items: start;
+}
+.sec-label { grid-column: span 3; padding-top: 6px; }
+.sec-body { grid-column: span 9; min-width: 0; }
+.sec-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px 32px; }
+.sec-head h2 { margin: 0; max-width: 24ch; text-wrap: balance; }
+.sec-content { margin-top: 40px; }
+@media (max-width: 900px) {
+  /* One column: twelve tracks of minmax(0, 1fr) can shrink to nothing, but
+     their eleven 40px gaps cannot, and 440px of gaps overflowed a 390px
+     phone. */
+  .sec-grid { grid-template-columns: minmax(0, 1fr); column-gap: 0; row-gap: 10px; }
+  .sec-label, .sec-body, .sec-grid > .col-span-12 { grid-column: 1 / -1; }
+  .sec-content { margin-top: 28px; }
+}
+@media (max-width: 700px) {
+  .sec-head h2 { max-width: none; }
+}
+
+/* A hairline row: photograph inset, caption under it, text beside it. */
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  column-gap: 40px;
+  row-gap: 16px;
+  align-items: start;
+  padding-block: 28px;
+  border-top: 1px solid var(--hairline);
+}
+.row:last-child { border-bottom: 1px solid var(--hairline); }
+.row-compact { grid-template-columns: 132px minmax(0, 1fr); column-gap: 24px; padding-block: 18px; }
+@media (max-width: 700px) {
+  .row { grid-template-columns: 1fr; padding-block: 22px; }
+  .row-compact { grid-template-columns: 96px minmax(0, 1fr); column-gap: 16px; }
+}
+
+/* The numeral for a real sequence. */
+.step-num {
+  font-family: var(--font-display);
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+@media (max-width: 700px) { .step-num { font-size: 36px; } }
+
+/* A quiet two-column definition list (specification, contact lines). */
+.spec { display: grid; grid-template-columns: minmax(0, 11rem) minmax(0, 1fr); column-gap: 24px; }
+.spec dt { padding: 10px 0; border-top: 1px solid var(--hairline); font-family: var(--font-text); font-style: italic; color: var(--ink-muted); }
+.spec dd { padding: 10px 0; border-top: 1px solid var(--hairline); color: var(--ink-body); }
+@media (max-width: 560px) {
+  .spec { grid-template-columns: 1fr; }
+  .spec dt { border-top: 1px solid var(--hairline); padding-bottom: 0; }
+  .spec dd { border-top: 0; padding-top: 2px; }
+}
+
+/* ---- Motion: a fade ----------------------------------------------------- */
+.reveal-armed { transform: none; transition: opacity 0.6s ease; }
+.reveal-armed.reveal-in { transform: none; }
+
+/* ---- The type switch, re-based ------------------------------------------
+   The serif setting is now the site; "Futura, quiet" (Inter) is the
+   alternate a preview can flip back to. The other two are unchanged. */
+html[data-type="futura"] { --font-text: var(--font-inter), var(--font-poppins), system-ui, -apple-system, sans-serif; }
+html[data-type="futura"] body { font-size: 17px; line-height: 1.65; }
+html[data-type="futura"] .eyebrow,
+html[data-type="futura"] .label,
+html[data-type="futura"] .tag,
+html[data-type="futura"] .cap,
+html[data-type="futura"] .caption,
+html[data-type="futura"] .link,
+html[data-type="futura"] .arrow-link,
+html[data-type="futura"] .btn-secondary { font-style: normal; }
+
+/* ---- The letterhead on a phone: one column, every block full width
+   (mobile.css splits the old four-column footer in two). ---- */
+@media (max-width: 700px) {
+  footer .grid { grid-template-columns: 1fr; row-gap: 36px; }
+  footer .grid > * { grid-column: 1 / -1; }
+}
+
+/* ---- The menus: text lists under the bar, not photo-tile panels ---- */
+.menu-panel {
+  position: absolute;
+  top: var(--bar-h);
+  left: -20px;
+  z-index: 40;
+  min-width: 264px;
+  background: #FFFFFF;
+  border: 1px solid var(--hairline);
+  padding: 18px 22px 20px;
+  box-shadow: 0 16px 40px rgba(20, 22, 26, 0.08);
+}
+.menu-panel-wide { min-width: 680px; }
+.menu-item {
+  display: block;
+  padding: 7px 0;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--ink);
+  text-decoration: none;
+}
+.menu-item:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 1px; }
+.menu-note { display: block; font-family: var(--font-text); font-style: italic; font-size: 14px; font-weight: 400; color: var(--ink-muted); }
+.menu-group { padding-top: 14px; }
+.menu-group + .menu-group { margin-top: 6px; }
+.menu-foot { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--hairline); display: flex; flex-wrap: wrap; gap: 8px 24px; }
+.nav-phone {
+  font-family: var(--font-text);
+  font-size: 15.5px;
+  color: var(--ink-body);
+  white-space: nowrap;
+  text-decoration: none;
+}
+.nav-phone:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 1px; }
+.nav-light .nav-phone { color: rgba(255, 255, 255, 0.92); text-shadow: 0 1px 8px rgba(20, 24, 29, 0.35); }
+.nav-light .nav-phone:hover { color: #FFFFFF; }
