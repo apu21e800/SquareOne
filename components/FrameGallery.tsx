@@ -64,7 +64,7 @@ export default function FrameGallery({
             </div>
 
             <ul
-              aria-label={`${ariaLabel} — ${group.label}`}
+              aria-label={`${ariaLabel}, ${group.label}`}
               className="mt-6 grid grid-cols-2 gap-x-5 gap-y-8 min-[701px]:grid-cols-3 min-[1024px]:grid-cols-4 max-[700px]:gap-x-3 max-[700px]:gap-y-6"
             >
               {group.photos.map((p, i) => (

@@ -63,7 +63,7 @@ export default function MaterialsBand() {
           <h2 className="mt-4 max-w-[16ch] [text-wrap:balance]">Specified from a drawing, matched from a card</h2>
           <p className="mt-6 max-w-[48ch] text-ink-body [text-wrap:pretty]">
             Every stamped pattern begins as a dimensioned template sheet, and every colour has a
-            published name on the coating chart &mdash; so a landscape architect can draw it, an
+            published name on the coating chart, so a landscape architect can draw it, an
             engineer can specify it and the finished surface matches both. The sample boards come
             to the site visit, because a drawing is not a casting.
           </p>

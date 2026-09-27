@@ -45,7 +45,7 @@ export default function ProjectsPreview() {
             .join(" · ")
           // What the photograph shows, from the record: the project, the
           // system installed and the place.
-          const alt = `${project.title} — ${project.systems.join(" and ")} installed by Square One in ${project.city}`
+          const alt = `${project.title}, ${project.systems.join(" and ")} installed by Square One in ${project.city}`
           return (
             <li key={project.slug}>
               <Frame

@@ -77,9 +77,9 @@ const CITIES: Record<string, CityCopy> = {
       "Stamped asphalt driveways in Vancouver and the Lower Mainland: StreetPrint patterns, StreetBond colour, over the driveway you have. Free site visit and quote.",
     headline: "Stamped asphalt driveways across Metro Vancouver",
     lede:
-      "StreetPrint® stamped asphalt and StreetBond® colour, installed over the driveway you already have — Square One driveways on record from West Vancouver and Richmond to New Westminster, Surrey, Langley and Maple Ridge.",
+      "StreetPrint® stamped asphalt and StreetBond® colour, installed over the driveway you already have: Square One driveways on record from West Vancouver and Richmond to New Westminster, Surrey, Langley and Maple Ridge.",
     intro: [
-      "A Lower Mainland driveway spends most of the year wet. Stamped asphalt suits that: the StreetPrint template is pressed into the asphalt you already have, so the pattern is part of the surface — one continuous slab with no joints to settle, and none of the weeds or plow damage of a laid cobble lane. StreetBond colour is rolled into the imprint and holds through wet coastal winters; when it dulls, it is recoated rather than rebuilt. The Maple Ridge and Surrey driveways in the gallery below are recoats, one with its medallion carried through.",
+      "A Lower Mainland driveway spends most of the year wet. Stamped asphalt suits that: the StreetPrint template is pressed into the asphalt you already have, so the pattern is part of the surface: one continuous slab with no joints to settle, and none of the weeds or plow damage of a laid cobble lane. StreetBond colour is rolled into the imprint and holds through wet coastal winters; when it dulls, it is recoated rather than rebuilt. The Maple Ridge and Surrey driveways in the gallery below are recoats, one with its medallion carried through.",
       "On record on this side of the Strait: a herringbone driveway and walk, ashlar slate in Langley and Vancouver, brick and offset brick in Richmond, a strata laneway in New Westminster, and driveways in Burnaby, West Vancouver and Maple Ridge. They are private homes, so the captions carry the city and nothing more.",
     ],
     phone: "604-612-6209",
@@ -96,11 +96,11 @@ const CITIES: Record<string, CityCopy> = {
       },
       {
         q: "Can you work on a sloped North Shore driveway?",
-        a: "Yes. Asphalt is laid on grades all the time, and the stamped texture gives tyres more to hold than a smooth surface — there is a West Vancouver driveway in the gallery. We look at the grade and drainage at the site visit.",
+        a: "Yes. Asphalt is laid on grades all the time, and the stamped texture gives tyres more to hold than a smooth surface. There is a West Vancouver driveway in the gallery. We look at the grade and drainage at the site visit.",
       },
       {
         q: "My driveway was coated years ago and has faded. Can it be refreshed?",
-        a: "Yes. StreetBond is refreshed with a recoat rather than replaced — the Maple Ridge and Surrey driveways on this page are recoats, one with its medallion carried through. For a driveway that is sound but faded and was never coloured, DuraShield is the maintenance coating, in black or Solar Gray.",
+        a: "Yes. StreetBond is refreshed with a recoat rather than replaced: the Maple Ridge and Surrey driveways on this page are recoats, one with its medallion carried through. For a driveway that is sound but faded and was never coloured, DuraShield is the maintenance coating, in black or Solar Gray.",
       },
       {
         q: "Do you install driveways outside Vancouver proper?",
@@ -120,7 +120,7 @@ const CITIES: Record<string, CityCopy> = {
       "Stamped asphalt driveways in Victoria, Saanich and Sooke: StreetPrint patterns, StreetBond colour, over the driveway you have. Free site visit and quote.",
     headline: "Stamped asphalt driveways in Greater Victoria",
     lede:
-      "StreetPrint® stamped asphalt and StreetBond® colour for Victoria, Saanich, the Peninsula, Sooke and the Cowichan Valley — installed by Square One, with the Island's own line at 250-391-0270 and driveways on record from Ten Mile Point to Mill Bay.",
+      "StreetPrint® stamped asphalt and StreetBond® colour for Victoria, Saanich, the Peninsula, Sooke and the Cowichan Valley, installed by Square One, with the Island's own line at 250-391-0270 and driveways on record from Ten Mile Point to Mill Bay.",
     intro: [
       "Greater Victoria carries a good share of Square One's driveway record: a grey ashlar slate drive at a Ten Mile Point home in Saanich, running from the street to a stone-and-timber entry; the driveway at Craigdarroch Castle; ashlar slate in North Saanich and Duncan; offset brick in Victoria, on its own and as a border around an ashlar field; and driveways in West Saanich, Sooke and Mill Bay.",
       "Owners here want an entrance that reads as stone without tearing out the driveway to get it, and that is what stamped asphalt is: the StreetPrint template pressed into the existing asphalt, StreetBond colour rolled into the imprint, and a textured surface the manufacturer rates snowplow safe and publishes at a 10–20 year service life under municipal traffic. A driveway sees a fraction of that.",
@@ -134,11 +134,11 @@ const CITIES: Record<string, CityCopy> = {
     faqs: [
       {
         q: "Do you actually install on Vancouver Island?",
-        a: "Yes. Vancouver Island is a Square One service region with its own line, 250-391-0270. Every driveway on this page — Saanich, North and West Saanich, Sooke, Duncan, Mill Bay and Victoria — was installed by Square One.",
+        a: "Yes. Vancouver Island is a Square One service region with its own line, 250-391-0270. Every driveway on this page (Saanich, North and West Saanich, Sooke, Duncan, Mill Bay and Victoria) was installed by Square One.",
       },
       {
         q: "Which StreetPrint patterns are on record in Greater Victoria?",
-        a: "Ashlar slate is the most photographed — Ten Mile Point, North Saanich and Duncan — with offset brick in Victoria, on its own and as a border around an ashlar field. Both are on Square One's template sheet, along with standard herringbone, standard and offset tile and random stone. Sample boards come to the site visit so you can hold them against the house.",
+        a: "Ashlar slate is the most photographed (Ten Mile Point, North Saanich and Duncan) with offset brick in Victoria, on its own and as a border around an ashlar field. Both are on Square One's template sheet, along with standard herringbone, standard and offset tile and random stone. Sample boards come to the site visit so you can hold them against the house.",
       },
       {
         q: "How does it hold up through an Island winter?",
@@ -146,7 +146,7 @@ const CITIES: Record<string, CityCopy> = {
       },
       {
         q: "How far up-Island do you go?",
-        a: "Greater Victoria and the Peninsula, Sooke, the Cowichan Valley, Nanaimo and Parksville are in the service area, and Square One's record runs further up-Island — Lantzville, Parksville and Tofino among them. Send the address and we will tell you straight away whether it makes sense.",
+        a: "Greater Victoria and the Peninsula, Sooke, the Cowichan Valley, Nanaimo and Parksville are in the service area, and Square One's record runs further up-Island: Lantzville, Parksville and Tofino among them. Send the address and we will tell you straight away whether it makes sense.",
       },
     ],
     other: "vancouver",
@@ -157,16 +157,16 @@ const CITIES: Record<string, CityCopy> = {
 function heroAlt(p: WorkPhoto): string {
   const sys = p.systems.join(" and ")
   return p.place
-    ? `${p.subject} in ${sys} — ${p.place}, BC. Installed by Square One Paving.`
+    ? `${p.subject} in ${sys}, ${p.place}, BC. Installed by Square One Paving.`
     : `${p.subject} in ${sys}. Installed by Square One Paving.`
 }
 
 /* The three residential systems, as lib/products.ts describes them. The lede
    above carries the first mention of StreetPrint® and StreetBond® on the page. */
 const SYSTEMS = [
-  { name: "StreetPrint stamped asphalt", body: "Brick, herringbone, ashlar slate and tile patterns pressed into your existing asphalt — no excavation, no new base.", href: "/products/streetprint" },
-  { name: "StreetBond colour coating", body: "The colour and the seal in one — UV-stable, anti-skid, and the way an existing driveway gets refreshed: recoated, not rebuilt.", href: "/products/streetbond" },
-  { name: "DuraShield maintenance coating", body: "For a driveway that is sound but faded — a protective coating in black or Solar Gray, shielding the asphalt from UV and resisting chemicals.", href: "/products/durashield" },
+  { name: "StreetPrint stamped asphalt", body: "Brick, herringbone, ashlar slate and tile patterns pressed into your existing asphalt, no excavation, no new base.", href: "/products/streetprint" },
+  { name: "StreetBond colour coating", body: "The colour and the seal in one, UV-stable, anti-skid, and the way an existing driveway gets refreshed: recoated, not rebuilt.", href: "/products/streetbond" },
+  { name: "DuraShield maintenance coating", body: "For a driveway that is sound but faded: a protective coating in black or Solar Gray, shielding the asphalt from UV and resisting chemicals.", href: "/products/durashield" },
 ]
 
 export async function generateStaticParams() {
@@ -324,7 +324,7 @@ export default async function DrivewayCityPage({ params }: Props) {
         </p>
         <p className="mt-6 max-w-[52ch] text-[16px] leading-[1.6] text-ink-muted [text-wrap:pretty]">
           Free site visit and a written quote, anywhere in the service area. Elsewhere in BC,
-          we travel for the right job &mdash; ask.
+          we travel for the right job, ask.
         </p>
       </Section>
 

@@ -96,7 +96,7 @@ export default async function Footer() {
               <div className="sec-body">
                 <h2 className="max-w-[20ch] [text-wrap:balance]">Send a few photos and a site address</h2>
                 <p className="mt-5 max-w-[52ch] text-ink-body [text-wrap:pretty]">
-                  Drawings help if you have them. We walk the site before we quote it &mdash;
+                  Drawings help if you have them. We walk the site before we quote it,
                   Lower Mainland and Vancouver Island, free.
                 </p>
                 <div className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-4">
@@ -122,7 +122,7 @@ export default async function Footer() {
           <div className="grid grid-cols-12 gap-x-10 gap-y-12 max-[900px]:grid-cols-1">
             {/* The mark and the line */}
             <div className="col-span-5 max-[900px]:col-span-1">
-              <Link href="/" className="inline-flex items-center" aria-label="Square One Paving — home">
+              <Link href="/" className="inline-flex items-center" aria-label="Square One Paving, home">
                 <BrandMark tone="light" size="footer" />
               </Link>
               <p className="mt-7 max-w-[38ch] text-[16.5px] leading-[1.6] text-[color:var(--ink-on-slate-body)] [text-wrap:pretty]">

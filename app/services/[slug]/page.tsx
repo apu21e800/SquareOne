@@ -356,7 +356,7 @@ export default async function ServicePage({ params }: Props) {
                 <li key={project.slug}>
                   <Frame
                     src={project.imageUrl}
-                    alt={`${project.title} — ${project.systems.join(" and ")}`}
+                    alt={`${project.title}, ${project.systems.join(" and ")}`}
                     aspect="aspect-[4/3]"
                     sizes="(max-width: 700px) 100vw, (max-width: 1280px) 33vw, 411px"
                     href={`/projects/${project.slug}`}
@@ -417,8 +417,8 @@ export default async function ServicePage({ params }: Props) {
               drawings go by email to{" "}
               <a href="mailto:office@squareonepaving.com" className="link">
                 office@squareonepaving.com
-              </a>{" "}
-              &mdash; put the site address in the subject line.
+              </a>
+              . Put the site address in the subject line.
             </p>
           </div>
           <div className="col-span-5 flex flex-wrap items-center gap-x-8 gap-y-4 min-[901px]:justify-end max-[900px]:col-span-1">
@@ -448,7 +448,7 @@ export default async function ServicePage({ params }: Props) {
 
             return (
               <li key={other.slug} className="row row-compact relative">
-                <Link href={`/services/${other.slug}`} aria-label={`${otherName} — the service`} className="absolute inset-0 z-[2]" />
+                <Link href={`/services/${other.slug}`} aria-label={`${otherName}, the service`} className="absolute inset-0 z-[2]" />
                 <Frame src={src} alt={alt} aspect="aspect-[3/2]" sizes="132px" />
                 <div className="min-w-0">
                   <h3>{otherName}</h3>

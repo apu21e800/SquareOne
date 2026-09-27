@@ -135,8 +135,8 @@ export default function TypeToggle() {
       </p>
 
       <p className="mt-2 border-t border-white/10 pt-2 text-[10.5px] leading-[1.45] text-[#A39B92]">
-        Four settings of Futura &mdash; case, weight, spacing and the reading text beside
-        it &mdash; on the real pages. Your choice follows you around the site.
+        Four settings of Futura (case, weight, spacing and the reading text beside
+        it) on the real pages. Your choice follows you around the site.
       </p>
     </div>
   )

@@ -69,7 +69,7 @@ const COPY: Record<Exclude<WorkApp, "driveways">, AppCopy> = {
     title: "Decorative Crosswalks in BC",
     headline: "Decorative crosswalks that read from a block away",
     intro: [
-      "A decorative crosswalk does two jobs at once: it protects the person in it and it tells the driver something is happening here. Square One installs them in preformed thermoplastic — TrafficPatterns™, heat-fused to the pavement and open to traffic within minutes, and TrafficPatternsXD™, the 150-mil aggregate-reinforced sheet made for arterial crossings and transit hubs — and in StreetPrint® stamped asphalt, which the manufacturer publishes at a 10–20 year service life and offers with retroreflective options. DuraTherm carries the crosswalk bars, stop bars and legends around them.",
+      "A decorative crosswalk does two jobs at once: it protects the person in it and it tells the driver something is happening here. Square One installs them in preformed thermoplastic (TrafficPatterns™, heat-fused to the pavement and open to traffic within minutes, and TrafficPatternsXD™, the 150-mil aggregate-reinforced sheet made for arterial crossings and transit hubs) and in StreetPrint® stamped asphalt, which the manufacturer publishes at a 10–20 year service life and offers with retroreflective options. DuraTherm carries the crosswalk bars, stop bars and legends around them.",
       "The record runs from the UBC and Musqueam crossing on University Boulevard and the rainbow intersection in Nanaimo to a plain high-visibility brick crosswalk at Grandview Heights School in Surrey. Municipalities, school districts, developers and transit agencies commission them. Square One installs across the Lower Mainland and Vancouver Island, with crossings in Kelowna, Sechelt and Squamish also on record.",
     ],
     products: ["trafficpatterns", "trafficpatterns-xd", "streetprint", "duratherm", "streetbond"],
@@ -85,7 +85,7 @@ const COPY: Record<Exclude<WorkApp, "driveways">, AppCopy> = {
     title: "Stamped Asphalt Streetscapes in BC",
     headline: "Streetscapes with pattern and colour built in",
     intro: [
-      "A streetscape is the part of the road people are meant to notice: the intersection, the median, the lane behind a townhome row, the forecourt of a civic building. Square One builds them in StreetPrint® stamped asphalt — a heated steel template presses brick, herringbone or ashlar slate into the asphalt, so the pattern is part of the surface rather than painted on it — and colours the imprint with StreetBond®, a water-based acrylic coating with an anti-skid aggregate and more than fifty standard colours. TrafficPatternsXD™ takes the highest-wear crossings; DuraTherm and DecoMark add the markings and graphics.",
+      "A streetscape is the part of the road people are meant to notice: the intersection, the median, the lane behind a townhome row, the forecourt of a civic building. Square One builds them in StreetPrint® stamped asphalt (a heated steel template presses brick, herringbone or ashlar slate into the asphalt, so the pattern is part of the surface rather than painted on it) and colours the imprint with StreetBond®, a water-based acrylic coating with an anti-skid aggregate and more than fifty standard colours. TrafficPatternsXD™ takes the highest-wear crossings; DuraTherm and DecoMark add the markings and graphics.",
       "On record: a StreetPrint town centre, plaza and heritage forecourt in Victoria, the 32nd Avenue median in Surrey, a pewter herringbone street in Mission, the StreetBond fire lane at Maplewoods Townhomes in North Vancouver and a strata laneway in Squamish. Municipalities, developers and landscape architects specify the work; Square One installs it across the Lower Mainland and Vancouver Island.",
     ],
     products: ["streetprint", "streetbond", "trafficpatterns-xd", "duratherm", "decomark"],
@@ -101,8 +101,8 @@ const COPY: Record<Exclude<WorkApp, "driveways">, AppCopy> = {
     title: "Roundabouts & Traffic Calming in BC",
     headline: "Roundabouts and traffic calming that read as streetscape",
     intro: [
-      "Roundabout aprons, traffic islands and medians have to take turning trucks and plow blades and still tell drivers to slow down. Square One builds them in StreetPrint® stamped asphalt — a textured, slip-resistant surface the manufacturer rates snowplow and de-icing salt safe, with a published 10–20 year service life and nothing to peel or re-lay — and in TrafficPatternsXD™, the 150-mil aggregate-reinforced thermoplastic for the busiest intersections. StreetBond® colour sets the apron off from the travel lane, and PreMark carries the turn arrows.",
-      "Roundabouts in Duncan, North Cowichan and at McTavish Exchange in North Saanich; aprons and islands in Abbotsford and Maple Ridge; a coloured median and roundabout in Surrey; traffic-calming devices in View Royal and North Vancouver — the record covers both sides of the Strait and reaches into the Interior at Kelowna and Vernon. Municipalities and developers commission the work; Square One installs it across the Lower Mainland and Vancouver Island.",
+      "Roundabout aprons, traffic islands and medians have to take turning trucks and plow blades and still tell drivers to slow down. Square One builds them in StreetPrint® stamped asphalt (a textured, slip-resistant surface the manufacturer rates snowplow and de-icing salt safe, with a published 10–20 year service life and nothing to peel or re-lay) and in TrafficPatternsXD™, the 150-mil aggregate-reinforced thermoplastic for the busiest intersections. StreetBond® colour sets the apron off from the travel lane, and PreMark carries the turn arrows.",
+      "Roundabouts in Duncan, North Cowichan and at McTavish Exchange in North Saanich; aprons and islands in Abbotsford and Maple Ridge; a coloured median and roundabout in Surrey; traffic-calming devices in View Royal and North Vancouver. The record covers both sides of the Strait and reaches into the Interior at Kelowna and Vernon. Municipalities and developers commission the work; Square One installs it across the Lower Mainland and Vancouver Island.",
     ],
     products: ["streetprint", "trafficpatterns-xd", "streetbond", "premark"],
     seo: "Roundabout aprons, traffic islands and traffic calming in StreetPrint stamped asphalt and TrafficPatternsXD across BC. Snowplow safe; published 10–20 yr life.",
@@ -117,7 +117,7 @@ const COPY: Record<Exclude<WorkApp, "driveways">, AppCopy> = {
     title: "Decorative Parking Lot Paving in BC",
     headline: "Parking lots that direct people without a sign",
     intro: [
-      "A brick-pattern walkway across a parking lot moves pedestrians where you want them and tells drivers to expect them. Square One builds thresholds, entrance aprons, walkways and crosswalks for retail centres, strata and commercial sites: StreetPrint® stamped asphalt for the pattern, pressed into the lot's own asphalt with minimal closure time; StreetBond® for colour and grip, on asphalt or concrete; and preformed thermoplastic — TrafficPatternsXD™ for the crossings, PreMark for the arrows and accessible-parking symbols, DecoMark for a logo at the entrance — heat-fused to the pavement rather than sprayed on. For a lot that is sound but tired, DuraShield is the maintenance coating, in black or Solar Gray.",
+      "A brick-pattern walkway across a parking lot moves pedestrians where you want them and tells drivers to expect them. Square One builds thresholds, entrance aprons, walkways and crosswalks for retail centres, strata and commercial sites: StreetPrint® stamped asphalt for the pattern, pressed into the lot's own asphalt with minimal closure time; StreetBond® for colour and grip, on asphalt or concrete; and preformed thermoplastic (TrafficPatternsXD™ for the crossings, PreMark for the arrows and accessible-parking symbols, DecoMark for a logo at the entrance) heat-fused to the pavement rather than sprayed on. For a lot that is sound but tired, DuraShield is the maintenance coating, in black or Solar Gray.",
       "The record runs from Ralph's Farm Market in Murrayville, Langley and StreetPrint parking bays in Mission to a high-visibility walkway at Shipspoint and the Hillside Mall crosswalk in Victoria, with a townhouse lot in Kelowna and a parkade in Victoria alongside. Property managers, developers and parking operators commission it; Square One installs across the Lower Mainland and Vancouver Island.",
     ],
     products: ["streetprint", "streetbond", "trafficpatterns-xd", "premark", "decomark", "durashield"],
@@ -134,7 +134,7 @@ const COPY: Record<Exclude<WorkApp, "driveways">, AppCopy> = {
     headline: "Park paths and spray parks with colour underfoot",
     intro: [
       "Park pathways, greenways, plazas and spray parks are surfaces people walk, run and play on, often barefoot. Square One coats them in StreetBond®, a water-based acrylic with an anti-skid aggregate for wet surfaces, UV-stable colour and a manufacturer-published 8+ year life cycle that is refreshed with a recoat rather than rebuilt; StreetBond SR is the solar-reflective version. StreetPrint® gives a park walkway the look of stone, pressed into the asphalt, and DecoMark and TrafficPatterns™ add medallions, wayfinding and crossings in preformed thermoplastic.",
-      "Spray parks in Maple Ridge, Surrey and Vancouver and at Wesburn Park and Keswick Water Park in Burnaby; the Spirit Trail in West Vancouver; Alexandra Park in Richmond; the Snug Cove walkway on Bowen Island; a StreetPrint walkway at Mount Douglas in Saanich and the Harbour Walkway in Victoria — with Rutland Centennial Park in Kelowna and a solar-reflective pathway in Osoyoos in the Interior. Municipalities, landscape architects and strata councils commission the work; Square One installs it across the Lower Mainland and Vancouver Island.",
+      "Spray parks in Maple Ridge, Surrey and Vancouver and at Wesburn Park and Keswick Water Park in Burnaby; the Spirit Trail in West Vancouver; Alexandra Park in Richmond; the Snug Cove walkway on Bowen Island; a StreetPrint walkway at Mount Douglas in Saanich and the Harbour Walkway in Victoria, with Rutland Centennial Park in Kelowna and a solar-reflective pathway in Osoyoos in the Interior. Municipalities, landscape architects and strata councils commission the work; Square One installs it across the Lower Mainland and Vancouver Island.",
     ],
     products: ["streetbond", "streetprint", "trafficpatterns", "decomark"],
     seo: "Park paths, greenways and spray parks in StreetBond coatings and StreetPrint stamped asphalt across BC. Anti-skid colour that is recoated rather than rebuilt.",
@@ -166,7 +166,7 @@ const COPY: Record<Exclude<WorkApp, "driveways">, AppCopy> = {
     headline: "Bike lanes that keep their colour",
     intro: [
       "A green bike lane is only useful while it is still green. Square One installs the lane surface itself: PreMark preformed thermoplastic, manufactured to exact dimensions with embedded retroreflective glass beads and heat-applied for a permanent bond, and StreetBond®, a water-based acrylic coating with an anti-skid aggregate for wet conditions, UV-stable colour and a manufacturer-published 8+ year life cycle that is refreshed with a recoat. The bicycle symbols and arrows go down in PreMark to the owner's marking standard, and StreetPrint® stamped asphalt gives a multi-use path a brick pattern with the manufacturer's published 10–20 year service life.",
-      "Green PreMark bike lanes in North Vancouver, a blue bike lane in Richmond, the Cowrie and Trail lane and crossing in Sechelt, a StreetPrint bike path on 32nd Avenue in Surrey — the record covers both regions. Municipalities commission the work; Square One installs it across the Lower Mainland and Vancouver Island.",
+      "Green PreMark bike lanes in North Vancouver, a blue bike lane in Richmond, the Cowrie and Trail lane and crossing in Sechelt, a StreetPrint bike path on 32nd Avenue in Surrey. The record covers both regions. Municipalities commission the work; Square One installs it across the Lower Mainland and Vancouver Island.",
     ],
     products: ["premark", "streetbond", "trafficpatterns", "streetprint"],
     seo: "Green bike lanes and multi-use paths in PreMark thermoplastic, StreetBond coatings and StreetPrint, Lower Mainland and Vancouver Island. A published 8+ year life cycle.",
@@ -358,7 +358,7 @@ export default async function ApplicationPage({ params }: Props) {
               key={p.slug}
               className="relative grid grid-cols-12 gap-x-10 gap-y-1 border-t border-hairline py-6 last:border-b max-[700px]:grid-cols-1"
             >
-              <Link href={`/products/${p.slug}`} aria-label={`${p.name} — the system`} className="absolute inset-0 z-[2]" />
+              <Link href={`/products/${p.slug}`} aria-label={`${p.name}, the system`} className="absolute inset-0 z-[2]" />
               <span className="label col-span-3 pt-1 max-[700px]:col-span-1">{p.category}</span>
               <div className="col-span-9 min-w-0 max-[700px]:col-span-1">
                 <h3>{p.name}</h3>
@@ -385,7 +385,7 @@ export default async function ApplicationPage({ params }: Props) {
               const alt = [
                 project.title,
                 `in ${project.systems.join(" and ")}`,
-                project.title.includes(city) ? "" : `— ${city}, BC`,
+                project.title.includes(city) ? "" : `, ${city}, BC`,
               ]
                 .filter(Boolean)
                 .join(" ") + ". Installed by Square One Paving."

@@ -77,7 +77,7 @@ export default function DocPreviewModal({ target, onClose }: { target: PreviewTa
           ) : (
             <div className="flex min-h-[320px] w-full flex-col items-center justify-center gap-4 text-center">
               <p className="max-w-[36ch] text-[16px] leading-[1.6] text-ink-body">
-                No preview for this document yet — open the PDF itself.
+                No preview for this document yet: open the PDF itself.
               </p>
               <a href={doc.href} target="_blank" rel="noopener noreferrer" className="link">
                 Open the PDF

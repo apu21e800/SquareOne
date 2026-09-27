@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   // even: the two phrases people search, then the province, then the name.
   title: { absolute: "BC Stamped Asphalt & Decorative Pavement | Square One Paving" },
   description:
-    clampDescription("Stamped asphalt, coloured coatings and thermoplastic crosswalks for BC cities, developers and homeowners — specified, installed and warranted by Square One since 2000."),
+    clampDescription("Stamped asphalt, coloured coatings and thermoplastic crosswalks for BC cities, developers and homeowners: specified, installed and warranted by Square One since 2000."),
   keywords: [
     "decorative pavement BC",
     "stamped asphalt BC",
@@ -40,9 +40,9 @@ export const metadata: Metadata = {
   openGraph: {
     title: "BC Stamped Asphalt & Decorative Pavement | Square One Paving",
     description:
-      clampDescription("Stamped asphalt, StreetBond coatings and thermoplastic crosswalks for BC cities, developers and homeowners — Lower Mainland and Vancouver Island, since 2000."),
+      clampDescription("Stamped asphalt, StreetBond coatings and thermoplastic crosswalks for BC cities, developers and homeowners (Lower Mainland and Vancouver Island, since 2000)."),
     images: [
-      { url: "/images/og-image.png", width: 1200, height: 600, alt: "Square One Paving — stamped asphalt and decorative pavement installers in BC" },
+      { url: "/images/og-image.png", width: 1200, height: 600, alt: "Square One Paving, stamped asphalt and decorative pavement installers in BC" },
     ],
   },
 }

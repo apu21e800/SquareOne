@@ -7,7 +7,7 @@ import { clampDescription } from "@/lib/seo"
 export const metadata: Metadata = {
   title: "Search",
   description:
-    clampDescription("Search Square One Paving — products, services, applications, projects, the blog and the full specifications library."),
+    clampDescription("Search Square One Paving: products, services, applications, projects, the blog and the full specifications library."),
   robots: { index: false, follow: true },
   alternates: { canonical: `${SITE_URL}/search` },
 }

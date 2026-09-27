@@ -93,8 +93,8 @@ function imageEntries(): SearchEntry[] {
     project.images.forEach((image, i) => {
       entries.push({
         type: "image",
-        title: i === 0 ? project.title : `${project.title} — photo ${i + 1}`,
-        subtitle: `Project — ${project.city.split(",")[0].trim()}`,
+        title: i === 0 ? project.title : `${project.title}, photo ${i + 1}`,
+        subtitle: `Project: ${project.city.split(",")[0].trim()}`,
         href: `/projects/${project.slug}`,
         image,
         keywords: `${project.systems.join(" ")} ${project.application} ${project.city}`,
@@ -108,7 +108,7 @@ function imageEntries(): SearchEntry[] {
     const label = appLabel.get(photo.app) ?? photo.app
     entries.push({
       type: "image",
-      title: photo.place ? `${photo.subject} — ${photo.place}` : photo.subject,
+      title: photo.place ? `${photo.subject}, ${photo.place}` : photo.subject,
       subtitle: `${photo.systems.join(" + ")} · ${label}`,
       href: photo.app === "driveways" ? "/driveways" : `/applications/${photo.app}`,
       image: photo.src,
@@ -129,7 +129,7 @@ function imageEntries(): SearchEntry[] {
         entries.push({
           type: "image",
           title: humanize(file),
-          subtitle: owner ? `Product — ${owner}` : "Products",
+          subtitle: owner ? `Product: ${owner}` : "Products",
           href: `/products/${slug}`,
           image: `/images/products/${dir}/${file}`,
           keywords: owner ?? "",
@@ -144,7 +144,7 @@ function imageEntries(): SearchEntry[] {
     entries.push({
       type: "image",
       title: humanize(file),
-      subtitle: "Service — Vapour blasting",
+      subtitle: "Service: Vapour blasting",
       href: "/services/vapor-blasting",
       image: `/images/services/vapor-blasting/${file}`,
       keywords: "vapour blasting restoration cleaning",
@@ -158,7 +158,7 @@ const STATIC_PAGES: SearchEntry[] = [
   { type: "page", title: "Home", subtitle: "Decorative pavement for BC since 2000", href: "/", keywords: "square one paving homepage decorative pavement bc" },
   { type: "page", title: "Services", subtitle: "Stamped asphalt, coatings, thermoplastic, vapour blasting", href: "/services", keywords: "what we do services index" },
   { type: "page", title: "Products", subtitle: "The nine systems we install", href: "/products", keywords: "systems catalogue products index" },
-  { type: "page", title: "Applications", subtitle: "Where the work lives — crosswalks to driveways", href: "/applications", keywords: "applications index where we work" },
+  { type: "page", title: "Applications", subtitle: "Where the work lives: crosswalks to driveways", href: "/applications", keywords: "applications index where we work" },
   { type: "page", title: "Driveways", subtitle: "Stamped asphalt for Victoria & Vancouver homes", href: "/driveways", keywords: "residential homeowner driveway victoria vancouver" },
   { type: "page", title: "Driveways in Vancouver", subtitle: "Stamped asphalt driveways across Metro Vancouver", href: "/driveways/vancouver", keywords: "vancouver driveway lower mainland north shore burnaby richmond langley homeowner" },
   { type: "page", title: "Driveways in Victoria", subtitle: "Stamped asphalt driveways across Greater Victoria and the Island", href: "/driveways/victoria", keywords: "victoria driveway saanich oak bay sooke langford island homeowner" },

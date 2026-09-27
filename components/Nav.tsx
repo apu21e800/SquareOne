@@ -63,7 +63,7 @@ const SERVICE_ITEMS: { href: string; name: string; note: string }[] = [
   { href: "/services/decorative-coatings", name: "Decorative coatings", note: "Colour that holds under traffic" },
   { href: "/services/preformed-thermoplastic", name: "Preformed thermoplastic", note: "Crosswalks, symbols, civic art" },
   { href: "/services/vapor-blasting", name: "Vapour blasting", note: "Cleaning, priming, graffiti removal" },
-  { href: "/driveways", name: "Driveways", note: "For homeowners — Vancouver and Victoria" },
+  { href: "/driveways", name: "Driveways", note: "For homeowners, Vancouver and Victoria" },
 ]
 
 /** Where the work goes — the ten application galleries (mirrors lib/work.ts WORK_APPS). */
@@ -102,7 +102,7 @@ function Wordmark({ onClick, light = false }: { onClick?: () => void; light?: bo
     <Link
       href="/"
       onClick={onClick}
-      aria-label="Square One Paving — home"
+      aria-label="Square One Paving, home"
       className="flex shrink-0 items-center"
     >
       <BrandMark tone={light ? "light" : "dark"} />

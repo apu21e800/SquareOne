@@ -26,8 +26,8 @@ const projectTypes = [
   "Residential Driveway",
   "Patio or Walkway",
   "Parking Area / Commercial",
-  "Municipal — Crosswalk or Bike Lane",
-  "Municipal — Road or Plaza",
+  "Municipal: Crosswalk or Bike Lane",
+  "Municipal: Road or Plaza",
   "Vapour Blasting / Surface Prep",
   "Multiple Services",
   "Other / Not Sure",
@@ -85,7 +85,7 @@ export default function QuoteForm() {
       const colour = q.get("colour")
       const city = q.get("city")
       if (!pattern && !colour) return
-      const line = `Driveway — ${[pattern, colour ? `in ${colour}` : ""].filter(Boolean).join(" ")}${city ? `, ${city}` : ""}. `
+      const line = `Driveway: ${[pattern, colour ? `in ${colour}` : ""].filter(Boolean).join(" ")}${city ? `, ${city}` : ""}. `
       setForm((f) => ({
         ...f,
         projectType: f.projectType || "Residential Driveway",
@@ -124,7 +124,7 @@ export default function QuoteForm() {
       form.location && `Location: ${form.location}`,
       form.message && `\n${form.message}`,
     ].filter(Boolean).join("\n")
-    const subject = `Quote request${form.name ? ` — ${form.name}` : ""}`
+    const subject = `Quote request${form.name ? `: ${form.name}` : ""}`
     return `mailto:office@squareonepaving.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines)}`
   }
 
@@ -138,10 +138,10 @@ export default function QuoteForm() {
         className="border border-hairline bg-white p-10 outline-none max-[700px]:p-6"
       >
         <div className="label text-[color:var(--accent-deep)]">Request received</div>
-        <h2 className="card-title mt-4">Thank you &mdash; it&rsquo;s with the office.</h2>
+        <h2 className="card-title mt-4">Thank you, it&rsquo;s with the office.</h2>
         <p className="mt-4 max-w-[52ch] text-[16px] leading-[1.65] text-ink-body">
-          Someone from the office will be in touch to arrange the site visit &mdash; free,
-          with the colour and pattern samples, across the Lower Mainland and Vancouver Island.
+          Someone from the office will be in touch to arrange the site visit (free,
+          with the colour and pattern samples, across the Lower Mainland and Vancouver Island).
           The written quote follows the visit.
         </p>
 
@@ -161,7 +161,7 @@ export default function QuoteForm() {
             ))}
           </ul>
           <p className="mt-4 text-[14px] leading-[1.6] text-ink-muted">
-            Photographs and drawings help &mdash; send them to{" "}
+            Photographs and drawings help. Send them to{" "}
             <a href="mailto:office@squareonepaving.com" className="font-medium text-ink-body underline-offset-4 hover:underline">
               office@squareonepaving.com
             </a>{" "}
@@ -206,7 +206,7 @@ export default function QuoteForm() {
             setSubmitted(true)
           }
         } catch {
-          setError("We couldn't reach the server — check your connection and try again.")
+          setError("We couldn't reach the server. Check your connection and try again.")
         } finally {
           sending.current = false
           setLoading(false)
@@ -351,7 +351,7 @@ export default function QuoteForm() {
             {error}
           </p>
           <p className="mt-2 text-[14px] leading-[1.6] text-ink-body">
-            Nothing is lost &mdash; call{" "}
+            Nothing is lost: call{" "}
             <a href="tel:+16046126209" className="font-medium text-ink underline-offset-4 hover:underline">604-612-6209</a>{" "}
             (Lower Mainland) or{" "}
             <a href="tel:+12503910270" className="font-medium text-ink underline-offset-4 hover:underline">250-391-0270</a>{" "}
@@ -359,7 +359,7 @@ export default function QuoteForm() {
             <a href={mailtoFallback()} className="font-medium text-ink underline-offset-4 hover:underline">
               send it by email
             </a>{" "}
-            &mdash; that link carries everything you have typed.
+            (that link carries everything you have typed).
           </p>
         </div>
       )}

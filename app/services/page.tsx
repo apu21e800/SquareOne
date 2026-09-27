@@ -7,10 +7,10 @@ import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
 
 export const metadata: Metadata = {
-  openGraph: { title: "Decorative Pavement Services in BC", description: clampDescription("Stamped asphalt, decorative coatings, preformed thermoplastic and vapour blasting — specified with you and installed by our own crews across the Lower Mainland and Vancouver Island since 2000."), images: [{ url: "/images/applications/public-art/new-westminster-boundary-pump-station-full-field-streetbond-01.jpg" }] },
+  openGraph: { title: "Decorative Pavement Services in BC", description: clampDescription("Stamped asphalt, decorative coatings, preformed thermoplastic and vapour blasting: specified with you and installed by our own crews across the Lower Mainland and Vancouver Island since 2000."), images: [{ url: "/images/applications/public-art/new-westminster-boundary-pump-station-full-field-streetbond-01.jpg" }] },
   title: "Decorative Pavement Services in BC",
   description:
-    clampDescription("Stamped asphalt, decorative coatings, preformed thermoplastic and vapour blasting — specified with you and installed by our own crews across the Lower Mainland and Vancouver Island since 2000."),
+    clampDescription("Stamped asphalt, decorative coatings, preformed thermoplastic and vapour blasting: specified with you and installed by our own crews across the Lower Mainland and Vancouver Island since 2000."),
   alternates: { canonical: `${SITE_URL}/services` },
 }
 
@@ -33,7 +33,7 @@ const services = [
     slug: "stamped-asphalt",
     name: "Stamped asphalt",
     tagline: "Specified from a dimensioned template sheet, pressed into the asphalt already there by our own crews.",
-    desc: "Pattern named from the sheet, colour off the chart, the texturing specification in the library — then StreetPrint® pressed into the asphalt in place, or heavy-duty TrafficPatternsXD™ for the busiest crossings. A 10–20 year StreetPrint service life, published by the manufacturer.",
+    desc: "Pattern named from the sheet, colour off the chart, the texturing specification in the library. Then StreetPrint® pressed into the asphalt in place, or heavy-duty TrafficPatternsXD™ for the busiest crossings. A 10–20 year StreetPrint service life, published by the manufacturer.",
     image: "/images/hero/victoria-ellis-point-walkway-streetprint.jpg",
     alt: "Cobblestone-pattern StreetPrint walkway in a red-brown colour beside a timber rail at Ellis Point, Victoria",
     caption: "Ellis Point, Victoria · StreetPrint",
@@ -43,7 +43,7 @@ const services = [
     slug: "decorative-coatings",
     name: "Decorative coatings",
     tagline: "Specified off the colour chart, proved on a sample board, coated in place by our own crews.",
-    desc: "StreetBond® in more than fifty standard colours, or matched to your reference, on asphalt or concrete — anti-skid, UV-stable, recoated rather than rebuilt, with an 8+ year life cycle published by the manufacturer. DuraShield for plain asphalt protection.",
+    desc: "StreetBond® in more than fifty standard colours, or matched to your reference, on asphalt or concrete: anti-skid, UV-stable, recoated rather than rebuilt, with an 8+ year life cycle published by the manufacturer. DuraShield for plain asphalt protection.",
     image: "/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg",
     alt: "Multicolour StreetBond plaza under the SkyTrain guideway at Joyce Station, Vancouver, at dusk",
     caption: "Joyce Station, Vancouver · StreetBond",
@@ -63,9 +63,9 @@ const services = [
     slug: "vapor-blasting",
     name: "Vapour blasting",
     tagline: "Clean it, prime it, bring it back.",
-    desc: "The supporting service: surface cleaning and priming ahead of a coating or thermoplastic install, and graffiti, mould and marking removal on its own — mobile across the Lower Mainland and Vancouver Island, with up to 92% less dust than dry blasting.",
+    desc: "The supporting service: surface cleaning and priming ahead of a coating or thermoplastic install, and graffiti, mould and marking removal on its own, mobile across the Lower Mainland and Vancouver Island, with up to 92% less dust than dry blasting.",
     image: "/images/services/vapor-blasting/generated/gen-sidewalk-concrete-cleaning.jpg",
-    alt: "Cleaning a concrete sidewalk beside a stone monument with the vapour blasting rig, the lane coned off — an illustration of the service",
+    alt: "Cleaning a concrete sidewalk beside a stone monument with the vapour blasting rig, the lane coned off, an illustration of the service",
     caption: "Sidewalk · concrete · an illustration of the service",
     applications: ["Graffiti Removal", "Marking Removal", "Surface Prep", "Mould & Muck"],
   },
@@ -86,7 +86,7 @@ const specifierLinks = [
   { href: "/resources", label: "Specification library", note: "Specifications, data sheets, colour cards, SDS and guides for every system" },
   { href: "/patterns", label: "Template sheets", note: "Every StreetPrint template as a dimensioned drawing, named for the plan" },
   { href: "/products/streetbond#colours", label: "StreetBond colour chart", note: "More than fifty standard colours, plus custom matching" },
-  { href: "/projects", label: "Projects on record", note: "The installations, told in full — the place, the systems, the photographs" },
+  { href: "/projects", label: "Projects on record", note: "The installations, told in full: the place, the systems, the photographs" },
 ]
 
 export default function ServicesPage() {
@@ -95,10 +95,10 @@ export default function ServicesPage() {
       {/* ---- Header — full-bleed image band ---- */}
       <IndexImageHero
         src="/images/applications/public-art/new-westminster-boundary-pump-station-full-field-streetbond-01.jpg"
-        alt="The Boundary Road pump station in New Westminster from above — a quilt of red, blue, yellow, pink, black and white StreetBond squares across the whole plaza, installed by Square One"
+        alt="The Boundary Road pump station in New Westminster from above, a quilt of red, blue, yellow, pink, black and white StreetBond squares across the whole plaza, installed by Square One"
         eyebrow="What we do"
         title="What Square One does for a project"
-        lede="A free site walk, help specifying — template sheets, colour chart, sample boards, the manufacturer's specifications — a written quote, and installation by our own crews. Three ways to change a surface and one to clean it, Lower Mainland and Vancouver Island, since 2000."
+        lede="A free site walk, help specifying (template sheets, colour chart, sample boards, the manufacturer's specifications), a written quote, and installation by our own crews. Three ways to change a surface and one to clean it, Lower Mainland and Vancouver Island, since 2000."
         caption="New Westminster · Boundary Road pump station · StreetBond"
         imagePosition="center 45%"
       />
@@ -148,7 +148,7 @@ export default function ServicesPage() {
       <Section
         label="For specifiers"
         title="Drawing it, specifying it, putting it to tender"
-        intro="A landscape architect, an engineer or a municipal project specifier can take the whole job from this site: the template sheets as dimensioned drawings, the colour chart, the manufacturer's specifications and data sheets, the installed work as precedent — and a site walk with the sample boards when you are ready."
+        intro="A landscape architect, an engineer or a municipal project specifier can take the whole job from this site: the template sheets as dimensioned drawings, the colour chart, the manufacturer's specifications and data sheets, the installed work as precedent, and a site walk with the sample boards when you are ready."
       >
         <ul className="border-t border-hairline">
           {specifierLinks.map((item) => (

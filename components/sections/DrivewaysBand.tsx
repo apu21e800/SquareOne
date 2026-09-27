@@ -44,7 +44,7 @@ export default function DrivewaysBand() {
       label="Driveways · Vancouver and Victoria"
       title="The driveway you already have, made to look like stone"
       link={{ href: "/patterns", label: "StreetPrint patterns" }}
-      intro="StreetPrint patterns pressed into your existing asphalt and sealed in StreetBond colour — one continuous surface, no joints to heave, nothing for weeds to take hold in. Installed by the same crews that do our municipal work."
+      intro="StreetPrint patterns pressed into your existing asphalt and sealed in StreetBond colour: one continuous surface, no joints to heave, nothing for weeds to take hold in. Installed by the same crews that do our municipal work."
       wide
     >
       <div className="grid grid-cols-12 gap-x-10 gap-y-12 max-[900px]:grid-cols-1">

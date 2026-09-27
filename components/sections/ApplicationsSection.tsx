@@ -18,7 +18,7 @@ import { BUYERS } from "@/lib/buyers"
 
 const VAPOUR = {
   label: "Vapour blasting",
-  desc: "Surface cleaning, priming, graffiti and mould removal — mobile, dustless, no damage to the surface under it.",
+  desc: "Surface cleaning, priming, graffiti and mould removal: mobile, dustless, no damage to the surface under it.",
   href: "/services/vapor-blasting",
   thumb: "/images/services/vapor-blasting/generated/gen-granville-island-vapour-blasting-01-enhanced.jpg",
   alt: "Square One crew vapour blasting at Granville Island",
@@ -26,7 +26,7 @@ const VAPOUR = {
 
 function alt(p: WorkPhoto): string {
   const sys = p.systems.join(" and ")
-  return p.place ? `${p.subject} in ${sys} — ${p.place}, BC` : `${p.subject} in ${sys}`
+  return p.place ? `${p.subject} in ${sys}, ${p.place}, BC` : `${p.subject} in ${sys}`
 }
 
 interface AppRow {

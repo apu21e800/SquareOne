@@ -315,7 +315,7 @@ export default async function ProjectPage({ params }: Props) {
               caption={caption}
               photos={gallery.map((src, i) => ({
                 src,
-                alt: i === 0 ? project.title : `${project.title} — photo ${i + 1} of ${gallery.length}`,
+                alt: i === 0 ? project.title : `${project.title}, photo ${i + 1} of ${gallery.length}`,
                 primary: project.title,
                 secondary: caption,
               }))}

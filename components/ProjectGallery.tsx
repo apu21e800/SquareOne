@@ -53,7 +53,7 @@ export default function ProjectGallery({
               primary={photo.secondary ?? caption}
               aspect="aspect-[4/3]"
               sizes="(max-width: 700px) 100vw, (max-width: 1280px) 50vw, 628px"
-              ariaLabel={`${caption} — view full screen (photograph ${i + 2} of ${photos.length})`}
+              ariaLabel={`${caption}, view full screen (photograph ${i + 2} of ${photos.length})`}
               onOpen={() => show(i + 1)}
             />
           </li>

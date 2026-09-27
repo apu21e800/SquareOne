@@ -54,7 +54,7 @@ import { clampDescription } from "@/lib/seo"
 export const metadata: Metadata = {
   title: "Vapour Blasting BC | Cleaning & Priming",
   description:
-    clampDescription("Mobile vapour blasting across the Lower Mainland and Vancouver Island — surface cleaning and priming, graffiti, gum and mould removal, road-marking removal, paint and coating stripping. Up to 92% less dust than dry blasting. Square One Paving."),
+    clampDescription("Mobile vapour blasting across the Lower Mainland and Vancouver Island: surface cleaning and priming, graffiti, gum and mould removal, road-marking removal, paint and coating stripping. Up to 92% less dust than dry blasting. Square One Paving."),
   keywords: [
     "vapour blasting BC",
     "vapor blasting Vancouver",
@@ -71,7 +71,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Vapour Blasting BC | Cleaning & Priming | Square One Paving",
     description:
-      clampDescription("Graffiti off brick, mould off commercial exteriors, markings off roads, coatings off steel and hulls — with up to 92% less dust than dry blasting. Mobile across BC."),
+      clampDescription("Graffiti off brick, mould off commercial exteriors, markings off roads, coatings off steel and hulls, with up to 92% less dust than dry blasting. Mobile across BC."),
     images: [{ url: "/images/og-image.png", width: 1200, height: 600, alt: "Square One Paving" }],
   },
 }
@@ -84,9 +84,9 @@ const GEN = `${DIR}/generated`
 type Fact = { number: string; label: string }
 
 const facts: Fact[] = [
-  { number: "92%", label: "less dust than dry blasting — the water holds it down" },
+  { number: "92%", label: "less dust than dry blasting: the water holds it down" },
   { number: "Low heat", label: "little to no heat at the surface, so nothing warps or scorches" },
-  { number: "2", label: "regions — Lower Mainland and Vancouver Island, one mobile rig" },
+  { number: "2", label: "regions: Lower Mainland and Vancouver Island, one mobile rig" },
 ]
 
 // ── What it handles — Square One's published applications, grouped by the
@@ -96,7 +96,7 @@ const tiers = [
   {
     audience: "Commercial & municipal",
     title: "Storefronts, plazas, roads",
-    body: "Graffiti, gum, mould and old markings off brick, concrete, stone and asphalt — without the dust cloud of dry blasting.",
+    body: "Graffiti, gum, mould and old markings off brick, concrete, stone and asphalt, without the dust cloud of dry blasting.",
     bullets: [
       "Graffiti, gum, mould and soot removal",
       "Road marking removal",
@@ -107,7 +107,7 @@ const tiers = [
     tags: ["Property managers", "Municipalities", "Strata"],
     photo: {
       src: `${GEN}/gen-brick-graffiti-mid-pass.jpg`,
-      alt: "Vapour blasting aerosol graffiti off a face-brick wall — clean brick behind the nozzle, tags ahead of it",
+      alt: "Vapour blasting aerosol graffiti off a face-brick wall, clean brick behind the nozzle, tags ahead of it",
       caption: "Graffiti · face brick",
       position: "center 55%",
     },
@@ -115,7 +115,7 @@ const tiers = [
   {
     audience: "Residential",
     title: "Driveways, patios, railings",
-    body: "Paint, stain, moss and grime off patios, driveways, stone and railings — cleaned, then primed for whatever comes next.",
+    body: "Paint, stain, moss and grime off patios, driveways, stone and railings, cleaned, then primed for whatever comes next.",
     bullets: [
       "Paint and stain removal",
       "Wood, concrete and steel cleaning",
@@ -158,7 +158,7 @@ const tiers = [
 const recordFrames = [
   {
     src: `${GEN}/gen-granville-island-vapour-blasting-01-enhanced.jpg`,
-    alt: "Square One removing a painted marking from the Granville Island boardwalk, Vancouver — AI-enhanced from the original photograph",
+    alt: "Square One removing a painted marking from the Granville Island boardwalk, Vancouver, AI-enhanced from the original photograph",
     primary: "Granville Island, Vancouver",
     secondary: "Marking removal · AI-enhanced from the original photograph",
   },
@@ -176,7 +176,7 @@ const recordFrames = [
   },
   {
     src: `${DIR}/nozzle-pavers-01.jpg`,
-    alt: "The vapour blasting nozzle mid-pass over pavers — the wet fan of abrasive and the clean line behind it",
+    alt: "The vapour blasting nozzle mid-pass over pavers, the wet fan of abrasive and the clean line behind it",
     primary: "The nozzle mid-pass",
     secondary: "Cleaning · pavers",
   },
@@ -197,7 +197,7 @@ const illustrationFrames = [
   },
   {
     src: `${GEN}/gen-road-marking-removal-02.jpg`,
-    alt: "Vapour blasting a painted line off wet asphalt — the spray, and the water holding the dust down",
+    alt: "Vapour blasting a painted line off wet asphalt, the spray, and the water holding the dust down",
     primary: "Line marking removal",
     secondary: "Asphalt",
   },
@@ -215,13 +215,13 @@ const illustrationFrames = [
   },
   {
     src: `${GEN}/gen-brick-graffiti-mid-pass.jpg`,
-    alt: "Vapour blasting aerosol graffiti off a face-brick wall — clean brick behind the nozzle, tags ahead of it",
+    alt: "Vapour blasting aerosol graffiti off a face-brick wall, clean brick behind the nozzle, tags ahead of it",
     primary: "Graffiti, mid-pass",
     secondary: "Face brick",
   },
   {
     src: `${GEN}/gen-brick-graffiti-after.jpg`,
-    alt: "The same face-brick wall after vapour blasting — clean brick, mortar joints intact",
+    alt: "The same face-brick wall after vapour blasting, clean brick, mortar joints intact",
     primary: "Graffiti, after",
     secondary: "Face brick",
   },
@@ -257,7 +257,7 @@ const cityFrames = [
   },
   {
     src: `${GEN}/gen-road-marking-removal-02.jpg`,
-    alt: "Vapour blasting a painted line off wet asphalt — the spray, and the water holding the dust down",
+    alt: "Vapour blasting a painted line off wet asphalt, the spray, and the water holding the dust down",
     caption: "Line marking removal · asphalt",
     position: "center 60%",
   },
@@ -290,7 +290,7 @@ export default function VaporBlastingServicePage() {
           {
             "@type": "Service",
             name: "Vapour blasting",
-            serviceType: "Vapour blasting — surface cleaning, priming, graffiti and marking removal",
+            serviceType: "Vapour blasting: surface cleaning, priming, graffiti and marking removal",
             description: metadata.description,
             provider: { "@id": `${SITE_URL}/#organization` },
             areaServed: [
@@ -314,7 +314,7 @@ export default function VaporBlastingServicePage() {
         alt="A Square One operator vapour blasting a painted marking off the boardwalk at Granville Island, Vancouver"
         eyebrow="Service · Mobile cleaning and priming"
         title="Clean it, prime it, bring it back"
-        lede="A powerful, portable blasting solution for surface prep. Vapour blasting uses less water, generates up to 92% less dust, produces little to no heat and creates less environmental impact than the alternatives — while getting the job done faster."
+        lede="A powerful, portable blasting solution for surface prep. Vapour blasting uses less water, generates up to 92% less dust, produces little to no heat and creates less environmental impact than the alternatives, while getting the job done faster."
         caption="Granville Island, Vancouver · marking removal"
         imagePosition="30% 58%"
         align="right"
@@ -355,7 +355,7 @@ export default function VaporBlastingServicePage() {
       <Section
         label="Before and after"
         title="Drag the line"
-        intro="Aerosol graffiti on face brick. The abrasive travels in water, so the paint comes off and the dust stays on the ground — no shutdown, no dust cloud, no chemical residue."
+        intro="Aerosol graffiti on face brick. The abrasive travels in water, so the paint comes off and the dust stays on the ground: no shutdown, no dust cloud, no chemical residue."
         wide
       >
         <BeforeAfter
@@ -367,7 +367,7 @@ export default function VaporBlastingServicePage() {
           }}
           after={{
             src: `${GEN}/gen-brick-graffiti-after.jpg`,
-            alt: "The same face-brick wall after vapour blasting — clean brick, mortar joints intact",
+            alt: "The same face-brick wall after vapour blasting, clean brick, mortar joints intact",
           }}
         />
         <div className="mt-4 flex flex-wrap items-baseline justify-between gap-x-8 gap-y-3">
@@ -383,7 +383,7 @@ export default function VaporBlastingServicePage() {
              surface only (illustrations of the service, never a place) ──── */}
       <Section
         label="One rig, any surface"
-        title="Sidewalks, piers, lines — wherever the paint is"
+        title="Sidewalks, piers, lines: wherever the paint is"
         intro="Illustrations of the service. The real frames are in the gallery below."
         wide
       >
@@ -407,7 +407,7 @@ export default function VaporBlastingServicePage() {
       <Section
         label="What it handles"
         title="From storefront to drydock"
-        intro="Vapour blasting works on almost every hard surface. The difference between a parkade, a patio and a yacht deck is the pressure and the media — not the method."
+        intro="Vapour blasting works on almost every hard surface. The difference between a parkade, a patio and a yacht deck is the pressure and the media, not the method."
         tone="warm"
         wide
       >
@@ -462,7 +462,7 @@ export default function VaporBlastingServicePage() {
           <div className="col-span-5 max-[900px]:col-span-1">
             <span className="label">Service area</span>
             <p className="mt-3 text-[16px] leading-[1.6] text-ink-body">
-              Lower Mainland and Vancouver Island &mdash; the rig is mobile, and it comes to the site.
+              Lower Mainland and Vancouver Island. The rig is mobile, and it comes to the site.
             </p>
             <p className="mt-2 text-[15px] italic leading-[1.6] text-ink-muted">{cities.join(" · ")}</p>
           </div>
@@ -496,7 +496,7 @@ export default function VaporBlastingServicePage() {
                   },
                   {
                     label: "Illustrations of the service",
-                    note: "Generated scenes of the rig at work — the surfaces and the method, not records of specific jobs.",
+                    note: "Generated scenes of the rig at work, the surfaces and the method, not records of specific jobs.",
                     photos: illustrationFrames,
                   },
                 ]}

@@ -66,11 +66,11 @@ export default function SearchPageClient() {
 
       <p aria-live="polite" className="label mt-4">
         {query.trim() === ""
-          ? "Type to search the whole site — pages, systems, projects, documents, the blog and imagery."
+          ? "Type to search the whole site: pages, systems, projects, documents, the blog and imagery."
           : !index
             ? "Loading the index…"
             : total === 0
-              ? `Nothing for "${query}" — try a product, city or system name.`
+              ? `Nothing for "${query}", try a product, city or system name.`
               : `${total} result${total === 1 ? "" : "s"} for "${query}"`}
       </p>
 
@@ -89,7 +89,7 @@ export default function SearchPageClient() {
                 <ul className="mt-6 grid grid-cols-6 gap-x-3 gap-y-5 max-[900px]:grid-cols-4 max-[560px]:grid-cols-3">
                   {entries.map((entry) => (
                     <li key={entry.image}>
-                      <Link href={entry.href} title={`${entry.title} — ${entry.subtitle ?? ""}`} className="block">
+                      <Link href={entry.href} title={`${entry.title}, ${entry.subtitle ?? ""}`} className="block">
                         <figure className="m-0">
                           <span className="relative block aspect-[4/3] w-full overflow-hidden bg-surface-stone">
                             <Image
@@ -156,7 +156,7 @@ export default function SearchPageClient() {
 
               {group.type === "image" && group.total > IMAGE_CAP && (
                 <p className="mt-3 text-[14px] italic text-ink-muted">
-                  Showing {IMAGE_CAP} of {group.total} images — narrow the search to see the rest.
+                  Showing {IMAGE_CAP} of {group.total} images, narrow the search to see the rest.
                 </p>
               )}
             </div>

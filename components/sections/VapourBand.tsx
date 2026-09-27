@@ -40,7 +40,7 @@ export default function VapourBand() {
             }}
             after={{
               src: `${GEN}/gen-brick-graffiti-after.jpg`,
-              alt: "The same face-brick wall after vapour blasting — clean brick, mortar joints intact",
+              alt: "The same face-brick wall after vapour blasting, clean brick, mortar joints intact",
             }}
             sizes="(max-width: 900px) 100vw, 720px"
             tone="water"
@@ -70,7 +70,7 @@ export default function VapourBand() {
           <h2 className="mt-4 max-w-[16ch] [text-wrap:balance]">Graffiti and old markings, lifted wet</h2>
           <p className="mt-6 max-w-[44ch] text-ink-body [text-wrap:pretty]">
             The abrasive travels in water, so the paint comes off and the dust stays on the
-            ground &mdash; no dust cloud, no chemical residue, and the brick, stone, concrete or
+            ground: no dust cloud, no chemical residue, and the brick, stone, concrete or
             steel underneath is left as it was. One mobile rig, both regions: graffiti, mould,
             paint, road markings, and the priming before a coating goes down.
           </p>

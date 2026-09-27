@@ -41,7 +41,7 @@ export default function PatternSheetGrid({
             <span className="relative block aspect-[1800/1390] w-full overflow-hidden border border-hairline bg-white">
               <Image
                 src={sheetSrc(p.slug)}
-                alt={`${p.name} — StreetPrint template drawing, dimensioned in inches`}
+                alt={`${p.name}, StreetPrint template drawing, dimensioned in inches`}
                 width={SHEET_W}
                 height={SHEET_H}
                 sizes="(max-width: 600px) 92vw, (max-width: 900px) 46vw, 400px"

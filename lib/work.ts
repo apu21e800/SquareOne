@@ -75,10 +75,10 @@ export const WORK_APPS: WorkAppMeta[] = [
   { slug: "parking-lots", label: "Parking lots", blurb: "Thresholds, walkways and crosswalks that organise retail, strata and commercial lots." },
   { slug: "parks-paths", label: "Parks & paths", blurb: "Park paths, greenways, plazas and spray parks with StreetBond colour and stamped pattern underfoot." },
   { slug: "schools-sports-courts", label: "Schools & sports courts", blurb: "Sports courts, school crosswalks and play markings that hold up to recess and rain." },
-  { slug: "bike-lanes", label: "Bike lanes", blurb: "Green bike lanes and multi-use paths in PreMark thermoplastic, StreetBond and StreetPrint — colour that holds under daily traffic." },
-  { slug: "public-art", label: "Public art", blurb: "Artist-designed pavement — First Nations artwork, murals and community pieces, rendered in thermoplastic and StreetBond coatings." },
+  { slug: "bike-lanes", label: "Bike lanes", blurb: "Green bike lanes and multi-use paths in PreMark thermoplastic, StreetBond and StreetPrint, colour that holds under daily traffic." },
+  { slug: "public-art", label: "Public art", blurb: "Artist-designed pavement: First Nations artwork, murals and community pieces, rendered in thermoplastic and StreetBond coatings." },
   { slug: "branding-wayfinding", label: "Branding & wayfinding", blurb: "Logos, wayfinding symbols and decals heat-fused into the pavement for schools, retail centres and civic sites." },
-  { slug: "driveways", label: "Driveways", blurb: "StreetPrint stamped asphalt and StreetBond colour over the driveway you already have — homes across the Lower Mainland and Vancouver Island." },
+  { slug: "driveways", label: "Driveways", blurb: "StreetPrint stamped asphalt and StreetBond colour over the driveway you already have, homes across the Lower Mainland and Vancouver Island." },
 ]
 
 // ── Sources ────────────────────────────────────────────────────────────────
@@ -180,7 +180,7 @@ function parseName(fileName: string): { systems: string[]; subject: string; plac
 /** Caption corrections the filename cannot express, keyed by archive filename. */
 const OVERRIDES: Record<string, Partial<Pick<WorkPhoto, "subject" | "place">>> = {
   "Cycle Grip MMAX Lower Levels Hwy, North Vancouver BC.jpg": { subject: "Cycle Grip bike lane, Lower Levels Highway", place: "North Vancouver" },
-  "PreMark Green Bike Lane, Assembly.jpg": { subject: "Green bike lane — installation", place: "" },
+  "PreMark Green Bike Lane, Assembly.jpg": { subject: "Green bike lane, installation", place: "" },
   "PreMark Green Bike Lane.jpg": { subject: "Green bike lane", place: "" },
   "DecoMark  Think Train, City of Vancouver.jpg": { subject: "'Think Train' safety graphic", place: "Vancouver" },
   "DecoMark Katzie Elementary School.jpg": { subject: "School branding", place: "Katzie Elementary" },
@@ -234,7 +234,7 @@ type Extra = [dir: "fio" | "drv", file: string, app: WorkApp, systems: string[],
 
 const EXTRAS: Extra[] = [
   ["fio", "Photo-2025-03-07-2-54-05-PM-scaled.jpg", "crosswalks", ["TrafficPatternsXD"], "Railroad-inspired crosswalk", "City of Langley"],
-  ["fio", "Photo-2025-03-06-3-06-49-PM-scaled-e1743101603782.jpg", "crosswalks", ["TrafficPatternsXD"], "Railroad-inspired crosswalk — detail", "City of Langley"],
+  ["fio", "Photo-2025-03-06-3-06-49-PM-scaled-e1743101603782.jpg", "crosswalks", ["TrafficPatternsXD"], "Railroad-inspired crosswalk, detail", "City of Langley"],
   ["fio", "White-Rock-crosswalk-29-1-scaled.jpg", "crosswalks", ["TrafficPatterns"], "Custom artist-designed crosswalk", "White Rock"],
   ["fio", "Whiterock-Pier-Crosswalk-TrafficPatternsXD-2-scaled.jpg", "crosswalks", ["TrafficPatternsXD"], "Pier crosswalk", "White Rock Pier"],
   ["fio", "decorative-crosswalk-with-stamped-asphalt-at-granville-island-brewery-crosswalk-sign-scaled-1-2048x1536.jpg", "crosswalks", ["TrafficPatternsXD"], "Decorative crosswalk", "Granville Island, Vancouver"],
@@ -243,10 +243,10 @@ const EXTRAS: Extra[] = [
   ["fio", "visible-school-crosswalk-for-safety-6.jpg", "crosswalks", ["StreetPrint"], "High-visibility school crosswalk", "Grandview Heights School, Surrey"],
   ["fio", "IMG_1635.jpeg", "crosswalks", ["TrafficPatternsXD"], "Little Italy crosswalk", "Commercial Drive, Vancouver"],
   ["fio", "502639628_1112360040926014_5391735583045489560_n.jpg", "crosswalks", ["TrafficPatternsXD"], "Rainbow intersection", "Nanaimo"],
-  ["fio", "504448297_1112360024259349_5235743119624258372_n-1.jpg", "crosswalks", ["TrafficPatternsXD"], "Rainbow intersection — street level", "Nanaimo"],
+  ["fio", "504448297_1112360024259349_5235743119624258372_n-1.jpg", "crosswalks", ["TrafficPatternsXD"], "Rainbow intersection, street level", "Nanaimo"],
   ["fio", "Photo-2025-04-03-1-57-51-PM-scaled.jpg", "streetscapes", ["StreetPrint", "StreetBond"], "Pewter herringbone stamped asphalt", "Mission"],
   ["fio", "maplewoods-fire-lane-north-vancouver-streetbond-01.jpg", "streetscapes", ["StreetBond"], "Decorative fire lane", "Maplewoods Townhomes, North Vancouver"],
-  ["fio", "Mask-Group-6.jpg", "streetscapes", ["StreetPrint"], "Red brick road median — installation", ""],
+  ["fio", "Mask-Group-6.jpg", "streetscapes", ["StreetPrint"], "Red brick road median, installation", ""],
   ["fio", "Bowen-Island-asphalt-walkway-with-StreetBond150-scaled-1.jpg", "parks-paths", ["StreetBond"], "Snug Cove community walkway", "Bowen Island"],
   ["fio", "Photo-2023-05-25-12-55-19 PM-scaled.jpg", "parks-paths", ["StreetBond"], "Solar-reflective park pathway", "Osoyoos", true],
   ["fio", "Photo-2025-07-07-11-54-41-AM.jpg", "parks-paths", ["StreetBond"], "Spray park surfacing", "Maple Ridge", true],
@@ -263,10 +263,10 @@ const EXTRAS: Extra[] = [
   ["fio", "Labyrinth-Maple-Ridge-c̓əsqənelə-Elementary-2-scaled-1.jpg", "public-art", ["StreetBond"], "Labyrinth", "c̓əsqənelə Elementary, Maple Ridge"],
   ["fio", "Photo-2023-07-05-11-22-34-AM.jpg", "public-art", ["StreetBond"], "Quilt motif", "Boundary Road Pump Station"],
   ["fio", "IMG_4531-scaled.jpeg", "public-art", ["DecoMark", "StreetBond"], "First Nations canoe motif", ""],
-  ["fio", "IMG_6053-scaled.jpeg", "public-art", ["DecoMark", "StreetBond"], "First Nations canoe motif — detail", ""],
+  ["fio", "IMG_6053-scaled.jpeg", "public-art", ["DecoMark", "StreetBond"], "First Nations canoe motif, detail", ""],
   ["fio", "IMG_3229-1-scaled.jpg", "public-art", ["DecoMark"], "Plaza graphics", "800 Robson Street, Vancouver"],
   ["fio", "Ralphs-Farm-Market-Parking-Lot-with-StreetPrint-Decorative-Stamped-Asphalt-in-Langley-BC-Canada.jpg", "parking-lots", ["StreetPrint"], "Ralph's Farm Market", "Murrayville, Langley"],
-  ["fio", "Ralphs-Farm-Market-Parking-Lot-with-StreetPrint-Decorative-Red-Stamped-Asphalt.jpg", "parking-lots", ["StreetPrint"], "Ralph's Farm Market — walkways", "Murrayville, Langley"],
+  ["fio", "Ralphs-Farm-Market-Parking-Lot-with-StreetPrint-Decorative-Red-Stamped-Asphalt.jpg", "parking-lots", ["StreetPrint"], "Ralph's Farm Market, walkways", "Murrayville, Langley"],
   ["fio", "Photo-2024-10-15-5-38-42-PM-scaled.jpg", "parking-lots", ["StreetPrint"], "Commercial entrance apron", ""],
   ["fio", "Photo-2025-07-28-2-10-43-PM-scaled.jpg", "parking-lots", ["StreetBond"], "Retail plaza entrance", ""],
   ["fio", "Photo-2025-09-25-3-48-33-PM-scaled.jpg", "schools-sports-courts", ["DecoMark"], "Sensory play pathway", "South Langford Elementary, Langford"],
@@ -284,7 +284,7 @@ const EXTRAS: Extra[] = [
   ["fio", "Cobblestone-stamped-asphalt-driveway-colose-up-at-Ellis-Point-Walkway-Victoria-BC-Canada.jpg", "parks-paths", ["StreetPrint"], "Cobblestone close-up, Ellis Point", "Victoria"],
   ["fio", "Photo-2023-09-29-4-48-15 PM-1-scaled.jpg", "driveways", ["StreetPrint"], "Townhome laneway, ashlar slate", ""],
   ["fio", "townhouse-driveway.png", "driveways", ["StreetPrint"], "Townhouse driveway grid", ""],
-  ["fio", "303-IMG_3928.JPG", "driveways", ["StreetPrint"], "Red brick with charcoal border — detail", ""],
+  ["fio", "303-IMG_3928.JPG", "driveways", ["StreetPrint"], "Red brick with charcoal border, detail", ""],
 ]
 
 // ── Filesystem helpers ──────────────────────────────────────────────────────

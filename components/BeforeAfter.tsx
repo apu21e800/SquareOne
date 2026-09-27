@@ -203,7 +203,7 @@ export default function BeforeAfter({
         max={100}
         step={0.5}
         value={clamp}
-        aria-label={`${beforeLabel} and ${afterLabel} comparison — move to reveal the cleaned surface`}
+        aria-label={`${beforeLabel} and ${afterLabel} comparison, move to reveal the cleaned surface`}
         aria-valuetext={`${Math.round(clamp)}% ${beforeLabel.toLowerCase()}`}
         onChange={(e) => {
           take()

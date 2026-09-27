@@ -9,13 +9,13 @@ const steps: { num: string; title: string; body: string; meta: string }[] = [
   {
     num: "01",
     title: "Site visit",
-    body: "We meet you on site and look at the asphalt — its condition, the drainage, the traffic it carries — before anything is quoted. The visit is free.",
+    body: "We meet you on site and look at the asphalt (its condition, the drainage, the traffic it carries) before anything is quoted. The visit is free.",
     meta: "Before the quote",
   },
   {
     num: "02",
     title: "Specification",
-    body: "Pattern, colour and system matched to the surface and the traffic — StreetPrint, StreetBond or TrafficPatterns — and set out in a written quote.",
+    body: "Pattern, colour and system matched to the surface and the traffic (StreetPrint, StreetBond or TrafficPatterns) and set out in a written quote.",
     meta: "Before the quote",
   },
   {
@@ -49,7 +49,7 @@ export default function ProcessBand() {
           </div>
 
           <p className="max-w-[56ch] text-[19px] leading-[1.65] text-ink-body">
-            Every project, municipal or residential, runs the same five steps &mdash; a site visit
+            Every project, municipal or residential, runs the same five steps: a site visit
             before the quote, the surface prepared before the colour, and a walk-through before we
             leave. It is the discipline that makes decorative pavement last.
           </p>

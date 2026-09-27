@@ -22,6 +22,13 @@ export function pageTitle(title: string, section?: string, max = 60): string {
   const candidates = [base]
   if (base.includes(":")) candidates.push(base.split(":")[0].trim())
   if (base.includes(" — ")) candidates.push(base.split(" — ")[0].trim())
+  // 27 Sept 2026: the em dashes came out of the copy, and "Place — thing"
+  // titles became "Place, thing". The first clause is still the fallback,
+  // as long as it is a title on its own and not a fragment.
+  if (base.includes(", ")) {
+    const head = base.split(", ")[0].trim()
+    if (head.length >= 16) candidates.push(head)
+  }
   for (const t of candidates) {
     const withSection = section ? `${t} | ${section}` : t
     for (const suffix of [" | Square One Paving", " | Square One", ""]) {

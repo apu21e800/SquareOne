@@ -72,7 +72,7 @@ const faqs = [
   },
   {
     q: "Which patterns and colours can I choose?",
-    a: "The StreetPrint templates on Square One's own sheet: ashlar slate, offset brick, standard herringbone, random stone, standard tile and offset tile, with soldier-course, stacked-brick and Texas cobble borders. The manufacturer draws the templates as dimensioned sheets — three are shown above, the rest are in the pattern library. StreetBond colour comes from the published chart of more than fifty; for a house that usually means the greys, black and the earth tones — bedrock, brick, granite, pewter, sierra, black, concrete gray, burnt sienna, brown suede, taupe and graphite. Sample boards come to the site visit.",
+    a: "The StreetPrint templates on Square One's own sheet: ashlar slate, offset brick, standard herringbone, random stone, standard tile and offset tile, with soldier-course, stacked-brick and Texas cobble borders. The manufacturer draws the templates as dimensioned sheets. Three are shown above, the rest are in the pattern library. StreetBond colour comes from the published chart of more than fifty; for a house that usually means the greys, black and the earth tones: bedrock, brick, granite, pewter, sierra, black, concrete gray, burnt sienna, brown suede, taupe and graphite. Sample boards come to the site visit.",
   },
   {
     q: "Is stamped asphalt safe in BC winters?",
@@ -84,7 +84,7 @@ const faqs = [
   },
   {
     q: "Do you install driveways on Vancouver Island?",
-    a: "Yes. Vancouver Island is a Square One service region with its own line, 250-391-0270. The Island driveways on this page — Saanich, North and West Saanich, Sooke, Duncan, Mill Bay and Victoria — were all installed by Square One.",
+    a: "Yes. Vancouver Island is a Square One service region with its own line, 250-391-0270. The Island driveways on this page (Saanich, North and West Saanich, Sooke, Duncan, Mill Bay and Victoria) were all installed by Square One.",
   },
   {
     q: "Do you work outside the Lower Mainland and Vancouver Island?",
@@ -215,7 +215,7 @@ export default function DrivewaysPage() {
             <p className="lede mt-7 max-w-[56ch] [text-wrap:pretty]">
               The look of brick or stone with the wear of asphalt: a StreetPrint&reg; pattern
               pressed into the driveway you already have and sealed in StreetBond&reg; colour.
-              No demolition, no new base &mdash; and a free site visit before anything is quoted.
+              No demolition, no new base, and a free site visit before anything is quoted.
             </p>
 
             <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
@@ -321,7 +321,7 @@ export default function DrivewaysPage() {
         title="Stamped asphalt driveways from Victoria to Vancouver"
         intro={
           <>
-            Square One driveways from the record &mdash; Saanich, Sooke, Duncan, Mill Bay and
+            Square One driveways from the record: Saanich, Sooke, Duncan, Mill Bay and
             Victoria on the Island; Vancouver, West Vancouver, Burnaby, New Westminster,
             Richmond, Surrey, Langley and Maple Ridge on the mainland. Filter by region, or go
             straight to your city.
@@ -350,8 +350,8 @@ export default function DrivewaysPage() {
             Across the Lower Mainland and Vancouver Island, from one office in Maple Ridge and
             the Island&rsquo;s own line. If you are in one of the areas below, we come to you.
             <span className="mt-4 block text-[16px] text-ink-muted">
-              Elsewhere in BC &mdash; the Okanagan and the Interior are already in our project
-              record &mdash; we travel for the right job. Tell us where, and we will say straight
+              Elsewhere in BC (the Okanagan and the Interior are already in our project
+              record), we travel for the right job. Tell us where, and we will say straight
               away whether it makes sense.
             </span>
           </>

@@ -83,7 +83,7 @@ export default function FollowTheWork({ settings, tiles }: { settings: SiteSetti
                 href={tile.url}
                 target="_blank"
                 rel="noopener"
-                aria-label={tile.fallback ? `${tile.caption} — Square One on Instagram` : `${tile.caption} — view on ${tile.platform}`}
+                aria-label={tile.fallback ? `${tile.caption}, Square One on Instagram` : `${tile.caption}, view on ${tile.platform}`}
                 className="thumb group relative block aspect-square overflow-hidden bg-[color:var(--surface-stone)]"
               >
                 <Image

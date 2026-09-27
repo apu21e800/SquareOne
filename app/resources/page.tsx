@@ -37,10 +37,10 @@ export default function ResourcesPage() {
     <main className="bg-[color:var(--surface)]">
       <IndexImageHero
         src="/images/S1_update_v2/photos/Featured%20image%20options/Photo-2025-03-07-2-54-05-PM-scaled.jpg"
-        alt="Rail ties in tan TrafficPatternsXD thermoplastic set into dark stamped asphalt — the railroad-inspired crosswalk in the City of Langley, installed by Square One Paving"
+        alt="Rail ties in tan TrafficPatternsXD thermoplastic set into dark stamped asphalt, the railroad-inspired crosswalk in the City of Langley, installed by Square One Paving"
         eyebrow="Resources"
         title="Specification library"
-        lede={`${resourceCount} documents for engineers and specifiers — the manufacturer's specifications, data sheets, colour cards and design manuals for every system Square One installs. Preview one, or take it straight into the spec package.`}
+        lede={`${resourceCount} documents for engineers and specifiers: the manufacturer's specifications, data sheets, colour cards and design manuals for every system Square One installs. Preview one, or take it straight into the spec package.`}
         caption="City of Langley · TrafficPatternsXD"
         imagePosition="center 60%"
       />

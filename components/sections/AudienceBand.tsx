@@ -19,12 +19,12 @@ import { Section, Row } from "@/components/ui/Container"
 const audiences = [
   {
     label: "Specifiers",
-    desc: "Landscape architects and engineers: template sheets, the colour chart, specifications and sample boards at the site walk — what you need to draw it and put it to tender.",
+    desc: "Landscape architects and engineers: template sheets, the colour chart, specifications and sample boards at the site walk (what you need to draw it and put it to tender).",
     orders: ["Template sheets", "Colour chart", "Specifications"],
     href: "/specifiers",
     cta: "For specifiers",
     image: "/images/S1_update_v2/photos/Featured%20image%20options/Photo-2025-03-07-2-54-05-PM-scaled.jpg",
-    alt: "Rail ties in tan TrafficPatternsXD thermoplastic set into dark stamped asphalt — the railroad-inspired crosswalk in the City of Langley",
+    alt: "Rail ties in tan TrafficPatternsXD thermoplastic set into dark stamped asphalt, the railroad-inspired crosswalk in the City of Langley",
     caption: "City of Langley · TrafficPatternsXD",
     position: "center 60%",
   },
@@ -41,7 +41,7 @@ const audiences = [
   },
   {
     label: "Homeowners",
-    desc: "Stamped asphalt driveways for Vancouver and Victoria homes — brick, cobble and slate patterns pressed into the asphalt you already have.",
+    desc: "Stamped asphalt driveways for Vancouver and Victoria homes: brick, cobble and slate patterns pressed into the asphalt you already have.",
     orders: ["Driveways", "Walkways", "Laneways"],
     href: "/driveways",
     cta: "Driveways",
@@ -57,7 +57,7 @@ export default function AudienceBand() {
     <Section
       label="Who we work with"
       title="Specifiers, owners, homeowners"
-      intro="Drawings and specifications for the people who draw it, a site walk and a written quote for the people who build it, and the same crews and the same published specification for a forty-foot driveway — across the Lower Mainland and Vancouver Island."
+      intro="Drawings and specifications for the people who draw it, a site walk and a written quote for the people who build it, and the same crews and the same published specification for a forty-foot driveway, across the Lower Mainland and Vancouver Island."
       wide
     >
       <div>

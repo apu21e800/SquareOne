@@ -91,7 +91,7 @@ const REGIONS = [
   {
     name: "Vancouver Island",
     line: LINES[1],
-    where: "A service region with its own line — the crew comes over",
+    where: "A service region with its own line, the crew comes over",
     src: "/images/applications/public-art/oak-bay-village-intersection-wide-streetbond-01.jpg",
     alt: "A painted medallion of a heron and a salmon in StreetBond filling the Oak Bay Village intersection, seen from above",
     caption: "Oak Bay · Village intersection · StreetBond",
@@ -124,7 +124,7 @@ export default function ContactPage() {
             <span className="label">Contact &middot; Free site visit</span>
             <h1 className="h1-tight mt-6 [text-wrap:balance]">Tell us the job. We&rsquo;ll walk the site.</h1>
             <p className="lede mt-6 max-w-[50ch] [text-wrap:pretty]">
-              A crosswalk, a plaza, a parking area, a driveway &mdash; a description and a location
+              A crosswalk, a plaza, a parking area, a driveway. A description and a location
               are enough to start, and drawings help. The site visit is free across the Lower Mainland
               and Vancouver Island, the sample boards come along, and the quote is written by the
               crew who install it.
@@ -203,7 +203,7 @@ export default function ContactPage() {
               <p className="mt-4 text-[14px] leading-[1.6] text-ink-muted">
                 Photos and drawings go by email to{" "}
                 <a href="mailto:office@squareonepaving.com" className="link">office@squareonepaving.com</a>
-                {" "}&mdash; put the site address in the subject line.
+                . Put the site address in the subject line.
               </p>
             </RailBlock>
 

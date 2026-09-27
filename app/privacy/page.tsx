@@ -5,42 +5,50 @@ import { clampDescription } from "@/lib/seo"
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
-    clampDescription("How Square One Paving collects, uses and protects personal information under PIPEDA — enquiries, quotes and squareonepaving.com."),
+    clampDescription("How Square One Paving collects, uses and protects personal information under PIPEDA: enquiries, quotes and squareonepaving.com."),
   alternates: { canonical: `${SITE_URL}/privacy` },
 }
 
+/*
+ * 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.10): rewritten in Square One's
+ * own sentences. Until then this page was the sibling site's legal template
+ * with the names swapped, and the same sentences on two domains compete in
+ * search. The substance is unchanged — what is collected, what it is used
+ * for, PIPEDA, the two processors, cookies, the three-year retention line,
+ * the rights, the contact block — only the words are ours.
+ */
 const sections = [
   {
-    heading: "1. Information We Collect",
-    body: `When you use squareonepaving.com or submit an inquiry, we may collect the following personal information:\n\n— Contact details: name, email address, phone number and organization\n— Project information: location, project type, and details you provide in form submissions\n— Usage data: the standard server logs kept by our hosting provider — pages requested, browser type and referring URL\n— Communications: records of email correspondence or form submissions\n\nWe collect this information only when you voluntarily provide it, or when it is automatically collected through your use of the site.`,
+    heading: "1. What we collect",
+    body: `Most of the personal information we hold arrives through the quote form and by email: your name, your email address, a phone number, the company or organization you work for if you give one, and whatever you tell us about the job: where it is, what kind of work it is, and the details you type into the form.\n\nThe emails and form submissions themselves are kept, as the record of what was asked and what we said.\n\nThe site gathers less than the form does. Our hosting provider keeps ordinary server logs: which pages were requested, the browser that asked for them, and the page that sent you here.\n\nPersonal information reaches us in one of two ways: because you chose to send it, or because your browser sent a request to the site.`,
   },
   {
-    heading: "2. How We Use Your Information",
-    body: `We use collected information to:\n\n— Respond to your inquiries and project requests\n— Provide quotes and project consultations\n— Improve our website and service offerings\n— Send relevant updates or service announcements (only with your consent)\n— Comply with legal obligations\n\nWe do not sell, rent, or trade your personal information to third parties.`,
+    heading: "2. What we use it for",
+    body: `We use it to get back to you. An enquiry gets an answer, a quote request gets a quote, and a job that needs a conversation gets one.\n\nWhat we learn from enquiries and from the site's logs also goes into improving the website and the services we offer.\n\nIf we ever want to send you news about our services, we ask first; nothing of that kind goes out without your consent.\n\nWhere the law requires us to keep or produce a record, we do.\n\nYour personal information is not for sale. We do not sell it, rent it out or trade it with anyone.`,
   },
   {
-    heading: "3. Legal Basis (PIPEDA)",
-    body: `Square One Paving is a Canadian company subject to the Personal Information Protection and Electronic Documents Act (PIPEDA). We collect, use, and disclose personal information with your consent — either express (you fill out a form) or implied (you provide a business card at a job site).\n\nYou may withdraw consent at any time by contacting us at the addresses below, subject to legal or contractual restrictions.`,
+    heading: "3. Consent, and the law that applies (PIPEDA)",
+    body: `Square One Paving is a Canadian company, and the federal Personal Information Protection and Electronic Documents Act (PIPEDA) governs what we do with personal information.\n\nWe collect it, use it and disclose it with your consent. Sometimes that consent is express: you fill in the form and press send. Sometimes it is implied: you hand one of us a business card on a site.\n\nConsent can be withdrawn at any time: contact us at the address below. The exception is where a law or a contract stands in the way.`,
   },
   {
-    heading: "4. Third-Party Services",
-    body: `We use the following third-party services that may process your data:\n\n— Email delivery: Resend (email transmission for form submissions)\n— Hosting: Vercel (site hosting and server logs; data processed in North America)\n\nEach service operates under its own privacy policy. We choose partners who maintain data protection standards consistent with PIPEDA.`,
+    heading: "4. Who else handles it",
+    body: `Two outside services touch this information on our behalf.\n\nThe form's email is delivered by Resend, which carries the message from the site to our inbox. The site is hosted by Vercel, which serves the pages and keeps the server logs; that processing happens in North America.\n\nEach of them works under a privacy policy of its own. We choose providers whose data protection holds to the standard PIPEDA sets.`,
   },
   {
     heading: "5. Cookies",
-    body: `squareonepaving.com does not use cookies for advertising, analytics or cross-site tracking. Your browser may store a display preference locally, and our hosting provider may set cookies needed to serve the site securely.\n\nYou can clear or block cookies and local storage in your browser settings without losing access to the site.`,
+    body: `This site sets no cookie to advertise to you, to measure you for analytics, or to follow you from one site to another.\n\nYour browser may keep a display preference in its own local storage, and our hosting provider may set a cookie where one is needed to serve the site securely.\n\nClear them or block them in your browser settings if you prefer; the site stays open to you either way.`,
   },
   {
-    heading: "6. Data Retention",
-    body: `We retain personal information for as long as necessary to fulfill the purposes described in this policy, or as required by law. Inquiry records are typically retained for 3 years from the date of last contact. You may request deletion of your data at any time.`,
+    heading: "6. How long we keep it",
+    body: `We keep personal information for as long as the purpose it was collected for still stands, or for as long as the law requires.\n\nFor an enquiry, that usually means three years from the last time we were in touch.\n\nYou can ask us to delete your information at any time.`,
   },
   {
-    heading: "7. Your Rights",
-    body: `Under PIPEDA, you have the right to:\n\n— Access the personal information we hold about you\n— Correct inaccurate or incomplete information\n— Withdraw consent to our use of your information\n— Request deletion of your personal information\n— File a complaint with the Office of the Privacy Commissioner of Canada\n\nTo exercise any of these rights, contact us using the information below.`,
+    heading: "7. Your rights",
+    body: `PIPEDA gives you the following rights over the personal information we hold:\n\n- To see what we hold about you\n- To have anything that is wrong or incomplete corrected\n- To withdraw your consent to our using it\n- To ask us to delete it\n- To complain to the Office of the Privacy Commissioner of Canada\n\nTo use any of them, get in touch by the details in the next section.`,
   },
   {
-    heading: "8. Contact Us",
-    body: `For privacy-related inquiries, contact:\n\nSquare One Paving\n19–11720 Stewart Crescent\nMaple Ridge, BC V2X 9E7\noffice@squareonepaving.com | 604-612-6209 | 1-877-391-0270`,
+    heading: "8. Contact",
+    body: `Anything about privacy (a question, a correction, a request to see or delete what we hold) goes to:\n\nSquare One Paving\n19–11720 Stewart Crescent\nMaple Ridge, BC V2X 9E7\noffice@squareonepaving.com | 604-612-6209 | 1-877-391-0270`,
   },
 ]
 
@@ -48,20 +56,20 @@ export default function PrivacyPage() {
   return (
     <main className="min-h-screen bg-[#F5F3F0]">
       <div className="max-w-3xl mx-auto px-6 sm:px-8 pt-32 pb-24">
-        <p className="text-xs font-semibold text-[#E8581A] uppercase tracking-widest mb-4">
+        <p className="label mb-4">
           Legal
         </p>
         <h1 className="text-4xl sm:text-5xl font-bold text-[#2D2D2D] mb-3">
           Privacy Policy
         </h1>
-        <p className="text-sm text-[#626262] mb-12">Last updated: September 2026</p>
+        <p className="text-sm text-[#626262] mb-12">Last updated: 26 September 2026</p>
 
         <p className="text-[#626262] leading-relaxed mb-12">
-          Square One Paving (&ldquo;we,&rdquo; &ldquo;us,&rdquo; or
-          &ldquo;our&rdquo;) is committed to protecting your privacy. This
-          policy explains how we collect, use, and safeguard your personal
-          information when you visit squareonepaving.com or contact us about our
-          services.
+          This page is about the personal information that reaches Square One
+          Paving through squareonepaving.com and through the enquiries people
+          send us. It says what we collect, what we do with it, how we look
+          after it, and how to reach us about any of that. Where it says
+          &ldquo;we&rdquo;, it means Square One Paving.
         </p>
 
         <div className="space-y-10">

@@ -43,7 +43,7 @@ export const HERO_SLIDES: Slide[] = [
   },
   {
     src: "/images/applications/parks-paths/surrey-marine-spray-park-from-above-streetbond-01.jpg",
-    alt: "A spray park in Surrey from above — a river of blue StreetBond through green and yellow leaf shapes",
+    alt: "A spray park in Surrey from above, a river of blue StreetBond through green and yellow leaf shapes",
     place: "Surrey",
     system: "StreetBond",
     position: "center 55%",

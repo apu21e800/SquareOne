@@ -15,7 +15,7 @@ export function GET() {
   const lines: string[] = [
     "# Square One Paving",
     "",
-    "> BC decorative pavement installer since 2000 — stamped asphalt, decorative coatings, preformed thermoplastic and vapour blasting for municipalities, developers, strata and homeowners across the Lower Mainland and Vancouver Island. Square One installs the systems; their manufacturer makes them.",
+    "> BC decorative pavement installer since 2000: stamped asphalt, decorative coatings, preformed thermoplastic and vapour blasting for municipalities, developers, strata and homeowners across the Lower Mainland and Vancouver Island. Square One installs the systems; their manufacturer makes them.",
     "",
     "Office: 19-11720 Stewart Crescent, Maple Ridge, BC V2X 9E7. Phone 604-612-6209 (Lower Mainland), 250-391-0270 (Vancouver Island), 1-877-391-0270 (toll-free). Email office@squareonepaving.com.",
     "Service area: Metro Vancouver, the Fraser Valley and Vancouver Island; elsewhere in BC by arrangement.",
@@ -23,7 +23,7 @@ export function GET() {
     "",
     "## Services",
     ...services.map((s) => `- [${s.name}](${SITE_URL}/services/${s.slug}): ${s.tagline}`),
-    `- [Residential driveways](${SITE_URL}/driveways): StreetPrint patterns and StreetBond colour over the driveway you already have — Vancouver and Victoria.`,
+    `- [Residential driveways](${SITE_URL}/driveways): StreetPrint patterns and StreetBond colour over the driveway you already have, Vancouver and Victoria.`,
     "",
     "## Systems installed",
     ...products.map((p) => `- [${p.name}${p.mark ?? ""}](${SITE_URL}/products/${p.slug}): ${p.tagline}`),

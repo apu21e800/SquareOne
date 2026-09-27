@@ -61,7 +61,7 @@ export default function ProductsPage() {
         alt="Three systems in one frame on the Agnes Greenway, New Westminster: a green coated bike lane, a white TrafficPatternsXD crossing and yellow tactile plates at the kerb, a tower beyond"
         eyebrow="Products"
         title="The right system for the surface"
-        lede="Eight pavement systems, installed by Square One across the Lower Mainland and Vancouver Island — from pattern to protection. If it is not listed here, we do not install it."
+        lede="Eight pavement systems, installed by Square One across the Lower Mainland and Vancouver Island, from pattern to protection. If it is not listed here, we do not install it."
         caption="New Westminster · Agnes Greenway · TrafficPatternsXD"
         imagePosition="center 78%"
       />
@@ -82,7 +82,7 @@ export default function ProductsPage() {
               <li key={product.slug} className="relative">
                 <Link
                   href={`/products/${product.slug}`}
-                  aria-label={`${product.name} — the system`}
+                  aria-label={`${product.name}, the system`}
                   className="absolute inset-0 z-[2]"
                 />
                 <Frame

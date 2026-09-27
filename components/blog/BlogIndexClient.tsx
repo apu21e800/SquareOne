@@ -127,7 +127,7 @@ export default function BlogIndexClient({ posts }: Props) {
             <div className="py-20 text-center">
               <p className="text-ink">Nothing filed here yet</p>
               <p className="mt-2 text-[15px] text-ink-body">
-                No notes under this topic — check back soon.
+                No notes under this topic. Check back soon.
               </p>
               <button type="button" onClick={() => setActive("All")} className="link mt-7">
                 Show all notes

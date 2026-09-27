@@ -16,7 +16,7 @@ export const TYPE_ORDER: ResourceType[] = [
 
 /** What the type means to a specifier — one line under each rail heading. */
 const TYPE_NOTE: Record<ResourceType, string> = {
-  Specification: "Write these into the spec package — the system, its substrate and its tolerances.",
+  Specification: "Write these into the spec package: the system, its substrate and its tolerances.",
   "Technical info": "Technical data sheets and test findings for the material.",
   SDS: "Safety data sheets for every component on site.",
   Guide: "Design manuals, application instructions and template guidelines.",
@@ -92,7 +92,7 @@ export default function DocumentRail({ docs, product }: { docs: ResourceDoc[]; p
       {target && <DocPreviewModal target={target} onClose={() => setTarget(null)} />}
       <div className="grid grid-cols-12 gap-x-10 gap-y-10 max-[900px]:grid-cols-1">
         {groups.map((g) => (
-          <section key={g.type} className="col-span-12 grid grid-cols-subgrid max-[900px]:col-span-1 max-[900px]:block" aria-label={`${product} — ${g.type}`}>
+          <section key={g.type} className="col-span-12 grid grid-cols-subgrid max-[900px]:col-span-1 max-[900px]:block" aria-label={`${product}, ${g.type}`}>
             <div className="col-span-3 max-[900px]:mb-3">
               <h3 className="label">{g.type}</h3>
               <p className="mt-2 max-w-[28ch] text-[14.5px] italic leading-[1.6] text-ink-muted">{TYPE_NOTE[g.type]}</p>

@@ -30,11 +30,11 @@ import { clampDescription } from "@/lib/seo"
  */
 
 export const metadata: Metadata = {
-  openGraph: { title: "Photo Galleries — Our Work Across BC", images: [{ url: "/images/hero/white-rock-pier-crosswalk-trafficpatternsxd.jpg" }] },
+  openGraph: { title: "Photo Galleries: Our Work Across BC", images: [{ url: "/images/hero/white-rock-pier-crosswalk-trafficpatternsxd.jpg" }] },
   // One separator: the root template adds " | Square One Paving" (56 chars all in).
-  title: "Photo Galleries — Our Work Across BC",
+  title: "Photo Galleries: Our Work Across BC",
   description:
-    clampDescription("Square One Paving’s own photographs of decorative pavement in BC — crosswalks, parks, schools, public art, parking lots and driveways, by system and region."),
+    clampDescription("Square One Paving’s own photographs of decorative pavement in BC: crosswalks, parks, schools, public art, parking lots and driveways, by system and region."),
   keywords: [
     "stamped asphalt photos BC",
     "decorative crosswalk photos",
@@ -67,7 +67,7 @@ function GalleryCover({
   return (
     <Frame
       src={photo?.src}
-      alt={photo ? `${title} — gallery of Square One installations` : ""}
+      alt={photo ? `${title}, gallery of Square One installations` : ""}
       aspect="aspect-[4/3]"
       sizes={sizes}
       priority={priority}
@@ -132,7 +132,7 @@ export default function GalleriesPage() {
         alt="Red brick-pattern TrafficPatternsXD crosswalk with white edge lines, leading across the road to the White Rock Pier and the beach"
         eyebrow="Galleries"
         title="Photographs of our own work"
-        lede="Square One's own installation photography across the Lower Mainland and Vancouver Island, captioned with the system and the place it was installed — by application, by system and by region."
+        lede="Square One's own installation photography across the Lower Mainland and Vancouver Island, captioned with the system and the place it was installed, by application, by system and by region."
         caption="White Rock Pier · TrafficPatternsXD · 2019"
         imagePosition="center 62%"
       />
@@ -185,7 +185,7 @@ export default function GalleriesPage() {
             <span className="label">Projects</span>
             <h3 className="mt-1">Projects, told in full</h3>
             <p className="mt-3 max-w-[40ch] text-[16px] leading-[1.6] text-ink-body [text-wrap:pretty]">
-              Each with its photographs, the systems installed and the place &mdash; and the
+              Each with its photographs, the systems installed and the place, and the
               story behind the crossing, the plaza or the driveway.
             </p>
             <p className="mt-5">

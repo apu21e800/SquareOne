@@ -61,7 +61,7 @@ export const TYPEFACES: Typeface[] = [
   {
     id: "futura-caps",
     label: "Futura, capitals",
-    note: "The launch setting — Futura Bold in spaced capitals. Poster voice: strong at a glance, loud over a long page.",
+    note: "The launch setting: Futura Bold in spaced capitals. Poster voice: strong at a glance, loud over a long page.",
     preview: "var(--font-futura), var(--font-poppins), sans-serif",
     previewStyle: { fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em" },
     licence: "Licensed",
@@ -81,7 +81,7 @@ export const TYPEFACES: Typeface[] = [
   {
     id: "futura-light",
     label: "Futura, light",
-    note: "Futura Book at display size, sentence case, a step larger. The architectural setting — elegant, and it leans on the photographs.",
+    note: "Futura Book at display size, sentence case, a step larger. The architectural setting: elegant, and it leans on the photographs.",
     preview: "var(--font-futura), var(--font-poppins), sans-serif",
     previewStyle: { fontWeight: 400, letterSpacing: "0" },
     licence: "Licensed",

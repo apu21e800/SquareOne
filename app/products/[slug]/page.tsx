@@ -168,7 +168,7 @@ function galleryAlt(product: Product, src: string, index: number): string {
     .map((t) => TOKEN_CASE[t.toLowerCase()] ?? t.charAt(0).toUpperCase() + t.slice(1))
     .join(" ")
   return subject
-    ? `${product.name} reference photograph — ${subject}`
+    ? `${product.name} reference photograph, ${subject}`
     : `${product.name} reference photograph ${index + 1}`
 }
 
@@ -493,7 +493,7 @@ export default async function ProductPage({ params }: Props) {
           id="colours"
           label="Colours"
           title="Fifty-two standard StreetBond colours, plus custom matching"
-          intro="Read off the published StreetBond colour chart. On-screen colour is a reference only — the sample board we bring to the site visit is what decides."
+          intro="Read off the published StreetBond colour chart. On-screen colour is a reference only: the sample board we bring to the site visit is what decides."
           tone={toneOf("colours")}
           wide
         >
@@ -589,7 +589,7 @@ export default async function ProductPage({ params }: Props) {
           label="Specify it"
           title={`${product.name} specifications and data sheets`}
           link={{ href: docsHref, label: `Open the ${product.name} documents` }}
-          intro={`${docs.length} ${product.name} document${docs.length === 1 ? "" : "s"} — specification, technical data, safety data and colour — are kept with the rest of the library, where they are previewed page by page and checked against the manufacturer’s current editions.`}
+          intro={`${docs.length} ${product.name} document${docs.length === 1 ? "" : "s"} (specification, technical data, safety data and colour) are kept with the rest of the library, where they are previewed page by page and checked against the manufacturer’s current editions.`}
           tone={toneOf("documents")}
         />
       )}
@@ -606,7 +606,7 @@ export default async function ProductPage({ params }: Props) {
               >
                 <Link
                   href={`/products/${p.slug}`}
-                  aria-label={`${p.name} — the system`}
+                  aria-label={`${p.name}, the system`}
                   className="absolute inset-0 z-[2]"
                 />
                 <span className="label col-span-3 pt-1 max-[700px]:col-span-1">{p.category}</span>

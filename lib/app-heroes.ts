@@ -47,7 +47,7 @@ export const APP_HEROES: Record<Exclude<WorkApp, "driveways">, AppHero> = {
   },
   "parks-paths": {
     src: "/images/applications/parks-paths/coquitlam-sheffield-park-from-above-streetbond-01.jpg",
-    alt: "Sheffield Park in Coquitlam from above — a StreetBond polka-dot path in white on grey curving around a spray pad between new houses and tall firs",
+    alt: "Sheffield Park in Coquitlam from above, a StreetBond polka-dot path in white on grey curving around a spray pad between new houses and tall firs",
     caption: "Coquitlam · Sheffield Park · StreetBond",
     position: "center 55%",
   },
@@ -59,13 +59,13 @@ export const APP_HEROES: Record<Exclude<WorkApp, "driveways">, AppHero> = {
   },
   "bike-lanes": {
     src: "/images/applications/bike-lanes/sechelt-cowrie-and-trail-intersection-streetbond-01.jpg",
-    alt: "The Cowrie and Trail intersection in Sechelt from above — green StreetBond bike lanes with white dashes meeting at a crossing, red DecoMark symbols at the kerbs",
+    alt: "The Cowrie and Trail intersection in Sechelt from above, green StreetBond bike lanes with white dashes meeting at a crossing, red DecoMark symbols at the kerbs",
     caption: "Sechelt · Cowrie and Trail intersection · StreetBond",
     position: "center 72%",
   },
   "public-art": {
     src: "/images/applications/public-art/langley-events-centre-circle-of-life-decomark-01.jpg",
-    alt: "'Circle of Life' at Langley Events Centre from above — a medallion of orange, blue, green and cream DecoMark thermoplastic on a concrete plaza",
+    alt: "'Circle of Life' at Langley Events Centre from above, a medallion of orange, blue, green and cream DecoMark thermoplastic on a concrete plaza",
     caption: "Langley · Events Centre, 'Circle of Life' · DecoMark",
     position: "center 52%",
   },

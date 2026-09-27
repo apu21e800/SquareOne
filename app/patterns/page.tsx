@@ -22,7 +22,7 @@ import JsonLd, { breadcrumbSchema } from "@/components/JsonLd"
 export const metadata: Metadata = {
   title: "StreetPrint Stamped Asphalt Patterns",
   description: clampDescription(
-    "StreetPrint stamped asphalt templates Square One installs, as the manufacturer draws them — herringbone, offset brick, ashlar slate, tiles and borders.",
+    "StreetPrint stamped asphalt templates Square One installs, as the manufacturer draws them: herringbone, offset brick, ashlar slate, tiles and borders.",
   ),
   keywords: [
     "StreetPrint patterns",
@@ -42,7 +42,7 @@ export default function PatternsPage() {
   const closing = (
     <div className="mt-14 border-t border-hairline pt-6">
       <p className="max-w-[70ch] text-[14.5px] italic leading-[1.6] text-ink-muted">
-        A selection, not the whole library &mdash; custom templates are cut to order, ask us.
+        A selection, not the whole library: custom templates are cut to order, ask us.
         Random Stone is on Square One&rsquo;s sheet and has no standalone drawing. Colour names
         and ranges as the manufacturer publishes them; on-screen colour varies from the cast colour.
       </p>
@@ -68,7 +68,7 @@ export default function PatternsPage() {
           <h1 className="mt-5 max-w-[20ch] [text-wrap:balance]">The stamped asphalt pattern library</h1>
           <div className="mt-8 grid grid-cols-12 gap-x-10 gap-y-5 max-[900px]:grid-cols-1">
             <p className="lede col-span-7 max-w-[56ch] [text-wrap:pretty]">
-              {OFFERED_SHEETS.length} stamping templates, shown as the manufacturer draws them &mdash;
+              {OFFERED_SHEETS.length} stamping templates, shown as the manufacturer draws them,
               dimensioned to the inch. The heated template presses the pattern into the asphalt;
               StreetBond&reg; colour locks it in.
             </p>

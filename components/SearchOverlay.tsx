@@ -327,7 +327,7 @@ export default function SearchOverlay({
             <p className="text-[15px] italic text-ink-muted">Loading the index…</p>
           ) : total === 0 ? (
             <p className="text-[15px] italic text-ink-muted">
-              Nothing for &ldquo;{query}&rdquo; — try a product, city or system name.
+              Nothing for &ldquo;{query}&rdquo;, try a product, city or system name.
             </p>
           ) : (
             <div className="flex flex-col gap-9">

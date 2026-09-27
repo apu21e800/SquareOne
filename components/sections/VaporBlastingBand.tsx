@@ -25,7 +25,7 @@ export default function VaporBlastingBand() {
             <h2 className="stop mt-5">The cleanest way to restore a surface</h2>
 
             <p className="mt-6 max-w-[56ch] text-[19px] leading-[1.65] text-ink-body">
-              A powerful, portable blasting solution for surface prep &mdash; less water, up to
+              A powerful, portable blasting solution for surface prep: less water, up to
               92% less dust, little to no heat and less environmental impact than the
               alternatives, while getting the job done faster. The same rig primes the surfaces
               we coat ourselves.

@@ -73,7 +73,7 @@ export function FilterWord({
 export function workAlt(p: WorkPhoto): string {
   const sys = p.systems.join(" and ")
   return p.place
-    ? `${p.subject} in ${sys} — ${p.place}, BC. Installed by Square One Paving.`
+    ? `${p.subject} in ${sys}, ${p.place}, BC. Installed by Square One Paving.`
     : `${p.subject} in ${sys}. Installed by Square One Paving.`
 }
 

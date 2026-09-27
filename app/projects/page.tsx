@@ -35,10 +35,10 @@ import { clampDescription } from "@/lib/seo"
 const FIO = "/images/S1_update_v2/photos/Featured%20image%20options"
 
 export const metadata: Metadata = {
-  openGraph: { title: "Decorative Pavement Projects Across BC", description: clampDescription("Square One Paving projects across BC — crosswalks, public art, spray parks, parking lots and driveways, each with the system installed and the place."), images: [{ url: "/images/S1_update_v2/photos/Featured%20image%20options/502639628_1112360040926014_5391735583045489560_n.jpg" }] },
+  openGraph: { title: "Decorative Pavement Projects Across BC", description: clampDescription("Square One Paving projects across BC: crosswalks, public art, spray parks, parking lots and driveways, each with the system installed and the place."), images: [{ url: "/images/S1_update_v2/photos/Featured%20image%20options/502639628_1112360040926014_5391735583045489560_n.jpg" }] },
   title: "Decorative Pavement Projects Across BC",
   description:
-    clampDescription("Square One Paving projects across BC — crosswalks, public art, spray parks, parking lots and driveways, each with the system installed and the place."),
+    clampDescription("Square One Paving projects across BC: crosswalks, public art, spray parks, parking lots and driveways, each with the system installed and the place."),
   alternates: { canonical: `${SITE_URL}/projects` },
 }
 
@@ -65,10 +65,10 @@ export default function ProjectsPage() {
     <main className="bg-[color:var(--surface)]">
       <IndexImageHero
         src={`${FIO}/502639628_1112360040926014_5391735583045489560_n.jpg`}
-        alt="The rainbow intersection in Nanaimo from above — the whole crossing in bands of red, orange, yellow, green, blue and purple TrafficPatternsXD, installed by Square One Paving"
+        alt="The rainbow intersection in Nanaimo from above, the whole crossing in bands of red, orange, yellow, green, blue and purple TrafficPatternsXD, installed by Square One Paving"
         eyebrow="Projects"
         title="Decorative pavement projects across BC"
-        lede="Municipal, institutional, commercial and residential work from the Lower Mainland to Vancouver Island and the Interior — installed by Square One since 2000, each with the system and the place on record."
+        lede="Municipal, institutional, commercial and residential work from the Lower Mainland to Vancouver Island and the Interior, installed by Square One since 2000, each with the system and the place on record."
         caption="Nanaimo · Rainbow intersection · TrafficPatternsXD"
         imagePosition="center 50%"
       />
