@@ -54,8 +54,8 @@ function rowFor(slug: WorkApp | "vapour"): AppRow | null {
 export default function ApplicationsSection() {
   return (
     <Section
-      label="Where the work goes"
-      title="Who we work with, and where"
+      label="By client"
+      title="Where the work goes"
       link={{ href: "/galleries", label: "Every photograph, by application" }}
       tone="warm"
       wide

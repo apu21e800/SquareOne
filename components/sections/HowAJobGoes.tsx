@@ -3,7 +3,7 @@ import Frame from "@/components/ui/Frame"
 import { Section } from "@/components/ui/Container"
 
 /**
- * How a job goes — the one process band (26 Sept 2026, docs/OWN-COMPANY-BRIEF.md
+ * How a job goes: the one process band (26 Sept 2026, docs/OWN-COMPANY-BRIEF.md
  * §3.4 and §9.3). Until now the steps lived in four places with three
  * wordings: /about (five), every service page (five), /specifiers (five),
  * /contact (three). This is the one wording, four steps, numbered because
@@ -30,7 +30,7 @@ export interface Step {
 export const STEPS: Step[] = [
   {
     title: "Site visit",
-    body: "Send a few photographs and the address; we walk the site, free — the surface and its condition, the drainage, the traffic it carries and the layout it has to meet. The sample boards come with us.",
+    body: "Send a few photographs and the address, and we walk the site, free: the surface and its condition, the drainage, the traffic it carries and the layout it has to meet. The sample boards come with us.",
   },
   {
     title: "Written quote",
@@ -38,7 +38,7 @@ export const STEPS: Step[] = [
   },
   {
     title: "Install",
-    body: "Surface prep first — cleaning, and vapour blasting where the surface needs it — then the work, by Square One's own crews to the published specification.",
+    body: "Surface prep comes first: cleaning, and vapour blasting where the surface needs it. Then the work goes down, by Square One's own crews, to the published specification.",
   },
   {
     title: "Aftercare",

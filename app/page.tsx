@@ -103,11 +103,16 @@ export default async function Home() {
           /about. */}
       <ProofLine />
 
-      {/* 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §9.3): the proof only an
-          installer has — the same four steps on every job — comes before
-          who we work for. One component, one wording, shared with the
-          service pages, /about, /specifiers and /contact. */}
-      <HowAJobGoes tone="paper" />
+      {/* 27 Sept 2026 (Vern: "service oriented", "the right sales funnel"):
+          what we do comes first, then how a job goes, then who it is for.
+          The funnel reads: the four services, the four steps, the people
+          we do it for, where the work goes, and a quote at every turn. */}
+      <ServicesGrid />
+
+      {/* The proof only an installer has: the same four steps on every job.
+          One component, one wording, shared with the service pages, /about,
+          /specifiers and /contact (docs/OWN-COMPANY-BRIEF.md §9.3). */}
+      <HowAJobGoes tone="warm" />
 
       <AudienceBand />
 
@@ -115,8 +120,6 @@ export default async function Home() {
           sales funnel for contractors. Applications etc."): where the work
           goes comes before what we do. */}
       <ApplicationsSection />
-
-      <ServicesGrid />
 
       {/* Patterns and colours — back on the home page, 19 Sept evening
           (Vern: "the client did like some semblance of the colours and

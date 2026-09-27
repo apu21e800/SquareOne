@@ -301,7 +301,7 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
       <Link
         href={pathname === "/contact" ? "/contact#quote" : "/contact"}
         onClick={onClose}
-        className="flex h-16 shrink-0 items-center justify-center bg-[color:var(--accent-deep)] text-[15px] font-bold text-white transition-colors hover:bg-[#B03D15] hover:text-white"
+        className="flex h-16 shrink-0 items-center justify-center bg-[color:var(--accent-deep)] text-[15px] font-bold text-white transition-colors hover:bg-[color:var(--accent-press)] hover:text-white"
         style={{ fontFamily: "var(--font-display)" }}
       >
         Get a quote
