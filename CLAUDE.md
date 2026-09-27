@@ -29,17 +29,12 @@ FAQPage / BreadcrumbList / Service JSON-LD via `components/JsonLd.tsx`; `/llms.t
 107 hosted PDFs in /public/docs, page-one previews pre-rendered to /public/docs-previews by `node scripts/doc-previews.mjs` (run it after adding or replacing a PDF; needs poppler + Pillow locally). 36 documents carry `hub:` — the identical file on hubss.com, verified against HUB's own registry. Product pages render a typed rail (components/documents/DocumentRail); /resources and the search overlay share the preview modal.
 
 ## Brand
-<!-- Type system: ONE face (canon §2.5 as amended 4 Sept 2026, Vern's call) —
-     Poppins carries display at 600 spaced caps and body at 400/500. Nothing
-     renders below weight 400. The earlier Fraunces + Inter amendment
-     (2026-08-28) is superseded. See app/layout.tsx.
-     11 Sept 2026: a Futura OPTION exists for comparison only — Jost display +
-     Inter text behind <html data-type="futura">, switched by
-     components/TypeToggle (visible on preview deployments) or ?type=futura.
-     Poppins stays the default until Vern and the client choose. -->
-- Colors: Warm beige background (#F5F3F0), orange accent (#C85A3A), stone (#8B8680), charcoal (#2D2D2D)
-- Tone: Professional, practical, BC-focused
-- Positioning: "BC's Trusted Decorative Pavement Applicators" — quality work that lasts
+Current as of 27 Sept 2026 (the own-company restyle, docs/OWN-COMPANY-BRIEF.md). The surface lives in `app/own.css`, which loads last and wins; `app/globals.css` and `app/refine.css` hold the history under it.
+- Type: Futura LT Bold for display, in sentence case; Source Serif 4 for reading text and for the small voice (labels, captions, notes) in italic. No tracked capitals. The type switch (preview deployments only) can still put Inter back.
+- Colour: white ground (#FFFFFF) with two light neutral greys (#F4F5F6, #EAECEE) and hairlines (#E1E4E7); ink #14161A; charcoal (#2D3033) for the footer and the phone quote bar; terracotta for action only: #C85A3A is the brand accent, #B24E2E the button fill (white on it 5.2 : 1), #963F24 pressed. The copper in the logo is the logo's own. Vapour blasting keeps its water blue (#1F6FB2). Never HUB's cream (#F6F4EF), near-black (#101010) or bright orange (#F97316).
+- Shape: square corners everywhere; rows divided by hairlines instead of cards; captions under photographs, never over them (the hero reel and the page openers excepted); a section's label in a left margin column; one primary button per view ("Get a quote"); links are underlined ink; no arrow glyphs; no em dashes in copy.
+- Tone: professional, practical, BC-focused; plain, local, "we". Supplier words (specify, submittal, spec package) only on /specifiers.
+- Positioning: "BC's Trusted Decorative Pavement Applicators": quality work that lasts
 - Service area: Lower Mainland + Vancouver Island
 
 ## Tech Stack
