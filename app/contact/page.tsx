@@ -156,7 +156,7 @@ export default function ContactPage() {
             </dl>
 
             <div className="mt-9">
-              <a href="#quote" className="btn-primary">Request a quote</a>
+              <a href="#quote" className="btn-primary">Get a quote</a>
             </div>
           </div>
         </div>

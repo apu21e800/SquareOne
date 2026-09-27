@@ -306,7 +306,7 @@ export default async function ApplicationPage({ params }: Props) {
 
           <div className="mt-11 flex flex-wrap items-center gap-x-8 gap-y-4">
             <Link href="/contact" className="btn-primary">
-              Request a quote
+              Get a quote
             </Link>
             <a href={`tel:${PHONE.replace(/-/g, "")}`} className="link">
               {PHONE}
@@ -322,7 +322,15 @@ export default async function ApplicationPage({ params }: Props) {
             </div>
             <div className="contents">
               <dt>Projects</dt>
-              <dd>{caseStudies.length > 0 ? caseStudies.length : "See the gallery"}</dd>
+              {/* No count: a published number reads as a ceiling on the work
+                  (the client, 10 Sept 2026). The row points at the projects. */}
+              <dd>
+                {caseStudies.length > 0 ? (
+                  <a href="#projects" className="link">Told in full, on this page</a>
+                ) : (
+                  "See the gallery"
+                )}
+              </dd>
             </div>
             <div className="contents">
               <dt>Regions</dt>

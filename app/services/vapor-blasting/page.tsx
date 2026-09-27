@@ -321,7 +321,7 @@ export default function VaporBlastingServicePage() {
       >
         <div className="mt-9 flex flex-wrap items-center gap-x-8 gap-y-4">
           <Link href="/contact" className="btn-primary btn-water">
-            Request a quote
+            Get a quote
           </Link>
           <a
             href="tel:+16046126209"
@@ -533,7 +533,7 @@ export default function VaporBlastingServicePage() {
       >
         <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
           <Link href="/contact" className="btn-primary">
-            Request a quote
+            Get a quote
           </Link>
           <a href="tel:+16046126209" className="link">
             604-612-6209

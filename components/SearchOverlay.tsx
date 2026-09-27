@@ -50,7 +50,7 @@ const QUICK_LINKS = [
   { label: "Specifications & documents", href: "/resources" },
   { label: "Projects", href: "/projects" },
   { label: "Image galleries", href: "/galleries" },
-  { label: "Request a quote", href: "/contact" },
+  { label: "Get a quote", href: "/contact" },
 ]
 
 /** Searches people actually run — a system, a place, a document, a use. */

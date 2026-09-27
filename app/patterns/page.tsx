@@ -48,7 +48,7 @@ export default function PatternsPage() {
       </p>
 
       <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3">
-        <Link href="/contact" className="btn-primary">Request a quote</Link>
+        <Link href="/contact" className="btn-primary">Get a quote</Link>
         <Link href="/products/streetprint" className="link">StreetPrint</Link>
         <a href={SQUAREONE_PATTERNS_SHEET} className="link">Square One&rsquo;s patterns sheet</a>
         {/* HUB's template catalogue used to be linked here and on the home

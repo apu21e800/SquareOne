@@ -358,7 +358,7 @@ export default async function DrivewayCityPage({ params }: Props) {
       >
         <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
           <Link href="/contact" className="btn-primary">
-            Request a quote
+            Get a quote
           </Link>
           <a href={tel} className="link">
             {c.phone}

@@ -102,7 +102,7 @@ export default function MobileStickyCTA() {
             className="flex items-center justify-center bg-[color:var(--accent-deep)] py-[15px] text-[15px] font-bold leading-[1.2] text-white active:bg-[color:var(--accent-press)]"
             style={{ fontFamily: "var(--font-display)" }}
           >
-            Request a quote
+            Get a quote
           </Link>
         </div>
       </div>

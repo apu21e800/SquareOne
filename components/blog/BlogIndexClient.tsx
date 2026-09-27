@@ -52,13 +52,6 @@ function matchesCategory(post: BlogPostMeta, cat: string) {
   return haystack.includes(cat.toLowerCase())
 }
 
-/** Photo caption — category and year, the only location data frontmatter carries. */
-function captionFor(post: BlogPostMeta): string {
-  const year = post.date ? new Date(post.date).getFullYear() : Number.NaN
-  return [post.category, Number.isFinite(year) ? String(year) : ""]
-    .filter(Boolean)
-    .join(" · ")
-}
 
 function metaFor(post: BlogPostMeta): string {
   return [post.date ? formatDate(post.date) : "", post.description ? readTime(post.description) : ""]
@@ -143,7 +136,6 @@ export default function BlogIndexClient({ posts }: Props) {
                     href={`/blog/${featured.slug}`}
                     src={featured.featured_image || undefined}
                     alt={featured.title}
-                    caption={captionFor(featured)}
                     kicker={featured.category || undefined}
                     title={featured.title}
                     description={featured.description}
@@ -160,7 +152,6 @@ export default function BlogIndexClient({ posts }: Props) {
                         href={`/blog/${post.slug}`}
                         src={post.featured_image || undefined}
                         alt={post.title}
-                        caption={captionFor(post)}
                         kicker={post.category || undefined}
                         title={post.title}
                         description={post.description}
@@ -192,7 +183,7 @@ export default function BlogIndexClient({ posts }: Props) {
               </p>
               <div className="mt-8">
                 <Link href="/contact" className="btn-primary">
-                  Request a quote
+                  Get a quote
                 </Link>
               </div>
             </div>

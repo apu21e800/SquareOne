@@ -301,7 +301,7 @@ export default async function BlogPostPage({ params }: Props) {
             </p>
             <div className="mt-7">
               <Link href="/contact" className="btn-primary">
-                Request a quote
+                Get a quote
               </Link>
             </div>
           </aside>

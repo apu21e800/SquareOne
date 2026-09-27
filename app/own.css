@@ -308,7 +308,7 @@ a:hover { color: var(--ink); }
 .sec-label { grid-column: span 3; padding-top: 6px; }
 .sec-body { grid-column: span 9; min-width: 0; }
 .sec-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px 32px; }
-.sec-head h2 { margin: 0; max-width: 24ch; text-wrap: balance; }
+.sec-head h2 { margin: 0; max-width: 30ch; text-wrap: balance; }
 .sec-content { margin-top: 40px; }
 @media (max-width: 900px) {
   /* One column: twelve tracks of minmax(0, 1fr) can shrink to nothing, but
@@ -342,7 +342,7 @@ a:hover { color: var(--ink); }
 /* The numeral for a real sequence. */
 .step-num {
   font-family: var(--font-display);
-  font-size: 44px;
+  font-size: 56px;
   font-weight: 700;
   line-height: 1;
   letter-spacing: -0.02em;

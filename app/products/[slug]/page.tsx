@@ -300,7 +300,7 @@ export default async function ProductPage({ params }: Props) {
 
           <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-3">
             <Link href="/contact" className="btn-primary">
-              Request a quote
+              Get a quote
             </Link>
             <Link href={`/services/${product.serviceSlug}`} className="link">
               See the service

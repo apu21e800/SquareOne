@@ -178,7 +178,7 @@ export default function ApplicationsPage() {
       >
         <div className="mt-9">
           <Link href="/contact" className="btn-primary">
-            Request a quote
+            Get a quote
           </Link>
         </div>
       </IndexImageHero>

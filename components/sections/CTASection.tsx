@@ -35,7 +35,7 @@ export default function CTASection() {
 
             <div className="mt-9 flex flex-wrap gap-3">
               <Link href="/contact" className="btn-primary">
-                Request a quote
+                Get a quote
               </Link>
               <Link href="/contact" className="btn-secondary">
                 Book a site visit

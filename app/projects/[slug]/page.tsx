@@ -293,7 +293,7 @@ export default async function ProjectPage({ params }: Props) {
 
           <div className="mt-11 flex flex-wrap items-center gap-x-8 gap-y-4">
             <Link href="/contact" className="btn-primary">
-              Request a quote
+              Get a quote
             </Link>
             <Link href={`/services/${serviceSlug}`} className="link">
               More on {serviceName.toLowerCase()}
