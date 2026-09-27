@@ -9,10 +9,21 @@ import { getPostBySlug } from "@/lib/blog"
 import { galleryFor } from "@/lib/gallery"
 import { WORK_APPS } from "@/lib/work"
 import ProjectGallery from "@/components/ProjectGallery"
+import Frame from "@/components/ui/Frame"
+import { Section, Row } from "@/components/ui/Container"
 import { SITE_URL } from "@/lib/site"
 import { fitVars } from "@/lib/type"
 import JsonLd, { breadcrumbSchema } from "@/components/JsonLd"
 import { clampDescription, pageTitle } from "@/lib/seo"
+
+/**
+ * A project page — 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.7): the same
+ * skeleton (header, the photograph, the facts, the narrative beside the
+ * systems installed, the gallery, more projects) on the own-company
+ * surface: no full stop, the caption UNDER the photograph, the systems as a
+ * hairline block instead of a box, links as underlined words, the two
+ * related projects as hairline rows with their captions under the frames.
+ */
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -37,7 +48,7 @@ const serviceLabel: Record<string, string> = {
   "Vapour Blasting": "Vapour blasting",
 }
 
-/** Two cards fill the "More projects" row without leaving an orphan. */
+/** Two rows fill "More projects" without leaving an orphan. */
 const RELATED_COUNT = 2
 
 /** "Vancouver, BC" → "Vancouver" — the caption carries the city, not the province. */
@@ -100,9 +111,9 @@ export default async function ProjectPage({ params }: Props) {
   const serviceSlug = serviceSlugMap[project.service] ?? "stamped-asphalt"
   const serviceName = serviceLabel[project.service] ?? project.service
 
-  // The systems installed, from the catalogue — HUB's own description and
-  // figures, attributed on the page. "StreetBond150" and the like resolve to
-  // the StreetBond entry.
+  // The systems installed, from the catalogue — the manufacturer's own
+  // description and figures, attributed on the page. "StreetBond150" and
+  // the like resolve to the StreetBond entry.
   const installed = project.systems
     .map((name) => products.find((p) => p.name === name || (name.startsWith("StreetBond") && p.name === "StreetBond")))
     .filter((p, i, all): p is NonNullable<typeof p> => Boolean(p) && all.indexOf(p) === i)
@@ -144,65 +155,62 @@ export default async function ProjectPage({ params }: Props) {
       {/* ── 01 Project header ──────── */}
       <section className="pt-[calc(var(--bar-h)+96px)] max-[700px]:pt-[calc(var(--bar-h)+56px)]">
         <div className="container-1280">
-          <Link
-            href="/projects"
-            className="eyebrow w-fit transition-colors hover:text-[color:var(--ink)]"
-          >
+          <Link href="/projects" className="link">
             Projects
           </Link>
 
           {/* One sizing mechanism, not two: lib/type.ts now carries both the
               length judgement the old headlineSize() made and the longest-word
               ceiling it could not make. */}
-          <div className="fit-host mt-7 max-w-[54rem]">
-            <h1 className="display-fit stop [text-wrap:balance]" style={fitVars(project.title)}>
+          <div className="fit-host mt-6 max-w-[54rem]">
+            <h1 className="display-fit [text-wrap:balance]" style={fitVars(project.title)}>
               {project.title}
             </h1>
           </div>
         </div>
 
         {project.heroWide ? (
-          <div className="relative mt-10 aspect-[21/9] overflow-hidden bg-[color:var(--surface-stone)] max-[700px]:aspect-[3/2]">
-            <Image
-              src={heroImage}
-              alt={project.title}
-              fill
-              priority
-              sizes="100vw"
-              className="object-cover"
-            />
-            <div aria-hidden className="scrim scrim-light" />
-            <div className="caption">{caption}</div>
-          </div>
+          /* Full-bleed frame; the caption under it, in the column. */
+          <figure className="m-0 mt-10">
+            <div className="relative aspect-[21/9] overflow-hidden bg-[color:var(--surface-stone)] max-[700px]:aspect-[3/2]">
+              <Image
+                src={heroImage}
+                alt={project.title}
+                fill
+                priority
+                sizes="100vw"
+                className="object-cover"
+              />
+            </div>
+            <div className="container-1280">
+              <figcaption className="cap">{caption}</figcaption>
+            </div>
+          </figure>
         ) : (
           /* Archive-scale photography stays contained — never full-bleed. */
           <div className="container-1280">
-            <figure className="mt-10 max-w-[960px]">
-              <div className="relative aspect-[4/3] overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)]">
-                <Image
-                  src={heroImage}
-                  alt={project.title}
-                  fill
-                  priority
-                  sizes="(max-width: 1024px) 100vw, 960px"
-                  className="object-cover"
-                />
-              </div>
-              <figcaption className="label mt-3">{caption}</figcaption>
-            </figure>
+            <Frame
+              className="mt-10 max-w-[960px]"
+              src={heroImage}
+              alt={project.title}
+              caption={caption}
+              aspect="aspect-[4/3]"
+              sizes="(max-width: 1024px) 100vw, 960px"
+              priority
+            />
           </div>
         )}
 
         <div className="container-1280">
-          <dl className={`grid gap-10 border-b border-[color:var(--hairline)] pt-12 pb-[88px] max-[700px]:grid-cols-2 max-[700px]:gap-x-6 max-[700px]:gap-y-7 max-[700px]:pb-14 ${
+          <dl className={`grid gap-10 border-b border-hairline pt-12 pb-[88px] max-[700px]:grid-cols-2 max-[700px]:gap-x-6 max-[700px]:gap-y-7 max-[700px]:pb-14 ${
             facts.length >= 5 ? "grid-cols-5" : "grid-cols-4"
           }`}>
             {facts.map((fact) => (
-              <div key={fact.label} className="border-t border-[color:var(--hairline)] pt-4">
+              <div key={fact.label} className="border-t border-hairline pt-4">
                 <dt className="label">{fact.label}</dt>
-                <dd className="mt-2 text-[1.125rem] leading-[1.4] font-semibold tracking-[-0.01em] text-[color:var(--ink)] [text-wrap:pretty]">
+                <dd className="mt-2 text-[18px] leading-[1.4] text-ink [text-wrap:pretty]">
                   {fact.href ? (
-                    <Link href={fact.href} className="transition-colors hover:text-[color:var(--accent-deep)]">
+                    <Link href={fact.href} className="link">
                       {fact.value}
                     </Link>
                   ) : (
@@ -220,30 +228,30 @@ export default async function ProjectPage({ params }: Props) {
         <div className="container-1280">
           <div className="grid grid-cols-12 gap-x-12 gap-y-12 max-[900px]:grid-cols-1">
             <div className="col-span-7 max-[900px]:col-span-1">
-              <p className="max-w-[60ch] text-[19px] leading-[1.65] text-[color:var(--ink)] [text-wrap:pretty]">
+              <p className="lede max-w-[60ch] [text-wrap:pretty]">
                 {project.excerpt}
               </p>
 
               {project.story?.map((paragraph, i) => (
                 <p
                   key={i}
-                  className={`max-w-[60ch] text-[17px] leading-[1.75] text-[color:var(--ink-body)] [text-wrap:pretty] ${i === 0 ? "mt-8" : "mt-5"}`}
+                  className={`max-w-[60ch] text-ink-body [text-wrap:pretty] ${i === 0 ? "mt-8" : "mt-5"}`}
                 >
                   {paragraph}
                 </p>
               ))}
 
               {project.artist && (
-                <p className="mt-8 max-w-[60ch] text-[15px] leading-[1.6] text-[color:var(--ink-muted)]">
-                  <span className="label mr-3">Design</span>
-                  {project.artist}
-                </p>
+                <div className="mt-8 max-w-[60ch]">
+                  <span className="label">Design</span>
+                  <p className="mt-1 text-[15px] leading-[1.6] text-ink-muted">{project.artist}</p>
+                </div>
               )}
 
               {post && (
                 <p className="mt-8">
-                  <Link href={`/blog/${post.slug}`} className="arrow-link">
-                    Read the full story: {post.title} <span aria-hidden="true">&rarr;</span>
+                  <Link href={`/blog/${post.slug}`} className="link">
+                    Read the full story: {post.title}
                   </Link>
                 </p>
               )}
@@ -251,28 +259,30 @@ export default async function ProjectPage({ params }: Props) {
 
             {installed.length > 0 && (
               <aside className="col-span-5 max-[900px]:col-span-1">
-                <div className="rounded-[2px] border border-[color:var(--hairline)] bg-[color:var(--surface-warm)] p-8 max-[700px]:p-6">
+                <div className="border-t border-hairline pt-6">
                   <h2 className="label">{installed.length > 1 ? "The systems installed" : "The system installed"}</h2>
                   {installed.map((product) => (
-                    <div key={product.slug} className="mt-6 border-t border-[color:var(--hairline)] pt-5 first:mt-4">
+                    <div key={product.slug} className="mt-6 border-t border-hairline pt-5 first:mt-3 first:border-t-0 first:pt-0">
                       <h3>
                         {product.name}
                         {product.mark && <sup className="ml-[1px] text-[0.55em] font-normal">{product.mark}</sup>}
                       </h3>
-                      <p className="mt-2 text-[15px] leading-[1.6] text-[color:var(--ink-body)]">{product.shortDescription}</p>
+                      <p className="mt-2 text-[16px] leading-[1.6] text-ink-body">{product.shortDescription}</p>
                       <ul className="mt-4">
                         {product.keyBenefits.slice(0, 3).map((benefit) => (
-                          <li key={benefit} className="border-t border-[color:var(--hairline)] py-[9px] text-[14px] leading-[1.5] text-[color:var(--ink-body)]">
+                          <li key={benefit} className="border-t border-hairline py-[9px] text-[15px] leading-[1.5] text-ink-body">
                             {benefit}
                           </li>
                         ))}
                       </ul>
-                      <Link href={`/products/${product.slug}`} className="arrow-link mt-4 inline-flex gap-[0.35em]">
-                        {product.name} <span aria-hidden="true">&rarr;</span>
-                      </Link>
+                      <p className="mt-4">
+                        <Link href={`/products/${product.slug}`} className="link">
+                          {product.name}
+                        </Link>
+                      </p>
                     </div>
                   ))}
-                  <p className="mt-6 text-[12.5px] leading-[1.55] text-[color:var(--ink-muted)]">
+                  <p className="mt-6 text-[14px] italic leading-[1.55] text-ink-muted">
                     Descriptions and figures are the manufacturer&rsquo;s. Square One
                     installs the system and warrants the workmanship.
                   </p>
@@ -285,12 +295,12 @@ export default async function ProjectPage({ params }: Props) {
             <Link href="/contact" className="btn-primary">
               Request a quote
             </Link>
-            <Link href={`/services/${serviceSlug}`} className="arrow-link">
-              More on {serviceName.toLowerCase()} <span aria-hidden="true">&rarr;</span>
+            <Link href={`/services/${serviceSlug}`} className="link">
+              More on {serviceName.toLowerCase()}
             </Link>
             {appHref && (
-              <Link href={appHref} className="arrow-link">
-                All {project.application.toLowerCase()} work <span aria-hidden="true">&rarr;</span>
+              <Link href={appHref} className="link">
+                All {project.application.toLowerCase()} work
               </Link>
             )}
           </div>
@@ -299,7 +309,7 @@ export default async function ProjectPage({ params }: Props) {
 
       {/* ── 03 Gallery — every photograph opens the full-screen viewer ──────── */}
       {galleryRest.length > 0 && (
-        <section className="section border-y border-[color:var(--hairline)] bg-[color:var(--surface-warm)]">
+        <section className="section border-y border-hairline bg-[color:var(--surface-warm)]">
           <div className="container-1280">
             <ProjectGallery
               caption={caption}
@@ -314,47 +324,33 @@ export default async function ProjectPage({ params }: Props) {
         </section>
       )}
 
-      {/* ── 04 More projects ──────── */}
+      {/* ── 04 More projects — two hairline rows ──────── */}
       {related.length > 0 && (
-        <section className="section bg-[color:var(--surface)]">
-          <div className="container-1280">
-            <div className="flex flex-wrap items-baseline justify-between gap-6">
-              <h2>More projects</h2>
-              <Link href="/projects" className="arrow-link whitespace-nowrap">
-                All projects <span>&rarr;</span>
-              </Link>
-            </div>
-
-            <div className="mt-10 grid grid-cols-2 gap-6 max-[700px]:grid-cols-1 max-[700px]:gap-12">
-              {related.map((p) => (
-                <Link
-                  key={p.slug}
+        <Section label="Projects" title="More projects" link={{ href: "/projects", label: "All projects" }} wide>
+          <div>
+            {related.map((p) => (
+              <Row key={p.slug} as="article">
+                <Frame
+                  src={p.imageUrl}
+                  alt={p.title}
+                  caption={metaLine(p.city, p.systems, p.year)}
+                  aspect="aspect-[4/3]"
+                  sizes="(max-width: 700px) 100vw, 520px"
                   href={`/projects/${p.slug}`}
-                  className="card relative block aspect-[16/9] overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)]"
-                >
-                  <Image
-                    src={p.imageUrl}
-                    alt={p.title}
-                    fill
-                    sizes="(max-width: 700px) 100vw, (max-width: 1280px) 50vw, 628px"
-                    className="object-cover"
-                  />
-
-                  <div aria-hidden className="scrim" />
-
-                  <div className="pointer-events-none absolute right-6 bottom-5 left-6">
-                    <div className="text-[16px] leading-[1.3] font-semibold text-white">
+                />
+                <div className="min-w-0">
+                  <span className="label">{p.application}</span>
+                  <h3 className="mt-1">
+                    <Link href={`/projects/${p.slug}`} className="text-ink hover:underline hover:underline-offset-[5px] hover:decoration-1">
                       {p.title}
-                    </div>
-                    <div className="mt-1 text-[13px] leading-[1.4] text-[rgba(255,255,255,0.78)]">
-                      {metaLine(p.city, p.systems, p.year)}
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
+                    </Link>
+                  </h3>
+                  <p className="mt-3 max-w-[52ch] text-[16px] leading-[1.6] text-ink-body [text-wrap:pretty]">{p.excerpt}</p>
+                </div>
+              </Row>
+            ))}
           </div>
-        </section>
+        </Section>
       )}
     </main>
   )

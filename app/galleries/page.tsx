@@ -1,12 +1,12 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import Image from "next/image"
 
 import { WORK_APPS, getWork, workFor, workForRegion, type WorkPhoto } from "@/lib/work"
 import { products } from "@/lib/products"
 import IndexImageHero from "@/components/IndexImageHero"
 import WorkGallery from "@/components/WorkGallery"
-import ProjectCaption from "@/components/ui/ProjectCaption"
+import Frame from "@/components/ui/Frame"
+import { Section } from "@/components/ui/Container"
 import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
 
@@ -15,11 +15,17 @@ import { clampDescription } from "@/lib/seo"
  * application, by system, by region, then all at once (Vern, 4 Sept 2026:
  * "Jan likes to be able to show clients image galleries to showcase
  * products and applications"). The old site's /galleries lives on here:
- * its ten galleries are the first grid, one for one. Every tile on every
+ * its ten galleries are the first grid, one for one. Every frame on every
  * gallery page opens full screen (components/WorkGallery).
  *
+ * 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.7, §5 step 5): the same four
+ * bands on the own-company surface. Each gallery is a square-cornered
+ * frame with its name UNDER it — no gradient, no text over the
+ * photograph, no arrows — and each band is a Section with its label in
+ * the margin column and its one link as an underlined word.
+ *
  * No photograph counts on this page (the client, 16 Sept 2026: "don't love
- * saying the numbers"); the counts are used only to decide which cards
+ * saying the numbers"); the counts are used only to decide which frames
  * exist and in what order.
  */
 
@@ -39,42 +45,39 @@ export const metadata: Metadata = {
   alternates: { canonical: `${SITE_URL}/galleries` },
 }
 
-/** The sharpest available frame leads a gallery card. */
+/** The sharpest available frame leads a gallery. */
 function cover(photos: WorkPhoto[]): WorkPhoto | undefined {
   return photos.find((p) => p.hires && p.w >= 1600) ?? photos.find((p) => p.hires) ?? photos[0]
 }
 
-function GalleryCard({
+/** One gallery: the frame, its name under it in Futura, the whole thing the link. */
+function GalleryCover({
   href,
   photo,
   title,
-  count,
+  sizes,
   priority = false,
 }: {
   href: string
   photo?: Pick<WorkPhoto, "src">
   title: string
-  count: number
+  sizes: string
   priority?: boolean
 }) {
   return (
-    <Link
+    <Frame
+      src={photo?.src}
+      alt={photo ? `${title} — gallery of Square One installations` : ""}
+      aspect="aspect-[4/3]"
+      sizes={sizes}
+      priority={priority}
       href={href}
-      className="card relative block aspect-[4/3] overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)]"
-    >
-      {photo && (
-        <Image
-          src={photo.src}
-          alt={`${title} — gallery of Square One installations`}
-          fill
-          priority={priority}
-          sizes="(max-width: 700px) 100vw, (max-width: 1280px) 33vw, 411px"
-          className="object-cover"
-        />
-      )}
-      <div aria-hidden className="scrim" />
-      <ProjectCaption title={title} meta="View the gallery" />
-    </Link>
+      caption={
+        <span className="block not-italic font-bold text-ink" style={{ fontFamily: "var(--font-display)" }}>
+          {title}
+        </span>
+      }
+    />
   )
 }
 
@@ -92,10 +95,10 @@ export default function GalleriesPage() {
     }
   }).filter((g) => g.count > 0)
 
-  // The supporting service gets its own card (Vern, 19 Sept: "add the images
-  // to the galleries section"). Its frames are not all from the record, so
-  // they live on the service page in labelled groups rather than in
-  // lib/work.ts; the cover is Square One's own Granville Island job.
+  // The supporting service gets its own frame (Vern, 19 Sept: "add the
+  // images to the galleries section"). Its frames are not all from the
+  // record, so they live on the service page in labelled groups rather than
+  // in lib/work.ts; the cover is Square One's own Granville Island job.
   const vapour = {
     slug: "vapour-blasting",
     label: "Vapour blasting",
@@ -119,6 +122,9 @@ export default function GalleriesPage() {
     { label: "Victoria & Vancouver Island", href: "/driveways/victoria", photos: workForRegion("driveways", "Vancouver Island") },
   ].filter((g) => g.photos.length > 0)
 
+  const threeUp = "(max-width: 700px) 100vw, (max-width: 1280px) 33vw, 411px"
+  const fourUp = "(max-width: 700px) 100vw, (max-width: 1280px) 25vw, 300px"
+
   return (
     <main className="bg-[color:var(--surface)]">
       <IndexImageHero
@@ -132,103 +138,76 @@ export default function GalleriesPage() {
       />
 
       {/* ── By application ──────── */}
-      <section className="section" aria-labelledby="galleries-applications">
-        <div className="container-1280">
-          <div className="flex flex-wrap items-baseline justify-between gap-6">
-            <div>
-              <div className="eyebrow">By application</div>
-              <h2 id="galleries-applications" className="mt-4 [text-wrap:balance]">
-                A gallery for each kind of work
-              </h2>
-            </div>
-            <Link href="/applications" className="arrow-link whitespace-nowrap">
-              The application pages <span aria-hidden="true">&rarr;</span>
-            </Link>
-          </div>
-
-          <div className="mt-10 grid grid-cols-3 gap-6 max-[1000px]:grid-cols-2 max-[600px]:grid-cols-1">
-            {byApplication.map((g, i) => (
-              <GalleryCard key={g.slug} href={g.href} photo={g.photo} title={g.label} count={g.count} priority={i < 3} />
-            ))}
-            <GalleryCard key={vapour.slug} href={vapour.href} photo={vapour.photo} title={vapour.label} count={vapour.count} />
-          </div>
-        </div>
-      </section>
+      <Section
+        id="galleries-applications"
+        label="By application"
+        title="A gallery for each kind of work"
+        link={{ href: "/applications", label: "The application pages" }}
+        wide
+      >
+        <ul className="grid grid-cols-3 gap-x-7 gap-y-10 max-[1000px]:grid-cols-2 max-[600px]:grid-cols-1">
+          {byApplication.map((g, i) => (
+            <li key={g.slug}>
+              <GalleryCover href={g.href} photo={g.photo} title={g.label} sizes={threeUp} priority={i < 3} />
+            </li>
+          ))}
+          <li key={vapour.slug}>
+            <GalleryCover href={vapour.href} photo={vapour.photo} title={vapour.label} sizes={threeUp} />
+          </li>
+        </ul>
+      </Section>
 
       {/* ── By system ──────── */}
-      <section className="section border-t border-[color:var(--hairline)] bg-[color:var(--surface-warm)]" aria-labelledby="galleries-systems">
-        <div className="container-1280">
-          <div className="flex flex-wrap items-baseline justify-between gap-6">
-            <div>
-              <div className="eyebrow">By system</div>
-              <h2 id="galleries-systems" className="mt-4 [text-wrap:balance]">
-                The same photographs, sorted by what was installed
-              </h2>
-            </div>
-            <Link href="/products" className="arrow-link whitespace-nowrap">
-              The systems <span aria-hidden="true">&rarr;</span>
-            </Link>
-          </div>
-
-          <div className="mt-10 grid grid-cols-4 gap-6 max-[1000px]:grid-cols-2 max-[600px]:grid-cols-1">
-            {bySystem.map((g) => (
-              <GalleryCard key={g.slug} href={g.href} photo={g.photo} title={g.name} count={g.count} />
-            ))}
-          </div>
-        </div>
-      </section>
+      <Section
+        id="galleries-systems"
+        label="By system"
+        title="The same photographs, sorted by what was installed"
+        link={{ href: "/products", label: "The systems" }}
+        tone="warm"
+        wide
+      >
+        <ul className="grid grid-cols-4 gap-x-7 gap-y-10 max-[1000px]:grid-cols-2 max-[600px]:grid-cols-1">
+          {bySystem.map((g) => (
+            <li key={g.slug}>
+              <GalleryCover href={g.href} photo={g.photo} title={g.name} sizes={fourUp} />
+            </li>
+          ))}
+        </ul>
+      </Section>
 
       {/* ── Driveways and projects ──────── */}
-      <section className="section border-t border-[color:var(--hairline)]" aria-labelledby="galleries-more">
-        <div className="container-1280">
-          <div className="eyebrow">Driveways and projects</div>
-          <h2 id="galleries-more" className="mt-4 [text-wrap:balance]">
-            For homeowners, and for the full story
-          </h2>
-
-          <div className="mt-10 grid grid-cols-3 gap-6 max-[1000px]:grid-cols-2 max-[600px]:grid-cols-1">
-            {driveways.map((g) => (
-              <GalleryCard key={g.href} href={g.href} photo={cover(g.photos)} title={g.label} count={g.photos.length} />
-            ))}
-            <Link
-              href="/projects"
-              className="card-panel min-h-[240px] justify-between rounded-[2px]"
-            >
-              <div>
-                <div className="label">Projects</div>
-                <h3 className="mt-4 text-[22px] leading-[1.25]">Projects, told in full</h3>
-                <p className="mt-3 max-w-[40ch] text-[15px] leading-[1.6] text-[color:var(--ink-body)]">
-                  Each with its photographs, the systems installed and the place &mdash; and the
-                  story behind the crossing, the plaza or the driveway.
-                </p>
-              </div>
-              <span className="arrow-link mt-6">
-                Projects <span aria-hidden="true">&rarr;</span>
-              </span>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Every photograph ──────── */}
-      <section className="section border-t border-[color:var(--hairline)] bg-[color:var(--surface-warm)]" aria-labelledby="galleries-all">
-        <div className="container-1280">
-          <div className="flex flex-wrap items-baseline justify-between gap-6">
-            <div>
-              <div className="eyebrow">All the galleries, together</div>
-              <h2 id="galleries-all" className="mt-4 [text-wrap:balance]">
-                A selection from years of work across BC
-              </h2>
-            </div>
-            <p className="max-w-[44ch] text-[15px] leading-[1.6] text-[color:var(--ink-muted)]">
-              A sample of the work, not the full list. Filter by system or region, then click any photograph to open the viewer.
+      <Section id="galleries-more" label="Driveways and projects" title="For homeowners, and for the full story" wide>
+        <div className="grid grid-cols-3 gap-x-7 gap-y-10 max-[1000px]:grid-cols-2 max-[600px]:grid-cols-1">
+          {driveways.map((g) => (
+            <GalleryCover key={g.href} href={g.href} photo={cover(g.photos)} title={g.label} sizes={threeUp} />
+          ))}
+          <div className="border-t border-hairline pt-6">
+            <span className="label">Projects</span>
+            <h3 className="mt-1">Projects, told in full</h3>
+            <p className="mt-3 max-w-[40ch] text-[16px] leading-[1.6] text-ink-body [text-wrap:pretty]">
+              Each with its photographs, the systems installed and the place &mdash; and the
+              story behind the crossing, the plaza or the driveway.
+            </p>
+            <p className="mt-5">
+              <Link href="/projects" className="link">
+                All projects
+              </Link>
             </p>
           </div>
-          <div className="mt-10">
-            <WorkGallery photos={all} initial={12} ariaLabel="Every installation photograph on record" />
-          </div>
         </div>
-      </section>
+      </Section>
+
+      {/* ── Every photograph ──────── */}
+      <Section
+        id="galleries-all"
+        label="All the galleries, together"
+        title="A selection from years of work across BC"
+        intro="A sample of the work, not the full list. Filter by system or region, then click any photograph to open the viewer."
+        tone="warm"
+        wide
+      >
+        <WorkGallery photos={all} initial={12} ariaLabel="Every installation photograph on record" />
+      </Section>
     </main>
   )
 }

@@ -5,12 +5,15 @@ import FilterBar, { type FilterDef } from "@/components/ui/FilterBar"
 import RecordCard from "@/components/ui/RecordCard"
 
 /**
- * Filter bar + card grid for /projects.
+ * Filter bar + the records for /projects.
  *
  * Split out of app/projects/page.tsx so the page itself stays a Server
  * Component. One line of filters — the three questions a specifier asks:
- * what kind of work, where, and with which system. Cards are the shared
+ * what kind of work, where, and with which system. Records are the shared
  * RecordCard, so this index and /blog read as one system.
+ *
+ * 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.7): the lead is a hairline
+ * row, the rest a grid of frames with their captions under them.
  */
 
 export interface ProjectCard {
@@ -116,30 +119,31 @@ export default function ProjectsIndexClient({ projects }: ProjectsIndexClientPro
             )}
 
             {rest.length > 0 && (
-              <div className="mt-10 grid grid-cols-3 gap-6 max-[1000px]:grid-cols-2 max-[700px]:grid-cols-1 max-[700px]:gap-10">
+              <ul className="mt-12 grid grid-cols-3 gap-x-7 gap-y-12 max-[1000px]:grid-cols-2 max-[700px]:grid-cols-1 max-[700px]:gap-y-8">
                 {rest.map((project) => (
-                  <RecordCard
-                    key={project.slug}
-                    href={`/projects/${project.slug}`}
-                    src={project.src}
-                    alt={project.title}
-                    caption={[cityName(project.city), project.systems.join(" + "), project.year]
-                      .filter(Boolean)
-                      .join(" · ")}
-                    kicker={project.application}
-                    title={project.title}
-                    description={project.excerpt}
-                    meta={[cityName(project.city), project.region].join(" · ")}
-                  />
+                  <li key={project.slug}>
+                    <RecordCard
+                      href={`/projects/${project.slug}`}
+                      src={project.src}
+                      alt={project.title}
+                      caption={[cityName(project.city), project.systems.join(" + "), project.year]
+                        .filter(Boolean)
+                        .join(" · ")}
+                      kicker={project.application}
+                      title={project.title}
+                      description={project.excerpt}
+                      meta={[cityName(project.city), project.region].join(" · ")}
+                    />
+                  </li>
                 ))}
-              </div>
+              </ul>
             )}
           </>
         ) : (
-          <div className="mt-10 border-t border-[color:var(--hairline)] py-24 text-center">
-            <p className="text-[17px] text-[color:var(--ink-body)]">No projects match this filter.</p>
-            <button type="button" onClick={clear} className="arrow-link mt-6">
-              Clear filters <span aria-hidden="true">&rarr;</span>
+          <div className="mt-10 border-t border-hairline py-24 text-center">
+            <p className="text-ink-body">No projects match this filter.</p>
+            <button type="button" onClick={clear} className="link mt-6">
+              Clear filters
             </button>
           </div>
         )}

@@ -2,11 +2,15 @@ import Image from "next/image"
 import { fitVars } from "@/lib/type"
 
 /**
- * Full-bleed opening image band for index pages — Rockstar Pass Part 4,
- * retuned for direction C (First-Draft fix round): caps titles run at the
- * h1 scale (display-xl is the homepage hero's alone), the band is taller
- * so a two-line caps title never climbs into the bar, and a top scrim
- * keeps the light nav readable over any sky.
+ * Full-bleed opening image band for index pages.
+ *
+ * 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.7, §5 step 5): the opener stays
+ * — a photograph with the title over it — but the surface changes. The h1
+ * is Futura in sentence case with no orange full stop (`stop` is gone from
+ * the class list; own.css also retires the glyph), and no eyebrow over it.
+ * The caption over the photograph stays: this is an opener, not a row, and
+ * the captions-under-the-frame rule is for rows and galleries. `fitVars`
+ * keeps a long title inside its measure.
  */
 export default function IndexImageHero({
   src,
@@ -24,7 +28,8 @@ export default function IndexImageHero({
 }: {
   src: string
   alt: string
-  eyebrow: string
+  /** Kept for every caller; not drawn since 26 Sept 2026 (see below). */
+  eyebrow?: string
   title: React.ReactNode
   fit?: string
   lede?: string
@@ -59,11 +64,16 @@ export default function IndexImageHero({
         style={{ paddingTop: "calc(var(--bar-h) + 2rem)" }}
       >
         <div className={align === "right" ? "ml-auto max-w-[44rem] min-[901px]:pl-8" : undefined}>
-          <div className="eyebrow eyebrow-on-image">{eyebrow}</div>
+          {/* No eyebrow over the photograph (27 Sept 2026): the openers are
+              simplified the way the home hero is — the title, one line, the
+              caption. A label above a headline over a photo is HUB's shape
+              whatever face it is set in. `eyebrow` stays a prop so no caller
+              changes, and it still names the page for a screen reader. */}
+          {eyebrow && <span className="sr-only">{eyebrow}</span>}
 
-          <div className="fit-host mt-5 max-w-[48rem]">
+          <div className="fit-host max-w-[48rem]">
             <h1
-              className="display-fit stop text-white [text-wrap:balance]"
+              className="display-fit text-white [text-wrap:balance]"
               style={fitVars(fit ?? (typeof title === "string" ? title : ""), { max: "3.5rem" })}
             >
               {title}

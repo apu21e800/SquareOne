@@ -6,11 +6,14 @@ import FilterBar, { type FilterDef } from "@/components/ui/FilterBar"
 import RecordCard from "@/components/ui/RecordCard"
 
 /**
- * Filter bar + card grid for /blog — the same FilterBar and RecordCard as
+ * Filter bar + the records for /blog — the same FilterBar and RecordCard as
  * /projects, so the two indexes are one system. `label` is display copy
  * (Canadian English, sentence case); `match` is the original filter token
  * and must not change — it is what post categories and tags are tested
  * against.
+ *
+ * 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.7): the lead is a hairline
+ * row, the rest a grid of frames with their captions under them.
  */
 const TOPICS: ReadonlyArray<{ label: string; match: string }> = [
   { label: "Municipal", match: "Municipal" },
@@ -108,7 +111,7 @@ export default function BlogFilterClient({ posts }: Props) {
       />
 
       {filtered.length === 0 ? (
-        <p className="py-20 text-center text-[16px] text-[color:var(--ink-body)]">
+        <p className="py-20 text-center text-ink-body">
           Nothing filed under that yet.
         </p>
       ) : (
@@ -131,21 +134,22 @@ export default function BlogFilterClient({ posts }: Props) {
           )}
 
           {rest.length > 0 && (
-            <div className="mt-10 grid grid-cols-3 gap-6 max-[1000px]:grid-cols-2 max-[700px]:grid-cols-1 max-[700px]:gap-10">
+            <ul className="mt-12 grid grid-cols-3 gap-x-7 gap-y-12 max-[1000px]:grid-cols-2 max-[700px]:grid-cols-1 max-[700px]:gap-y-8">
               {rest.map((post) => (
-                <RecordCard
-                  key={post.slug}
-                  href={`/blog/${post.slug}`}
-                  src={post.featured_image || undefined}
-                  alt={post.title}
-                  caption={captionFor(post)}
-                  kicker={post.category || undefined}
-                  title={post.title}
-                  description={post.description}
-                  meta={post.date ? formatDate(post.date) : undefined}
-                />
+                <li key={post.slug}>
+                  <RecordCard
+                    href={`/blog/${post.slug}`}
+                    src={post.featured_image || undefined}
+                    alt={post.title}
+                    caption={captionFor(post)}
+                    kicker={post.category || undefined}
+                    title={post.title}
+                    description={post.description}
+                    meta={post.date ? formatDate(post.date) : undefined}
+                  />
+                </li>
               ))}
-            </div>
+            </ul>
           )}
         </>
       )}
