@@ -1,7 +1,7 @@
-import Image from "next/image"
 import Link from "next/link"
 import type { Metadata } from "next"
 import IndexImageHero from "@/components/IndexImageHero"
+import Frame from "@/components/ui/Frame"
 
 import { products, type Product } from "@/lib/products"
 import { SITE_URL } from "@/lib/site"
@@ -67,50 +67,41 @@ export default function ProductsPage() {
       />
 
       {/* One photographic wall — eight systems, no half-empty category rows.
-          The category reads inside each card; the mega menu teaches the
-          taxonomy, this page sells the systems. Each card's photograph is
+          26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.7): the same eight, each
+          a square-cornered frame with the name and its category UNDER it and
+          one line beneath — no caption over the photograph, no chip, no
+          arrow, no box; the whole cell is the link. The mega menu taught the
+          taxonomy once; this page sells the systems. Each photograph is
           described by lib/products.ts imageAlt, never as "installed by
           Square One" unless the record says so. */}
-      <section className="relative overflow-hidden pt-20 pb-28 max-[700px]:pt-12 max-[700px]:pb-14">
-        <div className="container-1280 relative z-[1]">
+      <section className="section bg-surface">
+        <div className="container-1280">
           <h2 className="sr-only">Stamped asphalt, decorative coatings, thermoplastic and surface protection systems</h2>
-          <div className="grid grid-cols-3 gap-6 max-[900px]:grid-cols-2 max-[600px]:grid-cols-1">
+          <ul className="grid grid-cols-3 gap-x-7 gap-y-12 max-[900px]:grid-cols-2 max-[600px]:grid-cols-1" role="list">
             {groups.flatMap((group) => group.items).map((product) => (
-              <Link
-                key={product.slug}
-                href={`/products/${product.slug}`}
-                aria-label={`Explore ${product.name}`}
-                className="card group flex flex-col overflow-hidden rounded-[2px] border border-[color:var(--hairline)] bg-[color:var(--surface)]"
-              >
-                <div className="relative aspect-[16/10] overflow-hidden">
-                  <Image
-                    src={product.image}
-                    alt={product.imageAlt}
-                    fill
-                    sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 400px"
-                    className="object-cover"
-                  />
-                  <div aria-hidden="true" className="scrim scrim-light" />
-                  <div className="caption">{product.category}</div>
-                </div>
-
-                <div className="flex flex-1 flex-col p-6 pt-5">
-                  <h3>
-                    {product.name}
-                    {product.mark && <sup className="ml-[1px] text-[0.55em] font-normal">{product.mark}</sup>}
-                  </h3>
-
-                  <p className="mt-2 text-[15px] leading-[1.55] text-[color:var(--ink-body)]">
-                    {product.tagline}
-                  </p>
-
-                  <span className="arrow-link mt-auto pt-6">
-                    Explore system <span aria-hidden="true">&rarr;</span>
-                  </span>
-                </div>
-              </Link>
+              <li key={product.slug} className="relative">
+                <Link
+                  href={`/products/${product.slug}`}
+                  aria-label={`${product.name} — the system`}
+                  className="absolute inset-0 z-[2]"
+                />
+                <Frame
+                  src={product.image}
+                  alt={product.imageAlt}
+                  aspect="aspect-[16/10]"
+                  sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 400px"
+                  caption={product.category}
+                />
+                <h3 className="mt-3">
+                  {product.name}
+                  {product.mark && <sup className="ml-[1px] text-[0.55em] font-normal">{product.mark}</sup>}
+                </h3>
+                <p className="mt-2 max-w-[44ch] text-[16px] leading-[1.55] text-ink-body [text-wrap:pretty]">
+                  {product.tagline}
+                </p>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       </section>
     </main>

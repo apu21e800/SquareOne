@@ -19,7 +19,8 @@ export const TYPE_CODE: Record<ResourceType, string> = {
  * Page one of the document, pre-rendered (lib/doc-previews). Served as-is
  * from /docs-previews — `unoptimized` keeps 200+ small WebPs out of the
  * image optimizer. If the file is missing or fails to load, the tile falls
- * back to the type code, so a broken preview never breaks a row.
+ * back to the type code, so a broken preview never breaks a row. Square-
+ * cornered, hairline-edged (26 Sept 2026).
  */
 export default function DocThumb({
   href,
@@ -43,7 +44,7 @@ export default function DocThumb({
     return (
       <span
         aria-hidden="true"
-        className={`flex shrink-0 items-center justify-center rounded-[2px] bg-[color:var(--surface-stone)] text-[11px] font-semibold tracking-[0.08em] text-[color:var(--ink-body)] ${box} ${className}`}
+        className={`flex shrink-0 items-center justify-center bg-surface-stone text-[11px] font-bold tracking-[0.08em] text-ink-body ${box} ${className}`}
         style={{ fontFamily: "var(--font-display)" }}
       >
         {TYPE_CODE[type]}
@@ -54,7 +55,7 @@ export default function DocThumb({
   return (
     <span
       aria-hidden="true"
-      className={`doc-thumb relative block shrink-0 overflow-hidden rounded-[2px] border border-[color:var(--hairline)] bg-white ${box} ${className}`}
+      className={`doc-thumb relative block shrink-0 overflow-hidden border border-hairline bg-white ${box} ${className}`}
     >
       <Image
         src={p.thumb}

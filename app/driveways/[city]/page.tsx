@@ -1,11 +1,12 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import Image from "next/image"
 import { notFound } from "next/navigation"
 
 import { workForRegion, type WorkPhoto, type WorkRegion } from "@/lib/work"
 import WorkGallery from "@/components/WorkGallery"
 import JsonLd, { breadcrumbSchema, faqSchema } from "@/components/JsonLd"
+import Frame from "@/components/ui/Frame"
+import { Section } from "@/components/ui/Container"
 import { SITE_URL } from "@/lib/site"
 import { fitVars } from "@/lib/type"
 import { clampDescription } from "@/lib/seo"
@@ -16,14 +17,20 @@ import { clampDescription } from "@/lib/seo"
  * photographs Square One has on record IN that region (lib/work.ts), so a
  * Victoria page shows Saanich, Sooke and Victoria driveways and nothing else.
  *
- *   01 Header      typographic — eyebrow, h1, lede, CTAs, phone for the region
- *   02 Hero figure the region's sharpest driveway, contained — rendered only
- *                  when the region holds a hi-res original 1600px or wider
- *   03 Systems     the three residential systems, short
- *   04 The work    region gallery with system chips
+ *   01 Header      typographic — label, h1, lede, the button, the region's line
+ *   02 Hero figure the region's sharpest driveway, contained, captioned under —
+ *                  rendered only when the region holds a hi-res original 1600px or wider
+ *   03 Why here    the label in the margin column, the paragraphs, the three
+ *                  residential systems as hairline rows beside them
+ *   04 The work    region gallery
  *   05 Where       communities served in the region
  *   06 Questions   four region-specific answers
  *   07 Close       CTA + the other city
+ *
+ * 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.7): the same skeleton on the
+ * own-company primitives — no orange full stop, the caption under the
+ * opening frame, the system cards as hairline rows, every arrow link an
+ * underlined word. Copy, facts and hrefs are the ones that were here.
  *
  * Copy rules (CANON): every place named in CITIES is a driveway in that
  * region's record (lib/work.ts, lib/work-captions.ts, lib/projects.ts) or a
@@ -194,9 +201,10 @@ export default async function DrivewayCityPage({ params }: Props) {
   const hero = photos.find((p) => p.src === c.heroSrc) ?? photos.find((p) => p.hires && p.w >= 1600)
   const gallery = hero ? photos.filter((p) => p.src !== hero.src) : photos
   const other = CITIES[c.other]
+  const tel = `tel:${c.phone.replace(/-/g, "")}`
 
   return (
-    <main className="bg-[color:var(--surface)]">
+    <main className="bg-surface">
       <JsonLd
         data={[
           faqSchema(c.faqs),
@@ -207,26 +215,26 @@ export default async function DrivewayCityPage({ params }: Props) {
         ]}
       />
       {/* ── 01 Header ──────── */}
-      <section className="section bg-[color:var(--surface)] pt-28 pb-14 max-[700px]:pt-[88px] max-[700px]:pb-10">
+      <section className="section bg-surface pt-28 pb-14 max-[700px]:pt-[88px] max-[700px]:pb-10">
         <div className="container-1280">
-          <Link href="/driveways" className="eyebrow w-fit transition-colors hover:text-[color:var(--ink)]">
+          <Link href="/driveways" className="label w-fit transition-colors hover:text-ink">
             Driveways &middot; {c.regionLabel}
           </Link>
 
-          <div className="fit-host mt-7 max-w-[44rem]">
-            <h1 className="display-fit stop [text-wrap:balance]" style={fitVars(c.headline)}>{c.headline}</h1>
+          <div className="fit-host mt-6 max-w-[44rem]">
+            <h1 className="display-fit [text-wrap:balance]" style={fitVars(c.headline)}>{c.headline}</h1>
           </div>
 
-          <p className="mt-7 max-w-[58ch] text-[19px] leading-[1.65] text-[color:var(--ink-body)] [text-wrap:pretty] max-[700px]:text-[17px]">
+          <p className="lede mt-7 max-w-[58ch] [text-wrap:pretty]">
             {c.lede}
           </p>
 
-          <div className="mt-11 flex flex-wrap items-center gap-x-8 gap-y-4">
+          <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
             <Link href="/contact" className="btn-primary">
               Book a free site visit
             </Link>
-            <a href={`tel:${c.phone.replace(/-/g, "")}`} className="arrow-link">
-              {c.phoneLabel} {c.phone} <span aria-hidden="true">&rarr;</span>
+            <a href={tel} className="link">
+              {c.phoneLabel} {c.phone}
             </a>
           </div>
         </div>
@@ -234,167 +242,139 @@ export default async function DrivewayCityPage({ params }: Props) {
 
       {/* ── 02 Hero figure — only when the region holds a sharp original ──────── */}
       {hero && (
-        <section className="bg-[color:var(--surface)] pb-16 max-[700px]:pb-10">
+        <section className="bg-surface pb-16 max-[700px]:pb-10">
           <div className="container-1280">
-            <figure className="max-w-[1080px]">
-              {/* Driveway photographs carry the surface in the lower half, so the crop anchors to the bottom edge. */}
-              <div className="relative aspect-[16/10] overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)]">
-                <Image
-                  src={hero.src}
-                  alt={heroAlt(hero)}
-                  fill
-                  priority
-                  fetchPriority="high"
-                  sizes="(max-width: 1120px) 100vw, 1080px"
-                  className="object-cover [object-position:center_78%]"
-                />
-              </div>
-              <figcaption className="label mt-3">
-                {[hero.place, hero.systems.join(" + "), hero.subject].filter(Boolean).join(" · ")}
-              </figcaption>
-            </figure>
+            {/* Driveway photographs carry the surface in the lower half, so the crop anchors to the bottom edge. */}
+            <Frame
+              src={hero.src}
+              alt={heroAlt(hero)}
+              aspect="aspect-[16/10]"
+              sizes="(max-width: 1120px) 100vw, 1080px"
+              position="center 78%"
+              priority
+              className="max-w-[1080px]"
+              caption={[hero.place, hero.systems.join(" + "), hero.subject].filter(Boolean).join(" · ")}
+            />
           </div>
         </section>
       )}
 
-      {/* ── 03 Intro + systems ──────── */}
-      <section className="section border-y border-[color:var(--hairline)] bg-[color:var(--surface-warm)]">
-        <div className="container-1280 grid grid-cols-[1fr_1.1fr] gap-16 max-[900px]:grid-cols-1 max-[900px]:gap-10">
-          <div>
-            <div className="eyebrow">Why stamped asphalt here</div>
+      {/* ── 03 Why here — the label in the margin, the paragraphs, the
+             three residential systems as hairline rows beside them ──────── */}
+      <section className="sec section bg-surface-warm">
+        <div className="container-1280 grid grid-cols-12 gap-x-10 gap-y-10 max-[900px]:grid-cols-1">
+          <div className="col-span-3 max-[900px]:col-span-1">
+            <span className="label">Why stamped asphalt here</span>
+          </div>
+
+          <div className="col-span-5 max-[900px]:col-span-1">
             {c.intro.map((para, i) => (
-              <p
-                key={i}
-                className={`${i === 0 ? "mt-6" : "mt-4"} max-w-[52ch] text-[17px] leading-[1.7] text-[color:var(--ink-body)] [text-wrap:pretty]`}
-              >
+              <p key={i} className={`${i === 0 ? "" : "mt-4"} max-w-[52ch] text-ink-body [text-wrap:pretty]`}>
                 {para}
               </p>
             ))}
-            <div className="mt-8 flex flex-wrap gap-x-7 gap-y-2">
-              <Link href="/patterns" className="arrow-link">
-                The pattern library <span aria-hidden="true">&rarr;</span>
+            <p className="mt-7 flex flex-wrap gap-x-7 gap-y-2">
+              <Link href="/patterns" className="link">
+                The pattern library
               </Link>
-              <Link href="/services/stamped-asphalt" className="arrow-link">
-                Stamped asphalt, the service <span aria-hidden="true">&rarr;</span>
+              <Link href="/services/stamped-asphalt" className="link">
+                Stamped asphalt, the service
               </Link>
-              <Link href="/projects" className="arrow-link">
-                Driveway projects <span aria-hidden="true">&rarr;</span>
+              <Link href="/projects" className="link">
+                Driveway projects
               </Link>
-            </div>
+            </p>
           </div>
 
-          <div className="grid gap-4">
+          <ul className="col-span-4 border-t border-hairline max-[900px]:col-span-1">
             {SYSTEMS.map((s) => (
-              <Link
-                key={s.href}
-                href={s.href}
-                className="card group flex items-baseline justify-between gap-6 rounded-[2px] border border-[color:var(--hairline)] bg-[color:var(--surface)] p-6"
-              >
-                <div>
-                  <h3>{s.name}</h3>
-                  <p className="mt-2 max-w-[46ch] text-[15px] leading-[1.55] text-[color:var(--ink-body)]">{s.body}</p>
-                </div>
-                <span aria-hidden="true" className="arrow-link whitespace-nowrap group-hover:translate-x-1">
-                  &rarr;
-                </span>
-              </Link>
+              <li key={s.href} className="border-b border-hairline py-5">
+                <h3>
+                  <Link href={s.href} className="underline-offset-4 hover:underline">
+                    {s.name}
+                  </Link>
+                </h3>
+                <p className="mt-2 max-w-[46ch] text-[15px] leading-[1.55] text-ink-body [text-wrap:pretty]">{s.body}</p>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       </section>
 
       {/* ── 04 The work ──────── */}
-      <section className="section bg-[color:var(--surface)]">
-        <div className="container-1280">
-          <div className="flex flex-wrap items-baseline justify-between gap-6">
-            <div>
-              <div className="eyebrow">Photographed on site</div>
-              <h2 className="mt-4 [text-wrap:balance]">Stamped asphalt driveways on record {c.region === "Lower Mainland" ? "in the Lower Mainland" : "on Vancouver Island"}</h2>
-            </div>
-            <p className="max-w-[44ch] text-[15px] leading-[1.6] text-[color:var(--ink-muted)]">
-              Square One driveways, captioned with the pattern and the community. Archive shots
-              stay small on purpose.
-            </p>
-          </div>
-
-          <div className="mt-10">
-            <WorkGallery photos={gallery} initial={12} ariaLabel={`${c.name} driveway photographs`} />
-          </div>
-        </div>
-      </section>
+      <Section
+        label="Photographed on site"
+        title={`Stamped asphalt driveways on record ${c.region === "Lower Mainland" ? "in the Lower Mainland" : "on Vancouver Island"}`}
+        intro="Square One driveways, captioned with the pattern and the community. Archive shots stay small on purpose."
+        wide
+      >
+        <WorkGallery photos={gallery} initial={12} ariaLabel={`${c.name} driveway photographs`} />
+      </Section>
 
       {/* ── 04b Try it — HELD BACK with the templates (Vern, 19 Sept). ──────── */}
 
       {/* ── 05 Where ──────── */}
-      <section className="section border-y border-[color:var(--hairline)] bg-[color:var(--surface-warm)]">
-        <div className="container-1280">
-          <div className="eyebrow">Where we install</div>
-          <h2 className="mt-4">Driveways across {c.regionLabel} and beyond</h2>
-          <div className="mt-8 flex flex-wrap gap-2.5">
-            {c.communities.map((place) => (
-              <span key={place} className="tag">
-                {place}
-              </span>
-            ))}
-          </div>
-          <p className="mt-6 max-w-[52ch] text-[15px] leading-[1.6] text-[color:var(--ink-muted)]">
-            Free site visit and a written quote, anywhere in the service area. Elsewhere in BC,
-            we travel for the right job &mdash; ask.
-          </p>
-        </div>
-      </section>
+      <Section label="Where we install" title={`Driveways across ${c.regionLabel} and beyond`} tone="warm">
+        <p>
+          {c.communities.map((place) => (
+            <span key={place} className="tag">
+              {place}
+            </span>
+          ))}
+        </p>
+        <p className="mt-6 max-w-[52ch] text-[16px] leading-[1.6] text-ink-muted [text-wrap:pretty]">
+          Free site visit and a written quote, anywhere in the service area. Elsewhere in BC,
+          we travel for the right job &mdash; ask.
+        </p>
+      </Section>
 
       {/* ── 06 Questions ──────── */}
-      <section className="section bg-[color:var(--surface)]">
-        <div className="container-1280">
-          <h2>Questions from {c.name} homeowners</h2>
-
-          <div className="mt-10 max-w-[760px] border-t border-[color:var(--hairline)]">
-            {c.faqs.map((faq, i) => (
-              <details key={faq.q} open={i === 0} className="group border-b border-[color:var(--hairline)]">
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-[22px] [&::-webkit-details-marker]:hidden">
-                  <span className="text-[1.25rem] font-semibold leading-[1.4] tracking-[-0.015em] text-[color:var(--ink)]">
-                    {faq.q}
-                  </span>
-                  <span aria-hidden="true" className="flex-shrink-0 text-[22px] font-normal leading-none text-[color:var(--ink-muted)]">
-                    <span className="group-open:hidden">+</span>
-                    <span className="hidden group-open:inline">&minus;</span>
-                  </span>
-                </summary>
-                <p className="max-w-[60ch] pb-6 pr-10 text-[15px] leading-[1.65] text-[color:var(--ink-body)] max-[700px]:pr-0">
-                  {faq.a}
-                </p>
-              </details>
-            ))}
-          </div>
+      <Section label="Questions" title={`Questions from ${c.name} homeowners`}>
+        <div className="border-t border-hairline">
+          {c.faqs.map((faq, i) => (
+            <details key={faq.q} open={i === 0} className="group border-b border-hairline">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-[22px] [&::-webkit-details-marker]:hidden">
+                <span className="text-[1.125rem] font-semibold leading-[1.4] text-ink">
+                  {faq.q}
+                </span>
+                <span aria-hidden="true" className="flex-shrink-0 text-[22px] font-normal leading-none text-ink-muted">
+                  <span className="group-open:hidden">+</span>
+                  <span className="hidden group-open:inline">&minus;</span>
+                </span>
+              </summary>
+              <p className="max-w-[60ch] pb-6 pr-10 text-[16px] leading-[1.6] text-ink-body max-[700px]:pr-0">
+                {faq.a}
+              </p>
+            </details>
+          ))}
         </div>
-      </section>
+      </Section>
 
       {/* ── 07 Close ──────── */}
-      <section className="section border-t border-[color:var(--hairline)] bg-[color:var(--surface-warm)]">
-        <div className="container-1280">
-          <div className="eyebrow">Free site visit</div>
-          <h2 className="stop mt-5 max-w-[22ch] [text-wrap:balance]">Send a photo of your driveway and we will come back with a written quote</h2>
-          <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
-            <Link href="/contact" className="btn-primary">
-              Request a quote
-            </Link>
-            <a href={`tel:${c.phone.replace(/-/g, "")}`} className="btn-secondary">
-              {c.phone}
-            </a>
-          </div>
-          <div className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-[color:var(--hairline)] pt-6">
-            <Link href="/driveways" className="arrow-link">
-              All driveways <span aria-hidden="true">&rarr;</span>
-            </Link>
-            {other && (
-              <Link href={`/driveways/${other.slug}`} className="arrow-link">
-                Driveways in {other.name} <span aria-hidden="true">&rarr;</span>
-              </Link>
-            )}
-          </div>
+      <Section
+        label="Free site visit"
+        title="Send a photo of your driveway and we will come back with a written quote"
+        tone="warm"
+      >
+        <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
+          <Link href="/contact" className="btn-primary">
+            Request a quote
+          </Link>
+          <a href={tel} className="link">
+            {c.phone}
+          </a>
         </div>
-      </section>
+        <p className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-hairline pt-6">
+          <Link href="/driveways" className="link">
+            All driveways
+          </Link>
+          {other && (
+            <Link href={`/driveways/${other.slug}`} className="link">
+              Driveways in {other.name}
+            </Link>
+          )}
+        </p>
+      </Section>
     </main>
   )
 }

@@ -28,7 +28,9 @@ export const metadata: Metadata = {
  * real, live in /public/docs and are served by the CDN; sizes are baked into
  * lib/resources.ts from the actual bytes. Opens like the other indexes — a
  * full-bleed photograph — so the library reads as part of the site, not a
- * filing cabinet.
+ * filing cabinet. 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.7): the closing
+ * line's links are underlined words; the library itself is restyled in
+ * components/ResourceLibrary.tsx.
  */
 export default function ResourcesPage() {
   return (
@@ -55,28 +57,28 @@ export default function ResourcesPage() {
 
       {/* ── Spec help. One line: the closing CTA for every page is the slate
              footer, and this must not rehearse it. ──────── */}
-      <section className="section border-t border-[color:var(--hairline)] bg-[color:var(--surface-warm)]">
+      <section className="sec section bg-surface-warm">
         <div className="container-1280">
-          <p className="max-w-[56ch] text-[17px] leading-[1.65] text-[color:var(--ink-body)] [text-wrap:pretty]">
+          <p className="max-w-[56ch] text-ink-body [text-wrap:pretty]">
             Writing a specification and need help matching a system to your traffic loading and
             substrate? Call{" "}
-            <a href="tel:+16046126209" className="font-semibold text-[color:var(--ink)]">
+            <a href="tel:+16046126209" className="link">
               604-612-6209
             </a>{" "}
             or{" "}
-            <Link href="/contact" className="font-semibold text-[color:var(--ink)] underline-offset-4 hover:underline">
+            <Link href="/contact" className="link">
               request a site visit
             </Link>
             . Product overviews live under{" "}
-            <Link href="/products" className="font-semibold text-[color:var(--ink)] underline-offset-4 hover:underline">
+            <Link href="/products" className="link">
               Products
             </Link>
             , the StreetPrint templates under{" "}
-            <Link href="/patterns" className="font-semibold text-[color:var(--ink)] underline-offset-4 hover:underline">
+            <Link href="/patterns" className="link">
               Patterns
             </Link>
             , and the installed work under{" "}
-            <Link href="/projects" className="font-semibold text-[color:var(--ink)] underline-offset-4 hover:underline">
+            <Link href="/projects" className="link">
               Projects
             </Link>
             .

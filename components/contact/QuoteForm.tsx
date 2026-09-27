@@ -34,9 +34,9 @@ const projectTypes = [
 ]
 
 const field =
-  "block h-[52px] w-full rounded-[2px] border border-hairline bg-white px-4 text-[16px] leading-[1.55] text-ink transition-colors placeholder:text-[#9AA0A7] hover:border-[color:var(--hairline-strong)] focus:border-ink focus:outline-none"
+  "block h-[52px] w-full border border-hairline bg-white px-4 text-[16px] leading-[1.55] text-ink transition-colors placeholder:text-[#9AA0A7] hover:border-[color:var(--hairline-strong)] focus:border-ink focus:outline-none"
 
-const label = "mb-[10px] block text-[12px] font-semibold uppercase tracking-[0.12em] text-ink"
+const label = "mb-[8px] block font-[family-name:var(--font-text)] text-[15px] italic leading-[1.4] text-ink-body"
 
 function Required() {
   return (
@@ -135,7 +135,7 @@ export default function QuoteForm() {
         tabIndex={-1}
         role="status"
         aria-live="polite"
-        className="rounded-[2px] border border-hairline bg-white p-10 shadow-[var(--shadow-rest)] outline-none max-[700px]:p-6"
+        className="border border-hairline bg-white p-10 outline-none max-[700px]:p-6"
       >
         <div className="label text-[color:var(--accent-deep)]">Request received</div>
         <h2 className="card-title mt-4">Thank you &mdash; it&rsquo;s with the office.</h2>
@@ -212,7 +212,7 @@ export default function QuoteForm() {
           setLoading(false)
         }
       }}
-      className="relative rounded-[2px] border border-hairline bg-white p-10 shadow-[var(--shadow-rest)] max-[700px]:p-5"
+      className="relative border border-hairline bg-white p-10 max-[700px]:p-5"
     >
       <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 border-b border-hairline pb-7">
         <h2 className="card-title">Request a quote</h2>
@@ -345,7 +345,7 @@ export default function QuoteForm() {
       {error && (
         <div
           role="alert"
-          className="mt-6 rounded-[2px] border border-[#E4C8C1] bg-[#FDF6F4] px-5 py-4"
+          className="mt-6 border border-[#E4C8C1] bg-[#FDF6F4] px-5 py-4"
         >
           <p ref={errorRef} className="text-[15px] leading-[1.55] font-medium text-[#A83E2B]">
             {error}

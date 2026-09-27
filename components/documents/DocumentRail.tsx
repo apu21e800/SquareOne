@@ -29,6 +29,10 @@ const TYPE_NOTE: Record<ResourceType, string> = {
  * the actions. Preview opens the document in place (DocPreviewModal);
  * Download is same-origin, so the `download` attribute is honoured. The
  * whole name is the preview trigger, so the target is generous.
+ *
+ * 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.7): a hairline row, not a
+ * tinted one — the name in the reading face, the meta line in the small
+ * voice, the two actions as underlined words. No pills, no icons, no orange.
  */
 export function DocRow({
   doc,
@@ -43,48 +47,29 @@ export function DocRow({
 }) {
   const open = () => onPreview({ doc, product })
   return (
-    <li className="group -mx-2 flex flex-wrap items-center gap-x-4 gap-y-3 rounded-[2px] px-2 py-[10px] transition-colors hover:bg-[color:var(--surface-stone)]">
+    <li className="group flex flex-wrap items-center gap-x-5 gap-y-3 py-[14px]">
       <button type="button" onClick={open} aria-label={`Preview ${doc.name}`} className="shrink-0 cursor-pointer">
         <DocThumb href={doc.href} type={doc.type} />
       </button>
 
       <button type="button" onClick={open} className="min-w-0 flex-1 cursor-pointer text-left">
-        <span className="block truncate text-[15px] leading-[1.5] font-medium text-[color:var(--ink)] group-hover:text-[color:var(--accent-deep)] max-[700px]:whitespace-normal">
+        <span className="block truncate text-[16px] leading-[1.5] text-ink decoration-1 decoration-[color:var(--hairline-strong)] underline-offset-[5px] group-hover:underline max-[700px]:whitespace-normal">
           {doc.name}
         </span>
-        <span className="mt-[2px] block text-[12.5px] leading-[1.5] text-[color:var(--ink-muted)]">
+        <span className="mt-[2px] block text-[14.5px] italic leading-[1.5] text-ink-muted">
           {showProduct ? <>{product} &middot; </> : null}
           {doc.type} &middot; {doc.size}
         </span>
       </button>
 
-      {/* Phones: the two actions drop under the title as one full-width row,
-          indented past the thumbnail, so each is a proper 40px thumb target. */}
-      <span className="flex shrink-0 items-center gap-2 max-[700px]:basis-full max-[700px]:pl-[60px]">
-        <button
-          type="button"
-          onClick={open}
-          aria-label={`Preview ${doc.name}`}
-          className="inline-flex h-9 cursor-pointer items-center gap-[6px] rounded-[2px] border border-[color:var(--hairline)] px-3 text-[12px] font-semibold tracking-[0.06em] text-[color:var(--ink)] transition-colors hover:border-[color:var(--hairline-strong)] hover:bg-white max-[700px]:h-10 max-[700px]:flex-1 max-[700px]:justify-center"
-          style={{ fontFamily: "var(--font-display)" }}
-        >
+      {/* Phones: the two actions drop under the title as one row, indented
+          past the thumbnail. */}
+      <span className="flex shrink-0 items-center gap-x-6 max-[700px]:basis-full max-[700px]:pl-[64px]">
+        <button type="button" onClick={open} aria-label={`Preview ${doc.name}`} className="link cursor-pointer">
           Preview
-          <svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12">
-            <path d="M1 6s2-3.5 5-3.5S11 6 11 6s-2 3.5-5 3.5S1 6 1 6z" stroke="currentColor" strokeWidth="1.3" fill="none" strokeLinejoin="round" />
-            <circle cx="6" cy="6" r="1.5" fill="currentColor" />
-          </svg>
         </button>
-        <a
-          href={doc.href}
-          download
-          aria-label={`Download ${doc.name} (${doc.size})`}
-          className="inline-flex h-9 items-center gap-[6px] rounded-[2px] border border-[color:var(--hairline)] px-3 text-[12px] font-semibold tracking-[0.06em] text-[color:var(--ink)] no-underline transition-colors hover:border-[color:var(--hairline-strong)] hover:bg-white max-[700px]:h-10 max-[700px]:flex-1 max-[700px]:justify-center"
-          style={{ fontFamily: "var(--font-display)" }}
-        >
+        <a href={doc.href} download aria-label={`Download ${doc.name} (${doc.size})`} className="link">
           Download
-          <svg aria-hidden="true" width="11" height="11" viewBox="0 0 12 12">
-            <path d="M6 1v8M2.5 5.5L6 9l3.5-3.5M1.5 11h9" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
         </a>
       </span>
     </li>
@@ -94,8 +79,9 @@ export function DocRow({
 /**
  * The typed document rail on a product page: the system's documents grouped
  * by what they are for, specifications first, each group with one line of
- * plain-language guidance. hubss.com's per-product downloads are the
- * benchmark; this adds the page-one previews and the type notes.
+ * plain-language guidance in the small voice. The product pages have not
+ * rendered it since 16 Sept 2026 (the client: documents on /resources only);
+ * it stays here, restyled, for the day a page wants it back.
  */
 export default function DocumentRail({ docs, product }: { docs: ResourceDoc[]; product: string }) {
   const [target, setTarget] = useState<PreviewTarget | null>(null)
@@ -104,14 +90,14 @@ export default function DocumentRail({ docs, product }: { docs: ResourceDoc[]; p
   return (
     <>
       {target && <DocPreviewModal target={target} onClose={() => setTarget(null)} />}
-      <div className="grid grid-cols-12 gap-x-12 gap-y-10 max-[900px]:grid-cols-1">
+      <div className="grid grid-cols-12 gap-x-10 gap-y-10 max-[900px]:grid-cols-1">
         {groups.map((g) => (
           <section key={g.type} className="col-span-12 grid grid-cols-subgrid max-[900px]:col-span-1 max-[900px]:block" aria-label={`${product} — ${g.type}`}>
             <div className="col-span-3 max-[900px]:mb-3">
               <h3 className="label">{g.type}</h3>
-              <p className="mt-2 max-w-[28ch] text-[13px] leading-[1.6] text-[color:var(--ink-muted)]">{TYPE_NOTE[g.type]}</p>
+              <p className="mt-2 max-w-[28ch] text-[14.5px] italic leading-[1.6] text-ink-muted">{TYPE_NOTE[g.type]}</p>
             </div>
-            <ul className="col-span-9 divide-y divide-[color:var(--hairline)] border-t border-[color:var(--hairline)] max-[900px]:col-span-1">
+            <ul className="col-span-9 divide-y divide-hairline border-t border-hairline max-[900px]:col-span-1" role="list">
               {g.docs.map((doc) => (
                 <DocRow key={doc.href} doc={doc} product={product} onPreview={setTarget} />
               ))}

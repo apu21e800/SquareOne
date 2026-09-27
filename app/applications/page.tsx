@@ -1,6 +1,6 @@
-import Image from "next/image"
 import Link from "next/link"
 import IndexImageHero from "@/components/IndexImageHero"
+import Frame from "@/components/ui/Frame"
 import { Metadata } from "next"
 import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
@@ -150,14 +150,19 @@ const credentials = [
  * driveways second-to-last as the residential anchor, vapour closes.
  *
  *   Header       IndexImageHero (h1 scale, top scrim — no nav collision)
- *   Listing      11 edge-to-edge photo cards, tag caption on image    warm
- *   Credentials  quiet hairline row                                   white
+ *   Listing      11 frames, the tag and the name UNDER each, one line,
+ *                one underlined link                                   paper
+ *   Credentials  quiet hairline row, in the small voice                paper
  *   Close        slate — rendered once by app/layout.tsx (Footer)
  *
- * Cards are photographic edge to edge — no padded frame around the image.
- * Every photograph is Square One's own, from a named BC install; each card
- * opens the application's gallery (lib/work.ts) — driveways to the pillar,
- * vapour to its service page.
+ * 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.7): the photo cards with a
+ * tag over the image and an arrow are now square-cornered frames with
+ * everything under them — the same eleven, the same order, the same
+ * words. Every photograph is Square One's own, from a named BC install;
+ * each frame opens the application's gallery (lib/work.ts) — driveways to
+ * the pillar, vapour to its service page. The opener carries the page's one
+ * button; the projects link moved off the photograph onto paper, under the
+ * grid.
  */
 export default function ApplicationsPage() {
   return (
@@ -171,68 +176,60 @@ export default function ApplicationsPage() {
         caption="White Rock · TrafficPatternsXD"
         imagePosition="center 78%"
       >
-        <div className="mt-9 flex flex-wrap items-center gap-[14px]">
+        <div className="mt-9">
           <Link href="/contact" className="btn-primary">
             Request a quote
-          </Link>
-          <Link href="/projects" className="btn-on-image">
-            See the projects
           </Link>
         </div>
       </IndexImageHero>
 
-      {/* Application cards — photographic, edge to edge */}
-      <section className="section border-t border-b border-[color:var(--hairline)] bg-[color:var(--surface-warm)]">
+      {/* The eleven applications — frames with the words under them */}
+      <section className="sec section bg-surface">
         <div className="container-1280">
-          <div className="grid grid-cols-1 gap-6 min-[701px]:grid-cols-3">
+          <ul className="grid grid-cols-1 gap-x-7 gap-y-12 min-[701px]:grid-cols-3" role="list">
             {applications.map((app) => (
-              <Link
-                key={app.title}
-                href={app.href}
-                className="card group flex flex-col overflow-hidden rounded-[2px] border border-[color:var(--hairline)] bg-[color:var(--surface)]"
-              >
-                <div className="relative aspect-[4/3] overflow-hidden">
-                  <Image
-                    src={app.image}
-                    alt={app.alt}
-                    fill
-                    sizes="(max-width: 700px) 100vw, (max-width: 1280px) 33vw, 400px"
-                    className="object-cover"
-                  />
-                  <div aria-hidden className="scrim scrim-light" />
-                  <div className="caption">{app.tag}</div>
-                </div>
-
-                <div className="flex flex-1 flex-col p-6 pt-5">
-                  <h3>{app.title}</h3>
-
-                  <p className="mt-[10px] text-[15px] leading-[1.55] text-[color:var(--ink-body)]">
-                    {app.desc}
-                  </p>
-
-                  <span className="arrow-link mt-auto pt-6">
-                    {app.cta}{" "}
-                    <span aria-hidden="true" className="group-hover:translate-x-1">
-                      &rarr;
-                    </span>
-                  </span>
-                </div>
-              </Link>
+              <li key={app.title}>
+                <Frame
+                  src={app.image}
+                  alt={app.alt}
+                  aspect="aspect-[4/3]"
+                  sizes="(max-width: 700px) 100vw, (max-width: 1280px) 33vw, 400px"
+                  href={app.href}
+                />
+                <span className="label mt-5">{app.tag}</span>
+                <h3 className="mt-1">{app.title}</h3>
+                <p className="mt-2 max-w-[44ch] text-[16px] leading-[1.55] text-ink-body [text-wrap:pretty]">
+                  {app.desc}
+                </p>
+                <p className="mt-4">
+                  <Link href={app.href} className="link">
+                    {app.cta}
+                  </Link>
+                </p>
+              </li>
             ))}
-          </div>
+          </ul>
+
+          {/* The projects link, off the photograph and onto paper (the
+              opener keeps its one button). */}
+          <p className="mt-14 border-t border-hairline pt-6">
+            <Link href="/projects" className="link">
+              See the projects
+            </Link>
+          </p>
         </div>
       </section>
 
-      {/* Credentials */}
-      <section className="section bg-[color:var(--surface)]">
+      {/* Credentials — one hairline row, the four lines as words */}
+      <section className="section bg-surface !pt-0">
         <div className="container-1280">
-          <div className="flex flex-wrap gap-x-10 gap-y-3 border-t border-[color:var(--hairline)] pt-6">
+          <p className="border-t border-hairline pt-6">
             {credentials.map((c) => (
-              <span key={c} className="text-[13px] font-medium text-[color:var(--ink-muted)]">
+              <span key={c} className="tag">
                 {c}
               </span>
             ))}
-          </div>
+          </p>
         </div>
       </section>
     </main>

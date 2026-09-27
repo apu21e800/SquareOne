@@ -1,6 +1,5 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import Image from "next/image"
 import { notFound } from "next/navigation"
 
 import { WORK_APPS, workAppMeta, workFor, type WorkApp } from "@/lib/work"
@@ -9,7 +8,8 @@ import IndexImageHero from "@/components/IndexImageHero"
 import { getProjectsByApplication } from "@/lib/projects"
 import { products } from "@/lib/products"
 import WorkGallery from "@/components/WorkGallery"
-import ProjectCaption from "@/components/ui/ProjectCaption"
+import Frame from "@/components/ui/Frame"
+import { Section } from "@/components/ui/Container"
 import { SITE_URL } from "@/lib/site"
 import JsonLd, { breadcrumbSchema } from "@/components/JsonLd"
 import { clampDescription } from "@/lib/seo"
@@ -21,13 +21,17 @@ import { clampDescription } from "@/lib/seo"
  *   01 Opener      the record's frame for this kind of work, full bleed,
  *                  eyebrow + h1 over it (lib/app-heroes.ts; 19 Sept 2026 —
  *                  before that these nine pages opened on text alone)
- *   01b Intro      the paragraphs, related links, CTAs and the record line
- *                  (systems · projects · regions)                          white
- *   02 The work    captioned tile gallery, system + region chips        white
- *   03 Systems     product cards for this application                   warm
- *   04 Projects    project cards where the application matches          white
- *   05 Next        prev / next application                              white
+ *   01b Intro      the paragraphs, related links, the one button and the
+ *                  record line (systems · projects · regions) as a list  paper
+ *   02 The work    the captioned gallery, under a margin-column header   paper
+ *   03 Systems     hairline rows for this application's systems          warm
+ *   04 Projects    frames with the title and place UNDER them            paper
+ *   05 Next        prev / next application, underlined words             paper
  *   Close          slate — Footer, rendered once by app/layout.tsx
+ *
+ * 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.7): the same five beats, the
+ * same words; section headers are the `Section` primitive, cards are rows
+ * or frames with the caption under, links are underlined, no arrows.
  *
  * Every photograph on these pages is Square One's own, captioned with the
  * system and the place. Low-res archive shots never leave tile scale.
@@ -273,13 +277,10 @@ export default async function ApplicationPage({ params }: Props) {
       />
 
       {/* ── 01b Intro ─────────────────────────────────────────────────────────────── */}
-      <section className="bg-[color:var(--surface)] pt-16 pb-16 max-[700px]:pt-10 max-[700px]:pb-12">
+      <section className="bg-surface pt-16 pb-16 max-[700px]:pt-10 max-[700px]:pb-12">
         <div className="container-1280">
-          <Link
-            href="/applications"
-            className="arrow-link w-fit text-[14px] transition-colors hover:text-[color:var(--ink)]"
-          >
-            <span aria-hidden="true" className="mr-[0.35em] inline-block">&larr;</span>All applications
+          <Link href="/applications" className="link">
+            All applications
           </Link>
 
           {copy.intro.map((para, i) => (
@@ -287,172 +288,145 @@ export default async function ApplicationPage({ params }: Props) {
               key={i}
               className={
                 i === 0
-                  ? "mt-6 max-w-[60ch] text-[19px] leading-[1.65] text-[color:var(--ink-body)] [text-wrap:pretty] max-[700px]:text-[17px]"
-                  : "mt-5 max-w-[60ch] text-[17px] leading-[1.7] text-[color:var(--ink-body)] [text-wrap:pretty] max-[700px]:text-[16px]"
+                  ? "lede mt-6 max-w-[60ch] [text-wrap:pretty]"
+                  : "mt-5 max-w-[60ch] text-ink-body [text-wrap:pretty]"
               }
             >
               {para}
             </p>
           ))}
 
-          <div className="mt-8 flex flex-wrap gap-x-7 gap-y-2">
+          <p className="mt-8 flex flex-wrap gap-x-7 gap-y-2">
             {copy.links.map((l) => (
-              <Link key={l.href} href={l.href} className="arrow-link">
-                {l.label} <span aria-hidden="true">&rarr;</span>
+              <Link key={l.href} href={l.href} className="link">
+                {l.label}
               </Link>
             ))}
-          </div>
+          </p>
 
           <div className="mt-11 flex flex-wrap items-center gap-x-8 gap-y-4">
             <Link href="/contact" className="btn-primary">
               Request a quote
             </Link>
-            <a href={`tel:${PHONE.replace(/-/g, "")}`} className="arrow-link">
-              {PHONE} <span aria-hidden="true">&rarr;</span>
+            <a href={`tel:${PHONE.replace(/-/g, "")}`} className="link">
+              {PHONE}
             </a>
           </div>
 
-          <dl className="mt-14 grid grid-cols-3 gap-8 border-t border-[color:var(--hairline)] pt-6 max-[700px]:grid-cols-1 max-[700px]:gap-5">
-            <div>
-              <dt className="label">Systems on record</dt>
-              <dd className="mt-2 text-[17px] font-semibold text-[color:var(--ink)]">
-                {photographed.length > 0 ? photographed.join(" · ") : "See the gallery"}
-              </dd>
+          {/* The record line, as the plain two-column list the site uses for
+              a specification (app/own.css .spec). */}
+          <dl className="spec mt-14">
+            <div className="contents">
+              <dt>Systems on record</dt>
+              <dd>{photographed.length > 0 ? photographed.join(" · ") : "See the gallery"}</dd>
             </div>
-            <div>
-              <dt className="label">Projects</dt>
-              <dd className="mt-2 text-[17px] font-semibold text-[color:var(--ink)]">
-                {caseStudies.length > 0 ? caseStudies.length : "See the gallery"}
-              </dd>
+            <div className="contents">
+              <dt>Projects</dt>
+              <dd>{caseStudies.length > 0 ? caseStudies.length : "See the gallery"}</dd>
             </div>
-            <div>
-              <dt className="label">Regions</dt>
-              <dd className="mt-2 text-[17px] font-semibold text-[color:var(--ink)]">
-                {regions.length > 0 ? regions.join(" · ") : "Across BC"}
-              </dd>
+            <div className="contents">
+              <dt>Regions</dt>
+              <dd>{regions.length > 0 ? regions.join(" · ") : "Across BC"}</dd>
             </div>
           </dl>
         </div>
       </section>
 
       {/* ── 02 The work ─────────────────────────────────────────────────────────── */}
-      <section className="section border-t border-[color:var(--hairline)] bg-[color:var(--surface)]">
-        <div className="container-1280">
-          <div className="flex flex-wrap items-baseline justify-between gap-6">
-            <div>
-              <div className="eyebrow">Photographed on site</div>
-              <h2 className="mt-4 [text-wrap:balance]">
-                {copy.work}
-              </h2>
-            </div>
-            <p className="max-w-[44ch] text-[15px] leading-[1.6] text-[color:var(--ink-muted)]">
-              Square One&rsquo;s own photography, captioned with the system installed and where.
-              Archive shots stay small on purpose.
-            </p>
-          </div>
+      <Section
+        id="work"
+        label="Photographed on site"
+        title={copy.work}
+        intro="Square One’s own photography, captioned with the system installed and where. Archive shots stay small on purpose."
+        wide
+      >
+        <WorkGallery photos={photos} ariaLabel={`${meta.label} installation photographs`} />
+      </Section>
 
-          <div className="mt-10">
-            <WorkGallery photos={photos} ariaLabel={`${meta.label} installation photographs`} />
-          </div>
-        </div>
-      </section>
-
-      {/* ── 03 Systems ──────────────────────────────────────────────────────────── */}
-      <section className="section border-y border-[color:var(--hairline)] bg-[color:var(--surface-warm)]">
-        <div className="container-1280">
-          <div className="flex flex-wrap items-baseline justify-between gap-6">
-            <h2>Systems installed for {meta.label.toLowerCase()}</h2>
-            <Link href="/products" className="arrow-link whitespace-nowrap">
-              All systems <span aria-hidden="true">&rarr;</span>
-            </Link>
-          </div>
-
-          <div className="mt-10 grid grid-cols-1 gap-5 min-[701px]:grid-cols-2 min-[1024px]:grid-cols-3">
-            {systems.map((p) => (
-              <Link
-                key={p.slug}
-                href={`/products/${p.slug}`}
-                className="card group flex flex-col rounded-[2px] border border-[color:var(--hairline)] bg-[color:var(--surface)] p-6"
-              >
-                <div className="label">{p.category}</div>
-                <h3 className="mt-3">{p.name}</h3>
-                <p className="mt-[10px] text-[15px] leading-[1.55] text-[color:var(--ink-body)] [text-wrap:pretty]">
+      {/* ── 03 Systems — hairline rows, the whole row a link; "Specs and
+             documents" came off every card (docs/OWN-COMPANY-BRIEF.md §3.5) ── */}
+      <Section
+        id="systems"
+        title={`Systems installed for ${meta.label.toLowerCase()}`}
+        link={{ href: "/products", label: "All systems" }}
+        tone="warm"
+        wide
+      >
+        <ul role="list">
+          {systems.map((p) => (
+            <li
+              key={p.slug}
+              className="relative grid grid-cols-12 gap-x-10 gap-y-1 border-t border-hairline py-6 last:border-b max-[700px]:grid-cols-1"
+            >
+              <Link href={`/products/${p.slug}`} aria-label={`${p.name} — the system`} className="absolute inset-0 z-[2]" />
+              <span className="label col-span-3 pt-1 max-[700px]:col-span-1">{p.category}</span>
+              <div className="col-span-9 min-w-0 max-[700px]:col-span-1">
+                <h3>{p.name}</h3>
+                <p className="mt-2 max-w-[60ch] text-[16px] leading-[1.55] text-ink-body [text-wrap:pretty]">
                   {p.tagline}
                 </p>
-                <span className="arrow-link mt-auto pt-6">
-                  Specs and documents{" "}
-                  <span aria-hidden="true" className="group-hover:translate-x-1">
-                    &rarr;
-                  </span>
-                </span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </Section>
 
-      {/* ── 04 Projects ─────────────────────────────────────────────────────── */}
+      {/* ── 04 Projects — frames with the title and the record's
+             place · system · year UNDER them ─────────────────────────────── */}
       {caseStudies.length > 0 && (
-        <section className="section bg-[color:var(--surface)]">
-          <div className="container-1280">
-            <div className="flex flex-wrap items-baseline justify-between gap-6">
-              <h2>Projects on record</h2>
-              <Link href="/projects" className="arrow-link whitespace-nowrap">
-                All projects <span aria-hidden="true">&rarr;</span>
-              </Link>
-            </div>
-
-            <div className="mt-10 grid grid-cols-1 gap-6 min-[701px]:grid-cols-3">
-              {caseStudies.map((project) => {
-                const city = cityName(project.city)
-                const metaLine = [city, project.systems.join(" + "), project.year]
-                  .filter((part): part is string => Boolean(part))
-                  .join(" · ")
-                // What the photograph shows: the project, the system, the city when the title does not already carry it.
-                const alt = [
-                  project.title,
-                  `in ${project.systems.join(" and ")}`,
-                  project.title.includes(city) ? "" : `— ${city}, BC`,
-                ]
-                  .filter(Boolean)
-                  .join(" ") + ". Installed by Square One Paving."
-                return (
-                  <Link
-                    key={project.slug}
+        <Section id="projects" label="Projects" title="Projects on record" link={{ href: "/projects", label: "All projects" }} wide>
+          <ul className="grid grid-cols-1 gap-x-7 gap-y-10 min-[701px]:grid-cols-3" role="list">
+            {caseStudies.map((project) => {
+              const city = cityName(project.city)
+              const metaLine = [city, project.systems.join(" + "), project.year]
+                .filter((part): part is string => Boolean(part))
+                .join(" · ")
+              // What the photograph shows: the project, the system, the city when the title does not already carry it.
+              const alt = [
+                project.title,
+                `in ${project.systems.join(" and ")}`,
+                project.title.includes(city) ? "" : `— ${city}, BC`,
+              ]
+                .filter(Boolean)
+                .join(" ") + ". Installed by Square One Paving."
+              return (
+                <li key={project.slug}>
+                  <Frame
+                    src={project.imageUrl}
+                    alt={alt}
+                    aspect="aspect-[4/3]"
+                    sizes="(max-width: 700px) 100vw, (max-width: 1280px) 33vw, 411px"
                     href={`/projects/${project.slug}`}
-                    className="card relative block aspect-[4/3] overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)]"
-                  >
-                    <Image
-                      src={project.imageUrl}
-                      alt={alt}
-                      fill
-                      sizes="(max-width: 700px) 100vw, (max-width: 1280px) 33vw, 411px"
-                      className="object-cover"
-                    />
-                    <div aria-hidden className="scrim" />
-                    <ProjectCaption title={project.title} meta={metaLine} />
-                  </Link>
-                )
-              })}
-            </div>
-          </div>
-        </section>
+                    caption={
+                      <>
+                        <span className="block not-italic font-bold text-ink" style={{ fontFamily: "var(--font-display)" }}>
+                          {project.title}
+                        </span>
+                        <span className="block">{metaLine}</span>
+                      </>
+                    }
+                  />
+                </li>
+              )
+            })}
+          </ul>
+        </Section>
       )}
 
       {/* ── 05 Next ─────────────────────────────────────────────────────────────── */}
-      <section className="border-t border-[color:var(--hairline)] bg-[color:var(--surface)] py-12">
-        <div className="container-1280 flex flex-wrap items-center justify-between gap-6">
+      <section className="border-t border-hairline bg-surface py-12">
+        <div className="container-1280 flex flex-wrap items-baseline justify-between gap-6">
           {prev && (
-            <Link href={`/applications/${prev.slug}`} className="arrow-link">
-              <span aria-hidden="true">&larr;</span> {prev.label}
+            <Link href={`/applications/${prev.slug}`} className="link">
+              {prev.label}
             </Link>
           )}
-          <Link href="/applications" className="label transition-colors hover:text-[color:var(--ink)]">
+          <Link href="/applications" className="link">
             All applications
           </Link>
           {next && (
-            <Link href={`/applications/${next.slug}`} className="arrow-link">
-              {next.label} <span aria-hidden="true">&rarr;</span>
+            <Link href={`/applications/${next.slug}`} className="link">
+              {next.label}
             </Link>
           )}
         </div>
