@@ -64,9 +64,9 @@ const services = [
     name: "Vapour blasting",
     tagline: "Clean it, prime it, bring it back.",
     desc: "The supporting service: surface cleaning and priming ahead of a coating or thermoplastic install, and graffiti, mould and marking removal on its own, mobile across the Lower Mainland and Vancouver Island, with up to 92% less dust than dry blasting.",
-    image: "/images/services/vapor-blasting/generated/gen-sidewalk-concrete-cleaning.jpg",
-    alt: "Cleaning a concrete sidewalk beside a stone monument with the vapour blasting rig, the lane coned off, an illustration of the service",
-    caption: "Sidewalk · concrete · an illustration of the service",
+    image: "/images/services/vapor-blasting/parking-lot-vapour-blasting-01.jpg",
+    alt: "Square One removing painted parking symbols from an asphalt lot with the vapour blasting rig",
+    caption: "Commercial parking lot · marking removal",
     applications: ["Graffiti Removal", "Marking Removal", "Surface Prep", "Mould & Muck"],
   },
 ]

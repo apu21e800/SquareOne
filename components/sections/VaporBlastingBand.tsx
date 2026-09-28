@@ -54,7 +54,7 @@ export default function VaporBlastingBand() {
 
           <div className="relative aspect-[4/3] overflow-hidden rounded-[2px] bg-surface-warm min-[901px]:aspect-auto min-[901px]:min-h-[560px]">
             <Image
-              src="/images/services/vapor-blasting/generated/gen-granville-island-vapour-blasting-01-enhanced.jpg"
+              src="/images/services/vapor-blasting/granville-island-vapour-blasting-01.jpg"
               alt="Square One removing a painted marking from the Granville Island boardwalk, Vancouver, with the vapour blasting rig"
               fill
               sizes="(max-width: 900px) 100vw, 55vw"

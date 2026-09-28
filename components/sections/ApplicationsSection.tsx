@@ -20,7 +20,7 @@ const VAPOUR = {
   label: "Vapour blasting",
   desc: "Surface cleaning, priming, graffiti and mould removal: mobile, dustless, no damage to the surface under it.",
   href: "/services/vapor-blasting",
-  thumb: "/images/services/vapor-blasting/generated/gen-granville-island-vapour-blasting-01-enhanced.jpg",
+  thumb: "/images/services/vapor-blasting/granville-island-vapour-blasting-01.jpg",
   alt: "Square One crew vapour blasting at Granville Island",
 }
 

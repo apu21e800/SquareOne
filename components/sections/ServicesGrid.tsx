@@ -53,7 +53,7 @@ const cardImage: Record<string, { src: string; alt: string; caption: string }> =
     caption: "Union Street greenway, Burnaby · DecoMark",
   },
   "vapor-blasting": {
-    src: "/images/services/vapor-blasting/generated/gen-granville-island-vapour-blasting-01-enhanced.jpg",
+    src: "/images/services/vapor-blasting/granville-island-vapour-blasting-01.jpg",
     alt: "Square One crew vapour blasting at Granville Island",
     caption: "Granville Island · vapour blasting",
   },

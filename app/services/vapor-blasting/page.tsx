@@ -2,11 +2,10 @@ import Link from "next/link"
 import { Metadata } from "next"
 import { SITE_URL } from "@/lib/site"
 import JsonLd, { breadcrumbSchema, faqSchema } from "@/components/JsonLd"
-import IndexImageHero from "@/components/IndexImageHero"
 import BeforeAfter from "@/components/BeforeAfter"
-import FrameGallery from "@/components/FrameGallery"
 import Frame from "@/components/ui/Frame"
-import { Section, Row } from "@/components/ui/Container"
+import { Section } from "@/components/ui/Container"
+import HowAJobGoes from "@/components/sections/HowAJobGoes"
 import { getServiceBySlug } from "@/lib/services"
 import { clampDescription } from "@/lib/seo"
 
@@ -23,32 +22,26 @@ import { clampDescription } from "@/lib/seo"
 // environmental impact than the alternatives, all while getting the job done
 // faster", plus its own list of applications. Nothing else is asserted.
 //
-// Imagery (19 Sept 2026) — two kinds, kept apart on disk and on the page:
+// Imagery (28 Sept 2026, Vern: "images show the same dude working… the
+// client is a bit put off by the duplicate AI images… the one with the
+// Burrard Street Bridge in the background is the OG one, it should be better
+// displayed on the blasting hero"). The page now carries the record only:
 //
-//   public/images/services/vapor-blasting/*.jpg
-//     The four photographs Square One holds (524px archive tiles, upscaled
-//     11 Sept). These are the record. They are the only frames captioned
-//     with a place, and they sit together under "From the record".
+//   public/images/services/vapor-blasting/granville-island-vapour-blasting-01.jpg
+//     The original photograph of the Granville Island job, the Burrard Street
+//     Bridge behind it. The hero, shown whole with its caption under it.
+//   parking-lot-, walkway-, nozzle-pavers-01.jpg
+//     Square One's other three vapour blasting photographs: "On the record".
 //
-//   public/images/services/vapor-blasting/generated/gen-*.jpg
-//     Supplied by Vern 19 Sept, AI-generated. gen-granville-island-…-enhanced
-//     is a re-render of the Granville Island photograph above — same job,
-//     same frame, a clear sky — and carries the hero and the site's vapour
-//     tiles. The other nine are illustrations of the service on real
-//     Vancouver and Victoria backdrops; the jobs in them never happened.
-//     They are captioned by surface and task only, never by place, and the
-//     method section says plainly which frames are the record. The gen-
-//     prefix and the generated/ folder keep them out of the search index
-//     and the disk-walked galleries (lib/search-index.ts, lib/gallery.ts).
+// The AI illustrations in generated/ (the same operator on six Vancouver
+// and Victoria backdrops, and the AI-enhanced copy of the hero) are off the
+// page and off the site; the files stay on disk. The one generated pair left
+// is the before/after wipe, a demonstration with no person in it, captioned
+// as one. New illustrations wait for a proper shoot or an approved
+// generation pass (Figma Weave works from Cowork, per run, on approval).
 //
-// The before / after wipe (components/BeforeAfter) is the page's one
-// interactive moment — Vern's bonus for the client, 19 Sept.
-//
-// 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.7): the same bands on the
-// own-company primitives — labels in the margin column, the three tier
-// cards as hairline rows with their frames captioned under them, the city
-// frames captioned under, the big numerals brought down to one quiet row,
-// every arrow link an underlined word. The water blue stays: it is this
+// 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.7): labels in the margin
+// column, hairlines, underlined links. The water blue stays: it is this
 // trade's own accent, and this page is the only place it is used.
 
 export const metadata: Metadata = {
@@ -79,7 +72,14 @@ export const metadata: Metadata = {
 const DIR = "/images/services/vapor-blasting"
 const GEN = `${DIR}/generated`
 
-// ── Headline facts — Square One's own published numbers ─────────────────────────
+/** The original photograph: Square One on the Granville Island boardwalk, the Burrard Street Bridge behind. */
+const HERO = {
+  src: `${DIR}/granville-island-vapour-blasting-01.jpg`,
+  alt: "A Square One operator vapour blasting a painted marking off the boardwalk at Granville Island, Vancouver, with the Burrard Street Bridge behind",
+  caption: "Granville Island, Vancouver · marking removal",
+}
+
+// ── Headline facts: Square One's own published numbers ─────────────────────────
 
 type Fact = { number: string; label: string }
 
@@ -89,8 +89,8 @@ const facts: Fact[] = [
   { number: "2", label: "regions: Lower Mainland and Vancouver Island, one mobile rig" },
 ]
 
-// ── What it handles — Square One's published applications, grouped by the
-//    business hierarchy: commercial and municipal first ──────────────────────
+// ── What it handles: Square One's published applications, grouped by the
+//    business hierarchy, commercial and municipal first ──────────────────────
 
 const tiers = [
   {
@@ -105,12 +105,6 @@ const tiers = [
       "Fire and smoke damage cleaning",
     ],
     tags: ["Property managers", "Municipalities", "Strata"],
-    photo: {
-      src: `${GEN}/gen-brick-graffiti-mid-pass.jpg`,
-      alt: "Vapour blasting aerosol graffiti off a face-brick wall, clean brick behind the nozzle, tags ahead of it",
-      caption: "Graffiti · face brick",
-      position: "center 55%",
-    },
   },
   {
     audience: "Residential",
@@ -124,12 +118,6 @@ const tiers = [
       "Priming before a coating",
     ],
     tags: ["Homeowners", "Estates"],
-    photo: {
-      src: `${GEN}/gen-patio-pavers-nozzle.jpg`,
-      alt: "The vapour blasting nozzle mid-pass over patio pavers, lifting moss and grime from the joints",
-      caption: "Patio pavers · cleaning",
-      position: "center 40%",
-    },
   },
   {
     audience: "Marine & industrial",
@@ -142,135 +130,40 @@ const tiers = [
       "Equipment and frames",
     ],
     tags: ["Marine", "Manufacturing"],
-    photo: {
-      src: `${GEN}/gen-steel-railing-rust.jpg`,
-      alt: "Vapour blasting rust off a steel railing at the water's edge",
-      caption: "Steel railing · rust and paint",
-      position: "center 42%",
-    },
   },
 ]
 
-// ── Gallery — the record first, then the illustrations, each labelled ──────
-//    (Vern, 19 Sept: "add the images to the galleries section"). Opens the
-//    same full-screen viewer as /galleries; reached from the hub's card.
+// ── On the record: Square One's other three vapour blasting photographs ─────
 
 const recordFrames = [
   {
-    src: `${GEN}/gen-granville-island-vapour-blasting-01-enhanced.jpg`,
-    alt: "Square One removing a painted marking from the Granville Island boardwalk, Vancouver, AI-enhanced from the original photograph",
-    primary: "Granville Island, Vancouver",
-    secondary: "Marking removal · AI-enhanced from the original photograph",
-  },
-  {
     src: `${DIR}/parking-lot-vapour-blasting-01.jpg`,
     alt: "Square One removing painted parking symbols from an asphalt lot with the vapour blasting rig",
-    primary: "Commercial parking lot",
-    secondary: "Marking removal · asphalt",
+    caption: "Commercial parking lot · marking removal",
+    position: "center 45%",
   },
   {
     src: `${DIR}/walkway-vapour-blasting-01.jpg`,
     alt: "Square One stripping a red coating from a public walkway with the vapour blasting rig",
-    primary: "Public walkway",
-    secondary: "Coating removal · concrete",
+    caption: "Public walkway · coating removal",
+    position: "center 50%",
   },
   {
     src: `${DIR}/nozzle-pavers-01.jpg`,
     alt: "The vapour blasting nozzle mid-pass over pavers, the wet fan of abrasive and the clean line behind it",
-    primary: "The nozzle mid-pass",
-    secondary: "Cleaning · pavers",
+    caption: "Pavers · the nozzle mid-pass",
+    position: "center 50%",
   },
 ]
 
-const illustrationFrames = [
-  {
-    src: `${GEN}/gen-sidewalk-concrete-cleaning.jpg`,
-    alt: "Cleaning a concrete sidewalk beside a stone monument with the vapour blasting rig, the lane coned off",
-    primary: "Sidewalk cleaning",
-    secondary: "Concrete · lane coned off",
-  },
-  {
-    src: `${GEN}/gen-concrete-pier-graffiti.jpg`,
-    alt: "Vapour blasting graffiti off a cast-concrete bridge pier",
-    primary: "Graffiti",
-    secondary: "Cast concrete",
-  },
-  {
-    src: `${GEN}/gen-road-marking-removal-02.jpg`,
-    alt: "Vapour blasting a painted line off wet asphalt, the spray, and the water holding the dust down",
-    primary: "Line marking removal",
-    secondary: "Asphalt",
-  },
-  {
-    src: `${GEN}/gen-road-marking-removal-01.jpg`,
-    alt: "Removing a painted road symbol from asphalt with the vapour blasting rig",
-    primary: "Road marking removal",
-    secondary: "Painted symbol · asphalt",
-  },
-  {
-    src: `${GEN}/gen-brick-graffiti-before.jpg`,
-    alt: "A face-brick wall covered in aerosol graffiti tags, before vapour blasting",
-    primary: "Graffiti, before",
-    secondary: "Face brick",
-  },
-  {
-    src: `${GEN}/gen-brick-graffiti-mid-pass.jpg`,
-    alt: "Vapour blasting aerosol graffiti off a face-brick wall, clean brick behind the nozzle, tags ahead of it",
-    primary: "Graffiti, mid-pass",
-    secondary: "Face brick",
-  },
-  {
-    src: `${GEN}/gen-brick-graffiti-after.jpg`,
-    alt: "The same face-brick wall after vapour blasting, clean brick, mortar joints intact",
-    primary: "Graffiti, after",
-    secondary: "Face brick",
-  },
-  {
-    src: `${GEN}/gen-steel-railing-rust.jpg`,
-    alt: "Vapour blasting rust off a steel railing at the water's edge",
-    primary: "Rust and paint removal",
-    secondary: "Steel railing",
-  },
-  {
-    src: `${GEN}/gen-patio-pavers-nozzle.jpg`,
-    alt: "The vapour blasting nozzle mid-pass over patio pavers, lifting moss and grime from the joints",
-    primary: "Patio cleaning",
-    secondary: "Pavers · moss and grime",
-  },
-]
-
-// ── The rig in the city — three illustrations, captioned by task and
-//    surface (no place: they are illustrations, not the record) ────────────
-
-const cityFrames = [
-  {
-    src: `${GEN}/gen-sidewalk-concrete-cleaning.jpg`,
-    alt: "Cleaning a concrete sidewalk beside a stone monument with the vapour blasting rig, the lane coned off",
-    caption: "Sidewalk cleaning · concrete · lane coned off",
-    position: "center 60%",
-  },
-  {
-    src: `${GEN}/gen-concrete-pier-graffiti.jpg`,
-    alt: "Vapour blasting graffiti off a cast-concrete bridge pier",
-    caption: "Graffiti · cast concrete",
-    position: "center 55%",
-  },
-  {
-    src: `${GEN}/gen-road-marking-removal-02.jpg`,
-    alt: "Vapour blasting a painted line off wet asphalt, the spray, and the water holding the dust down",
-    caption: "Line marking removal · asphalt",
-    position: "center 60%",
-  },
-]
-
-// ── Substrates — from Square One's published application list ──────────────
+// ── Substrates: from Square One's published application list ──────────────
 
 const substrates = [
   "Asphalt", "Concrete", "Brick", "Limestone", "Marble", "Stucco", "Steel", "Iron",
   "Wood", "Pavers & patios", "Marine decks", "Hulls & on-board coatings",
 ]
 
-// ── Service area — the same regions every other page names ─────────────────
+// ── Service area: the same regions every other page names ─────────────────
 
 const cities = [
   "Vancouver", "North Vancouver", "West Vancouver", "Burnaby", "Richmond", "Surrey",
@@ -307,33 +200,44 @@ export default function VaporBlastingServicePage() {
         ]}
       />
 
-      {/* ── Hero — full-bleed: Square One's Granville Island job, enhanced.
-             One button over the photograph; the number is an underlined word. ── */}
-      <IndexImageHero
-        src={`${GEN}/gen-granville-island-vapour-blasting-01-enhanced.jpg`}
-        alt="A Square One operator vapour blasting a painted marking off the boardwalk at Granville Island, Vancouver"
-        eyebrow="Service · Mobile cleaning and priming"
-        title="Clean it, prime it, bring it back"
-        lede="A powerful, portable blasting solution for surface prep. Vapour blasting uses less water, generates up to 92% less dust, produces little to no heat and creates less environmental impact than the alternatives, while getting the job done faster."
-        caption="Granville Island, Vancouver · marking removal"
-        imagePosition="30% 58%"
-        align="right"
-      >
-        <div className="mt-9 flex flex-wrap items-center gap-x-8 gap-y-4">
-          <Link href="/contact" className="btn-primary btn-water">
-            Get a quote
-          </Link>
-          <a
-            href="tel:+16046126209"
-            className="text-[16px] text-white underline decoration-white/60 underline-offset-[5px] transition-colors hover:decoration-white"
-          >
-            604-612-6209
-          </a>
+      {/* ── Opener: the words on paper, the original photograph beside them,
+             shown whole (the bridge, the operator and the marking), its
+             caption under it ── */}
+      <section className="bg-surface pt-[calc(var(--bar-h)+64px)] pb-16 max-[900px]:pt-[calc(var(--bar-h)+36px)] max-[900px]:pb-12">
+        <div className="container-1280 grid grid-cols-12 items-center gap-x-12 gap-y-10 max-[900px]:grid-cols-1">
+          <div className="col-span-5 max-[900px]:col-span-1">
+            <span className="label">Vapour blasting &middot; mobile cleaning and priming</span>
+            <h1 className="mt-5 max-w-[18ch]">Clean it, prime it, bring it back</h1>
+            <p className="lede mt-6 max-w-[48ch] [text-wrap:pretty]">
+              A powerful, portable blasting solution for surface prep. Vapour blasting uses less
+              water, generates up to 92% less dust, produces little to no heat and creates less
+              environmental impact than the alternatives, while getting the job done faster.
+            </p>
+            <div className="mt-9 flex flex-wrap items-center gap-x-8 gap-y-4">
+              <Link href="/contact" className="btn-primary btn-water">
+                Get a quote
+              </Link>
+              <a href="tel:+16046126209" className="link">
+                604-612-6209
+              </a>
+            </div>
+          </div>
+          <div className="col-span-7 max-[900px]:col-span-1">
+            <Frame
+              src={HERO.src}
+              alt={HERO.alt}
+              caption={HERO.caption}
+              aspect="aspect-[5/3]"
+              sizes="(max-width: 900px) 100vw, 760px"
+              position="center 50%"
+              priority
+            />
+          </div>
         </div>
-      </IndexImageHero>
+      </section>
 
-      {/* ── Facts — one quiet row on the water tint, divided by rules ── */}
-      <section className="band-water border-b py-8 max-[700px]:py-6" aria-label="Vapour blasting, in brief">
+      {/* ── Facts: one quiet row on the water tint, divided by rules ── */}
+      <section className="band-water border-y py-8 max-[700px]:py-6" aria-label="Vapour blasting, in brief">
         <ul className="container-1280 grid grid-cols-3 max-[700px]:grid-cols-1 max-[700px]:gap-y-5">
           {facts.map((fact, i) => (
             <li
@@ -342,7 +246,7 @@ export default function VaporBlastingServicePage() {
                 i > 0 ? "border-l border-[color:var(--water-hairline)]" : ""
               }`}
             >
-              <span className="block text-[22px] font-bold leading-none text-ink" style={{ fontFamily: "var(--font-display)" }}>
+              <span className="block text-[24px] font-bold leading-none text-ink" style={{ fontFamily: "var(--font-display)" }}>
                 {fact.number}
               </span>
               <span className="mt-2 block max-w-[32ch] text-[15px] leading-[1.5] text-ink-muted">{fact.label}</span>
@@ -351,11 +255,44 @@ export default function VaporBlastingServicePage() {
         </ul>
       </section>
 
-      {/* ── Before / after — the wall cleans itself, then it's yours ── */}
+      {/* ── What it handles: three columns, commercial first ──────── */}
+      <Section
+        label="What it handles"
+        title="From storefront to drydock"
+        intro="Vapour blasting works on almost every hard surface. The difference between a parkade, a patio and a yacht deck is the pressure and the media, not the method."
+        wide
+      >
+        <div className="grid grid-cols-3 gap-x-10 gap-y-12 max-[1000px]:grid-cols-1">
+          {tiers.map((tier) => (
+            <article key={tier.title} className="border-t border-hairline pt-6">
+              <span className="label">{tier.audience}</span>
+              <h3 className="mt-1">{tier.title}</h3>
+              <p className="mt-3 max-w-[44ch] text-[16px] leading-[1.6] text-ink-body [text-wrap:pretty]">{tier.body}</p>
+              <ul className="mt-5 border-t border-hairline">
+                {tier.bullets.map((bullet) => (
+                  <li key={bullet} className="border-b border-hairline py-[9px] text-[15px] leading-[1.5] text-ink-body">
+                    {bullet}
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-4">
+                {tier.tags.map((tag) => (
+                  <span key={tag} className="tag">
+                    {tag}
+                  </span>
+                ))}
+              </p>
+            </article>
+          ))}
+        </div>
+      </Section>
+
+      {/* ── Before / after: the one demonstration, captioned as one ── */}
       <Section
         label="Before and after"
         title="Drag the line"
         intro="Aerosol graffiti on face brick. The abrasive travels in water, so the paint comes off and the dust stays on the ground: no shutdown, no dust cloud, no chemical residue."
+        tone="warm"
         wide
       >
         <BeforeAfter
@@ -378,23 +315,24 @@ export default function VaporBlastingServicePage() {
         </div>
       </Section>
 
-      {/* ── The rig in the city — the three illustrations Vern and the
-             client worked hardest on, at full width, captioned by task and
-             surface only (illustrations of the service, never a place) ──── */}
+      {/* ── On the record: the three other photographs of Square One's
+             vapour blasting jobs, captioned under the frame ── */}
       <Section
-        label="One rig, any surface"
-        title="Sidewalks, piers, lines: wherever the paint is"
-        intro="Illustrations of the service. The real frames are in the gallery below."
+        id="gallery"
+        label="On the record"
+        title="Square One's vapour blasting, photographed on the job"
+        link={{ href: YOUTUBE, label: "Demonstration videos on YouTube" }}
+        className="scroll-mt-[72px]"
         wide
       >
-        <ul className="grid grid-cols-3 gap-6 max-[900px]:grid-cols-1">
-          {cityFrames.map((frame) => (
+        <ul className="grid grid-cols-3 gap-x-7 gap-y-10 max-[900px]:grid-cols-1">
+          {recordFrames.map((frame) => (
             <li key={frame.src}>
               <Frame
                 src={frame.src}
                 alt={frame.alt}
                 caption={frame.caption}
-                aspect="aspect-[16/10]"
+                aspect="aspect-[4/3]"
                 sizes="(max-width: 900px) 100vw, 400px"
                 position={frame.position}
               />
@@ -403,104 +341,29 @@ export default function VaporBlastingServicePage() {
         </ul>
       </Section>
 
-      {/* ── What it handles — three rows, commercial first ──────── */}
-      <Section
-        label="What it handles"
-        title="From storefront to drydock"
-        intro="Vapour blasting works on almost every hard surface. The difference between a parkade, a patio and a yacht deck is the pressure and the media, not the method."
-        tone="warm"
-        wide
-      >
-        <div>
-          {tiers.map((tier) => (
-            <Row key={tier.title} as="article">
-              <Frame
-                src={tier.photo.src}
-                alt={tier.photo.alt}
-                caption={tier.photo.caption}
-                aspect="aspect-[5/3]"
-                sizes="(max-width: 700px) 100vw, 520px"
-                position={tier.photo.position}
-              />
-              <div className="min-w-0">
-                <span className="label">{tier.audience}</span>
-                <h3 className="mt-1">{tier.title}</h3>
-                <p className="mt-3 max-w-[48ch] text-ink-body [text-wrap:pretty]">{tier.body}</p>
-                <ul className="mt-5 max-w-[48ch] border-t border-hairline">
-                  {tier.bullets.map((bullet) => (
-                    <li key={bullet} className="border-b border-hairline py-[9px] text-[15px] leading-[1.5] text-ink-body">
-                      {bullet}
-                    </li>
-                  ))}
-                </ul>
-                <p className="mt-4">
-                  {tier.tags.map((tag) => (
-                    <span key={tag} className="tag">
-                      {tag}
-                    </span>
-                  ))}
-                </p>
-              </div>
-            </Row>
-          ))}
-        </div>
+      {/* ── How a job goes: the site's one process band ── */}
+      <HowAJobGoes tone="warm" crews={false} cta={false} />
 
-        {/* Surfaces and the service area, on one rule — what the Scope
-            section used to say in three columns (trimmed 19 Sept 2026,
-            Vern: "too much text on the vapour blasting page"). */}
-        <div className="mt-12 grid grid-cols-12 gap-x-12 gap-y-6 border-t border-hairline pt-7 max-[900px]:grid-cols-1">
-          <div className="col-span-7 max-[900px]:col-span-1">
-            <span className="label">Surfaces</span>
-            <p className="mt-3">
-              {substrates.map((substrate) => (
-                <span key={substrate} className="tag">
-                  {substrate}
-                </span>
-              ))}
-            </p>
-          </div>
-          <div className="col-span-5 max-[900px]:col-span-1">
-            <span className="label">Service area</span>
-            <p className="mt-3 text-[16px] leading-[1.6] text-ink-body">
-              Lower Mainland and Vancouver Island. The rig is mobile, and it comes to the site.
-            </p>
-            <p className="mt-2 text-[15px] italic leading-[1.6] text-ink-muted">{cities.join(" · ")}</p>
-          </div>
-        </div>
-      </Section>
-
-      {/* ── Gallery — the record, then the illustrations. The one link is
-             external, so the header is set by hand on the Section's classes. ── */}
-      <section id="gallery" className="sec section scroll-mt-[72px] bg-surface-warm">
+      {/* ── Surfaces and the service area, on one rule ── */}
+      <section className="bg-surface-warm pb-20 max-[700px]:pb-14" aria-label="Surfaces and service area">
         <div className="container-1280">
-          <div className="sec-grid">
-            <div className="sec-label">
-              <span className="label">Gallery</span>
+          <div className="grid grid-cols-12 gap-x-12 gap-y-8 border-t border-hairline pt-7 max-[900px]:grid-cols-1">
+            <div className="col-span-7 max-[900px]:col-span-1">
+              <span className="label">Surfaces</span>
+              <p className="mt-3">
+                {substrates.map((substrate) => (
+                  <span key={substrate} className="tag">
+                    {substrate}
+                  </span>
+                ))}
+              </p>
             </div>
-            <div className="sec-body">
-              <div className="sec-head">
-                <h2>On record, and in illustration</h2>
-                <a href={YOUTUBE} target="_blank" rel="noopener noreferrer" className="link">
-                  Demonstration videos on our YouTube channel
-                </a>
-              </div>
-            </div>
-            <div className="sec-content col-span-12">
-              <FrameGallery
-                ariaLabel="Vapour blasting photographs"
-                groups={[
-                  {
-                    label: "From the record",
-                    note: "Square One's own jobs. The first frame is the hero of this page, AI-enhanced from the original photograph.",
-                    photos: recordFrames,
-                  },
-                  {
-                    label: "Illustrations of the service",
-                    note: "Generated scenes of the rig at work, the surfaces and the method, not records of specific jobs.",
-                    photos: illustrationFrames,
-                  },
-                ]}
-              />
+            <div className="col-span-5 max-[900px]:col-span-1">
+              <span className="label">Service area</span>
+              <p className="mt-3 text-[16px] leading-[1.6] text-ink-body">
+                Lower Mainland and Vancouver Island. The rig is mobile, and it comes to the site.
+              </p>
+              <p className="mt-2 text-[15px] italic leading-[1.6] text-ink-muted">{cities.join(" · ")}</p>
             </div>
           </div>
         </div>
@@ -532,7 +395,7 @@ export default function VaporBlastingServicePage() {
         tone="warm"
       >
         <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
-          <Link href="/contact" className="btn-primary">
+          <Link href="/contact" className="btn-primary btn-water">
             Get a quote
           </Link>
           <a href="tel:+16046126209" className="link">

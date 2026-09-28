@@ -11,19 +11,20 @@ import BeforeAfter from "@/components/BeforeAfter"
  * for pavement.
  *
  * 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §9.9): restyled on the new
- * primitives — the three frames carry their captions under them, the
- * eyebrow is the margin voice, the phone line is an underlined word. The
- * two wipe frames are the service page's illustrations (generated/, `gen-`
- * prefix): a demonstration, captioned as one, never a place.
+ * primitives. The two wipe frames are generated (generated/, `gen-`
+ * prefix): a demonstration with no person in it, captioned as one. The
+ * three frames under it are Square One's own photographs.
  */
-const GEN = "/images/services/vapor-blasting/generated"
+const DIR = "/images/services/vapor-blasting"
+const GEN = `${DIR}/generated`
 
-/** Three more illustrations of the service under the wipe. Captioned by
-    task and surface — never a place. */
+/** Under the wipe: Square One's own vapour blasting photographs from the
+    record (28 Sept 2026: the AI illustrations of one operator on six city
+    backdrops came off; the client was put off by the repeats). */
 const STRIP = [
-  { src: `${GEN}/gen-sidewalk-concrete-cleaning.jpg`, alt: "Cleaning a concrete sidewalk beside a stone monument with the vapour blasting rig", caption: "Sidewalk · concrete", position: "center 60%" },
-  { src: `${GEN}/gen-concrete-pier-graffiti.jpg`, alt: "Vapour blasting graffiti off a cast-concrete bridge pier", caption: "Graffiti · concrete", position: "center 55%" },
-  { src: `${GEN}/gen-road-marking-removal-02.jpg`, alt: "Vapour blasting a painted line off wet asphalt", caption: "Line removal · asphalt", position: "center 60%" },
+  { src: `${DIR}/granville-island-vapour-blasting-01.jpg`, alt: "A Square One operator vapour blasting a painted marking off the boardwalk at Granville Island, Vancouver", caption: "Granville Island · markings", position: "center 55%" },
+  { src: `${DIR}/parking-lot-vapour-blasting-01.jpg`, alt: "Square One removing painted parking symbols from an asphalt lot with the vapour blasting rig", caption: "Parking lot · markings", position: "center 45%" },
+  { src: `${DIR}/walkway-vapour-blasting-01.jpg`, alt: "Square One stripping a red coating from a public walkway with the vapour blasting rig", caption: "Walkway · coating", position: "center 50%" },
 ]
 
 export default function VapourBand() {

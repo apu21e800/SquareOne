@@ -104,7 +104,7 @@ export default function GalleriesPage() {
     label: "Vapour blasting",
     href: "/services/vapor-blasting#gallery",
     count: 0,
-    photo: { src: "/images/services/vapor-blasting/generated/gen-granville-island-vapour-blasting-01-enhanced.jpg" },
+    photo: { src: "/images/services/vapor-blasting/granville-island-vapour-blasting-01.jpg" },
   }
 
   const bySystem = products
