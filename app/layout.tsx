@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Poppins, Inter, Source_Serif_4 } from 'next/font/google'
 import localFont from 'next/font/local'
 import "./globals.css"
@@ -141,16 +141,25 @@ export const metadata: Metadata = {
   },
 }
 
+// The browser's own chrome (the address bar on a phone) in the site's white.
+export const viewport: Viewport = { themeColor: "#FFFFFF" }
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${poppins.variable} ${futura.variable} ${inter.variable} ${sourceSerif.variable}`}>
+    <html lang="en" data-scroll-behavior="smooth" className={`${poppins.variable} ${futura.variable} ${inter.variable} ${sourceSerif.variable}`}>
       <head>
         {TYPE_SWITCH_ENABLED && <script dangerouslySetInnerHTML={{ __html: TYPE_BOOT }} />}
       </head>
       <body className="antialiased">
         <StructuredData />
+        {/* Keyboard users skip the bar and the menus (28 Sept 2026). */}
+        <a href="#main" className="skip-link">
+          Skip to the content
+        </a>
         <Nav previews={menuPreviews()} />
-        {children}
+        <div id="main" tabIndex={-1} className="outline-none">
+          {children}
+        </div>
         <Footer />
         <MobileStickyCTA />
         <MotionBreath />

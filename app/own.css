@@ -1056,3 +1056,37 @@ h2.legal-h:not(.label):not(.eyebrow):not(.card-title) { font-size: clamp(1.375re
   .legal-clause { break-inside: avoid; }
   .legal-address { background: none; }
 }
+
+
+/* ---- The finish (28 Sept 2026; Vern: "give the site the 21e8.studio
+   polish that it deserves"). Small things that make it feel made: a way
+   past the bar for the keyboard, a press you can feel, a focus ring that
+   clears the edge, the selection in the brand's own tint, and the 404. ---- */
+.skip-link {
+  position: fixed;
+  left: 16px;
+  top: 12px;
+  z-index: 400;
+  padding: 11px 16px;
+  background: var(--ink);
+  color: #FFFFFF;
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  transform: translateY(-180%);
+  transition: transform 0.18s ease;
+}
+.skip-link:focus, .skip-link:focus-visible { transform: none; color: #FFFFFF; outline: 2px solid #FFFFFF; outline-offset: -4px; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+::selection { background: var(--accent-tint); color: var(--ink); }
+.btn-primary, .btn-ink, .btn-on-slate, .btn-water, .nav-cta { transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.08s ease; }
+.btn-primary:active, .btn-ink:active, .btn-on-slate:active, .btn-water:active, .nav-cta:active { transform: translateY(1px); }
+@media (prefers-reduced-motion: reduce) {
+  .btn-primary:active, .btn-ink:active, .btn-on-slate:active, .btn-water:active, .nav-cta:active { transform: none; }
+}
+
+.nf-ways { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 36px; border-top: 1px solid var(--ink); }
+.nf-row { grid-template-columns: 48px minmax(0, 1fr); padding: 14px 0; }
+.nf-row .drawer-name { font-size: 19px; text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 6px; text-decoration-color: transparent; transition: text-decoration-color 0.15s ease; }
+.nf-row:hover .drawer-name { text-decoration-color: var(--accent); }
+@media (max-width: 560px) { .nf-ways { grid-template-columns: minmax(0, 1fr); } }
