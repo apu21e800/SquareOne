@@ -111,10 +111,10 @@ export default async function Footer() {
                 <span className="label">Start a project</span>
               </div>
               <div className="sec-body">
-                <h2 className="max-w-[20ch] [text-wrap:balance]">Send a few photos and a site address</h2>
+                <h2 className="max-w-[20ch] [text-wrap:balance]">Send a few photos <em>and a site address</em></h2>
                 <p className="mt-5 max-w-[52ch] text-ink-body [text-wrap:pretty]">
                   A free site visit and a written quote, anywhere in the Lower Mainland and on
-                  Vancouver Island. Drawings help if you have them.
+                  Vancouver Island.
                 </p>
                 <div className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-4">
                   <Link href="/contact" className="btn-primary">
@@ -223,9 +223,8 @@ export default async function Footer() {
               record in lib/work.ts or lib/projects.ts. Courtenay was not, so
               it came off on 19 Sept 2026. */}
           <p className="foot-area mt-12 max-[700px]:mt-9">
-            We work across Vancouver, Burnaby, Richmond, Surrey, Langley, Maple Ridge and the Fraser
-            Valley, and Victoria, Nanaimo, Duncan, Comox and the rest of Vancouver Island, with projects
-            on record on the Sunshine Coast, in the Sea to Sky and in the Okanagan.
+            Metro Vancouver, the Fraser Valley and Vancouver Island, with work on record on the Sunshine
+            Coast, in the Sea to Sky and in the Okanagan.
           </p>
 
           {/* Legal row */}

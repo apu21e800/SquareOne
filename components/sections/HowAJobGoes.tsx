@@ -1,3 +1,4 @@
+import type { ReactNode } from "react"
 import Link from "next/link"
 import Frame from "@/components/ui/Frame"
 import { Section } from "@/components/ui/Container"
@@ -30,25 +31,25 @@ export interface Step {
 export const STEPS: Step[] = [
   {
     title: "Site visit",
-    body: "Send a few photographs and the address, and we walk the site, free: the surface and its condition, the drainage, the traffic it carries and the layout it has to meet. The sample boards come with us.",
+    body: "We walk the site with you and bring the sample boards. Free.",
   },
   {
     title: "Written quote",
-    body: "A written quote sets out the system, the pattern and the colours for the surface you have. Drawings help, and we work from yours.",
+    body: "The system, the pattern and the colours, in writing, before anything starts.",
   },
   {
     title: "Install",
-    body: "Surface prep comes first: cleaning, and vapour blasting where the surface needs it. Then the work goes down, by Square One's own crews, to the published specification.",
+    body: "Our own crews prep the surface and install to the published specification.",
   },
   {
     title: "Aftercare",
-    body: "Once the surface has cured we walk the finished work with you. The manufacturer warrants the material; Square One warrants the workmanship.",
+    body: "We walk the finished work with you. We warrant the workmanship; the manufacturer warrants the material.",
   },
 ]
 
 /** The one line /specifiers adds under the quote (§4 of the brief). */
 export const SPECIFIER_LINE =
-  "For a tender, the manufacturer's specifications and colour cards are in the document library, and we support the specification."
+  "For a tender: the specifications and colour cards are in the document library, and we support the spec."
 
 const CREWS = [
   {
@@ -86,19 +87,19 @@ const CREWS = [
 export const VAPOUR_STEPS: Step[] = [
   {
     title: "Photos and the address",
-    body: "Send a few photos of the surface and what has to come off it (paint, graffiti, mould, an old coating) and the address. We look at the site, free.",
+    body: "Send photos of the surface and what has to come off it. We look at the site, free.",
   },
   {
     title: "Written quote",
-    body: "A written quote for the surface and the job, before anything starts.",
+    body: "A written quote for the job, before anything starts.",
   },
   {
     title: "On site",
-    body: "The rig comes to you. The abrasive travels in water, so the paint comes off and the dust stays on the ground.",
+    body: "The rig comes to you. The abrasive travels in water, so the dust stays down.",
   },
   {
     title: "Walk-through",
-    body: "We walk the cleaned surface with you. If a coating or thermoplastic follows, the surface is primed and ready for it.",
+    body: "We walk the cleaned surface with you, primed if a coating follows.",
   },
 ]
 
@@ -106,10 +107,14 @@ export default function HowAJobGoes({
   tone = "warm",
   specifiers = false,
   crews = true,
-  title = "How a job goes",
+  title = (
+    <>
+      Four steps, <em>every job</em>
+    </>
+  ),
   cta = true,
   steps = STEPS,
-  label = "The same four steps, every job",
+  label = "How a job goes",
 }: {
   steps?: Step[]
   label?: string
@@ -118,14 +123,14 @@ export default function HowAJobGoes({
   specifiers?: boolean
   /** The four crew frames under the steps. */
   crews?: boolean
-  title?: string
+  title?: ReactNode
   cta?: boolean
 }) {
   return (
     <Section id="how-a-job-goes" label={label} title={title} tone={tone} wide>
-      <ol className="grid grid-cols-4 gap-x-10 gap-y-10 max-[900px]:grid-cols-2 max-[560px]:grid-cols-1">
+      <ol data-reveal-group className="grid grid-cols-4 gap-x-10 gap-y-10 max-[900px]:grid-cols-2 max-[560px]:grid-cols-1">
         {steps.map((step, i) => (
-          <li key={step.title} className="border-t border-hairline pt-6">
+          <li key={step.title} data-reveal className="border-t border-hairline pt-6">
             <span className="step-num" aria-hidden="true">
               {i + 1}
             </span>
@@ -133,7 +138,7 @@ export default function HowAJobGoes({
               <span className="sr-only">Step {i + 1}: </span>
               {step.title}
             </h3>
-            <p className="mt-3 text-[16px] leading-[1.6] text-ink-body [text-wrap:pretty]">{step.body}</p>
+            <p className="mt-3 max-w-[30ch] text-[16.5px] leading-[1.55] text-ink-body [text-wrap:pretty]">{step.body}</p>
             {specifiers && i === 1 && (
               <p className="mt-3 text-[16px] leading-[1.6] text-ink-body [text-wrap:pretty]">{SPECIFIER_LINE}</p>
             )}
@@ -142,16 +147,12 @@ export default function HowAJobGoes({
       </ol>
 
       {crews && (
-        <span className="label mt-14 max-[900px]:mt-10">On site with the crews</span>
-      )}
-      {crews && (
-        <ul className="mt-4 grid grid-cols-4 gap-x-6 gap-y-8 max-[900px]:grid-cols-2">
+        <ul className="mt-14 grid grid-cols-4 gap-x-6 gap-y-6 max-[900px]:mt-10 max-[900px]:grid-cols-2 max-[900px]:gap-x-3 max-[900px]:gap-y-3">
           {CREWS.map((frame) => (
             <li key={frame.src}>
               <Frame
                 src={frame.src}
                 alt={frame.alt}
-                caption={frame.caption}
                 aspect="aspect-[4/3]"
                 sizes="(max-width: 900px) 50vw, 300px"
                 position={frame.position}

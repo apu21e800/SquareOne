@@ -67,8 +67,9 @@ export default function ProjectsPage() {
         src={`${FIO}/Whiterock-Pier-Crosswalk-TrafficPatternsXD-1-scaled.jpg`}
         alt="The brick-pattern TrafficPatternsXD crosswalk at the White Rock pier, with the promenade and the bay behind it"
         eyebrow="Projects"
-        title="Decorative pavement projects across BC"
-        lede="Municipal, institutional, commercial and residential work from the Lower Mainland to Vancouver Island and the Interior, installed by Square One since 2000, each with the system and the place on record."
+        title={<>Decorative pavement projects <em>across BC</em></>}
+        fit="Decorative pavement projects across BC"
+        lede="Municipal, commercial and residential work, each with the system and the place on record."
         caption="White Rock · Pier crosswalk · TrafficPatternsXD"
         imagePosition="center 60%"
       />
@@ -78,7 +79,7 @@ export default function ProjectsPage() {
       {/* ── By application — the galleries, as hairline rows of links ──────── */}
       <Section
         label="The galleries"
-        title="The work, by application"
+        title={<>The work, <em>by application</em></>}
         link={{ href: "/galleries", label: "Every photograph, by application and system" }}
         tone="warm"
         wide

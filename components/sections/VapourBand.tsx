@@ -49,45 +49,16 @@ export default function VapourBand() {
           />
           <p className="cap">Demonstration &middot; aerosol graffiti off face brick &middot; drag the line</p>
 
-          <ul className="mt-7 grid grid-cols-3 gap-5 max-[560px]:gap-3">
-            {STRIP.map((frame) => (
-              <li key={frame.src}>
-                <Frame
-                  src={frame.src}
-                  alt={frame.alt}
-                  caption={<span className="max-[560px]:hidden">{frame.caption}</span>}
-                  aspect="aspect-[3/2]"
-                  sizes="(max-width: 900px) 33vw, 230px"
-                  position={frame.position}
-                  href="/services/vapor-blasting#gallery"
-                />
-              </li>
-            ))}
-          </ul>
         </div>
 
         {/* ── The argument ──────── */}
         <div className="col-span-5 max-[900px]:col-span-1">
           <span className="label">Vapour blasting</span>
-          <h2 className="mt-4 max-w-[16ch] [text-wrap:balance]">Graffiti and old markings, lifted wet</h2>
-          <p className="mt-6 max-w-[44ch] text-ink-body [text-wrap:pretty]">
-            The abrasive travels in water, so the paint comes off and the dust stays on the
-            ground: no dust cloud, no chemical residue, and the brick, stone, concrete or
-            steel underneath is left as it was. One mobile rig, both regions: graffiti, mould,
-            paint, road markings, and the priming before a coating goes down.
+          <h2 className="mt-4 max-w-[16ch] [text-wrap:balance]">Graffiti and old markings, <em>lifted wet</em></h2>
+          <p className="mt-6 max-w-[40ch] text-ink-body [text-wrap:pretty]">
+            The abrasive travels in water: the paint comes off, the dust stays down, and the
+            surface underneath is left as it was.
           </p>
-          <dl className="spec mt-8">
-            {[
-              ["Graffiti", "off brick, stone, concrete and steel"],
-              ["Markings", "old lines and legends off asphalt and concrete"],
-              ["Surface prep", "cleaned and primed before a coating"],
-            ].map(([k, v]) => (
-              <div key={k} className="contents">
-                <dt>{k}</dt>
-                <dd>{v}</dd>
-              </div>
-            ))}
-          </dl>
           <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-3">
             <Link href="/services/vapor-blasting" className="btn-primary btn-water">
               The vapour blasting service

@@ -96,25 +96,21 @@ const tiers = [
   {
     audience: "Commercial & municipal",
     title: "Storefronts, plazas, roads",
-    body: "Graffiti, gum, mould and old markings off brick, concrete, stone and asphalt, without the dust cloud of dry blasting.",
+    body: "Graffiti, gum, mould and old markings off brick, concrete, stone and asphalt.",
     bullets: [
       "Graffiti, gum, mould and soot removal",
       "Road marking removal",
       "Steel and concrete surface preparation",
-      "Brick and patio cleaning",
-      "Fire and smoke damage cleaning",
     ],
     tags: ["Property managers", "Municipalities", "Strata"],
   },
   {
     audience: "Residential",
     title: "Driveways, patios, railings",
-    body: "Paint, stain, moss and grime off patios, driveways, stone and railings, cleaned, then primed for whatever comes next.",
+    body: "Paint, stain, moss and grime off patios, driveways, stone and railings.",
     bullets: [
       "Paint and stain removal",
-      "Wood, concrete and steel cleaning",
       "Limestone, marble and stucco stain removal",
-      "Iron fence and railing preparation",
       "Priming before a coating",
     ],
     tags: ["Homeowners", "Estates"],
@@ -122,11 +118,10 @@ const tiers = [
   {
     audience: "Marine & industrial",
     title: "Hulls, decks, equipment",
-    body: "Deck and on-board coatings off, steel taken to a clean profile without the heat that warps thin sections.",
+    body: "Deck and on-board coatings off, steel back to a clean profile.",
     bullets: [
-      "Polyurethane deck coating removal (yachting)",
+      "Polyurethane deck coating removal",
       "Marine on-board coating removal",
-      "Steel surface preparation",
       "Equipment and frames",
     ],
     tags: ["Marine", "Manufacturing"],
@@ -207,11 +202,10 @@ export default function VaporBlastingServicePage() {
         <div className="container-1280 grid grid-cols-12 items-center gap-x-12 gap-y-10 max-[900px]:grid-cols-1">
           <div className="col-span-5 max-[900px]:col-span-1">
             <span className="label">Vapour blasting &middot; mobile cleaning and priming</span>
-            <h1 className="mt-5 max-w-[18ch]">Clean it, prime it, bring it back</h1>
+            <h1 className="mt-5 max-w-[18ch]">Clean it, prime it, <em>bring it back</em></h1>
             <p className="lede mt-6 max-w-[48ch] [text-wrap:pretty]">
-              A powerful, portable blasting solution for surface prep. Vapour blasting uses less
-              water, generates up to 92% less dust, produces little to no heat and creates less
-              environmental impact than the alternatives, while getting the job done faster.
+              Graffiti, old markings, paint and grime off almost any hard surface, with the dust held
+              down in water. The rig comes to you.
             </p>
             <div className="mt-9 flex flex-wrap items-center gap-x-8 gap-y-4">
               <Link href="/contact" className="btn-primary">
@@ -258,8 +252,7 @@ export default function VaporBlastingServicePage() {
       {/* ── What it handles: three columns, commercial first ──────── */}
       <Section
         label="What it handles"
-        title="From storefront to drydock"
-        intro="Vapour blasting works on almost every hard surface. The difference between a parkade, a patio and a yacht deck is the pressure and the media, not the method."
+        title={<>From storefront <em>to drydock</em></>}
         wide
       >
         <div className="grid grid-cols-3 gap-x-10 gap-y-12 max-[1000px]:grid-cols-1">
@@ -290,8 +283,8 @@ export default function VaporBlastingServicePage() {
       {/* ── Before / after: the one demonstration, captioned as one ── */}
       <Section
         label="Before and after"
-        title="Drag the line"
-        intro="Aerosol graffiti on face brick. The abrasive travels in water, so the paint comes off and the dust stays on the ground: no shutdown, no dust cloud, no chemical residue."
+        title={<>Drag <em>the line</em></>}
+        intro="Aerosol graffiti on face brick, before and after."
         tone="warm"
         wide
       >
@@ -320,7 +313,7 @@ export default function VaporBlastingServicePage() {
       <Section
         id="gallery"
         label="On the record"
-        title="Square One's vapour blasting, photographed on the job"
+        title={<>On the job, <em>photographed</em></>}
         link={{ href: YOUTUBE, label: "Demonstration videos on YouTube" }}
         className="scroll-mt-[72px]"
         wide
@@ -342,7 +335,7 @@ export default function VaporBlastingServicePage() {
       </Section>
 
       {/* ── How a job goes: the site's one process band ── */}
-      <HowAJobGoes tone="warm" crews={false} cta={false} steps={VAPOUR_STEPS} label="Four steps, every job" />
+      <HowAJobGoes tone="warm" crews={false} cta={false} steps={VAPOUR_STEPS} />
 
       {/* ── Surfaces and the service area, on one rule ── */}
       <section className="bg-surface-warm pb-20 max-[700px]:pb-14" aria-label="Surfaces and service area">
@@ -370,7 +363,7 @@ export default function VaporBlastingServicePage() {
       </section>
 
       {/* ── Questions ────────────────────────────────────────────── */}
-      <Section label="Questions" title="What people ask about vapour blasting">
+      <Section label="Questions" title={<>What people ask <em>about vapour blasting</em></>}>
         <div className="border-t border-hairline">
           {faqs.map((faq, i) => (
             <details key={faq.q} open={i === 0} className="group border-b border-hairline">
@@ -390,8 +383,8 @@ export default function VaporBlastingServicePage() {
       {/* ── Close ───────────────────────────────────────────────────── */}
       <Section
         label="Get a quote"
-        title="Send us a photo, we send back a quote"
-        intro="The fastest path to a quote is a couple of photos and a postcode. We identify the surface, suggest the approach and come back with a written estimate."
+        title={<>Send us a photo, <em>we send back a quote</em></>}
+        intro="A couple of photos and a postcode. We come back with the approach and a written quote."
         tone="warm"
       >
         <div className="flex flex-wrap items-center gap-x-8 gap-y-4">

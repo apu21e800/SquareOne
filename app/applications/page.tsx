@@ -38,7 +38,7 @@ const applications: AppCard[] = [
   {
     title: "Crosswalks",
     tag: "Municipal",
-    desc: "Decorative and high-visibility crosswalks in preformed thermoplastic and StreetPrint stamped asphalt, from the rainbow intersection in Nanaimo to a school crossing in Surrey.",
+    desc: "Rainbow intersections to school crossings, in thermoplastic and stamped asphalt.",
     image: `${FIO}/UBC-crosswalk-3-300dpi.jpg`,
     alt: "UBC and Musqueam crosswalk in TrafficPatterns preformed thermoplastic, University Boulevard, Vancouver",
     cta: "See the work",
@@ -47,7 +47,7 @@ const applications: AppCard[] = [
   {
     title: "Streetscapes",
     tag: "Municipal",
-    desc: "Intersections, medians, laneways and civic forecourts where the surface carries the design: pattern pressed into the asphalt, StreetBond colour on top. Victoria's town centre to a strata lane in Squamish.",
+    desc: "Intersections, medians, laneways and forecourts where the surface carries the design.",
     image: `${FIO}/maplewoods-fire-lane-north-vancouver-streetbond-01.jpg`,
     alt: "Blue StreetBond decorative fire lane at Maplewoods Townhomes, North Vancouver",
     cta: "See the work",
@@ -56,7 +56,7 @@ const applications: AppCard[] = [
   {
     title: "Roundabouts & traffic calming",
     tag: "Municipal",
-    desc: "Roundabout aprons, traffic islands, medians and calming devices in stamped asphalt, snowplow safe, and part of the street rather than hardware bolted onto it.",
+    desc: "Aprons, islands and calming devices that read as street, not hardware.",
     image: "/images/applications/roundabouts/surrey-roundabout-streetbond-01.jpg",
     alt: "StreetBond-coated median and roundabout in Surrey",
     cta: "See the work",
@@ -65,7 +65,7 @@ const applications: AppCard[] = [
   {
     title: "Parking lots",
     tag: "Commercial",
-    desc: "Thresholds, walkways and crosswalks that organise retail, strata and commercial lots, from Ralph's Farm Market in Langley to Hillside Mall in Victoria.",
+    desc: "Thresholds, walkways and crosswalks that organise a lot.",
     image: `${FIO}/Ralphs-Farm-Market-Parking-Lot-with-StreetPrint-Decorative-Stamped-Asphalt-in-Langley-BC-Canada.jpg`,
     alt: "Red brick StreetPrint stamped asphalt walkway across the parking lot at Ralph's Farm Market, Murrayville, Langley",
     cta: "See the work",
@@ -74,7 +74,7 @@ const applications: AppCard[] = [
   {
     title: "Parks & paths",
     tag: "Municipal",
-    desc: "Greenways, park walkways, plazas and spray parks with StreetBond colour and stamped pattern underfoot, anti-skid, and recoated rather than rebuilt.",
+    desc: "Greenways, park paths, plazas and spray parks, in colour underfoot.",
     image: `${FIO}/Bowen-Island-asphalt-walkway-with-StreetBond150-scaled-1.jpg`,
     alt: "StreetBond 150 coated community walkway at Snug Cove, Bowen Island",
     cta: "See the work",
@@ -83,7 +83,7 @@ const applications: AppCard[] = [
   {
     title: "Schools & sports courts",
     tag: "Institutional",
-    desc: "Sports courts, school crosswalks, sensory pathways, play markings and a labyrinth, surfaces built to hold up to recess and rain.",
+    desc: "Courts, school crosswalks, play markings and a labyrinth, built for recess and rain.",
     image: `${FIO}/StreetBond-Sports-Court-Brookmere-Park-Coquitlam-BC.jpg`,
     alt: "StreetBond coated sports court at Brookmere Park, Coquitlam",
     cta: "See the work",
@@ -92,7 +92,7 @@ const applications: AppCard[] = [
   {
     title: "Bike lanes",
     tag: "Municipal",
-    desc: "Green bike lanes and multi-use paths in PreMark thermoplastic, StreetBond and StreetPrint, colour that holds under daily traffic.",
+    desc: "Green bike lanes and multi-use paths, in colour that holds under traffic.",
     image: `${FIO}/Photo-2024-07-04-10-58-08-AM-scaled.jpg`,
     alt: "Red brick StreetPrint stamped asphalt multi-use path with bike lane markings",
     cta: "See the work",
@@ -101,7 +101,7 @@ const applications: AppCard[] = [
   {
     title: "Public art",
     tag: "Civic",
-    desc: "Artist-designed pavement: First Nations artwork, community murals and commemorative plazas rendered in thermoplastic and StreetBond, from Granville Street to Oak Bay.",
+    desc: "First Nations artwork, community murals and commemorative plazas, set in the pavement.",
     image: `${FIO}/Langley-event-3-2048x1536.jpg`,
     alt: "'Circle of Life' by Drew and Elinor Atkins in StreetBond at Langley Events Centre, Langley",
     cta: "See the work",
@@ -110,7 +110,7 @@ const applications: AppCard[] = [
   {
     title: "Branding & wayfinding",
     tag: "Commercial",
-    desc: "Logos, wayfinding symbols and decals heat-fused into the pavement for schools, retail centres and civic sites, from Little Italy on Commercial Drive to Tsawwassen Commons.",
+    desc: "Logos, wayfinding and decals, fused into the pavement.",
     image: `${FIO}/Decorative-asphalt-sidewalk-with-at-Reunion-housing-development-in-langley-BC-Canada.jpg`,
     alt: "Oak-leaf DecoMark thermoplastic decals on an asphalt sidewalk at Reunion, Murrayville, Langley",
     cta: "See the work",
@@ -119,7 +119,7 @@ const applications: AppCard[] = [
   {
     title: "Driveways",
     tag: "Residential",
-    desc: "StreetPrint stamped asphalt and StreetBond colour over the driveway you already have: brick, herringbone and ashlar slate patterns for homes across Greater Victoria and Metro Vancouver.",
+    desc: "Brick, herringbone and slate over the driveway you already have.",
     image: "/images/applications/driveways/saanich-ten-mile-point-driveway-streetprint-01.jpg",
     alt: "Grey ashlar slate StreetPrint stamped asphalt driveway at a Ten Mile Point home, Saanich",
     cta: "Explore driveways",
@@ -128,7 +128,7 @@ const applications: AppCard[] = [
   {
     title: "Vapour blasting",
     tag: "Extra service",
-    desc: "Surface cleaning, priming, graffiti and mould removal: mobile wet-abrasive blasting with up to 92% less dust than dry blasting, across both regions.",
+    desc: "Graffiti, markings and grime off, and the surface primed. Mobile, both regions.",
     image: "/images/services/vapor-blasting/walkway-vapour-blasting-01.jpg",
     alt: "Walkway being cleaned by vapour blasting, Square One Paving",
     cta: "Learn about vapour blasting",
@@ -182,8 +182,9 @@ export default function ApplicationsPage() {
         src="/images/hero/white-rock-marine-drive-wave-crosswalk.jpg"
         alt="Wave-motif TrafficPatternsXD decorative crosswalk on Marine Drive, White Rock"
         eyebrow="Applications"
-        title="Decorative pavement, by application"
-        lede="Crosswalks in Vancouver and Nanaimo, spray parks and parking lots across the Lower Mainland, driveways in Greater Victoria: StreetPrint® stamped asphalt, StreetBond® coatings and preformed thermoplastic, installed by Square One since 2000 on both sides of the Strait."
+        title={<>Decorative pavement, <em>by application</em></>}
+        fit="Decorative pavement, by application"
+        lede="StreetPrint® stamped asphalt, StreetBond® coatings and preformed thermoplastic, by where it goes. Our own crews, since 2000."
         caption="White Rock · TrafficPatternsXD"
         imagePosition="center 78%"
       >

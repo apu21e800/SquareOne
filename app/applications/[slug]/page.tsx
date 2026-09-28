@@ -351,7 +351,7 @@ export default async function ApplicationPage({ params }: Props) {
              documents" came off every card (docs/OWN-COMPANY-BRIEF.md §3.5) ── */}
       <Section
         id="systems"
-        title={`Systems installed for ${meta.label.toLowerCase()}`}
+        title={<>Systems installed <em>for {meta.label.toLowerCase()}</em></>}
         link={{ href: "/products", label: "All systems" }}
         tone="warm"
         wide
@@ -381,7 +381,7 @@ export default async function ApplicationPage({ params }: Props) {
       {/* ── 04 Projects — frames with the title and the record's
              place · system · year UNDER them ─────────────────────────────── */}
       {caseStudies.length > 0 && (
-        <Section id="projects" label="Projects" title="Projects on record" link={{ href: "/projects", label: "All projects" }} wide>
+        <Section id="projects" label="Projects" title={<>Projects <em>on record</em></>} link={{ href: "/projects", label: "All projects" }} wide>
           <ul className="grid grid-cols-1 gap-x-7 gap-y-10 min-[701px]:grid-cols-3" role="list">
             {caseStudies.map((project) => {
               const city = cityName(project.city)

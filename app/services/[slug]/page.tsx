@@ -57,23 +57,6 @@ const pageTitle: Record<string, string> = {
   "preformed-thermoplastic": "Preformed Thermoplastic Markings in BC",
 }
 
-/** The service heading — what Square One delivers, in the words a specifier uses. */
-/* 21 Sept 2026: each of these opened by repeating the service name, which
-   the H1 two sections above and the label beside them already carry — and
-   the extra words pushed a 40px headline into six lines in a 20rem column.
-   The name comes out, the promise stays. */
-const serviceHeading: Record<string, string> = {
-  "stamped-asphalt": "Specified with you, installed by our own crews",
-  "decorative-coatings": "From the colour chart to the cured surface",
-  "preformed-thermoplastic": "From your drawing to the road",
-}
-
-/** The heading over the systems. */
-const systemsHeading: Record<string, string> = {
-  "stamped-asphalt": "The systems behind stamped asphalt",
-  "decorative-coatings": "The coatings behind the service",
-  "preformed-thermoplastic": "The four thermoplastic systems",
-}
 
 const NUMBER_WORDS = [
   "zero",
@@ -172,8 +155,13 @@ export default async function ServicePage({ params }: Props) {
 
   const specColumns: { label: string; items: string[]; linked?: boolean }[] = [
     { label: "Applications", items: service.applications, linked: true },
-    { label: "Who specifies it", items: service.idealClients },
-    { label: "What you get", items: service.benefits },
+    { label: "Who specifies it", items: service.idealClients.slice(0, 5) },
+    // The site walk, the crews and the warranty split are in the process
+    // band on the same page; the list keeps what only this service has.
+    {
+      label: "What you get",
+      items: service.benefits.filter((b) => !/site walk|own crews|warranted by the manufacturer/i.test(b)).slice(0, 5),
+    },
   ]
 
   const serviceSchema = {
@@ -231,26 +219,12 @@ export default async function ServicePage({ params }: Props) {
         </div>
       </section>
 
-      {/* ── The service ────────────────────────────────────────── */}
-      <Section
-        label="What Square One delivers"
-        title={serviceHeading[service.slug] ?? "Specified with you, installed by our own crews"}
-        tone="warm"
-      >
-        {/* 28 Sept 2026 QA ("a jumble of text"): the three paragraphs of
-            fullDescription repeated the process band, the systems band and the
-            record below them, as 30 lines of grey. The band now carries the
-            first two sentences as a lede; the rest of the page tells the rest. */}
-        <p className="lede max-w-[58ch] [text-wrap:pretty]">
-          {(service.fullDescription.split(/\n\s*\n/)[0] ?? "")
-            .split(/(?<=[.!?])\s+(?=[A-Z])/)
-            .slice(0, 2)
-            .join(" ")}
-        </p>
-      </Section>
+      {/* ── "What Square One delivers" came off, 28 Sept 2026 (Vern: "too
+             much text… cut the fat"): its lede restated the intro above
+             and the bands below. ── */}
 
       {/* ── At a glance — three hairline lists ────────────────── */}
-      <Section label="At a glance" title={`${name}: where it goes, who specifies it, what you get`} wide>
+      <Section label="At a glance" title={<>Where it goes, <em>who specifies it</em></>} wide>
         <div className="grid grid-cols-1 gap-10 min-[701px]:grid-cols-3 min-[701px]:gap-x-10">
           {specColumns.map((column) => (
             <div key={column.label} className="border-t border-hairline pt-6">
@@ -309,7 +283,7 @@ export default async function ServicePage({ params }: Props) {
       {/* ── The systems — the means ───────────────────────────── */}
       <Section
         label="The systems"
-        title={systemsHeading[service.slug] ?? `The systems behind ${lowerName}`}
+        title={<>The systems <em>behind it</em></>}
         link={{ href: "/products", label: "All systems" }}
         wide
       >
@@ -346,7 +320,7 @@ export default async function ServicePage({ params }: Props) {
       {relatedProjects.length > 0 && (
         <Section
           label="On the record"
-          title={`${name} projects in BC`}
+          title={<>{name}, <em>on the record</em></>}
           link={{ href: "/projects", label: "All projects" }}
           tone="warm"
           wide
@@ -383,7 +357,7 @@ export default async function ServicePage({ params }: Props) {
       {/* ── Questions ────────────────────────────────────────────── */}
       <Section
         label="Questions"
-        title={`What specifiers ask about ${lowerName}`}
+        title={<>What specifiers ask <em>about {lowerName}</em></>}
         intro={
           <>
             For the specification itself, the documents are in{" "}
@@ -416,7 +390,7 @@ export default async function ServicePage({ params }: Props) {
       {/* ── More services — three hairline rows ────────────────── */}
       <Section
         label="More services"
-        title="Other services"
+        title={<>Other <em>services</em></>}
         link={{ href: "/services", label: "All services" }}
       >
         <ul>

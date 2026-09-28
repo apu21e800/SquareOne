@@ -123,7 +123,7 @@ export default function SpecifiersPage() {
         src="/images/applications/streetscapes/victoria-town-centre-crossing-streetprint-01.jpg"
         alt="Brick-red StreetPrint stamped asphalt crossing at the edge of a town centre plaza in Victoria, with shops and trees beyond"
         eyebrow="For specifiers"
-        title="Drawings, specifications and samples"
+        title={<>Drawings, specifications <em>and samples</em></>}
         lede="What a landscape architect, an engineer or a municipal specifier needs to put decorative pavement on a drawing and out to tender, and a site walk with the samples when you are ready."
         caption="Victoria · Town centre crossing · StreetPrint"
         imagePosition="center 60%"
@@ -152,7 +152,7 @@ export default function SpecifiersPage() {
       <Section
         id="specifiers-tools"
         label="Specifying it"
-        title="Four things to draw from"
+        title={<>Four things <em>to draw from</em></>}
         intro="The manufacturer publishes the specifications, the sheets and the chart. We install to them, and bring the samples."
         wide
       >
@@ -243,7 +243,7 @@ export default function SpecifiersPage() {
       <Section
         id="specifiers-services"
         label="The services"
-        title="What each service is specified for"
+        title={<>What each service <em>is specified for</em></>}
         link={{ href: "/services", label: "The service pages" }}
         tone="warm"
         wide
@@ -290,7 +290,7 @@ export default function SpecifiersPage() {
       <Section
         id="specifiers-precedent"
         label="Precedent"
-        title="Ten kinds of work, photographed on site"
+        title={<>Ten kinds of work, <em>photographed on site</em></>}
         link={{ href: "/projects", label: "All projects" }}
         wide
       >
@@ -324,7 +324,7 @@ export default function SpecifiersPage() {
       </Section>
 
       {/* ── How a job goes, with the specifier's line under step 2 ──────── */}
-      <HowAJobGoes tone="warm" specifiers crews={false} cta={false} title="From the drawing to the road" />
+      <HowAJobGoes tone="warm" specifiers crews={false} cta={false} title={<>From the drawing <em>to the road</em></>} />
 
       {/* ── For the spec: closures, warranties, regions, as a ledger ──────── */}
       <section className="bg-surface-warm pb-20 max-[700px]:pb-14" aria-label="For the specification">
@@ -352,7 +352,7 @@ export default function SpecifiersPage() {
       </section>
 
       {/* ── The way in ──────── */}
-      <Section id="specifiers-contact" label="Start a project" title="Send drawings or a site address" wide>
+      <Section id="specifiers-contact" label="Start a project" title={<>Send drawings <em>or a site address</em></>} wide>
         <div className="grid grid-cols-12 items-start gap-x-12 gap-y-10 max-[900px]:grid-cols-1">
           <div className="col-span-6 max-[900px]:col-span-1">
             <p className="max-w-[52ch] text-ink-body [text-wrap:pretty]">

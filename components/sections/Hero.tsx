@@ -144,14 +144,19 @@ export default function Hero({ slides, eyebrow, title }: HeroProps) {
           (a CMS field) now renders as the line under the headline. */}
       <div className="absolute inset-x-0 bottom-0 z-[2]">
         <div className="container-1280 pb-[72px] max-[1100px]:pb-[84px] max-[700px]:pb-[80px]">
-          <h1 className="display-xl max-w-[14ch] text-white [text-wrap:balance]">
-            {title ?? "Surfaces that define a place"}
+          <h1 className="display-xl max-w-none text-white">
+            {title ?? (
+              <>
+                Surfaces that <em>define a place</em>
+              </>
+            )}
           </h1>
 
           <p className="mt-6 max-w-[46ch] text-[19px] leading-[1.5] text-white/90 [text-wrap:pretty] max-[700px]:mt-5 max-[700px]:text-[17px]">
             {eyebrow ?? (
               <>
-                Lower Mainland and Vancouver Island since 2000. One office in Maple Ridge, crews on both sides of the Strait.
+                Stamped asphalt, coloured coatings and crosswalks, installed by our own crews across
+                the Lower Mainland and Vancouver Island since 2000.
               </>
             )}
           </p>

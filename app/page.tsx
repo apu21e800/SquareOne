@@ -7,10 +7,8 @@ import AudienceBand from "@/components/sections/AudienceBand"
 import ServicesGrid from "@/components/sections/ServicesGrid"
 import MaterialsBand from "@/components/sections/MaterialsBand"
 import ProjectsPreview from "@/components/sections/ProjectsPreview"
-import ApplicationsSection from "@/components/sections/ApplicationsSection"
 import DrivewaysBand from "@/components/sections/DrivewaysBand"
 import VapourBand from "@/components/sections/VapourBand"
-import BlogFeed from "@/components/sections/BlogFeed"
 import FollowTheWork from "@/components/sections/FollowTheWork"
 import { getSiteSettings, getSlots, getSocialPosts, slotImage, slotText } from "@/lib/cms"
 import { SITE_URL } from "@/lib/site"
@@ -102,43 +100,28 @@ export default async function Home() {
           /about. */}
       <ProofLine />
 
-      {/* 27 Sept 2026 (Vern: "service oriented", "the right sales funnel"):
-          what we do comes first, then how a job goes, then who it is for.
-          The funnel reads: the four services, the four steps, the people
-          we do it for, where the work goes, and a quote at every turn. */}
+      {/* 28 Sept 2026 (Vern: "too much text… cut the fat, get straight to
+          the point, make the sale"): eight bands where there were eleven,
+          each a headline, one line and the pictures. The order is the sale:
+          what we do, the work that proves it, how a job goes, who it is
+          for, the two offers people come for (driveways, vapour), the
+          patterns and colours, the crews on Instagram, then the quote
+          (the close band in the footer). "Where the work goes" and the
+          blog feed came off the home page; both are one click away in the
+          menu. */}
       <ServicesGrid />
-
-      {/* The proof only an installer has: the same four steps on every job.
-          One component, one wording, shared with the service pages, /about,
-          /specifiers and /contact (docs/OWN-COMPANY-BRIEF.md §9.3). */}
-      <HowAJobGoes tone="warm" />
-
-      <AudienceBand />
-
-      {/* The funnel's front door (Vern, 19 Sept evening: "work more like a
-          sales funnel for contractors. Applications etc."): where the work
-          goes comes before what we do. */}
-      <ApplicationsSection />
-
-      {/* Patterns and colours — back on the home page, 19 Sept evening
-          (Vern: "the client did like some semblance of the colours and
-          patterns on the homepage"), as the specifier's composition: three
-          drawing sheets fanned on the slate, eight named colours, two ways
-          in. Not a catalogue. */}
-      <MaterialsBand />
 
       <ProjectsPreview />
 
-      {/* The "Twenty-five years" band came off on 28 Sept 2026 (QA): its list of
-          the ten kinds of work repeated "Where the work goes" two bands above,
-          and the proof line under the hero already says since 2000. */}
+      <HowAJobGoes tone="paper" />
+
+      <AudienceBand tone="warm" />
 
       <DrivewaysBand />
 
-      {/* Vapour blasting, its own band (Vern, 19 Sept) — the wipe, on the slate. */}
       <VapourBand />
 
-      <BlogFeed />
+      <MaterialsBand />
 
       <FollowTheWork settings={settings} tiles={tiles} />
     </main>

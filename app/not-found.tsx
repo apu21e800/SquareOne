@@ -27,7 +27,7 @@ export default function NotFound() {
             <span className="label pt-3">Not found &middot; 404</span>
           </div>
           <div className="col-span-9 max-[900px]:col-span-1">
-            <h1 className="max-w-[16ch]">This page isn&rsquo;t on the record</h1>
+            <h1 className="max-w-[16ch]">This page isn&rsquo;t <em>on the record</em></h1>
             <p className="lede mt-6 max-w-[52ch]">
               The address may be from the old site, or it may have a typo in it. Everything we do is
               one of these, and the office is a phone call away.

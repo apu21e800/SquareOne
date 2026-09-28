@@ -23,7 +23,7 @@ export default function SearchPage() {
         <div className="container-1280">
           <span className="label">Search</span>
 
-          <h1 className="mt-4 max-w-[20ch]">Find it fast</h1>
+          <h1 className="mt-4 max-w-[20ch]">Find it <em>fast</em></h1>
 
           <div className="mt-10 max-w-[840px]">
             <Suspense fallback={null}>

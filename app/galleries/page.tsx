@@ -131,8 +131,9 @@ export default function GalleriesPage() {
         src="/images/hero/white-rock-pier-crosswalk-trafficpatternsxd.jpg"
         alt="Red brick-pattern TrafficPatternsXD crosswalk with white edge lines, leading across the road to the White Rock Pier and the beach"
         eyebrow="Galleries"
-        title="Photographs of our own work"
-        lede="Square One's own installation photography across the Lower Mainland and Vancouver Island, captioned with the system and the place it was installed, by application, by system and by region."
+        title={<>Photographs of <em>our own work</em></>}
+        fit="Photographs of our own work"
+        lede="Our own installation photographs, captioned with the system and the place."
         caption="White Rock Pier · TrafficPatternsXD · 2019"
         imagePosition="center 62%"
       />
@@ -141,7 +142,7 @@ export default function GalleriesPage() {
       <Section
         id="galleries-applications"
         label="By application"
-        title="A gallery for each kind of work"
+        title={<>A gallery for <em>each kind of work</em></>}
         link={{ href: "/applications", label: "The application pages" }}
         wide
       >
@@ -161,7 +162,7 @@ export default function GalleriesPage() {
       <Section
         id="galleries-systems"
         label="By system"
-        title="The same photographs, sorted by what was installed"
+        title={<>The same photographs, <em>by what was installed</em></>}
         link={{ href: "/products", label: "The systems" }}
         tone="warm"
         wide
@@ -176,7 +177,7 @@ export default function GalleriesPage() {
       </Section>
 
       {/* ── Driveways and projects ──────── */}
-      <Section id="galleries-more" label="Driveways and projects" title="For homeowners, and for the full story" wide>
+      <Section id="galleries-more" label="Driveways and projects" title={<>For homeowners, <em>and the full story</em></>} wide>
         <div className="grid grid-cols-3 gap-x-7 gap-y-10 max-[1000px]:grid-cols-2 max-[600px]:grid-cols-1">
           {driveways.map((g) => (
             <GalleryCover key={g.href} href={g.href} photo={cover(g.photos)} title={g.label} sizes={threeUp} />
@@ -201,7 +202,7 @@ export default function GalleriesPage() {
       <Section
         id="galleries-all"
         label="All the galleries, together"
-        title="A selection from years of work across BC"
+        title={<>Years of work, <em>across BC</em></>}
         intro="A sample of the work, not the full list. Filter by system or region, then click any photograph to open the viewer."
         tone="warm"
         wide

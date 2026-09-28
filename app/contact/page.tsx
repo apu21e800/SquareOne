@@ -71,15 +71,15 @@ const LINES = [
 const STEPS = [
   {
     title: "Tell us the job",
-    body: "A description and a location. Photos of the surface as it is and a rough area help; drawings help more.",
+    body: "A description and a location. Photos and drawings help.",
   },
   {
     title: "We walk the site",
-    body: "Free, across the Lower Mainland and Vancouver Island. The sample boards come along, so pattern and colour are chosen on the surface they will go on.",
+    body: "Free, with the sample boards, anywhere in the Lower Mainland and on Vancouver Island.",
   },
   {
     title: "You get a written quote",
-    body: "From the crew who install it, to the published specification. The manufacturer warrants the material; Square One warrants the workmanship.",
+    body: "To the published specification. We warrant the workmanship.",
   },
 ]
 
@@ -112,11 +112,10 @@ export default function ContactPage() {
         <div className="container-1280 grid grid-cols-12 items-end gap-x-12 gap-y-10 max-[900px]:grid-cols-1">
           <div className="col-span-8 max-[900px]:col-span-1">
             <span className="label">Request a quote &middot; free site visit</span>
-            <h1 className="mt-5 max-w-[16ch] [text-wrap:balance]">Tell us the job. We&rsquo;ll walk the site.</h1>
+            <h1 className="mt-5 max-w-[16ch] [text-wrap:balance]">Tell us the job. <em>We&rsquo;ll walk the site.</em></h1>
             <p className="lede mt-6 max-w-[56ch] [text-wrap:pretty]">
-              A crosswalk, a plaza, a parking area, a driveway. A description and a location are
-              enough to start. The site visit is free across the Lower Mainland and Vancouver Island,
-              the sample boards come along, and the quote is written by the crew who install it.
+              A description and a location are enough to start. The site visit is free; the quote
+              comes in writing.
             </p>
           </div>
 
@@ -235,7 +234,7 @@ export default function ContactPage() {
       {/* ── Where we work — two regions, two lines, the record's cities ──────── */}
       <Section
         label="Where we work"
-        title="Lower Mainland and Vancouver Island"
+        title={<>Lower Mainland <em>and Vancouver Island</em></>}
         link={{ href: "/projects", label: "All projects" }}
         intro="The office is in Maple Ridge and the Island has its own line. The record also runs to Squamish, Sechelt and the Okanagan when the job calls for it."
         tone="warm"

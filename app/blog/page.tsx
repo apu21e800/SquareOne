@@ -51,8 +51,9 @@ export default async function BlogPage() {
         src="/images/hero/bowen-island-polka-dot-walkway-streetbond.jpg"
         alt="Blue, green, yellow and grey StreetBond dots along the Snug Cove walkway on Bowen Island, with an eagle asking 'Will you see me before I see you?'"
         eyebrow="Blog"
-        title="Project stories and guides"
-        lede="Materials, methods and what holds up on BC pavement: stamped asphalt, StreetBond coatings and thermoplastic markings, told project by project."
+        title={<>Project stories <em>and guides</em></>}
+        fit="Project stories and guides"
+        lede="What holds up on BC pavement, told project by project."
         caption="Bowen Island · StreetBond"
         imagePosition="center 40%"
       />

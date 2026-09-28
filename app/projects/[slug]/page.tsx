@@ -326,7 +326,7 @@ export default async function ProjectPage({ params }: Props) {
 
       {/* ── 04 More projects — two hairline rows ──────── */}
       {related.length > 0 && (
-        <Section label="Projects" title="More projects" link={{ href: "/projects", label: "All projects" }} wide>
+        <Section label="Projects" title={<>More <em>projects</em></>} link={{ href: "/projects", label: "All projects" }} wide>
           <div>
             {related.map((p) => (
               <Row key={p.slug} as="article">

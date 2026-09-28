@@ -403,7 +403,7 @@ export default async function ProductPage({ params }: Props) {
       <Section
         id="applications"
         label="Applications"
-        title={`Where ${product.name} is specified`}
+        title={<>Where {product.name} <em>is specified</em></>}
         intro="The surfaces Square One installs it on. The linked ones open the photographs on record for that kind of work."
         tone="stone"
         wide
@@ -434,7 +434,7 @@ export default async function ProductPage({ params }: Props) {
         <Section
           id="work"
           label="Photographed on site"
-          title={`Square One's ${product.name} installations across BC`}
+          title={<>{product.name}, <em>installed across BC</em></>}
           tone={toneOf("work")}
           wide
         >
@@ -447,7 +447,7 @@ export default async function ProductPage({ params }: Props) {
         <Section
           id="colours"
           label="Colours"
-          title={`${product.name} colours, off the published card`}
+          title={<>{product.name} colours, <em>off the published card</em></>}
           tone={toneOf("colours")}
           wide
         >
@@ -512,7 +512,7 @@ export default async function ProductPage({ params }: Props) {
         <Section
           id="colours"
           label="Colours"
-          title="Fifty-two standard StreetBond colours, plus custom matching"
+          title={<>Fifty-two standard colours, <em>plus custom matching</em></>}
           intro="Read off the published StreetBond colour chart. On-screen colour is a reference only: the sample board we bring to the site visit is what decides."
           tone={toneOf("colours")}
           wide
@@ -577,7 +577,7 @@ export default async function ProductPage({ params }: Props) {
         <Section
           id="documents"
           label="Specify it"
-          title={`${product.name} specifications and data sheets`}
+          title={<>{product.name} <em>specifications and data sheets</em></>}
           link={{ href: docsHref, label: `Open the ${product.name} documents` }}
           intro={`${docs.length} ${product.name} document${docs.length === 1 ? "" : "s"} (specification, technical data, safety data and colour) are kept with the rest of the library, where they are previewed page by page and checked against the manufacturer’s current editions.`}
           tone={toneOf("documents")}
@@ -587,7 +587,7 @@ export default async function ProductPage({ params }: Props) {
       {/* ── Related systems — hairline rows: the category as the small voice,
              the name, one line; the whole row is the link. ──────── */}
       {related.length > 0 && (
-        <Section title="Related systems we install" tone={toneOf("related")} wide>
+        <Section title={<>Related <em>systems</em></>} tone={toneOf("related")} wide>
           <ul role="list">
             {related.map((p) => (
               <li

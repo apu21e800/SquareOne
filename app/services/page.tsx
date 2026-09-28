@@ -5,7 +5,6 @@ import { Section, Row } from "@/components/ui/Container"
 import type { Metadata } from "next"
 import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
-import { sentenceCase } from "@/lib/text"
 
 export const metadata: Metadata = {
   openGraph: { title: "Decorative Pavement Services in BC", description: clampDescription("Stamped asphalt, decorative coatings, preformed thermoplastic and vapour blasting: specified with you and installed by our own crews across the Lower Mainland and Vancouver Island since 2000."), images: [{ url: "/images/applications/public-art/new-westminster-boundary-pump-station-full-field-streetbond-01.jpg" }] },
@@ -98,7 +97,8 @@ export default function ServicesPage() {
         src="/images/applications/public-art/new-westminster-boundary-pump-station-full-field-streetbond-01.jpg"
         alt="The Boundary Road pump station in New Westminster from above, a quilt of red, blue, yellow, pink, black and white StreetBond squares across the whole plaza, installed by Square One"
         eyebrow="What we do"
-        title="What we do"
+        title={<>What <em>we do</em></>}
+        fit="What we do"
         lede="Three ways to change a surface and one to clean it: a free site walk, a written quote and our own crews, across the Lower Mainland and Vancouver Island since 2000."
         caption="New Westminster · Boundary Road pump station · StreetBond"
         imagePosition="center 45%"
@@ -108,7 +108,7 @@ export default function ServicesPage() {
       <Section
         id="services"
         label="The services"
-        title="Three ways we change a surface, and one way we clean it"
+        title={<>Three ways we change a surface, <em>and one way we clean it</em></>}
         tone="warm"
         wide
       >
@@ -124,18 +124,15 @@ export default function ServicesPage() {
                 href={`/services/${service.slug}`}
               />
               <div className="min-w-0">
-                <h3>{service.name}</h3>
-                <p className="mt-3 max-w-[52ch] text-ink-body [text-wrap:pretty]">{service.tagline}</p>
-                <p className="mt-4">
-                  {service.applications.map((application) => (
-                    <span key={application} className="tag">
-                      {sentenceCase(application)}
-                    </span>
-                  ))}
-                </p>
+                <h3 className="text-[30px] leading-[1.1] max-[700px]:text-[24px]">
+                  <Link href={`/services/${service.slug}`} className="hover:underline hover:decoration-1 hover:underline-offset-[6px]">
+                    {service.name}
+                  </Link>
+                </h3>
+                <p className="mt-3 max-w-[40ch] text-ink-body [text-wrap:pretty]">{service.tagline}</p>
                 <p className="mt-5">
                   <Link href={`/services/${service.slug}`} className="link">
-                    {service.name}, the service
+                    The service
                   </Link>
                 </p>
               </div>
@@ -147,8 +144,8 @@ export default function ServicesPage() {
       {/* ---- For specifiers — one line and the three things they open first ---- */}
       <Section
         label="For specifiers"
-        title="Drawing it, specifying it, putting it to tender"
-        intro="A landscape architect, an engineer or a municipal project specifier can take the whole job from this site: the template sheets as dimensioned drawings, the colour chart, the manufacturer's specifications and data sheets, the installed work as precedent, and a site walk with the sample boards when you are ready."
+        title={<>Drawing it, specifying it, <em>putting it to tender</em></>}
+        intro="The sheets, the colour chart, the specifications and the record: everything to draw it and tender it."
       >
         <ul className="border-t border-hairline">
           {specifierLinks.map((item) => (
@@ -160,11 +157,11 @@ export default function ServicesPage() {
             </li>
           ))}
         </ul>
-        <div className="mt-9">
-          <Link href="/specifiers" className="btn-primary">
+        <p className="mt-8">
+          <Link href="/specifiers" className="link">
             Everything for specifiers
           </Link>
-        </div>
+        </p>
       </Section>
 
       {/* ---- Fact strip — one hairline row in the serif ---- */}

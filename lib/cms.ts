@@ -41,7 +41,8 @@ export const DEFAULT_SETTINGS: SiteSettings = {
     // with one row of links instead of a "What we do" column, so the line
     // can name the trades again without saying them twice. Plain, local,
     // "we" — the site's voice (docs/OWN-COMPANY-BRIEF.md §3.10).
-    "We stamp, coat and mark asphalt and concrete across the Lower Mainland and Vancouver Island, and have since 2000. One office in Maple Ridge; our own crews on both sides of the Strait.",
+    // 28 Sept 2026 ("cut the fat"): one sentence.
+    "We stamp, coat and mark asphalt and concrete, with our own crews on both sides of the Strait, since 2000.",
   phoneOffice: "604-612-6209",
   phoneIsland: "250-391-0270",
   phoneTollFree: "1-877-391-0270",

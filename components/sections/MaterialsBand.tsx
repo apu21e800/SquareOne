@@ -50,26 +50,18 @@ export default function MaterialsBand() {
               )
             })}
           </div>
-          <p className="cap mt-6">
-            {FEATURED_SHEETS.map((s) => s.name).join(" · ")}
-            {" · three of the "}
-            {OFFERED_SHEETS.length} template sheets
-          </p>
         </div>
 
         {/* ── The argument, and the colours ──────── */}
         <div className="col-span-6 max-[900px]:col-span-1">
           <span className="label">Patterns and colours</span>
-          <h2 className="mt-4 max-w-[16ch] [text-wrap:balance]">Specified from a drawing, matched from a card</h2>
+          <h2 className="mt-4 max-w-[16ch] [text-wrap:balance]">Specified from a drawing, <em>matched from a card</em></h2>
           <p className="mt-6 max-w-[48ch] text-ink-body [text-wrap:pretty]">
-            Every stamped pattern begins as a dimensioned template sheet, and every colour has a
-            published name on the coating chart, so a landscape architect can draw it, an
-            engineer can specify it and the finished surface matches both. The sample boards come
-            to the site visit, so you see the real surface before you sign.
+            Every pattern is a dimensioned sheet and every colour a named chip, so what gets
+            drawn is what gets installed.
           </p>
 
           <div className="mt-10">
-            <span className="label">Eight of the colours</span>
             <ul className="mt-4 grid grid-cols-8 gap-[6px] max-[560px]:grid-cols-4" role="list">
               {STRIP.map((swatch) => (
                 <li key={swatch.name}>
@@ -79,9 +71,6 @@ export default function MaterialsBand() {
                       className="block aspect-[1/1.15] ring-1 ring-black/10"
                       style={{ background: swatch.hex }}
                     />
-                    <span className="mt-2 block text-[12.5px] italic leading-[1.3] text-ink-muted transition-colors group-hover:text-ink">
-                      {swatch.name}
-                    </span>
                   </Link>
                 </li>
               ))}

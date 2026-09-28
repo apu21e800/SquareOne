@@ -65,7 +65,7 @@ export default function PatternsPage() {
       <section className="bg-surface pt-[calc(var(--bar-h)+88px)] pb-14 max-[700px]:pt-[calc(var(--bar-h)+48px)] max-[700px]:pb-10">
         <div className="container-1280">
           <span className="label">StreetPrint&reg; templates</span>
-          <h1 className="mt-5 max-w-[20ch] [text-wrap:balance]">The stamped asphalt pattern library</h1>
+          <h1 className="mt-5 max-w-[20ch] [text-wrap:balance]">The stamped asphalt <em>pattern library</em></h1>
           <div className="mt-8 grid grid-cols-12 gap-x-10 gap-y-5 max-[900px]:grid-cols-1">
             <p className="lede col-span-7 max-w-[56ch] [text-wrap:pretty]">
               {OFFERED_SHEETS.length} stamping templates, shown as the manufacturer draws them,
