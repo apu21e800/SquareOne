@@ -183,7 +183,7 @@ const COPY: Record<Exclude<WorkApp, "driveways">, AppCopy> = {
     headline: "Public art rendered in the road itself",
     intro: [
       "Pavement public art is a piece where the artist's drawing becomes the road surface. Square One carries it from the drawing to the ground: colour-matched fields in StreetBond®, a water-based acrylic coating with custom colour mixing and an anti-skid aggregate, and factory-cut graphics in TrafficPatterns™ and DecoMark preformed thermoplastic, which reproduce a logo, emblem or complex design in full colour with the durability of a standard road marking. DuraTherm handles the crosswalk bars where the piece is also a crossing, and the layout is set out on site to the geometry a circular motif or a woven crest demands.",
-      "Robyn Sparrow's Musqueam design on Granville Street; 'Every Child Matters' by Charliss Santos in New Westminster; 'Circle of Life' by Drew and Elinor Atkins at Langley Events Centre; the whorl-and-canoes medallion at Victoria High School; 'Carpeting' by Renée Van Halm at Joyce Station; Terry Fox Hometown Square in Port Coquitlam; the labyrinth at c̓əsqənelə Elementary in Maple Ridge; street murals in Oak Bay. Municipalities, transit agencies, First Nations and community organisations commission the work; Square One installs it across the Lower Mainland and Vancouver Island.",
+      "Robyn Sparrow's Musqueam design on Granville Street; 'Every Child Matters' by Charliss Santos in New Westminster; 'Circle of Life' by Drew and Elinor Atkins at Langley Events Centre; the whorl-and-canoes medallion at Victoria High School; 'Carpeting' by Renée Van Halm at Joyce Station; Terry Fox Hometown Square in Port Coquitlam; the labyrinth at c̓əsqənelə Elementary in Maple Ridge; the village traffic circle in Cadboro Bay. Municipalities, transit agencies, First Nations and community organisations commission the work; Square One installs it across the Lower Mainland and Vancouver Island.",
     ],
     products: ["streetbond", "trafficpatterns", "decomark", "duratherm"],
     seo: "Pavement public art in TrafficPatterns, DecoMark thermoplastic and StreetBond, Lower Mainland and Vancouver Island: First Nations designs, murals and plazas.",
@@ -245,6 +245,10 @@ export default async function ApplicationPage({ params }: Props) {
   const hero = APP_HEROES[slug as keyof typeof APP_HEROES]
   const photos = workFor(meta.slug)
   const caseStudies = getProjectsByApplication(meta.label)
+  // The gallery skips the opener's frame and the case-study leads told in
+  // full further down, so no photograph appears twice on the page.
+  const onPage = new Set([hero.src, ...caseStudies.map((p) => p.imageUrl)])
+  const galleryPhotos = photos.filter((p) => !onPage.has(p.src))
   const systems = copy.products
     .map((s) => products.find((p) => p.slug === s))
     .filter((p): p is NonNullable<typeof p> => Boolean(p))
@@ -344,7 +348,7 @@ export default async function ApplicationPage({ params }: Props) {
         intro="Square One’s own photography, captioned with the system installed and where."
         wide
       >
-        <WorkGallery photos={photos} ariaLabel={`${meta.label} installation photographs`} />
+        <WorkGallery photos={galleryPhotos} ariaLabel={`${meta.label} installation photographs`} />
       </Section>
 
       {/* ── 03 Systems — hairline rows, the whole row a link; "Specs and

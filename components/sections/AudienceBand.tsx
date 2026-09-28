@@ -34,10 +34,13 @@ const audiences = [
     orders: ["Site walk", "Own crews", "Workmanship warranty"],
     href: "/services",
     cta: "The services",
-    image: "/images/applications/crosswalks/richmond-crossing-with-tactile-edge-trafficpatternsxd-01.jpg",
-    alt: "A TrafficPatternsXD crossing with a yellow tactile edge between towers in Richmond, installed by Square One",
-    caption: "Richmond · TrafficPatternsXD",
-    position: "center 55%",
+    // 28 Sept 2026, second image pass: the Chilliwack turnaround, April
+    // 2026, a developer's frontage in herringbone StreetPrint (was the 2023
+    // Agnus Green frame).
+    image: "/images/applications/roundabouts/chilliwack-circular-turnaround-streetprint-01.jpg",
+    alt: "A circular turnaround in charcoal herringbone StreetPrint in front of a new apartment building in Chilliwack",
+    caption: "Chilliwack · Circular turnaround · StreetPrint",
+    position: "center 60%",
   },
   {
     label: "Homeowners",
@@ -45,10 +48,10 @@ const audiences = [
     orders: ["Driveways", "Walkways", "Laneways"],
     href: "/driveways",
     cta: "Driveways",
-    image: "/images/S1_update_v2/photos/Driveways/Number%201.jpg",
-    alt: "Grey ashlar slate StreetPrint stamped asphalt driveway in front of a three-car garage, installed by Square One",
-    caption: "Ashlar slate · StreetPrint driveway",
-    position: "center 70%",
+    image: "/images/S1_update_v2/photos/Driveways/Number%204.jpg",
+    alt: "A grey ashlar StreetPrint walkway curving through a garden to the house, installed by Square One",
+    caption: "Ashlar garden walkway · StreetPrint",
+    position: "center 60%",
   },
 ]
 

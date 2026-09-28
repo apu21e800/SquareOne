@@ -37,20 +37,28 @@ const cardImage: Record<string, { src: string; alt: string; caption: string }> =
   // 19 Sept 2026: every frame is from the record (lib/work-captions.ts),
   // none of them repeated in the hero reel or in Selected work below. The
   // captions say what the alt text already said: the place and the system.
+  // 28 Sept 2026, second image pass (Vern: "more recent images… site
+  // wide"): the Mission parking bays, April 2025, crisp grey herringbone at a
+  // new building under a big sky. The Victoria town centre job moved to the
+  // audience band as its clock-tower plaza frame.
   "stamped-asphalt": {
-    src: "/images/applications/streetscapes/victoria-town-centre-crossing-streetprint-01.jpg",
-    alt: "A red brick StreetPrint town centre crossing between trees in Victoria",
-    caption: "Town centre crossing, Victoria · StreetPrint",
+    src: "/images/applications/parking-lots/mission-parking-bays-and-lot-streetprint-01.jpg",
+    alt: "Grey herringbone StreetPrint parking bays in front of a new commercial building in Mission, clouds over the hills beyond",
+    caption: "Parking bays, Mission · StreetPrint",
   },
+  // 28 Sept 2026 image pass: the Maplewoods fire lane, the strongest
+  // StreetBond frame on the record that the home page does not show elsewhere.
   "decorative-coatings": {
-    src: "/images/applications/public-art/north-vancouver-lynn-valley-plaza-streetbond-01.jpg",
-    alt: "Lynn Valley plaza, North Vancouver: a red StreetBond field with black and white line art",
-    caption: "Lynn Valley plaza, North Vancouver · StreetBond",
+    src: "/images/S1_update_v2/photos/Featured%20image%20options/maplewoods-fire-lane-north-vancouver-streetbond-01.jpg",
+    alt: "A decorative fire lane in blue StreetBond waves between townhomes at Maplewoods, North Vancouver",
+    caption: "Maplewoods Townhomes, North Vancouver · StreetBond",
   },
+  // 28 Sept 2026, second image pass: the Beban Park sports crosswalk, March
+  // 2024, in place of the 2022 Burnaby greenway frame.
   "preformed-thermoplastic": {
-    src: "/images/applications/public-art/burnaby-union-street-thunderbird-decomark-01.jpg",
-    alt: "A DecoMark thunderbird on the Union Street greenway in Burnaby, seen from above",
-    caption: "Union Street greenway, Burnaby · DecoMark",
+    src: "/images/S1_update_v2/photos/Featured%20image%20options/Photo-2024-03-19-3-28-23-PM-1-scaled.jpg",
+    alt: "A sports-themed TrafficPatterns crosswalk across the Beban Park lot in Nanaimo, a soccer ball, a baseball, a golf ball and a bicycle set in green and blue waves",
+    caption: "Sports crosswalk, Beban Park, Nanaimo · TrafficPatterns",
   },
   "vapor-blasting": {
     src: "/images/services/vapor-blasting/granville-island-vapour-blasting-01.jpg",

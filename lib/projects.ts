@@ -434,7 +434,9 @@ const records: ProjectInput[] = [
     slug: "boundary-road-pump-station",
     service: "Decorative Coatings",
     application: "Public art",
-    city: "Boundary Road, BC",
+    // 28 Sept 2026: the pump station is in New Westminster (the delivery
+    // folder, and every library caption of the job, say so).
+    city: "New Westminster, BC",
     region: "Lower Mainland",
     systems: ["StreetBond"],
     excerpt:
@@ -512,10 +514,15 @@ const records: ProjectInput[] = [
       "StreetBond is a water-based acrylic pavement coating, published by its manufacturer for asphalt and concrete with an anti-skid aggregate for wet conditions, UV-stable colour and an 8+ year life cycle that is recoated rather than replaced. Those are the properties a spray pad needs: grip when wet, colour that holds under summer sun, and a surface that can be recoated in a later season rather than rebuilt.",
       "The photographs show the pad before opening, with the blue arches and the orange tower standing over the fresh surface, and from above in July with the park full and the colour reading clearly against the concrete around it. A municipality planning a spray park should ask for StreetBond 150 across the whole pad, with the colour plan drawn around the features before the surface goes down.",
     ],
+    // 28 Sept 2026: the arches lead; the July frame of the full park (many
+    // children in it) goes last rather than first on every page that shows
+    // this project's lead photograph.
     images: [
-      `${FIO}/Photo-2025-07-07-11-54-41-AM.jpg`,
-      `${FIO}/Photo-2025-06-16-5-06-20-PM-scaled.jpg`,
+      // The library copy of the arches frame (the same photograph as the
+      // Featured-image copy), so pages can tell it is already shown.
+      "/images/applications/parks-paths/maple-ridge-spray-park-arches-streetbond-01.jpg",
       `${FIO}/Photo-2025-06-16-5-07-47-PM-scaled.jpg`,
+      `${FIO}/Photo-2025-07-07-11-54-41-AM.jpg`,
     ],
     heroWide: true,
   },
@@ -674,8 +681,14 @@ const records: ProjectInput[] = [
       "The photograph shows the bays in front of the building's glass doors, the herringbone running the length of the frontage and the white lines set between the stalls. A property owner or developer planning a commercial frontage should ask to see the StreetBond colour card against the building's materials before choosing a tone; the pattern is built into the asphalt and the colour is what sets the mood.",
     ],
     post: "mission-bc-streetscape",
-    images: [`${FIO}/Photo-2025-04-03-1-57-51-PM-scaled.jpg`],
-    heroWide: false,
+    // 28 Sept 2026: the frame the story describes (the bays in front of the
+    // glass doors) leads; the same afternoon's close-up follows.
+    images: [
+      "/images/applications/parking-lots/mission-parking-bays-and-lot-streetprint-01.jpg",
+      "/images/applications/parking-lots/mission-parking-bays-at-the-building-streetprint-01.jpg",
+      `${FIO}/Photo-2025-04-03-1-57-51-PM-scaled.jpg`,
+    ],
+    heroWide: true,
   },
   {
     title: "Reunion Housing, DecoMark sidewalk decals",

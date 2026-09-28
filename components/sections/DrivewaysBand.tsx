@@ -22,9 +22,12 @@ const CITIES: { href: string; name: string; region: string; src: string; alt: st
     href: "/driveways/vancouver",
     name: "Vancouver driveways",
     region: "Metro Vancouver",
-    src: "/images/applications/driveways/richmond-brick-driveway-streetprint-01.jpg",
-    alt: "A red-brown brick-pattern StreetPrint driveway in front of a stucco bungalow in Richmond, installed by Square One",
-    caption: "Richmond · StreetPrint",
+    // 28 Sept 2026 image pass: the full-size frame of the driveway the old
+    // site captioned "Custom Ashlar Slate Driveway, Vancouver BC" (lib/work.ts
+    // now records it as Vancouver); /driveways/vancouver opens on it too.
+    src: "/images/S1_update_v2/photos/Driveways/Number%202.jpg",
+    alt: "A custom StreetPrint driveway with a compass-rose pattern in front of a timber-framed house in Vancouver, installed by Square One",
+    caption: "Vancouver · StreetPrint",
     communities: "West Vancouver to Maple Ridge",
   },
   {

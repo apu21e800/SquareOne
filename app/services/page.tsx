@@ -27,16 +27,19 @@ export const metadata: Metadata = {
    26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.7): the four photo cards are
    four hairline rows — the frame inset with its caption under it (the
    place and the system the alt text already named), the text beside it,
-   the applications as words, one underlined link. */
+   the applications as words, one underlined link.
+
+   28 Sept 2026, second image pass: each row now shows the frame its service
+   page opens on (2023–2026 work), so the row and the page agree. */
 const services = [
   {
     slug: "stamped-asphalt",
     name: "Stamped asphalt",
     tagline: "Specified from a dimensioned template sheet, pressed into the asphalt already there by our own crews.",
     desc: "Pattern named from the sheet, colour off the chart, the texturing specification in the library. Then StreetPrint® pressed into the asphalt in place, or heavy-duty TrafficPatternsXD™ for the busiest crossings. A 10–20 year StreetPrint service life, published by the manufacturer.",
-    image: "/images/hero/victoria-ellis-point-walkway-streetprint.jpg",
-    alt: "Cobblestone-pattern StreetPrint walkway in a red-brown colour beside a timber rail at Ellis Point, Victoria",
-    caption: "Ellis Point, Victoria · StreetPrint",
+    image: "/images/applications/parking-lots/mission-parking-bays-and-lot-streetprint-01.jpg",
+    alt: "Grey herringbone StreetPrint parking bays in front of a new commercial building in Mission",
+    caption: "Parking bays, Mission · StreetPrint",
     applications: ["Crosswalks", "Roundabouts", "Streetscapes", "Commercial Entries"],
   },
   {
@@ -44,9 +47,9 @@ const services = [
     name: "Decorative coatings",
     tagline: "Specified off the colour chart, proved on a sample board, coated in place by our own crews.",
     desc: "StreetBond® in more than fifty standard colours, or matched to your reference, on asphalt or concrete: anti-skid, UV-stable, recoated rather than rebuilt, with an 8+ year life cycle published by the manufacturer. DuraShield for plain asphalt protection.",
-    image: "/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg",
-    alt: "Multicolour StreetBond plaza under the SkyTrain guideway at Joyce Station, Vancouver, at dusk",
-    caption: "Joyce Station, Vancouver · StreetBond",
+    image: "/images/applications/parks-paths/surrey-marine-spray-park-streetbond-01.jpg",
+    alt: "A marine spray park in Surrey, a swirl of blue StreetBond water through lime-green and yellow leaf shapes",
+    caption: "Marine spray park, Surrey · StreetBond",
     applications: ["Bike Lanes", "Bus Rapid Transit", "Parking Lots", "Spray Parks"],
   },
   {
@@ -54,9 +57,9 @@ const services = [
     name: "Preformed thermoplastic",
     tagline: "Cut to your drawing, to the owner's marking standard, and fused into the road by our own crews.",
     desc: "Send the drawing or the artist's file: TrafficPatterns™, DecoMark®, DuraTherm® and PreMark® are cut to the design before they reach the site and heat-fused in place. A TrafficPatterns crossing is open to traffic within minutes of application.",
-    image: "/images/projects/ubc-musqueam-crosswalk/ubc-musqueam-crosswalk-trafficpatterns-01.jpg",
-    alt: "A bus crossing the Musqueam artwork in TrafficPatterns thermoplastic on the UBC crosswalk, University Boulevard, Vancouver",
-    caption: "University Boulevard, Vancouver · TrafficPatterns",
+    image: "/images/S1_update_v2/photos/Featured%20image%20options/Photo-2023-09-22-1-50-34-PM.jpg",
+    alt: "'Every Child Matters' by Charliss Santos in orange and black TrafficPatterns, New Westminster",
+    caption: "'Every Child Matters', New Westminster · TrafficPatterns",
     applications: ["Crosswalk Markings", "School Zones", "Custom Logos", "Stop Bars"],
   },
   {

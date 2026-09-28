@@ -119,15 +119,43 @@ function fallbackTiles(profileUrl: string): SocialTile[] {
   const bySlug = (slug: string) => projects.find((p) => p.slug === slug)
   // 28 Sept 2026: six installs that appear nowhere else on the home page.
   // The grid used to repeat "Selected work", the driveway band and the
-  // vapour photograph a scroll apart. Island and Mainland, a spread of
-  // systems; every one a project on the record (lib/projects.ts).
+  // vapour photograph a scroll apart. A spread of systems; every frame on
+  // the record (lib/work-captions.ts).
   const picks: { slug?: string; src?: string; alt?: string; caption: string }[] = [
-    { slug: "victoria-high-school-whorl-canoes", caption: "Victoria High School · DecoMark and StreetBond" },
-    { slug: "maple-ridge-spray-park", caption: "Spray park, Maple Ridge · StreetBond" },
-    { slug: "joyce-skytrain-art-installation", caption: "Joyce SkyTrain Station, Vancouver · StreetBond" },
-    { slug: "south-langford-elementary", caption: "South Langford Elementary, Langford · DecoMark and TrafficPatterns" },
-    { slug: "beban-park-sports-crosswalk", caption: "Sports crosswalk, Beban Park, Nanaimo · preformed thermoplastic" },
-    { slug: "ellis-point-cobblestone-victoria", caption: "British Cobble walkway, Ellis Point, Victoria · StreetPrint" },
+    // 28 Sept 2026, second image pass (Vern: "more recent images"): six
+    // frames shot between April 2025 and August 2026, from the September
+    // delivery, none of them a job the home page shows elsewhere, each one
+    // holding up in a portrait crop.
+    {
+      src: "/images/applications/parks-paths/vancouver-spray-park-wide-streetbond-01.jpg",
+      alt: "Fields of blue and lime green StreetBond across a spray park in Vancouver, tree shadows falling over them",
+      caption: "Spray park, Vancouver · StreetBond",
+    },
+    {
+      src: "/images/applications/schools-sports-courts/lower-mainland-bc-elevated-play-deck-streetbond-01.jpg",
+      alt: "A covered play deck coated in yellow, orange and blue StreetBond, a basketball key painted at one end",
+      caption: "Elevated play deck, Lower Mainland · StreetBond",
+    },
+    {
+      src: "/images/applications/schools-sports-courts/abbotsford-basketball-key-streetbond-01.jpg",
+      alt: "A blue StreetBond basketball key on a new court in Abbotsford",
+      caption: "Basketball key, Abbotsford · StreetBond",
+    },
+    {
+      src: "/images/applications/branding-wayfinding/coquitlam-red-sol-courtyard-decomark-01.jpg",
+      alt: "Blue DecoMark circles and sweeping lines set into the concrete courtyard at Red Sol in Coquitlam",
+      caption: "Red Sol courtyard, Coquitlam · DecoMark",
+    },
+    {
+      src: "/images/applications/schools-sports-courts/vancouver-school-play-markings-premark-01.jpg",
+      alt: "Stars, dots and court lines in PreMark across a school playground in Vancouver",
+      caption: "School play markings, Vancouver · PreMark",
+    },
+    {
+      src: "/images/applications/driveways/richmond-brick-driveway-streetprint-01.jpg",
+      alt: "A brick-pattern StreetPrint driveway in front of a house in Richmond",
+      caption: "Brick driveway, Richmond · StreetPrint",
+    },
   ]
   const tiles: SocialTile[] = []
   for (const pick of picks) {

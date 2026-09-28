@@ -54,30 +54,33 @@ export const metadata: Metadata = {
  * never an office.
  */
 
+/* 28 Sept 2026, second image pass (Vern: "more recent images… site wide"):
+   three of the four frames are 2025–2026 work from the September delivery
+   (Chilliwack, Maple Ridge, South Langford); vapour keeps Granville Island. */
 const trades: { name: string; line: string; href: string; src: string; alt: string; caption: string }[] = [
   {
     name: "Stamped asphalt",
     line: "Brick, cobble and slate, pressed into the asphalt itself.",
     href: "/services/stamped-asphalt",
-    src: "/images/hero/victoria-ellis-point-walkway-streetprint.jpg",
-    alt: "Brick-red cobble StreetPrint stamped asphalt walkway beside a timber rail at Ellis Point, Victoria",
-    caption: "Ellis Point, Victoria · StreetPrint",
+    src: "/images/applications/roundabouts/chilliwack-circular-turnaround-streetprint-01.jpg",
+    alt: "A circular turnaround in charcoal herringbone StreetPrint in front of a new apartment building in Chilliwack",
+    caption: "Chilliwack · StreetPrint",
   },
   {
     name: "Decorative coatings",
     line: "StreetBond colour on asphalt and concrete.",
     href: "/services/decorative-coatings",
-    src: "/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg",
-    alt: "Multicolour StreetBond plaza under the SkyTrain guideway at Joyce Station, Vancouver, at dusk",
-    caption: "Joyce Station, Vancouver · StreetBond",
+    src: "/images/applications/parks-paths/maple-ridge-spray-park-surface-streetbond-01.jpg",
+    alt: "Blue and orange StreetBond around the play features of the spray park in Maple Ridge",
+    caption: "Spray park, Maple Ridge · StreetBond",
   },
   {
     name: "Preformed thermoplastic",
     line: "Crosswalks, symbols and public art, fused into the road.",
     href: "/services/preformed-thermoplastic",
-    src: "/images/projects/ubc-musqueam-crosswalk/ubc-musqueam-crosswalk-trafficpatterns-01.jpg",
-    alt: "A bus crossing the blue and green TrafficPatterns crosswalk of the UBC and Musqueam crests at University Boulevard, Vancouver",
-    caption: "University Boulevard, Vancouver · TrafficPatterns",
+    src: "/images/S1_update_v2/photos/Featured%20image%20options/Photo-2025-09-25-3-48-33-PM-scaled.jpg",
+    alt: "An alphabet path in rainbow-coloured DecoMark winding along a school walkway at South Langford Elementary, Langford",
+    caption: "South Langford Elementary, Langford · DecoMark",
   },
   {
     name: "Vapour blasting",

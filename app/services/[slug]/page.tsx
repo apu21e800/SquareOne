@@ -148,6 +148,8 @@ export default async function ServicePage({ params }: Props) {
   const relatedProjects = projects
     .filter((p) => p.service === service.name)
     .filter((p) => service.slug !== "stamped-asphalt" || p.application !== "Driveways")
+    // The opener's photograph is not repeated as a project tile below it.
+    .filter((p) => p.imageUrl !== heroSrc)
     .slice(0, 3)
 
   const showsPatterns = service.slug === "stamped-asphalt"

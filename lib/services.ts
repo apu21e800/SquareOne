@@ -108,10 +108,14 @@ export const services: Service[] = [
         a: "Yes, when the asphalt is sound: we assess that at the site walk, and if it is not sound enough to take a stamp we say so. The manufacturer publishes a 10–20 year service life for StreetPrint and rates the textured surface slip-resistant and safe for snowplows and de-icing salt. TrafficPatternsXD is the heavier material, and as its surface wears new anti-skid elements are exposed.",
       },
     ],
-    imageUrl: "/images/applications/crosswalks/langley-railways-crossing-at-the-heritage-block-trafficpatternsxd-01.jpg",
-    imageAlt: "A railway-tie pattern crossing in tan and charcoal stamped asphalt at the heritage block in Langley, townhomes behind, installed by Square One",
-    imageCaption: "Langley · Railways crossing at the heritage block · TrafficPatternsXD",
-    imagePosition: "center 68%",
+    // 28 Sept 2026, second image pass: the Mission parking bays (April 2025,
+    // 2400px landscape) open the page; the Langley frame was a 1800px
+    // portrait cropped to a strip. The home services grid shows the same
+    // frame, so the card and the page it opens agree.
+    imageUrl: "/images/applications/parking-lots/mission-parking-bays-and-lot-streetprint-01.jpg",
+    imageAlt: "Grey herringbone StreetPrint parking bays in front of a new commercial building in Mission, clouds over the hills beyond, installed by Square One",
+    imageCaption: "Mission · Parking bays · StreetPrint",
+    imagePosition: "center 62%",
   },
   {
     slug: "preformed-thermoplastic",
@@ -184,10 +188,12 @@ export const services: Service[] = [
         a: "Across the Lower Mainland and Vancouver Island: the UBC and Musqueam crosswalk in Vancouver, the Every Child Matters crossing in New Westminster, the sensory play pathway at South Langford Elementary, and the projects on this page.",
       },
     ],
-    imageUrl: "/images/S1_update_v2/photos/Featured%20image%20options/UBC-crosswalk-3-300dpi.jpg",
-    imageAlt: "Musqueam artwork in blue, green and gold TrafficPatterns thermoplastic on the crosswalk beside the UBC letters on University Boulevard, Vancouver",
-    imageCaption: "Vancouver · UBC and Musqueam crosswalk · TrafficPatterns",
-    imagePosition: "center 62%",
+    // 28 Sept 2026, second image pass: Every Child Matters (September 2023)
+    // in place of the 2019 UBC frame, which still leads its project page.
+    imageUrl: "/images/S1_update_v2/photos/Featured%20image%20options/Photo-2023-09-22-1-50-34-PM.jpg",
+    imageAlt: "'Every Child Matters' by Charliss Santos in orange and black TrafficPatterns, set into a public square in New Westminster, installed by Square One",
+    imageCaption: "New Westminster · 'Every Child Matters' · TrafficPatterns",
+    imagePosition: "center 50%",
   },
   {
     slug: "decorative-coatings",

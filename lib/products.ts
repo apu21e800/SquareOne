@@ -111,7 +111,7 @@ export const products: Product[] = [
     ],
     applications: ["Bike Lanes", "Spray Parks", "Plazas", "Sports Courts", "School Zones", "Parking Lots", "Decorative Driveways"],
     image: "/images/applications/public-art/new-westminster-boundary-pump-station-plaza-streetbond-01.jpg",
-    imageAlt: "The Boundary Road pump station plaza in New Westminster, a quilt of red, blue, yellow, pink, black and white StreetBond squares under the SkyTrain guideway, installed by Square One",
+    imageAlt: "The Boundary Road pump station plaza in New Westminster, a quilt of red, blue, yellow, pink, black and white StreetBond squares between two roads, an overpass behind, installed by Square One",
     heroPosition: "center 60%",
     galleryImages: [
       "/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg",
@@ -148,8 +148,11 @@ export const products: Product[] = [
       "Heat-fused to the pavement in place, short closures",
     ],
     applications: ["Decorative Crosswalks", "Transit Stop Platforms", "Pedestrian Zones", "School Entrances", "Plaza Accents", "Public Art"],
-    image: "/images/products/traffic-patterns/trafficpatterns-ubc-musqueam-plate-01.jpg",
-    imageAlt: "Musqueam artwork in blue, green and gold TrafficPatterns thermoplastic on the crosswalk beside the UBC letters on University Boulevard, Vancouver",
+    // 28 Sept 2026, second image pass: Beban Park (March 2024, 2400px) in
+    // place of the 2000px UBC plate, which stays in the gallery below.
+    image: "/images/S1_update_v2/photos/Featured%20image%20options/Photo-2024-03-19-3-28-23-PM-1-scaled.jpg",
+    imageAlt: "A sports-themed TrafficPatterns crosswalk across the Beban Park lot in Nanaimo, a soccer ball, a baseball, a golf ball and a bicycle set in green and blue waves, installed by Square One",
+    heroPosition: "center 64%",
     galleryImages: ["/images/products/traffic-patterns/trafficpatterns-1.jpg"],
     serviceSlug: "preformed-thermoplastic",
   },
@@ -184,9 +187,11 @@ export const products: Product[] = [
       "For transit hubs, arterial crosswalks and major intersections",
     ],
     applications: ["Major Intersections", "Arterial Crosswalks", "Transit Hubs", "Bus Stops", "Traffic Calming", "High-Volume Pedestrian Zones"],
-    image: "/images/applications/crosswalks/north-vancouver-townhome-street-crossing-wide-trafficpatternsxd-01.jpg",
-    imageAlt: "A plum-and-cream brick-pattern TrafficPatternsXD crossing between two townhome blocks on a North Vancouver street, installed by Square One",
-    heroPosition: "center 64%",
+    // 28 Sept 2026, second image pass: the Nanaimo rainbow intersection
+    // (2025) in place of the 2023 North Vancouver crossing.
+    image: "/images/S1_update_v2/photos/Featured%20image%20options/502639628_1112360040926014_5391735583045489560_n.jpg",
+    imageAlt: "The rainbow intersection in Nanaimo from above, full-spectrum TrafficPatternsXD across the whole crossing, installed by Square One",
+    heroPosition: "center 50%",
     galleryImages: ["/images/products/traffic-patterns-xd/trafficpatterns-xd-1.jpg"],
     serviceSlug: "stamped-asphalt",
   },
@@ -314,8 +319,11 @@ export const products: Product[] = [
       "Bicycle symbols and green bike-lane markings",
     ],
     applications: ["Turn Arrows", "Speed Legends", "Bicycle Symbols", "Bike Lanes", "Accessible Parking Symbols", "School Zone Markings", "Bus Stop Markings"],
-    image: "/images/products/premark/premark-north-vancouver-green-bike-lane-01.jpg",
-    imageAlt: "A white bicycle symbol in PreMark preformed thermoplastic being heat-applied to a green bike lane in North Vancouver, the heater rig over the marking",
+    // 28 Sept 2026, second image pass: a Vancouver school playground
+    // (August 2026, 2400px) in place of a 1334px frame that ran full-bleed.
+    image: "/images/applications/schools-sports-courts/vancouver-school-play-markings-premark-01.jpg",
+    imageAlt: "Stars, dots and court lines in PreMark preformed thermoplastic across a school playground in Vancouver, installed by Square One",
+    heroPosition: "center 58%",
     galleryImages: [
       "/images/products/premark/premark-arrows-installation-intersection-01.jpg",
       "/images/products/premark/roadway-turn-arrows-pavement-marking-01.jpg",

@@ -112,8 +112,10 @@ export const WORK_CAPTIONS: Record<string, WorkCaption> = {
   "/images/applications/public-art/north-vancouver-lynn-valley-plaza-and-murals-streetbond-01.jpg": { subject: "Lynn Valley plaza and murals", place: "North Vancouver", systems: ["StreetBond"] },
   "/images/applications/public-art/north-vancouver-lynn-valley-plaza-streetbond-01.jpg": { subject: "Lynn Valley plaza", place: "North Vancouver", systems: ["StreetBond"] },
   "/images/applications/public-art/oak-bay-street-mural-crossing-streetbond-01.jpg": { subject: "Street mural crossing", place: "Oak Bay", systems: ["StreetBond"] },
-  "/images/applications/public-art/oak-bay-village-intersection-medallion-streetbond-01.jpg": { subject: "Village intersection medallion", place: "Oak Bay", systems: ["StreetBond"] },
-  "/images/applications/public-art/oak-bay-village-intersection-wide-streetbond-01.jpg": { subject: "Village intersection, wide", place: "Oak Bay", systems: ["StreetBond"] },
+  // 28 Sept 2026: filed as Oak Bay from the GPS; the "Welcome to Cadboro Bay"
+  // sign in the wide frame puts both at the Cadboro Bay Village traffic circle.
+  "/images/applications/public-art/oak-bay-village-intersection-medallion-streetbond-01.jpg": { subject: "Village traffic circle", place: "Cadboro Bay, Saanich", systems: ["StreetBond"] },
+  "/images/applications/public-art/oak-bay-village-intersection-wide-streetbond-01.jpg": { subject: "Village traffic circle, wide", place: "Cadboro Bay, Saanich", systems: ["StreetBond"] },
   "/images/applications/public-art/port-coquitlam-commemorative-map-inlay-streetbond-01.jpg": { subject: "Commemorative map inlay", place: "Port Coquitlam", systems: ["StreetBond"] },
   "/images/applications/public-art/sechelt-tsain-ko-from-the-road-decomark-01.jpg": { subject: "Tsain-Ko from the road", place: "Sechelt", systems: ["DecoMark"] },
   "/images/applications/public-art/sechelt-tsain-ko-storefront-medallion-decomark-01.jpg": { subject: "Tsain-Ko storefront medallion", place: "Sechelt", systems: ["DecoMark"] },

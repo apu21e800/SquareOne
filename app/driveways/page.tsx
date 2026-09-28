@@ -188,7 +188,8 @@ const steps: { title: string; desc: string }[] = [
 ]
 
 export default function DrivewaysPage() {
-  const gallery = workFor("driveways")
+  // The hero frame is not repeated as the first tile of the gallery below it.
+  const gallery = workFor("driveways").filter((p) => p.src !== HERO.src)
 
   return (
     <main>

@@ -1,6 +1,6 @@
 import Frame from "@/components/ui/Frame"
 import { Section } from "@/components/ui/Container"
-import { getFeaturedProjects } from "@/lib/projects"
+import { getFeaturedProjects, projects } from "@/lib/projects"
 
 /** "Vancouver, BC" → "Vancouver" — the caption carries the city, not the province. */
 function cityName(city: string): string {
@@ -11,15 +11,17 @@ function cityName(city: string): string {
    (SOUL-PASS MOVE 5); slugs missing from the data fall through to
    the default featured order. */
 const FEATURED_ORDER = [
-  "ubc-musqueam-crosswalk", // cool — blues and greens
-  "nanaimo-rainbow-intersection", // warm — full spectrum
-  "white-rock-custom-crosswalk", // cool — sea blues
-  "langley-events-centre-streetbond", // warm — orange and sand
-  // Two more, 21 Sept 2026 (Vern: "add two more to selected work"). Both were
-  // already featured in lib/projects.ts and neither repeats a place or a
-  // system pairing already in the four above: a transit plaza and a street.
-  "richmond-brighouse-translink", // cool — grey and steel
-  "little-italy-vancouver-crosswalks", // warm — Commercial Drive
+  // 28 Sept 2026, second image pass (Vern: "more recent images… feature the
+  // best looking"): newest first. The two large frames are the two
+  // strongest 2025 projects; the four under them run 2025, 2024, 2023, 2023,
+  // Island and Mainland. UBC (2019) and the Langley Events Centre moved off
+  // the home page; both lead their own pages under /projects.
+  "nanaimo-rainbow-intersection", // warm — full spectrum, 2025
+  "white-rock-custom-crosswalk", // cool — sea blues, 2025
+  "south-langford-elementary", // warm — alphabet path, 2025
+  "victoria-high-school-whorl-canoes", // cool — turquoise, Victoria, 2024
+  "boundary-road-pump-station", // warm — the quilt, 2023
+  "every-child-matters-new-westminster", // warm — orange, 2023
 ]
 
 /**
@@ -32,7 +34,7 @@ const FEATURED_ORDER = [
 export default function ProjectsPreview() {
   const featured = getFeaturedProjects()
   const curated = FEATURED_ORDER.map((slug) =>
-    featured.find((p) => p.slug === slug),
+    projects.find((p) => p.slug === slug),
   ).filter((p): p is NonNullable<typeof p> => Boolean(p))
   const featuredProjects = (curated.length === 6 ? curated : featured).slice(0, 6)
 

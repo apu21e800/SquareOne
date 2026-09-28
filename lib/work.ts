@@ -276,8 +276,12 @@ const EXTRAS: Extra[] = [
   ["fio", "Decorative-asphalt-sidewalk-with-at-Reunion-housing-development-in-langley-BC-Canada.jpg", "branding-wayfinding", ["DecoMark"], "Oak-leaf sidewalk decals", "Reunion, Murrayville, Langley"],
   ["fio", "DecoMark-on-asphalt-Little-Italy-Community-Branding_Commercia-Drive-Vancouver-BC-Canada-op6t525a5rlrtdb6ycgokn391ncum7c5zqlh8og8kw.jpg", "branding-wayfinding", ["DecoMark"], "Little Italy neighbourhood branding", "Commercial Drive, Vancouver"],
   ["drv", "Number 1.jpg", "driveways", ["StreetPrint"], "Ashlar slate driveway", ""],
-  ["drv", "Number 2.jpg", "driveways", ["StreetPrint"], "Driveway with circle medallion", ""],
-  ["drv", "Number 3.jpg", "driveways", ["StreetPrint"], "Charcoal cobble driveway", ""],
+  // 28 Sept 2026: Number 2 and Number 3 are the full-size frames of two driveways
+  // the old site captioned "Custom Ashlar Slate Driveway, Vancouver BC" and
+  // "Decorative Driveway, Victoria BC" (same houses, compared by eye); those
+  // 667px tiles are hidden in lib/curation.ts as duplicates.
+  ["drv", "Number 2.jpg", "driveways", ["StreetPrint"], "Driveway with circle medallion", "Vancouver"],
+  ["drv", "Number 3.jpg", "driveways", ["StreetPrint"], "Charcoal cobble driveway", "Victoria"],
   ["drv", "Number 4.jpg", "driveways", ["StreetPrint"], "Ashlar garden walkway", ""],
   ["drv", "Ten Mile Point Driveway I.jpg", "driveways", ["StreetPrint"], "Ten Mile Point driveway", "Saanich"],
   ["fio", "IMG_9161.jpg", "driveways", ["StreetPrint"], "Herringbone driveway with circle medallion", ""],

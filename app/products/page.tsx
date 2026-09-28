@@ -58,14 +58,14 @@ export default function ProductsPage() {
   return (
     <main className="bg-[color:var(--surface)]">
       <IndexImageHero
-        src="/images/applications/crosswalks/new-westminster-agnes-greenway-crossing-with-bike-lane-trafficpatternsxd-01.jpg"
-        alt="Three systems in one frame on the Agnes Greenway, New Westminster: a green coated bike lane, a white TrafficPatternsXD crossing and yellow tactile plates at the kerb, a tower beyond"
+        src="/images/S1_update_v2/photos/Featured%20image%20options/504448297_1112360024259349_5235743119624258372_n-1.jpg"
+        alt="The rainbow intersection in Nanaimo at street level, bands of TrafficPatternsXD colour across the road in front of the shops"
         eyebrow="The systems we install"
         title={<>The right system <em>for the surface</em></>}
         fit="The right system for the surface"
         lede="Eight pavement systems, from pattern to protection. If it is not listed here, we do not install it."
-        caption="New Westminster · Agnes Greenway · TrafficPatternsXD"
-        imagePosition="center 78%"
+        caption="Nanaimo · Rainbow intersection · TrafficPatternsXD"
+        imagePosition="center 62%"
       />
 
       {/* One photographic wall — eight systems, no half-empty category rows.

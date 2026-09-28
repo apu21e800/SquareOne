@@ -72,7 +72,9 @@ const CITIES: Record<string, CityCopy> = {
     name: "Vancouver",
     region: "Lower Mainland",
     regionLabel: "Metro Vancouver",
-    heroSrc: "/images/applications/driveways/richmond-brick-driveway-streetprint-01.jpg",
+    // 28 Sept 2026: the Vancouver driveway the home band shows, so the card
+    // and the page it opens agree.
+    heroSrc: "/images/S1_update_v2/photos/Driveways/Number%202.jpg",
     title: "Stamped Asphalt Driveways in Vancouver",
     description:
       "Stamped asphalt driveways in Vancouver and the Lower Mainland: StreetPrint patterns, StreetBond colour, over the driveway you have. Free site visit and quote.",

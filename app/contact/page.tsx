@@ -98,8 +98,8 @@ const REGIONS = [
     line: LINES[1],
     where: "A service region with its own line, the crew comes over",
     src: "/images/applications/public-art/oak-bay-village-intersection-wide-streetbond-01.jpg",
-    alt: "A painted medallion of a heron and a salmon in StreetBond filling the Oak Bay Village intersection, seen from above",
-    caption: "Oak Bay · Village intersection · StreetBond",
+    alt: "An octopus and fish on a blue sea, painted in StreetBond on the Cadboro Bay Village traffic circle in Saanich, seen from above",
+    caption: "Cadboro Bay, Saanich · Village traffic circle · StreetBond",
     cities: workMunicipalities("Vancouver Island"),
   },
 ]

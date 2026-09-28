@@ -32,8 +32,6 @@ import { clampDescription } from "@/lib/seo"
  * seem like we have only done 194." A published count reads as a ceiling.
  */
 
-const FIO = "/images/S1_update_v2/photos/Featured%20image%20options"
-
 export const metadata: Metadata = {
   openGraph: { title: "Decorative Pavement Projects Across BC", description: clampDescription("Square One Paving projects across BC: crosswalks, public art, spray parks, parking lots and driveways, each with the system installed and the place."), images: [{ url: "/images/S1_update_v2/photos/Featured%20image%20options/502639628_1112360040926014_5391735583045489560_n.jpg" }] },
   title: "Decorative Pavement Projects Across BC",
@@ -47,7 +45,11 @@ const APP_HREF: Record<string, string> = Object.fromEntries(
 )
 
 export default function ProjectsPage() {
-  const cards: ProjectCard[] = projects.map((project) => ({
+  // 28 Sept 2026 (Vern: "more recent images… up front"): newest first. The
+  // projects with a published year lead, latest year first; the rest keep
+  // the record's own order behind them (Array.prototype.sort is stable).
+  const newestFirst = [...projects].sort((a, b) => Number(b.year ?? 0) - Number(a.year ?? 0))
+  const cards: ProjectCard[] = newestFirst.map((project) => ({
     slug: project.slug,
     title: project.title,
     application: project.application,
@@ -63,15 +65,18 @@ export default function ProjectsPage() {
 
   return (
     <main className="bg-[color:var(--surface)]">
+      {/* 28 Sept 2026: the opener was the White Rock pier project's own lead
+          frame, so it showed twice on this page; the Cadboro Bay traffic
+          circle (May 2026) is on the record and leads no project. */}
       <IndexImageHero
-        src={`${FIO}/Whiterock-Pier-Crosswalk-TrafficPatternsXD-1-scaled.jpg`}
-        alt="The brick-pattern TrafficPatternsXD crosswalk at the White Rock pier, with the promenade and the bay behind it"
+        src="/images/applications/public-art/oak-bay-village-intersection-wide-streetbond-01.jpg"
+        alt="An octopus and fish on a blue sea, painted in StreetBond on the Cadboro Bay Village traffic circle in Saanich, the village shops behind"
         eyebrow="Projects"
         title={<>Decorative pavement projects <em>across BC</em></>}
         fit="Decorative pavement projects across BC"
         lede="Municipal, commercial and residential work, each with the system and the place on record."
-        caption="White Rock · Pier crosswalk · TrafficPatternsXD"
-        imagePosition="center 60%"
+        caption="Cadboro Bay, Saanich · Village traffic circle · StreetBond"
+        imagePosition="center 55%"
       />
 
       <ProjectsIndexClient projects={cards} />

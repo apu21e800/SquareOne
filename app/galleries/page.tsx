@@ -45,9 +45,18 @@ export const metadata: Metadata = {
   alternates: { canonical: `${SITE_URL}/galleries` },
 }
 
-/** The sharpest available frame leads a gallery. */
-function cover(photos: WorkPhoto[]): WorkPhoto | undefined {
-  return photos.find((p) => p.hires && p.w >= 1600) ?? photos.find((p) => p.hires) ?? photos[0]
+/** The sharpest available frame leads a gallery, and no frame covers two
+    galleries on this page (28 Sept 2026: the Nanaimo intersection was
+    covering crosswalks, TrafficPatternsXD and a third tile at once). */
+function coverPicker() {
+  const used = new Set<string>()
+  return (photos: WorkPhoto[]): WorkPhoto | undefined => {
+    const fresh = photos.filter((p) => !used.has(p.src))
+    const pick =
+      fresh.find((p) => p.hires && p.w >= 1600) ?? fresh.find((p) => p.hires) ?? fresh[0] ?? photos[0]
+    if (pick) used.add(pick.src)
+    return pick
+  }
 }
 
 /** One gallery: the frame, its name under it in Futura, the whole thing the link. */
@@ -83,6 +92,7 @@ function GalleryCover({
 
 export default function GalleriesPage() {
   const all = getWork()
+  const cover = coverPicker()
 
   const byApplication = WORK_APPS.map((a) => {
     const photos = workFor(a.slug)

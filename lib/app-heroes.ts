@@ -34,28 +34,35 @@ export const APP_HEROES: Record<Exclude<WorkApp, "driveways">, AppHero> = {
     position: "center 62%",
   },
   roundabouts: {
+    // 28 Sept 2026, second image pass: the Chilliwack turnaround, April 2026,
+    // in place of the 2023 Maple Ridge frame (which now leads the gallery).
     src: "/images/applications/roundabouts/chilliwack-circular-turnaround-streetprint-01.jpg",
-    alt: "A charcoal StreetPrint brick-pattern circular turnaround with a concrete kerb ring in front of a new apartment building in Chilliwack",
+    alt: "A circular turnaround in charcoal herringbone StreetPrint in front of a new apartment building in Chilliwack, installed by Square One",
     caption: "Chilliwack · Circular turnaround · StreetPrint",
-    position: "center 66%",
+    position: "center 64%",
   },
   "parking-lots": {
-    src: "/images/S1_update_v2/photos/Featured%20image%20options/Photo-2024-10-15-5-38-42-PM-scaled.jpg",
-    alt: "A wide grey cobble-pattern StreetPrint apron at the glass entrance of a commercial building, the parking lot beyond",
-    caption: "Commercial entrance apron · StreetPrint",
-    position: "center 70%",
+    // 28 Sept 2026, second image pass: the Mission parking bays, April 2025,
+    // along the shopfronts (the wider frame of the same job leads the Mission
+    // case study lower on the page, so it is not used twice).
+    src: "/images/applications/parking-lots/mission-parking-bays-at-the-building-streetprint-01.jpg",
+    alt: "Grey herringbone StreetPrint parking bays along the glass shopfronts of a new building in Mission",
+    caption: "Mission · Parking bays at the building · StreetPrint",
+    position: "center 50%",
   },
   "parks-paths": {
-    src: "/images/applications/parks-paths/coquitlam-sheffield-park-from-above-streetbond-01.jpg",
-    alt: "Sheffield Park in Coquitlam from above, a StreetBond polka-dot path in white on grey curving around a spray pad between new houses and tall firs",
-    caption: "Coquitlam · Sheffield Park · StreetBond",
-    position: "center 55%",
+    src: "/images/applications/parks-paths/surrey-marine-spray-park-detail-streetbond-01.jpg",
+    alt: "A blue StreetBond swirl and sea creatures across the Marine spray park in Surrey",
+    caption: "Surrey · Marine spray park · StreetBond",
+    position: "center 50%",
   },
   "schools-sports-courts": {
-    src: "/images/applications/schools-sports-courts/abbotsford-eagle-mountain-labyrinth-decomark-01.jpg",
-    alt: "A bright orange DecoMark labyrinth on black asphalt at Eagle Mountain school in Abbotsford, freshly installed",
-    caption: "Abbotsford · Eagle Mountain labyrinth · DecoMark",
-    position: "center 68%",
+    // 28 Sept 2026, second image pass: a Vancouver school entrance, August
+    // 2026, in place of the 2022 Abbotsford labyrinth.
+    src: "/images/applications/schools-sports-courts/vancouver-school-entrance-play-area-streetbond-01.jpg",
+    alt: "A path of blue StreetBond hexagons running across a school playground in Vancouver to the front doors, stars and shapes set around it",
+    caption: "Vancouver · School entrance play area · StreetBond",
+    position: "center 60%",
   },
   "bike-lanes": {
     src: "/images/applications/bike-lanes/sechelt-cowrie-and-trail-intersection-streetbond-01.jpg",
@@ -64,15 +71,18 @@ export const APP_HEROES: Record<Exclude<WorkApp, "driveways">, AppHero> = {
     position: "center 72%",
   },
   "public-art": {
-    src: "/images/applications/public-art/langley-events-centre-circle-of-life-decomark-01.jpg",
-    alt: "'Circle of Life' at Langley Events Centre from above, a medallion of orange, blue, green and cream DecoMark thermoplastic on a concrete plaza",
-    caption: "Langley · Events Centre, 'Circle of Life' · DecoMark",
-    position: "center 52%",
+    // 28 Sept 2026, second image pass: the Cadboro Bay Village traffic
+    // circle, May 2026 (Every Child Matters leads the thermoplastic page).
+    src: "/images/applications/public-art/oak-bay-village-intersection-medallion-streetbond-01.jpg",
+    alt: "An octopus and fish on a blue sea, painted in StreetBond on the traffic circle in Cadboro Bay Village, Saanich, seen from above",
+    caption: "Cadboro Bay, Saanich · Village traffic circle · StreetBond",
+    position: "center 55%",
   },
   "branding-wayfinding": {
-    src: "/images/applications/branding-wayfinding/coquitlam-red-sol-detail-decomark-01.jpg",
-    alt: "Blue DecoMark circles and sweeping white-edged blue lines set into a grey concrete courtyard at Red Sol, Coquitlam",
-    caption: "Coquitlam · Red Sol courtyard · DecoMark",
-    position: "center 60%",
+    // 28 Sept 2026, second image pass: the Coquitlam retail plaza, July 2025.
+    src: "/images/applications/branding-wayfinding/coquitlam-retail-plaza-wayfinding-streetbond-01.jpg",
+    alt: "Bands of teal, blue, orange and yellow StreetBond sweeping along a retail plaza sidewalk in Coquitlam",
+    caption: "Coquitlam · Retail plaza wayfinding · StreetBond",
+    position: "center 62%",
   },
 }

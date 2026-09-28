@@ -201,9 +201,12 @@ export default async function ProductPage({ params }: Props) {
   // Square One's own photographs of this system, captioned with place and
   // subject. StreetBond also owns its SR variant. Empty for systems with no
   // installs on record (DuraShield) — the band simply does not render.
-  const work = getWork().filter((photo) =>
-    photo.systems.some((system) => system === product.name || (product.name === "StreetBond" && system.startsWith("StreetBond"))),
-  )
+  const work = getWork()
+    .filter((photo) =>
+      photo.systems.some((system) => system === product.name || (product.name === "StreetBond" && system.startsWith("StreetBond"))),
+    )
+    // The opener's photograph is not repeated in the band of work below it.
+    .filter((photo) => photo.src !== product.image)
   // The library groups documents by product name; its anchor slug is its own
   // ("traffic-patterns" for TrafficPatterns), so the link reads it from the group.
   const docGroup = resourceGroups.find((group) => group.product === product.name)
