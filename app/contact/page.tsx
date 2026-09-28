@@ -43,7 +43,18 @@ import { workMunicipalities } from "@/lib/work"
    Nothing here is new to the record: the free site visit, the sample boards,
    the written quote, the warranty split, the office, the three lines, the
    regions, the cities. Office hours are still not on record, so they are
-   still not here. */
+   still not here.
+
+   28 Sept 2026 (Vern: "Request a quote page is pretty sad, improve it";
+   "mind the hubss.com design patterns"). hubss.com's contact page is a
+   dark photograph with the invitation and the offices on the left and a
+   dark form card on the right. This one leads with the form, on white:
+   the invitation and the three lines across the top, then the form on
+   the left in two numbered sections (the work, then you) with the
+   project type as tiles, and on the right a rail that stays in view,
+   what happens next as a short timeline, what to send, and the seal.
+   The Spirit Trail frame moves below the form as a full-width band; the
+   regions close the page as before. */
 
 const OPENER = {
   src: "/images/contact/west-vancouver-spirit-trail-crew-on-site-streetbond.jpg",
@@ -72,12 +83,6 @@ const STEPS = [
   },
 ]
 
-const PROCESS = {
-  src: "/images/applications/schools-sports-courts/surrey-kb-woodward-installation-decomark-01.jpg",
-  alt: "The infrared heater rig parked on a freshly laid grey octagon with blue web lines mid-install at KB Woodward school, Surrey",
-  caption: "Surrey · KB Woodward · DecoMark, mid-install",
-}
-
 const REGIONS = [
   {
     name: "Lower Mainland",
@@ -99,116 +104,93 @@ const REGIONS = [
   },
 ]
 
-function RailBlock({ heading, children }: { heading: string; children: React.ReactNode }) {
-  return (
-    <div className="border-b border-hairline py-6 first:pt-0">
-      <span className="label">{heading}</span>
-      {children}
-    </div>
-  )
-}
-
 export default function ContactPage() {
   return (
     <main className="bg-surface">
-      {/* ── Opener — the invitation, the lines, the crew on site (caption under) ──────── */}
-      <section className="relative grid min-h-[680px] grid-cols-[52fr_48fr] overflow-hidden bg-surface pt-[var(--bar-h)] max-[900px]:min-h-0 max-[900px]:grid-cols-1">
-        <div
-          className="
-            relative flex items-center
-            pt-20 pb-20 pr-[72px] pl-[max(calc((100vw_-_1280px)/2),40px)]
-            max-[900px]:pt-14 max-[900px]:pr-6 max-[900px]:pb-12 max-[900px]:pl-6
-          "
-        >
-          <div className="relative z-[1] w-full max-w-[560px]">
-            <span className="label">Contact &middot; Free site visit</span>
-            <h1 className="h1-tight mt-6 [text-wrap:balance]">Tell us the job. We&rsquo;ll walk the site.</h1>
-            <p className="lede mt-6 max-w-[50ch] [text-wrap:pretty]">
-              A crosswalk, a plaza, a parking area, a driveway. A description and a location
-              are enough to start, and drawings help. The site visit is free across the Lower Mainland
-              and Vancouver Island, the sample boards come along, and the quote is written by the
-              crew who install it.
+      {/* ── Opener — the invitation, and the lines for whoever would rather call ──────── */}
+      <section className="bg-surface pt-[calc(var(--bar-h)+56px)] pb-12 max-[700px]:pt-[calc(var(--bar-h)+32px)] max-[700px]:pb-8">
+        <div className="container-1280 grid grid-cols-12 items-end gap-x-12 gap-y-10 max-[900px]:grid-cols-1">
+          <div className="col-span-8 max-[900px]:col-span-1">
+            <span className="label">Request a quote &middot; free site visit</span>
+            <h1 className="mt-5 max-w-[16ch] [text-wrap:balance]">Tell us the job. We&rsquo;ll walk the site.</h1>
+            <p className="lede mt-6 max-w-[56ch] [text-wrap:pretty]">
+              A crosswalk, a plaza, a parking area, a driveway. A description and a location are
+              enough to start. The site visit is free across the Lower Mainland and Vancouver Island,
+              the sample boards come along, and the quote is written by the crew who install it.
             </p>
+          </div>
 
-            {/* 21 Sept 2026 (Vern: "contact page text too big in some
-                areas"). The four lines were set at 26px Futura Bold — h3 size
-                for a telephone number — in a two-column table whose labels ran
-                from eight characters to sixteen, so a river of space opened
-                between the short labels and their numbers and the mailbox had
-                to drop a size of its own to fit. Stacked pairs, two up: the
-                numbers stay the loudest thing in the block without shouting,
-                the mailbox sets at the same size as the rest, and it reads the
-                same way as the footer and the proof line. */}
-            <dl className="mt-10 grid grid-cols-3 gap-x-7 gap-y-6 border-t border-hairline pt-8 max-[700px]:grid-cols-2 max-[420px]:grid-cols-1 max-[420px]:gap-y-5">
-              {[...LINES, { region: "Email", display: "office@squareonepaving.com", href: "mailto:office@squareonepaving.com" }].map((l) => (
-                <div key={l.href} className={l.region === "Email" ? "col-span-3 min-w-0 max-[700px]:col-span-2 max-[420px]:col-span-1" : "min-w-0"}>
-                  <dt className="label">{l.region}</dt>
+          <div className="col-span-4 max-[900px]:col-span-1">
+            <span className="label">Rather talk?</span>
+            <dl className="q-lines mt-3">
+              {LINES.map((l) => (
+                <div key={l.href}>
+                  <dt>{l.region}</dt>
                   <dd>
-                    <a
-                      href={l.href}
-                      className="mt-[3px] inline-block font-[family-name:var(--font-display)] text-[19px] leading-[1.25] font-bold tracking-[-0.01em] tabular-nums text-ink underline-offset-4 hover:underline [overflow-wrap:anywhere] max-[700px]:text-[17.5px]"
-                    >
-                      {l.display}
-                    </a>
+                    <a href={l.href}>{l.display}</a>
                   </dd>
                 </div>
               ))}
+              <div>
+                <dt>Email</dt>
+                <dd>
+                  <a href="mailto:office@squareonepaving.com" className="q-mail">
+                    office@squareonepaving.com
+                  </a>
+                </dd>
+              </div>
             </dl>
-
-            <div className="mt-9">
-              <a href="#quote" className="btn-primary">Get a quote</a>
-            </div>
           </div>
         </div>
-
-        <figure className="relative m-0 flex min-w-0 flex-col">
-          <span className="relative block min-h-0 flex-1 overflow-hidden bg-surface-stone max-[900px]:aspect-[4/3] max-[900px]:flex-none">
-            <Image
-              src={OPENER.src}
-              alt={OPENER.alt}
-              fill
-              priority
-              fetchPriority="high"
-              sizes="(max-width: 900px) 100vw, 48vw"
-              className="object-cover [object-position:8%_62%]"
-            />
-          </span>
-          <figcaption className="cap px-6 pb-5">{OPENER.caption}</figcaption>
-        </figure>
       </section>
 
-      {/* ── The form, and the office beside it ──────── */}
-      <section className="border-t border-hairline bg-surface-warm py-24 max-[700px]:py-14">
+      {/* ── The form, and the rail beside it ──────── */}
+      <section className="border-t border-hairline bg-surface pb-24 max-[700px]:pb-16">
         <div className="container-1280 grid grid-cols-12 items-start gap-x-12 gap-y-14 max-[900px]:grid-cols-1">
-          <div className="col-span-7 max-[900px]:col-span-1">
+          <div className="col-span-8 max-[900px]:col-span-1">
             <QuoteForm />
           </div>
 
-          <aside className="col-span-5 max-[900px]:col-span-1 min-[901px]:pl-4">
-            <RailBlock heading="Office">
-              <address className="mt-2 text-[1.25rem] font-semibold not-italic leading-[1.4] text-ink">
-                19&ndash;11720 Stewart Crescent
-              </address>
-              <p className="mt-1 text-[15px] text-ink-muted">Maple Ridge, BC V2X 9E7</p>
-            </RailBlock>
+          <aside className="q-rail col-span-4 max-[900px]:col-span-1">
+            <span className="label">What happens next</span>
+            <ol className="q-timeline mt-4">
+              {STEPS.map((s, i) => (
+                <li key={s.title}>
+                  <span className="q-dot" aria-hidden="true">
+                    {i + 1}
+                  </span>
+                  <div>
+                    <h3 className="q-t-title">
+                      <span className="sr-only">Step {i + 1}: </span>
+                      {s.title}
+                    </h3>
+                    <p className="q-t-body">{s.body}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
 
-            <RailBlock heading="What to send">
-              <ul className="mt-3 grid grid-cols-2 gap-x-6 gap-y-[9px] text-[15px] leading-[1.4] text-ink-body max-[420px]:grid-cols-1">
+            <div className="mt-9 border-t border-hairline pt-6">
+              <span className="label">What to send</span>
+              <ul className="q-list mt-3">
                 <li>Photos of the surface as it is</li>
                 <li>The address or postal code</li>
                 <li>Drawings or a sketch, if you have them</li>
                 <li>A rough area in square metres</li>
                 <li>When you need it done</li>
               </ul>
-              <p className="mt-4 text-[14px] leading-[1.6] text-ink-muted">
+              <p className="mt-4 text-[14.5px] leading-[1.6] text-ink-muted">
                 Photos and drawings go by email to{" "}
-                <a href="mailto:office@squareonepaving.com" className="link">office@squareonepaving.com</a>
-                . Put the site address in the subject line.
+                <a href="mailto:office@squareonepaving.com" className="link text-[14.5px]">
+                  office@squareonepaving.com
+                </a>
+                , with the site address in the subject line.
               </p>
-            </RailBlock>
+            </div>
 
-            <RailBlock heading="Two shortcuts">
-              <ul className="mt-3 flex flex-col gap-[14px]">
+            <div className="mt-8 border-t border-hairline pt-6">
+              <span className="label">Two shortcuts</span>
+              <ul className="mt-3 flex flex-col gap-[12px]">
                 <li>
                   <Link href="/driveways#patterns" className="link">
                     Building a driveway? See the patterns first
@@ -220,9 +202,9 @@ export default function ContactPage() {
                   </Link>
                 </li>
               </ul>
-            </RailBlock>
+            </div>
 
-            <div className="mt-7 flex items-center gap-4">
+            <div className="mt-8 flex items-center gap-4 border-t border-hairline pt-6">
               <Image
                 src="/images/S1_update_v2/Old%20Square%20One%20Web%20Assets/Contact%20Page/BBB-Logo.png"
                 alt="BBB Accredited Business seal"
@@ -236,41 +218,17 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* ── What happens next — the three steps, numbered, and how the work is done ──────── */}
-      <section className="sec section bg-surface">
-        <div className="container-1280 grid grid-cols-12 items-center gap-x-14 gap-y-12 max-[900px]:grid-cols-1">
-          <div className="col-span-6 max-[900px]:col-span-1">
-            <span className="label">What happens next</span>
-            <h2 className="mt-4 max-w-[18ch] [text-wrap:balance]">From a message to a written quote</h2>
-            <ol className="mt-10">
-              {STEPS.map((s, i) => (
-                <li key={s.title} className="grid grid-cols-[64px_1fr] gap-x-5 border-t border-hairline py-7 last:border-b max-[420px]:grid-cols-[48px_1fr]">
-                  <span className="step-num" aria-hidden="true">
-                    {i + 1}
-                  </span>
-                  <div>
-                    <h3>
-                      <span className="sr-only">Step {i + 1}: </span>
-                      {s.title}
-                    </h3>
-                    <p className="mt-2 max-w-[46ch] text-[16px] leading-[1.6] text-ink-body [text-wrap:pretty]">
-                      {s.body}
-                    </p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </div>
-
-          <div className="col-span-6 max-[900px]:col-span-1">
-            <Frame
-              src={PROCESS.src}
-              alt={PROCESS.alt}
-              caption={PROCESS.caption}
-              aspect="aspect-[4/3]"
-              sizes="(max-width: 900px) 100vw, 560px"
-            />
-          </div>
+      {/* ── The crew on site — the frame from the record, full width, caption under ──────── */}
+      <section className="bg-surface-warm pt-16 pb-14 max-[700px]:pt-10 max-[700px]:pb-10">
+        <div className="container-1280">
+          <Frame
+            src={OPENER.src}
+            alt={OPENER.alt}
+            caption={OPENER.caption}
+            aspect="aspect-[21/9] max-[700px]:aspect-[4/3]"
+            position="8% 62%"
+            sizes="(max-width: 1280px) 100vw, 1280px"
+          />
         </div>
       </section>
 

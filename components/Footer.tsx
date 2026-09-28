@@ -1,14 +1,24 @@
 import Link from "next/link"
 import BrandMark from "@/components/BrandMark"
 import FooterClose from "@/components/FooterClose"
+import BackToTop from "@/components/BackToTop"
+import ColourEdge from "@/components/ui/ColourEdge"
 import { getSiteSettings } from "@/lib/cms"
 
 /* Site close — rebuilt 4 Sept 2026 at Vern's call ("just looks like a jumble
-   of text") as a dark CTA into a four-column footer; rebuilt again 26 Sept
-   2026 as the own-company close (docs/OWN-COMPANY-BRIEF.md §3.7): a light
-   closing band, then the letterhead. Contact canon only: 604-612-6209
-   office, 250-391-0270 Vancouver Island, 1-877-391-0270 toll-free,
-   office@squareonepaving.com, 19-11720 Stewart Crescent, Maple Ridge. */
+   of text") as a dark CTA into a four-column footer; rebuilt 26 Sept 2026
+   as a light closing band and a dark letterhead; rebuilt again 28 Sept
+   2026 (Vern: "make sure the footer is different from the hubss page").
+   hubss.com closes dark, near-black, on four columns: the logo, a tagline
+   and a row of icons, then Products, Applications and Offices with an
+   orange rule, the copyright and two legal links underneath. This one
+   closes LIGHT, on paper: the colour card's edge along the top, the mark
+   and the company's own sentence set large, then two ledgers (the office
+   and its lines; the site and the networks), a label in the margin of
+   every row, the way a spec sheet or a letterhead sets them. Contact canon
+   only: 604-612-6209 office, 250-391-0270 Vancouver Island,
+   1-877-391-0270 toll-free, office@squareonepaving.com, 19-11720 Stewart
+   Crescent, Maple Ridge. */
 
 const TIKTOK_PATH =
   "M12.53.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"
@@ -26,24 +36,37 @@ interface FooterLink {
   href: string
 }
 
-const whatWeDo: FooterLink[] = [
-  { label: "Stamped asphalt", href: "/services/stamped-asphalt" },
-  { label: "Decorative coatings", href: "/services/decorative-coatings" },
-  { label: "Preformed thermoplastic", href: "/services/preformed-thermoplastic" },
-  { label: "Vapour blasting", href: "/services/vapor-blasting" },
-  { label: "Driveways", href: "/driveways" },
-  { label: "StreetPrint patterns", href: "/patterns" },
-]
-
-const company: FooterLink[] = [
-  { label: "Projects", href: "/projects" },
-  { label: "Galleries", href: "/galleries" },
-  { label: "Applications", href: "/applications" },
-  { label: "Systems we install", href: "/products" },
-  { label: "Resources", href: "/resources" },
-  { label: "Blog", href: "/blog" },
-  { label: "About", href: "/about" },
-  { label: "Contact", href: "/contact" },
+const PAGES: { label: string; links: FooterLink[] }[] = [
+  {
+    label: "What we do",
+    links: [
+      { label: "Stamped asphalt", href: "/services/stamped-asphalt" },
+      { label: "Decorative coatings", href: "/services/decorative-coatings" },
+      { label: "Preformed thermoplastic", href: "/services/preformed-thermoplastic" },
+      { label: "Vapour blasting", href: "/services/vapor-blasting" },
+      { label: "Driveways", href: "/driveways" },
+    ],
+  },
+  {
+    label: "The work",
+    links: [
+      { label: "Projects", href: "/projects" },
+      { label: "Galleries", href: "/galleries" },
+      { label: "Applications", href: "/applications" },
+      { label: "StreetPrint patterns", href: "/patterns" },
+      { label: "Systems we install", href: "/products" },
+    ],
+  },
+  {
+    label: "The company",
+    links: [
+      { label: "About", href: "/about" },
+      { label: "For specifiers", href: "/specifiers" },
+      { label: "Resources", href: "/resources" },
+      { label: "Blog", href: "/blog" },
+      { label: "Contact", href: "/contact" },
+    ],
+  },
 ]
 
 /** "604-612-6209" → "tel:+16046126209" */
@@ -51,8 +74,6 @@ const tel = (display: string) => {
   const digits = display.replace(/\D/g, "")
   return `tel:+${digits.length === 10 ? "1" + digits : digits}`
 }
-
-const hairline = "var(--hairline-slate)"
 
 export default async function Footer() {
   const year = new Date().getFullYear()
@@ -77,12 +98,8 @@ export default async function Footer() {
     ...(site.tiktok ? [{ label: "TikTok", href: site.tiktok, path: TIKTOK_PATH }] : []),
   ]
 
-  /* 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.7, §9.12–13): the closing
-     band goes LIGHT — the line, one button and the office number on paper —
-     and the footer proper is the site's one dark band, set as a letterhead:
-     the mark, the address and the lines as one text block, then one row of
-     links, then the legal line. HUB closes on a dark CTA into a four-column
-     footer; this does neither. FooterClose keeps the /contact rule. */
+  /* The closing band stays light (26 Sept 2026) and FooterClose keeps its
+     rule: /contact, and the pages that end on a close of their own, skip it. */
   return (
     <div>
       {/* ── The close — light, for every page but /contact ──────── */}
@@ -116,43 +133,46 @@ export default async function Footer() {
         </section>
       </FooterClose>
 
-      {/* ── The letterhead ──────── */}
-      <footer className="bg-[color:var(--surface-slate)] text-[color:var(--ink-on-slate-body)]">
-        <div className="container-1280 pt-16 pb-8 max-[700px]:pt-12">
-          <div className="grid grid-cols-12 gap-x-10 gap-y-12 max-[900px]:grid-cols-1">
-            {/* The mark and the line */}
-            <div className="col-span-5 max-[900px]:col-span-1">
+      {/* ── The letterhead, on paper ──────── */}
+      <footer className="site-foot">
+        <ColourEdge />
+        <div className="container-1280 pt-16 pb-9 max-[700px]:pt-12">
+          {/* The mark, and the company's sentence set large */}
+          <div className="grid grid-cols-12 items-start gap-x-10 gap-y-7 max-[900px]:grid-cols-1">
+            <div className="col-span-3 max-[900px]:col-span-1">
               <Link href="/" className="inline-flex items-center" aria-label="Square One Paving, home">
-                <BrandMark tone="light" size="footer" />
+                <BrandMark tone="dark" size="footer" />
               </Link>
-              <p className="mt-7 max-w-[38ch] text-[16.5px] leading-[1.6] text-[color:var(--ink-on-slate-body)] [text-wrap:pretty]">
-                {site.positioning}
-              </p>
             </div>
+            <p className="foot-statement col-span-9 max-[900px]:col-span-1">{site.positioning}</p>
+          </div>
 
-            {/* The address and the lines, as one block — the way a letterhead sets them */}
-            <address className="col-span-4 not-italic max-[900px]:col-span-1">
-              <span className="label-on-slate">Square One Paving</span>
-              <p className="mt-3 text-[16.5px] leading-[1.6] text-white">
-                {site.addressLine1}
-                <br />
-                {site.addressLine2}
-              </p>
-              <dl className="mt-5 flex flex-col gap-y-[6px]">
+          {/* Two ledgers: the office and its lines; the site and the networks */}
+          <div className="mt-14 grid grid-cols-12 gap-x-10 gap-y-10 max-[900px]:mt-10 max-[900px]:grid-cols-1">
+            <address className="col-span-6 not-italic max-[900px]:col-span-1">
+              <dl className="foot-ledger">
+                <div>
+                  <dt>Square One Paving</dt>
+                  <dd>
+                    {site.addressLine1}
+                    <br />
+                    {site.addressLine2}
+                  </dd>
+                </div>
                 {phones.map((p) => (
-                  <div key={p.href} className="flex flex-wrap items-baseline gap-x-3">
-                    <dt className="text-[15px] italic text-[color:var(--ink-on-slate-muted)]">{p.label}</dt>
+                  <div key={p.href}>
+                    <dt>{p.label}</dt>
                     <dd>
-                      <a href={p.href} className="whitespace-nowrap text-[16.5px] tabular-nums text-white transition-colors hover:text-[color:var(--ink-on-slate-body)]">
+                      <a href={p.href} className="foot-num">
                         {p.display}
                       </a>
                     </dd>
                   </div>
                 ))}
-                <div className="flex flex-wrap items-baseline gap-x-3">
-                  <dt className="text-[15px] italic text-[color:var(--ink-on-slate-muted)]">Email</dt>
+                <div>
+                  <dt>Email</dt>
                   <dd>
-                    <a href={`mailto:${site.email}`} className="text-[16.5px] text-white transition-colors hover:text-[color:var(--ink-on-slate-body)] [overflow-wrap:anywhere]">
+                    <a href={`mailto:${site.email}`} className="foot-a [overflow-wrap:anywhere]">
                       {site.email}
                     </a>
                   </dd>
@@ -160,57 +180,57 @@ export default async function Footer() {
               </dl>
             </address>
 
-            {/* Where else we are */}
-            <div className="col-span-3 max-[900px]:col-span-1">
-              <span className="label-on-slate">Elsewhere</span>
-              <ul className="mt-3 flex flex-col gap-y-[6px]">
-                {networks.map((s) => (
-                  <li key={s.label}>
-                    <a
-                      href={s.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="foot-link foot-net inline-flex items-center gap-[9px]"
-                    >
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                        <path d={s.path} />
-                      </svg>
-                      {s.label}
-                    </a>
-                  </li>
+            <nav aria-label="Footer" className="col-span-6 max-[900px]:col-span-1">
+              <dl className="foot-ledger">
+                {PAGES.map((group) => (
+                  <div key={group.label}>
+                    <dt>{group.label}</dt>
+                    <dd>
+                      <ul className="foot-run">
+                        {group.links.map((link) => (
+                          <li key={link.href}>
+                            <Link href={link.href} className="foot-a">
+                              {link.label}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </dd>
+                  </div>
                 ))}
-              </ul>
-            </div>
+                <div>
+                  <dt>Elsewhere</dt>
+                  <dd>
+                    <ul className="foot-run">
+                      {networks.map((s) => (
+                        <li key={s.label}>
+                          <a href={s.href} target="_blank" rel="noopener noreferrer" className="foot-a foot-net-a">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                              <path d={s.path} />
+                            </svg>
+                            {s.label}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </dd>
+                </div>
+              </dl>
+            </nav>
           </div>
-
-          {/* One row of links */}
-          <nav aria-label="Footer" className="mt-14 border-t pt-6 max-[700px]:mt-10" style={{ borderColor: hairline }}>
-            <ul className="flex flex-wrap gap-x-7 gap-y-2">
-              {[...whatWeDo, ...company].map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href} className="foot-link">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
 
           {/* Service area — one quiet line. Every place named here is on the
               record in lib/work.ts or lib/projects.ts. Courtenay was not, so
               it came off on 19 Sept 2026. */}
-          <p className="mt-8 text-[14.5px] italic leading-[1.7] text-[color:var(--ink-on-slate-muted)]">
+          <p className="foot-area mt-12 max-[700px]:mt-9">
             Working across Vancouver, Burnaby, Richmond, Surrey, Langley, Maple Ridge and the Fraser Valley
             &middot; Victoria, Nanaimo, Duncan, Comox and Vancouver Island &middot; Sunshine Coast,
             Sea to Sky and Okanagan projects on record
           </p>
 
           {/* Legal row */}
-          <div
-            className="mt-6 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-t pt-6"
-            style={{ borderColor: hairline }}
-          >
-            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[14px] text-[color:var(--ink-on-slate-legal)]">
+          <div className="foot-legal mt-6">
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
               <span>&copy; {year} Square One Paving</span>
               <span>BBB Accredited Business</span>
               <span className="flex items-center gap-2">
@@ -227,13 +247,14 @@ export default async function Footer() {
               </span>
             </div>
 
-            <div className="flex gap-6 text-[14px]">
-              <Link href="/privacy" className="text-[color:var(--ink-on-slate-legal)] transition-colors hover:text-white">
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+              <Link href="/privacy" className="foot-a">
                 Privacy
               </Link>
-              <Link href="/terms" className="text-[color:var(--ink-on-slate-legal)] transition-colors hover:text-white">
+              <Link href="/terms" className="foot-a">
                 Terms
               </Link>
+              <BackToTop className="foot-a foot-top" />
             </div>
           </div>
         </div>

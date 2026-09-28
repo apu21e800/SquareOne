@@ -266,6 +266,17 @@ a:hover { color: var(--ink); }
 .nav-light .nav-cta { background: #FFFFFF; border-color: #FFFFFF; color: var(--ink); }
 .nav-light .nav-cta:hover { background: var(--surface-stone); border-color: var(--surface-stone); color: var(--ink); }
 .nav-link { font-size: 15px; font-weight: 700; letter-spacing: 0; color: var(--ink-body); }
+/* One line per label at every desktop width: at 1024 the five labels, the
+   search and the button wrapped to two lines ("What we / do"). */
+.nav-link { white-space: nowrap; }
+@media (max-width: 1279px) {
+  .nav-link { font-size: 14px; }
+  header nav[aria-label="Primary"] { column-gap: 18px; }
+}
+@media (max-width: 1120px) {
+  header nav[aria-label="Primary"] { column-gap: 14px; }
+  .nav-cta { padding: 10px 14px; }
+}
 
 /* ---- Rows, not cards ---------------------------------------------------- */
 .card-panel {
@@ -438,12 +449,16 @@ html[data-type="futura"] .btn-secondary { font-style: normal; }
 .btn-primary.btn-water, .btn-water { background: var(--water); color: #FFFFFF; }
 .btn-primary.btn-water:hover, .btn-water:hover { background: var(--water-deep); color: #FFFFFF; }
 
-/* ---- The mega menu (28 Sept 2026, Vern: "mega menu too… let's go pro").
-   HUB's mega menu is a wall of photo tiles with names over gradients. This
-   one is a full-width sheet of words: what we do, or who we work for, each
-   with one plain line, and a column that starts a project (the free site
-   visit, the two lines, the one button). Square, white, a hairline, a soft
-   shadow; the page steps back a little behind it. ---- */
+/* ---- The mega menu, with a face (28 Sept 2026, second pass; Vern: "give
+   the mega menu some personality, it's rather lacking… mind the hubss.com
+   design patterns"). HUB's: four photo tiles in a row on near-black, a
+   spaced-caps label under each, a list under that, "View all" and an
+   arrow. Ours, on white: an index with the material beside each name (a
+   square cut from Square One's own photographs, like the sample boards on
+   a site walk), a ledger of buyers, and ONE photograph that follows the
+   pointer, revealed by the before/after line with its caption under it.
+   A grey strip starts a project; the colour card's edge closes the sheet.
+   The wipe is the site's one signature motion; reduced motion skips it. */
 .mega-panel {
   position: fixed;
   top: var(--bar-h);
@@ -452,55 +467,592 @@ html[data-type="futura"] .btn-secondary { font-style: normal; }
   z-index: 40;
   background: #FFFFFF;
   border-top: 1px solid var(--hairline);
+  box-shadow: 0 30px 60px rgba(20, 22, 26, 0.12);
+}
+.mega-scrim { background: rgba(20, 22, 26, 0.18); }
+.mega-swap { animation: mega-fade 0.22s ease-out both; }
+@keyframes mega-fade { from { opacity: 0; } to { opacity: 1; } }
+
+.mega-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 12px;
   border-bottom: 1px solid var(--hairline);
-  box-shadow: 0 28px 56px rgba(20, 22, 26, 0.10);
 }
-.mega-scrim { background: rgba(20, 22, 26, 0.16); }
-.mega-item {
-  display: block;
-  padding: 14px 0 15px;
-  border-top: 1px solid var(--hairline);
-  text-decoration: none;
+.mega-head .link { font-size: 15px; }
+
+/* The index: number, sample, name and note. The active row takes the
+   terracotta rule in the gutter and its name underlines. */
+.mega-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 30px 56px minmax(0, 1fr);
+  align-items: center;
+  column-gap: 18px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--hairline);
   color: var(--ink);
+  text-decoration: none;
 }
+.mega-row::before {
+  content: "";
+  position: absolute;
+  left: -18px;
+  top: 12px;
+  bottom: 12px;
+  width: 3px;
+  background: var(--accent);
+  transform: scaleY(0);
+  transform-origin: 50% 50%;
+  transition: transform 0.22s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.mega-row[data-active]::before { transform: scaleY(1); }
+.mega-row:hover { color: var(--ink); }
+.mega-num {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--hairline-strong);
+  transition: color 0.15s ease;
+}
+.mega-row[data-active] .mega-num { color: var(--accent-deep); }
+.mega-swatch {
+  display: block;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: var(--surface-stone);
+  box-shadow: inset 0 0 0 1px rgba(20, 22, 26, 0.08);
+  transition: box-shadow 0.15s ease;
+}
+.mega-swatch img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.mega-row[data-active] .mega-swatch { box-shadow: 0 0 0 1px var(--ink); }
 .mega-name {
   display: block;
   font-family: var(--font-display);
-  font-size: 19px;
+  font-size: 20px;
   font-weight: 700;
-  line-height: 1.25;
-  letter-spacing: -0.01em;
+  line-height: 1.2;
+  letter-spacing: -0.012em;
   color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 6px;
+  text-decoration-color: transparent;
+  transition: text-decoration-color 0.15s ease;
 }
+.mega-row[data-active] .mega-name { text-decoration-color: var(--accent); }
 .mega-note {
   display: block;
-  margin-top: 3px;
+  margin-top: 4px;
   font-family: var(--font-text);
   font-style: italic;
   font-size: 15px;
   line-height: 1.45;
   color: var(--ink-muted);
 }
-.mega-item:hover .mega-name { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 5px; }
-.mega-sub {
-  display: block;
-  padding: 5px 0;
-  font-family: var(--font-text);
-  font-size: 16px;
-  line-height: 1.4;
+.mega-more {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 32px;
+  margin-top: 6px;
+}
+.mega-row-sm { grid-template-columns: 40px minmax(0, 1fr); column-gap: 14px; padding: 12px 0; }
+.mega-row-sm .mega-name { font-size: 17px; }
+.mega-row-sm .mega-note { font-size: 14px; }
+
+/* The ledger: the buyer in the margin, their galleries as a run of words. */
+.mega-ledger > div {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  column-gap: 28px;
+  padding: 15px 0 16px;
+  border-bottom: 1px solid var(--hairline);
+}
+.mega-ledger .mega-name { font-size: 17px; }
+.mega-ledger .mega-note { font-size: 14px; margin-top: 3px; }
+.mega-run { font-family: var(--font-text); font-size: 17px; line-height: 1.75; color: var(--ink-body); }
+.mega-run li { display: inline; }
+.mega-run li + li::before { content: "\00A0\00B7\0020"; color: var(--hairline-strong); }
+.mega-run a {
   color: var(--ink-body);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 5px;
+  text-decoration-color: var(--hairline);
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
+}
+.mega-run a:hover, .mega-run a[data-active] { color: var(--ink); text-decoration-color: var(--accent); }
+
+/* The frame: every photograph stacked, the active one wiped in behind the
+   line. The line is the before/after's divider, white, one pass. */
+.mega-preview { margin: 0; }
+.mega-frame {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--surface-stone);
+}
+.mega-shot { object-fit: cover; opacity: 0; }
+.mega-shot.is-prev { opacity: 1; z-index: 1; }
+.mega-shot.is-active { opacity: 1; z-index: 2; animation: mega-wipe 0.56s cubic-bezier(0.22, 0.7, 0.18, 1) both; }
+@keyframes mega-wipe { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+.mega-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 3;
+  width: 2px;
+  margin-left: -1px;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 1px rgba(20, 22, 26, 0.12), 0 0 18px rgba(255, 255, 255, 0.5);
+  pointer-events: none;
+  animation: mega-line 0.56s cubic-bezier(0.22, 0.7, 0.18, 1) both;
+}
+@keyframes mega-line {
+  0% { left: 0; opacity: 1; }
+  88% { opacity: 1; }
+  100% { left: 100%; opacity: 0; }
+}
+.mega-preview .cap { min-height: 1.45em; }
+
+/* The strip: the free site visit, the two lines, the button. */
+.mega-strip { background: var(--surface-warm); border-top: 1px solid var(--hairline); }
+.mega-lines { display: flex; gap: 26px; flex-shrink: 0; margin: 0; }
+.mega-lines > div { display: flex; flex-direction: column; }
+.mega-lines dt { font-family: var(--font-text); font-style: italic; font-size: 13.5px; line-height: 1.3; color: var(--ink-muted); }
+.mega-lines dd { margin: 0; }
+.mega-lines a { font-family: var(--font-display); font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--ink); text-decoration: none; }
+.mega-lines a:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+/* The colour card's edge: eight StreetBond colours (components/ui/ColourEdge). */
+.colour-edge { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); height: 5px; }
+.colour-edge > span { display: block; }
+
+/* The phone's drawer, in the same hand. */
+.drawer-row {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  align-items: center;
+  column-gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--hairline);
+  color: var(--ink);
   text-decoration: none;
 }
-.mega-sub:hover { color: var(--ink); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
-.mega-foot {
-  margin-top: 22px;
-  padding-top: 18px;
-  border-top: 1px solid var(--hairline);
+.drawer-name {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.drawer-note {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--font-text);
+  font-style: italic;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--ink-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mega-shot.is-active, .mega-swap { animation: none; }
+  .mega-line { display: none; }
+  .mega-row::before { transition: none; }
+}
+
+
+/* ---- The footer, on paper (28 Sept 2026; Vern: "make sure the footer is
+   different from the hubss page"). HUB closes near-black on four columns.
+   Square One closes white: the colour card's edge, the mark and the
+   company's sentence set large in the serif, then two ledgers with a label
+   in the margin of every row (a letterhead, a spec sheet), the service
+   area, and the legal line with its way back to the top. ---- */
+.site-foot { background: #FFFFFF; color: var(--ink-body); }
+.site-foot .colour-edge { height: 6px; }
+.foot-statement {
+  font-family: var(--font-text);
+  font-size: clamp(1.375rem, 2.1vw, 1.875rem);
+  line-height: 1.34;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+  max-width: 36ch;
+  text-wrap: pretty;
+}
+.foot-ledger { margin: 0; border-top: 1px solid var(--ink); }
+.foot-ledger > div {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+  column-gap: 20px;
+  padding: 13px 0 14px;
+  border-bottom: 1px solid var(--hairline);
+}
+.foot-ledger dt {
+  font-family: var(--font-text);
+  font-style: italic;
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--ink-muted);
+}
+.foot-ledger dd { margin: 0; font-size: 16.5px; line-height: 1.5; color: var(--ink); }
+.foot-a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  text-decoration-color: transparent;
+  transition: text-decoration-color 0.15s ease, color 0.15s ease;
+}
+.foot-a:hover { color: var(--ink); text-decoration-color: var(--accent); }
+.foot-num {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.005em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 5px;
+  text-decoration-color: transparent;
+  transition: text-decoration-color 0.15s ease;
+}
+.foot-num:hover { color: var(--ink); text-decoration-color: var(--accent); }
+.foot-run { display: block; line-height: 1.65; }
+.foot-run li { display: inline; }
+.foot-run li + li::before { content: "\00A0\00B7\0020"; color: var(--hairline-strong); }
+.foot-net-a { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; }
+.foot-net-a svg { color: var(--ink-muted); flex-shrink: 0; }
+.foot-area {
+  font-family: var(--font-text);
+  font-style: italic;
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: var(--ink-muted);
+  max-width: 110ch;
+}
+.foot-legal {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px 28px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+  padding-top: 18px;
+  border-top: 1px solid var(--hairline);
+  font-size: 14px;
+  color: var(--ink-muted);
 }
-.mega-aside {
-  background: var(--surface-warm);
-  padding: 28px 28px 30px;
+.foot-legal .foot-a { color: var(--ink-body); }
+.foot-top { background: none; border: 0; padding: 0; cursor: pointer; font: inherit; }
+.foot-top::after { content: "\00A0\2191"; }
+@media (max-width: 700px) {
+  .foot-ledger > div { grid-template-columns: minmax(0, 1fr); row-gap: 2px; padding: 12px 0 13px; }
+  .foot-ledger dd { font-size: 16px; }
+  .foot-legal { flex-direction: column; align-items: flex-start; }
+}
+
+
+/* ---- Request a quote (28 Sept 2026; Vern: "Request a quote page is pretty
+   sad, improve it"). The form leads, on white, in two numbered sections;
+   the project type is a set of tiles; a rail beside it stays in view with
+   the three steps as a short timeline. hubss.com's is a dark photograph
+   with a dark form card on the right; nothing here is dark. ---- */
+.q-lines { margin: 0; border-top: 1px solid var(--ink); }
+.q-lines > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 0 11px;
+  border-bottom: 1px solid var(--hairline);
+}
+.q-lines dt { font-family: var(--font-text); font-style: italic; font-size: 14.5px; color: var(--ink-muted); }
+.q-lines dd { margin: 0; min-width: 0; text-align: right; }
+.q-lines a {
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: 0.005em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 5px;
+  text-decoration-color: transparent;
+  transition: text-decoration-color 0.15s ease;
+}
+.q-lines a:hover { text-decoration-color: var(--accent); }
+.q-lines a.q-mail { font-family: var(--font-text); font-size: 16px; font-weight: 400; overflow-wrap: anywhere; }
+
+.q-form { padding-top: 8px; }
+.q-section { min-width: 0; margin: 0; padding: 0; border: 0; }
+.q-section + .q-section { margin-top: 44px; }
+.q-legend {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  width: 100%;
+  padding: 26px 0 0;
+  border-top: 1px solid var(--ink);
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.012em;
+  line-height: 1.2;
+  color: var(--ink);
+}
+.q-step {
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent-deep);
+}
+.q-label {
+  display: block;
+  margin-bottom: 9px;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.005em;
+  line-height: 1.3;
+  color: var(--ink);
+}
+.q-optional { font-family: var(--font-text); font-style: italic; font-weight: 400; font-size: 14px; color: var(--ink-muted); letter-spacing: 0; }
+.q-field {
+  display: block;
+  width: 100%;
+  height: 54px;
+  padding: 0 16px;
+  background: #FFFFFF;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 0;
+  font-family: var(--font-text);
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--ink);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.q-field::placeholder { color: #9AA0A7; }
+.q-field:hover { border-color: var(--ink-muted); }
+.q-field:focus { outline: none; border-color: var(--ink); box-shadow: 0 0 0 3px rgba(200, 90, 58, 0.18); }
+.q-area { height: auto; min-height: 150px; padding-top: 14px; padding-bottom: 14px; resize: vertical; }
+.q-hint { margin-top: 10px; font-family: var(--font-text); font-style: italic; font-size: 14.5px; line-height: 1.55; color: var(--ink-muted); }
+.q-hint a { color: var(--ink-body); text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--hairline-strong); }
+
+/* The tiles: a radio each, the box on the corner, the name and a line. */
+.q-tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.q-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 96px;
+  padding: 14px 14px 13px;
+  background: #FFFFFF;
+  border: 1px solid var(--hairline-strong);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+.q-tile:hover { border-color: var(--ink); }
+.q-radio { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+.q-tile-box {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--hairline-strong);
+  background: #FFFFFF;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.q-tile-name { font-family: var(--font-display); font-size: 16px; font-weight: 700; line-height: 1.2; color: var(--ink); padding-right: 22px; }
+.q-tile-sub { margin-top: 3px; font-family: var(--font-text); font-style: italic; font-size: 13.5px; line-height: 1.35; color: var(--ink-muted); }
+.q-tile:has(.q-radio:checked) { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); background: var(--surface-warm); }
+.q-tile:has(.q-radio:checked) .q-tile-box { background: var(--accent-deep); border-color: var(--accent-deep); box-shadow: inset 0 0 0 3px #FFFFFF; }
+.q-tile:has(.q-radio:focus-visible) { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+.q-submit {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 24px;
+  margin-top: 36px;
+  padding-top: 28px;
+  border-top: 1px solid var(--hairline);
+}
+.q-send { padding: 18px 34px; font-size: 16px; }
+
+/* The confirmation, where the form was: a terracotta rule on top. */
+.q-done { border-top: 3px solid var(--accent); background: var(--surface-warm); padding: 36px 36px 34px; }
+
+/* The rail: in view while the form scrolls on a desktop. */
+@media (min-width: 901px) {
+  .q-rail { position: sticky; top: calc(var(--bar-h) + 28px); padding-top: 8px; }
+}
+.q-timeline { position: relative; margin: 0; padding: 0; list-style: none; }
+.q-timeline li { position: relative; display: grid; grid-template-columns: 30px minmax(0, 1fr); column-gap: 16px; padding-bottom: 20px; }
+.q-timeline li:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: 14px;
+  top: 32px;
+  bottom: 4px;
+  width: 1px;
+  background: var(--hairline-strong);
+}
+.q-dot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--ink);
+  background: #FFFFFF;
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.q-timeline li:first-child .q-dot { background: var(--ink); color: #FFFFFF; }
+.q-t-title { font-family: var(--font-display); font-size: 18px; font-weight: 700; line-height: 1.25; letter-spacing: -0.01em; color: var(--ink); padding-top: 4px; }
+.q-t-body { margin-top: 5px; font-size: 15.5px; line-height: 1.55; color: var(--ink-body); text-wrap: pretty; }
+.q-list { list-style: none; margin: 0; padding: 0; }
+.q-list li { position: relative; padding: 6px 0 6px 20px; font-size: 15.5px; line-height: 1.45; color: var(--ink-body); border-bottom: 1px solid var(--hairline); }
+.q-list li::before { content: ""; position: absolute; left: 1px; top: 12px; width: 10px; height: 10px; border: 1px solid var(--ink-muted); }  /* a checklist box, not HUB's orange square */
+
+@media (max-width: 1100px) {
+  .q-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .q-tile { min-height: 84px; padding: 12px 12px 11px; }
+  .q-tile-name { font-size: 15px; }
+  .q-legend { font-size: 22px; }
+  .q-send { width: 100%; }
+  .q-done { padding: 26px 20px 24px; }
+}
+
+
+/* ---- Privacy and terms, as documents (28 Sept 2026; Vern: "privacy and
+   terms pages should look different too"). hubss.com: one centred column
+   on near-black, spaced caps, "1. Heading" between rules. Square One: the
+   label and the contents in the margin column, a ledger of when, what and
+   who to ask, each clause's number in its own gutter, the text at reading
+   size. Printing leaves only the document. ---- */
+.legal h1 { margin-top: 0; }
+.legal-meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, auto));
+  justify-content: start;
+  column-gap: 40px;
+  row-gap: 10px;
+  margin: 28px 0 0;
+  padding: 14px 0 0;
+  border-top: 1px solid var(--ink);
+}
+.legal-meta dt { font-family: var(--font-text); font-style: italic; font-size: 14px; line-height: 1.4; color: var(--ink-muted); }
+.legal-meta dd { margin: 2px 0 0; font-size: 16px; line-height: 1.45; color: var(--ink); }
+.legal-meta a { color: var(--ink); text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--hairline-strong); }
+.legal-meta a:hover { text-decoration-color: var(--ink); }
+.legal-lede { margin-top: 28px; max-width: 60ch; }
+.legal-lede p { font-size: inherit; line-height: inherit; }
+
+.legal-toc { position: relative; }
+@media (min-width: 901px) {
+  .legal-toc > div { position: sticky; top: calc(var(--bar-h) + 32px); }
+}
+.legal-toc-list { list-style: none; margin: 12px 0 0; padding: 0; border-top: 1px solid var(--hairline); }
+.legal-toc-list a {
+  position: relative;
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  column-gap: 8px;
+  padding: 8px 0 8px;
+  border-bottom: 1px solid var(--hairline);
+  font-family: var(--font-text);
+  font-size: 15px;
+  line-height: 1.35;
+  color: var(--ink-muted);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.legal-toc-list a:hover { color: var(--ink); }
+.legal-toc-list a[data-active] { color: var(--ink); }
+.legal-toc-list a[data-active]::before {
+  content: "";
+  position: absolute;
+  left: -14px;
+  top: 9px;
+  bottom: 9px;
+  width: 3px;
+  background: var(--accent);
+}
+.legal-toc-n { font-family: var(--font-display); font-weight: 700; font-size: 13px; padding-top: 2px; color: var(--hairline-strong); font-variant-numeric: tabular-nums; }
+.legal-toc-list a[data-active] .legal-toc-n { color: var(--accent-deep); }
+.legal-toc-foot { margin-top: 18px; }
+.legal-toc-fold { border-top: 1px solid var(--ink); border-bottom: 1px solid var(--hairline); }
+.legal-toc-fold summary { display: flex; align-items: baseline; justify-content: space-between; padding: 12px 0; cursor: pointer; list-style: none; }
+.legal-toc-fold summary::-webkit-details-marker { display: none; }
+.legal-toc-fold summary::after { content: "+"; font-family: var(--font-display); font-size: 20px; line-height: 1; color: var(--ink); }
+.legal-toc-fold[open] summary::after { content: "\2212"; }
+.legal-toc-count { margin-left: auto; margin-right: 14px; font-family: var(--font-text); font-style: italic; font-size: 14px; color: var(--ink-muted); }
+.legal-toc-fold .legal-toc-list { margin: 0 0 12px; }
+
+.legal-clause {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  column-gap: 12px;
+  padding: 30px 0 34px;
+  border-top: 1px solid var(--hairline);
+  scroll-margin-top: calc(var(--bar-h) + 24px);
+}
+.legal-clause:first-child { border-top-color: var(--ink); }
+.legal-num {
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--hairline-strong);
+  font-variant-numeric: tabular-nums;
+}
+.legal-h {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.014em;
+  line-height: 1.15;
+  color: var(--ink);
+}
+h2.legal-h:not(.label):not(.eyebrow):not(.card-title) { font-size: clamp(1.375rem, 1.9vw, 1.75rem); }
+.legal-text { margin-top: 14px; max-width: 66ch; }
+.legal-text p { font-size: 17.5px; line-height: 1.65; color: var(--ink-body); }
+.legal-text p + p, .legal-text p + ul, .legal-text ul + p { margin-top: 14px; }
+.legal-list { list-style: none; margin: 0; padding: 0; }
+.legal-list li { position: relative; padding: 7px 0 7px 22px; font-size: 17px; line-height: 1.5; color: var(--ink-body); border-bottom: 1px solid var(--hairline); }
+.legal-list li:first-child { border-top: 1px solid var(--hairline); }
+.legal-list li::before { content: ""; position: absolute; left: 2px; top: 17px; width: 10px; height: 1px; background: var(--ink-muted); }
+.legal-address { padding: 16px 20px; background: var(--surface-warm); border-left: 2px solid var(--ink); font-style: normal; }
+.legal-address a { color: var(--ink); white-space: nowrap; text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--hairline-strong); }
+.legal-address a:hover { text-decoration-color: var(--ink); }
+.legal-sep { color: var(--hairline-strong); }
+.legal-end { display: flex; flex-wrap: wrap; gap: 10px 28px; padding-top: 22px; border-top: 1px solid var(--ink); }
+
+@media (max-width: 700px) {
+  .legal-meta { grid-template-columns: minmax(0, 1fr); }
+  .legal-clause { grid-template-columns: minmax(0, 1fr); row-gap: 8px; padding: 24px 0 26px; }
+  .legal-num { font-size: 24px; }
+  .legal-text p { font-size: 16.5px; }
+  .legal-list li { font-size: 16px; }
+}
+
+@media print {
+  header, footer, .legal-toc, .legal-end, [aria-label="Type setting"] { display: none !important; }
+  .legal { padding: 0; }
+  .legal-clause { break-inside: avoid; }
+  .legal-address { background: none; }
 }

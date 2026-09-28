@@ -8,6 +8,7 @@ import "./refine.css"
 // head of the file and docs/OWN-COMPANY-BRIEF.md §3.7.
 import "./own.css"
 import Nav from "@/components/Nav"
+import { menuPreviews } from "@/lib/menu"
 import Footer from "@/components/Footer"
 import StructuredData from "@/components/StructuredData"
 import MobileStickyCTA from "@/components/MobileStickyCTA"
@@ -148,7 +149,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="antialiased">
         <StructuredData />
-        <Nav />
+        <Nav previews={menuPreviews()} />
         {children}
         <Footer />
         <MobileStickyCTA />

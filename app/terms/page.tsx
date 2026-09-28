@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
+import LegalDocument from "@/components/LegalDocument"
 
 export const metadata: Metadata = {
   title: "Terms of Use",
@@ -59,39 +60,19 @@ const sections = [
 
 export default function TermsPage() {
   return (
-    <main className="min-h-screen bg-[#F5F3F0]">
-      <div className="max-w-3xl mx-auto px-6 sm:px-8 pt-32 pb-24">
-        <p className="label mb-4">
-          Legal
+    <LegalDocument
+      title="Terms of use"
+      updated="26 September 2026"
+      applies="squareonepaving.com, and everyone who uses it"
+      lede={
+        <p>
+          squareonepaving.com is run by Square One Paving. What follows are the terms on which we
+          make it available, and they apply to anyone who uses the site (the &ldquo;Site&rdquo;).
+          Take a minute with them before you go further.
         </p>
-        <h1 className="text-4xl sm:text-5xl font-bold text-[#2D2D2D] mb-3">
-          Terms of Use
-        </h1>
-        <p className="text-sm text-[#626262] mb-12">Last updated: 26 September 2026</p>
-
-        <p className="text-[#626262] leading-relaxed mb-12">
-          squareonepaving.com is run by Square One Paving. What follows are the
-          terms on which we make it available, and they apply to anyone who
-          uses the site (the &ldquo;Site&rdquo;). Take a minute with them
-          before you go further.
-        </p>
-
-        <div className="space-y-10">
-          {sections.map((section) => (
-            <div
-              key={section.heading}
-              className="border-t border-[#8B8680]/20 pt-8"
-            >
-              <h2 className="text-xl font-bold text-[#2D2D2D] mb-4">
-                {section.heading}
-              </h2>
-              <p className="text-sm text-[#626262] leading-relaxed whitespace-pre-line">
-                {section.body}
-              </p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </main>
+      }
+      sections={sections}
+      other={{ href: "/privacy", label: "Privacy policy" }}
+    />
   )
 }

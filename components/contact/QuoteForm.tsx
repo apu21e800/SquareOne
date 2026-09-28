@@ -20,31 +20,35 @@ import { useEffect, useRef, useState } from "react"
      outage costs the client nothing.
    · values are trimmed, the submit cannot fire twice, and the honeypot is
      positioned off-screen rather than display:none (some bots skip hidden
-     fields, and filling it is what marks them). */
+     fields, and filling it is what marks them).
 
-const projectTypes = [
-  "Residential Driveway",
-  "Patio or Walkway",
-  "Parking Area / Commercial",
-  "Municipal: Crosswalk or Bike Lane",
-  "Municipal: Road or Plaza",
-  "Vapour Blasting / Surface Prep",
-  "Multiple Services",
-  "Other / Not Sure",
+   28 Sept 2026 (Vern: "Request a quote page is pretty sad, improve it"):
+   the same payload, field for field, in a new hand. The work comes first
+   and the person second, the way a site walk goes; the project type is a
+   set of tiles (radio buttons carrying the exact values the select used
+   to send); labels are the display face, hints the serif; the card became
+   two numbered sections on hairlines. Nothing about what reaches the
+   office changed. */
+
+/** The values are what the office has always received; only the words on
+    the tiles are new. Do not change a value without changing the inbox rules. */
+const projectTypes: { value: string; label: string; sub: string }[] = [
+  { value: "Residential Driveway", label: "Driveway", sub: "At home" },
+  { value: "Patio or Walkway", label: "Patio or walkway", sub: "At home or on site" },
+  { value: "Parking Area / Commercial", label: "Parking area", sub: "Commercial" },
+  { value: "Municipal: Crosswalk or Bike Lane", label: "Crosswalk or bike lane", sub: "Municipal" },
+  { value: "Municipal: Road or Plaza", label: "Road or plaza", sub: "Municipal" },
+  { value: "Vapour Blasting / Surface Prep", label: "Vapour blasting", sub: "Cleaning and surface prep" },
+  { value: "Multiple Services", label: "More than one", sub: "Several of these" },
+  { value: "Other / Not Sure", label: "Something else", sub: "Or not sure yet" },
 ]
 
-const field =
-  "block h-[52px] w-full border border-hairline bg-white px-4 text-[16px] leading-[1.55] text-ink transition-colors placeholder:text-[#9AA0A7] hover:border-[color:var(--hairline-strong)] focus:border-ink focus:outline-none"
+const field = "q-field"
 
-const label = "mb-[8px] block font-[family-name:var(--font-text)] text-[15px] italic leading-[1.4] text-ink-body"
+const label = "q-label"
 
-function Required() {
-  return (
-    <span aria-hidden="true" className="font-normal text-ink-muted">
-      {" "}
-      *
-    </span>
-  )
+function Optional() {
+  return <span className="q-optional"> optional</span>
 }
 
 /** The three lines, in the order the rest of the site names them. */
@@ -135,7 +139,7 @@ export default function QuoteForm() {
         tabIndex={-1}
         role="status"
         aria-live="polite"
-        className="border border-hairline bg-white p-10 outline-none max-[700px]:p-6"
+        className="q-done outline-none"
       >
         <div className="label text-[color:var(--accent-deep)]">Request received</div>
         <h2 className="card-title mt-4">Thank you, it&rsquo;s with the office.</h2>
@@ -212,20 +216,89 @@ export default function QuoteForm() {
           setLoading(false)
         }
       }}
-      className="relative border border-hairline bg-white p-10 max-[700px]:p-5"
+      className="q-form relative"
     >
-      <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 border-b border-hairline pb-7">
-        <h2 className="card-title">Request a quote</h2>
-        <p className="text-[14px] leading-[1.5] text-ink-muted">Two minutes. Photos and drawings can follow by email.</p>
-      </div>
+      {/* 01 — the work */}
+      <fieldset className="q-section" disabled={loading}>
+        <legend className="q-legend">
+          <span className="q-step" aria-hidden="true">01</span>
+          The work
+        </legend>
 
-      <fieldset className="mt-8 min-w-0 border-0 p-0" disabled={loading}>
-        <legend className="label">You</legend>
-        <div className="mt-5 grid grid-cols-2 gap-x-5 gap-y-6 max-[560px]:grid-cols-1">
+        <div className="mt-6" role="radiogroup" aria-labelledby="q-type-label">
+          <span id="q-type-label" className={label}>
+            What kind of job is it?<Optional />
+          </span>
+          <div className="q-tiles">
+            {projectTypes.map((t) => {
+              const id = `q-type-${t.value.replace(/[^a-z]+/gi, "-").toLowerCase()}`
+              return (
+                <label key={t.value} htmlFor={id} className="q-tile">
+                  <input
+                    id={id}
+                    type="radio"
+                    name="projectType"
+                    value={t.value}
+                    checked={form.projectType === t.value}
+                    onChange={() => setForm({ ...form, projectType: t.value })}
+                    className="q-radio"
+                  />
+                  <span className="q-tile-box" aria-hidden="true" />
+                  <span className="q-tile-name">{t.label}</span>
+                  <span className="q-tile-sub">{t.sub}</span>
+                </label>
+              )
+            })}
+          </div>
+        </div>
+
+        <div className="mt-7 grid grid-cols-1 gap-y-6">
+          <div>
+            <label htmlFor="q-location" className={label}>
+              Where is it?<Optional />
+            </label>
+            <input
+              id="q-location"
+              type="text"
+              autoComplete="address-level2"
+              enterKeyHint="next"
+              value={form.location}
+              onChange={(e) => setForm({ ...form, location: e.target.value })}
+              placeholder="Address, postal code or site name"
+              className={field}
+            />
+          </div>
+          <div>
+            <label htmlFor="q-scope" className={label}>
+              Tell us about it<Optional />
+            </label>
+            <textarea
+              id="q-scope"
+              rows={5}
+              maxLength={4000}
+              value={form.message}
+              onChange={(e) => setForm({ ...form, message: e.target.value })}
+              placeholder="Two decorative crosswalks and a plaza recoat, roughly 400 m². When you need it done, and any drawings, help too."
+              className={`${field} q-area`}
+            />
+            <p className="q-hint">
+              A rough area and when you need it done help most. Photos and drawings can follow by email to{" "}
+              <a href="mailto:office@squareonepaving.com">office@squareonepaving.com</a>.
+            </p>
+          </div>
+        </div>
+      </fieldset>
+
+      {/* 02 — you */}
+      <fieldset className="q-section" disabled={loading}>
+        <legend className="q-legend">
+          <span className="q-step" aria-hidden="true">02</span>
+          You
+        </legend>
+        <div className="mt-6 grid grid-cols-2 gap-x-5 gap-y-6 max-[560px]:grid-cols-1">
           <div>
             <label htmlFor="q-name" className={label}>
               Name
-              <Required />
             </label>
             <input
               id="q-name"
@@ -241,7 +314,9 @@ export default function QuoteForm() {
             />
           </div>
           <div>
-            <label htmlFor="q-org" className={label}>Organization</label>
+            <label htmlFor="q-org" className={label}>
+              Organization<Optional />
+            </label>
             <input
               id="q-org"
               type="text"
@@ -249,14 +324,13 @@ export default function QuoteForm() {
               enterKeyHint="next"
               value={form.company}
               onChange={(e) => setForm({ ...form, company: e.target.value })}
-              placeholder="Municipality, developer, strata or contractor"
+              placeholder="Your company, city or strata"
               className={field}
             />
           </div>
           <div>
             <label htmlFor="q-email" className={label}>
               Email
-              <Required />
             </label>
             <input
               id="q-email"
@@ -275,61 +349,19 @@ export default function QuoteForm() {
             />
           </div>
           <div>
-            <label htmlFor="q-phone" className={label}>Phone</label>
+            <label htmlFor="q-phone" className={label}>
+              Phone<Optional />
+            </label>
             <input
               id="q-phone"
               type="tel"
               autoComplete="tel"
               inputMode="tel"
-              enterKeyHint="next"
+              enterKeyHint="send"
               value={form.phone}
               onChange={(e) => setForm({ ...form, phone: e.target.value })}
               placeholder="604 555 0142"
               className={field}
-            />
-          </div>
-        </div>
-      </fieldset>
-
-      <div aria-hidden="true" className="mt-10 border-t border-hairline" />
-      <fieldset className="mt-8 min-w-0 border-0 p-0" disabled={loading}>
-        <legend className="label">The project</legend>
-        <div className="mt-5 grid grid-cols-2 gap-x-5 gap-y-6 max-[560px]:grid-cols-1">
-          <div>
-            <label htmlFor="q-type" className={label}>Project type</label>
-            <select
-              id="q-type"
-              value={form.projectType}
-              onChange={(e) => setForm({ ...form, projectType: e.target.value })}
-              className={`${field} cursor-pointer`}
-            >
-              <option value="">Select a project type</option>
-              {projectTypes.map((t) => <option key={t} value={t}>{t}</option>)}
-            </select>
-          </div>
-          <div>
-            <label htmlFor="q-location" className={label}>Location</label>
-            <input
-              id="q-location"
-              type="text"
-              autoComplete="address-level2"
-              enterKeyHint="next"
-              value={form.location}
-              onChange={(e) => setForm({ ...form, location: e.target.value })}
-              placeholder="Address or postal code, or the site name"
-              className={field}
-            />
-          </div>
-          <div className="col-span-2 max-[560px]:col-span-1">
-            <label htmlFor="q-scope" className={label}>Scope</label>
-            <textarea
-              id="q-scope"
-              rows={5}
-              maxLength={4000}
-              value={form.message}
-              onChange={(e) => setForm({ ...form, message: e.target.value })}
-              placeholder="Two decorative crosswalks and a plaza recoat, roughly 400 m². When you need it done, and any drawings, help too."
-              className={`${field} h-auto min-h-[150px] resize-y py-[14px]`}
             />
           </div>
         </div>
@@ -364,22 +396,18 @@ export default function QuoteForm() {
         </div>
       )}
 
-      <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4 border-t border-hairline pt-8">
+      <div className="q-submit">
         <button
           type="submit"
           disabled={loading}
           aria-busy={loading}
-          className="btn-primary w-full cursor-pointer text-center disabled:cursor-not-allowed disabled:opacity-60 min-[701px]:w-auto"
+          className="btn-primary q-send cursor-pointer text-center disabled:cursor-not-allowed disabled:opacity-60"
         >
           {loading ? "Sending…" : "Send the request"}
         </button>
-        <span className="text-[14px] leading-[1.5] text-ink-muted">
-          Or call{" "}
-          <a href="tel:+16046126209" className="font-medium text-ink-body">604-612-6209</a>
-          {" "}(Lower Mainland) or{" "}
-          <a href="tel:+12503910270" className="font-medium text-ink-body">250-391-0270</a>
-          {" "}(Vancouver Island).
-        </span>
+        <p className="text-[15px] leading-[1.5] text-ink-muted">
+          The office answers to arrange the site visit; the written quote follows it.
+        </p>
       </div>
     </form>
   )

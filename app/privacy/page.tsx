@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
+import LegalDocument from "@/components/LegalDocument"
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
@@ -54,40 +55,20 @@ const sections = [
 
 export default function PrivacyPage() {
   return (
-    <main className="min-h-screen bg-[#F5F3F0]">
-      <div className="max-w-3xl mx-auto px-6 sm:px-8 pt-32 pb-24">
-        <p className="label mb-4">
-          Legal
+    <LegalDocument
+      title="Privacy policy"
+      updated="26 September 2026"
+      applies="squareonepaving.com, and the enquiries sent to Square One Paving"
+      lede={
+        <p>
+          This page is about the personal information that reaches Square One Paving through
+          squareonepaving.com and through the enquiries people send us. It says what we collect,
+          what we do with it, how we look after it, and how to reach us about any of that. Where it
+          says &ldquo;we&rdquo;, it means Square One Paving.
         </p>
-        <h1 className="text-4xl sm:text-5xl font-bold text-[#2D2D2D] mb-3">
-          Privacy Policy
-        </h1>
-        <p className="text-sm text-[#626262] mb-12">Last updated: 26 September 2026</p>
-
-        <p className="text-[#626262] leading-relaxed mb-12">
-          This page is about the personal information that reaches Square One
-          Paving through squareonepaving.com and through the enquiries people
-          send us. It says what we collect, what we do with it, how we look
-          after it, and how to reach us about any of that. Where it says
-          &ldquo;we&rdquo;, it means Square One Paving.
-        </p>
-
-        <div className="space-y-10">
-          {sections.map((section) => (
-            <div
-              key={section.heading}
-              className="border-t border-[#8B8680]/20 pt-8"
-            >
-              <h2 className="text-xl font-bold text-[#2D2D2D] mb-4">
-                {section.heading}
-              </h2>
-              <div className="text-sm text-[#626262] leading-relaxed whitespace-pre-line">
-                {section.body}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </main>
+      }
+      sections={sections}
+      other={{ href: "/terms", label: "Terms of use" }}
+    />
   )
 }

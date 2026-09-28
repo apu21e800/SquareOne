@@ -53,10 +53,11 @@ export default function MobileStickyCTA() {
       {/* Spacer, phone only — the bar floats over the document, so the foot of
           every page gets its height back or the last 54px (the footer's legal
           row, a form's submit button) sits under it and cannot be tapped. It
-          carries the footer's slate so it reads as the footer, not a seam. */}
+          carries the footer's ground so it reads as the footer, not a seam
+          (white since 28 Sept 2026, when the footer went to paper). */}
       <div
         aria-hidden="true"
-        className="h-[54px] bg-[color:var(--surface-slate)] lg:hidden"
+        className="h-[54px] bg-white lg:hidden"
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       />
 

@@ -10,7 +10,8 @@ import { usePathname } from "next/navigation"
    their reader (the specifier's drawings, the vapour photo, the city's
    driveway), and two closes in a row read as a template. On those pages the
    footer's band steps aside. */
-const OWN_CLOSE = ["/contact", "/specifiers", "/services/vapor-blasting"]
+// 28 Sept 2026: the two legal documents end on their own links, not a sales band.
+const OWN_CLOSE = ["/contact", "/specifiers", "/services/vapor-blasting", "/privacy", "/terms"]
 
 export default function FooterClose({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
