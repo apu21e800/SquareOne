@@ -56,7 +56,7 @@ export const products: Product[] = [
       { k: "Substrate", v: "New asphalt, or sound existing asphalt" },
       { k: "Colour", v: "StreetBond coating, rolled into the imprint" },
       { k: "Service life", v: "10–20 years, published by the manufacturer" },
-      { k: "Surface", v: "Slip-resistant texture; snowplough and de-icing salt safe" },
+      { k: "Surface", v: "Slip-resistant texture; snowplow and de-icing salt safe" },
       { k: "Options", v: "Custom patterns and colours; retroreflective for crosswalks" },
     ],
     mark: "®",
@@ -66,7 +66,7 @@ export const products: Product[] = [
     shortDescription:
       "Brick, cobble or slate pressed into the asphalt: the imprinting system Square One installs across the Lower Mainland and Vancouver Island; 10–20 year service life, per the manufacturer.",
     fullDescription:
-      "StreetPrint is an asphalt imprinting system: the regular kind of stamped asphalt Square One installs; TrafficPatternsXD™ is the heavy-duty kind. The asphalt, new or existing and sound, is reheated and a steel template is pressed into it, so the brick, cobble, slate or custom pattern is part of the surface rather than a layer on top of it: nothing to peel, nothing to re-lay, no demolition and no new base. StreetBond® colour is then rolled into the imprint. The textured surface is slip-resistant and safe for snowploughs and de-icing salt, and the manufacturer publishes a 10–20 year service life for it. Square One installs StreetPrint across the Lower Mainland and Vancouver Island: the school crosswalk at Grandview Heights in Surrey, the parking lot walkways at Ralph's Farm Market in Langley and the pewter herringbone streetscape in Mission are all on the record.",
+      "StreetPrint is an asphalt imprinting system: the regular kind of stamped asphalt Square One installs; TrafficPatternsXD™ is the heavy-duty kind. The asphalt, new or existing and sound, is reheated and a steel template is pressed into it, so the brick, cobble, slate or custom pattern is part of the surface rather than a layer on top of it: nothing to peel, nothing to re-lay, no demolition and no new base. StreetBond® colour is then rolled into the imprint. The textured surface is slip-resistant and safe for snowplows and de-icing salt, and the manufacturer publishes a 10–20 year service life for it. Square One installs StreetPrint across the Lower Mainland and Vancouver Island: the school crosswalk at Grandview Heights in Surrey, the parking lot walkways at Ralph's Farm Market in Langley and the pewter herringbone streetscape in Mission are all on the record.",
     keyBenefits: [
       "10–20 year service life, published by the manufacturer",
       "Slip-resistant textured surface",

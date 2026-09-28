@@ -13,6 +13,7 @@ import { Section } from "@/components/ui/Container"
 import { SITE_URL } from "@/lib/site"
 import JsonLd, { breadcrumbSchema } from "@/components/JsonLd"
 import { clampDescription } from "@/lib/seo"
+import { plainCase } from "@/lib/text"
 
 /**
  * Application page — one template, nine pages (driveways has its own pillar
@@ -276,63 +277,58 @@ export default async function ApplicationPage({ params }: Props) {
         imagePosition={hero.position}
       />
 
-      {/* ── 01b Intro ─────────────────────────────────────────────────────────────── */}
+      {/* ── 01b Intro: the lede and the way in on the left, the record as a
+             ledger on the right (28 Sept 2026 QA: 30 lines of copy with the
+             right half of the page empty; the later paragraphs listed the
+             places the gallery captions already name) ─────────────────────── */}
       <section className="bg-surface pt-16 pb-16 max-[700px]:pt-10 max-[700px]:pb-12">
-        <div className="container-1280">
-          <Link href="/applications" className="link">
-            All applications
-          </Link>
-
-          {copy.intro.map((para, i) => (
-            <p
-              key={i}
-              className={
-                i === 0
-                  ? "lede mt-6 max-w-[60ch] [text-wrap:pretty]"
-                  : "mt-5 max-w-[60ch] text-ink-body [text-wrap:pretty]"
-              }
-            >
-              {para}
-            </p>
-          ))}
-
-          <p className="mt-8 flex flex-wrap gap-x-7 gap-y-2">
-            {copy.links.map((l) => (
-              <Link key={l.href} href={l.href} className="link">
-                {l.label}
-              </Link>
-            ))}
-          </p>
-
-          <div className="mt-11 flex flex-wrap items-center gap-x-8 gap-y-4">
-            <Link href="/contact" className="btn-primary">
-              Get a quote
+        <div className="container-1280 grid grid-cols-12 items-start gap-x-12 gap-y-10 max-[900px]:grid-cols-1">
+          <div className="col-span-7 max-[900px]:col-span-1">
+            <Link href="/applications" className="link">
+              All applications
             </Link>
-            <a href={`tel:${PHONE.replace(/-/g, "")}`} className="link">
-              {PHONE}
-            </a>
+
+            <p className="lede mt-6 max-w-[56ch] [text-wrap:pretty]">
+              {(copy.intro[0] ?? "").split(/(?<=[.!?])\s+(?=[A-Z])/).slice(0, 2).join(" ")}
+            </p>
+
+            <p className="mt-8 flex flex-wrap gap-x-7 gap-y-2">
+              {copy.links.map((l) => (
+                <Link key={l.href} href={l.href} className="link">
+                  {l.label}
+                </Link>
+              ))}
+            </p>
+
+            <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
+              <Link href="/contact" className="btn-primary">
+                Get a quote
+              </Link>
+              <a href={`tel:${PHONE.replace(/-/g, "")}`} className="link">
+                {PHONE}
+              </a>
+            </div>
           </div>
 
-          {/* The record line, as the plain two-column list the site uses for
-              a specification (app/own.css .spec). */}
-          <dl className="spec mt-14">
-            <div className="contents">
-              <dt>Systems on record</dt>
+          {/* The record line, as a ledger beside the lede. */}
+          <dl className="spec-notes col-span-5 max-[900px]:col-span-1 min-[901px]:mt-12">
+            <div>
+              <dt>Systems</dt>
               <dd>{photographed.length > 0 ? photographed.join(" · ") : "See the gallery"}</dd>
             </div>
-            <div className="contents">
+            <div>
               <dt>Projects</dt>
               {/* No count: a published number reads as a ceiling on the work
                   (the client, 10 Sept 2026). The row points at the projects. */}
               <dd>
                 {caseStudies.length > 0 ? (
-                  <a href="#projects" className="link">Told in full, on this page</a>
+                  <a href="#projects" className="link">Told in full, below</a>
                 ) : (
                   "See the gallery"
                 )}
               </dd>
             </div>
-            <div className="contents">
+            <div>
               <dt>Regions</dt>
               <dd>{regions.length > 0 ? regions.join(" · ") : "Across BC"}</dd>
             </div>
@@ -345,7 +341,7 @@ export default async function ApplicationPage({ params }: Props) {
         id="work"
         label="Photographed on site"
         title={copy.work}
-        intro="Square One’s own photography, captioned with the system installed and where. Archive shots stay small on purpose."
+        intro="Square One’s own photography, captioned with the system installed and where."
         wide
       >
         <WorkGallery photos={photos} ariaLabel={`${meta.label} installation photographs`} />
@@ -367,9 +363,12 @@ export default async function ApplicationPage({ params }: Props) {
               className="relative grid grid-cols-12 gap-x-10 gap-y-1 border-t border-hairline py-6 last:border-b max-[700px]:grid-cols-1"
             >
               <Link href={`/products/${p.slug}`} aria-label={`${p.name}, the system`} className="absolute inset-0 z-[2]" />
-              <span className="label col-span-3 pt-1 max-[700px]:col-span-1">{p.category}</span>
+              <span className="label col-span-3 pt-1 max-[700px]:col-span-1">{plainCase(p.category)}</span>
               <div className="col-span-9 min-w-0 max-[700px]:col-span-1">
-                <h3>{p.name}</h3>
+                <h3>
+                  {p.name}
+                  {p.mark && <sup className="ml-[1px] text-[0.55em] font-normal">{p.mark}</sup>}
+                </h3>
                 <p className="mt-2 max-w-[60ch] text-[16px] leading-[1.55] text-ink-body [text-wrap:pretty]">
                   {p.tagline}
                 </p>

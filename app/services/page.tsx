@@ -5,6 +5,7 @@ import { Section, Row } from "@/components/ui/Container"
 import type { Metadata } from "next"
 import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
+import { sentenceCase } from "@/lib/text"
 
 export const metadata: Metadata = {
   openGraph: { title: "Decorative Pavement Services in BC", description: clampDescription("Stamped asphalt, decorative coatings, preformed thermoplastic and vapour blasting: specified with you and installed by our own crews across the Lower Mainland and Vancouver Island since 2000."), images: [{ url: "/images/applications/public-art/new-westminster-boundary-pump-station-full-field-streetbond-01.jpg" }] },
@@ -67,7 +68,7 @@ const services = [
     image: "/images/services/vapor-blasting/parking-lot-vapour-blasting-01.jpg",
     alt: "Square One removing painted parking symbols from an asphalt lot with the vapour blasting rig",
     caption: "Commercial parking lot · marking removal",
-    applications: ["Graffiti Removal", "Marking Removal", "Surface Prep", "Mould & Muck"],
+    applications: ["Graffiti Removal", "Marking Removal", "Surface Prep", "Mould and grime"],
   },
 ]
 
@@ -97,8 +98,8 @@ export default function ServicesPage() {
         src="/images/applications/public-art/new-westminster-boundary-pump-station-full-field-streetbond-01.jpg"
         alt="The Boundary Road pump station in New Westminster from above, a quilt of red, blue, yellow, pink, black and white StreetBond squares across the whole plaza, installed by Square One"
         eyebrow="What we do"
-        title="What Square One does for a project"
-        lede="A free site walk, help specifying (template sheets, colour chart, sample boards, the manufacturer's specifications), a written quote, and installation by our own crews. Three ways to change a surface and one to clean it, Lower Mainland and Vancouver Island, since 2000."
+        title="What we do"
+        lede="Three ways to change a surface and one to clean it: a free site walk, a written quote and our own crews, across the Lower Mainland and Vancouver Island since 2000."
         caption="New Westminster · Boundary Road pump station · StreetBond"
         imagePosition="center 45%"
       />
@@ -125,11 +126,10 @@ export default function ServicesPage() {
               <div className="min-w-0">
                 <h3>{service.name}</h3>
                 <p className="mt-3 max-w-[52ch] text-ink-body [text-wrap:pretty]">{service.tagline}</p>
-                <p className="mt-3 max-w-[56ch] text-[16px] leading-[1.6] text-ink-muted [text-wrap:pretty]">{service.desc}</p>
                 <p className="mt-4">
                   {service.applications.map((application) => (
                     <span key={application} className="tag">
-                      {application}
+                      {sentenceCase(application)}
                     </span>
                   ))}
                 </p>

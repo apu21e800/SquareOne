@@ -145,7 +145,7 @@ export default function ContactPage() {
       </section>
 
       {/* ── The form, and the rail beside it ──────── */}
-      <section className="border-t border-hairline bg-surface pb-24 max-[700px]:pb-16">
+      <section className="bg-surface pb-24 max-[700px]:pb-16">
         <div className="container-1280 grid grid-cols-12 items-start gap-x-12 gap-y-14 max-[900px]:grid-cols-1">
           <div className="col-span-8 max-[900px]:col-span-1">
             <QuoteForm />
@@ -263,7 +263,7 @@ export default function ContactPage() {
               <p className="mt-2 text-[15px] leading-[1.5] text-ink-muted">{r.where}</p>
               <div className="mt-5 border-t border-hairline pt-4">
                 <span className="label">On the record</span>
-                <p className="mt-1 text-[15px] leading-[1.7] text-ink-body">{r.cities.join(" · ")}</p>
+                <p className="mt-1 text-[15px] leading-[1.7] text-ink-body">{r.cities.map((c) => c.replace(/ /g, "\u00A0")).join(" · ")}</p>
               </div>
             </article>
           ))}

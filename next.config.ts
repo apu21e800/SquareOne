@@ -214,6 +214,11 @@ const nextConfig: NextConfig = {
       { source: "/stamped-asphalt-landing-page", destination: "/services/stamped-asphalt", permanent: true },
       { source: "/decorative-coatings", destination: "/services/decorative-coatings", permanent: true },
       { source: "/preformed-thermoplastic", destination: "/services/preformed-thermoplastic", permanent: true },
+      // 28 Sept 2026 QA: two posts off the site until Square One confirms
+      // them (the reasons are in each file's front-matter, marked unlisted).
+      // Temporary on purpose: either can come back by deleting its line.
+      { source: "/blog/the-brick-roundabout-that-solved-a-junction", destination: "/applications/roundabouts", permanent: false },
+      { source: "/blog/memorial-park-where-the-ferry-meets-the-crosswalk", destination: "/blog/white-rock-crosswalk", permanent: false },
     ];
   },
   images: {

@@ -1,6 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import type { ReactNode } from "react"
+import NoPhoto from "@/components/ui/NoPhoto"
 
 /**
  * A photograph, set the own-company way (26 Sept 2026): the frame is square-
@@ -40,7 +41,7 @@ export default function Frame({
   const figure = (
     <figure className={`m-0 ${className}`}>
       <span className={`relative block w-full overflow-hidden bg-surface-stone ${aspect}`}>
-        {src && (
+        {src ? (
           <Image
             src={src}
             alt={alt}
@@ -50,6 +51,8 @@ export default function Frame({
             className="object-cover"
             style={position ? { objectPosition: position } : undefined}
           />
+        ) : (
+          <NoPhoto />
         )}
         {children}
       </span>

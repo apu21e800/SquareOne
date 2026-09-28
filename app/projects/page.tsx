@@ -64,13 +64,13 @@ export default function ProjectsPage() {
   return (
     <main className="bg-[color:var(--surface)]">
       <IndexImageHero
-        src={`${FIO}/502639628_1112360040926014_5391735583045489560_n.jpg`}
-        alt="The rainbow intersection in Nanaimo from above, the whole crossing in bands of red, orange, yellow, green, blue and purple TrafficPatternsXD, installed by Square One Paving"
+        src={`${FIO}/Whiterock-Pier-Crosswalk-TrafficPatternsXD-1-scaled.jpg`}
+        alt="The brick-pattern TrafficPatternsXD crosswalk at the White Rock pier, with the promenade and the bay behind it"
         eyebrow="Projects"
         title="Decorative pavement projects across BC"
         lede="Municipal, institutional, commercial and residential work from the Lower Mainland to Vancouver Island and the Interior, installed by Square One since 2000, each with the system and the place on record."
-        caption="Nanaimo · Rainbow intersection · TrafficPatternsXD"
-        imagePosition="center 50%"
+        caption="White Rock · Pier crosswalk · TrafficPatternsXD"
+        imagePosition="center 60%"
       />
 
       <ProjectsIndexClient projects={cards} />

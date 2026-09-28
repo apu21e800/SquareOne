@@ -80,7 +80,7 @@ const records: ProjectInput[] = [
     excerpt:
       "A full intersection in rainbow colour, installed June 2025 in TrafficPatternsXD: aggregate-reinforced preformed thermoplastic fused into stamped asphalt, so the colour holds under turning traffic and plow blades.",
     story: [
-      "This Nanaimo crossing is not one crosswalk but the whole junction. Bands of red, orange, yellow, green, blue and purple run edge to edge across the intersection, with a chevron of black, brown, light blue, pink and white cutting in from one corner, and the white crosswalk lines set into the colour. An intersection is harder on a surface than a mid-block crossing: every vehicle that passes turns across it, and the surface has to take plough blades as well as tires.",
+      "This Nanaimo crossing is not one crosswalk but the whole junction. Bands of red, orange, yellow, green, blue and purple run edge to edge across the intersection, with a chevron of black, brown, light blue, pink and white cutting in from one corner, and the white crosswalk lines set into the colour. An intersection is harder on a surface than a mid-block crossing: every vehicle that passes turns across it, and the surface has to take plow blades as well as tires.",
       "Square One installed it in June 2025 in TrafficPatternsXD, an aggregate-reinforced preformed thermoplastic. The manufacturer publishes it as a 150-mil sheet, heavier than standard TrafficPatterns, heated and stamped into the top layer of prepared asphalt rather than laid on it, with fresh anti-skid elements exposed as the sheet wears. It is the system the manufacturer positions for major intersections and transit hubs, which is what a full-intersection treatment is.",
       "The photographs show the intersection from above, the cones still out, and from street level, where the bands meet the kerb and the tactile paving at the corner. A municipality planning a full-intersection treatment should ask for TrafficPatternsXD rather than a coating, and for the standard crosswalk lines to be part of the design from the first drawing.",
     ],
@@ -139,7 +139,7 @@ const records: ProjectInput[] = [
     heroWide: true,
   },
   {
-    title: "UBC & Musqueam Crosswalk",
+    title: "UBC & Musqueam crosswalk",
     slug: "ubc-musqueam-crosswalk",
     service: "Preformed Thermoplastic",
     application: "Crosswalks",
@@ -210,8 +210,11 @@ const records: ProjectInput[] = [
       "The photograph shows the blocks wrapping around a tree well and a wayfinding sign, with the same colours carried up the walls of a small station structure. A transit agency or public art program planning a surface installation should ask for on-site colour panels, a masking and sequencing plan for the colour boundaries, and a cure schedule that fits inside the operating window.",
     ],
     post: "joyce-skytrain-art-installation",
+    // 28 Sept 2026 QA: the first frame here was a Coast Salish medallion
+    // outside a brick-and-glass school, the same building as the Victoria
+    // High School project, not 'Carpeting'. It is off this project and off
+    // the site until Square One confirms which job it is (docs note for Vern).
     images: [
-      "/images/projects/joyce-skytrain-art-installation/joyce-collingwood-station-plaza-streetbond-01.jpg",
       "/images/projects/joyce-skytrain-art-installation/joyce-station-carpeting-renee-van-halm-streetbond-02.jpg",
     ],
     heroWide: false,
@@ -617,7 +620,7 @@ const records: ProjectInput[] = [
       "StreetPrint stamped asphalt in red with yellow borders: a defined, visible crossing for a school zone, where a crossing you can't miss is the whole point.",
     story: [
       "A school crossing has one job: to be seen. Grandview Heights School specified StreetPrint stamped asphalt for a new crosswalk, and the result is a red tile-pattern crossing with wide yellow borders on the road at the school's parking lot. A crossing that is visually distinct from the road around it makes drivers slow earlier, and one that stays distinct through the winter keeps doing so.",
-      "StreetPrint is an asphalt imprinting system. A heated steel template is pressed into the asphalt so the pattern is built into the surface, then StreetBond colour is rolled into the imprint. The texture reads as different from the surrounding road before a driver registers the colour; the colour on top does the rest. The manufacturer publishes a 10–20 year service life, a slip-resistant textured surface that is snowplough and de-icing salt safe, and retroreflective options for crosswalks.",
+      "StreetPrint is an asphalt imprinting system. A heated steel template is pressed into the asphalt so the pattern is built into the surface, then StreetBond colour is rolled into the imprint. The texture reads as different from the surrounding road before a driver registers the colour; the colour on top does the rest. The manufacturer publishes a 10–20 year service life, a slip-resistant textured surface that is snowplow and de-icing salt safe, and retroreflective options for crosswalks.",
       "The photographs show the crossing from the sidewalk with the pedestrian sign in the foreground, and straight on, where the red field and the yellow borders read from the far end of the lot. A school or district planning a crossing should ask for a stamped, coloured surface rather than painted bars, and for the border colour to be part of the design from the start.",
     ],
     post: "school-crosswalk-for-high-visibility",
@@ -642,7 +645,7 @@ const records: ProjectInput[] = [
       "A one-of-a-kind stamped asphalt parking lot at Ralph's Farm Market: red brick StreetPrint walkways and aprons that tie the site to the store's branding, built in partnership with the manufacturer.",
     story: [
       "Ralph's Farm Market on Fraser Highway in Murrayville began as a seasonal hay wagon and grew into a year-round market. When the owners upgraded the parking lot they wanted a surface that reflected the care they put into the rest of the operation: a lot that works for customers and delivery vehicles and looks as though a designer specified it.",
-      "Square One and the manufacturer worked together on a custom stamped asphalt design that ties in the store's branding. StreetPrint, the asphalt imprinting system, presses the brick pattern into the asphalt with a heated steel template; StreetBond colour is then rolled into the imprint, in tones chosen to complement the market's palette. The manufacturer publishes StreetPrint with a 10–20 year service life, a slip-resistant textured surface, and snowplough and de-icing salt safety, practical properties for a working parking lot.",
+      "Square One and the manufacturer worked together on a custom stamped asphalt design that ties in the store's branding. StreetPrint, the asphalt imprinting system, presses the brick pattern into the asphalt with a heated steel template; StreetBond colour is then rolled into the imprint, in tones chosen to complement the market's palette. The manufacturer publishes StreetPrint with a 10–20 year service life, a slip-resistant textured surface, and snowplow and de-icing salt safety, practical properties for a working parking lot.",
       "The photographs show red brick walkways and aprons running across the black lot: out from the market's entrance sign to the stalls, a T-junction of walkways with a pickup parked beside it, and a border strip along the garden beds. The lot still does its practical work, drainage, clear lane markings, accessible pathways, while the walkways carry the brand outdoors. A retailer planning a lot should ask for the pedestrian routes to be stamped and coloured and the parking field left plain.",
     ],
     post: "ralphs-farm-market-decorative-parking-lot",
@@ -667,7 +670,7 @@ const records: ProjectInput[] = [
       "Herringbone StreetPrint stamped asphalt sealed in StreetBond 150 Pewter, a grey-on-grey commercial frontage in Mission, installed April 2025.",
     story: [
       "Grey on grey. The parking bays along this commercial frontage in Mission are herringbone StreetPrint stamped asphalt sealed in StreetBond 150 Pewter, a neutral grey with warm undertones that reads as slate or aged stone under overcast light, with the stall lines in white. Square One installed it in April 2025.",
-      "StreetPrint is an asphalt imprinting system: a heated steel template pressed into the asphalt so the herringbone is built into the surface, then StreetBond colour rolled into the imprint. The manufacturer publishes a 10–20 year service life for StreetPrint, a slip-resistant textured surface, and snowplough and de-icing salt safety. Pewter is one of more than fifty standard StreetBond colours the manufacturer publishes; a neutral was chosen here because it will date more slowly than a saturated colour.",
+      "StreetPrint is an asphalt imprinting system: a heated steel template pressed into the asphalt so the herringbone is built into the surface, then StreetBond colour rolled into the imprint. The manufacturer publishes a 10–20 year service life for StreetPrint, a slip-resistant textured surface, and snowplow and de-icing salt safety. Pewter is one of more than fifty standard StreetBond colours the manufacturer publishes; a neutral was chosen here because it will date more slowly than a saturated colour.",
       "The photograph shows the bays in front of the building's glass doors, the herringbone running the length of the frontage and the white lines set between the stalls. A property owner or developer planning a commercial frontage should ask to see the StreetBond colour card against the building's materials before choosing a tone; the pattern is built into the asphalt and the colour is what sets the mood.",
     ],
     post: "mission-bc-streetscape",
@@ -733,7 +736,7 @@ const records: ProjectInput[] = [
       "Stamped asphalt laneways and crossings across the Windsor Gate master-planned community in Coquitlam, coloured and sealed with the StreetBond coating system.",
     story: [
       "Windsor Gate is a master-planned community in Coquitlam, a development with a high bar for exterior finishes and common areas. Square One was specified to deliver the laneway and crossing surfaces for the townhouse component, and returned for a second phase across additional lots. The brief asked for a surface that felt considered: stamped asphalt with a colour coating, not bare concrete or painted asphalt.",
-      "The work starts after the paving crew has placed and compacted the asphalt. StreetPrint, the asphalt imprinting system, presses the pattern into the hot asphalt with a heated steel template while the material is still workable; once it has cooled, StreetBond colour is applied and bonds into the texture of the imprint. The manufacturer publishes a 10–20 year service life for StreetPrint, slip resistance and snowplough safety, and an 8+ year life cycle for the StreetBond coating, recoated rather than replaced.",
+      "The work starts after the paving crew has placed and compacted the asphalt. StreetPrint, the asphalt imprinting system, presses the pattern into the hot asphalt with a heated steel template while the material is still workable; once it has cooled, StreetBond colour is applied and bonds into the texture of the imprint. The manufacturer publishes a 10–20 year service life for StreetPrint, slip resistance and snowplow safety, and an 8+ year life cycle for the StreetBond coating, recoated rather than replaced.",
       "The second phase raised the question every phased project raises: colour. The StreetBond formulations had to match the first phase exactly, because a drift between phases shows when they are seen together. Square One keeps batch records and colour specifications from every phase for this reason, and the match was exact.",
       "The photographs show a full street of brick-pattern stamped asphalt in a red-brown tone, with a cream crossing bordered in charcoal and a small motif set at its centre. A developer specifying stamped asphalt for a multi-phase community should ask the installer to keep batch and colour records from phase one, so the later phases match.",
     ],
@@ -759,7 +762,7 @@ const records: ProjectInput[] = [
       "A stamped asphalt driveway for a Ten Mile Point home in Saanich: grey ashlar pattern running from the street to a stone-and-timber entry.",
     story: [
       "A driveway at a Ten Mile Point home in Saanich, stamped in a grey ashlar pattern that runs from the street to the house's stone-and-timber entry. The pattern is ashlar, large rectangles laid in broken courses, with a darker border band following the edge of the drive, and it sits with the stone piers and timber posts of the house in a way a plain asphalt drive would not.",
-      "StreetPrint is an asphalt imprinting system: a heated steel template pressed into the asphalt so the pattern is built into the surface, with StreetBond colour rolled into the imprint. The manufacturer publishes a 10–20 year service life, a slip-resistant textured surface, and snowplough and de-icing salt safety; because the pattern is in the asphalt there is nothing to peel and nothing to re-lay, and it can go over sound existing asphalt. A homeowner planning a driveway should ask to see pattern and colour together, and whether the existing asphalt is sound enough to take a stamp.",
+      "StreetPrint is an asphalt imprinting system: a heated steel template pressed into the asphalt so the pattern is built into the surface, with StreetBond colour rolled into the imprint. The manufacturer publishes a 10–20 year service life, a slip-resistant textured surface, and snowplow and de-icing salt safety; because the pattern is in the asphalt there is nothing to peel and nothing to re-lay, and it can go over sound existing asphalt. A homeowner planning a driveway should ask to see pattern and colour together, and whether the existing asphalt is sound enough to take a stamp.",
     ],
     images: [`${DRV}/Ten%20Mile%20Point%20Driveway%20I.jpg`],
     heroWide: true,
@@ -777,8 +780,8 @@ const records: ProjectInput[] = [
     excerpt:
       "British Cobble StreetPrint in a warm brick tone at Ellis Point: the texture of a cobbled lane with none of the weeds, settling or plow damage.",
     story: [
-      "British Cobble StreetPrint in a warm brick tone at Ellis Point in Victoria: the rounded stones and irregular joints of a cobbled lane, with the texture a real cobble has and none of the weeds, settling or plough damage. The photograph is a close view of the surface running beside a timber fence toward the house, where the individual stones and the depth of the joints are plain to see.",
-      "StreetPrint is an asphalt imprinting system. A heated steel template is pressed into the asphalt so the cobble is built into the surface rather than laid on it, and StreetBond colour is rolled into the imprint. The manufacturer publishes a 10–20 year service life, a slip-resistant textured surface, and snowplough and de-icing salt safety. A homeowner who wants the look of cobble without the maintenance should ask for the British Cobble pattern and a colour chosen against the house's materials.",
+      "British Cobble StreetPrint in a warm brick tone at Ellis Point in Victoria: the rounded stones and irregular joints of a cobbled lane, with the texture a real cobble has and none of the weeds, settling or plow damage. The photograph is a close view of the surface running beside a timber fence toward the house, where the individual stones and the depth of the joints are plain to see.",
+      "StreetPrint is an asphalt imprinting system. A heated steel template is pressed into the asphalt so the cobble is built into the surface rather than laid on it, and StreetBond colour is rolled into the imprint. The manufacturer publishes a 10–20 year service life, a slip-resistant textured surface, and snowplow and de-icing salt safety. A homeowner who wants the look of cobble without the maintenance should ask for the British Cobble pattern and a colour chosen against the house's materials.",
     ],
     images: [`${FIO}/Cobblestone-stamped-asphalt-driveway-colose-up-at-Ellis-Point-Walkway-Victoria-BC-Canada.jpg`],
     heroWide: true,

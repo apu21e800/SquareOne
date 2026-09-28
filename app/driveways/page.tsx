@@ -220,7 +220,7 @@ export default function DrivewaysPage() {
 
             <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
               <Link href="/contact" className="btn-primary">
-                Book a free site visit
+                Get a quote
               </Link>
               <Link href="#patterns" className="link">
                 See the patterns

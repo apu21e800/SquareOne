@@ -4,6 +4,7 @@ import Frame from "@/components/ui/Frame"
 import { Metadata } from "next"
 import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
+import { STREETBOND_COLOURS } from "@/lib/palette"
 
 export const metadata: Metadata = {
   openGraph: { title: "Decorative Pavement Applications in BC", description: clampDescription("Decorative pavement across BC: crosswalks, streetscapes, parking lots, parks, schools, bike lanes, public art and driveways in stamped asphalt and coatings."), images: [{ url: "/images/hero/white-rock-marine-drive-wave-crosswalk.jpg" }] },
@@ -135,6 +136,16 @@ const applications: AppCard[] = [
   },
 ]
 
+/** Twelve colours off the chart for the "Something else" square: a spread
+    of the range rather than its first row of browns. */
+const BOARD = [
+  "Sandy Beige", "Driftwood", "Butterscotch", "Chestnut Brown",
+  "Paprika", "Avocado", "Sea Foam", "Bike Path Green",
+  "Patriot Blue", "Merlot", "Graphite", "Pewter",
+]
+  .map((name) => STREETBOND_COLOURS.find((c) => c.name === name))
+  .filter((c): c is (typeof STREETBOND_COLOURS)[number] => Boolean(c))
+
 const credentials = [
   "Serving BC since 2000",
   "Stamped asphalt, coatings and preformed thermoplastic",
@@ -208,6 +219,27 @@ export default function ApplicationsPage() {
                 </p>
               </li>
             ))}
+            {/* The twelfth square (28 Sept 2026 QA): eleven frames left a
+                hole at the end of the grid. It is the way in for a job that
+                is none of the above, on a sample board of the chart. */}
+            <li>
+              <Link href="/contact" className="kit-visual kit-chips app-else" aria-label="Something else: tell us the job">
+                {BOARD.map((c) => (
+                  <span key={c.name} style={{ background: c.hex }} title={c.name} />
+                ))}
+              </Link>
+              <span className="label mt-5">Your site</span>
+              <h3 className="mt-1">Something else</h3>
+              <p className="mt-2 max-w-[44ch] text-[16px] leading-[1.55] text-ink-body [text-wrap:pretty]">
+                Not sure which of these your job is? Describe the surface and where it is. The site
+                visit is free, and the written quote names the system that fits.
+              </p>
+              <p className="mt-4">
+                <Link href="/contact" className="link">
+                  Tell us the job
+                </Link>
+              </p>
+            </li>
           </ul>
 
           {/* The projects link, off the photograph and onto paper (the

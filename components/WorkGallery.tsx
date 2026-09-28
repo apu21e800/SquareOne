@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type TouchEvent } from "react"
 import Image from "next/image"
 import type { WorkPhoto } from "@/lib/work"
+import { sentenceCase } from "@/lib/text"
 
 /**
  * The work, photographed on site — a captioned grid of Square One's own
@@ -78,9 +79,10 @@ export function workAlt(p: WorkPhoto): string {
 }
 
 function captionLines(p: WorkPhoto): { primary: string; secondary: string } {
-  const primary = p.place || p.subject
+  const subject = sentenceCase(p.subject)
+  const primary = p.place || subject
   const secondary = p.place
-    ? [p.systems.join(" + "), p.subject].filter(Boolean).join(" · ")
+    ? [p.systems.join(" + "), subject].filter(Boolean).join(" · ")
     : p.systems.join(" + ")
   return { primary, secondary }
 }

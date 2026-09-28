@@ -80,7 +80,7 @@ export default function PatternsPage() {
               <Link href="/applications/roundabouts" className="link">roundabouts</Link>{" "}
               and{" "}
               <Link href="/applications/parking-lots" className="link">parking lots</Link>;
-              the samples come to the site visit, because a drawing is not a casting.
+              the samples come to the site visit, so you see the real surface before you sign.
             </p>
           </div>
         </div>

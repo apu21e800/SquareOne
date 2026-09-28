@@ -82,7 +82,7 @@ export default function DrivewaysBand() {
           </p>
           <div className="mt-6">
             <Link href="/contact" className="btn-primary">
-              Book a site visit
+              Get a quote
             </Link>
           </div>
           <p className="mt-4 text-[15px] text-ink-muted">

@@ -65,7 +65,7 @@ export default function MaterialsBand() {
             Every stamped pattern begins as a dimensioned template sheet, and every colour has a
             published name on the coating chart, so a landscape architect can draw it, an
             engineer can specify it and the finished surface matches both. The sample boards come
-            to the site visit, because a drawing is not a casting.
+            to the site visit, so you see the real surface before you sign.
           </p>
 
           <div className="mt-10">

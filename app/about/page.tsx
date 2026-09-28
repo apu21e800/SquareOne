@@ -97,7 +97,7 @@ const trades: { name: string; line: string; href: string; src: string; alt: stri
 const principles = [
   {
     title: "Built for BC weather",
-    body: "Every system Square One installs has published performance from its manufacturer: StreetPrint's textured surface is slip-resistant and safe for snowploughs and de-icing salt, and StreetBond is UV-stable with an anti-skid aggregate for wet surfaces.",
+    body: "Every system Square One installs has published performance from its manufacturer: StreetPrint's textured surface is slip-resistant and safe for snowplows and de-icing salt, and StreetBond is UV-stable with an anti-skid aggregate for wet surfaces.",
   },
   {
     title: "Two kinds of stamped asphalt",
@@ -170,12 +170,6 @@ export default function AboutPage() {
               parks, commercial sites and private driveways, from one office in Maple Ridge to
               both sides of the Strait of Georgia.
             </p>
-            <p className="col-span-5 max-w-[40ch] self-start pt-2 text-[16px] leading-[1.6] text-ink-muted max-[900px]:max-w-[56ch] max-[900px]:pt-0">
-              Decorative pavement installers (stamped asphalt, coatings and preformed
-              thermoplastic) since 2000: StreetPrint&reg;, StreetBond&reg;, TrafficPatterns&trade;,
-              TrafficPatternsXD&trade;, DecoMark, DuraTherm, PreMark and DuraShield, every one
-              installed to its manufacturer&apos;s specification.
-            </p>
           </div>
         </div>
       </section>
@@ -199,15 +193,14 @@ export default function AboutPage() {
       </figure>
 
       {/* ── 3 · Our story ──────── */}
-      <Section label="Our story" title="One trade, done properly" tone="warm" wide>
+      <Section label="Our story" title="One kind of work, done properly" tone="warm" wide>
         <div className="grid grid-cols-12 gap-x-10 gap-y-14 max-[900px]:grid-cols-1">
           <div className="col-span-6 max-[900px]:col-span-1">
             <div className="max-w-[58ch] space-y-5 text-ink-body [text-wrap:pretty]">
               <p>
-                Square One Paving started in 2000 doing one thing: decorative pavement, in BC,
-                through BC weather. Twenty-five years on it still does one thing (stamped
-                asphalt, StreetBond coatings and preformed thermoplastic, installed by its own
-                crews) and it warrants the workmanship of every installation.
+                Square One Paving started in 2000 doing one kind of work: decorative pavement, in
+                BC, through BC weather. More than twenty-five years on, we still do that one kind
+                of work, with our own crews, and we warrant the workmanship of every installation.
               </p>
               <p>
                 The practice has settled around four trades:{" "}
@@ -343,6 +336,7 @@ export default function AboutPage() {
 
       {/* ── 8 · Where we work ──────── */}
       <Section
+        label="Regions"
         title="Where we work"
         intro={
           <>
@@ -396,12 +390,8 @@ export default function AboutPage() {
             </span>
           ))}
         </p>
-
-        <div className="mt-10">
-          <Link href="/contact" className="btn-primary">
-            Start a project
-          </Link>
-        </div>
+        {/* No button here (28 Sept QA): the closing band right under this
+            section carries the page's one "Get a quote". */}
       </Section>
     </main>
   )

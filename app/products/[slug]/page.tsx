@@ -17,6 +17,7 @@ import { SITE_URL } from "@/lib/site"
 import { fitVars } from "@/lib/type"
 import JsonLd, { breadcrumbSchema } from "@/components/JsonLd"
 import { clampDescription } from "@/lib/seo"
+import { plainCase } from "@/lib/text"
 
 
 /** The service each system is installed under, as the site names it. */
@@ -414,10 +415,10 @@ export default async function ProductPage({ params }: Props) {
               <li key={application} className="border-t border-hairline py-4">
                 {gallery ? (
                   <Link href={galleryHref(gallery)} className="link">
-                    {application}
+                    {plainCase(application)}
                   </Link>
                 ) : (
-                  <span className="text-[16px] text-ink-body">{application}</span>
+                  <span className="text-[16px] text-ink-body">{plainCase(application)}</span>
                 )}
                 {/* The photograph count came off 18 Sept — the client, on
                     DuraShield: "these numbers don't add up". A count reads as
@@ -523,7 +524,7 @@ export default async function ProductPage({ params }: Props) {
               return (
                 <div key={range}>
                   <div className="flex items-baseline gap-3 border-t border-hairline pt-4">
-                    <span className="label">{range}</span>
+                    <span className="label">{plainCase(range)}</span>
                     <span className="text-[14.5px] italic text-ink-muted">{swatches.length}</span>
                   </div>
                   <ul className="mt-5 grid grid-cols-[repeat(auto-fill,minmax(96px,1fr))] gap-x-4 gap-y-6" role="list">
@@ -557,41 +558,11 @@ export default async function ProductPage({ params }: Props) {
         </Section>
       )}
 
-      {/* ── Gallery ────────
-          Reference frames, not the record: the client flagged three of these
-          as "not ours" (19 Sept 2026), so the band says what it is. The
-          frames carry no caption — the record's captions belong to the work
-          band above; a reference frame's only words are its alt text. ──────── */}
-      {gallery.length > 0 && (
-        <Section
-          id="gallery"
-          title={`${product.name} reference photography`}
-          link={{ href: "/projects", label: "See our projects" }}
-          intro={
-            <>
-              Reference photography of the system from the manufacturer.{" "}
-              {work.length > 0
-                ? `Square One's own ${product.name} jobs are the frames on the record above.`
-                : `These frames show the system as the manufacturer photographs it, not Square One's own jobs.`}
-            </>
-          }
-          tone={toneOf("gallery")}
-          wide
-        >
-          <ul className="grid grid-cols-3 gap-x-7 gap-y-8 max-[700px]:grid-cols-1" role="list">
-            {gallery.map((src, i) => (
-              <li key={src}>
-                <Frame
-                  src={src}
-                  alt={galleryAlt(product, src, i)}
-                  aspect="aspect-[4/3]"
-                  sizes="(max-width: 700px) 100vw, (max-width: 1280px) 33vw, 411px"
-                />
-              </li>
-            ))}
-          </ul>
-        </Section>
-      )}
+      {/* ── The manufacturer's reference photography came off on 28 Sept 2026
+          (QA before the client review): the set mixed in frames of Square
+          One's own jobs under a "from the manufacturer" label, and it was
+          the most catalogue-like block on an installer's page. The record
+          above carries the photographs. ──────── */}
 
       {/* ── Documents ────────
           The rail of spec sheets, TDS and guides that used to sit here came
@@ -628,7 +599,7 @@ export default async function ProductPage({ params }: Props) {
                   aria-label={`${p.name}, the system`}
                   className="absolute inset-0 z-[2]"
                 />
-                <span className="label col-span-3 pt-1 max-[700px]:col-span-1">{p.category}</span>
+                <span className="label col-span-3 pt-1 max-[700px]:col-span-1">{plainCase(p.category)}</span>
                 <div className="col-span-9 min-w-0 max-[700px]:col-span-1">
                   <h3>
                     {p.name}

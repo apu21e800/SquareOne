@@ -39,9 +39,6 @@ function yearOf(post: BlogPostMeta): string {
 }
 
 /** Photo caption — category and year, the only location data frontmatter carries. */
-function captionFor(post: BlogPostMeta): string {
-  return [post.category, yearOf(post)].filter(Boolean).join(" · ")
-}
 
 function matchesTopic(post: BlogPostMeta, match: string) {
   const haystack = [post.category, ...(post.tags ?? [])].join(" ").toLowerCase()
@@ -124,7 +121,6 @@ export default function BlogFilterClient({ posts }: Props) {
                 href={`/blog/${lead.slug}`}
                 src={lead.featured_image || undefined}
                 alt={lead.title}
-                caption={captionFor(lead)}
                 kicker={lead.category || undefined}
                 title={lead.title}
                 description={lead.description}
@@ -141,7 +137,6 @@ export default function BlogFilterClient({ posts }: Props) {
                     href={`/blog/${post.slug}`}
                     src={post.featured_image || undefined}
                     alt={post.title}
-                    caption={captionFor(post)}
                     kicker={post.category || undefined}
                     title={post.title}
                     description={post.description}

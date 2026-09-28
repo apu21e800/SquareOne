@@ -70,10 +70,35 @@ const CREWS = [
     position: "center 60%",
   },
   {
-    src: "/images/applications/crosswalks/langley-railways-crossing-crew-on-site-trafficpatternsxd-01.jpg",
-    alt: "The railway-tie crossing in the City of Langley with a crew member at the far kerb",
-    caption: "City of Langley · crew on site · TrafficPatternsXD",
-    position: "center 50%",
+    // 28 Sept 2026 QA: the Langley frame here showed a finished crossing under
+    // "crew on site", a scroll after the same crossing in the specifiers row.
+    src: "/images/applications/schools-sports-courts/surrey-kb-woodward-installation-decomark-01.jpg",
+    alt: "The infrared heater rig parked on a freshly laid grey octagon with blue web lines mid-install at KB Woodward school, Surrey",
+    caption: "Surrey · KB Woodward · DecoMark, mid-install",
+    position: "center 55%",
+  },
+]
+
+/** The four steps for vapour blasting (28 Sept 2026 QA: the paving steps, with
+    their patterns, colours and cure, read wrong on a cleaning service). Each
+    line restates the vapour page: the free site visit, the written quote, the
+    rig on site with the abrasive in water, and the primed surface. */
+export const VAPOUR_STEPS: Step[] = [
+  {
+    title: "Photos and the address",
+    body: "Send a few photos of the surface and what has to come off it (paint, graffiti, mould, an old coating) and the address. We look at the site, free.",
+  },
+  {
+    title: "Written quote",
+    body: "A written quote for the surface and the job, before anything starts.",
+  },
+  {
+    title: "On site",
+    body: "The rig comes to you. The abrasive travels in water, so the paint comes off and the dust stays on the ground.",
+  },
+  {
+    title: "Walk-through",
+    body: "We walk the cleaned surface with you. If a coating or thermoplastic follows, the surface is primed and ready for it.",
   },
 ]
 
@@ -83,7 +108,11 @@ export default function HowAJobGoes({
   crews = true,
   title = "How a job goes",
   cta = true,
+  steps = STEPS,
+  label = "The same four steps, every job",
 }: {
+  steps?: Step[]
+  label?: string
   tone?: "paper" | "warm" | "stone"
   /** Adds the specification-support line under step 2. */
   specifiers?: boolean
@@ -93,9 +122,9 @@ export default function HowAJobGoes({
   cta?: boolean
 }) {
   return (
-    <Section id="how-a-job-goes" label="The same four steps, every job" title={title} tone={tone} wide>
+    <Section id="how-a-job-goes" label={label} title={title} tone={tone} wide>
       <ol className="grid grid-cols-4 gap-x-10 gap-y-10 max-[900px]:grid-cols-2 max-[560px]:grid-cols-1">
-        {STEPS.map((step, i) => (
+        {steps.map((step, i) => (
           <li key={step.title} className="border-t border-hairline pt-6">
             <span className="step-num" aria-hidden="true">
               {i + 1}
@@ -113,7 +142,10 @@ export default function HowAJobGoes({
       </ol>
 
       {crews && (
-        <ul className="mt-14 grid grid-cols-4 gap-x-6 gap-y-8 max-[900px]:grid-cols-2 max-[900px]:mt-10">
+        <span className="label mt-14 max-[900px]:mt-10">On site with the crews</span>
+      )}
+      {crews && (
+        <ul className="mt-4 grid grid-cols-4 gap-x-6 gap-y-8 max-[900px]:grid-cols-2">
           {CREWS.map((frame) => (
             <li key={frame.src}>
               <Frame
@@ -132,7 +164,7 @@ export default function HowAJobGoes({
       {cta && (
         <div className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-4 max-[900px]:mt-9">
           <Link href="/contact" className="btn-primary">
-            Book a site visit
+            Get a quote
           </Link>
           <span className="text-[16px] text-ink-muted">
             or call <a href="tel:+16046126209" className="link">604-612-6209</a>

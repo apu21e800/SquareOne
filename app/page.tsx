@@ -4,7 +4,6 @@ import { HERO_SLIDES } from "@/lib/hero-slides"
 import ProofLine from "@/components/sections/ProofLine"
 import HowAJobGoes from "@/components/sections/HowAJobGoes"
 import AudienceBand from "@/components/sections/AudienceBand"
-import EditorialBand from "@/components/sections/EditorialBand"
 import ServicesGrid from "@/components/sections/ServicesGrid"
 import MaterialsBand from "@/components/sections/MaterialsBand"
 import ProjectsPreview from "@/components/sections/ProjectsPreview"
@@ -130,7 +129,9 @@ export default async function Home() {
 
       <ProjectsPreview />
 
-      <EditorialBand statement={slotText(slots, "home.statement", "Twenty-five years on BC ground")} />
+      {/* The "Twenty-five years" band came off on 28 Sept 2026 (QA): its list of
+          the ten kinds of work repeated "Where the work goes" two bands above,
+          and the proof line under the hero already says since 2000. */}
 
       <DrivewaysBand />
 

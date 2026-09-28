@@ -8,7 +8,7 @@ import { AnimatePresence, MotionConfig, motion, type Transition } from "framer-m
 import BrandMark from "@/components/BrandMark"
 import SearchOverlay from "@/components/SearchOverlay"
 import { BUYERS } from "@/lib/buyers"
-import type { MenuPreviews } from "@/lib/menu"
+import { MENU_PREVIEWS, type MenuPreviews } from "@/lib/menu"
 import ColourEdge from "@/components/ui/ColourEdge"
 
 /* ------------------------------------------------------------------
@@ -498,11 +498,12 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
    Nav
    ------------------------------------------------------------------ */
 
-export default function Nav({ previews = {} }: { previews?: MenuPreviews }) {
+export default function Nav({ previews = MENU_PREVIEWS }: { previews?: MenuPreviews }) {
   const pathname = usePathname()
   const [scrolled, setScrolled] = useState(false)
   const [onImage, setOnImage] = useState(false)
   const [atFooter, setAtFooter] = useState(false)
+  const [deep, setDeep] = useState(false)
   const [menu, setMenu] = useState<MenuKey | null>(null)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
@@ -547,9 +548,12 @@ export default function Nav({ previews = {} }: { previews?: MenuPreviews }) {
     setDrawerOpen(false)
   }, [clearCloseTimer])
 
-  // Bar goes opaque past 24px
+  // Bar goes opaque past 24px; "deep" once the visitor has really scrolled
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24)
+    const onScroll = () => {
+      setScrolled(window.scrollY > 24)
+      setDeep(window.scrollY > 320)
+    }
     onScroll()
     window.addEventListener("scroll", onScroll, { passive: true })
     return () => window.removeEventListener("scroll", onScroll)
@@ -631,7 +635,10 @@ export default function Nav({ previews = {} }: { previews?: MenuPreviews }) {
   // Menus and the drawer sit on white, so the light treatment yields to them
   const light = onImage && !scrolled && menu === null
   // Hidden only while nothing is open and the footer is on screen.
-  const hidden = atFooter && menu === null && !drawerOpen && !searchOpen
+  // 28 Sept 2026 QA: on a short page (search, the 404) the footer is in view
+  // on arrival, and the bar vanished before anyone scrolled. It steps off
+  // only once the visitor has scrolled into the page.
+  const hidden = atFooter && deep && menu === null && !drawerOpen && !searchOpen
 
   return (
     // reducedMotion="user": the CSS kill switch cannot stop framer's JS

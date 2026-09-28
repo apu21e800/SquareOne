@@ -57,7 +57,7 @@ export default function AudienceBand() {
     <Section
       label="Who we work with"
       title="Specifiers, owners, homeowners"
-      intro="Drawings and specifications for the people who draw it, a site walk and a written quote for the people who build it, and the same crews and the same published specification for a forty-foot driveway, across the Lower Mainland and Vancouver Island."
+      intro="Whoever the work is for, it gets the same site walk, a written quote and our own crews."
       wide
     >
       <div>

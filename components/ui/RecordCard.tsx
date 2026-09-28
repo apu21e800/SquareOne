@@ -1,5 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
+import NoPhoto from "@/components/ui/NoPhoto"
+import { clampWords } from "@/lib/text"
 
 /**
  * The one record — a project or a blog post reads the same way. Used by
@@ -54,7 +56,7 @@ export default function RecordCard({
         <Link href={href} className="block" tabIndex={-1} aria-hidden="true">
           <figure className="m-0">
             <span className="relative block aspect-[4/3] w-full overflow-hidden bg-surface-stone">
-              {src && (
+              {src ? (
                 <Image
                   src={src}
                   alt={alt}
@@ -63,6 +65,8 @@ export default function RecordCard({
                   sizes="(max-width: 700px) 100vw, 520px"
                   className="object-cover"
                 />
+              ) : (
+                <NoPhoto />
               )}
             </span>
             {caption && <figcaption className="cap">{caption}</figcaption>}
@@ -71,7 +75,7 @@ export default function RecordCard({
 
         <div className="min-w-0">
           {kicker && <span className="label">{kicker}</span>}
-          <h3 className={`text-[26px] leading-[1.15] [text-wrap:balance] max-[700px]:text-[22px] ${kicker ? "mt-2" : ""}`}>
+          <h3 className={`rc-title-lead [text-wrap:balance] ${kicker ? "mt-2" : ""}`}>
             <Link href={href} className="text-ink hover:underline hover:underline-offset-[5px] hover:decoration-1">
               {title}
             </Link>
@@ -92,7 +96,7 @@ export default function RecordCard({
       <Link href={href} className="block" tabIndex={-1} aria-hidden="true">
         <figure className="m-0">
           <span className="relative block aspect-[4/3] w-full overflow-hidden bg-surface-stone">
-            {src && (
+            {src ? (
               <Image
                 src={src}
                 alt={alt}
@@ -100,6 +104,8 @@ export default function RecordCard({
                 sizes="(max-width: 600px) 124px, (max-width: 700px) 100vw, (max-width: 1000px) 50vw, 400px"
                 className="object-cover"
               />
+            ) : (
+              <NoPhoto />
             )}
           </span>
           {caption && <figcaption className="cap max-[600px]:hidden">{caption}</figcaption>}
@@ -109,15 +115,15 @@ export default function RecordCard({
       <div className="min-w-0 mt-4 max-[600px]:mt-0">
         {kicker && <span className="label">{kicker}</span>}
 
-        <h3 className={`[text-wrap:pretty] max-[600px]:text-[17px] max-[600px]:leading-[1.3] ${kicker ? "mt-1" : ""}`}>
+        <h3 className={`rc-title [text-wrap:pretty] ${kicker ? "mt-1" : ""}`}>
           <Link href={href} className="text-ink hover:underline hover:underline-offset-[5px] hover:decoration-1">
             {title}
           </Link>
         </h3>
 
         {description && (
-          <p className="mt-2 line-clamp-2 text-[15px] leading-[1.55] text-ink-body max-[600px]:hidden">
-            {description}
+          <p className="mt-2 text-[15px] leading-[1.55] text-ink-body max-[600px]:hidden">
+            {clampWords(description, 118)}
           </p>
         )}
 

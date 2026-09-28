@@ -6,6 +6,7 @@ import Frame from "@/components/ui/Frame"
 import { products, type Product } from "@/lib/products"
 import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
+import { plainCase } from "@/lib/text"
 
 const DESCRIPTION =
   "Eight pavement systems installed on the Lower Mainland and Vancouver Island: StreetPrint® stamped asphalt, StreetBond® coatings and thermoplastic markings."
@@ -90,7 +91,7 @@ export default function ProductsPage() {
                   alt={product.imageAlt}
                   aspect="aspect-[16/10]"
                   sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 400px"
-                  caption={product.category}
+                  caption={plainCase(product.category)}
                 />
                 <h3 className="mt-3">
                   {product.name}

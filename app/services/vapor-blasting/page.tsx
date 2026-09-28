@@ -5,7 +5,7 @@ import JsonLd, { breadcrumbSchema, faqSchema } from "@/components/JsonLd"
 import BeforeAfter from "@/components/BeforeAfter"
 import Frame from "@/components/ui/Frame"
 import { Section } from "@/components/ui/Container"
-import HowAJobGoes from "@/components/sections/HowAJobGoes"
+import HowAJobGoes, { VAPOUR_STEPS } from "@/components/sections/HowAJobGoes"
 import { getServiceBySlug } from "@/lib/services"
 import { clampDescription } from "@/lib/seo"
 
@@ -214,7 +214,7 @@ export default function VaporBlastingServicePage() {
               environmental impact than the alternatives, while getting the job done faster.
             </p>
             <div className="mt-9 flex flex-wrap items-center gap-x-8 gap-y-4">
-              <Link href="/contact" className="btn-primary btn-water">
+              <Link href="/contact" className="btn-primary">
                 Get a quote
               </Link>
               <a href="tel:+16046126209" className="link">
@@ -342,7 +342,7 @@ export default function VaporBlastingServicePage() {
       </Section>
 
       {/* ── How a job goes: the site's one process band ── */}
-      <HowAJobGoes tone="warm" crews={false} cta={false} />
+      <HowAJobGoes tone="warm" crews={false} cta={false} steps={VAPOUR_STEPS} label="Four steps, every job" />
 
       {/* ── Surfaces and the service area, on one rule ── */}
       <section className="bg-surface-warm pb-20 max-[700px]:pb-14" aria-label="Surfaces and service area">
@@ -395,7 +395,7 @@ export default function VaporBlastingServicePage() {
         tone="warm"
       >
         <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
-          <Link href="/contact" className="btn-primary btn-water">
+          <Link href="/contact" className="btn-primary">
             Get a quote
           </Link>
           <a href="tel:+16046126209" className="link">

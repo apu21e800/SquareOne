@@ -15,6 +15,7 @@ const WAYS = [
   { href: "/services/preformed-thermoplastic", name: "Preformed thermoplastic", swatch: "preformed-thermoplastic" },
   { href: "/services/vapor-blasting", name: "Vapour blasting", swatch: "vapor-blasting" },
   { href: "/driveways", name: "Driveways", swatch: "driveways" },
+  { href: "/products", name: "The systems we install", swatch: "systems" },
 ]
 
 export default function NotFound() {
@@ -46,9 +47,6 @@ export default function NotFound() {
             </ul>
 
             <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
-              <Link href="/contact" className="btn-primary">
-                Get a quote
-              </Link>
               <Link href="/projects" className="link">
                 Projects
               </Link>

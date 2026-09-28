@@ -227,7 +227,7 @@ export default function QuoteForm() {
 
         <div className="mt-6" role="radiogroup" aria-labelledby="q-type-label">
           <span id="q-type-label" className={label}>
-            What kind of job is it?<Optional />
+            What kind of job is it? Pick one<Optional />
           </span>
           <div className="q-tiles">
             {projectTypes.map((t) => {
@@ -278,7 +278,7 @@ export default function QuoteForm() {
               maxLength={4000}
               value={form.message}
               onChange={(e) => setForm({ ...form, message: e.target.value })}
-              placeholder="Two decorative crosswalks and a plaza recoat, roughly 400 m². When you need it done, and any drawings, help too."
+              placeholder="Two decorative crosswalks and a plaza recoat, roughly 400 m², needed by June."
               className={`${field} q-area`}
             />
             <p className="q-hint">

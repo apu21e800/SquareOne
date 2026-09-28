@@ -18,18 +18,27 @@ export default function LegalContents({
 }) {
   const [active, setActive] = useState(items[0]?.id ?? "")
 
+  // The clause being read = the last one whose heading has passed a third
+  // of the way down the window. A scroll listener rather than an observer:
+  // the answer is the same at any window height, and at the top of the page
+  // it is always the first clause.
   useEffect(() => {
-    if (!("IntersectionObserver" in window)) return
-    const els = items.map((it) => document.getElementById(it.id)).filter((e): e is HTMLElement => e !== null)
-    const io = new IntersectionObserver(
-      (entries) => {
-        const visible = entries.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)
-        if (visible[0]) setActive(visible[0].target.id)
-      },
-      { rootMargin: "-20% 0px -65% 0px", threshold: 0 },
-    )
-    els.forEach((el) => io.observe(el))
-    return () => io.disconnect()
+    const onScroll = () => {
+      const line = window.innerHeight * 0.33
+      let current = items[0]?.id ?? ""
+      for (const it of items) {
+        const el = document.getElementById(it.id)
+        if (el && el.getBoundingClientRect().top <= line) current = it.id
+      }
+      setActive(current)
+    }
+    onScroll()
+    window.addEventListener("scroll", onScroll, { passive: true })
+    window.addEventListener("resize", onScroll)
+    return () => {
+      window.removeEventListener("scroll", onScroll)
+      window.removeEventListener("resize", onScroll)
+    }
   }, [items])
 
   const list = (

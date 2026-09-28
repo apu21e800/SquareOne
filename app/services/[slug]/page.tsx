@@ -14,6 +14,7 @@ import IndexImageHero from "@/components/IndexImageHero"
 import HowAJobGoes from "@/components/sections/HowAJobGoes"
 import Frame from "@/components/ui/Frame"
 import { Section } from "@/components/ui/Container"
+import { sentenceCase } from "@/lib/text"
 import { clampDescription } from "@/lib/seo"
 
 interface Props {
@@ -221,7 +222,7 @@ export default async function ServicePage({ params }: Props) {
 
           <div className="mt-9 flex flex-wrap items-center gap-x-8 gap-y-4">
             <Link href="/contact" className="btn-primary">
-              Request a site visit
+              Get a quote
             </Link>
             <Link href="/specifiers" className="link">
               For specifiers
@@ -236,13 +237,16 @@ export default async function ServicePage({ params }: Props) {
         title={serviceHeading[service.slug] ?? "Specified with you, installed by our own crews"}
         tone="warm"
       >
-        {/* fullDescription is one string (other readers expect that); blank
-            lines in it are paragraph breaks — the service, the systems, the record. */}
-        <div className="max-w-[62ch] space-y-5 text-ink-body [text-wrap:pretty]">
-          {service.fullDescription.split(/\n\s*\n/).map((paragraph, i) => (
-            <p key={i}>{paragraph}</p>
-          ))}
-        </div>
+        {/* 28 Sept 2026 QA ("a jumble of text"): the three paragraphs of
+            fullDescription repeated the process band, the systems band and the
+            record below them, as 30 lines of grey. The band now carries the
+            first two sentences as a lede; the rest of the page tells the rest. */}
+        <p className="lede max-w-[58ch] [text-wrap:pretty]">
+          {(service.fullDescription.split(/\n\s*\n/)[0] ?? "")
+            .split(/(?<=[.!?])\s+(?=[A-Z])/)
+            .slice(0, 2)
+            .join(" ")}
+        </p>
       </Section>
 
       {/* ── At a glance — three hairline lists ────────────────── */}
@@ -262,10 +266,10 @@ export default async function ServicePage({ params }: Props) {
                           href={galleryHref(gallery)}
                           className="text-ink underline decoration-[color:var(--hairline-strong)] underline-offset-4 transition-colors hover:decoration-[color:var(--ink)]"
                         >
-                          {item}
+                          {sentenceCase(item)}
                         </Link>
                       ) : (
-                        item
+                        sentenceCase(item)
                       )}
                     </li>
                   )
@@ -309,7 +313,7 @@ export default async function ServicePage({ params }: Props) {
         link={{ href: "/products", label: "All systems" }}
         wide
       >
-        <div className="grid grid-cols-1 gap-x-10 gap-y-8 min-[701px]:grid-cols-2 min-[1025px]:grid-cols-4">
+        <div className={`grid grid-cols-1 gap-x-10 gap-y-8 min-[701px]:grid-cols-2 ${service.productsIncluded.length === 3 ? "min-[1025px]:grid-cols-3" : "min-[1025px]:grid-cols-4"}`}>
           {service.productsIncluded.map((line) => {
             const product = productFor(line)
             return (
@@ -328,7 +332,7 @@ export default async function ServicePage({ params }: Props) {
                   )}
                 </h3>
                 {product && (
-                  <p className="mt-3 text-[15px] leading-[1.55] text-ink-muted">
+                  <p className="mt-3 text-[16px] leading-[1.55] text-ink-body">
                     {line.replace(/^[A-Za-z]+(?:XD)?[®™]?\s*/, "").replace(/^[—–-]\s*/, "").replace(/^\w/, (c) => c.toUpperCase())}
                   </p>
                 )}
@@ -382,8 +386,7 @@ export default async function ServicePage({ params }: Props) {
         title={`What specifiers ask about ${lowerName}`}
         intro={
           <>
-            Short answers, in the same words the page already uses. For the specification itself, the
-            documents are in{" "}
+            For the specification itself, the documents are in{" "}
             <Link href="/resources" className="link">
               the library
             </Link>
@@ -407,37 +410,13 @@ export default async function ServicePage({ params }: Props) {
         </div>
       </Section>
 
-      {/* ── The way in — one strip, not a second footer ───────── */}
-      <section className="sec bg-surface-warm py-12 max-[700px]:py-9">
-        <div className="container-1280 grid grid-cols-12 items-center gap-x-12 gap-y-6 max-[900px]:grid-cols-1">
-          <div className="col-span-7 max-[900px]:col-span-1">
-            <h2 className="text-pretty">Send drawings or a site address</h2>
-            <p className="mt-3 max-w-[56ch] text-[16px] leading-[1.6] text-ink-muted [text-wrap:pretty]">
-              A few photographs and a postal code are enough to start; drawings help. Photos and
-              drawings go by email to{" "}
-              <a href="mailto:office@squareonepaving.com" className="link">
-                office@squareonepaving.com
-              </a>
-              . Put the site address in the subject line.
-            </p>
-          </div>
-          <div className="col-span-5 flex flex-wrap items-center gap-x-8 gap-y-4 min-[901px]:justify-end max-[900px]:col-span-1">
-            <Link href="/contact" className="btn-primary">
-              Request a site visit
-            </Link>
-            <span className="text-[15px] leading-[1.8] text-ink-muted">
-              <a href="tel:+16046126209" className="link">604-612-6209</a> Lower Mainland
-              <br />
-              <a href="tel:+12503910270" className="link">250-391-0270</a> Vancouver Island
-            </span>
-          </div>
-        </div>
-      </section>
+      {/* The page's own close came off on 28 Sept 2026 (QA: two quote bands in a
+          row); the footer's "Start a project" band is the one close. */}
 
       {/* ── More services — three hairline rows ────────────────── */}
       <Section
         label="More services"
-        title="Other services across the Lower Mainland and Vancouver Island"
+        title="Other services"
         link={{ href: "/services", label: "All services" }}
       >
         <ul>

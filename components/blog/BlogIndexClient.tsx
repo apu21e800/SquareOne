@@ -81,7 +81,7 @@ export default function BlogIndexClient({ posts }: Props) {
         <div className="container-1280 relative z-[1]">
           <span className="label">Blog</span>
 
-          <h1 className="mt-4">Guides and project stories</h1>
+          <h1 className="mt-4">Project stories and guides</h1>
 
           <p className="lede mt-5 max-w-[56ch] [text-wrap:pretty]">
             Notes from the crews and the estimating desk: materials, methods and what

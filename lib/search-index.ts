@@ -164,7 +164,7 @@ const STATIC_PAGES: SearchEntry[] = [
   { type: "page", title: "Driveways in Victoria", subtitle: "Stamped asphalt driveways across Greater Victoria and the Island", href: "/driveways/victoria", keywords: "victoria driveway saanich oak bay sooke langford island homeowner" },
   { type: "page", title: "Vapour blasting", subtitle: "Cleaning, priming, graffiti and mould removal", href: "/services/vapor-blasting", keywords: "vapor blasting dustless restoration surface prep graffiti mould" },
   { type: "page", title: "Projects", subtitle: "Selected work across BC", href: "/projects", keywords: "projects portfolio work" },
-  { type: "page", title: "Blog", subtitle: "Guides and project stories from BC ground", href: "/blog", keywords: "blog articles guides news stories journal" },
+  { type: "page", title: "Blog", subtitle: "Project stories and guides from BC ground", href: "/blog", keywords: "blog articles guides news stories journal" },
   { type: "page", title: "Patterns", subtitle: "StreetPrint template sheets, dimensioned", href: "/patterns", keywords: "patterns templates herringbone offset brick ashlar slate tiles border streetprint stamped" },
   { type: "page", title: "Resources", subtitle: "Specifications, colour cards, SDS and guides", href: "/resources", keywords: "documents specs specifications library downloads sds colour cards" },
   { type: "page", title: "For specifiers", subtitle: "Drawings, specifications and samples for landscape architects and engineers", href: "/specifiers", keywords: "specifiers landscape architect engineer municipal tender specification drawings template sheets colour chart sample boards precedent" },

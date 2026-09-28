@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import Image from "next/image"
 import Link from "next/link"
 
 import IndexImageHero from "@/components/IndexImageHero"
@@ -11,7 +12,7 @@ import { products } from "@/lib/products"
 import { WORK_APPS } from "@/lib/work"
 import { APP_LEADS } from "@/lib/app-leads"
 import { resourceGroups, resourceCount, type ResourceType } from "@/lib/resources"
-import { OFFERED_SHEETS, FEATURED_SHEETS } from "@/lib/pattern-sheets"
+import { OFFERED_SHEETS } from "@/lib/pattern-sheets"
 import { STREETBOND_COLOURS } from "@/lib/palette"
 import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
@@ -54,12 +55,21 @@ const displayName: Record<string, string> = {
   "vapor-blasting": "Vapour blasting",
 }
 
-/** What each service is used for, in a specifier's words: the applications on the service pages, condensed. */
-const usedFor: Record<string, string> = {
-  "stamped-asphalt": "Crosswalks, roundabout aprons, medians and traffic calming, commercial entries and parking lot walkways: pattern and colour in the asphalt itself.",
-  "decorative-coatings": "Bike lanes and bus corridors, plazas and public art, spray parks, sports courts and school zones, parking stalls: colour and grip on asphalt or concrete.",
-  "preformed-thermoplastic": "Decorative crosswalks, stop bars, arrows and legends, school zone graphics, logos and wayfinding, transit stop graphics, cut to the drawing and fused into the road.",
-  "vapor-blasting": "Surface cleaning and priming ahead of a coating or thermoplastic install; graffiti, mould and road-marking removal on its own. The supporting service.",
+/** What each service is used for, in a specifier's words: the applications
+    on the service pages, condensed to the words a drawing would use. */
+const usedFor: Record<string, string[]> = {
+  "stamped-asphalt": ["Crosswalks", "Roundabout aprons", "Medians and traffic calming", "Commercial entries", "Parking lot walkways"],
+  "decorative-coatings": ["Bike lanes and bus corridors", "Plazas and public art", "Spray parks", "Sports courts", "School zones"],
+  "preformed-thermoplastic": ["Decorative crosswalks", "Stop bars, arrows and legends", "School zone graphics", "Logos and wayfinding"],
+  "vapor-blasting": ["Surface prep before a coating", "Graffiti and mould", "Road-marking removal"],
+}
+
+/** The material beside each service: the menu's squares (public/images/menu). */
+const swatch: Record<string, string> = {
+  "stamped-asphalt": "/images/menu/swatch-stamped-asphalt.webp",
+  "decorative-coatings": "/images/menu/swatch-decorative-coatings.webp",
+  "preformed-thermoplastic": "/images/menu/swatch-preformed-thermoplastic.webp",
+  "vapor-blasting": "/images/menu/swatch-vapor-blasting.webp",
 }
 
 const SERVICE_ORDER = ["stamped-asphalt", "decorative-coatings", "preformed-thermoplastic", "vapor-blasting"]
@@ -75,8 +85,6 @@ const TYPE_LABEL: Record<ResourceType, string> = {
   "Technical info": "Technical data",
 }
 
-/** The three sheets the site leads with, named as the drawings name them. */
-const featuredSheetNames = FEATURED_SHEETS.map((s) => s.name).join(", ")
 
 /**
  * 27 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.7, §4): the same page on the
@@ -116,7 +124,7 @@ export default function SpecifiersPage() {
         alt="Brick-red StreetPrint stamped asphalt crossing at the edge of a town centre plaza in Victoria, with shops and trees beyond"
         eyebrow="For specifiers"
         title="Drawings, specifications and samples"
-        lede="What a landscape architect, an engineer, a municipal project specifier or a developer's project manager needs to put decorative pavement on a drawing and out to tender. All of it is on this site, and a site walk with the sample boards follows when you are ready."
+        lede="What a landscape architect, an engineer or a municipal specifier needs to put decorative pavement on a drawing and out to tender, and a site walk with the samples when you are ready."
         caption="Victoria · Town centre crossing · StreetPrint"
         imagePosition="center 60%"
       />
@@ -140,78 +148,98 @@ export default function SpecifiersPage() {
         </dl>
       </section>
 
-      {/* ── What to draw from ──────── */}
+      {/* ── The kit: four things to draw from, each one you can see ──────── */}
       <Section
         id="specifiers-tools"
         label="Specifying it"
         title="Four things to draw from"
-        intro="The manufacturer publishes the specifications, the sheets and the chart. Square One installs to them, and brings the samples."
+        intro="The manufacturer publishes the specifications, the sheets and the chart. We install to them, and bring the samples."
         wide
       >
-        <div className="grid grid-cols-2 gap-x-10 gap-y-12 max-[700px]:grid-cols-1">
-          <article className="border-t border-hairline pt-6">
-            <span className="label">Specification library</span>
-            <h3 className="mt-1">The documents, for the spec package</h3>
-            <p className="mt-3 max-w-[52ch] text-ink-body">
-              The manufacturer&rsquo;s own publications for every system Square One installs,
-              previewed on the page and downloaded from this site.
-            </p>
-            <p className="mt-3">
+        <ul className="kit-grid">
+          <li className="kit-tile">
+            <Link href="/resources" className="kit-visual kit-paper">
+              <Image
+                src="/images/specifiers/cross-section-detail.webp"
+                alt="A typical pavement cross-section detail from the specification library: the thermoplastic panel, asphalt, base and subgrade, each labelled"
+                fill
+                sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 300px"
+                className="object-contain p-3"
+              />
+            </Link>
+            <span className="label mt-4">Specification library</span>
+            <h3 className="kit-title">{resourceCount} documents, for the spec package</h3>
+            <p className="tags mt-2">
               {typesHeld.map((t) => (
                 <span key={t} className="tag">
                   {TYPE_LABEL[t]}
                 </span>
               ))}
             </p>
-            <p className="mt-5">
-              <Link href="/resources" className="link">Open the library</Link>
-            </p>
-          </article>
+            <Link href="/resources" className="link mt-3 inline-block">
+              Open the library
+            </Link>
+          </li>
 
-          <article className="border-t border-hairline pt-6">
-            <span className="label">Template sheets</span>
-            <h3 className="mt-1">Every StreetPrint template, dimensioned</h3>
-            <p className="mt-3 max-w-[52ch] text-ink-body">
-              Each stamping template is a drawing before it is a road: the sheet with its border,
-              coordinates, dimension set and title block. Name the field and the border on your
-              drawing as the sheets name them ({featuredSheetNames} among them) and the sheet is
-              the reference. The manufacturer cuts custom templates to order; its template
-              guidelines are in the library.
-            </p>
-            <p className="mt-5">
-              <Link href="/patterns" className="link">See the sheets</Link>
-            </p>
-          </article>
+          <li className="kit-tile">
+            <Link href="/patterns" className="kit-visual kit-paper">
+              <Image
+                src="/images/patterns/herringbone.webp"
+                alt="The StreetPrint Standard Herringbone template sheet: the dimensioned pattern with its border and title block"
+                fill
+                sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 300px"
+                className="object-contain p-2"
+              />
+            </Link>
+            <span className="label mt-4">Template sheets</span>
+            <h3 className="kit-title">Every StreetPrint pattern, dimensioned</h3>
+            <p className="kit-line">{OFFERED_SHEETS.length} sheets with border, coordinates and title block. Name them on your drawing.</p>
+            <Link href="/patterns" className="link mt-3 inline-block">
+              See the sheets
+            </Link>
+          </li>
 
-          <article className="border-t border-hairline pt-6">
-            <span className="label">Colour chart</span>
-            <h3 className="mt-1">StreetBond colour, off the chart</h3>
-            <p className="mt-3 max-w-[52ch] text-ink-body">
-              Standard colours can be specified straight off the published chart, the colour for
-              stamped asphalt as well as for coatings. For anything outside it, send a colour
-              reference and Square One matches it. The colour card itself is in the library.
-            </p>
-            <p className="mt-5">
-              <Link href="/products/streetbond#colours" className="link">The colour chart</Link>
-            </p>
-          </article>
+          <li className="kit-tile">
+            <Link href="/products/streetbond#colours" className="kit-visual kit-chips" aria-label="The StreetBond colour chart">
+              {STREETBOND_COLOURS.slice(0, 24).map((c) => (
+                <span key={c.name} style={{ background: c.hex }} title={c.name} />
+              ))}
+            </Link>
+            <span className="label mt-4">Colour chart</span>
+            <h3 className="kit-title">StreetBond colour, off the chart</h3>
+            <p className="kit-line">{STREETBOND_COLOURS.length} colours on the chart. Send a reference and we match it.</p>
+            <Link href="/products/streetbond#colours" className="link mt-3 inline-block">
+              The colour chart
+            </Link>
+          </li>
 
-          <article className="border-t border-hairline pt-6">
-            <span className="label">Sample boards</span>
-            <h3 className="mt-1">Held against the site, at the site walk</h3>
-            <p className="mt-3 max-w-[52ch] text-ink-body">
-              A drawing is not a casting and a screen is not a coating. The pattern and colour
-              samples come to the free site visit and are held against the site&rsquo;s own
-              materials, and the written quote follows.
-            </p>
-            <p className="mt-5">
-              <Link href="/contact" className="link">Book the site walk</Link>
-            </p>
-          </article>
-        </div>
+          <li className="kit-tile">
+            <Link href="/contact" className="kit-visual kit-board" aria-label="Book the site walk">
+              <Image
+                src="/images/textures/stamped-asphalt-texture.webp"
+                alt=""
+                fill
+                sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 300px"
+                className="object-cover"
+              />
+              <span className="kit-board-chips" aria-hidden="true">
+                {["Terra Cotta", "Sandy Beige", "Slate"].map((n) => {
+                  const c = STREETBOND_COLOURS.find((x) => x.name === n)
+                  return c ? <span key={n} style={{ background: c.hex }} /> : null
+                })}
+              </span>
+            </Link>
+            <span className="label mt-4">Sample boards</span>
+            <h3 className="kit-title">Held against your site</h3>
+            <p className="kit-line">Pattern and colour samples come to the free site walk, before the written quote.</p>
+            <Link href="/contact" className="link mt-3 inline-block">
+              Book the site walk
+            </Link>
+          </li>
+        </ul>
       </Section>
 
-      {/* ── The four services ──────── */}
+      {/* ── The four services, side by side ──────── */}
       <Section
         id="specifiers-services"
         label="The services"
@@ -220,55 +248,42 @@ export default function SpecifiersPage() {
         tone="warm"
         wide
       >
-        <ol>
+        <ul className="svc-matrix">
           {SERVICE_ORDER.map((slug) => {
             const service = services.find((s) => s.slug === slug)
             if (!service) return null
             const name = displayName[slug] ?? service.name
             const systems = systemsFor(slug)
             return (
-              <li key={slug} className="grid grid-cols-12 gap-x-10 gap-y-4 border-t border-hairline py-8 last:border-b max-[900px]:grid-cols-1">
-                <div className="col-span-4 max-[900px]:col-span-1">
-                  <h3>
-                    <Link href={`/services/${slug}`} className="hover:underline hover:decoration-1 hover:underline-offset-[6px]">
-                      {name}
-                    </Link>
-                  </h3>
-                  <p className="mt-2 max-w-[36ch] text-[16px] leading-[1.55] text-ink-muted">{service.tagline}</p>
-                </div>
-                <div className="col-span-5 max-[900px]:col-span-1">
-                  <span className="label">Used for</span>
-                  <p className="mt-2 max-w-[52ch] text-[16px] leading-[1.6] text-ink-body">
-                    {usedFor[slug] ?? service.applications.join(", ")}
+              <li key={slug} className="svc-col">
+                <Link href={`/services/${slug}`} className="svc-head">
+                  <span className="mega-swatch" style={{ width: 56, height: 56 }} aria-hidden="true">
+                    <Image src={swatch[slug]} alt="" width={56} height={56} unoptimized />
+                  </span>
+                  <span className="svc-name">{name}</span>
+                </Link>
+                <span className="label mt-5">Used for</span>
+                <ul className="svc-list">
+                  {(usedFor[slug] ?? service.applications).map((u) => (
+                    <li key={u}>{u}</li>
+                  ))}
+                </ul>
+                <span className="label mt-5">{systems.length > 0 ? "The systems" : "The rig"}</span>
+                {systems.length > 0 ? (
+                  <p className="tags mt-1">
+                    {systems.map((p) => (
+                      <Link key={p.slug} href={`/products/${p.slug}`} className="tag svc-sys">
+                        <span className="svc-sys-name">{withMark(p.name, p.mark)}</span>
+                      </Link>
+                    ))}
                   </p>
-                </div>
-                <div className="col-span-3 max-[900px]:col-span-1">
-                  <span className="label">{systems.length > 0 ? "The systems" : "The rig"}</span>
-                  {systems.length > 0 ? (
-                    <ul className="mt-2">
-                      {systems.map((p) => (
-                        <li key={p.slug} className="text-[16px] leading-[1.7]">
-                          <Link href={`/products/${p.slug}`} className="text-ink hover:underline hover:decoration-1 hover:underline-offset-4">
-                            {withMark(p.name, p.mark)}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="mt-2 text-[16px] leading-[1.6] text-ink-body">
-                      Mobile across the Lower Mainland and Vancouver Island.
-                    </p>
-                  )}
-                  <p className="mt-4">
-                    <Link href={`/services/${slug}`} className="link">
-                      {name}, the service
-                    </Link>
-                  </p>
-                </div>
+                ) : (
+                  <p className="mt-1 text-[15.5px] leading-[1.5] text-ink-body">Mobile, both regions</p>
+                )}
               </li>
             )
           })}
-        </ol>
+        </ul>
       </Section>
 
       {/* ── Precedent ──────── */}
@@ -276,7 +291,7 @@ export default function SpecifiersPage() {
         id="specifiers-precedent"
         label="Precedent"
         title="Ten kinds of work, photographed on site"
-        intro="Square One's own installation photography, captioned with the system and the place: a gallery for each kind of work, and the projects told in full."
+        link={{ href: "/projects", label: "All projects" }}
         wide
       >
         <ul className="grid grid-cols-5 gap-x-6 gap-y-9 max-[1100px]:grid-cols-3 max-[700px]:grid-cols-2">
@@ -293,85 +308,45 @@ export default function SpecifiersPage() {
                   priority={i < 5}
                   href={href}
                   caption={
-                    <>
-                      <span className="block not-italic font-bold text-ink" style={{ fontFamily: "var(--font-display)" }}>
-                        {app.label}
-                      </span>
-                      <span className="block">The gallery</span>
-                    </>
+                    <span className="block not-italic font-bold text-ink" style={{ fontFamily: "var(--font-display)" }}>
+                      {app.label}
+                    </span>
                   }
                 />
               </li>
             )
           })}
         </ul>
-
-        <div className="mt-12 grid grid-cols-2 gap-x-10 gap-y-10 max-[700px]:grid-cols-1">
-          <div className="border-t border-hairline pt-6">
-            <span className="label">Projects</span>
-            <h3 className="mt-1">Projects on record</h3>
-            <p className="mt-3 max-w-[48ch] text-ink-body">
-              Each installation told in full: the place, the systems, the photographs, and what to
-              ask for on a project like it.
-            </p>
-            <p className="mt-5">
-              <Link href="/projects" className="link">All projects</Link>
-            </p>
-          </div>
-          <div className="border-t border-hairline pt-6">
-            <span className="label">Galleries</span>
-            <h3 className="mt-1">By system and by region</h3>
-            <p className="mt-3 max-w-[48ch] text-ink-body">
-              The same photographs sorted by what was installed, and by the Lower Mainland or
-              Vancouver Island.
-            </p>
-            <p className="mt-5">
-              <Link href="/galleries" className="link">All galleries</Link>
-            </p>
-          </div>
-        </div>
+        <p className="mt-10 flex flex-wrap gap-x-8 gap-y-3">
+          <Link href="/projects" className="link">Every project, told in full</Link>
+          <Link href="/galleries" className="link">The galleries, by system and by region</Link>
+        </p>
       </Section>
 
       {/* ── How a job goes, with the specifier's line under step 2 ──────── */}
       <HowAJobGoes tone="warm" specifiers crews={false} cta={false} title="From the drawing to the road" />
 
-      {/* ── Closures, warranties and the two regions ──────── */}
-      <section className="bg-surface-warm pb-20 max-[700px]:pb-14" aria-label="Closures, warranties and regions">
+      {/* ── For the spec: closures, warranties, regions, as a ledger ──────── */}
+      <section className="bg-surface-warm pb-20 max-[700px]:pb-14" aria-label="For the specification">
         <div className="container-1280">
-          <div className="grid grid-cols-4 gap-x-10 gap-y-10 max-[1100px]:grid-cols-2 max-[600px]:grid-cols-1">
-            <div className="border-t border-hairline pt-6">
-              <span className="label">Keeping the site open</span>
-              <p className="mt-2 text-[16px] leading-[1.6] text-ink-body">
-                Stamped asphalt goes into the asphalt already there, so closures are short. A
-                TrafficPatterns crossing is open to traffic within minutes. Where a site could not
-                close, the work on record went in during phased overnight windows.
-              </p>
+          <div className="sec-grid">
+            <div className="sec-label">
+              <span className="label">For the spec</span>
             </div>
-            <div className="border-t border-hairline pt-6">
-              <span className="label">Two warranties, one installer</span>
-              <p className="mt-2 text-[16px] leading-[1.6] text-ink-body">
-                The manufacturer warrants the material, under its limited warranty against
-                manufacturing defects. Square One warrants the workmanship: every system goes down
-                to the published specification, by Square One&rsquo;s own crews.
-              </p>
-            </div>
-            <div className="border-t border-hairline pt-6">
-              <span className="label">Lower Mainland</span>
-              <p className="mt-2 text-[16px] leading-[1.6] text-ink-body">
-                One office, in Maple Ridge: 19&ndash;11720 Stewart Crescent, V2X 9E7.
-                <br />
-                <a href="tel:+16046126209" className="link not-italic">604-612-6209</a>
-              </p>
-            </div>
-            <div className="border-t border-hairline pt-6">
-              <span className="label">Vancouver Island</span>
-              <p className="mt-2 text-[16px] leading-[1.6] text-ink-body">
-                A service region with a line of its own. Crews serve Greater Victoria, the Cowichan
-                Valley and Nanaimo.
-                <br />
-                <a href="tel:+12503910270" className="link not-italic">250-391-0270</a>
-              </p>
-            </div>
+            <dl className="sec-body spec-notes">
+              <div>
+                <dt>Closures</dt>
+                <dd>Short. The pattern goes into the asphalt already there, and a TrafficPatterns crossing opens to traffic within minutes. Where a site could not close, the work on record went in over phased overnight windows.</dd>
+              </div>
+              <div>
+                <dt>Warranty</dt>
+                <dd>The manufacturer warrants the material. Square One warrants the workmanship, installed to the published specification by our own crews.</dd>
+              </div>
+              <div>
+                <dt>Regions</dt>
+                <dd>Lower Mainland, from the office in Maple Ridge, and Vancouver Island, on its own line.</dd>
+              </div>
+            </dl>
           </div>
         </div>
       </section>
@@ -387,7 +362,7 @@ export default function SpecifiersPage() {
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
               <Link href="/contact" className="btn-primary">
-                Request a site visit
+                Get a quote
               </Link>
               <a href="mailto:office@squareonepaving.com" className="link">
                 office@squareonepaving.com
