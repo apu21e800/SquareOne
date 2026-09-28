@@ -56,15 +56,6 @@ const PRIMARY_LINKS: PrimaryLink[] = [
   { label: "About", href: "/about", match: ["/about", "/blog"] },
 ]
 
-/** What we do — the four trades, the residential line, and the systems, one click deeper. */
-const SERVICE_ITEMS: { href: string; name: string; note: string }[] = [
-  // Jan, 19 Sept: two kinds under stamped asphalt — StreetPrint regular, TrafficPatternsXD durable.
-  { href: "/services/stamped-asphalt", name: "Stamped asphalt", note: "StreetPrint and TrafficPatternsXD" },
-  { href: "/services/decorative-coatings", name: "Decorative coatings", note: "Colour that holds under traffic" },
-  { href: "/services/preformed-thermoplastic", name: "Preformed thermoplastic", note: "Crosswalks, symbols, civic art" },
-  { href: "/services/vapor-blasting", name: "Vapour blasting", note: "Cleaning, priming, graffiti removal" },
-  { href: "/driveways", name: "Driveways", note: "For homeowners, Vancouver and Victoria" },
-]
 
 /** Where the work goes — the ten application galleries (mirrors lib/work.ts WORK_APPS). */
 const APPLICATIONS: { label: string; href: string; slug: string }[] = [
@@ -86,6 +77,7 @@ const byslug = (slug: string) => APPLICATIONS.find((a) => a.slug === slug)
 /** The four buyers, each with its galleries (the same grouping as the home page's ApplicationsSection). */
 const BUYER_GROUPS = BUYERS.map((b) => ({
   label: b.label,
+  note: b.note,
   items: b.slugs.map(byslug).filter((a): a is NonNullable<typeof a> => Boolean(a)),
 }))
 
@@ -116,91 +108,140 @@ interface PanelProps {
   onMouseLeave: () => void
 }
 
-/** A text panel under its bar item — the site's container is not involved. */
-function Panel({
+/**
+ * The mega menu (28 Sept 2026, Vern: "mega menu too… let's go pro"). A
+ * full-width sheet under the bar: the words on the left, a column that
+ * starts a project on the right. No photo tiles, no captions over
+ * gradients: that is HUB's menu. This one reads like an installer's.
+ */
+function MegaPanel({
   label,
-  wide = false,
   children,
+  onNavigate,
   onMouseEnter,
   onMouseLeave,
-}: {
-  label: string
-  wide?: boolean
-  children: React.ReactNode
-  onMouseEnter: () => void
-  onMouseLeave: () => void
-}) {
+}: PanelProps & { label: string; children: React.ReactNode }) {
   return (
     <motion.div
       role="region"
       aria-label={label}
-      initial={{ opacity: 0, y: 4 }}
+      initial={{ opacity: 0, y: -4 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 4 }}
+      exit={{ opacity: 0, y: -4 }}
       transition={panelTransition}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      className={`menu-panel hidden min-[1024px]:block${wide ? " menu-panel-wide" : ""}`}
+      className="mega-panel hidden min-[1024px]:block"
     >
-      {children}
+      <div className="container-1280 grid grid-cols-12 gap-x-12 py-10">
+        <div className="col-span-8">{children}</div>
+        <StartProject onNavigate={onNavigate} />
+      </div>
     </motion.div>
   )
 }
 
-function ServicesPanel({ onNavigate, onMouseEnter, onMouseLeave }: PanelProps) {
+/** The column that ends every menu: the free site visit, the lines, the button. */
+function StartProject({ onNavigate }: { onNavigate: () => void }) {
   return (
-    <Panel label="What we do" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
-      {SERVICE_ITEMS.map((item) => (
-        <Link key={item.href} href={item.href} onClick={onNavigate} className="menu-item">
-          {item.name}
-          <span className="menu-note">{item.note}</span>
-        </Link>
-      ))}
-      <div className="menu-foot">
-        {/* The eight systems live one click deeper (the client, 19 Sept: not
-            sure Products belongs in the menu; Vern: "lead potential clients
-            towards services"). */}
-        <Link href="/products" onClick={onNavigate} className="link">
-          The systems we install
-        </Link>
-        <Link href="/services" onClick={onNavigate} className="link">
-          All services
+    <aside className="mega-aside col-span-4 self-start">
+      <span className="label">Start a project</span>
+      <p className="mt-2 text-[22px] font-bold leading-[1.2] text-ink" style={{ fontFamily: "var(--font-display)" }}>
+        Free site visit, written quote
+      </p>
+      <p className="mt-3 text-[16px] leading-[1.55] text-ink-body">
+        Send a few photos and the address. We walk the site with the sample boards and follow
+        with a written quote.
+      </p>
+      <div className="mt-6">
+        <Link href="/contact" onClick={onNavigate} className="btn-primary">
+          Get a quote
         </Link>
       </div>
-    </Panel>
+      <dl className="mt-6 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-[15px] leading-[1.5]">
+        <dt className="italic text-ink-muted">Lower Mainland</dt>
+        <dd>
+          <a href="tel:+16046126209" className="tabular-nums text-ink hover:underline hover:underline-offset-4">604-612-6209</a>
+        </dd>
+        <dt className="italic text-ink-muted">Vancouver Island</dt>
+        <dd>
+          <a href="tel:+12503910270" className="tabular-nums text-ink hover:underline hover:underline-offset-4">250-391-0270</a>
+        </dd>
+      </dl>
+    </aside>
   )
 }
 
-function BuyersPanel({ onNavigate, onMouseEnter, onMouseLeave }: PanelProps) {
+/** What we do: the four trades, the residential line, and the systems behind them. */
+const SERVICE_COLUMNS: { href: string; name: string; note: string }[][] = [
+  [
+    // Jan, 19 Sept: two kinds under stamped asphalt, StreetPrint regular and TrafficPatternsXD durable.
+    { href: "/services/stamped-asphalt", name: "Stamped asphalt", note: "Brick, cobble or slate pressed into the asphalt already there" },
+    { href: "/services/decorative-coatings", name: "Decorative coatings", note: "Colour that holds under traffic, on asphalt or concrete" },
+    { href: "/services/preformed-thermoplastic", name: "Preformed thermoplastic", note: "Crosswalks, symbols and street art, cut to the drawing" },
+  ],
+  [
+    { href: "/services/vapor-blasting", name: "Vapour blasting", note: "Graffiti, markings and grime lifted wet; surfaces primed" },
+    { href: "/driveways", name: "Driveways", note: "For homeowners in Metro Vancouver and Greater Victoria" },
+    { href: "/products", name: "The systems we install", note: "The eight systems behind the four services" },
+  ],
+]
+
+function ServicesMega({ onNavigate, onMouseEnter, onMouseLeave }: PanelProps) {
   return (
-    <Panel label="Who we work with" wide onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
-      <div className="grid grid-cols-2 gap-x-10">
-        <div>
-          {BUYER_GROUPS.slice(0, 1).map((g) => (
-            <div key={g.label} className="menu-group">
-              <span className="label">{g.label}</span>
-              {g.items.map((a) => (
-                <Link key={a.href} href={a.href} onClick={onNavigate} className="menu-item">
-                  {a.label}
+    <MegaPanel label="What we do" onNavigate={onNavigate} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+      <span className="label">What we do</span>
+      <div className="mt-4 grid grid-cols-2 gap-x-10">
+        {SERVICE_COLUMNS.map((col, i) => (
+          <ul key={i}>
+            {col.map((item) => (
+              <li key={item.href}>
+                <Link href={item.href} onClick={onNavigate} className="mega-item">
+                  <span className="mega-name">{item.name}</span>
+                  <span className="mega-note">{item.note}</span>
                 </Link>
-              ))}
-            </div>
-          ))}
-        </div>
-        <div>
-          {BUYER_GROUPS.slice(1).map((g) => (
-            <div key={g.label} className="menu-group">
-              <span className="label">{g.label}</span>
-              {g.items.map((a) => (
-                <Link key={a.href} href={a.href} onClick={onNavigate} className="menu-item">
-                  {a.label}
-                </Link>
-              ))}
-            </div>
-          ))}
-        </div>
+              </li>
+            ))}
+          </ul>
+        ))}
       </div>
-      <div className="menu-foot">
+      <div className="mega-foot">
+        <Link href="/services" onClick={onNavigate} className="link">
+          All services
+        </Link>
+        <Link href="/specifiers" onClick={onNavigate} className="link">
+          For specifiers
+        </Link>
+        <Link href="/projects" onClick={onNavigate} className="link">
+          Projects
+        </Link>
+      </div>
+    </MegaPanel>
+  )
+}
+
+function BuyersMega({ onNavigate, onMouseEnter, onMouseLeave }: PanelProps) {
+  return (
+    <MegaPanel label="Who we work with" onNavigate={onNavigate} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+      <span className="label">Who we work with</span>
+      <div className="mt-4 grid grid-cols-2 gap-x-10 gap-y-7">
+        {BUYER_GROUPS.map((g) => (
+          <div key={g.label} className="border-t border-hairline pt-4">
+            <span className="mega-name">{g.label}</span>
+            <span className="mega-note">{g.note}</span>
+            <ul className="mt-2">
+              {g.items.map((a) => (
+                <li key={a.href}>
+                  <Link href={a.href} onClick={onNavigate} className="mega-sub">
+                    {a.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+      <div className="mega-foot">
         <Link href="/galleries" onClick={onNavigate} className="link">
           Every photograph, by application
         </Link>
@@ -208,7 +249,7 @@ function BuyersPanel({ onNavigate, onMouseEnter, onMouseLeave }: PanelProps) {
           Projects
         </Link>
       </div>
-    </Panel>
+    </MegaPanel>
   )
 }
 
@@ -522,14 +563,6 @@ export default function Nav() {
                       <path d="M1 1l3 3 3-3" stroke="currentColor" strokeWidth="1.5" fill="none" />
                     </svg>
                   </Link>
-                  <AnimatePresence>
-                    {menu === menuKey && menuKey === "services" && (
-                      <ServicesPanel onNavigate={closeAll} onMouseEnter={() => openMenu("services")} onMouseLeave={scheduleClose} />
-                    )}
-                    {menu === menuKey && menuKey === "buyers" && (
-                      <BuyersPanel onNavigate={closeAll} onMouseEnter={() => openMenu("buyers")} onMouseLeave={scheduleClose} />
-                    )}
-                  </AnimatePresence>
                 </div>
               )
             })}
@@ -594,6 +627,33 @@ export default function Nav() {
           </button>
         </div>
       </header>
+
+      {/* The page steps back while a menu is open; a click on it closes the menu. */}
+      <AnimatePresence>
+        {menu && (
+          <motion.div
+            aria-hidden="true"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            onClick={closeMenu}
+            className="mega-scrim hidden min-[1024px]:block"
+          />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {menu === "services" && (
+          <ServicesMega onNavigate={closeAll} onMouseEnter={() => openMenu("services")} onMouseLeave={scheduleClose} />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {menu === "buyers" && (
+          <BuyersMega onNavigate={closeAll} onMouseEnter={() => openMenu("buyers")} onMouseLeave={scheduleClose} />
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {drawerOpen && <MobileDrawer onClose={closeAll} />}
