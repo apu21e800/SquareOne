@@ -44,7 +44,7 @@ async function loadIndex(): Promise<SearchEntry[]> {
 }
 
 const QUICK_LINKS = [
-  { label: "Products", href: "/products" },
+  { label: "Systems we install", href: "/products" },
   { label: "Applications", href: "/applications" },
   { label: "Driveways", href: "/driveways" },
   { label: "Specifications & documents", href: "/resources" },

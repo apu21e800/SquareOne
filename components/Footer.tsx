@@ -39,7 +39,7 @@ const company: FooterLink[] = [
   { label: "Projects", href: "/projects" },
   { label: "Galleries", href: "/galleries" },
   { label: "Applications", href: "/applications" },
-  { label: "Products", href: "/products" },
+  { label: "Systems we install", href: "/products" },
   { label: "Resources", href: "/resources" },
   { label: "Blog", href: "/blog" },
   { label: "About", href: "/about" },

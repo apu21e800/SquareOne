@@ -24,17 +24,23 @@ export default function PatternSheetGrid({
   /** Square One's name for the template, where the sheet's differs. Off on the
       home band — the library is where names matter. */
   subnames = true,
+  rail = false,
 }: {
   sheets?: PatternSheet[]
   limit?: number
   priority?: boolean
   columns?: 2 | 3
   subnames?: boolean
+  /** On a phone, a sideways swipe rail instead of a tall stack of drawings. */
+  rail?: boolean
 }) {
   const shown = limit ? sheets.slice(0, limit) : sheets
   const cols = columns === 2 ? "grid-cols-2" : "grid-cols-3"
   return (
-    <ul className={`grid ${cols} gap-x-7 gap-y-10 max-[900px]:grid-cols-2 max-[600px]:grid-cols-1`} role="list">
+    <ul
+      className={`grid ${cols} gap-x-7 gap-y-10 max-[900px]:grid-cols-2 ${rail ? "rail-m max-[700px]:gap-y-0" : "max-[600px]:grid-cols-1"}`}
+      role="list"
+    >
       {shown.map((p, i) => (
         <li key={p.slug}>
           <figure className="m-0">

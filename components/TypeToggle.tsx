@@ -48,7 +48,12 @@ export default function TypeToggle() {
         window.location.hostname === "localhost"
       const production = process.env.NEXT_PUBLIC_VERCEL_ENV === "production"
       const dismissed = window.localStorage.getItem("s1-type-ui") === "off"
-      setVisible(!production && (previewHost || fromUrl !== null) && !dismissed)
+      // 28 Sept 2026 (Vern: "let's go pro"; the client reviews the preview):
+      // the serif setting is the site, so the switch no longer shows itself
+      // on previews. It opens only when a link asks for it with ?type=, e.g.
+      // ?type=futura-serif, and it still never shows on production.
+      void previewHost
+      setVisible(!production && fromUrl !== null && !dismissed)
     } catch {
       /* storage unavailable — the switch simply stays hidden */
     }

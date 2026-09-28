@@ -201,7 +201,7 @@ export default function DrivewaysPage() {
           className="
             relative flex items-center
             pt-24 pb-24 pr-[72px] pl-[max(calc((100vw_-_1280px)/2),40px)]
-            max-[700px]:pt-[72px] max-[700px]:pr-6 max-[700px]:pb-14 max-[700px]:pl-6
+            max-[700px]:pt-[112px] max-[700px]:pr-6 max-[700px]:pb-12 max-[700px]:pl-6
           "
         >
 
@@ -273,7 +273,7 @@ export default function DrivewaysPage() {
         className="scroll-mt-[72px]"
         wide
       >
-        <PatternSheetGrid sheets={FEATURED_SHEETS} subnames={false} />
+        <PatternSheetGrid sheets={FEATURED_SHEETS} subnames={false} rail />
         <p className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3">
           <Link href="/patterns" className="link">
             The pattern library

@@ -18,6 +18,15 @@ import { fitVars } from "@/lib/type"
 import JsonLd, { breadcrumbSchema } from "@/components/JsonLd"
 import { clampDescription } from "@/lib/seo"
 
+
+/** The service each system is installed under, as the site names it. */
+const SERVICE_NAME: Record<string, string> = {
+  "stamped-asphalt": "Stamped asphalt",
+  "decorative-coatings": "Decorative coatings",
+  "preformed-thermoplastic": "Preformed thermoplastic",
+  "vapor-blasting": "Vapour blasting",
+}
+
 interface Props {
   params: Promise<{ slug: string }>
 }
@@ -283,9 +292,16 @@ export default async function ProductPage({ params }: Props) {
       {/* ── Header ──────── */}
       <section className="section bg-surface pt-16 pb-14 max-[700px]:pt-10 max-[700px]:pb-10">
         <div className="container-1280">
-          <Link href="/products" className="link">
-            All products
-          </Link>
+          {/* 28 Sept 2026 (Vern: "S1 is an installer, services over
+              products"): the page opens on the service the system belongs
+              to, not on the catalogue. */}
+          <p className="label">
+            Installed by Square One under our{" "}
+            <Link href={`/services/${product.serviceSlug}`} className="link not-italic">
+              {SERVICE_NAME[product.serviceSlug] ?? "services"}
+            </Link>{" "}
+            service
+          </p>
 
           {/* The manufacturer wordmark used to sit here, and the row above it
               said "Installed by Square One since 2000" beside a chip that
@@ -303,13 +319,16 @@ export default async function ProductPage({ params }: Props) {
               Get a quote
             </Link>
             <Link href={`/services/${product.serviceSlug}`} className="link">
-              See the service
+              {SERVICE_NAME[product.serviceSlug] ?? "The service"}, the service
             </Link>
             {product.slug === "streetprint" && (
               <Link href="/patterns" className="link">
                 The pattern library
               </Link>
             )}
+            <Link href="/products" className="link">
+              All the systems we install
+            </Link>
           </div>
         </div>
       </section>
