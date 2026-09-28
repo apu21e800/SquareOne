@@ -20,11 +20,12 @@ const GEN = `${DIR}/generated`
 
 /** Under the wipe: Square One's own vapour blasting photographs from the
     record (28 Sept 2026: the AI illustrations of one operator on six city
-    backdrops came off; the client was put off by the repeats). */
+    backdrops came off; the client was put off by the repeats). The Granville
+    Island photograph leads the "What we do" card above, so it is not here. */
 const STRIP = [
-  { src: `${DIR}/granville-island-vapour-blasting-01.jpg`, alt: "A Square One operator vapour blasting a painted marking off the boardwalk at Granville Island, Vancouver", caption: "Granville Island · markings", position: "center 55%" },
   { src: `${DIR}/parking-lot-vapour-blasting-01.jpg`, alt: "Square One removing painted parking symbols from an asphalt lot with the vapour blasting rig", caption: "Parking lot · markings", position: "center 45%" },
   { src: `${DIR}/walkway-vapour-blasting-01.jpg`, alt: "Square One stripping a red coating from a public walkway with the vapour blasting rig", caption: "Walkway · coating", position: "center 50%" },
+  { src: `${DIR}/nozzle-pavers-01.jpg`, alt: "The vapour blasting nozzle mid-pass over pavers, the wet fan of abrasive and the clean line behind it", caption: "Pavers · mid-pass", position: "center 50%" },
 ]
 
 export default function VapourBand() {

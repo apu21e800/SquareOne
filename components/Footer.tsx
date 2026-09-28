@@ -170,7 +170,7 @@ export default async function Footer() {
                       href={s.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="foot-link inline-flex items-center gap-[9px]"
+                      className="foot-link foot-net inline-flex items-center gap-[9px]"
                     >
                       <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                         <path d={s.path} />

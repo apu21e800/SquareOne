@@ -228,6 +228,10 @@ a:hover { color: var(--ink); }
 .btn-secondary:hover { border: 0; }
 .foot-link { color: var(--ink-on-slate-body); font-style: normal; font-size: 15.5px; text-decoration-color: transparent; }
 .foot-link:hover { color: #FFFFFF; text-decoration-color: var(--ink-on-slate-muted); }
+/* The network links keep the icon beside the name on a phone: app/mobile.css
+   makes every .foot-link an inline-block there for the thumb, which dropped
+   the icon onto a line of its own. */
+.foot-link.foot-net { display: inline-flex; }
 
 /* ---- Buttons: square, sentence case, no arrow, one per view ------------- */
 .btn-primary, .btn-on-slate, .btn-on-image, .btn-water, .offer-btn, .nav-cta {
@@ -292,7 +296,12 @@ a:hover { color: var(--ink); }
   letter-spacing: 0;
   color: var(--ink-muted);
 }
-.tag + .tag::before { content: "\00A0\00B7\00A0"; color: var(--hairline-strong); }
+/* The dot rides on the end of the word before it, followed by a plain
+   space: a run of tags wraps between words on a phone, and a wrapped line
+   never starts with a dot. (A no-break space on both sides, the old rule,
+   made the whole run one unbreakable word.) The space is written \0020:
+   a literal space right after \00B7 is eaten as the escape's terminator. */
+.tag:has(+ .tag)::after { content: "\00A0\00B7\0020"; color: var(--hairline-strong); }
 .chip { border-color: var(--hairline); }
 
 /* The section header: a hairline, the label in the margin column, the

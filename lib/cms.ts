@@ -116,21 +116,17 @@ interface SocialDoc {
 /** Until the marketing team fills the grid: six Square One installs, linking to the profile. */
 function fallbackTiles(profileUrl: string): SocialTile[] {
   const bySlug = (slug: string) => projects.find((p) => p.slug === slug)
+  // 28 Sept 2026: six installs that appear nowhere else on the home page.
+  // The grid used to repeat "Selected work", the driveway band and the
+  // vapour photograph a scroll apart. Island and Mainland, a spread of
+  // systems; every one a project on the record (lib/projects.ts).
   const picks: { slug?: string; src?: string; alt?: string; caption: string }[] = [
-    { slug: "nanaimo-rainbow-intersection", caption: "Rainbow intersection, Nanaimo · TrafficPatternsXD" },
-    { slug: "white-rock-custom-crosswalk", caption: "Artist-designed crosswalk, White Rock · TrafficPatterns" },
-    { slug: "ubc-musqueam-crosswalk", caption: "UBC & Musqueam crosswalk, Vancouver · TrafficPatterns" },
-    {
-      src: "/images/S1_update_v2/photos/Driveways/Ten%20Mile%20Point%20Driveway%20I.jpg",
-      alt: "StreetPrint stamped asphalt driveway at Ten Mile Point, Saanich",
-      caption: "Ten Mile Point, Saanich · StreetPrint driveway",
-    },
-    { slug: "langley-events-centre-streetbond", caption: "Circle of Life, Langley Events Centre · StreetBond" },
-    {
-      src: "/images/services/vapor-blasting/granville-island-vapour-blasting-01.jpg",
-      alt: "Square One crew vapour blasting at Granville Island",
-      caption: "Vapour blasting, Granville Island · surface prep",
-    },
+    { slug: "victoria-high-school-whorl-canoes", caption: "Victoria High School · DecoMark and StreetBond" },
+    { slug: "maple-ridge-spray-park", caption: "Spray park, Maple Ridge · StreetBond" },
+    { slug: "joyce-skytrain-art-installation", caption: "Joyce SkyTrain Station, Vancouver · StreetBond" },
+    { slug: "south-langford-elementary", caption: "South Langford Elementary, Langford · DecoMark and TrafficPatterns" },
+    { slug: "beban-park-sports-crosswalk", caption: "Sports crosswalk, Beban Park, Nanaimo · preformed thermoplastic" },
+    { slug: "ellis-point-cobblestone-victoria", caption: "British Cobble walkway, Ellis Point, Victoria · StreetPrint" },
   ]
   const tiles: SocialTile[] = []
   for (const pick of picks) {

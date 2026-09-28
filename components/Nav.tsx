@@ -146,7 +146,7 @@ function StartProject({ onNavigate }: { onNavigate: () => void }) {
   return (
     <aside className="mega-aside col-span-4 self-start">
       <span className="label">Start a project</span>
-      <p className="mt-2 text-[22px] font-bold leading-[1.2] text-ink" style={{ fontFamily: "var(--font-display)" }}>
+      <p className="mt-2 text-[22px] font-bold leading-[1.2] text-ink [text-wrap:balance]" style={{ fontFamily: "var(--font-display)" }}>
         Free site visit, written quote
       </p>
       <p className="mt-3 text-[16px] leading-[1.55] text-ink-body">
