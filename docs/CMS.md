@@ -10,7 +10,7 @@ Studio and the page updates within a minute.
 | ------------------------ | -------------------------------------------------------------------------------- |
 | **Blog posts**           | Create, edit, publish. Lead photograph, category, body with photos and links.    |
 | **Projects**             | The case studies — title, story, city, systems, photographs, "feature on home".  |
-| **Social grid**          | The "Follow the work" strip on the home page: photo + caption + link to the post. |
+| **Social grid**          | The Instagram strip on the home page ("Recent, on Instagram"): photo + caption + link to the post. |
 | **Site settings**        | Phones, email, address, Instagram / TikTok / Facebook / LinkedIn / YouTube links, the social heading. |
 | **Text slots**           | Headings and lines anywhere the site exposes a key (list below).                 |
 | **Photo slots**          | Photographs anywhere the site exposes a key — the home reel first.               |
@@ -26,36 +26,54 @@ kept working while the CMS was being added.
 
 ## One-time setup (Vern)
 
+Rewritten 30 Sept 2026 and checked against the tree: the old steps named
+the s1-v2-prep-2 preview and the bare domain, and their import command
+stopped at "No CLI config found". Do this **after PR #11 is merged**, so
+what the seed carries is what the live site already says. About 20 minutes.
+Seed first, variables second: the site starts reading Sanity the moment the
+variables are in, and by then the record is already there.
+
 1. **Create the project** at sanity.io → Create project → name "Square One
-   Paving", dataset `production`, free plan. Copy the project id (8
+   Paving", dataset `production`, Free plan. Copy the project id (8
    characters) from sanity.io/manage.
-2. **Vercel → square-one → Settings → Environment Variables** (all
-   environments):
+2. **Seed the record**, from the repo on your machine (Claude Code can run
+   it; `npx sanity login` opens the browser once):
+   ```
+   npm install
+   npx sanity login
+   npm run cms:seed                      # writes sanity/seed/seed.ndjson from the repo
+   npm run cms:import -- -p <project id> # uploads it, photographs included
+   ```
+   The `-p` is required: the repo has no `sanity.cli.ts`. The seed carries
+   the 48 listed posts, the 31 projects, and the contact lines and social
+   links; the photographs are fetched from www.squareonepaving.com (all 88
+   answered 200 on 30 Sept). Ids are stable, so running it again updates
+   rather than duplicates. Left out on purpose: posts marked `unlisted:
+   true`, and the footer line and social heading, which stay the site's
+   own until an editor writes one in Site settings. Spot-check three long
+   posts in the Studio afterwards (the markdown → Portable Text conversion
+   covers headings, lists, bold, italic, links).
+3. **CORS**: sanity.io/manage → project → API → CORS origins → add each of
+   these with **Allow credentials** ticked. Without them the Studio cannot
+   log in from the site.
+   - `https://www.squareonepaving.com`
+   - `https://square-one-git-s1-own-company-based-agency.vercel.app`
+   - `http://localhost:3000`
+4. **Vercel → square-one → Settings → Environments → Production** (then the
+   same under **Preview**) → add:
    - `NEXT_PUBLIC_SANITY_PROJECT_ID` = the project id
    - `NEXT_PUBLIC_SANITY_DATASET` = `production`
    - `SANITY_REVALIDATE_SECRET` = any long random string (used in step 5)
-   Redeploy. `/studio` now loads the editing desk.
-3. **CORS** — sanity.io/manage → project → API → CORS origins → add
-   `https://square-one-git-s1-v2-prep-2-based-agency.vercel.app` and, at
-   launch, `https://squareonepaving.com` (allow credentials). Without this
-   the Studio cannot log in from the site.
-4. **Seed the record** (once, from the repo on your machine, logged in with
-   `npx sanity login`):
-   ```
-   npm install
-   npm run cms:seed      # writes sanity/seed/seed.ndjson from the repo
-   npm run cms:import    # uploads 51 posts, 31 projects, settings + photos
-   ```
-   Ids are stable, so running it again updates rather than duplicates.
-   Spot-check three long posts in the Studio afterwards (the markdown →
-   Portable Text conversion covers headings, lists, bold, italic, links).
-5. **Webhook** so publishing is instant — sanity.io/manage → API → Webhooks
-   → URL `https://squareonepaving.com/api/revalidate?secret=<the secret>`,
-   trigger on create/update/delete, dataset `production`. Without it, pages
-   refresh on their own within 60 seconds. New posts also appear in search
-   and the sitemap after the next deploy (a Vercel Deploy Hook can be added
-   to the same webhook for that).
-6. **Invite editors** — sanity.io/manage → Members → invite Gord, Jan and
+   Redeploy production (variables only reach new builds). `/studio` now
+   loads the editing desk instead of "Not connected yet".
+5. **Webhook** so publishing is instant: sanity.io/manage → API → Webhooks
+   → URL `https://www.squareonepaving.com/api/revalidate?secret=<the secret>`
+   (www, the address the site answers on; the bare domain only redirects),
+   method POST, trigger on create/update/delete, dataset
+   `production`. Without it, pages refresh on their own within 60 seconds.
+   New posts also appear in search and the sitemap after the next deploy (a
+   Vercel Deploy Hook can be added to the same webhook for that).
+6. **Invite editors**: sanity.io/manage → Members → invite Gord, Jan and
    the marketing team (Editor role). They sign in at /studio with Google.
 
 ## Editing guide for the team (short)
