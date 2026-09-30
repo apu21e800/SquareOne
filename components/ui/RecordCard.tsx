@@ -1,7 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import NoPhoto from "@/components/ui/NoPhoto"
-import { clampWords } from "@/lib/text"
+import type { ReactNode } from "react"
 
 /**
  * The one record — a project or a blog post reads the same way. Used by
@@ -24,6 +24,11 @@ import { clampWords } from "@/lib/text"
  * kicker · title · meta right — so thirty projects or fifty posts scan in a
  * few screens instead of a long scroll of full-width photographs. That fold
  * hides the caption under the thumbnail; the meta line carries the place.
+ *
+ * 30 Sept 2026 QA: the line or two under a title is clamped by the browser
+ * (three lines, the ellipsis at the line's end) instead of cut at a
+ * character count, so a sentence is never sawn off in the middle; the lead
+ * record's title is the h2 of its index.
  */
 export interface RecordCardProps {
   href: string
@@ -33,7 +38,8 @@ export interface RecordCardProps {
   kicker?: string
   title: string
   description?: string
-  meta?: string
+  /** The quiet last line; a node when a phone needs a different one (the place, when the caption is folded away). */
+  meta?: ReactNode
   lead?: boolean
   priority?: boolean
 }
@@ -75,11 +81,11 @@ export default function RecordCard({
 
         <div className="min-w-0">
           {kicker && <span className="label">{kicker}</span>}
-          <h3 className={`rc-title-lead [text-wrap:balance] ${kicker ? "mt-2" : ""}`}>
+          <h2 className={`card-title rc-title-lead [text-wrap:balance] ${kicker ? "mt-2" : ""}`}>
             <Link href={href} className="text-ink hover:underline hover:underline-offset-[5px] hover:decoration-1">
               {title}
             </Link>
-          </h3>
+          </h2>
           {description && (
             <p className="mt-3 max-w-[52ch] text-[16px] leading-[1.6] text-ink-body [text-wrap:pretty] max-[600px]:line-clamp-3 max-[600px]:text-[15px]">
               {description}
@@ -122,8 +128,8 @@ export default function RecordCard({
         </h3>
 
         {description && (
-          <p className="mt-2 text-[15px] leading-[1.55] text-ink-body max-[600px]:hidden">
-            {clampWords(description, 118)}
+          <p className="mt-2 line-clamp-3 text-[15px] leading-[1.55] text-ink-body [text-wrap:pretty] max-[600px]:hidden">
+            {description}
           </p>
         )}
 

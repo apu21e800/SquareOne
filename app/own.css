@@ -203,6 +203,9 @@ h3 {
 /* Reading text a step larger where a page opens with an intro. */
 .lede { font-size: 20px; line-height: 1.5; color: var(--ink-body); }
 @media (max-width: 700px) { .lede { font-size: 18px; } }
+/* The standfirst: one sentence set large in the serif, the page's intro. */
+.standfirst { font-family: var(--font-text); font-size: 25px; line-height: 1.4; color: var(--ink); text-wrap: pretty; }
+@media (max-width: 700px) { .standfirst { font-size: 20px; } }
 
 /* ---- Colour discipline -------------------------------------------------- */
 a:hover { color: var(--ink); }
@@ -365,9 +368,14 @@ a:hover { color: var(--ink); }
   border-top: 1px solid var(--hairline);
 }
 .row:last-child { border-bottom: 1px solid var(--hairline); }
+/* The four service rows on /services (30 Sept 2026): the photograph and the
+   words share the row evenly, and the words sit at the photograph's middle. */
+.row-service { grid-template-columns: minmax(0, 6fr) minmax(0, 6fr); column-gap: 56px; align-items: center; padding-block: 40px; }
+@media (max-width: 1000px) { .row-service { column-gap: 40px; } }
 .row-compact { grid-template-columns: 132px minmax(0, 1fr); column-gap: 24px; padding-block: 18px; }
 @media (max-width: 700px) {
   .row { grid-template-columns: 1fr; padding-block: 22px; }
+  .row-service { padding-block: 26px; }
   .row-compact { grid-template-columns: 96px minmax(0, 1fr); column-gap: 16px; }
 }
 
@@ -392,9 +400,19 @@ a:hover { color: var(--ink); }
   .spec dd { border-top: 0; padding-top: 2px; }
 }
 
-/* ---- Motion: a fade ----------------------------------------------------- */
-.reveal-armed { transform: none; transition: opacity 0.6s ease; }
-.reveal-armed.reveal-in { transform: none; }
+/* ---- Motion: a rise (30 Sept 2026; Vern: "make it magic") ----------------
+   Below-fold rows, frames and steps come up 12px as they arrive, one after
+   another in a group (components/MotionBreath.tsx arms them, 70ms apart,
+   and only on screens that don't ask for reduced motion). The server HTML
+   is never hidden, and a phone's sideways rails are exempt (app/mobile.css). */
+.reveal-armed {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.7s ease, transform 0.9s cubic-bezier(0.2, 0.75, 0.2, 1);
+  will-change: opacity, transform;
+}
+.reveal-armed.reveal-in { opacity: 1; transform: none; }
+.reveal-done { will-change: auto; }
 
 /* ---- The type switch, re-based ------------------------------------------
    The serif setting is now the site; "Futura, quiet" (Inter) is the
@@ -1178,7 +1196,8 @@ a[href^="tel:"] { white-space: nowrap; }
 
 /* Record cards (blog, projects): title sizes as classes, because the
    unlayered h3 rule above outranks Tailwind's size utilities. */
-.rc-title-lead { font-size: 26px; line-height: 1.15; }
+/* The lead record's title is its index's h2 (30 Sept 2026); `card-title` keeps it out of the section-heading size. */
+.rc-title-lead, h2.card-title.rc-title-lead { font-size: 26px; line-height: 1.15; letter-spacing: -0.012em; }
 .rc-title { font-size: 20px; line-height: 1.25; }
 @media (max-width: 700px) { .rc-title-lead { font-size: 22px; } }
 @media (max-width: 600px) { .rc-title { font-size: 17px; line-height: 1.3; } }
@@ -1256,4 +1275,53 @@ h1.headline-sentence, .headline-sentence {
   text-transform: none;
   letter-spacing: -0.02em;
   line-height: 1.06;
+}
+
+/* ---- QA pass, 30 Sept 2026 -----------------------------------------------
+   Four things a keyboard and a thumb need, and one hover the site owns. */
+
+/* Over a photograph the bar is light, and an ink focus ring on a dark
+   frame is a ring nobody sees: the ring goes white there. */
+.nav-light :focus-visible { outline-color: #FFFFFF; }
+
+/* Targets a thumb can hit: the inline links, the footer's numbers and runs,
+   the phone number in the bar and the filter words all sit in 22px lines.
+   Vertical padding on an inline box adds nothing to the line and 8px to
+   the target, so every one is 30px tall without a layout change. */
+.link, .foot-a, .foot-num, .nav-phone, .arrow-link, .svc-sys, .q-lines a, .legal-address a, .q-rail a, .spec-glance-a, .legal-meta dd a { padding-block: 4px; }
+a.label { padding-block: 4px; margin-block: -4px; }
+button.link { padding-inline: 6px; margin-inline: -6px; }
+
+/* A linked frame answers the pointer without moving the photograph (the
+   frame never zooms, docs/OWN-COMPANY-BRIEF.md §3.7): the caption comes up
+   to ink with the accent under it, the way a menu row does, and the
+   photograph lifts a shade. */
+.frame-link .cap {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  text-decoration-color: transparent;
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+.frame-link img { transition: filter 0.6s ease; }
+@media (hover: hover) {
+  .frame-link:hover .cap { color: var(--ink); text-decoration-color: var(--accent); }
+  .frame-link:hover img { filter: brightness(1.04); }
+}
+.frame-link:focus-visible { outline-offset: 4px; }
+
+/* The opener's words arrive: headline, line, button, 90ms apart, once, on
+   load. The photograph is already there; only the words rise, and they
+   are never hidden for a reader who asked for reduced motion. */
+@keyframes hero-rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+.hero-in > * { animation: hero-rise 0.8s cubic-bezier(0.2, 0.75, 0.2, 1) both; }
+.hero-in > :nth-child(2) { animation-delay: 90ms; }
+.hero-in > :nth-child(3) { animation-delay: 180ms; }
+.hero-in > :nth-child(n + 4) { animation-delay: 270ms; }
+@media (prefers-reduced-motion: reduce) {
+  .hero-in > * { animation: none; }
+  .reveal-armed { opacity: 1; transform: none; transition: none; }
 }

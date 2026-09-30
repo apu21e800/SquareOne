@@ -143,7 +143,7 @@ export default function Hero({ slides, eyebrow, title }: HeroProps) {
           button — the second action is the reel itself. The `eyebrow` slot
           (a CMS field) now renders as the line under the headline. */}
       <div className="absolute inset-x-0 bottom-0 z-[2]">
-        <div className="container-1280 pb-[72px] max-[1100px]:pb-[84px] max-[700px]:pb-[80px]">
+        <div className="hero-in container-1280 pb-[72px] max-[1100px]:pb-[84px] max-[700px]:pb-[80px]">
           <h1 className="display-xl max-w-none text-white">
             {title ?? (
               <>

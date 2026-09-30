@@ -11,6 +11,7 @@ import {
   type SearchEntry,
 } from "@/lib/search-score"
 import { previewFor } from "@/lib/doc-previews"
+import { BrandIcon } from "@/components/BrandMark"
 
 /**
  * Sitewide quick search: one input over pages, services, products,
@@ -106,7 +107,14 @@ function Thumb({ entry }: { entry: SearchEntry }) {
     )
   }
   if (!entry.image) {
-    return <span aria-hidden="true" className="block h-[54px] w-[72px] shrink-0 bg-surface-stone" />
+    // A page with no photograph of its own shows the mark, small and quiet,
+    // instead of an empty grey square that reads as a picture that failed
+    // (30 Sept 2026 QA).
+    return (
+      <span aria-hidden="true" className="flex h-[54px] w-[72px] shrink-0 items-center justify-center bg-surface-stone opacity-70">
+        <BrandIcon height={18} />
+      </span>
+    )
   }
   return (
     <span className="relative block h-[54px] w-[72px] shrink-0 overflow-hidden bg-surface-stone">

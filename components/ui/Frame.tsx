@@ -8,7 +8,8 @@ import NoPhoto from "@/components/ui/NoPhoto"
  * cornered and inset in its column; the caption sits UNDER it in the serif,
  * never over it on a gradient. One component for every photograph outside
  * the hero reel and the page openers, so rows, grids and galleries read as
- * one system. No hover zoom, no scrim, no overlay.
+ * one system. No hover zoom, no scrim, no overlay: a linked frame's caption
+ * takes the hover instead (`.frame-link`).
  *
  * `href` wraps the frame (and its caption) in a link; the text beside a
  * Row carries its own link, so a row never nests two.
@@ -60,8 +61,10 @@ export default function Frame({
     </figure>
   )
   if (!href) return figure
+  // `frame-link` (app/own.css, 30 Sept 2026): the caption answers the
+  // pointer; the photograph itself never moves.
   return (
-    <Link href={href} className="block">
+    <Link href={href} className="frame-link block">
       {figure}
     </Link>
   )

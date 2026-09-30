@@ -40,7 +40,7 @@ const services = [
     image: "/images/applications/parking-lots/mission-parking-bays-and-lot-streetprint-01.jpg",
     alt: "Grey herringbone StreetPrint parking bays in front of a new commercial building in Mission",
     caption: "Parking bays, Mission · StreetPrint",
-    applications: ["Crosswalks", "Roundabouts", "Streetscapes", "Commercial Entries"],
+    applications: ["Crosswalks", "Roundabouts", "Streetscapes", "Commercial entries"],
   },
   {
     slug: "decorative-coatings",
@@ -50,7 +50,7 @@ const services = [
     image: "/images/applications/parks-paths/surrey-marine-spray-park-streetbond-01.jpg",
     alt: "A marine spray park in Surrey, a swirl of blue StreetBond water through lime-green and yellow leaf shapes",
     caption: "Marine spray park, Surrey · StreetBond",
-    applications: ["Bike Lanes", "Bus Rapid Transit", "Parking Lots", "Spray Parks"],
+    applications: ["Bike lanes", "Bus rapid transit", "Parking lots", "Spray parks"],
   },
   {
     slug: "preformed-thermoplastic",
@@ -58,9 +58,9 @@ const services = [
     tagline: "Cut to your drawing, to the owner's marking standard, and fused into the road by our own crews.",
     desc: "Send the drawing or the artist's file: TrafficPatterns™, DecoMark®, DuraTherm® and PreMark® are cut to the design before they reach the site and heat-fused in place. A TrafficPatterns crossing is open to traffic within minutes of application.",
     image: "/images/S1_update_v2/photos/Featured%20image%20options/Photo-2023-09-22-1-50-34-PM.jpg",
-    alt: "'Every Child Matters' by Charliss Santos in orange and black TrafficPatterns, New Westminster",
-    caption: "'Every Child Matters', New Westminster · TrafficPatterns",
-    applications: ["Crosswalk Markings", "School Zones", "Custom Logos", "Stop Bars"],
+    alt: "\u2018Every Child Matters\u2019 by Charliss Santos in orange and black TrafficPatterns, New Westminster",
+    caption: "\u2018Every Child Matters\u2019, New Westminster · TrafficPatterns",
+    applications: ["Crosswalk markings", "School zones", "Custom logos", "Stop bars"],
   },
   {
     slug: "vapor-blasting",
@@ -70,7 +70,7 @@ const services = [
     image: "/images/services/vapor-blasting/parking-lot-vapour-blasting-01.jpg",
     alt: "Square One removing painted parking symbols from an asphalt lot with the vapour blasting rig",
     caption: "Commercial parking lot · marking removal",
-    applications: ["Graffiti Removal", "Marking Removal", "Surface Prep", "Mould and grime"],
+    applications: ["Graffiti removal", "Marking removal", "Surface prep", "Mould and grime"],
   },
 ]
 
@@ -116,23 +116,34 @@ export default function ServicesPage() {
         wide
       >
         <div>
-          {services.map((service) => (
-            <Row key={service.slug} as="article">
+          {services.map((service, i) => (
+            <Row key={service.slug} as="article" className="row-service">
               <Frame
                 src={service.image}
                 alt={service.alt}
                 caption={service.caption}
                 aspect="aspect-[4/3]"
-                sizes="(max-width: 700px) 100vw, 520px"
+                sizes="(max-width: 700px) 100vw, 600px"
                 href={`/services/${service.slug}`}
+                priority={i === 0}
               />
+              {/* 30 Sept 2026 QA: the words sat high beside a tall frame with
+                  the right half of the row empty. The column is wider, the
+                  text meets the photograph at its middle, and the kinds of
+                  work each service is specified for run under the line. */}
               <div className="min-w-0">
-                <h3 className="text-[30px] leading-[1.1] max-[700px]:text-[24px]">
+                <span className="label tabular-nums" aria-hidden="true">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <h3 className="mt-2 text-[34px] leading-[1.05] max-[700px]:text-[26px]">
                   <Link href={`/services/${service.slug}`} className="hover:underline hover:decoration-1 hover:underline-offset-[6px]">
                     {service.name}
                   </Link>
                 </h3>
-                <p className="mt-3 max-w-[40ch] text-ink-body [text-wrap:pretty]">{service.tagline}</p>
+                <p className="mt-4 max-w-[44ch] text-[18px] leading-[1.5] text-ink-body [text-wrap:pretty] max-[700px]:text-[17px]">
+                  {service.tagline}
+                </p>
+                <p className="label mt-5">{service.applications.join(" · ")}</p>
                 <p className="mt-5">
                   <Link href={`/services/${service.slug}`} className="link">
                     The service

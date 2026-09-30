@@ -207,16 +207,25 @@ export default async function ServicePage({ params }: Props) {
       <section className="bg-surface pt-14 pb-16 max-[700px]:pt-10 max-[700px]:pb-12">
         <div className="container-1280">
           {/* The intro carries the systems and the region — the same sentence
-              search engines and the Service schema read as the description. */}
-          <p className="lede max-w-[60ch] [text-wrap:pretty]">{service.shortDescription}</p>
-
-          <div className="mt-9 flex flex-wrap items-center gap-x-8 gap-y-4">
-            <Link href="/contact" className="btn-primary">
-              Get a quote
-            </Link>
-            <Link href="/specifiers" className="link">
-              For specifiers
-            </Link>
+              search engines and the Service schema read as the description.
+              30 Sept 2026 QA: set on the section grid like every band under
+              it, the label in the margin and the sentence as a standfirst,
+              so the opener no longer leaves the right half of the page empty. */}
+          <div className="sec-grid">
+            <div className="sec-label">
+              <span className="label">In short</span>
+            </div>
+            <div className="sec-body">
+              <p className="standfirst max-w-[46ch] [text-wrap:pretty]">{service.shortDescription}</p>
+              <div className="mt-9 flex flex-wrap items-center gap-x-8 gap-y-4">
+                <Link href="/contact" className="btn-primary">
+                  Get a quote
+                </Link>
+                <Link href="/specifiers" className="link">
+                  For specifiers
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -240,7 +249,7 @@ export default async function ServicePage({ params }: Props) {
                       {gallery ? (
                         <Link
                           href={galleryHref(gallery)}
-                          className="text-ink underline decoration-[color:var(--hairline-strong)] underline-offset-4 transition-colors hover:decoration-[color:var(--ink)]"
+                          className="spec-glance-a text-ink underline decoration-[color:var(--hairline-strong)] underline-offset-4 transition-colors hover:decoration-[color:var(--ink)]"
                         >
                           {sentenceCase(item)}
                         </Link>

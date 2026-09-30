@@ -40,6 +40,9 @@ export default function PatternSheetGrid({
     <ul
       className={`grid ${cols} gap-x-7 gap-y-10 max-[900px]:grid-cols-2 ${rail ? "rail-m max-[700px]:gap-y-0" : "max-[600px]:grid-cols-1"}`}
       role="list"
+      // The phone rail scrolls sideways, so a keyboard needs a way to reach
+      // it (30 Sept 2026 QA, axe: scrollable-region-focusable).
+      {...(rail ? { tabIndex: 0, "aria-label": "Pattern sheets, scroll sideways" } : {})}
     >
       {shown.map((p, i) => (
         <li key={p.slug}>

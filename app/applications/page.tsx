@@ -105,7 +105,7 @@ const applications: AppCard[] = [
     tag: "Civic",
     desc: "First Nations artwork, community murals and commemorative plazas, set in the pavement.",
     image: `${FIO}/Photo-2023-09-22-1-50-34-PM.jpg`,
-    alt: "'Every Child Matters' by Charliss Santos in orange and black TrafficPatterns, New Westminster",
+    alt: "‘Every Child Matters’ by Charliss Santos in orange and black TrafficPatterns, New Westminster",
     cta: "See the work",
     href: "/applications/public-art",
   },
@@ -197,12 +197,34 @@ export default function ApplicationsPage() {
         </div>
       </IndexImageHero>
 
-      {/* The eleven applications — frames with the words under them */}
-      <section className="sec section bg-surface">
+      {/* The eleven applications — frames with the words under them.
+          30 Sept 2026 QA: the grid opened with no heading (an h3 straight
+          after the H1), so it gets the site's section header, with the
+          projects link where every section keeps its one link. */}
+      <section className="sec section bg-surface" aria-labelledby="applications-heading">
         <div className="container-1280">
-          <ul className="grid grid-cols-1 gap-x-7 gap-y-12 min-[701px]:grid-cols-3" role="list">
+          <div className="sec-grid">
+            <div className="sec-label">
+              <span className="label">By application</span>
+            </div>
+            <div className="sec-body">
+              <div className="sec-head">
+                <h2 id="applications-heading">
+                  Eleven kinds of work, <em>on the record</em>
+                </h2>
+                <Link href="/projects" className="link whitespace-nowrap">
+                  See the projects
+                </Link>
+              </div>
+              <p className="mt-5 max-w-[60ch] text-ink-body [text-wrap:pretty]">
+                Each opens on Square One&rsquo;s own photographs of that kind of job, with the
+                system and the place under every frame.
+              </p>
+            </div>
+          </div>
+          <ul data-reveal-group className="mt-12 grid grid-cols-1 gap-x-7 gap-y-12 min-[701px]:grid-cols-3" role="list">
             {applications.map((app) => (
-              <li key={app.title}>
+              <li key={app.title} data-reveal>
                 <Frame
                   src={app.image}
                   alt={app.alt}
@@ -225,7 +247,7 @@ export default function ApplicationsPage() {
             {/* The twelfth square (28 Sept 2026 QA): eleven frames left a
                 hole at the end of the grid. It is the way in for a job that
                 is none of the above, on a sample board of the chart. */}
-            <li>
+            <li data-reveal>
               <Link href="/contact" className="kit-visual kit-chips app-else" aria-label="Something else: tell us the job">
                 {BOARD.map((c) => (
                   <span key={c.name} style={{ background: c.hex }} title={c.name} />
@@ -244,14 +266,6 @@ export default function ApplicationsPage() {
               </p>
             </li>
           </ul>
-
-          {/* The projects link, off the photograph and onto paper (the
-              opener keeps its one button). */}
-          <p className="mt-14 border-t border-hairline pt-6">
-            <Link href="/projects" className="link">
-              See the projects
-            </Link>
-          </p>
         </div>
       </section>
 

@@ -79,9 +79,9 @@ export default function ProductsPage() {
       <section className="section bg-surface">
         <div className="container-1280">
           <h2 className="sr-only">Stamped asphalt, decorative coatings, thermoplastic and surface protection systems</h2>
-          <ul className="grid grid-cols-3 gap-x-7 gap-y-12 max-[900px]:grid-cols-2 max-[600px]:grid-cols-1" role="list">
+          <ul data-reveal-group className="grid grid-cols-3 gap-x-7 gap-y-12 max-[900px]:grid-cols-2 max-[600px]:grid-cols-1" role="list">
             {groups.flatMap((group) => group.items).map((product) => (
-              <li key={product.slug} className="relative">
+              <li key={product.slug} data-reveal className="relative">
                 <Link
                   href={`/products/${product.slug}`}
                   aria-label={`${product.name}, the system`}

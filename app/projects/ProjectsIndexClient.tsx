@@ -113,15 +113,15 @@ export default function ProjectsIndexClient({ projects }: ProjectsIndexClientPro
                   kicker={lead.application}
                   title={lead.title}
                   description={lead.excerpt}
-                  meta={[cityName(lead.city), lead.region].join(" · ")}
+                  meta={lead.region}
                 />
               </div>
             )}
 
             {rest.length > 0 && (
-              <ul className="mt-12 grid grid-cols-3 gap-x-7 gap-y-12 max-[1000px]:grid-cols-2 max-[700px]:grid-cols-1 max-[700px]:gap-y-8">
+              <ul data-reveal-group className="mt-12 grid grid-cols-3 gap-x-7 gap-y-12 max-[1000px]:grid-cols-2 max-[700px]:grid-cols-1 max-[700px]:gap-y-8">
                 {rest.map((project) => (
-                  <li key={project.slug}>
+                  <li key={project.slug} data-reveal>
                     <RecordCard
                       href={`/projects/${project.slug}`}
                       src={project.src}
@@ -132,7 +132,15 @@ export default function ProjectsIndexClient({ projects }: ProjectsIndexClientPro
                       kicker={project.application}
                       title={project.title}
                       description={project.excerpt}
-                      meta={[cityName(project.city), project.region].join(" · ")}
+                      meta={
+                        <>
+                          {/* The caption under the frame carries the city on wide
+                              screens; on a phone the frame folds away and the city
+                              comes back here (30 Sept 2026 QA: it printed twice). */}
+                          <span className="hidden max-[600px]:inline">{cityName(project.city)} · </span>
+                          {project.region}
+                        </>
+                      }
                     />
                   </li>
                 ))}

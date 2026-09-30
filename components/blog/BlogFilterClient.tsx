@@ -130,9 +130,9 @@ export default function BlogFilterClient({ posts }: Props) {
           )}
 
           {rest.length > 0 && (
-            <ul className="mt-12 grid grid-cols-3 gap-x-7 gap-y-12 max-[1000px]:grid-cols-2 max-[700px]:grid-cols-1 max-[700px]:gap-y-8">
+            <ul data-reveal-group className="mt-12 grid grid-cols-3 gap-x-7 gap-y-12 max-[1000px]:grid-cols-2 max-[700px]:grid-cols-1 max-[700px]:gap-y-8">
               {rest.map((post) => (
-                <li key={post.slug}>
+                <li key={post.slug} data-reveal>
                   <RecordCard
                     href={`/blog/${post.slug}`}
                     src={post.featured_image || undefined}

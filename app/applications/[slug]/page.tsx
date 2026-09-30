@@ -355,6 +355,7 @@ export default async function ApplicationPage({ params }: Props) {
              documents" came off every card (docs/OWN-COMPANY-BRIEF.md §3.5) ── */}
       <Section
         id="systems"
+        label="The systems"
         title={<>Systems installed <em>for {meta.label.toLowerCase()}</em></>}
         link={{ href: "/products", label: "All systems" }}
         tone="warm"

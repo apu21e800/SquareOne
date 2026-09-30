@@ -104,14 +104,16 @@ export default async function Footer() {
     <div>
       {/* ── The close — light, for every page but /contact ──────── */}
       <FooterClose>
-        <section className="sec bg-surface-warm py-[5.5rem] max-[700px]:py-14">
+        <section className="sec bg-surface-warm py-[5.5rem] max-[700px]:py-14" aria-labelledby="close-heading">
           <div className="container-1280">
             <div className="sec-grid">
               <div className="sec-label">
                 <span className="label">Start a project</span>
               </div>
               <div className="sec-body">
-                <h2 className="max-w-[20ch] [text-wrap:balance]">Send a few photos <em>and a site address</em></h2>
+                {/* Named, so the band is a landmark of its own between the
+                    page and the footer (30 Sept 2026 QA, axe: region). */}
+                <h2 id="close-heading" className="max-w-[20ch] [text-wrap:balance]">Send a few photos <em>and a site address</em></h2>
                 <p className="mt-5 max-w-[52ch] text-ink-body [text-wrap:pretty]">
                   A free site visit and a written quote, anywhere in the Lower Mainland and on
                   Vancouver Island.

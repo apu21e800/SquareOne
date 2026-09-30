@@ -156,8 +156,8 @@ export default function SpecifiersPage() {
         intro="The manufacturer publishes the specifications, the sheets and the chart. We install to them, and bring the samples."
         wide
       >
-        <ul className="kit-grid">
-          <li className="kit-tile">
+        <ul data-reveal-group className="kit-grid">
+          <li className="kit-tile" data-reveal>
             <Link href="/resources" className="kit-visual kit-paper">
               <Image
                 src="/images/specifiers/cross-section-detail.webp"
@@ -181,7 +181,7 @@ export default function SpecifiersPage() {
             </Link>
           </li>
 
-          <li className="kit-tile">
+          <li className="kit-tile" data-reveal>
             <Link href="/patterns" className="kit-visual kit-paper">
               <Image
                 src="/images/patterns/herringbone.webp"
@@ -199,7 +199,7 @@ export default function SpecifiersPage() {
             </Link>
           </li>
 
-          <li className="kit-tile">
+          <li className="kit-tile" data-reveal>
             <Link href="/products/streetbond#colours" className="kit-visual kit-chips" aria-label="The StreetBond colour chart">
               {STREETBOND_COLOURS.slice(0, 24).map((c) => (
                 <span key={c.name} style={{ background: c.hex }} title={c.name} />
@@ -213,7 +213,7 @@ export default function SpecifiersPage() {
             </Link>
           </li>
 
-          <li className="kit-tile">
+          <li className="kit-tile" data-reveal>
             <Link href="/contact" className="kit-visual kit-board" aria-label="Book the site walk">
               <Image
                 src="/images/textures/stamped-asphalt-texture.webp"
@@ -294,12 +294,12 @@ export default function SpecifiersPage() {
         link={{ href: "/projects", label: "All projects" }}
         wide
       >
-        <ul className="grid grid-cols-5 gap-x-6 gap-y-9 max-[1100px]:grid-cols-3 max-[700px]:grid-cols-2">
+        <ul data-reveal-group className="grid grid-cols-5 gap-x-6 gap-y-9 max-[1100px]:grid-cols-3 max-[700px]:grid-cols-2">
           {WORK_APPS.map((app, i) => {
             const src = APP_LEADS[app.slug]
             const href = app.slug === "driveways" ? "/driveways" : `/applications/${app.slug}`
             return (
-              <li key={app.slug}>
+              <li key={app.slug} data-reveal>
                 <Frame
                   src={src}
                   alt={`${app.label}: gallery of Square One installations`}

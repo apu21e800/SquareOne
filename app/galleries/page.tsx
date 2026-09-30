@@ -156,13 +156,13 @@ export default function GalleriesPage() {
         link={{ href: "/applications", label: "The application pages" }}
         wide
       >
-        <ul className="grid grid-cols-3 gap-x-7 gap-y-10 max-[1000px]:grid-cols-2 max-[600px]:grid-cols-1">
+        <ul data-reveal-group className="grid grid-cols-3 gap-x-7 gap-y-10 max-[1000px]:grid-cols-2 max-[600px]:grid-cols-1">
           {byApplication.map((g, i) => (
-            <li key={g.slug}>
+            <li key={g.slug} data-reveal>
               <GalleryCover href={g.href} photo={g.photo} title={g.label} sizes={threeUp} priority={i < 3} />
             </li>
           ))}
-          <li key={vapour.slug}>
+          <li key={vapour.slug} data-reveal>
             <GalleryCover href={vapour.href} photo={vapour.photo} title={vapour.label} sizes={threeUp} />
           </li>
         </ul>
@@ -177,9 +177,9 @@ export default function GalleriesPage() {
         tone="warm"
         wide
       >
-        <ul className="grid grid-cols-4 gap-x-7 gap-y-10 max-[1000px]:grid-cols-2 max-[600px]:grid-cols-1">
+        <ul data-reveal-group className="grid grid-cols-4 gap-x-7 gap-y-10 max-[1000px]:grid-cols-2 max-[600px]:grid-cols-1">
           {bySystem.map((g) => (
-            <li key={g.slug}>
+            <li key={g.slug} data-reveal>
               <GalleryCover href={g.href} photo={g.photo} title={g.name} sizes={fourUp} />
             </li>
           ))}

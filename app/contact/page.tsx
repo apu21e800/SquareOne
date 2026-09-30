@@ -151,7 +151,7 @@ export default function ContactPage() {
           </div>
 
           <aside className="q-rail col-span-4 max-[900px]:col-span-1">
-            <span className="label">What happens next</span>
+            <h2 className="label">What happens next</h2>
             <ol className="q-timeline mt-4">
               {STEPS.map((s, i) => (
                 <li key={s.title}>
@@ -170,7 +170,7 @@ export default function ContactPage() {
             </ol>
 
             <div className="mt-9 border-t border-hairline pt-6">
-              <span className="label">What to send</span>
+              <h2 className="label">What to send</h2>
               <ul className="q-list mt-3">
                 <li>Photos of the surface as it is</li>
                 <li>The address or postal code</li>
@@ -188,7 +188,7 @@ export default function ContactPage() {
             </div>
 
             <div className="mt-8 border-t border-hairline pt-6">
-              <span className="label">Two shortcuts</span>
+              <h2 className="label">Two shortcuts</h2>
               <ul className="mt-3 flex flex-col gap-[12px]">
                 <li>
                   <Link href="/driveways#patterns" className="link">

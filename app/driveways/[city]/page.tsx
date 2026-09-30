@@ -267,7 +267,9 @@ export default async function DrivewayCityPage({ params }: Props) {
       <section className="sec section bg-surface-warm">
         <div className="container-1280 grid grid-cols-12 gap-x-10 gap-y-10 max-[900px]:grid-cols-1">
           <div className="col-span-3 max-[900px]:col-span-1">
-            <span className="label">Why stamped asphalt here</span>
+            {/* The margin label is this band's heading (30 Sept 2026 QA: the
+                three system names were h3s straight after the H1). */}
+            <h2 className="label">Why stamped asphalt here</h2>
           </div>
 
           <div className="col-span-5 max-[900px]:col-span-1">

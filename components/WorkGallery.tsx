@@ -374,6 +374,7 @@ export default function WorkGallery({
       {filtered.length > 0 ? (
         <ul
           aria-label={ariaLabel}
+          data-reveal-group
           className={`grid grid-cols-2 gap-x-5 gap-y-8 min-[701px]:grid-cols-3 min-[1024px]:grid-cols-4 max-[700px]:gap-x-3 max-[700px]:gap-y-6 ${
             filters ? "mt-10 max-[700px]:mt-8" : ""
           }`}
@@ -381,7 +382,7 @@ export default function WorkGallery({
           {visible.map((p, i) => {
             const { primary, secondary } = captionLines(p)
             return (
-              <li key={p.src}>
+              <li key={p.src} data-reveal>
                 <GalleryFrame
                   src={p.src}
                   alt={workAlt(p)}

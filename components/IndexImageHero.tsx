@@ -63,7 +63,7 @@ export default function IndexImageHero({
         className="container-1280 relative z-[1] w-full pb-14 max-[700px]:pb-10"
         style={{ paddingTop: "calc(var(--bar-h) + 2rem)" }}
       >
-        <div className={align === "right" ? "ml-auto max-w-[44rem] min-[901px]:pl-8" : undefined}>
+        <div className={`hero-in ${align === "right" ? "ml-auto max-w-[44rem] min-[901px]:pl-8" : ""}`}>
           {/* No eyebrow over the photograph (27 Sept 2026): the openers are
               simplified the way the home hero is — the title, one line, the
               caption. A label above a headline over a photo is HUB's shape
