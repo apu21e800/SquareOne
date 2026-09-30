@@ -10,6 +10,17 @@ export const post = defineType({
     { name: "seo", title: "Search & sharing" },
   ],
   fields: [
+    // 30 Sept 2026: what the drafter (lib/automation/blog.ts) found to check
+    // before publishing. Shown only when there are notes; the site never reads it.
+    defineField({
+      name: "editorNotes",
+      type: "text",
+      title: "Notes for the editor",
+      rows: 12,
+      description: "Written by the drafter: the fact check, the style check, the photo. Never shown on the site; clear it before publishing.",
+      hidden: ({ document }) => !document?.editorNotes,
+      group: "content",
+    }),
     defineField({ name: "title", type: "string", title: "Title", validation: (r) => r.required().max(110), group: "content" }),
     defineField({
       name: "slug",

@@ -73,6 +73,22 @@ Copy .env.local.example → .env.local and fill in:
 - SANITY_REVALIDATE_SECRET — the Sanity webhook's signing secret (docs/CMS.md);
   /api/revalidate refuses anything it didn't sign.
 - NEXT_PUBLIC_SITE_URL — public site URL for canonical/sitemap/robots/schema/OG (defaults to https://www.squareonepaving.com in `lib/site.ts` — www, because Vercel serves production on www and the old site's whole Google index was www; every absolute URL derives from `SITE_URL` there — never hard-code the host)
+- The CMS (docs/CMS.md) and the blog and social automation (docs/AUTOMATION.md)
+  have their own: NEXT_PUBLIC_SANITY_PROJECT_ID, NEXT_PUBLIC_SANITY_DATASET,
+  SANITY_REVALIDATE_SECRET; CRON_SECRET, ANTHROPIC_API_KEY,
+  SANITY_API_WRITE_TOKEN, BLOG_DRAFT_NOTIFY, BUFFER_API_KEY, AUTOMATION_PAUSED.
+
+## Blog and social automation (lib/automation/, docs/AUTOMATION.md)
+Two Vercel crons (vercel.json, production only). Weekly, `/api/cron/draft-post`
+writes a project story from the record for the next project with no post and
+saves it as an **unpublished** Sanity draft with "Notes for the editor" (fact
+check, style check). Daily, `/api/cron/social-drafts` turns each newly
+published post into Instagram, Facebook and LinkedIn **drafts** in Buffer.
+Nothing publishes itself. The drafter may state only what
+`lib/automation/facts.ts` hands it; `lib/automation/style.ts` is the house style
+and the canon as rules (keep it free of the literal tokens lint-claims bans:
+lint-claims reads lib/). The pipelines take their services as arguments, so
+they can be run end to end against fakes; they never read the filesystem.
 
 ## Architecture
 

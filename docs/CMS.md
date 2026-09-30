@@ -145,3 +145,6 @@ PR #11 went live on 7 Oct, so the condition above is met.
   builds the known ones ahead and a new one on its first request. The site
   search reads the record, so a new project shows there after the next
   deploy (as new posts do).
+- Posts drafted by the automation (docs/AUTOMATION.md) carry `editorNotes`,
+  a field shown in Studio only when it has something in it; the site never
+  queries it.
