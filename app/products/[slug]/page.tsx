@@ -254,6 +254,12 @@ export default async function ProductPage({ params }: Props) {
 
   const docCount = `${docs.length} document${docs.length === 1 ? "" : "s"}`
 
+  // The description, split at its sentences: the first two open the page,
+  // the rest fold (2 Oct 2026).
+  const sentences = (product.fullDescription.match(/[^.!?]+[.!?]+(?=\s|$)/g) ?? [product.fullDescription]).map((t) => t.trim())
+  const lead = sentences.slice(0, 2).join(" ")
+  const rest = sentences.slice(2).join(" ")
+
   return (
     <main className="bg-surface">
       <JsonLd data={[breadcrumbSchema(SITE_URL, [{ name: "Products", path: "/products" }, { name: product.name, path: `/products/${product.slug}` }])]} />
@@ -319,20 +325,14 @@ export default async function ProductPage({ params }: Props) {
             {product.tagline}
           </p>
 
+          {/* One button and one link (2 Oct 2026: the row carried four; the
+              menu reaches the catalogue and the pattern band sits below). */}
           <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-3">
             <Link href="/contact" className="btn-primary">
               Get a quote
             </Link>
             <Link href={`/services/${product.serviceSlug}`} className="link">
               {SERVICE_NAME[product.serviceSlug] ?? "The service"}, the service
-            </Link>
-            {product.slug === "streetprint" && (
-              <Link href="/patterns" className="link">
-                The pattern library
-              </Link>
-            )}
-            <Link href="/products" className="link">
-              All the systems we install
             </Link>
           </div>
         </div>
@@ -348,26 +348,26 @@ export default async function ProductPage({ params }: Props) {
         tone={toneOf("overview")}
         wide
       >
+        {/* 2 Oct 2026 (Vern: "this page is very wordy… look at all that
+            text"): the description opens on its first two sentences, the
+            rest folds under "More about …" the way the questions do, and the
+            key-benefits list is gone from the page (every line of it is a
+            row of the specification beside it; the data stays in
+            lib/products.ts for the schema and llms.txt). */}
         <div className="grid grid-cols-12 gap-x-10 gap-y-12 max-[900px]:grid-cols-1">
           <div className="col-span-7 max-[900px]:col-span-1">
-            <p className="max-w-[60ch] text-ink-body [text-wrap:pretty]">
-              {product.fullDescription}
-            </p>
-
-            {product.keyBenefits.length > 0 && (
-              <>
-                <span className="label mt-12">Key benefits</span>
-                <ul className="mt-4 grid grid-cols-2 gap-x-10 max-[700px]:grid-cols-1 max-[700px]:gap-x-0">
-                  {product.keyBenefits.map((benefit) => (
-                    <li
-                      key={benefit}
-                      className="border-t border-hairline py-[13px] text-[16px] leading-[1.5] text-ink-body"
-                    >
-                      {benefit}
-                    </li>
-                  ))}
-                </ul>
-              </>
+            <p className="standfirst max-w-[44ch] [text-wrap:pretty]">{lead}</p>
+            {rest && (
+              <details className="group mt-8 border-t border-b border-hairline">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-[16px] [&::-webkit-details-marker]:hidden">
+                  <span className="text-[16px] font-semibold text-ink">More about {product.name}</span>
+                  <span aria-hidden="true" className="flex-shrink-0 text-[22px] font-normal leading-none text-ink-muted">
+                    <span className="group-open:hidden">+</span>
+                    <span className="hidden group-open:inline">&minus;</span>
+                  </span>
+                </summary>
+                <p className="max-w-[60ch] pb-6 text-[16px] leading-[1.65] text-ink-body [text-wrap:pretty]">{rest}</p>
+              </details>
             )}
           </div>
 
@@ -381,9 +381,8 @@ export default async function ProductPage({ params }: Props) {
                 </div>
               ))}
             </dl>
-            <p className="border-t border-hairline pt-4 text-[14.5px] italic leading-[1.6] text-ink-muted">
-              Figures are the manufacturer&rsquo;s, from the product&rsquo;s own data sheet.
-              The manufacturer warrants the material; Square One installs the system and warrants the workmanship.
+            <p className="border-t border-hairline pt-4 text-[14.5px] leading-[1.6] text-ink-muted">
+              The manufacturer&rsquo;s figures, from its data sheet. It warrants the material; Square One warrants the workmanship.
             </p>
             <p className="mt-5 flex flex-wrap gap-x-7 gap-y-2">
               <Link href={`/services/${product.serviceSlug}`} className="link">
@@ -407,8 +406,8 @@ export default async function ProductPage({ params }: Props) {
       <Section
         id="applications"
         label="Applications"
-        title={<>Where {product.name} <em>is specified</em></>}
-        intro="The surfaces Square One installs it on. The linked ones open the photographs on record for that kind of work."
+        title={<>Where {product.name} <em>goes</em></>}
+        intro="The surfaces we install it on; the linked ones open the photographs."
         tone="stone"
         wide
       >
@@ -585,10 +584,10 @@ export default async function ProductPage({ params }: Props) {
       {docs.length > 0 && (
         <Section
           id="documents"
-          label="Specify it"
-          title={<>{product.name} <em>specifications and data sheets</em></>}
-          link={{ href: docsHref, label: `Open the ${product.name} documents` }}
-          intro={`${docs.length} ${product.name} document${docs.length === 1 ? "" : "s"} (specification, technical data, safety data and colour) are kept with the rest of the library, where they are previewed page by page and checked against the manufacturer’s current editions.`}
+          label="Documents"
+          title={<>{product.name} <em>documents</em></>}
+          link={{ href: docsHref, label: "Open the documents" }}
+          intro={`${docCount}: the specification, technical data, safety data and the colour card, in the library.`}
           tone={toneOf("documents")}
         />
       )}

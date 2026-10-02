@@ -9,7 +9,9 @@ import { OFFERED_SHEETS, FEATURED_SHEETS, sheetSrc, SHEET_W, SHEET_H, type Patte
  * whole drawing sheet with a name and one line under it. The sheets are the
  * same object here — the drawing whole, at its true proportions, on the
  * sheet's own white. 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.7): the
- * card comes off. Each sheet is a square-cornered frame with a hairline,
+ * card comes off. Each sheet is a square-cornered frame (the hairline
+ * around it came off on 2 Oct 2026, Vern: "remove borders from patterns
+ * sheet page"),
  * and the name, Square One's own name for it and the note sit UNDER it in
  * the serif, the way every caption on the site now reads.
  *
@@ -47,7 +49,7 @@ export default function PatternSheetGrid({
       {shown.map((p, i) => (
         <li key={p.slug}>
           <figure className="m-0">
-            <span className="relative block aspect-[1800/1390] w-full overflow-hidden border border-hairline bg-white">
+            <span className="relative block aspect-[1800/1390] w-full overflow-hidden bg-white">
               <Image
                 src={sheetSrc(p.slug)}
                 alt={`${p.name}, StreetPrint template drawing, dimensioned in inches`}

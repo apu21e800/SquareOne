@@ -279,55 +279,60 @@ export default async function ServicePage({ params }: Props) {
         </div>
       </section>
 
-      {/* ── The systems — the means ───────────────────────────── */}
-      <Section
-        label="The systems"
-        title={<>The systems <em>behind it</em></>}
-        link={{ href: "/products", label: "All systems" }}
-        wide
-      >
-        <div data-reveal-group className={`grid grid-cols-1 gap-x-10 gap-y-8 min-[701px]:grid-cols-2 ${service.productsIncluded.length === 3 ? "min-[1025px]:grid-cols-3" : "min-[1025px]:grid-cols-4"}`}>
-          {service.productsIncluded.map((line) => {
-            const product = productFor(line)
-            return (
-              <article key={line} data-reveal className="card-panel">
-                {/* 2 Oct 2026: the system's own photograph leads its panel
-                    (the row was names and one-liners on an empty band);
-                    the opener's frame is never repeated. */}
-                {product && product.image !== heroSrc && (
-                  <Frame
-                    src={product.image}
-                    alt={product.imageAlt}
-                    aspect="aspect-[4/3]"
-                    sizes="(max-width: 700px) 100vw, (max-width: 1024px) 50vw, 400px"
-                    position={product.heroPosition}
-                    href={`/products/${product.slug}`}
-                    className="mb-5"
-                  />
-                )}
-                {/* The product's name is the title and the way to its page;
-                    the line from lib/services.ts (its role in this service)
-                    sits under it. */}
-                <h3 className="text-pretty">
-                  {product ? (
-                    <Link href={`/products/${product.slug}`} className="underline-offset-4 hover:underline">
-                      {product.name}
-                      {product.mark && <sup className="ml-[1px] text-[0.55em] font-normal">{product.mark}</sup>}
-                    </Link>
-                  ) : (
-                    line
-                  )}
-                </h3>
-                {product && (
-                  <p className="mt-3 text-[16px] leading-[1.55] text-ink-body">
-                    {line.replace(/^[A-Za-z]+(?:XD)?[®™]?\s*/, "").replace(/^[—–-]\s*/, "").replace(/^\w/, (c) => c.toUpperCase())}
-                  </p>
-                )}
-              </article>
-            )
-          })}
-        </div>
-      </Section>
+      {/* ── The systems — the means. Only the systems with a page of their
+             own get a panel; a line that is an option rather than a system
+             (anti-skid aggregate, custom colour matching) reads as one
+             sentence under the grid, not as a panel with no photograph
+             (2 Oct 2026, Vern: "the text floating next to the two images"). */}
+      {(() => {
+        const lines = service.productsIncluded.map((line) => ({ line, product: productFor(line) }))
+        const panels = lines.filter((l) => l.product)
+        const options = lines.filter((l) => !l.product).map((l) => l.line.replace(/^\w/, (c) => c.toLowerCase()))
+        const cols = panels.length >= 4 ? "min-[1025px]:grid-cols-4" : panels.length === 3 ? "min-[1025px]:grid-cols-3" : "min-[1025px]:grid-cols-2"
+        return (
+          <Section
+            label="The systems"
+            title={<>The systems <em>behind it</em></>}
+            link={{ href: "/products", label: "All systems" }}
+            wide
+          >
+            <div data-reveal-group className={`grid grid-cols-1 gap-x-10 gap-y-8 min-[701px]:grid-cols-2 ${cols}`}>
+              {panels.map(({ line, product }) =>
+                product ? (
+                  <article key={line} data-reveal className="card-panel">
+                    {/* The system's own photograph leads its panel; the opener's frame is never repeated. */}
+                    {product.image !== heroSrc && (
+                      <Frame
+                        src={product.image}
+                        alt={product.imageAlt}
+                        aspect="aspect-[4/3]"
+                        sizes="(max-width: 700px) 100vw, (max-width: 1024px) 50vw, 400px"
+                        position={product.heroPosition}
+                        href={`/products/${product.slug}`}
+                        className="mb-5"
+                      />
+                    )}
+                    <h3 className="text-pretty">
+                      <Link href={`/products/${product.slug}`} className="underline-offset-4 hover:underline">
+                        {product.name}
+                        {product.mark && <sup className="ml-[1px] text-[0.55em] font-normal">{product.mark}</sup>}
+                      </Link>
+                    </h3>
+                    <p className="mt-3 text-[16px] leading-[1.55] text-ink-body">
+                      {line.replace(/^[A-Za-z]+(?:XD)?[®™]?\s*/, "").replace(/^[—–-]\s*/, "").replace(/^\w/, (c) => c.toUpperCase())}
+                    </p>
+                  </article>
+                ) : null,
+              )}
+            </div>
+            {options.length > 0 && (
+              <p className="mt-10 max-w-[70ch] border-t border-hairline pt-5 text-[15.5px] leading-[1.6] text-ink-muted">
+                Also {options.join(", and ")}.
+              </p>
+            )}
+          </Section>
+        )
+      })()}
 
       {/* ── Patterns and colours — the sheets fanned, the chip strip, the
              two links; stamped asphalt only (2 Oct 2026, Vern: "access to

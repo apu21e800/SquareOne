@@ -41,10 +41,8 @@ export default function PatternsPage() {
   /* The note and the links close whichever group renders last. */
   const closing = (
     <div className="mt-14 border-t border-hairline pt-6">
-      <p className="max-w-[70ch] text-[14.5px] italic leading-[1.6] text-ink-muted">
-        A selection, not the whole library: custom templates are cut to order, ask us.
-        Random Stone is on Square One&rsquo;s sheet and has no standalone drawing. Colour names
-        and ranges as the manufacturer publishes them; on-screen colour varies from the cast colour.
+      <p className="max-w-[70ch] text-[14.5px] leading-[1.6] text-ink-muted">
+        A selection, not the whole library: custom templates are cut to order. The samples come to the site visit.
       </p>
 
       <div className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3">
@@ -66,23 +64,13 @@ export default function PatternsPage() {
         <div className="container-1280">
           <span className="label">StreetPrint&reg; templates</span>
           <h1 className="mt-5 max-w-[20ch] [text-wrap:balance]">The stamped asphalt <em>pattern library</em></h1>
-          <div className="mt-8 grid grid-cols-12 gap-x-10 gap-y-5 max-[900px]:grid-cols-1">
-            <p className="lede col-span-7 max-w-[56ch] [text-wrap:pretty]">
-              {OFFERED_SHEETS.length} stamping templates, shown as the manufacturer draws them,
-              dimensioned to the inch. The heated template presses the pattern into the asphalt;
-              StreetBond&reg; colour locks it in.
-            </p>
-            <p className="col-span-5 max-w-[40ch] self-start pt-1 text-[16px] leading-[1.65] text-ink-muted max-[900px]:max-w-[56ch] max-[900px]:pt-0">
-              Drawings are the manufacturer&rsquo;s own template sheets. Square One installs them
-              on{" "}
-              <Link href="/driveways" className="link">driveways</Link>,{" "}
-              <Link href="/applications/crosswalks" className="link">crosswalks</Link>,{" "}
-              <Link href="/applications/roundabouts" className="link">roundabouts</Link>{" "}
-              and{" "}
-              <Link href="/applications/parking-lots" className="link">parking lots</Link>;
-              the samples come to the site visit, so you see the real surface before you sign.
-            </p>
-          </div>
+          {/* One paragraph (2 Oct 2026: the two-column opener was the
+              wordiest thing on the page); the applications are in the menu. */}
+          <p className="lede mt-8 max-w-[56ch] [text-wrap:pretty]">
+            {OFFERED_SHEETS.length} stamping templates, as the manufacturer draws them, dimensioned
+            to the inch. The heated template presses the pattern into the asphalt; StreetBond&reg;
+            colour locks it in.
+          </p>
         </div>
       </section>
 

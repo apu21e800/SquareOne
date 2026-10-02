@@ -1548,3 +1548,6 @@ h1 em, .display-xl em { letter-spacing: -0.008em; }
 /* Drawer rows without a swatch (driveways, the systems, documents) keep the
    text aligned with the rows that have one. */
 .drawer-row > span:only-child { grid-column: 2; }
+
+/* The menu preview's caption holds to one line. */
+.mega-preview .cap { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
