@@ -12,6 +12,7 @@ import { SITE_URL } from "@/lib/site"
 import JsonLd, { breadcrumbSchema, faqSchema } from "@/components/JsonLd"
 import IndexImageHero from "@/components/IndexImageHero"
 import HowAJobGoes from "@/components/sections/HowAJobGoes"
+import MaterialsBand from "@/components/sections/MaterialsBand"
 import Frame from "@/components/ui/Frame"
 import { Section } from "@/components/ui/Container"
 import { sentenceCase } from "@/lib/text"
@@ -327,6 +328,11 @@ export default async function ServicePage({ params }: Props) {
           })}
         </div>
       </Section>
+
+      {/* ── Patterns and colours — the sheets fanned, the chip strip, the
+             two links; stamped asphalt only (2 Oct 2026, Vern: "access to
+             the pattern sheets from… the Stamped Asphalt page") ──────── */}
+      {showsPatterns && <MaterialsBand tone="paper" />}
 
       {/* ── Projects on record — frames, captioned under ──────── */}
       {relatedProjects.length > 0 && (

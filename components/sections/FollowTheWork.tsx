@@ -42,7 +42,7 @@ export default function FollowTheWork({ settings, tiles }: { settings: SiteSetti
      heading, a pill button and one full-width row of six rounded squares.
      This is Square One's own composition: the words and the four networks
      as a hairline ledger in the left third, and the six photographs as a
-     three-by-two contact sheet of portrait frames on the right, each
+     three-by-two contact sheet of square frames on the right (squares since 2 Oct 2026, Vern), each
      captioned UNDER the picture in the serif (the site's signature; HUB
      never captions), no badges over the photographs, square corners. The
      heading is set here, not read from Site settings, so the HUB phrase
@@ -93,7 +93,7 @@ export default function FollowTheWork({ settings, tiles }: { settings: SiteSetti
                   aria-label={tile.fallback ? `${tile.caption}, Square One on Instagram` : `${tile.caption}, view on ${tile.platform}`}
                   className="social-tile group block"
                 >
-                  <span className="relative block aspect-[4/5] overflow-hidden bg-[color:var(--surface-stone)]">
+                  <span className="relative block aspect-square overflow-hidden bg-[color:var(--surface-stone)]">
                     <Image
                       src={tile.src}
                       alt={tile.alt}

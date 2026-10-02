@@ -144,6 +144,8 @@ const SERVICE_ROWS: Row[] = [
 
 const SERVICE_MORE: Row[] = [
   { href: "/driveways", name: "Driveways", note: "For homeowners in Metro Vancouver and Greater Victoria" },
+  // 2 Oct 2026 (Vern): the pattern sheets, reachable from the menu.
+  { href: "/patterns", name: "Pattern sheets", note: "The StreetPrint templates, drawn to scale" },
   { href: "/products", name: "The systems we install", note: "The eight systems behind the four services" },
   // 2 Oct 2026: the document library gets a way in from the menu.
   { href: "/resources", name: "Documents", note: "Specifications, data sheets and colour cards" },

@@ -74,6 +74,12 @@ const GALLERY_LEADS: MenuPreviews = {
     alt: "Ashlar slate driveway in StreetPrint",
     caption: "Ashlar slate driveway · StreetPrint",
   },
+  // The pattern sheets (2 Oct 2026): the herringbone drawing.
+  "/patterns": {
+    src: "/images/patterns/herringbone.webp",
+    alt: "The StreetPrint Standard Herringbone template sheet: a dimensioned drawing of the brick pattern with its title block",
+    caption: "StreetPrint · Standard Herringbone · the template sheet",
+  },
   // The systems: the drawing a specifier works from, not a photograph.
   "/products": {
     src: "/images/patterns/herringbone.webp",

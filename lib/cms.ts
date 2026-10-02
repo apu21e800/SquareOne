@@ -122,39 +122,39 @@ function fallbackTiles(profileUrl: string): SocialTile[] {
   // vapour photograph a scroll apart. A spread of systems; every frame on
   // the record (lib/work-captions.ts).
   const picks: { slug?: string; src?: string; alt?: string; caption: string }[] = [
-    // 28 Sept 2026, second image pass (Vern: "more recent images"): six
-    // frames shot between April 2025 and August 2026, from the September
-    // delivery, none of them a job the home page shows elsewhere, each one
-    // holding up in a portrait crop.
+    // 2 Oct 2026 (Vern: "need better images for the homepage social media
+    // section"): six of the strongest frames in the library, each one
+    // holding up as a square, none of them a job the home page shows
+    // elsewhere, five systems between them. Every caption is the record's.
     {
-      src: "/images/applications/parks-paths/vancouver-spray-park-wide-streetbond-01.jpg",
-      alt: "Fields of blue and lime green StreetBond across a spray park in Vancouver, tree shadows falling over them",
-      caption: "Spray park, Vancouver · StreetBond",
+      src: "/images/S1_update_v2/photos/Featured%20image%20options/UBC-crosswalk-3-300dpi.jpg",
+      alt: "The UBC and Musqueam crosswalk on University Boulevard, a Musqueam design in green, blue and cream TrafficPatterns under the UBC letters",
+      caption: "UBC & Musqueam crosswalk, University Boulevard · TrafficPatterns",
     },
     {
-      src: "/images/applications/schools-sports-courts/lower-mainland-bc-elevated-play-deck-streetbond-01.jpg",
-      alt: "A covered play deck coated in yellow, orange and blue StreetBond, a basketball key painted at one end",
-      caption: "Elevated play deck, Lower Mainland · StreetBond",
+      src: "/images/applications/public-art/oak-bay-street-mural-crossing-streetbond-01.jpg",
+      alt: "A street mural crossing in Oak Bay, a First Nations design in black, red, yellow and teal StreetBond across the road",
+      caption: "Street mural crossing, Oak Bay · StreetBond",
     },
     {
-      src: "/images/applications/schools-sports-courts/abbotsford-basketball-key-streetbond-01.jpg",
-      alt: "A blue StreetBond basketball key on a new court in Abbotsford",
-      caption: "Basketball key, Abbotsford · StreetBond",
+      src: "/images/S1_update_v2/photos/Featured%20image%20options/maplewoods-fire-lane-north-vancouver-streetbond-01.jpg",
+      alt: "The decorative fire lane at Maplewoods Townhomes in North Vancouver, white waves across blue StreetBond",
+      caption: "Decorative fire lane, Maplewoods, North Vancouver · StreetBond",
     },
     {
-      src: "/images/applications/branding-wayfinding/coquitlam-red-sol-courtyard-decomark-01.jpg",
-      alt: "Blue DecoMark circles and sweeping lines set into the concrete courtyard at Red Sol in Coquitlam",
-      caption: "Red Sol courtyard, Coquitlam · DecoMark",
+      src: "/images/applications/schools-sports-courts/abbotsford-eagle-mountain-labyrinth-decomark-01.jpg",
+      alt: "The red and black DecoMark labyrinth at Eagle Mountain in Abbotsford, seen from above",
+      caption: "Eagle Mountain labyrinth, Abbotsford · DecoMark",
     },
     {
-      src: "/images/applications/schools-sports-courts/vancouver-school-play-markings-premark-01.jpg",
-      alt: "Stars, dots and court lines in PreMark across a school playground in Vancouver",
-      caption: "School play markings, Vancouver · PreMark",
+      src: "/images/applications/bike-lanes/sechelt-cowrie-and-trail-lane-markings-decomark-01.jpg",
+      alt: "Salmon and canoe symbols in red DecoMark down the green bike lane at Cowrie and Trail in Sechelt",
+      caption: "Cowrie and Trail lane markings, Sechelt · DecoMark",
     },
     {
-      src: "/images/applications/driveways/richmond-brick-driveway-streetprint-01.jpg",
-      alt: "A brick-pattern StreetPrint driveway in front of a house in Richmond",
-      caption: "Brick driveway, Richmond · StreetPrint",
+      src: "/images/S1_update_v2/photos/Featured%20image%20options/Labyrinth-Maple-Ridge-c%CC%93%C9%99sq%C9%99nel%C9%99-Elementary-2-scaled-1.jpg",
+      alt: "An orange and purple StreetBond labyrinth on the playground at c\u0313\u0259sq\u0259nel\u0259 Elementary in Maple Ridge",
+      caption: "Labyrinth, c\u0313\u0259sq\u0259nel\u0259 Elementary, Maple Ridge · StreetBond",
     },
   ]
   const tiles: SocialTile[] = []

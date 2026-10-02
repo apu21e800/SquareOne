@@ -11,6 +11,7 @@ import { resourceGroups } from "@/lib/resources"
 import { getWork, WORK_APPS } from "@/lib/work"
 import type { WorkApp, WorkAppMeta } from "@/lib/work"
 import WorkGallery from "@/components/WorkGallery"
+import MaterialsBand from "@/components/sections/MaterialsBand"
 import Frame from "@/components/ui/Frame"
 import { Section } from "@/components/ui/Container"
 import { SITE_URL } from "@/lib/site"
@@ -431,6 +432,11 @@ export default async function ProductPage({ params }: Props) {
           })}
         </ul>
       </Section>
+
+      {/* ── Patterns and colours, on the two stamped systems (2 Oct 2026,
+             Vern: "access to the pattern sheets from the StreetPrint page…
+             and TPXD page") ──────── */}
+      {(product.slug === "streetprint" || product.slug === "trafficpatterns-xd") && <MaterialsBand tone="paper" />}
 
       {/* ── The work on record ──────── */}
       {work.length > 0 && (

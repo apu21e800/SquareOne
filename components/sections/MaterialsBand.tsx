@@ -26,10 +26,14 @@ const STRIP = ["Brick", "Terra Cotta", "Sandy Beige", "Driftwood", "Pewter", "Sl
   .map((name) => STREETBOND_COLOURS.find((c) => c.name === name))
   .filter((c): c is NonNullable<typeof c> => Boolean(c))
 
-export default function MaterialsBand() {
+/** The same band on the pages where stamped asphalt is sold (2 Oct 2026,
+    Vern: "access to the pattern sheets from the StreetPrint page, Stamped
+    Asphalt page and TPXD page… something like this, we had it before"). */
+export default function MaterialsBand({ tone = "warm" }: { tone?: "paper" | "warm" | "stone" }) {
   const [a, b, c] = FEATURED_SHEETS
+  const bg = tone === "stone" ? "bg-surface-stone" : tone === "paper" ? "bg-surface" : "bg-surface-warm"
   return (
-    <section className="sec relative overflow-hidden bg-surface-warm py-[6rem] max-[900px]:py-14">
+    <section className={`sec relative overflow-hidden ${bg} py-[6rem] max-[900px]:py-14`}>
       <div className="container-1280 relative z-[1] grid grid-cols-12 items-center gap-x-14 gap-y-14 max-[900px]:grid-cols-1">
         {/* ── The drawings, fanned ──────── */}
         <div className="col-span-6 max-[900px]:col-span-1">
