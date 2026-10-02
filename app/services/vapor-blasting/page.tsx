@@ -177,7 +177,7 @@ export default function VaporBlastingServicePage() {
         fit="Clean it, prime it, bring it back"
         lede="Graffiti, old markings, paint and grime off almost any hard surface, with the dust held down in water. The rig comes to you."
         caption={HERO.caption}
-        imagePosition="center 65%"
+        imagePosition="center 70%"
         align="right"
         tall
         narrow

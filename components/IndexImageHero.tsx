@@ -41,8 +41,9 @@ export default function IndexImageHero({
       left of centre, so the words never cover it. The caption swaps to the
       left corner to stay clear of the block. */
   align?: "left" | "right"
-  /** A taller opener (84vh) when the photograph needs its whole height
-      (2 Oct 2026, the vapour page: "zoom out a bit on that hero image"). */
+  /** A full-height opener when the photograph needs its whole height
+      (2 Oct 2026, the vapour page: "zoom out a bit on that hero image",
+      then "zoom out more, show more of the arrow and the bridge"). */
   tall?: boolean
   /** A narrower block of words on the right (36rem), when the subject
       stands at the centre of the frame. */
@@ -52,7 +53,7 @@ export default function IndexImageHero({
   return (
     <section
       data-nav-on-image
-      className={`opener ${align === "right" ? "opener-right" : ""} relative flex ${tall ? "h-[84vh] min-h-[640px]" : "h-[64vh] min-h-[580px]"} items-end overflow-hidden bg-surface-slate`}
+      className={`opener ${align === "right" ? "opener-right" : ""} relative flex ${tall ? "h-[100vh] min-h-[640px] supports-[height:100svh]:h-[100svh]" : "h-[64vh] min-h-[580px]"} items-end overflow-hidden bg-surface-slate`}
     >
       <Image
         src={src}

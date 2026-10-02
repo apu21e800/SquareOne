@@ -1557,9 +1557,12 @@ h1 em, .display-xl em { letter-spacing: -0.008em; }
    stays in daylight. */
 .opener-right .scrim-rise {
   background:
-    linear-gradient(to right, rgba(24, 21, 18, 0) 38%, rgba(24, 21, 18, 0.5) 100%),
-    linear-gradient(to top, rgba(24, 21, 18, 0.42) 0%, rgba(24, 21, 18, 0.18) 32%, rgba(24, 21, 18, 0) 60%);
+    linear-gradient(to right, rgba(24, 21, 18, 0) 42%, rgba(24, 21, 18, 0.4) 100%),
+    linear-gradient(to top, rgba(24, 21, 18, 0.32) 0%, rgba(24, 21, 18, 0.12) 30%, rgba(24, 21, 18, 0) 55%);
 }
+/* The photograph keeps its colour under a lighter rise, with a touch more
+   saturation (2 Oct 2026, Vern: "seems muted"). */
+.opener-right img { filter: saturate(1.12) contrast(1.03); }
 
 /* The who-we-work-with ledger: the galleries as a two-column list per
    buyer, not a run of words with dots, and the buyer's name in a narrower
