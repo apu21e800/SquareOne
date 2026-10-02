@@ -78,9 +78,13 @@ export const metadata: Metadata = {
 const DIR = "/images/services/vapor-blasting"
 const GEN = `${DIR}/generated`
 
-/** The opener: Square One on the Granville Island boardwalk, the Burrard Street Bridge behind, the sunlit copy of the photograph. */
+/** The opener: Square One on the Granville Island boardwalk, the Burrard
+    Street Bridge behind, the sunlit copy of the photograph, in the wider
+    framing Vern made for the hero (2 Oct 2026: "I added more room around
+    the edges so it fits better"). The operator stands at the centre, so
+    the words keep to a narrower block on the right. */
 const HERO = {
-  src: `${GEN}/gen-granville-island-vapour-blasting-01-enhanced.jpg`,
+  src: `${GEN}/gen-granville-island-vapour-blasting-01-wide.jpg`,
   alt: "A Square One operator vapour blasting a painted marking off the boardwalk at Granville Island, Vancouver, the Burrard Street Bridge behind under a clear sky",
   caption: "Granville Island, Vancouver · marking removal",
 }
@@ -168,14 +172,15 @@ export default function VaporBlastingServicePage() {
       <IndexImageHero
         src={HERO.src}
         alt={HERO.alt}
-        eyebrow="Vapour blasting · mobile cleaning and priming"
+        eyebrow="Vapour blasting"
         title={<>Clean it, prime it, <em>bring it back</em></>}
         fit="Clean it, prime it, bring it back"
         lede="Graffiti, old markings, paint and grime off almost any hard surface, with the dust held down in water. The rig comes to you."
         caption={HERO.caption}
-        imagePosition="32% 85%"
+        imagePosition="center 65%"
         align="right"
         tall
+        narrow
       >
         <div className="hero-actions mt-9 max-[700px]:mt-7">
           <Link href="/contact" className="btn-primary">

@@ -25,6 +25,7 @@ export default function IndexImageHero({
   imagePosition = "center",
   align = "left",
   tall = false,
+  narrow = false,
   children,
 }: {
   src: string
@@ -43,6 +44,9 @@ export default function IndexImageHero({
   /** A taller opener (84vh) when the photograph needs its whole height
       (2 Oct 2026, the vapour page: "zoom out a bit on that hero image"). */
   tall?: boolean
+  /** A narrower block of words on the right (36rem), when the subject
+      stands at the centre of the frame. */
+  narrow?: boolean
   children?: React.ReactNode
 }) {
   return (
@@ -67,7 +71,7 @@ export default function IndexImageHero({
         className="container-1280 relative z-[1] w-full pb-14 max-[700px]:pb-10"
         style={{ paddingTop: "calc(var(--bar-h) + 2rem)" }}
       >
-        <div className={`hero-in ${align === "right" ? "ml-auto max-w-[44rem] min-[901px]:pl-8" : ""}`}>
+        <div className={`hero-in ${align === "right" ? `ml-auto ${narrow ? "max-w-[36rem]" : "max-w-[44rem]"} min-[901px]:pl-8` : ""}`}>
           {/* No eyebrow over the photograph (27 Sept 2026): a label above a
               headline over a photo is HUB's shape whatever face it is set
               in. The page's name goes on the ledger under the words instead
