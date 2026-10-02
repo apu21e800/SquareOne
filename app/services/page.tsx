@@ -30,12 +30,16 @@ export const metadata: Metadata = {
    the applications as words, one underlined link.
 
    28 Sept 2026, second image pass: each row now shows the frame its service
-   page opens on (2023–2026 work), so the row and the page agree. */
+   page opens on (2023–2026 work), so the row and the page agree.
+
+   2 Oct 2026 (the client: the audience is people buying decorative
+   hardscapes, commercial and residential): the three taglines say what the
+   buyer gets rather than how it is specified. */
 const services = [
   {
     slug: "stamped-asphalt",
     name: "Stamped asphalt",
-    tagline: "Specified from a dimensioned template sheet, pressed into the asphalt already there by our own crews.",
+    tagline: "Brick, cobble or slate, pressed into the asphalt you already have, by our own crews.",
     desc: "Pattern named from the sheet, colour off the chart, the texturing specification in the library. Then StreetPrint® pressed into the asphalt in place, or heavy-duty TrafficPatternsXD™ for the busiest crossings. A 10–20 year StreetPrint service life, published by the manufacturer.",
     image: "/images/applications/parking-lots/mission-parking-bays-and-lot-streetprint-01.jpg",
     alt: "Grey herringbone StreetPrint parking bays in front of a new commercial building in Mission",
@@ -45,7 +49,7 @@ const services = [
   {
     slug: "decorative-coatings",
     name: "Decorative coatings",
-    tagline: "Specified off the colour chart, proved on a sample board, coated in place by our own crews.",
+    tagline: "Colour off the chart, proved on a sample board, coated in place by our own crews.",
     desc: "StreetBond® in more than fifty standard colours, or matched to your reference, on asphalt or concrete: anti-skid, UV-stable, recoated rather than rebuilt, with an 8+ year life cycle published by the manufacturer. DuraShield for plain asphalt protection.",
     image: "/images/applications/parks-paths/surrey-marine-spray-park-streetbond-01.jpg",
     alt: "A marine spray park in Surrey, a swirl of blue StreetBond water through lime-green and yellow leaf shapes",
@@ -55,7 +59,7 @@ const services = [
   {
     slug: "preformed-thermoplastic",
     name: "Preformed thermoplastic",
-    tagline: "Cut to your drawing, to the owner's marking standard, and fused into the road by our own crews.",
+    tagline: "Crosswalks, symbols and logos, cut to the drawing and fused into the road by our own crews.",
     desc: "Send the drawing or the artist's file: TrafficPatterns™, DecoMark®, DuraTherm® and PreMark® are cut to the design before they reach the site and heat-fused in place. A TrafficPatterns crossing is open to traffic within minutes of application.",
     image: "/images/S1_update_v2/photos/Featured%20image%20options/Photo-2023-09-22-1-50-34-PM.jpg",
     alt: "\u2018Every Child Matters\u2019 by Charliss Santos in orange and black TrafficPatterns, New Westminster",
@@ -85,12 +89,6 @@ const facts = [
 ]
 
 /** The three things a specifier opens first, and the record as precedent. */
-const specifierLinks = [
-  { href: "/resources", label: "Specification library", note: "Specifications, data sheets, colour cards, SDS and guides for every system" },
-  { href: "/patterns", label: "Template sheets", note: "Every StreetPrint template as a dimensioned drawing, named for the plan" },
-  { href: "/products/streetbond#colours", label: "StreetBond colour chart", note: "More than fifty standard colours, plus custom matching" },
-  { href: "/projects", label: "Projects on record", note: "The installations, told in full: the place, the systems, the photographs" },
-]
 
 export default function ServicesPage() {
   return (
@@ -155,28 +153,10 @@ export default function ServicesPage() {
         </div>
       </Section>
 
-      {/* ---- For specifiers — one line and the three things they open first ---- */}
-      <Section
-        label="For specifiers"
-        title={<>Drawing it, specifying it, <em>putting it to tender</em></>}
-        intro="The sheets, the colour chart, the specifications and the record: everything to draw it and tender it."
-      >
-        <ul className="border-t border-hairline">
-          {specifierLinks.map((item) => (
-            <li key={item.href} className="border-b border-hairline py-4">
-              <Link href={item.href} className="link">
-                {item.label}
-              </Link>
-              <span className="mt-1 block max-w-[60ch] text-[15px] leading-[1.5] text-ink-muted">{item.note}</span>
-            </li>
-          ))}
-        </ul>
-        <p className="mt-8">
-          <Link href="/specifiers" className="link">
-            Everything for specifiers
-          </Link>
-        </p>
-      </Section>
+      {/* The "For specifiers" section came off on 2 Oct 2026 (the client:
+          "for specifiers section is not required"; Vern: "just hide the
+          specifiers section for now"). The route still answers; it is
+          linked from nowhere. */}
 
       {/* ---- Fact strip — one hairline row in the serif ---- */}
       <section className="border-t border-hairline bg-surface-stone py-7">

@@ -168,8 +168,8 @@ const STATIC_PAGES: SearchEntry[] = [
   { type: "page", title: "Projects", subtitle: "Selected work across BC", href: "/projects", keywords: "projects portfolio work" },
   { type: "page", title: "Blog", subtitle: "Project stories and guides from BC ground", href: "/blog", keywords: "blog articles guides news stories journal" },
   { type: "page", title: "Patterns", subtitle: "StreetPrint template sheets, dimensioned", href: "/patterns", keywords: "patterns templates herringbone offset brick ashlar slate tiles border streetprint stamped" },
-  { type: "page", title: "Resources", subtitle: "Specifications, colour cards, SDS and guides", href: "/resources", keywords: "documents specs specifications library downloads sds colour cards" },
-  { type: "page", title: "For specifiers", subtitle: "Drawings, specifications and samples for landscape architects and engineers", href: "/specifiers", keywords: "specifiers landscape architect engineer municipal tender specification drawings template sheets colour chart sample boards precedent" },
+  { type: "page", title: "Documents", subtitle: "Specifications, colour cards, SDS and guides", href: "/resources", keywords: "documents resources specs specifications library downloads sds colour cards" },
+  // /specifiers is hidden for now (2 Oct 2026, Vern): linked from nowhere, not in search.
   { type: "page", title: "About", subtitle: "The crew behind 25 years of BC surfaces", href: "/about", keywords: "company about team gord jan history" },
   { type: "page", title: "Contact", subtitle: "Free site visit and written quote", href: "/contact", keywords: "quote request phone email contact maple ridge" },
 ]

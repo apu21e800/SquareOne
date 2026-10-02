@@ -16,24 +16,28 @@ import { Section } from "@/components/ui/Container"
  * library, the free site walk, Square One's own crews, the warranty split
  * (app/about, app/patterns, app/resources).
  */
+// 2 Oct 2026, the client's notes: the audience is the people who buy
+// decorative hardscapes for commercial and residential sites, and the
+// specifiers' card is not required. Three buyers: the municipality, the
+// commercial or strata owner, the homeowner.
 const audiences = [
   {
-    label: "Specifiers",
-    desc: "Template sheets, the colour chart and the specifications, to draw it and tender it.",
-    orders: ["Template sheets", "Colour chart", "Specifications"],
-    href: "/specifiers",
-    cta: "For specifiers",
+    label: "Municipalities",
+    desc: "Crosswalks, intersections, parks and school zones, installed by our own crews.",
+    orders: ["Crosswalks", "Streetscapes", "Parks"],
+    href: "/applications/crosswalks",
+    cta: "Municipal work",
     image: "/images/S1_update_v2/photos/Featured%20image%20options/Photo-2025-03-07-2-54-05-PM-scaled.jpg",
     alt: "Rail ties in tan TrafficPatternsXD thermoplastic set into dark stamped asphalt, the railroad-inspired crosswalk in the City of Langley",
     caption: "City of Langley · TrafficPatternsXD",
     position: "center 60%",
   },
   {
-    label: "Owners and contractors",
-    desc: "Municipalities, developers and contractors: a written quote, our own crews, the workmanship warranted.",
+    label: "Commercial and strata",
+    desc: "Entries, parking, plazas and laneways: a written quote, our own crews, the workmanship warranted.",
     orders: ["Site walk", "Own crews", "Workmanship warranty"],
-    href: "/services",
-    cta: "The services",
+    href: "/applications/parking-lots",
+    cta: "Commercial work",
     // 28 Sept 2026, second image pass: the Chilliwack turnaround, April
     // 2026, a developer's frontage in herringbone StreetPrint (was the 2023
     // Agnus Green frame).
@@ -60,7 +64,7 @@ export default function AudienceBand({ tone = "paper" }: { tone?: "paper" | "war
   // three hairline rows became three columns, a photograph, the name, one
   // line and the way in. The "orders" tags stay in the data for later use.
   return (
-    <Section label="Who we work with" title={<>Specifiers, owners, <em>homeowners</em></>} tone={tone} wide>
+    <Section label="Who we work with" title={<>Municipal, commercial, <em>residential</em></>} tone={tone} wide>
       <ul data-reveal-group className="grid grid-cols-3 gap-x-8 gap-y-12 max-[900px]:grid-cols-1" role="list">
         {audiences.map((audience) => (
           <li key={audience.label} data-reveal>

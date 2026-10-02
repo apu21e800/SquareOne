@@ -38,6 +38,12 @@ interface Props {
  * Display copy only. Routes and slugs come from lib/services.ts untouched —
  * "vapor-blasting" stays the slug, "Vapour blasting" is what the page reads.
  * Mirrors components/sections/ServicesGrid.tsx.
+ *
+ * 2 Oct 2026, the client's notes: the page speaks to the buyer (municipal,
+ * commercial, residential) rather than the specifier: "who it is for" and
+ * "who we work with" in the glance, "product documents" and the "pattern
+ * library" under the process band, "Questions about …" closed by default,
+ * and no specifiers link. The facts are the same facts.
  */
 const displayName: Record<string, string> = {
   "stamped-asphalt": "Stamped asphalt",
@@ -157,7 +163,7 @@ export default async function ServicePage({ params }: Props) {
 
   const specColumns: { label: string; items: string[]; linked?: boolean }[] = [
     { label: "Applications", items: service.applications, linked: true },
-    { label: "Who specifies it", items: service.idealClients.slice(0, 5) },
+    { label: "Who we work with", items: service.idealClients.slice(0, 5) },
     // The site walk, the crews and the warranty split are in the process
     // band on the same page; the list keeps what only this service has.
     {
@@ -221,8 +227,8 @@ export default async function ServicePage({ params }: Props) {
                 <Link href="/contact" className="btn-primary">
                   Get a quote
                 </Link>
-                <Link href="/specifiers" className="link">
-                  For specifiers
+                <Link href="/projects" className="link">
+                  See the projects
                 </Link>
               </div>
             </div>
@@ -235,7 +241,7 @@ export default async function ServicePage({ params }: Props) {
              and the bands below. ── */}
 
       {/* ── At a glance — three hairline lists ────────────────── */}
-      <Section label="At a glance" title={<>Where it goes, <em>who specifies it</em></>} wide>
+      <Section label="At a glance" title={<>Where it goes, <em>who it is for</em></>} wide>
         <div className="grid grid-cols-1 gap-10 min-[701px]:grid-cols-3 min-[701px]:gap-x-10">
           {specColumns.map((column) => (
             <div key={column.label} className="border-t border-hairline pt-6">
@@ -265,18 +271,18 @@ export default async function ServicePage({ params }: Props) {
         </div>
       </Section>
 
-      {/* ── How a job goes — the one process band, and the documents a
-             specifier opens for the tender under it ─────────────── */}
+      {/* ── How a job goes — the one process band, and the product
+             documents under it ─────────────────────────────────── */}
       <HowAJobGoes tone="warm" crews={false} cta={false} />
       <section className="bg-surface-warm pb-20 max-[700px]:pb-14">
         <div className="container-1280 -mt-12 max-[700px]:-mt-6">
           <p className="flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-hairline pt-6">
             <Link href="/resources" className="link">
-              Specification library
+              Product documents
             </Link>
             {showsPatterns && (
               <Link href="/patterns" className="link">
-                Template sheets
+                Pattern library
               </Link>
             )}
             {showsColours && (
@@ -284,9 +290,6 @@ export default async function ServicePage({ params }: Props) {
                 StreetBond colour chart
               </Link>
             )}
-            <Link href="/specifiers" className="link">
-              Everything for specifiers
-            </Link>
           </p>
         </div>
       </section>
@@ -382,10 +385,10 @@ export default async function ServicePage({ params }: Props) {
       {/* ── Questions ────────────────────────────────────────────── */}
       <Section
         label="Questions"
-        title={<>What specifiers ask <em>about {lowerName}</em></>}
+        title={<>Questions <em>about {lowerName}</em></>}
         intro={
           <>
-            For the specification itself, the documents are in{" "}
+            The product documents are in{" "}
             <Link href="/resources" className="link">
               the library
             </Link>
@@ -394,8 +397,8 @@ export default async function ServicePage({ params }: Props) {
         }
       >
         <div className="border-t border-hairline">
-          {service.faqs.map((faq, i) => (
-            <details key={faq.q} open={i === 0} className="group border-b border-hairline">
+          {service.faqs.map((faq) => (
+            <details key={faq.q} className="group border-b border-hairline">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-[20px] [&::-webkit-details-marker]:hidden">
                 <span className="text-[1.125rem] font-semibold leading-[1.4] text-ink">{faq.q}</span>
                 <span aria-hidden="true" className="flex-shrink-0 text-[22px] font-normal leading-none text-ink-muted">

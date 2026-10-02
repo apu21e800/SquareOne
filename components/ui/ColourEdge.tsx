@@ -5,16 +5,20 @@ import { colour } from "@/lib/palette"
  * home page's materials band, side by side, as the thin strip along the
  * bottom of the menu and the top of the footer. Values are the chart's own
  * (lib/palette.ts); names show on hover. Decorative: screen readers skip it.
+ *
+ * 2 Oct 2026 (Vern, on the client's notes: "the pastel grey and brown is a
+ * nice touch, lean more towards the grey tones"): the eight re-picked from
+ * the chart's greys and sands, light to dark, two warm browns among them.
  */
 const EDGE = [
-  "Brick",
-  "Terra Cotta",
-  "Sandy Beige",
-  "Driftwood",
   "Pewter",
-  "Slate",
-  "Bike Path Green",
+  "Driftwood",
+  "Gun Metal",
+  "Sandy Beige",
+  "San Diego Buff",
+  "Graphite",
   "Patriot Blue",
+  "Slate",
 ].map(colour)
 
 export default function ColourEdge({ className = "" }: { className?: string }) {

@@ -65,7 +65,7 @@ export default function ProductsPage() {
         fit="The right system for the surface"
         lede="Eight pavement systems, from pattern to protection. If it is not listed here, we do not install it."
         caption="Nanaimo · Rainbow intersection · TrafficPatternsXD"
-        imagePosition="center 62%"
+        imagePosition="center 84%"
       />
 
       {/* One photographic wall — eight systems, no half-empty category rows.

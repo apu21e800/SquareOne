@@ -32,12 +32,17 @@ interface PrimaryLink {
     is organised by what it does and who it does it for; a supplier's by
     catalogue. The application galleries are all still here, grouped under
     the four buyers (BUYERS, shared with the home page). */
+// 2 Oct 2026, the client's notes: "add Driveways to the top nav", "for
+// specifiers section is not required", "remove phone number from main nav".
+// Vern, later the same day: "just hide the specifiers section for now", so
+// /specifiers is linked from nowhere (the route still answers); the office
+// number stays in the menu strip and the drawer.
 const PRIMARY_LINKS: PrimaryLink[] = [
-  { label: "What we do", href: "/services", match: ["/services", "/products", "/driveways", "/patterns"], menu: "services" },
+  { label: "What we do", href: "/services", match: ["/services", "/products", "/patterns"], menu: "services" },
   { label: "Who we work with", href: "/applications", match: ["/applications", "/galleries"], menu: "buyers" },
+  { label: "Driveways", href: "/driveways", match: ["/driveways"] },
   { label: "Projects", href: "/projects", match: ["/projects"] },
-  { label: "For specifiers", href: "/specifiers", match: ["/specifiers", "/resources"] },
-  { label: "About", href: "/about", match: ["/about", "/blog"] },
+  { label: "About", href: "/about", match: ["/about", "/blog", "/specifiers", "/resources"] },
 ]
 
 
@@ -129,7 +134,9 @@ const SERVICE_ROWS: Row[] = [
 
 const SERVICE_MORE: Row[] = [
   { href: "/driveways", name: "Driveways", note: "For homeowners in Metro Vancouver and Greater Victoria", swatch: "driveways" },
-  { href: "/products", name: "The systems we install", note: "The eight systems behind the four services", swatch: "systems" },
+  { href: "/products", name: "The systems", note: "The eight systems behind the four services", swatch: "systems" },
+  // 2 Oct 2026: the document library gets a row of its own in the menu.
+  { href: "/resources", name: "Documents", note: "Specifications, data sheets and colour cards", swatch: "documents" },
 ]
 
 /** The preview follows the pointer after a breath, so a pass across the
@@ -153,6 +160,26 @@ function usePreview(initial: string) {
 }
 
 function Swatch({ name, size }: { name: string; size: number }) {
+  // The documents row (2 Oct 2026, Vern: "I don't know where to find the
+  // Resources / Documents page") has no photograph: its swatch is a drawn
+  // sheet with a colour-chip row, so no new image crosses the bridge.
+  if (name === "documents") {
+    return (
+      <span className="mega-swatch" style={{ width: size, height: size }} aria-hidden="true">
+        <svg viewBox="0 0 40 40" width={size} height={size} style={{ display: "block" }}>
+          <rect x="8" y="5" width="24" height="30" fill="#FFFFFF" stroke="#14161A" strokeOpacity="0.35" />
+          <rect x="12" y="10" width="10" height="1.6" fill="#14161A" fillOpacity="0.55" />
+          <rect x="12" y="14" width="16" height="1.2" fill="#14161A" fillOpacity="0.28" />
+          <rect x="12" y="17" width="16" height="1.2" fill="#14161A" fillOpacity="0.28" />
+          <rect x="12" y="20" width="12" height="1.2" fill="#14161A" fillOpacity="0.28" />
+          <rect x="12" y="26" width="4" height="4" fill="#BEBCB8" />
+          <rect x="16" y="26" width="4" height="4" fill="#AE946C" />
+          <rect x="20" y="26" width="4" height="4" fill="#6A665B" />
+          <rect x="24" y="26" width="4" height="4" fill="#444B5B" />
+        </svg>
+      </span>
+    )
+  }
   return (
     <span className="mega-swatch" style={{ width: size, height: size }} aria-hidden="true">
       <Image src={`/images/menu/swatch-${name}.webp`} alt="" width={size} height={size} unoptimized />
@@ -459,8 +486,9 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
 
         <div className="mt-9">
           {[
+            { label: "Driveways", href: "/driveways" },
             { label: "Projects", href: "/projects" },
-            { label: "For specifiers", href: "/specifiers" },
+            { label: "Documents", href: "/resources" },
             { label: "About", href: "/about" },
             { label: "Blog", href: "/blog" },
             { label: "Contact", href: "/contact" },
@@ -718,10 +746,8 @@ export default function Nav({ previews = MENU_PREVIEWS }: { previews?: MenuPrevi
             })}
           </nav>
 
-          {/* The office number, in the bar (26 Sept 2026, the brief §3.1). */}
-          <a href="tel:+16046126209" className="nav-phone ml-6 hidden min-[1180px]:inline-block">
-            604-612-6209
-          </a>
+          {/* The office number left the bar on 2 Oct 2026 (the client's
+              note); it stays in the menu strip and the drawer. */}
 
           <button
             type="button"

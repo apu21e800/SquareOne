@@ -1325,3 +1325,87 @@ button.link { padding-inline: 6px; margin-inline: -6px; }
   .hero-in > * { animation: none; }
   .reveal-armed { opacity: 1; transform: none; transition: none; }
 }
+
+/* ============================================================
+   2 Oct 2026: the client's notes, after their first look at the preview.
+
+   "Not impressed by the serif italic." "Far less orange, more a B&W
+   greyscale effect, still crisp and image forward." They are fairly happy
+   with the live site, which is sans and crisp. So, over everything above:
+
+     one face read   — Inter for everything read, no italics anywhere the
+                       design speaks (prose keeps its own italics).
+     one face shown  — Futura: Bold for the line, Book for the phrase that
+                       used to be the serif's italic.
+     no orange       — the only colour in the chrome is the colour card's
+                       edge, on the footer; action is ink, hover is black.
+                       The photographs keep their colour: they are the
+                       product. The copper in the mark is the mark's.
+     the water       — vapour blasting's blue goes to slate.
+   ============================================================ */
+:root {
+  --font-text: var(--font-inter), var(--font-poppins), system-ui, -apple-system, sans-serif;
+  --accent: #14161A;
+  --accent-deep: #14161A;
+  --accent-press: #000000;
+  --accent-tint: #EAECEE;
+  --water: #4A5058;
+  --water-deep: #2D3033;
+  --water-tint: #F4F5F6;
+  --water-hairline: #DADDE0;
+  --small: 14px;
+}
+body { font-size: 17px; line-height: 1.6; }
+@media (max-width: 700px) { body { font-size: 16px; } }
+
+/* The small voice: Inter, regular, grey. Every italic the own-company pass
+   set is listed here, plus Tailwind's `italic` utility, which the
+   components use for the same voice; `em` and `i` inside reading prose
+   keep their emphasis. */
+.eyebrow, .label, .tag, .cap, .caption, .link, .arrow-link, .btn-secondary, .foot-link,
+.mega-note, .social-note, .nav-phone, .q-hint, .lede, .standfirst, .cap-on-slate,
+.legal-meta dt, .foot-ledger dt, .spec dt, .rc-meta, .drawer-note, .mega-lines dt,
+.social-note, figcaption, .label-on-slate, .label-on-image, .eyebrow-on-image,
+.chip-name, .menu-note, .q-lines dt, .q-optional, .q-tile-sub, .legal-toc-count, .foot-area,
+.italic, .prose figcaption { font-style: normal; }
+.label, .eyebrow, .tag, .cap, .caption { font-size: var(--small); letter-spacing: 0; }
+.link, .arrow-link, .btn-secondary, .foot-link { font-family: var(--font-text); font-style: normal; font-size: 16px; }
+.standfirst { font-family: var(--font-text); font-size: 23px; line-height: 1.45; letter-spacing: -0.01em; }
+@media (max-width: 700px) { .standfirst { font-size: 19px; } }
+.lede { font-family: var(--font-text); }
+
+/* The heading pairing: the phrase is Futura Book, same size, same case
+   as the line it follows; the opener keeps its capitals on the line and
+   sentence case on the phrase. */
+h1 em, h2 em, .display-xl em, .display-statement em, .h-serif {
+  font-family: var(--font-display);
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: -0.012em;
+}
+h1 em, .display-xl em { letter-spacing: -0.008em; }
+
+/* Action in ink. */
+.btn-primary, .nav-cta { background: var(--ink); border-color: var(--ink); color: #FFFFFF; }
+.btn-primary:hover, .nav-cta:hover { background: #000000; border-color: #000000; color: #FFFFFF; }
+.nav-light .nav-cta { background: #FFFFFF; border-color: #FFFFFF; color: var(--ink); }
+.nav-light .nav-cta:hover { background: var(--surface-stone); border-color: var(--surface-stone); color: var(--ink); }
+.btn-primary.btn-water, .btn-water { background: var(--ink); }
+.btn-primary.btn-water:hover, .btn-water:hover { background: #000000; }
+.mega-row[data-active] .mega-name, .nf-row:hover .drawer-name, .frame-link:hover .cap,
+.foot-a:hover, .foot-num:hover { text-decoration-color: var(--ink); }
+.q-field:focus { box-shadow: 0 0 0 3px rgba(20, 22, 26, 0.12); }
+.text-water { color: var(--ink); }
+/* On a photograph the button is white, ink on it; ink on a dark frame would vanish. */
+.hero-in .btn-primary { background: #FFFFFF; border-color: #FFFFFF; color: var(--ink); }
+.hero-in .btn-primary:hover { background: var(--surface-stone); border-color: var(--surface-stone); color: var(--ink); }
+
+/* The menu's second row has three ways on now (driveways, the systems, the
+   documents), side by side. */
+.mega-more { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 24px; }
+.mega-more .mega-row-sm { grid-template-columns: 40px minmax(0, 1fr); column-gap: 12px; }
+.mega-more .mega-row-sm .mega-name { font-size: 16px; }
+
+/* A link inside reading prose: the tap target reaches 24px without
+   touching the line (vertical padding on an inline element does not). */
+.prose a { padding-block: 2px; }

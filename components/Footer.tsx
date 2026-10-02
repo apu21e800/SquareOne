@@ -61,8 +61,9 @@ const PAGES: { label: string; links: FooterLink[] }[] = [
     label: "The company",
     links: [
       { label: "About", href: "/about" },
-      { label: "For specifiers", href: "/specifiers" },
-      { label: "Resources", href: "/resources" },
+      // "For specifiers" came off on 2 Oct 2026 (Vern: "just hide the
+      // specifiers section for now"); the page still answers at /specifiers.
+      { label: "Documents", href: "/resources" },
       { label: "Blog", href: "/blog" },
       { label: "Contact", href: "/contact" },
     ],

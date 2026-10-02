@@ -5,7 +5,6 @@ import ProofLine from "@/components/sections/ProofLine"
 import HowAJobGoes from "@/components/sections/HowAJobGoes"
 import AudienceBand from "@/components/sections/AudienceBand"
 import ServicesGrid from "@/components/sections/ServicesGrid"
-import MaterialsBand from "@/components/sections/MaterialsBand"
 import ProjectsPreview from "@/components/sections/ProjectsPreview"
 import DrivewaysBand from "@/components/sections/DrivewaysBand"
 import VapourBand from "@/components/sections/VapourBand"
@@ -113,15 +112,18 @@ export default async function Home() {
 
       <ProjectsPreview />
 
-      <HowAJobGoes tone="paper" />
+      {/* 2 Oct 2026, the client: "a bit overkill info wise, trim some fat".
+          The crew photographs under the four steps came off, and so did the
+          patterns-and-colours band (the driveways band links to the
+          patterns, and /driveways and /patterns carry the sheets). Seven
+          bands. */}
+      <HowAJobGoes tone="paper" crews={false} />
 
       <AudienceBand tone="warm" />
 
       <DrivewaysBand />
 
       <VapourBand />
-
-      <MaterialsBand />
 
       <FollowTheWork settings={settings} tiles={tiles} />
     </main>

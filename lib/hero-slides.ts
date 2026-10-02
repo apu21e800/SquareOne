@@ -35,11 +35,15 @@ export const HERO_SLIDES: Slide[] = [
     // The Chilliwack turnaround sat here first; on a phone its subject fell
     // behind the headline, so it moved to the audience band, where a
     // portrait crop suits it, and the Victoria plaza took its place.
-    src: "/images/applications/streetscapes/victoria-town-centre-plaza-streetprint-01.jpg",
-    alt: "Red herringbone StreetPrint across a town centre plaza in Victoria, a clock tower over the trees",
+    // 2 Oct 2026 (Vern: "this hero image does not focus on the installation
+    // groundwork"): the portrait frame of the plaza, cropped to its top,
+    // showed the building and a sliver of paving. The landscape frame of
+    // the same job puts the herringbone in the frame at every width.
+    src: "/images/applications/streetscapes/victoria-town-centre-paving-streetprint-01.jpg",
+    alt: "Brick-red herringbone StreetPrint stamped asphalt paving a town centre plaza in Victoria, with benches, trees and shopfronts beyond",
     place: "Victoria",
     system: "StreetPrint",
-    position: "center 22%",
+    position: "center 62%",
   },
   {
     // The record filed this as Oak Bay; the "Welcome to Cadboro Bay" sign in
@@ -52,11 +56,15 @@ export const HERO_SLIDES: Slide[] = [
     position: "center 55%",
   },
   {
-    src: "/images/applications/branding-wayfinding/coquitlam-retail-plaza-wayfinding-streetbond-01.jpg",
-    alt: "Bands of teal, blue, orange and yellow StreetBond sweeping along a retail plaza sidewalk in Coquitlam",
-    place: "Coquitlam",
-    system: "StreetBond",
-    position: "center 62%",
+    // 2 Oct 2026: the Coquitlam retail plaza (a portrait frame with its
+    // colour in the lower third) showed a glass storefront on a laptop and
+    // on a phone, whatever the crop. The Union Street thunderbird in Burnaby
+    // fills the frame top to bottom at every width.
+    src: "/images/applications/public-art/burnaby-union-street-thunderbird-decomark-01.jpg",
+    alt: "A white thunderbird in DecoMark thermoplastic on the black asphalt of the Union Street greenway in Burnaby, seen from above",
+    place: "Burnaby",
+    system: "DecoMark",
+    position: "center 50%",
   },
   {
     src: "/images/applications/parks-paths/maple-ridge-spray-park-arches-streetbond-01.jpg",
@@ -70,7 +78,7 @@ export const HERO_SLIDES: Slide[] = [
     alt: "A map in blue and green StreetBond with a route line across it and a round commemorative marker, beside the stands in Port Coquitlam",
     place: "Port Coquitlam",
     system: "StreetBond",
-    position: "center 55%",
+    position: "center 72%",
   },
   {
     src: "/images/applications/public-art/greater-victoria-friendship-centre-walkway-streetbond-01.jpg",

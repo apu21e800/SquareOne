@@ -56,10 +56,15 @@ import { workMunicipalities } from "@/lib/work"
    The Spirit Trail frame moves below the form as a full-width band; the
    regions close the page as before. */
 
+/* 2 Oct 2026 (the client: "find a better featured image"): the Spirit Trail
+   frame with the vintage car gave way to the Railways crossing in Langley,
+   crisp lines on new asphalt with the flagger at the far corner, which reads
+   at any width and in the quieter palette. The Spirit Trail file stays in
+   public/images/contact for the record. */
 const OPENER = {
-  src: "/images/contact/west-vancouver-spirit-trail-crew-on-site-streetbond.jpg",
-  alt: "A Square One crew member in a hard hat and high-visibility vest waving a vintage car across a freshly coated StreetBond crossing on the Spirit Trail in West Vancouver",
-  caption: "West Vancouver · Spirit Trail · StreetBond",
+  src: "/images/applications/crosswalks/langley-railways-crossing-crew-on-site-trafficpatternsxd-01.jpg",
+  alt: "A railway-tie pattern TrafficPatternsXD crossing in tan and white running across a wide intersection in Langley, a flagger in high-visibility gear at the far corner",
+  caption: "Langley · Railways crossing · TrafficPatternsXD",
 }
 
 const LINES = [
@@ -178,21 +183,9 @@ export default function ContactPage() {
               </p>
             </div>
 
-            <div className="mt-8 border-t border-hairline pt-6">
-              <h2 className="label">Two shortcuts</h2>
-              <ul className="mt-3 flex flex-col gap-[12px]">
-                <li>
-                  <Link href="/driveways#patterns" className="link">
-                    Building a driveway? See the patterns first
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/specifiers" className="link">
-                    Writing a spec? Drawings, sheets and documents
-                  </Link>
-                </li>
-              </ul>
-            </div>
+            {/* The two shortcuts (patterns, the specifiers' library) came off
+                on 2 Oct 2026 with the client's notes: Driveways is in the
+                menu bar now and the specifiers page is no longer promoted. */}
 
             <div className="mt-8 flex items-center gap-4 border-t border-hairline pt-6">
               <Image
@@ -202,7 +195,7 @@ export default function ContactPage() {
                 height={51}
                 className="h-8 w-auto flex-shrink-0"
               />
-              <p className="text-[14px] italic leading-[1.5] text-ink-muted">Decorative pavement across BC since 2000</p>
+              <p className="text-[14px] leading-[1.5] text-ink-muted">Decorative pavement across BC since 2000</p>
             </div>
           </aside>
         </div>
@@ -216,7 +209,7 @@ export default function ContactPage() {
             alt={OPENER.alt}
             caption={OPENER.caption}
             aspect="aspect-[21/9] max-[700px]:aspect-[4/3]"
-            position="8% 62%"
+            position="center 36%"
             sizes="(max-width: 1280px) 100vw, 1280px"
           />
         </div>

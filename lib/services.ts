@@ -36,14 +36,22 @@ export interface Service {
  * app/about, app/contact or app/driveways. idealClients is the specifier
  * list — homeowners appear on stamped asphalt only, last. The FAQs restate
  * the page — they feed the FAQPage schema.
+ *
+ * 2 Oct 2026 (the client: the audience is people buying decorative
+ * hardscapes, commercial and residential; "for specifiers is not required"):
+ * the taglines, the intro lines, the "who" lists and the benefit lines say
+ * what the buyer gets, with the municipality and the developer first and
+ * the engineers and landscape architects still on the list. The facts, the
+ * figures and their attribution are unchanged; the full descriptions and the
+ * questions keep the specification detail for whoever needs it.
  */
 export const services: Service[] = [
   {
     slug: "stamped-asphalt",
     name: "Stamped Asphalt",
-    tagline: "Specified from a dimensioned template sheet, pressed into the asphalt already there by our own crews.",
+    tagline: "Brick, cobble or slate, pressed into the asphalt you already have, by our own crews.",
     shortDescription:
-      "StreetPrint® and TrafficPatternsXD™ stamped asphalt, specified from template sheets and installed by our own crews on the Lower Mainland and Vancouver Island.",
+      "StreetPrint® and TrafficPatternsXD™ stamped asphalt, chosen from the pattern library and installed by our own crews on the Lower Mainland and Vancouver Island.",
     fullDescription:
       "Square One takes a stamped asphalt surface from the drawing to the road. It starts with a free site walk: we look at the asphalt that is there (its condition, its drainage and the traffic it carries) and bring the sample boards, so pattern and colour are chosen against the real site. Every template is a dimensioned sheet (herringbone, offset brick, ashlar slate, tiles and borders, in the pattern library), so a landscape architect or engineer can name the sheet on the drawing, and the manufacturer's asphalt pavement texturing specification, the colour card and the custom template guidelines are in the specification library for the tender package. The written quote sets out the system, the template and the colour for the surface you have; if the asphalt is not sound enough to take a stamp, we say so.\n\nSquare One installs two kinds, with its own crews and to the published specification, across the Lower Mainland and Vancouver Island. StreetPrint is the regular kind: the asphalt is reheated, a steel template is pressed into it and StreetBond® colour is rolled into the imprint, no demolition and no new base, so closures are short. TrafficPatternsXD is the heavy-duty kind: a 150-mil aggregate-reinforced preformed thermoplastic, heated and stamped into the top layer of the asphalt for the crossings that take the most traffic, exposing new anti-skid elements as it wears. The manufacturer publishes a 10–20 year service life for StreetPrint and rates its textured surface slip-resistant and safe for snowplows and de-icing salt. The manufacturer warrants the material; Square One warrants the workmanship.\n\nCrosswalks, roundabout aprons, medians, traffic calming, commercial entries and parking lot walkways: the school crosswalk at Grandview Heights in Surrey, the walkways at Ralph's Farm Market in Langley and the rainbow intersection in Nanaimo are on the record.",
     productsIncluded: [
@@ -60,18 +68,17 @@ export const services: Service[] = [
       "Parking Lots and Walkways",
     ],
     idealClients: [
-      "Landscape architects",
-      "Civil and traffic engineers",
-      "Municipal project specifiers",
-      "Developers and their project managers",
-      "General contractors",
+      "Municipalities",
+      "Developers and project managers",
       "Strata and property managers",
+      "General contractors",
+      "Landscape architects and engineers",
       "Homeowners",
     ],
     benefits: [
       "Free site walk with the sample boards, then a written quote",
-      "Templates drawn as dimensioned sheets, in the pattern library",
-      "Texturing specification, colour card and template guidelines in the library",
+      "Every pattern drawn to scale in the pattern library",
+      "Colour off the published chart, proved on a sample board",
       "Installed by Square One's own crews to the published specification",
       "No demolition, no new base, short closures",
       "10–20 year StreetPrint service life, published by the manufacturer",
@@ -120,7 +127,7 @@ export const services: Service[] = [
   {
     slug: "preformed-thermoplastic",
     name: "Preformed Thermoplastic",
-    tagline: "Cut to your drawing, to the owner's marking standard, and fused into the road by our own crews.",
+    tagline: "Crosswalks, symbols and logos, cut to the drawing and fused into the road by our own crews.",
     shortDescription:
       "TrafficPatterns™, DecoMark®, DuraTherm® and PreMark® markings, cut to the design and heat-fused by our own crews on the Lower Mainland and Vancouver Island.",
     fullDescription:
@@ -141,17 +148,16 @@ export const services: Service[] = [
       "Transit Stop Graphics",
     ],
     idealClients: [
-      "Civil and traffic engineers",
-      "Municipal project specifiers",
-      "Landscape architects",
-      "Developers and their project managers",
+      "Municipalities",
+      "Developers and project managers",
       "General contractors",
       "Strata and property managers",
+      "Landscape architects and engineers",
     ],
     benefits: [
       "Cut to the drawing before it reaches the site, precise placement, no overspray",
-      "Colours and symbols to the owner's marking standard; TAC-standard shapes for DuraTherm and PreMark",
-      "Design manuals, design guidelines, colour palettes and specifications in the library",
+      "Colours and symbols to the road owner's standard; TAC shapes for arrows and legends",
+      "Design manuals and colour palettes for every system, in the library",
       "Installed by Square One's own crews to the published specification",
       "Open to traffic within minutes of application (TrafficPatterns)",
       "Retroreflective markings for night visibility (DuraTherm, PreMark)",
@@ -198,7 +204,7 @@ export const services: Service[] = [
   {
     slug: "decorative-coatings",
     name: "Decorative Coatings",
-    tagline: "Specified off the colour chart, proved on a sample board, coated in place by our own crews.",
+    tagline: "Colour off the chart, proved on a sample board, coated in place by our own crews.",
     shortDescription:
       "StreetBond® coatings in fifty-plus colours and DuraShield asphalt protection, installed by our own crews across the Lower Mainland and Vancouver Island.",
     fullDescription:
@@ -219,17 +225,16 @@ export const services: Service[] = [
       "Accessible Parking Areas",
     ],
     idealClients: [
-      "Landscape architects",
-      "Municipal project specifiers",
-      "Civil and traffic engineers",
-      "Developers and their project managers",
-      "General contractors",
+      "Municipalities",
+      "Developers and project managers",
       "Strata and property managers",
+      "General contractors",
+      "Landscape architects and engineers",
     ],
     benefits: [
-      "Colour specified off the published chart: fifty-plus standard colours, custom matching",
+      "Fifty-plus standard colours off the published chart, or matched to yours",
       "Sample boards at the site walk, then a written quote",
-      "Coated-asphalt and coated-concrete specifications, data sheets and SDS in the library",
+      "Specifications, data sheets and SDS for every system, in the library",
       "Installed by Square One's own crews to the published specification",
       "Anti-skid aggregate; UV-stable, water-based acrylic",
       "8+ year life cycle, published by the manufacturer, recoated, not rebuilt",

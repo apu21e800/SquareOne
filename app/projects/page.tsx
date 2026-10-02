@@ -85,7 +85,7 @@ export default function ProjectsPage() {
       <Section
         label="The galleries"
         title={<>The work, <em>by application</em></>}
-        link={{ href: "/galleries", label: "Every photograph, by application and system" }}
+        link={{ href: "/galleries", label: "All the galleries" }}
         tone="warm"
         wide
       >

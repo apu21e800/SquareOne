@@ -80,6 +80,12 @@ const GALLERY_LEADS: MenuPreviews = {
     alt: "The StreetPrint Standard Herringbone template sheet: a dimensioned drawing of the brick pattern with its title block",
     caption: "StreetPrint · Standard Herringbone · the template sheet",
   },
+  // The documents (2 Oct 2026): the library's own opener.
+  "/resources": {
+    src: "/images/S1_update_v2/photos/Featured%20image%20options/Photo-2025-03-07-2-54-05-PM-scaled.jpg",
+    alt: "Rail ties in tan TrafficPatternsXD thermoplastic set into dark stamped asphalt, the railroad-inspired crosswalk in the City of Langley",
+    caption: "City of Langley · TrafficPatternsXD",
+  },
 }
 
 const SERVICE_OPENERS: MenuPreviews = Object.fromEntries(

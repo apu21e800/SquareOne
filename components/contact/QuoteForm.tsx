@@ -24,24 +24,18 @@ import { useEffect, useRef, useState } from "react"
 
    28 Sept 2026 (Vern: "Request a quote page is pretty sad, improve it"):
    the same payload, field for field, in a new hand. The work comes first
-   and the person second, the way a site walk goes; the project type is a
-   set of tiles (radio buttons carrying the exact values the select used
-   to send); labels are the display face, hints the serif; the card became
-   two numbered sections on hairlines. Nothing about what reaches the
-   office changed. */
+   and the person second, the way a site walk goes; labels are the display
+   face; the card became two numbered sections on hairlines. Nothing about
+   what reaches the office changed.
 
-/** The values are what the office has always received; only the words on
-    the tiles are new. Do not change a value without changing the inbox rules. */
-const projectTypes: { value: string; label: string; sub: string }[] = [
-  { value: "Residential Driveway", label: "Driveway", sub: "At home" },
-  { value: "Patio or Walkway", label: "Patio or walkway", sub: "At home or on site" },
-  { value: "Parking Area / Commercial", label: "Parking area", sub: "Commercial" },
-  { value: "Municipal: Crosswalk or Bike Lane", label: "Crosswalk or bike lane", sub: "Municipal" },
-  { value: "Municipal: Road or Plaza", label: "Road or plaza", sub: "Municipal" },
-  { value: "Vapour Blasting / Surface Prep", label: "Vapour blasting", sub: "Cleaning and surface prep" },
-  { value: "Multiple Services", label: "More than one", sub: "Several of these" },
-  { value: "Other / Not Sure", label: "Something else", sub: "Or not sure yet" },
-]
+   2 Oct 2026 (the client: "Remove 'What kind of job is it? Pick one' from
+   the Get a quote page"): the eight project-type tiles are gone from the
+   form. The `projectType` field still travels in the payload, empty unless
+   a driveway link filled it, so the route, the inbox rules and the office's
+   email are untouched. The values the tiles sent, for the record:
+   "Residential Driveway", "Patio or Walkway", "Parking Area / Commercial",
+   "Municipal: Crosswalk or Bike Lane", "Municipal: Road or Plaza",
+   "Vapour Blasting / Surface Prep", "Multiple Services", "Other / Not Sure". */
 
 const field = "q-field"
 
@@ -225,34 +219,7 @@ export default function QuoteForm() {
           The work
         </legend>
 
-        <div className="mt-6" role="radiogroup" aria-labelledby="q-type-label">
-          <span id="q-type-label" className={label}>
-            What kind of job is it? Pick one<Optional />
-          </span>
-          <div className="q-tiles">
-            {projectTypes.map((t) => {
-              const id = `q-type-${t.value.replace(/[^a-z]+/gi, "-").toLowerCase()}`
-              return (
-                <label key={t.value} htmlFor={id} className="q-tile">
-                  <input
-                    id={id}
-                    type="radio"
-                    name="projectType"
-                    value={t.value}
-                    checked={form.projectType === t.value}
-                    onChange={() => setForm({ ...form, projectType: t.value })}
-                    className="q-radio"
-                  />
-                  <span className="q-tile-box" aria-hidden="true" />
-                  <span className="q-tile-name">{t.label}</span>
-                  <span className="q-tile-sub">{t.sub}</span>
-                </label>
-              )
-            })}
-          </div>
-        </div>
-
-        <div className="mt-7 grid grid-cols-1 gap-y-6">
+        <div className="mt-6 grid grid-cols-1 gap-y-6">
           <div>
             <label htmlFor="q-location" className={label}>
               Where is it?<Optional />
