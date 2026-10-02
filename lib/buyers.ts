@@ -12,6 +12,8 @@ import type { WorkApp } from "@/lib/work"
  */
 export interface Buyer {
   label: string
+  /** The menu's name for the group, when the full label runs long (2 Oct 2026). */
+  short?: string
   note: string
   slugs: (WorkApp | "vapour")[]
 }
@@ -24,11 +26,13 @@ export const BUYERS: Buyer[] = [
   },
   {
     label: "Commercial, strata & property managers",
+    short: "Commercial & strata",
     note: "Retail centres, strata corporations and the people who look after them.",
     slugs: ["parking-lots", "vapour"],
   },
   {
     label: "Parks, schools & recreation",
+    short: "Parks & schools",
     note: "Parks boards, school districts and recreation departments.",
     slugs: ["parks-paths", "schools-sports-courts"],
   },

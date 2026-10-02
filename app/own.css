@@ -1551,3 +1551,27 @@ h1 em, .display-xl em { letter-spacing: -0.008em; }
 
 /* The menu preview's caption holds to one line. */
 .mega-preview .cap { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* An opener with its words on the right darkens the right, not the whole
+   foot: the subject on the left (the operator, the marking, the spray)
+   stays in daylight. */
+.opener-right .scrim-rise {
+  background:
+    linear-gradient(to right, rgba(24, 21, 18, 0) 38%, rgba(24, 21, 18, 0.5) 100%),
+    linear-gradient(to top, rgba(24, 21, 18, 0.42) 0%, rgba(24, 21, 18, 0.18) 32%, rgba(24, 21, 18, 0) 60%);
+}
+
+/* The who-we-work-with ledger: the galleries as a two-column list per
+   buyer, not a run of words with dots, and the buyer's name in a narrower
+   column (2 Oct 2026). */
+.mega-ledger > div { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); padding: 16px 0 17px; }
+.mega-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 24px; row-gap: 6px; line-height: 1.5; }
+.mega-list li { display: block; }
+.mega-list li + li::before { content: none; }
+.mega-list a { display: inline-block; padding-block: 2px; }
+@media (max-width: 700px) {
+  /* On a phone the words span the whole width, so the standard rise comes back. */
+  .opener-right .scrim-rise {
+    background: linear-gradient(to top, rgba(24, 21, 18, 0.8) 0%, rgba(24, 21, 18, 0.52) 30%, rgba(24, 21, 18, 0.2) 55%, rgba(24, 21, 18, 0) 78%);
+  }
+}

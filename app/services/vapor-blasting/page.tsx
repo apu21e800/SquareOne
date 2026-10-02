@@ -173,8 +173,9 @@ export default function VaporBlastingServicePage() {
         fit="Clean it, prime it, bring it back"
         lede="Graffiti, old markings, paint and grime off almost any hard surface, with the dust held down in water. The rig comes to you."
         caption={HERO.caption}
-        imagePosition="center 38%"
+        imagePosition="32% 85%"
         align="right"
+        tall
       >
         <div className="hero-actions mt-9 max-[700px]:mt-7">
           <Link href="/contact" className="btn-primary">

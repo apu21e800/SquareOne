@@ -47,16 +47,19 @@ const PRIMARY_LINKS: PrimaryLink[] = [
 
 
 /** Where the work goes — the ten application galleries (mirrors lib/work.ts WORK_APPS). */
+/* The menu's names are the short ones (2 Oct 2026, Vern: "a lot of text
+   jammed into the who-we-work-with mega menu"); the pages keep their full
+   titles. */
 const APPLICATIONS: { label: string; href: string; slug: string }[] = [
   { label: "Crosswalks", href: "/applications/crosswalks", slug: "crosswalks" },
   { label: "Streetscapes", href: "/applications/streetscapes", slug: "streetscapes" },
-  { label: "Roundabouts & traffic calming", href: "/applications/roundabouts", slug: "roundabouts" },
+  { label: "Roundabouts", href: "/applications/roundabouts", slug: "roundabouts" },
   { label: "Parking lots", href: "/applications/parking-lots", slug: "parking-lots" },
   { label: "Parks & paths", href: "/applications/parks-paths", slug: "parks-paths" },
-  { label: "Schools & sports courts", href: "/applications/schools-sports-courts", slug: "schools-sports-courts" },
+  { label: "Schools & courts", href: "/applications/schools-sports-courts", slug: "schools-sports-courts" },
   { label: "Bike lanes", href: "/applications/bike-lanes", slug: "bike-lanes" },
   { label: "Public art", href: "/applications/public-art", slug: "public-art" },
-  { label: "Branding & wayfinding", href: "/applications/branding-wayfinding", slug: "branding-wayfinding" },
+  { label: "Wayfinding", href: "/applications/branding-wayfinding", slug: "branding-wayfinding" },
   { label: "Driveways", href: "/driveways", slug: "driveways" },
   { label: "Vapour blasting", href: "/services/vapor-blasting", slug: "vapour" },
 ]
@@ -65,7 +68,7 @@ const byslug = (slug: string) => APPLICATIONS.find((a) => a.slug === slug)
 
 /** The four buyers, each with its galleries (the same grouping as the home page's ApplicationsSection). */
 const BUYER_GROUPS = BUYERS.map((b) => ({
-  label: b.label,
+  label: b.short ?? b.label,
   note: b.note,
   items: b.slugs.map(byslug).filter((a): a is NonNullable<typeof a> => Boolean(a)),
 }))
@@ -316,7 +319,7 @@ function BuyersMenu({ previews, onNavigate }: MenuProps) {
               <div>
                 <span className="mega-name">{g.label}</span>
               </div>
-              <ul className="mega-run">
+              <ul className="mega-run mega-list">
                 {g.items.map((a) => (
                   <li key={a.href}>
                     <Link

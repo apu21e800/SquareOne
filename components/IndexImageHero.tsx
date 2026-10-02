@@ -24,6 +24,7 @@ export default function IndexImageHero({
   caption,
   imagePosition = "center",
   align = "left",
+  tall = false,
   children,
 }: {
   src: string
@@ -39,12 +40,15 @@ export default function IndexImageHero({
       left of centre, so the words never cover it. The caption swaps to the
       left corner to stay clear of the block. */
   align?: "left" | "right"
+  /** A taller opener (84vh) when the photograph needs its whole height
+      (2 Oct 2026, the vapour page: "zoom out a bit on that hero image"). */
+  tall?: boolean
   children?: React.ReactNode
 }) {
   return (
     <section
       data-nav-on-image
-      className="opener relative flex h-[64vh] min-h-[580px] items-end overflow-hidden bg-surface-slate"
+      className={`opener ${align === "right" ? "opener-right" : ""} relative flex ${tall ? "h-[84vh] min-h-[640px]" : "h-[64vh] min-h-[580px]"} items-end overflow-hidden bg-surface-slate`}
     >
       <Image
         src={src}
