@@ -89,7 +89,10 @@ export default function ServicesGrid() {
       link={{ href: "/services", label: "All services" }}
       wide
     >
-      <ul data-reveal-group className="grid grid-cols-2 gap-x-10 gap-y-14 max-[700px]:grid-cols-1 max-[700px]:gap-y-11">
+      {/* 2 Oct 2026 (Vern: "image sections still look too chunky"): four
+          across, as the live site set them, each frame a quarter of the
+          width instead of half. */}
+      <ul data-reveal-group className="grid grid-cols-4 gap-x-7 gap-y-12 max-[900px]:grid-cols-2 max-[900px]:gap-x-6 max-[560px]:grid-cols-1 max-[560px]:gap-y-10">
         {services.map((service) => {
           const img = cardImage[service.slug]
           const card = CARD[service.slug]
@@ -101,17 +104,17 @@ export default function ServicesGrid() {
                 <Frame
                   src={img.src}
                   alt={img.alt}
-                  aspect="aspect-[16/10]"
-                  sizes="(max-width: 700px) 100vw, (max-width: 1280px) 50vw, 620px"
+                  aspect="aspect-[4/3]"
+                  sizes="(max-width: 560px) 100vw, (max-width: 900px) 50vw, (max-width: 1280px) 25vw, 300px"
                   href={href}
                 />
               )}
-              <h3 className="mt-5 text-[30px] leading-[1.1] max-[700px]:text-[24px]">
+              <h3 className="mt-4 text-[22px] leading-[1.15]">
                 <Link href={href} className="hover:underline hover:decoration-1 hover:underline-offset-[6px]">
                   {trade}
                 </Link>
               </h3>
-              <p className="mt-2 max-w-[46ch] text-ink-body [text-wrap:pretty]">{card?.line ?? service.tagline}</p>
+              <p className="mt-2 max-w-[34ch] text-[15.5px] leading-[1.55] text-ink-body [text-wrap:pretty]">{card?.line ?? service.tagline}</p>
             </li>
           )
         })}

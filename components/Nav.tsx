@@ -122,6 +122,9 @@ interface Row {
   name: string
   note: string
   swatch?: string
+  /** A photograph for the swatch, cut by the image route, in place of the pre-cut webp. */
+  swatchSrc?: string
+  swatchPosition?: string
 }
 
 const SERVICE_ROWS: Row[] = [
@@ -129,14 +132,21 @@ const SERVICE_ROWS: Row[] = [
   { href: "/services/stamped-asphalt", name: "Stamped asphalt", note: "Brick, cobble or slate pressed into the asphalt already there", swatch: "stamped-asphalt" },
   { href: "/services/decorative-coatings", name: "Decorative coatings", note: "Colour that holds under traffic, on asphalt or concrete", swatch: "decorative-coatings" },
   { href: "/services/preformed-thermoplastic", name: "Preformed thermoplastic", note: "Crosswalks, symbols and street art, cut to the drawing", swatch: "preformed-thermoplastic" },
-  { href: "/services/vapor-blasting", name: "Vapour blasting", note: "Graffiti, markings and grime lifted wet; surfaces primed", swatch: "vapor-blasting" },
+  {
+    href: "/services/vapor-blasting",
+    name: "Vapour blasting",
+    note: "Graffiti, markings and grime lifted wet; surfaces primed",
+    swatch: "vapor-blasting",
+    swatchSrc: "/images/services/vapor-blasting/generated/gen-granville-island-vapour-blasting-01-enhanced.jpg",
+    swatchPosition: "30% 58%",
+  },
 ]
 
 const SERVICE_MORE: Row[] = [
-  { href: "/driveways", name: "Driveways", note: "For homeowners in Metro Vancouver and Greater Victoria", swatch: "driveways" },
-  { href: "/products", name: "The systems", note: "The eight systems behind the four services", swatch: "systems" },
-  // 2 Oct 2026: the document library gets a row of its own in the menu.
-  { href: "/resources", name: "Documents", note: "Specifications, data sheets and colour cards", swatch: "documents" },
+  { href: "/driveways", name: "Driveways", note: "For homeowners in Metro Vancouver and Greater Victoria" },
+  { href: "/products", name: "The systems we install", note: "The eight systems behind the four services" },
+  // 2 Oct 2026: the document library gets a way in from the menu.
+  { href: "/resources", name: "Documents", note: "Specifications, data sheets and colour cards" },
 ]
 
 /** The preview follows the pointer after a breath, so a pass across the
@@ -159,24 +169,15 @@ function usePreview(initial: string) {
   return [state, show] as const
 }
 
-function Swatch({ name, size }: { name: string; size: number }) {
-  // The documents row (2 Oct 2026, Vern: "I don't know where to find the
-  // Resources / Documents page") has no photograph: its swatch is a drawn
-  // sheet with a colour-chip row, so no new image crosses the bridge.
-  if (name === "documents") {
+function Swatch({ name, size, src, position }: { name: string; size: number; src?: string; position?: string }) {
+  // A row can point its swatch at a photograph instead of the pre-cut webp
+  // (2 Oct 2026, vapour blasting: the sunlit Granville Island frame, "same
+  // profile but sunny day, needs to go in the mega menu too"); the image
+  // route cuts the small square, so no new file crosses the bridge.
+  if (src) {
     return (
-      <span className="mega-swatch" style={{ width: size, height: size }} aria-hidden="true">
-        <svg viewBox="0 0 40 40" width={size} height={size} style={{ display: "block" }}>
-          <rect x="8" y="5" width="24" height="30" fill="#FFFFFF" stroke="#14161A" strokeOpacity="0.35" />
-          <rect x="12" y="10" width="10" height="1.6" fill="#14161A" fillOpacity="0.55" />
-          <rect x="12" y="14" width="16" height="1.2" fill="#14161A" fillOpacity="0.28" />
-          <rect x="12" y="17" width="16" height="1.2" fill="#14161A" fillOpacity="0.28" />
-          <rect x="12" y="20" width="12" height="1.2" fill="#14161A" fillOpacity="0.28" />
-          <rect x="12" y="26" width="4" height="4" fill="#BEBCB8" />
-          <rect x="16" y="26" width="4" height="4" fill="#AE946C" />
-          <rect x="20" y="26" width="4" height="4" fill="#6A665B" />
-          <rect x="24" y="26" width="4" height="4" fill="#444B5B" />
-        </svg>
+      <span className="mega-swatch relative" style={{ width: size, height: size }} aria-hidden="true">
+        <Image src={src} alt="" fill sizes={`${size * 2}px`} className="object-cover" style={{ objectPosition: position ?? "center" }} />
       </span>
     )
   }
@@ -259,7 +260,7 @@ function ServicesMenu({ previews, onNavigate }: MenuProps) {
                 <span className="mega-num" aria-hidden="true">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                {row.swatch && <Swatch name={row.swatch} size={56} />}
+                {row.swatch && <Swatch name={row.swatch} size={56} src={row.swatchSrc} position={row.swatchPosition} />}
                 <span className="min-w-0">
                   <span className="mega-name">{row.name}</span>
                 </span>
@@ -267,25 +268,25 @@ function ServicesMenu({ previews, onNavigate }: MenuProps) {
             </li>
           ))}
         </ol>
-        <ul className="mega-more">
+        {/* 2 Oct 2026 (Vern: "Driveways, The Systems, Documents in the mega
+            menu don't land right, skip the icons"): one hairline row of
+            words under the four services, no swatches. */}
+        <p className="mega-also">
+          <span className="mega-also-label">Also</span>
           {SERVICE_MORE.map((row) => (
-            <li key={row.href}>
-              <Link
-                href={row.href}
-                onClick={onNavigate}
-                onMouseEnter={() => show(row.href)}
-                onFocus={() => show(row.href)}
-                className="mega-row mega-row-sm"
-                data-active={pv.active === row.href || undefined}
-              >
-                {row.swatch && <Swatch name={row.swatch} size={40} />}
-                <span className="min-w-0">
-                  <span className="mega-name">{row.name}</span>
-                </span>
-              </Link>
-            </li>
+            <Link
+              key={row.href}
+              href={row.href}
+              onClick={onNavigate}
+              onMouseEnter={() => show(row.href)}
+              onFocus={() => show(row.href)}
+              className="mega-also-a"
+              data-active={pv.active === row.href || undefined}
+            >
+              {row.name}
+            </Link>
           ))}
-        </ul>
+        </p>
       </div>
       <div className="col-span-5">
         <MegaPreview keys={keys} previews={previews} active={pv.active} prev={pv.prev} />
@@ -452,7 +453,7 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
           {[...SERVICE_ROWS, ...SERVICE_MORE].map((row) => (
             <li key={row.href}>
               <Link href={row.href} onClick={onClose} className="drawer-row">
-                {row.swatch && <Swatch name={row.swatch} size={44} />}
+                {row.swatch && <Swatch name={row.swatch} size={44} src={row.swatchSrc} position={row.swatchPosition} />}
                 <span className="min-w-0">
                   <span className="drawer-name">{row.name}</span>
                 </span>

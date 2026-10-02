@@ -16,6 +16,10 @@ import { OFFERED_SHEETS, FEATURED_SHEETS, sheetSrc, SHEET_W, SHEET_H } from "@/l
  * the label in the margin voice, the orange squares off the sheet list, the
  * "All 8 pattern sheets" button and the arrow link now two underlined
  * words. No manufacturer named: the site sells Square One's service.
+ *
+ * Off the home page on 2 Oct 2026 (the client: "trim some fat"), back the
+ * same day (Vern: "now the template and colour palette sections are
+ * missing"), on the lighter grey, in the buyer's words.
  */
 
 const STRIP = ["Brick", "Terra Cotta", "Sandy Beige", "Driftwood", "Pewter", "Slate", "Bike Path Green", "Patriot Blue"]
@@ -25,7 +29,7 @@ const STRIP = ["Brick", "Terra Cotta", "Sandy Beige", "Driftwood", "Pewter", "Sl
 export default function MaterialsBand() {
   const [a, b, c] = FEATURED_SHEETS
   return (
-    <section className="sec relative overflow-hidden bg-surface-stone py-[6.5rem] max-[900px]:py-14">
+    <section className="sec relative overflow-hidden bg-surface-warm py-[6rem] max-[900px]:py-14">
       <div className="container-1280 relative z-[1] grid grid-cols-12 items-center gap-x-14 gap-y-14 max-[900px]:grid-cols-1">
         {/* ── The drawings, fanned ──────── */}
         <div className="col-span-6 max-[900px]:col-span-1">
@@ -55,10 +59,10 @@ export default function MaterialsBand() {
         {/* ── The argument, and the colours ──────── */}
         <div className="col-span-6 max-[900px]:col-span-1">
           <span className="label">Patterns and colours</span>
-          <h2 className="mt-4 max-w-[16ch] [text-wrap:balance]">Specified from a drawing, <em>matched from a card</em></h2>
+          <h2 className="mt-4 max-w-[16ch] [text-wrap:balance]">Drawn to scale, <em>matched from a card</em></h2>
           <p className="mt-6 max-w-[48ch] text-ink-body [text-wrap:pretty]">
-            Every pattern is a dimensioned sheet and every colour a named chip, so what gets
-            drawn is what gets installed.
+            Every pattern is a dimensioned sheet and every colour a named chip, so what you
+            choose is what gets installed.
           </p>
 
           <div className="mt-10">

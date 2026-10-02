@@ -71,7 +71,7 @@ export default function AudienceBand({ tone = "paper" }: { tone?: "paper" | "war
             <Frame
               src={audience.image}
               alt={audience.alt}
-              aspect="aspect-[4/5] max-[900px]:aspect-[4/3]"
+              aspect="aspect-[3/2]"
               sizes="(max-width: 900px) 100vw, 400px"
               position={audience.position}
               href={audience.href}

@@ -324,8 +324,14 @@ export const services: Service[] = [
       { q: "What can it remove?", a: "Road markings, graffiti, gum, mould and soot, paint and stain, fire and smoke damage, and marine coatings, from concrete, steel and wood." },
       { q: "Do you come to the site?", a: "Yes. The rig is mobile across the Lower Mainland and Vancouver Island, and it is how Square One prepares surfaces for its own coating and thermoplastic work." },
     ],
-    imageUrl: "/images/services/vapor-blasting/granville-island-vapour-blasting-01.jpg",
-    imageAlt: "A Square One operator vapour blasting a painted marking off the boardwalk at Granville Island, Vancouver",
+    // 2 Oct 2026 (Vern: "use the vapor blasting pic of the sunny day with the
+    // Burrard Street Bridge in the background… needs to go in the mega menu
+    // too"): the sunlit copy of the Granville Island photograph everywhere
+    // the service is pictured (the menu preview reads this field).
+    imageUrl: "/images/services/vapor-blasting/generated/gen-granville-island-vapour-blasting-01-enhanced.jpg",
+    imageAlt: "A Square One operator vapour blasting a painted marking off the boardwalk at Granville Island, Vancouver, the Burrard Street Bridge behind under a clear sky",
+    imageCaption: "Granville Island, Vancouver · marking removal",
+    imagePosition: "center 45%",
   },
 ]
 

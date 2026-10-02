@@ -84,11 +84,11 @@ export default function BrandMark({
           lineHeight: 1,
           whiteSpace: "nowrap",
           textTransform: "none",
-          // Light on dark sheds apparent weight under grayscale antialiasing;
-          // a hairline stroke in the same colour puts it back (21 Sept 2026).
-          ...(tone === "light"
-            ? { WebkitTextStroke: "0.35px currentColor", paintOrder: "stroke fill" as const }
-            : null),
+          // The hairline stroke that once thickened the light wordmark is
+          // gone (2 Oct 2026, Vern: "the white logo text looks blurry"); the
+          // bold weight carries it, and a soft shadow lifts it off a bright
+          // photograph without softening the letterforms.
+          ...(tone === "light" ? { textShadow: "0 1px 2px rgba(20, 22, 26, 0.35)" } : null),
         }}
       >
         Square<span style={{ letterSpacing: "-0.219em" }}> </span>One

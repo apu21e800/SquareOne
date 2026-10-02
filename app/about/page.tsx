@@ -86,7 +86,7 @@ const trades: { name: string; line: string; href: string; src: string; alt: stri
     name: "Vapour blasting",
     line: "Cleaning, priming, graffiti and marking removal.",
     href: "/services/vapor-blasting",
-    src: "/images/services/vapor-blasting/granville-island-vapour-blasting-01.jpg",
+    src: "/images/services/vapor-blasting/generated/gen-granville-island-vapour-blasting-01-enhanced.jpg",
     alt: "Square One crew vapour blasting at Granville Island",
     caption: "Granville Island, Vancouver · vapour blasting",
   },

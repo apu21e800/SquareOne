@@ -5,6 +5,7 @@ import ProofLine from "@/components/sections/ProofLine"
 import HowAJobGoes from "@/components/sections/HowAJobGoes"
 import AudienceBand from "@/components/sections/AudienceBand"
 import ServicesGrid from "@/components/sections/ServicesGrid"
+import MaterialsBand from "@/components/sections/MaterialsBand"
 import ProjectsPreview from "@/components/sections/ProjectsPreview"
 import DrivewaysBand from "@/components/sections/DrivewaysBand"
 import VapourBand from "@/components/sections/VapourBand"
@@ -113,10 +114,10 @@ export default async function Home() {
       <ProjectsPreview />
 
       {/* 2 Oct 2026, the client: "a bit overkill info wise, trim some fat".
-          The crew photographs under the four steps came off, and so did the
-          patterns-and-colours band (the driveways band links to the
-          patterns, and /driveways and /patterns carry the sheets). Seven
-          bands. */}
+          The crew photographs under the four steps came off. The
+          patterns-and-colours band came off too and came back the same day
+          (Vern: "the template and colour palette sections are missing"),
+          lower on the page. Eight bands. */}
       <HowAJobGoes tone="paper" crews={false} />
 
       {/* 2 Oct 2026 (Vern: "a few large grey background sections to break
@@ -125,6 +126,8 @@ export default async function Home() {
       <AudienceBand tone="stone" />
 
       <DrivewaysBand />
+
+      <MaterialsBand />
 
       <VapourBand />
 
