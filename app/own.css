@@ -428,11 +428,10 @@ html[data-type="futura"] .link,
 html[data-type="futura"] .arrow-link,
 html[data-type="futura"] .btn-secondary { font-style: normal; }
 
-/* ---- The letterhead on a phone: one column, every block full width
-   (mobile.css splits the old four-column footer in two). ---- */
+/* ---- The footer on a phone (2 Oct 2026, four columns again): the two
+   link lists share a row, the mark and the lines span it (mobile.css). ---- */
 @media (max-width: 700px) {
-  footer .grid { grid-template-columns: 1fr; row-gap: 36px; }
-  footer .grid > * { grid-column: 1 / -1; }
+  footer .grid { row-gap: 36px; }
 }
 
 /* ---- The menus: text lists under the bar, not photo-tile panels ---- */
@@ -1409,3 +1408,122 @@ h1 em, .display-xl em { letter-spacing: -0.008em; }
 /* A link inside reading prose: the tap target reaches 24px without
    touching the line (vertical padding on an inline element does not). */
 .prose a { padding-block: 2px; }
+
+/* ============================================================
+   2 Oct 2026, later: Vern on the new preview. "These headings on the
+   homepage just feel like they are floating there." "Hero sections still
+   feel a bit unfinished." "A few large grey background sections to break
+   things up." "Bring back what might have been lost from the live site;
+   it was just more simple and clean. Don't revert, keep improving."
+   "Footer is still feeling messy."
+   ============================================================ */
+
+/* The section header, anchored: the label sits directly over the heading
+   at the container's left edge, the one link on the heading's baseline at
+   the right, the content under them. The margin column (label left, heading
+   nine columns in, link at the far right) spread three small things across
+   1280px and read as floating. The hairline above each section stays. */
+.sec-grid { display: block; }
+.sec-label { padding-top: 0; }
+.sec-label:not(:empty) { margin-bottom: 14px; }
+.sec-body { min-width: 0; }
+.sec-head { gap: 12px 40px; }
+.sec-head h2, .sec-head h1 { max-width: 22ch; }
+.sec-content { margin-top: 44px; }
+.sec-grid > .col-span-12 { grid-column: auto; }
+@media (max-width: 700px) {
+  .sec-label:not(:empty) { margin-bottom: 10px; }
+  .sec-content { margin-top: 28px; }
+}
+
+/* The grey bands: the warm tone deepens so a grey section reads as one.
+   Stone is the darker of the two, for the bands that break the page. */
+:root { --surface-warm: #F1F2F4; --surface-stone: #E6E8EB; }
+
+/* The opener's base: a hairline ledger across the container with the
+   caption on the left and the reel's counter and controls on the right,
+   so nothing over the photograph floats. The reel's clock is the ledger's
+   own rule, in seven segments. */
+.hero-ledger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 40px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.28);
+  color: rgba(255, 255, 255, 0.9);
+}
+.hero-ledger .cap-on-image { font-family: var(--font-text); font-size: 14px; color: rgba(255, 255, 255, 0.86); min-width: 0; }
+.hero-ledger .reel-counter { font-family: var(--font-display); font-size: 13px; font-weight: 700; letter-spacing: 0.04em; font-variant-numeric: tabular-nums; color: rgba(255, 255, 255, 0.9); }
+.hero-ledger .reel-controls { display: flex; align-items: center; gap: 10px; }
+.hero-clock { position: absolute; left: 0; right: 0; bottom: 0; display: flex; gap: 2px; height: 3px; z-index: 2; }
+.hero-clock .reel-seg { flex: 1; height: 3px; background: rgba(255, 255, 255, 0.22); }
+.hero-clock .reel-seg-fill { background: #FFFFFF; }
+@media (max-width: 700px) {
+  .hero-ledger { margin-top: 28px; padding-top: 14px; gap: 14px; }
+  .hero-ledger .cap-on-image { font-size: 12.5px; }
+  .hero-ledger .reel-controls { display: none; }
+}
+.hero-in .btn-on-image { font-family: var(--font-display); font-size: 15px; font-weight: 700; letter-spacing: 0; text-transform: none; line-height: 1.2; padding: 15px 26px; }
+.hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 14px; }
+@media (max-width: 700px) {
+  .hero-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .hero-actions .btn-primary, .hero-actions .btn-on-image { display: flex; width: 100%; justify-content: center; padding-inline: 10px; }
+}
+
+/* The page openers (IndexImageHero) carry the same ledger: the page's
+   label on the left, the photograph's caption on the right. */
+.opener-ledger {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 36px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.28);
+  font-family: var(--font-text);
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.86);
+}
+.opener-ledger > span { min-width: 0; }
+@media (max-width: 700px) {
+  .opener-ledger { margin-top: 26px; padding-top: 12px; font-size: 12.5px; flex-wrap: wrap; gap: 6px 16px; }
+}
+
+/* The footer on charcoal: the brand's own footer colour, four columns,
+   the colour card's edge along its top. */
+.site-foot { background: var(--surface-slate); color: #C9CDD2; }
+.site-foot .colour-edge { height: 6px; }
+.foot-line { font-family: var(--font-text); font-size: 15.5px; line-height: 1.6; color: #C9CDD2; text-wrap: pretty; }
+.foot-head { display: block; font-family: var(--font-text); font-size: 13px; font-weight: 500; letter-spacing: 0.02em; color: #9BA1A9; }
+.foot-a { color: #E6E8EB; font-size: 15.5px; text-decoration-color: transparent; }
+.foot-a:hover { color: #FFFFFF; text-decoration-color: #FFFFFF; }
+.foot-net { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; margin: -8px; color: #C9CDD2; transition: color 0.15s ease; }
+.foot-net:hover { color: #FFFFFF; }
+.foot-lines { margin: 0; }
+.foot-lines > div { display: grid; grid-template-columns: 142px minmax(0, 1fr); column-gap: 16px; align-items: baseline; padding: 9px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.12); }
+.foot-lines > div:first-child { border-top: 1px solid rgba(255, 255, 255, 0.12); }
+.foot-lines dt { font-family: var(--font-text); font-size: 14px; color: #9BA1A9; }
+.foot-lines > div.foot-mail { grid-template-columns: minmax(0, 1fr); row-gap: 2px; }
+.foot-lines dd { margin: 0; font-size: 15.5px; color: #E6E8EB; }
+.foot-num { color: #FFFFFF; text-decoration-color: transparent; }
+.foot-num:hover { color: #FFFFFF; text-decoration-color: #FFFFFF; }
+.foot-address { font-family: var(--font-text); font-size: 14.5px; line-height: 1.55; color: #9BA1A9; }
+.foot-area { font-family: var(--font-text); font-size: 14.5px; line-height: 1.7; color: #9BA1A9; max-width: none; padding-top: 18px; border-top: 1px solid rgba(255, 255, 255, 0.12); }
+.foot-area .foot-head { display: inline; color: #C9CDD2; margin-right: 6px; }
+.foot-legal { border-top: 1px solid rgba(255, 255, 255, 0.12); color: #9BA1A9; }
+.foot-legal .foot-a { font-size: 14px; color: #C9CDD2; }
+.site-foot :focus-visible { outline-color: #FFFFFF; }
+
+/* The page openers stand a little taller (64vh) and their rise is a shade
+   lighter, so a sunlit frame reads as one; the words keep their shadow. */
+.opener .scrim-rise {
+  background: linear-gradient(
+    to top,
+    rgba(24, 21, 18, 0.8) 0%,
+    rgba(24, 21, 18, 0.52) 30%,
+    rgba(24, 21, 18, 0.2) 55%,
+    rgba(24, 21, 18, 0) 78%
+  );
+}

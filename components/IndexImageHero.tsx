@@ -28,7 +28,7 @@ export default function IndexImageHero({
 }: {
   src: string
   alt: string
-  /** Kept for every caller; not drawn since 26 Sept 2026 (see below). */
+  /** The page's name, on the ledger under the words (2 Oct 2026). */
   eyebrow?: string
   title: React.ReactNode
   fit?: string
@@ -44,7 +44,7 @@ export default function IndexImageHero({
   return (
     <section
       data-nav-on-image
-      className="relative flex h-[58vh] min-h-[560px] items-end overflow-hidden bg-surface-slate"
+      className="opener relative flex h-[64vh] min-h-[580px] items-end overflow-hidden bg-surface-slate"
     >
       <Image
         src={src}
@@ -64,13 +64,11 @@ export default function IndexImageHero({
         style={{ paddingTop: "calc(var(--bar-h) + 2rem)" }}
       >
         <div className={`hero-in ${align === "right" ? "ml-auto max-w-[44rem] min-[901px]:pl-8" : ""}`}>
-          {/* No eyebrow over the photograph (27 Sept 2026): the openers are
-              simplified the way the home hero is — the title, one line, the
-              caption. A label above a headline over a photo is HUB's shape
-              whatever face it is set in. `eyebrow` stays a prop so no caller
-              changes, and it still names the page for a screen reader. */}
-          {eyebrow && <span className="sr-only">{eyebrow}</span>}
-
+          {/* No eyebrow over the photograph (27 Sept 2026): a label above a
+              headline over a photo is HUB's shape whatever face it is set
+              in. The page's name goes on the ledger under the words instead
+              (2 Oct 2026, Vern: "hero sections still feel a bit unfinished"),
+              with the photograph's caption beside it, on one hairline. */}
           <div className="fit-host max-w-[48rem]">
             <h1
               className="display-fit text-white [text-wrap:balance]"
@@ -87,14 +85,15 @@ export default function IndexImageHero({
           )}
 
           {children}
+
+          {(eyebrow || caption) && (
+            <div className="opener-ledger">
+              <span className="truncate">{eyebrow}</span>
+              {caption && <span className="truncate text-right">{caption}</span>}
+            </div>
+          )}
         </div>
       </div>
-
-      {caption && (
-        <div className={`caption z-[1] max-[700px]:hidden ${align === "right" ? "" : "caption-right"}`}>
-          {caption}
-        </div>
-      )}
     </section>
   )
 }

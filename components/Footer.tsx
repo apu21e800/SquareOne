@@ -12,10 +12,13 @@ import { getSiteSettings } from "@/lib/cms"
    hubss.com closes dark, near-black, on four columns: the logo, a tagline
    and a row of icons, then Products, Applications and Offices with an
    orange rule, the copyright and two legal links underneath. This one
-   closes LIGHT, on paper: the colour card's edge along the top, the mark
-   and the company's own sentence set large, then two ledgers (the office
-   and its lines; the site and the networks), a label in the margin of
-   every row, the way a spec sheet or a letterhead sets them. Contact canon
+   closed LIGHT, on paper, from 28 Sept to 2 Oct 2026: the colour card's
+   edge, the company's sentence set large, two ledgers with a label in the
+   margin of every row. Vern, 2 Oct, on the preview: "footer is still
+   feeling messy"; the live site "was just more simple and clean". So it
+   closes on charcoal now, the brand's own footer colour, in four columns:
+   the mark, one line and the networks; what we do; the company; the lines
+   and the office. The edge along the top stays Square One's. Contact canon
    only: 604-612-6209 office, 250-391-0270 Vancouver Island,
    1-877-391-0270 toll-free, office@squareonepaving.com, 19-11720 Stewart
    Crescent, Maple Ridge. */
@@ -36,6 +39,9 @@ interface FooterLink {
   href: string
 }
 
+/* Two columns of pages, the way the live site set them (2 Oct 2026).
+   "For specifiers" came off the same day (Vern: "just hide the specifiers
+   section for now"); the page still answers at /specifiers. */
 const PAGES: { label: string; links: FooterLink[] }[] = [
   {
     label: "What we do",
@@ -45,26 +51,19 @@ const PAGES: { label: string; links: FooterLink[] }[] = [
       { label: "Preformed thermoplastic", href: "/services/preformed-thermoplastic" },
       { label: "Vapour blasting", href: "/services/vapor-blasting" },
       { label: "Driveways", href: "/driveways" },
+      { label: "StreetPrint patterns", href: "/patterns" },
     ],
   },
   {
-    label: "The work",
+    label: "Company",
     links: [
       { label: "Projects", href: "/projects" },
       { label: "Galleries", href: "/galleries" },
       { label: "Applications", href: "/applications" },
-      { label: "StreetPrint patterns", href: "/patterns" },
       { label: "Systems we install", href: "/products" },
-    ],
-  },
-  {
-    label: "The company",
-    links: [
-      { label: "About", href: "/about" },
-      // "For specifiers" came off on 2 Oct 2026 (Vern: "just hide the
-      // specifiers section for now"); the page still answers at /specifiers.
       { label: "Documents", href: "/resources" },
       { label: "Blog", href: "/blog" },
+      { label: "About", href: "/about" },
       { label: "Contact", href: "/contact" },
     ],
   },
@@ -136,32 +135,61 @@ export default async function Footer() {
         </section>
       </FooterClose>
 
-      {/* ── The letterhead, on paper ──────── */}
+      {/* ── The footer: charcoal, four columns, the colour card's edge along
+             its top. 2 Oct 2026 (Vern: "footer is still feeling messy";
+             "bring back what might have been lost from the live site, it was
+             just more simple and clean"): the letterhead's statement and its
+             two ledgers go; what stays is the live site's shape, the mark,
+             one line and the networks, then what we do, the company and the
+             lines, in the new voice. Charcoal is the brand's own footer
+             colour (CLAUDE.md), not hubss.com's near-black, and the edge is
+             Square One's alone. ──────── */}
       <footer className="site-foot">
         <ColourEdge />
         <div className="container-1280 pt-16 pb-9 max-[700px]:pt-12">
-          {/* The mark, and the company's sentence set large */}
-          <div className="grid grid-cols-12 items-start gap-x-10 gap-y-7 max-[900px]:grid-cols-1">
-            <div className="col-span-3 max-[900px]:col-span-1">
+          <div className="grid grid-cols-12 gap-x-10 gap-y-12 max-[900px]:grid-cols-2 max-[560px]:gap-x-6">
+            {/* The mark, one line, the networks */}
+            <div className="col-span-3 max-[900px]:col-span-2">
               <Link href="/" className="inline-flex items-center" aria-label="Square One Paving, home">
-                <BrandMark tone="dark" size="footer" />
+                <BrandMark tone="light" size="footer" />
               </Link>
+              <p className="foot-line mt-6 max-w-[30ch]">
+                Decorative pavement across British Columbia since 2000. One office in Maple Ridge,
+                crews on both sides of the Strait.
+              </p>
+              <ul className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3" aria-label="Square One elsewhere">
+                {networks.map((n) => (
+                  <li key={n.label}>
+                    <a href={n.href} target="_blank" rel="noopener noreferrer" className="foot-net" aria-label={n.label}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d={n.path} />
+                      </svg>
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <p className="foot-statement col-span-9 max-[900px]:col-span-1">{site.positioning}</p>
-          </div>
 
-          {/* Two ledgers: the office and its lines; the site and the networks */}
-          <div className="mt-14 grid grid-cols-12 gap-x-10 gap-y-10 max-[900px]:mt-10 max-[900px]:grid-cols-1">
-            <address className="col-span-6 not-italic max-[900px]:col-span-1">
-              <dl className="foot-ledger">
-                <div>
-                  <dt>Square One Paving</dt>
-                  <dd>
-                    {site.addressLine1}
-                    <br />
-                    {site.addressLine2}
-                  </dd>
-                </div>
+            {/* The pages */}
+            {PAGES.map((group, i) => (
+              <nav key={group.label} aria-label={group.label} className={`${i === 0 ? "col-span-3" : "col-span-2"} max-[900px]:col-span-1`}>
+                <span className="foot-head">{group.label}</span>
+                <ul className="mt-4 flex flex-col gap-[10px]">
+                  {group.links.map((link) => (
+                    <li key={link.href}>
+                      <Link href={link.href} className="foot-a">
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            ))}
+
+            {/* The lines */}
+            <address className="col-span-4 not-italic max-[900px]:col-span-2">
+              <span className="foot-head">Talk to us</span>
+              <dl className="foot-lines mt-4">
                 {phones.map((p) => (
                   <div key={p.href}>
                     <dt>{p.label}</dt>
@@ -172,60 +200,28 @@ export default async function Footer() {
                     </dd>
                   </div>
                 ))}
-                <div>
+                <div className="foot-mail">
                   <dt>Email</dt>
                   <dd>
-                    <a href={`mailto:${site.email}`} className="foot-a [overflow-wrap:anywhere]">
+                    <a href={`mailto:${site.email}`} className="foot-a">
                       {site.email}
                     </a>
                   </dd>
                 </div>
               </dl>
+              <p className="foot-address mt-5">
+                {site.addressLine1}
+                <br />
+                {site.addressLine2}
+              </p>
             </address>
-
-            <nav aria-label="Footer" className="col-span-6 max-[900px]:col-span-1">
-              <dl className="foot-ledger">
-                {PAGES.map((group) => (
-                  <div key={group.label}>
-                    <dt>{group.label}</dt>
-                    <dd>
-                      <ul className="foot-run">
-                        {group.links.map((link) => (
-                          <li key={link.href}>
-                            <Link href={link.href} className="foot-a">
-                              {link.label}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </dd>
-                  </div>
-                ))}
-                <div>
-                  <dt>Elsewhere</dt>
-                  <dd>
-                    <ul className="foot-run">
-                      {networks.map((s) => (
-                        <li key={s.label}>
-                          <a href={s.href} target="_blank" rel="noopener noreferrer" className="foot-a foot-net-a">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                              <path d={s.path} />
-                            </svg>
-                            {s.label}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  </dd>
-                </div>
-              </dl>
-            </nav>
           </div>
 
           {/* Service area — one quiet line. Every place named here is on the
               record in lib/work.ts or lib/projects.ts. Courtenay was not, so
               it came off on 19 Sept 2026. */}
-          <p className="foot-area mt-12 max-[700px]:mt-9">
+          <p className="foot-area mt-14 max-[700px]:mt-10">
+            <span className="foot-head">Serving</span>{" "}
             Metro Vancouver, the Fraser Valley and Vancouver Island, with work on record on the Sunshine
             Coast, in the Sea to Sky and in the Okanagan.
           </p>

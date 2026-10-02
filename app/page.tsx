@@ -119,7 +119,10 @@ export default async function Home() {
           bands. */}
       <HowAJobGoes tone="paper" crews={false} />
 
-      <AudienceBand tone="warm" />
+      {/* 2 Oct 2026 (Vern: "a few large grey background sections to break
+          things up"): the audience band and the vapour band sit on stone,
+          the darker grey; the projects and the close on the lighter one. */}
+      <AudienceBand tone="stone" />
 
       <DrivewaysBand />
 

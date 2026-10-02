@@ -4,6 +4,7 @@ import { SITE_URL } from "@/lib/site"
 import JsonLd, { breadcrumbSchema, faqSchema } from "@/components/JsonLd"
 import BeforeAfter from "@/components/BeforeAfter"
 import Frame from "@/components/ui/Frame"
+import IndexImageHero from "@/components/IndexImageHero"
 import { Section } from "@/components/ui/Container"
 import HowAJobGoes, { VAPOUR_STEPS } from "@/components/sections/HowAJobGoes"
 import { getServiceBySlug } from "@/lib/services"
@@ -34,14 +35,16 @@ import { clampDescription } from "@/lib/seo"
 //     Square One's other three vapour blasting photographs: "On the record".
 //
 // The AI illustrations in generated/ (the same operator on six Vancouver
-// and Victoria backdrops, and the AI-enhanced copy of the hero) are off the
-// page and off the site; the files stay on disk. Two generated frames stay,
-// each captioned as what it is: the before/after wipe, a demonstration with
-// no person in it, and (2 Oct 2026, Vern: "just keep the one with the bridge
-// in the background and the guy cleaning the railing") the steel railing,
-// set wide under the facts. New illustrations wait for a proper shoot or an
-// approved
-// generation pass (Figma Weave works from Cowork, per run, on approval).
+// and Victoria backdrops) are off the page and off the site; the files stay
+// on disk. Two generated frames stay. The before/after wipe, a demonstration
+// with no person in it, captioned as one. And the opener itself (2 Oct 2026,
+// Vern: "use the vapor blasting pic of the sunny day with the Burrard Street
+// Bridge in the background, same with the vapor blasting page"): the sunlit
+// copy of the Granville Island photograph, the real job and the real place,
+// its sky enhanced. The steel railing illustration came off the same day
+// ("that image is not usable"), and the "From storefront to drydock" section
+// it led with it; the surfaces list under the process band carries what the
+// section listed. New illustrations wait for a proper shoot.
 //
 // 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.7): labels in the margin
 // column, hairlines, underlined links. The water blue stays: it is this
@@ -75,17 +78,10 @@ export const metadata: Metadata = {
 const DIR = "/images/services/vapor-blasting"
 const GEN = `${DIR}/generated`
 
-/** The one illustration of the rig at work that stays (2 Oct 2026): a steel railing, rust and old coating coming off. Captioned as an illustration, no place named (CLAUDE.md, generated frames). */
-const RAILING = {
-  src: `${GEN}/gen-steel-railing-rust.jpg`,
-  alt: "Illustration: an operator vapour blasting rust and old coating off a steel railing beside the water",
-  caption: "Illustration \u00b7 rust and old coating off a steel railing \u00b7 the nozzle, the water, the clean line behind it",
-}
-
-/** The original photograph: Square One on the Granville Island boardwalk, the Burrard Street Bridge behind. */
+/** The opener: Square One on the Granville Island boardwalk, the Burrard Street Bridge behind, the sunlit copy of the photograph. */
 const HERO = {
-  src: `${DIR}/granville-island-vapour-blasting-01.jpg`,
-  alt: "A Square One operator vapour blasting a painted marking off the boardwalk at Granville Island, Vancouver, with the Burrard Street Bridge behind",
+  src: `${GEN}/gen-granville-island-vapour-blasting-01-enhanced.jpg`,
+  alt: "A Square One operator vapour blasting a painted marking off the boardwalk at Granville Island, Vancouver, the Burrard Street Bridge behind under a clear sky",
   caption: "Granville Island, Vancouver · marking removal",
 }
 
@@ -97,45 +93,6 @@ const facts: Fact[] = [
   { number: "92%", label: "less dust than dry blasting: the water holds it down" },
   { number: "Low heat", label: "little to no heat at the surface, so nothing warps or scorches" },
   { number: "2", label: "regions: Lower Mainland and Vancouver Island, one mobile rig" },
-]
-
-// ── What it handles: Square One's published applications, grouped by the
-//    business hierarchy, commercial and municipal first ──────────────────────
-
-const tiers = [
-  {
-    audience: "Commercial & municipal",
-    title: "Storefronts, plazas, roads",
-    body: "Graffiti, gum, mould and old markings off brick, concrete, stone and asphalt.",
-    bullets: [
-      "Graffiti, gum, mould and soot removal",
-      "Road marking removal",
-      "Steel and concrete surface preparation",
-    ],
-    tags: ["Property managers", "Municipalities", "Strata"],
-  },
-  {
-    audience: "Residential",
-    title: "Driveways, patios, railings",
-    body: "Paint, stain, moss and grime off patios, driveways, stone and railings.",
-    bullets: [
-      "Paint and stain removal",
-      "Limestone, marble and stucco stain removal",
-      "Priming before a coating",
-    ],
-    tags: ["Homeowners", "Estates"],
-  },
-  {
-    audience: "Marine & industrial",
-    title: "Hulls, decks, equipment",
-    body: "Deck and on-board coatings off, steel back to a clean profile.",
-    bullets: [
-      "Polyurethane deck coating removal",
-      "Marine on-board coating removal",
-      "Equipment and frames",
-    ],
-    tags: ["Marine", "Manufacturing"],
-  },
 ]
 
 // ── On the record: Square One's other three vapour blasting photographs ─────
@@ -205,40 +162,29 @@ export default function VaporBlastingServicePage() {
         ]}
       />
 
-      {/* ── Opener: the words on paper, the original photograph beside them,
-             shown whole (the bridge, the operator and the marking), its
-             caption under it ── */}
-      <section className="bg-surface pt-[calc(var(--bar-h)+64px)] pb-16 max-[900px]:pt-[calc(var(--bar-h)+36px)] max-[900px]:pb-12">
-        <div className="container-1280 grid grid-cols-12 items-center gap-x-12 gap-y-10 max-[900px]:grid-cols-1">
-          <div className="col-span-5 max-[900px]:col-span-1">
-            <span className="label">Vapour blasting &middot; mobile cleaning and priming</span>
-            <h1 className="mt-5 max-w-[18ch]">Clean it, prime it, <em>bring it back</em></h1>
-            <p className="lede mt-6 max-w-[48ch] [text-wrap:pretty]">
-              Graffiti, old markings, paint and grime off almost any hard surface, with the dust held
-              down in water. The rig comes to you.
-            </p>
-            <div className="mt-9 flex flex-wrap items-center gap-x-8 gap-y-4">
-              <Link href="/contact" className="btn-primary">
-                Get a quote
-              </Link>
-              <a href="tel:+16046126209" className="link">
-                604-612-6209
-              </a>
-            </div>
-          </div>
-          <div className="col-span-7 max-[900px]:col-span-1">
-            <Frame
-              src={HERO.src}
-              alt={HERO.alt}
-              caption={HERO.caption}
-              aspect="aspect-[5/3]"
-              sizes="(max-width: 900px) 100vw, 760px"
-              position="center 50%"
-              priority
-            />
-          </div>
+      {/* ── Opener: the photograph full-bleed, the words over it on the
+             right (the operator stands left of centre), the page's name and
+             the caption on the ledger under them ── */}
+      <IndexImageHero
+        src={HERO.src}
+        alt={HERO.alt}
+        eyebrow="Vapour blasting · mobile cleaning and priming"
+        title={<>Clean it, prime it, <em>bring it back</em></>}
+        fit="Clean it, prime it, bring it back"
+        lede="Graffiti, old markings, paint and grime off almost any hard surface, with the dust held down in water. The rig comes to you."
+        caption={HERO.caption}
+        imagePosition="center 38%"
+        align="right"
+      >
+        <div className="hero-actions mt-9 max-[700px]:mt-7">
+          <Link href="/contact" className="btn-primary">
+            Get a quote
+          </Link>
+          <a href="tel:+16046126209" className="btn-on-image">
+            604-612-6209
+          </a>
         </div>
-      </section>
+      </IndexImageHero>
 
       {/* ── Facts: one quiet row on the water tint, divided by rules ── */}
       <section className="band-water border-y py-8 max-[700px]:py-6" aria-label="Vapour blasting, in brief">
@@ -258,47 +204,6 @@ export default function VaporBlastingServicePage() {
           ))}
         </ul>
       </section>
-
-      {/* ── What it handles: the railing frame wide, then three columns,
-             commercial first ──────── */}
-      <Section
-        label="What it handles"
-        title={<>From storefront <em>to drydock</em></>}
-        wide
-      >
-        <Frame
-          src={RAILING.src}
-          alt={RAILING.alt}
-          caption={RAILING.caption}
-          aspect="aspect-[21/9] max-[700px]:aspect-[4/3]"
-          sizes="(max-width: 1280px) 100vw, 1280px"
-          position="center 40%"
-          className="mb-14 max-[700px]:mb-10"
-        />
-        <div data-reveal-group className="grid grid-cols-3 gap-x-10 gap-y-12 max-[1000px]:grid-cols-1">
-          {tiers.map((tier) => (
-            <article key={tier.title} data-reveal className="border-t border-hairline pt-6">
-              <span className="label">{tier.audience}</span>
-              <h3 className="mt-1">{tier.title}</h3>
-              <p className="mt-3 max-w-[44ch] text-[16px] leading-[1.6] text-ink-body [text-wrap:pretty]">{tier.body}</p>
-              <ul className="mt-5 border-t border-hairline">
-                {tier.bullets.map((bullet) => (
-                  <li key={bullet} className="border-b border-hairline py-[9px] text-[15px] leading-[1.5] text-ink-body">
-                    {bullet}
-                  </li>
-                ))}
-              </ul>
-              <p className="mt-4">
-                {tier.tags.map((tag) => (
-                  <span key={tag} className="tag">
-                    {tag}
-                  </span>
-                ))}
-              </p>
-            </article>
-          ))}
-        </div>
-      </Section>
 
       {/* ── Before / after: the one demonstration, captioned as one ── */}
       <Section
@@ -385,8 +290,8 @@ export default function VaporBlastingServicePage() {
       {/* ── Questions ────────────────────────────────────────────── */}
       <Section label="Questions" title={<>What people ask <em>about vapour blasting</em></>}>
         <div className="border-t border-hairline">
-          {faqs.map((faq, i) => (
-            <details key={faq.q} open={i === 0} className="group border-b border-hairline">
+          {faqs.map((faq) => (
+            <details key={faq.q} className="group border-b border-hairline">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-[20px] [&::-webkit-details-marker]:hidden">
                 <span className="text-[1.125rem] font-semibold leading-[1.4] text-ink">{faq.q}</span>
                 <span aria-hidden="true" className="flex-shrink-0 text-[22px] font-normal leading-none text-ink-muted">

@@ -64,22 +64,6 @@ const pageTitle: Record<string, string> = {
 }
 
 
-const NUMBER_WORDS = [
-  "zero",
-  "one",
-  "two",
-  "three",
-  "four",
-  "five",
-  "six",
-  "seven",
-  "eight",
-  "nine",
-] as const
-
-function numberWord(n: number): string {
-  return NUMBER_WORDS[n] ?? String(n)
-}
 
 /** "Vancouver, BC" → "Vancouver" — the caption carries the city, not the province. */
 function cityName(city: string): string {
@@ -203,7 +187,7 @@ export default async function ServicePage({ params }: Props) {
       <IndexImageHero
         src={heroSrc}
         alt={heroAlt}
-        eyebrow={`Service · One of ${numberWord(services.length)}, Lower Mainland and Vancouver Island`}
+        eyebrow="Services · Lower Mainland and Vancouver Island"
         title={name}
         lede={service.tagline}
         caption={heroSrc === service.imageUrl ? service.imageCaption : undefined}

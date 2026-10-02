@@ -138,12 +138,18 @@ export default function Hero({ slides, eyebrow, title }: HeroProps) {
 
       {/* ── Headline block, bottom-left ────────
           26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §9.2): the reel is exactly
-          as it was; over it, the headline alone in sentence case, one line
-          in the serif, one button. No eyebrow, no orange full stop, no second
-          button — the second action is the reel itself. The `eyebrow` slot
-          (a CMS field) now renders as the line under the headline. */}
+          as it was; over it, the headline in sentence case, one line in the
+          display face. The `eyebrow` slot (a CMS field) renders as the line
+          under the headline.
+
+          2 Oct 2026 (Vern: "hero sections still feel a bit unfinished";
+          "bring back what might have been lost from the live site"): the
+          second action is back beside the first, as the live site had it,
+          and the caption, the counter and the controls sit on one hairline
+          ledger under the words instead of floating in the corners. The
+          reel's clock is the hero's bottom edge, in seven segments. */}
       <div className="absolute inset-x-0 bottom-0 z-[2]">
-        <div className="hero-in container-1280 pb-[72px] max-[1100px]:pb-[84px] max-[700px]:pb-[80px]">
+        <div className="hero-in container-1280 pb-[40px] max-[700px]:pb-[30px]">
           <h1 className="display-xl max-w-none text-white">
             {title ?? (
               <>
@@ -161,77 +167,59 @@ export default function Hero({ slides, eyebrow, title }: HeroProps) {
             )}
           </p>
 
-          <div className="mt-9 max-[700px]:mt-7">
+          <div className="hero-actions mt-9 max-[700px]:mt-7">
             <Link href="/contact" className="btn-primary">
               Get a quote
             </Link>
+            <Link href="/projects" className="btn-on-image">
+              See the work
+            </Link>
+          </div>
+
+          <div className="hero-ledger">
+            <span className="cap-on-image truncate">{caption}</span>
+            <div className="flex shrink-0 items-center gap-4">
+              <span className="reel-counter">
+                {pad(index + 1)} / {pad(count)}
+              </span>
+              <div className="reel-controls">
+                <button type="button" onClick={() => go(-1)} aria-label="Previous frame" className="reel-btn">
+                  <svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14">
+                    <path d="M9 2L4 7l5 5" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
+                <button type="button" onClick={() => go(1)} aria-label="Next frame" className="reel-btn">
+                  <svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14">
+                    <path d="M5 2l5 5-5 5" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPlaying((p) => !p)}
+                  aria-label={playing ? "Pause the reel" : "Play the reel"}
+                  aria-pressed={!playing}
+                  className="reel-btn"
+                >
+                  {playing ? (
+                    <svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12">
+                      <path d="M3.5 2v8M8.5 2v8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                    </svg>
+                  ) : (
+                    <svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12">
+                      <path d="M3.5 2l6 4-6 4z" fill="currentColor" />
+                    </svg>
+                  )}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* ── Reel controls, bottom-right (wide screens) ──────── */}
-      <div className="absolute right-10 bottom-[100px] z-[2] hidden flex-col items-end gap-4 min-[1101px]:flex">
-        <div
-          className="text-right text-[12px] font-semibold tracking-[0.05em] text-white"
-          style={{ fontFamily: "var(--font-display)" }}
-        >
-          {caption}
-        </div>
-        <div className="flex items-center gap-3">
-          <span
-            className="mr-2 text-[12px] font-semibold tracking-[0.12em] text-white/80 tabular-nums"
-            style={{ fontFamily: "var(--font-display)" }}
-          >
-            {pad(index + 1)} / {pad(count)}
-          </span>
-          <button type="button" onClick={() => go(-1)} aria-label="Previous frame" className="reel-btn">
-            <svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14">
-              <path d="M9 2L4 7l5 5" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
-          <button type="button" onClick={() => go(1)} aria-label="Next frame" className="reel-btn">
-            <svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14">
-              <path d="M5 2l5 5-5 5" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
-          <button
-            type="button"
-            onClick={() => setPlaying((p) => !p)}
-            aria-label={playing ? "Pause the reel" : "Play the reel"}
-            aria-pressed={!playing}
-            className="reel-btn"
-          >
-            {playing ? (
-              <svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12">
-                <path d="M3.5 2v8M8.5 2v8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-              </svg>
-            ) : (
-              <svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12">
-                <path d="M3.5 2l6 4-6 4z" fill="currentColor" />
-              </svg>
-            )}
-          </button>
-        </div>
-      </div>
-
-      {/* ── Caption + counter — phones and tablets; wide screens carry the cluster ──────── */}
-      <div
-        className="absolute inset-x-6 bottom-[34px] z-[2] flex items-baseline justify-between gap-4 text-[11px] font-semibold tracking-[0.08em] text-white/80 min-[1101px]:hidden"
-        style={{ fontFamily: "var(--font-display)" }}
-      >
-        <span className="min-w-0 truncate">{caption}</span>
-        <span className="shrink-0 tabular-nums">
-          {pad(index + 1)} / {pad(count)}
-        </span>
-      </div>
-
-      {/* ── Progress hairlines — the reel's clock ──────── */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-x-6 bottom-5 z-[2] flex gap-[6px] min-[1101px]:inset-x-auto min-[1101px]:right-10 min-[1101px]:bottom-[72px] min-[1101px]:w-[252px]"
-      >
+      {/* ── The reel's clock: the hero's bottom edge, one segment a frame ──────── */}
+      <div aria-hidden="true" className="hero-clock">
         {SLIDES.map((s, i) => (
-          <div key={s.src} className="reel-seg flex-1">
+          <div key={s.src} className="reel-seg">
             {i < index && <div className="reel-seg-fill is-done" />}
             {i === index &&
               (reduced ? (
@@ -246,12 +234,6 @@ export default function Hero({ slides, eyebrow, title }: HeroProps) {
           </div>
         ))}
       </div>
-
-      {/* ── Quiet scroll cue ──────── */}
-      <div
-        aria-hidden="true"
-        className="absolute bottom-0 left-1/2 z-[2] h-9 w-px -translate-x-1/2 bg-white/40 max-[1100px]:hidden"
-      />
     </section>
   )
 }

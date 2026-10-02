@@ -60,10 +60,13 @@ const cardImage: Record<string, { src: string; alt: string; caption: string }> =
     alt: "A sports-themed TrafficPatterns crosswalk across the Beban Park lot in Nanaimo, a soccer ball, a baseball, a golf ball and a bicycle set in green and blue waves",
     caption: "Sports crosswalk, Beban Park, Nanaimo · TrafficPatterns",
   },
+  // 2 Oct 2026: the Granville Island frame moved to the vapour band lower
+  // on the page (the sunlit copy, Vern's pick), so the card shows the
+  // walkway instead; no photograph twice on the home page.
   "vapor-blasting": {
-    src: "/images/services/vapor-blasting/granville-island-vapour-blasting-01.jpg",
-    alt: "Square One crew vapour blasting at Granville Island",
-    caption: "Granville Island · vapour blasting",
+    src: "/images/services/vapor-blasting/walkway-vapour-blasting-01.jpg",
+    alt: "Square One stripping a red coating from a public walkway with the vapour blasting rig",
+    caption: "Public walkway · coating removal",
   },
 }
 

@@ -1,54 +1,43 @@
 import Link from "next/link"
 import Frame from "@/components/ui/Frame"
-import BeforeAfter from "@/components/BeforeAfter"
 
 /**
  * Vapour blasting on the home page — its own band, 19 Sept 2026 (Vern: "give
- * vapour blasting its own cool section on the homepage"). The one thing on
- * the home page a visitor can do with their hands: the graffiti wipe from
- * the service page, on a water-tinted band, with the argument beside it.
- * The blue is the trade's own accent (refine.css "Water"); the orange stays
- * for pavement.
+ * vapour blasting its own cool section on the homepage").
  *
  * 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §9.9): restyled on the new
- * primitives. The two wipe frames are generated (generated/, `gen-`
- * prefix): a demonstration with no person in it, captioned as one. The
- * three frames under it are Square One's own photographs.
+ * primitives, with the graffiti wipe from the service page beside the
+ * argument.
+ *
+ * 2 Oct 2026 (Vern: "use the vapor blasting pic of the sunny day with the
+ * Burrard Street Bridge in the background"): the wipe gives way to that
+ * photograph, Square One on the Granville Island boardwalk with the bridge
+ * behind, the sunlit copy of the frame the service page opens on. One
+ * photograph, the argument beside it, on the darker grey band.
  */
-const DIR = "/images/services/vapor-blasting"
-const GEN = `${DIR}/generated`
+const GEN = "/images/services/vapor-blasting/generated"
 
-/** Under the wipe: Square One's own vapour blasting photographs from the
-    record (28 Sept 2026: the AI illustrations of one operator on six city
-    backdrops came off; the client was put off by the repeats). The Granville
-    Island photograph leads the "What we do" card above, so it is not here. */
-const STRIP = [
-  { src: `${DIR}/parking-lot-vapour-blasting-01.jpg`, alt: "Square One removing painted parking symbols from an asphalt lot with the vapour blasting rig", caption: "Parking lot · markings", position: "center 45%" },
-  { src: `${DIR}/walkway-vapour-blasting-01.jpg`, alt: "Square One stripping a red coating from a public walkway with the vapour blasting rig", caption: "Walkway · coating", position: "center 50%" },
-  { src: `${DIR}/nozzle-pavers-01.jpg`, alt: "The vapour blasting nozzle mid-pass over pavers, the wet fan of abrasive and the clean line behind it", caption: "Pavers · mid-pass", position: "center 50%" },
-]
+const GRANVILLE = {
+  src: `${GEN}/gen-granville-island-vapour-blasting-01-enhanced.jpg`,
+  alt: "A Square One operator vapour blasting a painted marking off the boardwalk at Granville Island, Vancouver, the Burrard Street Bridge behind under a clear sky",
+  caption: "Granville Island, Vancouver · marking removal",
+}
 
 export default function VapourBand() {
   return (
-    <section className="band-water sec relative overflow-hidden py-[6.5rem] max-[900px]:py-14">
+    <section className="sec relative overflow-hidden bg-surface-stone py-[6.5rem] max-[900px]:py-14">
       <div className="container-1280 relative z-[1] grid grid-cols-12 items-center gap-x-14 gap-y-12 max-[900px]:grid-cols-1">
-        {/* ── The wipe ──────── */}
+        {/* ── The photograph ──────── */}
         <div className="col-span-7 max-[900px]:col-span-1">
-          <BeforeAfter
-            className="aspect-[16/10] max-[700px]:aspect-[4/3]"
-            before={{
-              src: `${GEN}/gen-brick-graffiti-before.jpg`,
-              alt: "A face-brick wall covered in aerosol graffiti tags, before vapour blasting",
-            }}
-            after={{
-              src: `${GEN}/gen-brick-graffiti-after.jpg`,
-              alt: "The same face-brick wall after vapour blasting, clean brick, mortar joints intact",
-            }}
+          <Frame
+            src={GRANVILLE.src}
+            alt={GRANVILLE.alt}
+            caption={GRANVILLE.caption}
+            aspect="aspect-[16/10] max-[700px]:aspect-[4/3]"
             sizes="(max-width: 900px) 100vw, 720px"
-            tone="water"
+            position="center 55%"
+            href="/services/vapor-blasting"
           />
-          <p className="cap">Demonstration &middot; aerosol graffiti off face brick &middot; drag the line</p>
-
         </div>
 
         {/* ── The argument ──────── */}
@@ -60,7 +49,7 @@ export default function VapourBand() {
             surface underneath is left as it was.
           </p>
           <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-3">
-            <Link href="/services/vapor-blasting" className="btn-primary btn-water">
+            <Link href="/services/vapor-blasting" className="btn-primary">
               The vapour blasting service
             </Link>
             <a href="tel:+16046126209" className="link">
