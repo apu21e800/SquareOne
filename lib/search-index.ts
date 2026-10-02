@@ -140,7 +140,9 @@ function imageEntries(): SearchEntry[] {
 
   // Vapour blasting field records
   const vapourDir = path.join(IMAGE_ROOT, "services", "vapor-blasting")
-  for (const file of listImages(vapourDir)) {
+  // hero.jpg is the Granville Island photograph a second time (an older
+  // copy, unreferenced); one frame of it in the results is enough.
+  for (const file of listImages(vapourDir).filter((f) => f !== "hero.jpg")) {
     entries.push({
       type: "image",
       title: humanize(file),

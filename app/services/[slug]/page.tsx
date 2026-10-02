@@ -298,11 +298,25 @@ export default async function ServicePage({ params }: Props) {
         link={{ href: "/products", label: "All systems" }}
         wide
       >
-        <div className={`grid grid-cols-1 gap-x-10 gap-y-8 min-[701px]:grid-cols-2 ${service.productsIncluded.length === 3 ? "min-[1025px]:grid-cols-3" : "min-[1025px]:grid-cols-4"}`}>
+        <div data-reveal-group className={`grid grid-cols-1 gap-x-10 gap-y-8 min-[701px]:grid-cols-2 ${service.productsIncluded.length === 3 ? "min-[1025px]:grid-cols-3" : "min-[1025px]:grid-cols-4"}`}>
           {service.productsIncluded.map((line) => {
             const product = productFor(line)
             return (
-              <article key={line} className="card-panel">
+              <article key={line} data-reveal className="card-panel">
+                {/* 2 Oct 2026: the system's own photograph leads its panel
+                    (the row was names and one-liners on an empty band);
+                    the opener's frame is never repeated. */}
+                {product && product.image !== heroSrc && (
+                  <Frame
+                    src={product.image}
+                    alt={product.imageAlt}
+                    aspect="aspect-[4/3]"
+                    sizes="(max-width: 700px) 100vw, (max-width: 1024px) 50vw, 400px"
+                    position={product.heroPosition}
+                    href={`/products/${product.slug}`}
+                    className="mb-5"
+                  />
+                )}
                 {/* The product's name is the title and the way to its page;
                     the line from lib/services.ts (its role in this service)
                     sits under it. */}

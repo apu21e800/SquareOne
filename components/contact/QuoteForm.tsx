@@ -281,10 +281,9 @@ export default function QuoteForm() {
               placeholder="Two decorative crosswalks and a plaza recoat, roughly 400 m², needed by June."
               className={`${field} q-area`}
             />
-            <p className="q-hint">
-              A rough area and when you need it done help most. Photos and drawings can follow by email to{" "}
-              <a href="mailto:office@squareonepaving.com">office@squareonepaving.com</a>.
-            </p>
+            {/* The hint under the box came off, 2 Oct 2026 (Vern: "the quote
+                page is very text heavy"): the placeholder shows what helps,
+                and the rail says where photographs go. */}
           </div>
         </div>
       </fieldset>
@@ -405,9 +404,6 @@ export default function QuoteForm() {
         >
           {loading ? "Sending…" : "Send the request"}
         </button>
-        <p className="text-[15px] leading-[1.5] text-ink-muted">
-          The office answers to arrange the site visit; the written quote follows it.
-        </p>
       </div>
     </form>
   )

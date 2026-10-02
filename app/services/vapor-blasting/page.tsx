@@ -35,9 +35,12 @@ import { clampDescription } from "@/lib/seo"
 //
 // The AI illustrations in generated/ (the same operator on six Vancouver
 // and Victoria backdrops, and the AI-enhanced copy of the hero) are off the
-// page and off the site; the files stay on disk. The one generated pair left
-// is the before/after wipe, a demonstration with no person in it, captioned
-// as one. New illustrations wait for a proper shoot or an approved
+// page and off the site; the files stay on disk. Two generated frames stay,
+// each captioned as what it is: the before/after wipe, a demonstration with
+// no person in it, and (2 Oct 2026, Vern: "just keep the one with the bridge
+// in the background and the guy cleaning the railing") the steel railing,
+// set wide under the facts. New illustrations wait for a proper shoot or an
+// approved
 // generation pass (Figma Weave works from Cowork, per run, on approval).
 //
 // 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.7): labels in the margin
@@ -71,6 +74,13 @@ export const metadata: Metadata = {
 
 const DIR = "/images/services/vapor-blasting"
 const GEN = `${DIR}/generated`
+
+/** The one illustration of the rig at work that stays (2 Oct 2026): a steel railing, rust and old coating coming off. Captioned as an illustration, no place named (CLAUDE.md, generated frames). */
+const RAILING = {
+  src: `${GEN}/gen-steel-railing-rust.jpg`,
+  alt: "Illustration: an operator vapour blasting rust and old coating off a steel railing beside the water",
+  caption: "Illustration \u00b7 rust and old coating off a steel railing \u00b7 the nozzle, the water, the clean line behind it",
+}
 
 /** The original photograph: Square One on the Granville Island boardwalk, the Burrard Street Bridge behind. */
 const HERO = {
@@ -249,15 +259,25 @@ export default function VaporBlastingServicePage() {
         </ul>
       </section>
 
-      {/* ── What it handles: three columns, commercial first ──────── */}
+      {/* ── What it handles: the railing frame wide, then three columns,
+             commercial first ──────── */}
       <Section
         label="What it handles"
         title={<>From storefront <em>to drydock</em></>}
         wide
       >
-        <div className="grid grid-cols-3 gap-x-10 gap-y-12 max-[1000px]:grid-cols-1">
+        <Frame
+          src={RAILING.src}
+          alt={RAILING.alt}
+          caption={RAILING.caption}
+          aspect="aspect-[21/9] max-[700px]:aspect-[4/3]"
+          sizes="(max-width: 1280px) 100vw, 1280px"
+          position="center 40%"
+          className="mb-14 max-[700px]:mb-10"
+        />
+        <div data-reveal-group className="grid grid-cols-3 gap-x-10 gap-y-12 max-[1000px]:grid-cols-1">
           {tiers.map((tier) => (
-            <article key={tier.title} className="border-t border-hairline pt-6">
+            <article key={tier.title} data-reveal className="border-t border-hairline pt-6">
               <span className="label">{tier.audience}</span>
               <h3 className="mt-1">{tier.title}</h3>
               <p className="mt-3 max-w-[44ch] text-[16px] leading-[1.6] text-ink-body [text-wrap:pretty]">{tier.body}</p>

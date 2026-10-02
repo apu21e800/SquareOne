@@ -68,19 +68,11 @@ const LINES = [
   { region: "Toll-free", display: "1-877-391-0270", href: "tel:+18773910270" },
 ]
 
+// One short line each (2 Oct 2026, Vern: "the quote page is very text heavy").
 const STEPS = [
-  {
-    title: "Tell us the job",
-    body: "A description and a location. Photos and drawings help.",
-  },
-  {
-    title: "We walk the site",
-    body: "Free, with the sample boards, anywhere in the Lower Mainland and on Vancouver Island.",
-  },
-  {
-    title: "You get a written quote",
-    body: "To the published specification. We warrant the workmanship.",
-  },
+  { title: "Tell us the job", body: "A description and a location." },
+  { title: "We walk the site", body: "Free, with the sample boards." },
+  { title: "You get a written quote", body: "We warrant the workmanship." },
 ]
 
 const REGIONS = [
@@ -179,11 +171,10 @@ export default function ContactPage() {
                 <li>When you need it done</li>
               </ul>
               <p className="mt-4 text-[14.5px] leading-[1.6] text-ink-muted">
-                Photos and drawings go by email to{" "}
+                By email:{" "}
                 <a href="mailto:office@squareonepaving.com" className="link text-[14.5px]">
                   office@squareonepaving.com
                 </a>
-                , with the site address in the subject line.
               </p>
             </div>
 

@@ -87,6 +87,11 @@ function Wordmark({ onClick, light = false }: { onClick?: () => void; light?: bo
 }
 
 /* ------------------------------------------------------------------
+   2 Oct 2026 (Vern: "still feels text heavy… including the mega menu"):
+   the one-line notes under every name, in the panels and the phone
+   drawer, came off. The names, the sample squares and the photograph
+   carry the menu; the notes stay in lib/menu.ts for the search index.
+
    The mega menu — second pass, 28 Sept 2026 (Vern: "give the mega menu
    some personality, it's rather lacking… mind the hubss.com design
    patterns"). HUB's menu is four photo tiles in a row on near-black, a
@@ -230,7 +235,6 @@ function ServicesMenu({ previews, onNavigate }: MenuProps) {
                 {row.swatch && <Swatch name={row.swatch} size={56} />}
                 <span className="min-w-0">
                   <span className="mega-name">{row.name}</span>
-                  <span className="mega-note">{row.note}</span>
                 </span>
               </Link>
             </li>
@@ -250,7 +254,6 @@ function ServicesMenu({ previews, onNavigate }: MenuProps) {
                 {row.swatch && <Swatch name={row.swatch} size={40} />}
                 <span className="min-w-0">
                   <span className="mega-name">{row.name}</span>
-                  <span className="mega-note">{row.note}</span>
                 </span>
               </Link>
             </li>
@@ -282,7 +285,6 @@ function BuyersMenu({ previews, onNavigate }: MenuProps) {
             <div key={g.label}>
               <div>
                 <span className="mega-name">{g.label}</span>
-                <span className="mega-note">{g.note}</span>
               </div>
               <ul className="mega-run">
                 {g.items.map((a) => (
@@ -319,7 +321,6 @@ function MegaStrip({ onNavigate }: { onNavigate: () => void }) {
           <span className="font-bold text-ink" style={{ fontFamily: "var(--font-display)" }}>
             Free site visit, written quote.
           </span>{" "}
-          <span className="max-[1199px]:hidden">Send a few photos and the address.</span>
         </p>
         <dl className="mega-lines">
           <div>
@@ -427,7 +428,6 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
                 {row.swatch && <Swatch name={row.swatch} size={44} />}
                 <span className="min-w-0">
                   <span className="drawer-name">{row.name}</span>
-                  <span className="drawer-note">{row.note}</span>
                 </span>
               </Link>
             </li>
