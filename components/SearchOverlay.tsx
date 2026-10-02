@@ -11,7 +11,6 @@ import {
   type SearchEntry,
 } from "@/lib/search-score"
 import { previewFor } from "@/lib/doc-previews"
-import { BrandIcon } from "@/components/BrandMark"
 
 /**
  * Sitewide quick search: one input over pages, services, products,
@@ -106,16 +105,10 @@ function Thumb({ entry }: { entry: SearchEntry }) {
       </span>
     )
   }
-  if (!entry.image) {
-    // A page with no photograph of its own shows the mark, small and quiet,
-    // instead of an empty grey square that reads as a picture that failed
-    // (30 Sept 2026 QA).
-    return (
-      <span aria-hidden="true" className="flex h-[54px] w-[72px] shrink-0 items-center justify-center bg-surface-stone opacity-70">
-        <BrandIcon height={18} />
-      </span>
-    )
-  }
+  // Every page carries its opener's photograph since 2 Oct 2026 (the mark
+  // that stood in for one read as a strange result, Vern); a row with no
+  // picture at all simply has none.
+  if (!entry.image) return null
   return (
     <span className="relative block h-[54px] w-[72px] shrink-0 overflow-hidden bg-surface-stone">
       <Image src={entry.image} alt="" fill sizes="72px" className="object-cover" />

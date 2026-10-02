@@ -3,7 +3,7 @@
  * the resources library. No fs, no server imports.
  *
  * Matching: the query is tokenized; EVERY term must hit at least one field.
- * Weights: title 4 (prefix +2, exact-title +6), subtitle 2, keywords 1.
+ * Weights: title 4 (prefix +2, exact-title +12), subtitle 2, keywords 1.
  */
 
 export type SearchEntryType =
@@ -81,7 +81,10 @@ export function scoreEntry(entry: SearchEntry, terms: string[]): number {
     if (s === 0) return 0 // AND semantics — every term must land somewhere
     total += s
   }
-  if (terms.length > 0 && title === terms.join(" ")) total += 6
+  // An exact title is the thing the query names: it outranks every partial
+  // hit, however many fields those land in (2 Oct 2026; +6 let a project
+  // called "StreetPrint in Pewter" outrank the StreetPrint product).
+  if (terms.length > 0 && title === terms.join(" ")) total += 12
   return total
 }
 
@@ -114,8 +117,26 @@ export function searchEntries(
     byType.set(entry.type, list)
   }
 
+  // Groups are ordered by their best hit, so the thing the query names
+  // leads (2 Oct 2026: "streetprint" put the Patterns page above the
+  // StreetPrint product because pages always came first); GROUP_ORDER
+  // only breaks ties.
+  const best = new Map<SearchEntryType, number>()
+  for (const { entry, score } of scored) {
+    if (!best.has(entry.type)) best.set(entry.type, score) // scored is sorted, first hit is the best
+  }
+  // Documents and images are the long tail and always close the list,
+  // whatever they score: a reference photograph titled "StreetPrint" must
+  // not outrank the StreetPrint product.
+  const tail: SearchEntryType[] = ["document", "image"]
   const groups: GroupedResults[] = []
-  for (const type of GROUP_ORDER) {
+  const types = [
+    ...GROUP_ORDER.filter((t) => !tail.includes(t)).sort(
+      (x, y) => (best.get(y) ?? 0) - (best.get(x) ?? 0) || GROUP_ORDER.indexOf(x) - GROUP_ORDER.indexOf(y),
+    ),
+    ...tail,
+  ]
+  for (const type of types) {
     const list = byType.get(type)
     if (!list || list.length === 0) continue
     groups.push({
