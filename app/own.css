@@ -1,0 +1,1580 @@
+/* ============================================================
+   Square One, its own company — the surface (26 Sept 2026).
+
+   HUB reviewed hubss.com on 25 Sept and said it looks too much like the
+   new Square One site. The audit agreed: the copy is Square One's (1%
+   shared) and the code is Square One's (4–17%), but the SHAPE was HUB's —
+   the tracked-caps eyebrow with its orange square, the orange full stop,
+   photo cards with chips and arrows, captions over gradients, rounded
+   buttons with arrows, a photo-tile mega menu, a dark CTA band into a
+   four-column footer. Vern's steer: share the photographs, keep the hero
+   reel, keep every page's skeleton, change the surface, stay ultra
+   professional. docs/OWN-COMPANY-BRIEF.md §3.7 is the table this file
+   implements.
+
+   This sheet loads last (app/layout.tsx) and is unlayered, so it wins over
+   globals.css, mobile.css, refine.css and every utility class at equal
+   specificity. Where a rule below retires one above, the older rule is
+   left in place as history and simply never renders — the retired
+   signatures are neutralised here, not deleted there.
+
+   The system, in one breath:
+     square      — the company is called Square One; every corner is 0.
+     ground      — white and two light neutral greys, charcoal to close;
+                   never HUB's cream, never HUB's near-black.
+     two faces   — Futura Bold in sentence case for display, Source Serif 4
+                   for everything read; the small voice is the serif in
+                   italic, not spaced capitals.
+     hairlines   — rows divided by rules, not cards in boxes.
+     captions    — under the frame, never over it.
+     one orange  — terracotta, on the primary button only (the copper in
+                   the mark is the mark's). Links are ink, underlined.
+     margin      — a section's label sits in a 3-of-12 left column beside
+                   its content; the one layout move.
+     numerals    — a big Futura figure only where the content is a real
+                   sequence (how a job goes).
+     motion      — a fade. Nothing zooms, nothing slides, nothing sticks
+                   but the phone's quote bar; the reel keeps its pace.
+   ============================================================ */
+
+/* ---- Tokens ------------------------------------------------------------- */
+:root {
+  --radius: 0px;
+
+  /* The ground and the accent (27 Sept 2026, Vern: "lighter grey than
+     hubss, different orange, sharper corner radius"). hubss.com sits on
+     warm cream (#F6F4EF, #F3F1EB) and near-black (#101010) and acts in a
+     bright orange (#F97316). Square One sits on white and two light
+     neutral greys, closes on charcoal, and acts in terracotta: the brand's
+     own accent (#C85A3A in CLAUDE.md), deepened for the button fill so
+     white type on it clears AA (5.2 : 1). The copper in the mark is the
+     mark's own and stays as it is. */
+  --surface:        #FFFFFF;
+  --surface-warm:   #F4F5F6;
+  --surface-stone:  #EAECEE;
+  --hairline:       #E1E4E7;
+  --hairline-strong:#A0A6AD;
+  --accent:         #C85A3A;
+  --accent-deep:    #B24E2E;
+  --accent-tint:    #F7EBE6;
+  --accent-press:   #963F24;
+
+  /* Charcoal, not HUB's near-black: the footer and the phone's quote bar.
+     On it: white 13.3 : 1, body 9.4, muted 6.0, faint and legal 5.0. */
+  --surface-slate:        #2D3033;
+  --charcoal:             #2D3033;
+  --ink-on-slate-body:    #D5D9DE;
+  --ink-on-slate-muted:   #A9AFB6;
+  --ink-on-slate-faint:   #9AA0A7;
+  --ink-on-slate-legal:   #9AA0A7;
+  --hairline-slate:       rgba(255, 255, 255, 0.12);
+
+  /* The reading face is the serif; the switch's "Futura, quiet" puts
+     Inter back (html[data-type="futura"] below). */
+  --font-text: var(--font-source-serif), Georgia, "Times New Roman", serif;
+
+  /* The small voice — labels, captions, notes — as one size. */
+  --small: 15px;
+}
+
+/* ---- Square. Every corner. -------------------------------------------- */
+[class*="rounded-["], .rounded, .rounded-sm, .rounded-md, .rounded-lg,
+.card-panel, .btn-primary, .btn-secondary, .btn-on-slate, .btn-on-image, .chip, .tag, .reel-btn,
+.offer-card, .nav-cta,
+input[type="text"], input[type="email"], input[type="tel"], input[type="search"], select, textarea, button {
+  border-radius: 0;
+}
+.eyebrow::before, .stop::after { border-radius: 0; }
+
+/* ---- Type --------------------------------------------------------------- */
+body {
+  font-family: var(--font-text);
+  font-size: 17.5px;
+  line-height: 1.6;
+}
+p { line-height: 1.6; }
+@media (max-width: 700px) { body { font-size: 16.5px; } }
+
+/* Display: Futura Bold, sentence case, closed up. The hero line is the one
+   place for scale; section headings sit a clear step under it. */
+h1, .display-xl, .display-statement, h2:not(.label):not(.eyebrow) {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: none;
+}
+h1 {
+  font-size: clamp(2.25rem, 4.4vw, 3.9rem);
+  letter-spacing: -0.02em;
+  line-height: 1.06;   /* 1.02 let a descender touch the cap below on a phone (QA, 28 Sept) */
+}
+.display-xl {
+  font-size: clamp(2.6rem, 5.4vw, 4.75rem);
+  letter-spacing: -0.026em;
+  line-height: 0.97;
+}
+.display-statement {
+  font-size: clamp(2rem, 3.1vw, 3.25rem);
+  letter-spacing: -0.02em;
+  line-height: 1.04;
+  color: var(--ink);
+}
+/* 28 Sept 2026 (Vern: "not quite DDB grade yet"): the section heading is
+   the page's second voice, so it gets a clear size of its own: 45px on a
+   laptop instead of 38, and it carries the section now that the paragraphs
+   under it are one line. */
+h2:not(.label):not(.eyebrow):not(.card-title) {
+  font-size: clamp(1.75rem, 3.1vw, 3rem);
+  letter-spacing: -0.022em;
+  line-height: 1.05;
+}
+h3 {
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  font-weight: 700;
+  letter-spacing: -0.012em;
+  line-height: 1.22;
+}
+@media (max-width: 560px) {
+  h1 { font-size: clamp(2rem, 8.6vw, 2.5rem); }
+  .display-xl:not(.display-fit) { font-size: clamp(2.125rem, 9.4vw, 2.75rem); letter-spacing: -0.02em; }
+  /* 28 Sept 2026: a fitted headline on a phone takes the same size as the
+     others, or less when its longest word would not fit the column
+     (TRAFFICPATTERNSXD in capitals was running off the screen at 41px). */
+  .display-xl.display-fit {
+    font-size: max(1.5rem, min(clamp(2.125rem, 9.4vw, 2.75rem), calc(100cqi / (var(--fit-em, 12) * var(--fit-adj, 1)))));
+  }
+  .display-statement { font-size: clamp(1.75rem, 7.6vw, 2.125rem); }
+  h3 { font-size: 1.25rem; }
+}
+@media (min-width: 1536px) {
+  h1 { font-size: clamp(2.75rem, 4vw, 4.5rem); }
+  .display-xl { font-size: clamp(3rem, 5.2vw, 5.75rem); }
+  .display-statement { font-size: clamp(2.25rem, 2.9vw, 3.75rem); }
+  h2:not(.label):not(.eyebrow):not(.card-title) { font-size: clamp(2rem, 2.8vw, 3.25rem); }
+}
+
+/* The small voice: the serif, italic, sentence case. This is what the
+   tracked-caps eyebrow and label become — every existing .eyebrow and
+   .label on the site reads this way from here on, with no square. */
+.eyebrow, .label, .chip-name, .label-on-slate {
+  font-family: var(--font-text);
+  font-style: italic;
+  font-size: var(--small);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.4;
+  text-transform: none;
+  color: var(--ink-muted);
+  display: block;
+}
+.eyebrow::before { content: none; }
+.eyebrow-num { display: none; }               /* the section index retires */
+.eyebrow-center { text-align: center; }
+.label-on-slate { color: var(--ink-on-slate-muted); }
+.eyebrow-on-image, .label-on-image {
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 1px 10px rgba(24, 21, 18, 0.55);
+}
+.eyebrow-on-image::before { content: none; }
+
+/* The orange full stop after a headline — retired. */
+.stop::after, .stop-tight::after { content: none; display: none; }
+
+/* Captions read in the serif. Over a photograph (the hero reel, the
+   openers) they stay white; in rows and galleries the components set them
+   under the frame with .cap. */
+.caption {
+  font-family: var(--font-text);
+  font-style: italic;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.cap {
+  font-family: var(--font-text);
+  font-style: italic;
+  font-size: 14.5px;
+  line-height: 1.45;
+  color: var(--ink-muted);
+  margin-top: 10px;
+}
+.cap-on-slate { color: var(--ink-on-slate-muted); }
+
+/* Reading text a step larger where a page opens with an intro. */
+.lede { font-size: 20px; line-height: 1.5; color: var(--ink-body); }
+@media (max-width: 700px) { .lede { font-size: 18px; } }
+/* The standfirst: one sentence set large in the serif, the page's intro. */
+.standfirst { font-family: var(--font-text); font-size: 25px; line-height: 1.4; color: var(--ink); text-wrap: pretty; }
+@media (max-width: 700px) { .standfirst { font-size: 20px; } }
+
+/* ---- Colour discipline -------------------------------------------------- */
+a:hover { color: var(--ink); }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.prose blockquote { border-left-color: var(--ink); }
+.pattern-tile { color: rgba(20, 22, 26, 0.72); }
+.group:hover .pattern-tile { color: var(--ink); border-color: var(--hairline-strong); }
+
+/* Links are ink, underlined; the underline is the hairline until hovered. */
+.link, .arrow-link, .btn-secondary, .foot-link {
+  font-family: var(--font-text);
+  font-style: italic;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 5px;
+  text-decoration-color: var(--hairline-strong);
+  transition: text-decoration-color 0.15s ease, color 0.15s ease;
+}
+.link:hover, .arrow-link:hover, .btn-secondary:hover, .foot-link:hover {
+  color: var(--ink);
+  text-decoration-color: var(--ink);
+}
+.arrow-link > span[aria-hidden="true"],
+.arrow-link > span:not([class]):last-child { display: none; }  /* the → glyph */
+.arrow-link span { transform: none; }
+.arrow-link:hover span { transform: none; }
+.btn-secondary { border: 0; padding: 0; background: none; display: inline-block; }
+.btn-secondary:hover { border: 0; }
+.foot-link { color: var(--ink-on-slate-body); font-style: normal; font-size: 15.5px; text-decoration-color: transparent; }
+.foot-link:hover { color: #FFFFFF; text-decoration-color: var(--ink-on-slate-muted); }
+/* The network links keep the icon beside the name on a phone: app/mobile.css
+   makes every .foot-link an inline-block there for the thumb, which dropped
+   the icon onto a line of its own. */
+.foot-link.foot-net { display: inline-flex; }
+
+/* ---- Buttons: square, sentence case, no arrow, one per view ------------- */
+.btn-primary, .btn-on-slate, .btn-on-image, .btn-water, .offer-btn, .nav-cta {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.005em;
+  text-transform: none;
+  line-height: 1.2;
+  padding: 15px 26px;
+  border-radius: 0;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+.btn-primary { background: var(--accent-deep); color: #FFFFFF; }
+.btn-primary:hover { background: var(--accent-press); color: #FFFFFF; }
+.btn-on-slate { background: #FFFFFF; color: var(--ink); }
+.btn-on-slate:hover { background: var(--surface-stone); color: var(--ink); }
+.btn-on-image { border: 1px solid rgba(255, 255, 255, 0.7); color: #FFFFFF; padding: 14px 25px; }
+.btn-on-image:hover { border-color: #FFFFFF; background: rgba(255, 255, 255, 0.08); }
+/* The ink button — the second fill the site allows, for the bar and for a
+   view that already spent its orange. */
+.btn-ink { display: inline-block; background: var(--ink); color: #FFFFFF; font-family: var(--font-display); font-size: 15px; font-weight: 700; line-height: 1.2; padding: 15px 26px; }
+.btn-ink:hover { background: #000000; color: #FFFFFF; }
+@media (max-width: 700px) {
+  .btn-primary, .btn-on-slate, .btn-on-image, .btn-ink { display: flex; width: 100%; justify-content: center; text-align: center; padding-block: 17px; }
+  .btn-secondary { display: inline-block; width: auto; padding: 0; }
+}
+
+/* The bar's quote button: terracotta, on white and over a photograph alike
+   (28 Sept 2026 QA: the most-seen button was the one place the brand's
+   action colour never appeared). */
+.nav-cta { background: var(--accent-deep); border-color: var(--accent-deep); color: #FFFFFF; font-size: 14px; padding: 11px 18px; }
+.nav-cta:hover { background: var(--accent-press); border-color: var(--accent-press); color: #FFFFFF; }
+.nav-light .nav-cta { background: var(--accent-deep); border-color: var(--accent-deep); color: #FFFFFF; }
+.nav-light .nav-cta:hover { background: var(--accent-press); border-color: var(--accent-press); color: #FFFFFF; }
+.nav-link { font-size: 15px; font-weight: 700; letter-spacing: 0; color: var(--ink-body); }
+/* One line per label at every desktop width: at 1024 the five labels, the
+   search and the button wrapped to two lines ("What we / do"). */
+.nav-link { white-space: nowrap; }
+@media (max-width: 1279px) {
+  .nav-link { font-size: 14px; }
+  header nav[aria-label="Primary"] { column-gap: 18px; }
+}
+@media (max-width: 1120px) {
+  header nav[aria-label="Primary"] { column-gap: 14px; }
+  .nav-cta { padding: 10px 14px; }
+}
+
+/* ---- Rows, not cards ---------------------------------------------------- */
+.card-panel {
+  background: transparent;
+  border: 0;
+  border-top: 1px solid var(--hairline);
+  padding: 22px 0 0;
+  box-shadow: none;
+}
+.card-panel:hover { box-shadow: none; }
+.card { border-radius: 0; }
+.card:hover { border-color: var(--hairline); }
+.card img, .thumb img { filter: none; }
+.card img, .card [data-zoom] { transition: none; }
+.card:hover img, .card:hover [data-zoom] { transform: none; }
+[class*="group-hover:scale"] { scale: none !important; }
+[class*="group-hover:-translate"], [class*="group-hover:translate"] { translate: none !important; }
+
+/* Chips become words: the serif, a middle dot between them. */
+.tag {
+  display: inline;
+  background: none;
+  padding: 0;
+  font-family: var(--font-text);
+  font-style: italic;
+  font-size: var(--small);
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--ink-muted);
+}
+/* The dot rides on the end of the word before it, followed by a plain
+   space: a run of tags wraps between words on a phone, and a wrapped line
+   never starts with a dot. (A no-break space on both sides, the old rule,
+   made the whole run one unbreakable word.) The space is written \0020:
+   a literal space right after \00B7 is eaten as the escape's terminator. */
+.tag:has(+ .tag)::after { content: "\00A0\00B7\0020"; color: var(--hairline-strong); }
+.chip { border-color: var(--hairline); }
+
+/* The section header: a hairline, the label in the margin column, the
+   heading and its one link in the content column. Stacks under 900px. */
+.sec { border-top: 1px solid var(--hairline); }
+.sec-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: 40px;
+  row-gap: 20px;
+  align-items: start;
+}
+.sec-label { grid-column: span 3; padding-top: 6px; }
+.sec-body { grid-column: span 9; min-width: 0; }
+.sec-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px 32px; }
+.sec-head h2 { margin: 0; max-width: 30ch; text-wrap: balance; }
+.sec-content { margin-top: 40px; }
+@media (max-width: 900px) {
+  /* One column: twelve tracks of minmax(0, 1fr) can shrink to nothing, but
+     their eleven 40px gaps cannot, and 440px of gaps overflowed a 390px
+     phone. */
+  .sec-grid { grid-template-columns: minmax(0, 1fr); column-gap: 0; row-gap: 10px; }
+  .sec-label, .sec-body, .sec-grid > .col-span-12 { grid-column: 1 / -1; }
+  .sec-content { margin-top: 28px; }
+}
+@media (max-width: 700px) {
+  .sec-head h2 { max-width: none; }
+}
+
+/* A hairline row: photograph inset, caption under it, text beside it. */
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  column-gap: 40px;
+  row-gap: 16px;
+  align-items: start;
+  padding-block: 28px;
+  border-top: 1px solid var(--hairline);
+}
+.row:last-child { border-bottom: 1px solid var(--hairline); }
+/* The four service rows on /services (30 Sept 2026): the photograph and the
+   words share the row evenly, and the words sit at the photograph's middle. */
+.row-service { grid-template-columns: minmax(0, 6fr) minmax(0, 6fr); column-gap: 56px; align-items: center; padding-block: 40px; }
+@media (max-width: 1000px) { .row-service { column-gap: 40px; } }
+.row-compact { grid-template-columns: 132px minmax(0, 1fr); column-gap: 24px; padding-block: 18px; }
+@media (max-width: 700px) {
+  .row { grid-template-columns: 1fr; padding-block: 22px; }
+  .row-service { padding-block: 26px; }
+  .row-compact { grid-template-columns: 96px minmax(0, 1fr); column-gap: 16px; }
+}
+
+/* The numeral for a real sequence. */
+.step-num {
+  font-family: var(--font-display);
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+@media (max-width: 700px) { .step-num { font-size: 36px; } }
+
+/* A quiet two-column definition list (specification, contact lines). */
+.spec { display: grid; grid-template-columns: minmax(0, 11rem) minmax(0, 1fr); column-gap: 24px; }
+.spec dt { padding: 10px 0; border-top: 1px solid var(--hairline); font-family: var(--font-text); font-style: italic; color: var(--ink-muted); }
+.spec dd { padding: 10px 0; border-top: 1px solid var(--hairline); color: var(--ink-body); }
+@media (max-width: 560px) {
+  .spec { grid-template-columns: 1fr; }
+  .spec dt { border-top: 1px solid var(--hairline); padding-bottom: 0; }
+  .spec dd { border-top: 0; padding-top: 2px; }
+}
+
+/* ---- Motion: a rise (30 Sept 2026; Vern: "make it magic") ----------------
+   Below-fold rows, frames and steps come up 12px as they arrive, one after
+   another in a group (components/MotionBreath.tsx arms them, 70ms apart,
+   and only on screens that don't ask for reduced motion). The server HTML
+   is never hidden, and a phone's sideways rails are exempt (app/mobile.css). */
+.reveal-armed {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.7s ease, transform 0.9s cubic-bezier(0.2, 0.75, 0.2, 1);
+  will-change: opacity, transform;
+}
+.reveal-armed.reveal-in { opacity: 1; transform: none; }
+.reveal-done { will-change: auto; }
+
+/* ---- The type switch, re-based ------------------------------------------
+   The serif setting is now the site; "Futura, quiet" (Inter) is the
+   alternate a preview can flip back to. The other two are unchanged. */
+html[data-type="futura"] { --font-text: var(--font-inter), var(--font-poppins), system-ui, -apple-system, sans-serif; }
+html[data-type="futura"] body { font-size: 17px; line-height: 1.65; }
+html[data-type="futura"] .eyebrow,
+html[data-type="futura"] .label,
+html[data-type="futura"] .tag,
+html[data-type="futura"] .cap,
+html[data-type="futura"] .caption,
+html[data-type="futura"] .link,
+html[data-type="futura"] .arrow-link,
+html[data-type="futura"] .btn-secondary { font-style: normal; }
+
+/* ---- The footer on a phone (2 Oct 2026, four columns again): the two
+   link lists share a row, the mark and the lines span it (mobile.css). ---- */
+@media (max-width: 700px) {
+  footer .grid { row-gap: 36px; }
+}
+
+/* ---- The menus: text lists under the bar, not photo-tile panels ---- */
+.menu-panel {
+  position: absolute;
+  top: var(--bar-h);
+  left: -20px;
+  z-index: 40;
+  min-width: 264px;
+  background: #FFFFFF;
+  border: 1px solid var(--hairline);
+  padding: 18px 22px 20px;
+  box-shadow: 0 16px 40px rgba(20, 22, 26, 0.08);
+}
+.menu-panel-wide { min-width: 680px; }
+.menu-item {
+  display: block;
+  padding: 7px 0;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--ink);
+  text-decoration: none;
+}
+.menu-item:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 1px; }
+.menu-note { display: block; font-family: var(--font-text); font-style: italic; font-size: 14px; font-weight: 400; color: var(--ink-muted); }
+.menu-group { padding-top: 14px; }
+.menu-group + .menu-group { margin-top: 6px; }
+.menu-foot { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--hairline); display: flex; flex-wrap: wrap; gap: 8px 24px; }
+.nav-phone {
+  font-family: var(--font-text);
+  font-size: 15.5px;
+  color: var(--ink-body);
+  white-space: nowrap;
+  text-decoration: none;
+}
+.nav-phone:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 1px; }
+.nav-light .nav-phone { color: rgba(255, 255, 255, 0.92); text-shadow: 0 1px 8px rgba(20, 24, 29, 0.35); }
+.nav-light .nav-phone:hover { color: #FFFFFF; }
+
+/* The water button keeps its blue on the vapour bands (the one trade that
+   works in water has its own accent; refine.css "Water"). */
+.btn-primary.btn-water, .btn-water { background: var(--water); color: #FFFFFF; }
+.btn-primary.btn-water:hover, .btn-water:hover { background: var(--water-deep); color: #FFFFFF; }
+
+/* ---- The mega menu, with a face (28 Sept 2026, second pass; Vern: "give
+   the mega menu some personality, it's rather lacking… mind the hubss.com
+   design patterns"). HUB's: four photo tiles in a row on near-black, a
+   spaced-caps label under each, a list under that, "View all" and an
+   arrow. Ours, on white: an index with the material beside each name (a
+   square cut from Square One's own photographs, like the sample boards on
+   a site walk), a ledger of buyers, and ONE photograph that follows the
+   pointer, revealed by the before/after line with its caption under it.
+   A grey strip starts a project; the colour card's edge closes the sheet.
+   The wipe is the site's one signature motion; reduced motion skips it. */
+.mega-panel {
+  position: fixed;
+  top: var(--bar-h);
+  left: 0;
+  right: 0;
+  z-index: 40;
+  background: #FFFFFF;
+  border-top: 1px solid var(--hairline);
+  box-shadow: 0 30px 60px rgba(20, 22, 26, 0.12);
+}
+.mega-scrim { background: rgba(20, 22, 26, 0.18); }
+.mega-swap { animation: mega-fade 0.22s ease-out both; }
+@keyframes mega-fade { from { opacity: 0; } to { opacity: 1; } }
+
+.mega-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--hairline);
+}
+.mega-head .link { font-size: 15px; }
+
+/* The index: number, sample, name and note. The active row takes the
+   terracotta rule in the gutter and its name underlines. */
+.mega-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 30px 56px minmax(0, 1fr);
+  align-items: center;
+  column-gap: 18px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--hairline);
+  color: var(--ink);
+  text-decoration: none;
+}
+.mega-row::before {
+  content: "";
+  position: absolute;
+  left: -18px;
+  top: 12px;
+  bottom: 12px;
+  width: 3px;
+  background: var(--accent);
+  transform: scaleY(0);
+  transform-origin: 50% 50%;
+  transition: transform 0.22s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.mega-row[data-active]::before { transform: scaleY(1); }
+.mega-row:hover { color: var(--ink); }
+.mega-num {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--hairline-strong);
+  transition: color 0.15s ease;
+}
+.mega-row[data-active] .mega-num { color: var(--accent-deep); }
+.mega-swatch {
+  display: block;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: var(--surface-stone);
+  box-shadow: inset 0 0 0 1px rgba(20, 22, 26, 0.08);
+  transition: box-shadow 0.15s ease;
+}
+.mega-swatch img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.mega-row[data-active] .mega-swatch { box-shadow: 0 0 0 1px var(--ink); }
+.mega-name {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 6px;
+  text-decoration-color: transparent;
+  transition: text-decoration-color 0.15s ease;
+}
+.mega-row[data-active] .mega-name { text-decoration-color: var(--accent); }
+.mega-note {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--font-text);
+  font-style: italic;
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--ink-muted);
+}
+.mega-more {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 32px;
+  margin-top: 6px;
+}
+.mega-row-sm { grid-template-columns: 40px minmax(0, 1fr); column-gap: 14px; padding: 12px 0; }
+.mega-row-sm .mega-name { font-size: 17px; }
+.mega-row-sm .mega-note { font-size: 14px; }
+
+/* The ledger: the buyer in the margin, their galleries as a run of words. */
+.mega-ledger > div {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  column-gap: 28px;
+  padding: 15px 0 16px;
+  border-bottom: 1px solid var(--hairline);
+}
+.mega-ledger .mega-name { font-size: 17px; }
+.mega-ledger .mega-note { font-size: 14px; margin-top: 3px; }
+.mega-run { font-family: var(--font-text); font-size: 17px; line-height: 1.75; color: var(--ink-body); }
+.mega-run li { display: inline; }
+.mega-run li + li::before { content: "\00A0\00B7\0020"; color: var(--hairline-strong); }
+.mega-run a {
+  color: var(--ink-body);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 5px;
+  text-decoration-color: var(--hairline);
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
+}
+.mega-run a:hover, .mega-run a[data-active] { color: var(--ink); text-decoration-color: var(--accent); }
+
+/* The frame: every photograph stacked, the active one wiped in behind the
+   line. The line is the before/after's divider, white, one pass. */
+.mega-preview { margin: 0; }
+.mega-frame {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--surface-stone);
+}
+.mega-shot { object-fit: cover; opacity: 0; }
+.mega-shot.is-prev { opacity: 1; z-index: 1; }
+.mega-shot.is-active { opacity: 1; z-index: 2; animation: mega-wipe 0.56s cubic-bezier(0.22, 0.7, 0.18, 1) both; }
+@keyframes mega-wipe { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+.mega-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 3;
+  width: 2px;
+  margin-left: -1px;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 1px rgba(20, 22, 26, 0.12), 0 0 18px rgba(255, 255, 255, 0.5);
+  pointer-events: none;
+  animation: mega-line 0.56s cubic-bezier(0.22, 0.7, 0.18, 1) both;
+}
+@keyframes mega-line {
+  0% { left: 0; opacity: 1; }
+  88% { opacity: 1; }
+  100% { left: 100%; opacity: 0; }
+}
+.mega-preview .cap { min-height: 1.45em; }
+
+/* The strip: the free site visit, the two lines, the button. */
+.mega-strip { background: var(--surface-warm); border-top: 1px solid var(--hairline); }
+.mega-lines { display: flex; gap: 26px; flex-shrink: 0; margin: 0; }
+.mega-lines > div { display: flex; flex-direction: column; }
+.mega-lines dt { font-family: var(--font-text); font-style: italic; font-size: 13.5px; line-height: 1.3; color: var(--ink-muted); }
+.mega-lines dd { margin: 0; }
+.mega-lines a { font-family: var(--font-display); font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--ink); text-decoration: none; }
+.mega-lines a:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+/* The colour card's edge: eight StreetBond colours (components/ui/ColourEdge). */
+.colour-edge { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); height: 5px; }
+.colour-edge > span { display: block; }
+
+/* The phone's drawer, in the same hand. */
+.drawer-row {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  align-items: center;
+  column-gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--hairline);
+  color: var(--ink);
+  text-decoration: none;
+}
+.drawer-name {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.drawer-note {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--font-text);
+  font-style: italic;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--ink-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mega-shot.is-active, .mega-swap { animation: none; }
+  .mega-line { display: none; }
+  .mega-row::before { transition: none; }
+}
+
+
+/* ---- The footer, on paper (28 Sept 2026; Vern: "make sure the footer is
+   different from the hubss page"). HUB closes near-black on four columns.
+   Square One closes white: the colour card's edge, the mark and the
+   company's sentence set large in the serif, then two ledgers with a label
+   in the margin of every row (a letterhead, a spec sheet), the service
+   area, and the legal line with its way back to the top. ---- */
+.site-foot { background: #FFFFFF; color: var(--ink-body); }
+.site-foot .colour-edge { height: 6px; }
+.foot-statement {
+  font-family: var(--font-text);
+  font-size: clamp(1.375rem, 2.1vw, 1.875rem);
+  line-height: 1.34;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+  max-width: 36ch;
+  text-wrap: pretty;
+}
+.foot-ledger { margin: 0; border-top: 1px solid var(--ink); }
+.foot-ledger > div {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+  column-gap: 20px;
+  padding: 13px 0 14px;
+  border-bottom: 1px solid var(--hairline);
+}
+.foot-ledger dt {
+  font-family: var(--font-text);
+  font-style: italic;
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--ink-muted);
+}
+.foot-ledger dd { margin: 0; font-size: 16.5px; line-height: 1.5; color: var(--ink); }
+.foot-a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  text-decoration-color: transparent;
+  transition: text-decoration-color 0.15s ease, color 0.15s ease;
+}
+.foot-a:hover { color: var(--ink); text-decoration-color: var(--accent); }
+.foot-num {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.005em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 5px;
+  text-decoration-color: transparent;
+  transition: text-decoration-color 0.15s ease;
+}
+.foot-num:hover { color: var(--ink); text-decoration-color: var(--accent); }
+.foot-run { display: block; line-height: 1.65; }
+.foot-run li { display: inline; }
+.foot-run li + li::before { content: "\00A0\00B7\0020"; color: var(--hairline-strong); }
+.foot-net-a { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; }
+.foot-net-a svg { color: var(--ink-muted); flex-shrink: 0; }
+.foot-area {
+  font-family: var(--font-text);
+  font-style: italic;
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: var(--ink-muted);
+  max-width: 110ch;
+}
+.foot-legal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+  padding-top: 18px;
+  border-top: 1px solid var(--hairline);
+  font-size: 14px;
+  color: var(--ink-muted);
+}
+.foot-legal .foot-a { color: var(--ink-body); }
+.foot-top { background: none; border: 0; padding: 0; cursor: pointer; font: inherit; }
+.foot-top::after { content: "\00A0\2191"; }
+@media (max-width: 700px) {
+  .foot-ledger > div { grid-template-columns: minmax(0, 1fr); row-gap: 2px; padding: 12px 0 13px; }
+  .foot-ledger dd { font-size: 16px; }
+  .foot-legal { flex-direction: column; align-items: flex-start; }
+}
+
+
+/* ---- Request a quote (28 Sept 2026; Vern: "Request a quote page is pretty
+   sad, improve it"). The form leads, on white, in two numbered sections;
+   the project type is a set of tiles; a rail beside it stays in view with
+   the three steps as a short timeline. hubss.com's is a dark photograph
+   with a dark form card on the right; nothing here is dark. ---- */
+.q-lines { margin: 0; border-top: 1px solid var(--ink); }
+.q-lines > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 0 11px;
+  border-bottom: 1px solid var(--hairline);
+}
+.q-lines dt { font-family: var(--font-text); font-style: italic; font-size: 14.5px; color: var(--ink-muted); }
+.q-lines dd { margin: 0; min-width: 0; text-align: right; }
+.q-lines a {
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: 0.005em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 5px;
+  text-decoration-color: transparent;
+  transition: text-decoration-color 0.15s ease;
+}
+.q-lines a:hover { text-decoration-color: var(--accent); }
+.q-lines a.q-mail { font-family: var(--font-text); font-size: 16px; font-weight: 400; overflow-wrap: anywhere; }
+
+.q-form { padding-top: 8px; }
+.q-section { min-width: 0; margin: 0; padding: 0; border: 0; }
+.q-section + .q-section { margin-top: 44px; }
+.q-legend {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  width: 100%;
+  padding: 26px 0 0;
+  border-top: 1px solid var(--ink);
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.012em;
+  line-height: 1.2;
+  color: var(--ink);
+}
+.q-step {
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-muted);
+}
+.q-label {
+  display: block;
+  margin-bottom: 9px;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.005em;
+  line-height: 1.3;
+  color: var(--ink);
+}
+.q-optional { font-family: var(--font-text); font-style: italic; font-weight: 400; font-size: 14px; color: var(--ink-muted); letter-spacing: 0; }
+.q-field {
+  display: block;
+  width: 100%;
+  height: 54px;
+  padding: 0 16px;
+  background: #FFFFFF;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 0;
+  font-family: var(--font-text);
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--ink);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.q-field::placeholder { color: #9AA0A7; }
+.q-field:hover { border-color: var(--ink-muted); }
+.q-field:focus { outline: none; border-color: var(--ink); box-shadow: 0 0 0 3px rgba(200, 90, 58, 0.18); }
+.q-area { height: auto; min-height: 150px; padding-top: 14px; padding-bottom: 14px; resize: vertical; }
+.q-hint { margin-top: 10px; font-family: var(--font-text); font-style: italic; font-size: 14.5px; line-height: 1.55; color: var(--ink-muted); }
+.q-hint a { color: var(--ink-body); text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--hairline-strong); }
+
+/* The tiles: a radio each, the box on the corner, the name and a line. */
+.q-tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.q-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 96px;
+  padding: 14px 14px 13px;
+  background: #FFFFFF;
+  border: 1px solid var(--hairline-strong);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+.q-tile:hover { border-color: var(--ink); }
+.q-radio { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+.q-tile-box {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--hairline-strong);
+  background: #FFFFFF;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.q-tile-name { font-family: var(--font-display); font-size: 16px; font-weight: 700; line-height: 1.2; color: var(--ink); padding-right: 22px; }
+.q-tile-sub { margin-top: 3px; font-family: var(--font-text); font-style: italic; font-size: 13.5px; line-height: 1.35; color: var(--ink-muted); }
+.q-tile:has(.q-radio:checked) { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); background: var(--surface-warm); }
+.q-tile:has(.q-radio:checked) .q-tile-box { background: var(--accent-deep); border-color: var(--accent-deep); box-shadow: inset 0 0 0 3px #FFFFFF; }
+.q-tile:has(.q-radio:focus-visible) { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+.q-submit {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 24px;
+  margin-top: 36px;
+  padding-top: 28px;
+  border-top: 1px solid var(--hairline);
+}
+.q-send { padding: 18px 34px; font-size: 16px; }
+
+/* The confirmation, where the form was: a terracotta rule on top. */
+.q-done { border-top: 3px solid var(--accent); background: var(--surface-warm); padding: 36px 36px 34px; }
+
+/* The rail: in view while the form scrolls on a desktop. */
+@media (min-width: 901px) {
+  .q-rail { position: sticky; top: calc(var(--bar-h) + 28px); padding-top: 8px; }
+}
+.q-timeline { position: relative; margin: 0; padding: 0; list-style: none; }
+.q-timeline li { position: relative; display: grid; grid-template-columns: 30px minmax(0, 1fr); column-gap: 16px; padding-bottom: 20px; }
+.q-timeline li:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: 14px;
+  top: 32px;
+  bottom: 4px;
+  width: 1px;
+  background: var(--hairline-strong);
+}
+.q-dot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--ink);
+  background: #FFFFFF;
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.q-timeline li:first-child .q-dot { background: var(--ink); color: #FFFFFF; }
+.q-t-title { font-family: var(--font-display); font-size: 18px; font-weight: 700; line-height: 1.25; letter-spacing: -0.01em; color: var(--ink); padding-top: 4px; }
+.q-t-body { margin-top: 5px; font-size: 15.5px; line-height: 1.55; color: var(--ink-body); text-wrap: pretty; }
+.q-list { list-style: none; margin: 0; padding: 0; }
+.q-list li { position: relative; padding: 6px 0 6px 20px; font-size: 15.5px; line-height: 1.45; color: var(--ink-body); border-bottom: 1px solid var(--hairline); }
+.q-list li::before { content: ""; position: absolute; left: 1px; top: 16px; width: 10px; height: 1px; background: var(--ink-muted); }  /* a short rule: a list, not a checklist, and not HUB's orange square */
+
+@media (max-width: 1100px) {
+  .q-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .q-tile { min-height: 84px; padding: 12px 12px 11px; }
+  .q-tile-name { font-size: 15px; }
+  .q-legend { font-size: 22px; }
+  .q-send { width: 100%; }
+  .q-done { padding: 26px 20px 24px; }
+}
+
+
+/* ---- Privacy and terms, as documents (28 Sept 2026; Vern: "privacy and
+   terms pages should look different too"). hubss.com: one centred column
+   on near-black, spaced caps, "1. Heading" between rules. Square One: the
+   label and the contents in the margin column, a ledger of when, what and
+   who to ask, each clause's number in its own gutter, the text at reading
+   size. Printing leaves only the document. ---- */
+.legal h1 { margin-top: 0; }
+.legal-meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, auto));
+  justify-content: start;
+  column-gap: 40px;
+  row-gap: 10px;
+  margin: 28px 0 0;
+  padding: 14px 0 0;
+  border-top: 1px solid var(--ink);
+}
+.legal-meta dt { font-family: var(--font-text); font-style: italic; font-size: 14px; line-height: 1.4; color: var(--ink-muted); }
+.legal-meta dd { margin: 2px 0 0; font-size: 16px; line-height: 1.45; color: var(--ink); }
+.legal-meta a { color: var(--ink); text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--hairline-strong); }
+.legal-meta a:hover { text-decoration-color: var(--ink); }
+.legal-lede { margin-top: 28px; max-width: 60ch; }
+.legal-lede p { font-size: inherit; line-height: inherit; }
+
+.legal-toc { position: relative; }
+@media (min-width: 901px) {
+  .legal-toc > div { position: sticky; top: calc(var(--bar-h) + 32px); }
+}
+.legal-toc-list { list-style: none; margin: 12px 0 0; padding: 0; border-top: 1px solid var(--hairline); }
+.legal-toc-list a {
+  position: relative;
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  column-gap: 8px;
+  padding: 8px 0 8px;
+  border-bottom: 1px solid var(--hairline);
+  font-family: var(--font-text);
+  font-size: 15px;
+  line-height: 1.35;
+  color: var(--ink-muted);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.legal-toc-list a:hover { color: var(--ink); }
+.legal-toc-list a[data-active] { color: var(--ink); }
+.legal-toc-list a[data-active]::before {
+  content: "";
+  position: absolute;
+  left: -14px;
+  top: 9px;
+  bottom: 9px;
+  width: 3px;
+  background: var(--accent);
+}
+.legal-toc-n { font-family: var(--font-display); font-weight: 700; font-size: 13px; padding-top: 2px; color: var(--hairline-strong); font-variant-numeric: tabular-nums; }
+.legal-toc-list a[data-active] .legal-toc-n { color: var(--accent-deep); }
+.legal-toc-foot { margin-top: 18px; }
+.legal-toc-fold { border-top: 1px solid var(--ink); border-bottom: 1px solid var(--hairline); }
+.legal-toc-fold summary { display: flex; align-items: baseline; justify-content: space-between; padding: 12px 0; cursor: pointer; list-style: none; }
+.legal-toc-fold summary::-webkit-details-marker { display: none; }
+.legal-toc-fold summary::after { content: "+"; font-family: var(--font-display); font-size: 20px; line-height: 1; color: var(--ink); }
+.legal-toc-fold[open] summary::after { content: "\2212"; }
+.legal-toc-count { margin-left: auto; margin-right: 14px; font-family: var(--font-text); font-style: italic; font-size: 14px; color: var(--ink-muted); }
+.legal-toc-fold .legal-toc-list { margin: 0 0 12px; }
+
+.legal-clause {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  column-gap: 12px;
+  padding: 30px 0 34px;
+  border-top: 1px solid var(--hairline);
+  scroll-margin-top: calc(var(--bar-h) + 24px);
+}
+.legal-clause:first-child { border-top-color: var(--ink); }
+.legal-num {
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--hairline-strong);
+  font-variant-numeric: tabular-nums;
+}
+.legal-h {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.014em;
+  line-height: 1.15;
+  color: var(--ink);
+}
+h2.legal-h:not(.label):not(.eyebrow):not(.card-title) { font-size: clamp(1.375rem, 1.9vw, 1.75rem); }
+.legal-text { margin-top: 14px; max-width: 66ch; }
+.legal-text p { font-size: 17.5px; line-height: 1.65; color: var(--ink-body); }
+.legal-text p + p, .legal-text p + ul, .legal-text ul + p { margin-top: 14px; }
+.legal-list { list-style: none; margin: 0; padding: 0; }
+.legal-list li { position: relative; padding: 7px 0 7px 22px; font-size: 17px; line-height: 1.5; color: var(--ink-body); border-bottom: 1px solid var(--hairline); }
+.legal-list li:first-child { border-top: 1px solid var(--hairline); }
+.legal-list li::before { content: ""; position: absolute; left: 2px; top: 17px; width: 10px; height: 1px; background: var(--ink-muted); }
+.legal-address { padding: 16px 20px; background: var(--surface-warm); border-left: 2px solid var(--ink); font-style: normal; }
+.legal-address a { color: var(--ink); white-space: nowrap; text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--hairline-strong); }
+.legal-address a:hover { text-decoration-color: var(--ink); }
+.legal-sep { color: var(--hairline-strong); }
+.legal-end { display: flex; flex-wrap: wrap; gap: 10px 28px; padding-top: 22px; border-top: 1px solid var(--ink); }
+
+@media (max-width: 700px) {
+  .legal-meta { grid-template-columns: minmax(0, 1fr); }
+  .legal-clause { grid-template-columns: minmax(0, 1fr); row-gap: 8px; padding: 24px 0 26px; }
+  .legal-num { font-size: 24px; }
+  .legal-text p { font-size: 16.5px; }
+  .legal-list li { font-size: 16px; }
+}
+
+@media print {
+  header, footer, .legal-toc, .legal-end, [aria-label="Type setting"] { display: none !important; }
+  .legal { padding: 0; }
+  .legal-clause { break-inside: avoid; }
+  .legal-address { background: none; }
+}
+
+
+/* ---- The finish (28 Sept 2026; Vern: "give the site the 21e8.studio
+   polish that it deserves"). Small things that make it feel made: a way
+   past the bar for the keyboard, a press you can feel, a focus ring that
+   clears the edge, the selection in the brand's own tint, and the 404. ---- */
+.skip-link {
+  position: fixed;
+  left: 16px;
+  top: 12px;
+  z-index: 400;
+  padding: 11px 16px;
+  background: var(--ink);
+  color: #FFFFFF;
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  transform: translateY(-180%);
+  transition: transform 0.18s ease;
+}
+.skip-link:focus, .skip-link:focus-visible { transform: none; color: #FFFFFF; outline: 2px solid #FFFFFF; outline-offset: -4px; }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+::selection { background: var(--accent-tint); color: var(--ink); }
+.btn-primary, .btn-ink, .btn-on-slate, .btn-water, .nav-cta { transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.08s ease; }
+.btn-primary:active, .btn-ink:active, .btn-on-slate:active, .btn-water:active, .nav-cta:active { transform: translateY(1px); }
+@media (prefers-reduced-motion: reduce) {
+  .btn-primary:active, .btn-ink:active, .btn-on-slate:active, .btn-water:active, .nav-cta:active { transform: none; }
+}
+
+.nf-ways { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 36px; border-top: 1px solid var(--ink); }
+.nf-row { grid-template-columns: 48px minmax(0, 1fr); padding: 14px 0; }
+.nf-row .drawer-name { font-size: 19px; text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 6px; text-decoration-color: transparent; transition: text-decoration-color 0.15s ease; }
+.nf-row:hover .drawer-name { text-decoration-color: var(--accent); }
+@media (max-width: 560px) { .nf-ways { grid-template-columns: minmax(0, 1fr); } }
+
+
+/* ---- For specifiers, things you can see (28 Sept 2026; Vern: "this page
+   is just a total jumble of text"). The four things to draw from are four
+   objects: a drawing from the library, a template sheet, the colour chart,
+   a sample board. The four services sit side by side with their material
+   on top. The closures, the warranty and the regions are a ledger. ---- */
+.kit-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 36px 28px; }
+.kit-tile { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; }
+.kit-visual {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--surface-stone);
+  box-shadow: inset 0 0 0 1px rgba(20, 22, 26, 0.08);
+  transition: box-shadow 0.18s ease;
+}
+.kit-visual:hover { box-shadow: inset 0 0 0 1px var(--ink); }
+.kit-paper { background: #FFFFFF; box-shadow: inset 0 0 0 1px var(--hairline), 0 1px 0 var(--hairline); }
+.kit-paper:hover { box-shadow: inset 0 0 0 1px var(--ink); }
+.kit-chips { display: grid; grid-template-columns: repeat(6, 1fr); grid-template-rows: repeat(4, 1fr); gap: 3px; padding: 3px; background: #FFFFFF; }
+.kit-chips > span { display: block; }
+.kit-board { background: var(--charcoal); }
+.kit-board-chips { position: absolute; right: 14px; bottom: 14px; display: flex; gap: 6px; }
+.kit-board-chips > span { display: block; width: 38px; height: 52px; box-shadow: 0 6px 14px rgba(0, 0, 0, 0.28), inset 0 0 0 1px rgba(255, 255, 255, 0.25); }
+.kit-title { margin-top: 3px; font-size: 19px; line-height: 1.25; text-wrap: balance; }
+.kit-line { margin-top: 6px; font-size: 15.5px; line-height: 1.5; color: var(--ink-body); text-wrap: pretty; }
+.kit-tile .tags { line-height: 1.6; }
+@media (max-width: 1100px) { .kit-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .kit-grid { grid-template-columns: minmax(0, 1fr); gap: 40px; } }
+
+.svc-matrix { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 32px 28px; }
+.svc-col { display: flex; flex-direction: column; min-width: 0; padding-top: 18px; border-top: 1px solid var(--ink); }
+.svc-head { display: flex; align-items: center; gap: 14px; color: var(--ink); text-decoration: none; }
+.svc-name {
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 5px;
+  text-decoration-color: transparent;
+  transition: text-decoration-color 0.15s ease;
+}
+.svc-head:hover .svc-name { text-decoration-color: var(--accent); }
+.svc-list { margin: 6px 0 0; padding: 0; list-style: none; }
+.svc-list li { padding: 6px 0; font-size: 15.5px; line-height: 1.4; color: var(--ink-body); border-bottom: 1px solid var(--hairline); }
+/* The underline sits on the name, not the link, so the dot between two
+   systems is not underlined with them. */
+.svc-sys { font-style: normal; color: var(--ink); text-decoration: none; }
+.svc-sys-name { text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--hairline-strong); }
+.svc-sys:hover .svc-sys-name { text-decoration-color: var(--ink); }
+@media (max-width: 1100px) { .svc-matrix { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .svc-matrix { grid-template-columns: minmax(0, 1fr); } }
+
+.spec-notes { margin: 0; border-top: 1px solid var(--ink); }
+.spec-notes > div { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 7fr); column-gap: 24px; padding: 16px 0 17px; border-bottom: 1px solid var(--hairline); }
+.spec-notes dt { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--ink); }
+.spec-notes dd { margin: 0; max-width: 64ch; font-size: 16.5px; line-height: 1.55; color: var(--ink-body); }
+@media (max-width: 700px) { .spec-notes > div { grid-template-columns: minmax(0, 1fr); row-gap: 4px; } }
+
+
+/* ---- QA pass, 28 Sept 2026 (site-wide) ---- */
+/* A phone number never breaks across lines. */
+a[href^="tel:"] { white-space: nowrap; }
+/* Footer runs: spaced, not dotted, so no line ends on a dangling dot. */
+.foot-run { display: flex; flex-wrap: wrap; gap: 2px 20px; }
+.foot-run li + li::before { content: none; }
+@media (max-width: 560px) { h1 { line-height: 1.08; } }
+
+/* Record cards (blog, projects): title sizes as classes, because the
+   unlayered h3 rule above outranks Tailwind's size utilities. */
+/* The lead record's title is its index's h2 (30 Sept 2026); `card-title` keeps it out of the section-heading size. */
+.rc-title-lead, h2.card-title.rc-title-lead { font-size: 26px; line-height: 1.15; letter-spacing: -0.012em; }
+.rc-title { font-size: 20px; line-height: 1.25; }
+@media (max-width: 700px) { .rc-title-lead { font-size: 22px; } }
+@media (max-width: 600px) { .rc-title { font-size: 17px; line-height: 1.3; } }
+/* No photograph on file: the mark on a faint template drawing. */
+.no-photo {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-warm);
+}
+.no-photo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("/images/patterns/herringbone.webp") center / 170% no-repeat;
+  opacity: 0.16;
+}
+.no-photo svg { position: relative; opacity: 0.55; }
+
+/* The applications index's twelfth square: the chart as a sample board,
+   square chips, the same 4:3 as the frames beside it (28 Sept 2026). */
+.app-else { grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(3, 1fr); }
+
+/* ---- From the crews (the home page's social block, 28 Sept 2026) ----
+   Unlike hubss.com's heading + pill + one row of rounded squares: the
+   networks as a hairline ledger, the photographs as a captioned contact
+   sheet in portrait frames. */
+.social-ledger { margin: 2rem 0 0; padding: 0; list-style: none; border-top: 1px solid var(--ink); }
+.social-ledger li { border-bottom: 1px solid var(--hairline); }
+.social-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 13px 0; color: var(--ink); text-decoration: none; }
+.social-name { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 700; font-size: 17px; }
+.social-note { font-family: var(--font-text); font-style: italic; font-size: var(--small); color: var(--ink-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.social-row:hover .social-name { text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 1px; }
+.social-tile { color: inherit; text-decoration: none; }
+.social-cap { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.social-tile:hover .social-cap { color: var(--ink); }
+
+/* ---- The display pairing (28 Sept 2026, "21e8 polish") ----
+   A headline in Futura Bold can end in the reading serif, in italic: the
+   phrase that carries the feeling. One move, used the same way on every
+   section heading and opener, so the site reads as one voice. */
+h1 em, h2 em, .display-xl em, .display-statement em, .h-serif {
+  font-family: var(--font-text);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+h1 em, .display-xl em { letter-spacing: -0.015em; }
+
+/* ---- The Futura treatment (28 Sept 2026) ----
+   Vern: "they like the Futura… maybe hero text should be all caps to accent
+   the Futura." Every page's H1 is set in Futura Bold capitals, tight, with
+   its closing phrase in the serif's italic in lower case (the pairing
+   above). Section headings stay in sentence case, so the page has one
+   poster line and never shouts; blog post titles stay in sentence case
+   because they run long. --fit-adj tells the fitted headlines that capitals
+   are wider (lib/type.ts measures lower case). */
+h1, .display-xl {
+  text-transform: uppercase;
+  letter-spacing: 0.012em;
+  line-height: 1;
+}
+h1 em, .display-xl em {
+  display: block;          /* the capitals, then the italic line under them */
+  text-transform: none;
+  letter-spacing: -0.012em;
+}
+h1.display-fit, .display-xl.display-fit { --fit-adj: 1.38; }
+h1 { font-size: clamp(2rem, 4vw, 3.5rem); }
+@media (min-width: 1536px) { h1 { font-size: clamp(2.5rem, 3.6vw, 4rem); } }
+@media (max-width: 560px) { h1 { font-size: clamp(1.75rem, 7.6vw, 2.25rem); } }
+h1.headline-sentence, .headline-sentence {
+  text-transform: none;
+  letter-spacing: -0.02em;
+  line-height: 1.06;
+}
+
+/* ---- QA pass, 30 Sept 2026 -----------------------------------------------
+   Four things a keyboard and a thumb need, and one hover the site owns. */
+
+/* Over a photograph the bar is light, and an ink focus ring on a dark
+   frame is a ring nobody sees: the ring goes white there. */
+.nav-light :focus-visible { outline-color: #FFFFFF; }
+
+/* Targets a thumb can hit: the inline links, the footer's numbers and runs,
+   the phone number in the bar and the filter words all sit in 22px lines.
+   Vertical padding on an inline box adds nothing to the line and 8px to
+   the target, so every one is 30px tall without a layout change. */
+.link, .foot-a, .foot-num, .nav-phone, .arrow-link, .svc-sys, .q-lines a, .legal-address a, .q-rail a, .spec-glance-a, .legal-meta dd a { padding-block: 4px; }
+a.label { padding-block: 4px; margin-block: -4px; }
+button.link { padding-inline: 6px; margin-inline: -6px; }
+
+/* A linked frame answers the pointer without moving the photograph (the
+   frame never zooms, docs/OWN-COMPANY-BRIEF.md §3.7): the caption comes up
+   to ink with the accent under it, the way a menu row does, and the
+   photograph lifts a shade. */
+.frame-link .cap {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  text-decoration-color: transparent;
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+.frame-link img { transition: filter 0.6s ease; }
+@media (hover: hover) {
+  .frame-link:hover .cap { color: var(--ink); text-decoration-color: var(--accent); }
+  .frame-link:hover img { filter: brightness(1.04); }
+}
+.frame-link:focus-visible { outline-offset: 4px; }
+
+/* The opener's words arrive: headline, line, button, 90ms apart, once, on
+   load. The photograph is already there; only the words rise, and they
+   are never hidden for a reader who asked for reduced motion. */
+@keyframes hero-rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+.hero-in > * { animation: hero-rise 0.8s cubic-bezier(0.2, 0.75, 0.2, 1) both; }
+.hero-in > :nth-child(2) { animation-delay: 90ms; }
+.hero-in > :nth-child(3) { animation-delay: 180ms; }
+.hero-in > :nth-child(n + 4) { animation-delay: 270ms; }
+@media (prefers-reduced-motion: reduce) {
+  .hero-in > * { animation: none; }
+  .reveal-armed { opacity: 1; transform: none; transition: none; }
+}
+
+/* ============================================================
+   2 Oct 2026: the client's notes, after their first look at the preview.
+
+   "Not impressed by the serif italic." "Far less orange, more a B&W
+   greyscale effect, still crisp and image forward." They are fairly happy
+   with the live site, which is sans and crisp. So, over everything above:
+
+     one face read   — Inter for everything read, no italics anywhere the
+                       design speaks (prose keeps its own italics).
+     one face shown  — Futura: Bold for the line, Book for the phrase that
+                       used to be the serif's italic.
+     no orange       — the only colour in the chrome is the colour card's
+                       edge, on the footer; action is ink, hover is black.
+                       The photographs keep their colour: they are the
+                       product. The copper in the mark is the mark's.
+     the water       — vapour blasting's blue goes to slate.
+   ============================================================ */
+:root {
+  --font-text: var(--font-inter), var(--font-poppins), system-ui, -apple-system, sans-serif;
+  /* 2 Oct 2026, later (Vern: "tie back in a little bit of orange where it
+     works to lead the eye, maybe even hover states"): the brand's terracotta
+     is --accent again, spent on the menu's gutter rule, the underline a link
+     or a frame answers the pointer with, the reel's running segment and the
+     primary button's hover. At rest the chrome stays ink and grey. */
+  --accent: #C85A3A;
+  --accent-deep: #14161A;
+  --accent-press: #000000;
+  --accent-tint: #EAECEE;
+  --water: #4A5058;
+  --water-deep: #2D3033;
+  --water-tint: #F4F5F6;
+  --water-hairline: #DADDE0;
+  --small: 14px;
+}
+body { font-size: 17px; line-height: 1.6; }
+@media (max-width: 700px) { body { font-size: 16px; } }
+
+/* The small voice: Inter, regular, grey. Every italic the own-company pass
+   set is listed here, plus Tailwind's `italic` utility, which the
+   components use for the same voice; `em` and `i` inside reading prose
+   keep their emphasis. */
+.eyebrow, .label, .tag, .cap, .caption, .link, .arrow-link, .btn-secondary, .foot-link,
+.mega-note, .social-note, .nav-phone, .q-hint, .lede, .standfirst, .cap-on-slate,
+.legal-meta dt, .foot-ledger dt, .spec dt, .rc-meta, .drawer-note, .mega-lines dt,
+.social-note, figcaption, .label-on-slate, .label-on-image, .eyebrow-on-image,
+.chip-name, .menu-note, .q-lines dt, .q-optional, .q-tile-sub, .legal-toc-count, .foot-area,
+.italic, .prose figcaption { font-style: normal; }
+.label, .eyebrow, .tag, .cap, .caption { font-size: var(--small); letter-spacing: 0; }
+.link, .arrow-link, .btn-secondary, .foot-link { font-family: var(--font-text); font-style: normal; font-size: 16px; }
+.standfirst { font-family: var(--font-text); font-size: 23px; line-height: 1.45; letter-spacing: -0.01em; }
+@media (max-width: 700px) { .standfirst { font-size: 19px; } }
+.lede { font-family: var(--font-text); }
+
+/* The heading pairing: the phrase is Futura Book, same size, same case
+   as the line it follows; the opener keeps its capitals on the line and
+   sentence case on the phrase. */
+h1 em, h2 em, .display-xl em, .display-statement em, .h-serif {
+  font-family: var(--font-display);
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: -0.012em;
+}
+h1 em, .display-xl em { letter-spacing: -0.008em; }
+
+/* Action in ink. */
+.btn-primary, .nav-cta { background: var(--ink); border-color: var(--ink); color: #FFFFFF; }
+.btn-primary:hover, .nav-cta:hover { background: var(--accent); border-color: var(--accent); color: #FFFFFF; }
+.nav-light .nav-cta { background: #FFFFFF; border-color: #FFFFFF; color: var(--ink); }
+.nav-light .nav-cta:hover { background: var(--surface-stone); border-color: var(--surface-stone); color: var(--ink); }
+.btn-primary.btn-water, .btn-water { background: var(--ink); }
+.btn-primary.btn-water:hover, .btn-water:hover { background: var(--accent); }
+.q-field:focus { box-shadow: 0 0 0 3px rgba(20, 22, 26, 0.12); }
+.text-water { color: var(--ink); }
+/* On a photograph the button is white, ink on it; ink on a dark frame would vanish. */
+.hero-in .btn-primary { background: #FFFFFF; border-color: #FFFFFF; color: var(--ink); }
+.hero-in .btn-primary:hover { background: var(--surface-stone); border-color: var(--surface-stone); color: var(--ink); }
+
+/* The menu's second row has three ways on now (driveways, the systems, the
+   documents), side by side. */
+.mega-more { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 24px; }
+.mega-more .mega-row-sm { grid-template-columns: 40px minmax(0, 1fr); column-gap: 12px; }
+.mega-more .mega-row-sm .mega-name { font-size: 16px; }
+
+/* A link inside reading prose: the tap target reaches 24px without
+   touching the line (vertical padding on an inline element does not). */
+.prose a { padding-block: 2px; }
+
+/* ============================================================
+   2 Oct 2026, later: Vern on the new preview. "These headings on the
+   homepage just feel like they are floating there." "Hero sections still
+   feel a bit unfinished." "A few large grey background sections to break
+   things up." "Bring back what might have been lost from the live site;
+   it was just more simple and clean. Don't revert, keep improving."
+   "Footer is still feeling messy."
+   ============================================================ */
+
+/* The section header, anchored: the label sits directly over the heading
+   at the container's left edge, the one link on the heading's baseline at
+   the right, the content under them. The margin column (label left, heading
+   nine columns in, link at the far right) spread three small things across
+   1280px and read as floating. The hairline above each section stays. */
+.sec-grid { display: block; }
+.sec-label { padding-top: 0; }
+.sec-label:not(:empty) { margin-bottom: 14px; }
+.sec-body { min-width: 0; }
+.sec-head { gap: 12px 40px; }
+.sec-head h2, .sec-head h1 { max-width: 22ch; }
+.sec-content { margin-top: 44px; }
+.sec-grid > .col-span-12 { grid-column: auto; }
+@media (max-width: 700px) {
+  .sec-label:not(:empty) { margin-bottom: 10px; }
+  .sec-content { margin-top: 28px; }
+}
+
+/* The grey bands: the warm tone deepens so a grey section reads as one.
+   Stone is the darker of the two, for the bands that break the page. */
+:root { --surface-warm: #F1F2F4; --surface-stone: #E6E8EB; }
+
+/* The opener's base: a hairline ledger across the container with the
+   caption on the left and the reel's counter and controls on the right,
+   so nothing over the photograph floats. The reel's clock is the ledger's
+   own rule, in seven segments. */
+.hero-ledger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 40px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.28);
+  color: rgba(255, 255, 255, 0.9);
+}
+.hero-ledger .cap-on-image { font-family: var(--font-text); font-size: 14px; color: rgba(255, 255, 255, 0.86); min-width: 0; }
+.hero-ledger .reel-counter { font-family: var(--font-display); font-size: 13px; font-weight: 700; letter-spacing: 0.04em; font-variant-numeric: tabular-nums; color: rgba(255, 255, 255, 0.9); }
+.hero-ledger .reel-controls { display: flex; align-items: center; gap: 10px; }
+.hero-clock { position: absolute; left: 0; right: 0; bottom: 0; display: flex; gap: 2px; height: 3px; z-index: 2; }
+.hero-clock .reel-seg { flex: 1; height: 3px; background: rgba(255, 255, 255, 0.22); }
+.hero-clock .reel-seg-fill { background: #FFFFFF; }
+.hero-clock .reel-seg-fill.is-running { background: var(--accent); }
+@media (max-width: 700px) {
+  .hero-ledger { margin-top: 28px; padding-top: 14px; gap: 14px; }
+  .hero-ledger .cap-on-image { font-size: 12.5px; }
+  .hero-ledger .reel-controls { display: none; }
+}
+.hero-in .btn-on-image { font-family: var(--font-display); font-size: 15px; font-weight: 700; letter-spacing: 0; text-transform: none; line-height: 1.2; padding: 15px 26px; }
+.hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 14px; }
+@media (max-width: 700px) {
+  .hero-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .hero-actions .btn-primary, .hero-actions .btn-on-image { display: flex; width: 100%; justify-content: center; padding-inline: 10px; }
+}
+
+/* The page openers (IndexImageHero) carry the same ledger: the page's
+   label on the left, the photograph's caption on the right. */
+.opener-ledger {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 36px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.28);
+  font-family: var(--font-text);
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.86);
+}
+.opener-ledger > span { min-width: 0; }
+@media (max-width: 700px) {
+  .opener-ledger { margin-top: 26px; padding-top: 12px; font-size: 12.5px; flex-wrap: wrap; gap: 6px 16px; }
+}
+
+/* The footer on charcoal: the brand's own footer colour, four columns,
+   the colour card's edge along its top. */
+.site-foot { background: var(--surface-slate); color: #C9CDD2; }
+.site-foot .colour-edge { height: 6px; }
+.foot-line { font-family: var(--font-text); font-size: 15.5px; line-height: 1.6; color: #C9CDD2; text-wrap: pretty; }
+.foot-head { display: block; font-family: var(--font-text); font-size: 13px; font-weight: 500; letter-spacing: 0.02em; color: #9BA1A9; }
+.foot-a { color: #E6E8EB; font-size: 15.5px; text-decoration-color: transparent; }
+.foot-a:hover { color: #FFFFFF; text-decoration-color: var(--accent); }
+.foot-net { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; margin: -8px; color: #C9CDD2; transition: color 0.15s ease; }
+.foot-net:hover { color: #FFFFFF; }
+.foot-lines { margin: 0; }
+.foot-lines > div { display: grid; grid-template-columns: 142px minmax(0, 1fr); column-gap: 16px; align-items: baseline; padding: 9px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.12); }
+.foot-lines > div:first-child { border-top: 1px solid rgba(255, 255, 255, 0.12); }
+.foot-lines dt { font-family: var(--font-text); font-size: 14px; color: #9BA1A9; }
+.foot-lines > div.foot-mail { grid-template-columns: minmax(0, 1fr); row-gap: 2px; }
+.foot-lines dd { margin: 0; font-size: 15.5px; color: #E6E8EB; }
+.foot-num { color: #FFFFFF; text-decoration-color: transparent; }
+.foot-num:hover { color: #FFFFFF; text-decoration-color: var(--accent); }
+.foot-address { font-family: var(--font-text); font-size: 14.5px; line-height: 1.55; color: #9BA1A9; }
+.foot-area { font-family: var(--font-text); font-size: 14.5px; line-height: 1.7; color: #9BA1A9; max-width: none; padding-top: 18px; border-top: 1px solid rgba(255, 255, 255, 0.12); }
+.foot-area .foot-head { display: inline; color: #C9CDD2; margin-right: 6px; }
+.foot-legal { border-top: 1px solid rgba(255, 255, 255, 0.12); color: #9BA1A9; }
+.foot-legal .foot-a { font-size: 14px; color: #C9CDD2; }
+.site-foot :focus-visible { outline-color: #FFFFFF; }
+
+/* The page openers stand a little taller (64vh) and their rise is a shade
+   lighter, so a sunlit frame reads as one; the words keep their shadow. */
+.opener .scrim-rise {
+  background: linear-gradient(
+    to top,
+    rgba(24, 21, 18, 0.8) 0%,
+    rgba(24, 21, 18, 0.52) 30%,
+    rgba(24, 21, 18, 0.2) 55%,
+    rgba(24, 21, 18, 0) 78%
+  );
+}
+
+/* The menu's second row: three words on a hairline under the services,
+   no swatches (2 Oct 2026). */
+.mega-more { display: none; }
+.mega-also { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 22px; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--hairline); }
+.mega-also-label { font-family: var(--font-text); font-size: 13px; color: var(--ink-muted); margin-right: 2px; }
+.mega-also-a { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--ink); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 5px; text-decoration-color: transparent; transition: text-decoration-color 0.15s ease; padding-block: 4px; }
+.mega-also-a:hover, .mega-also-a[data-active] { text-decoration-color: var(--accent); }
+
+/* The underline a link answers the pointer with is terracotta; the word
+   stays ink. */
+.link:hover, .arrow-link:hover, .btn-secondary:hover, .foot-link:hover { color: var(--ink); text-decoration-color: var(--accent); }
+.sec-head .link:hover { text-decoration-color: var(--accent); }
+.spec-glance-a:hover, .q-rail a:hover, .q-lines a:hover { text-decoration-color: var(--accent) !important; }
+/* Drawer rows without a swatch (driveways, the systems, documents) keep the
+   text aligned with the rows that have one. */
+.drawer-row > span:only-child { grid-column: 2; }
+
+/* The menu preview's caption holds to one line. */
+.mega-preview .cap { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* An opener with its words on the right darkens the right, not the whole
+   foot: the subject on the left (the operator, the marking, the spray)
+   stays in daylight. */
+.opener-right .scrim-rise {
+  background:
+    linear-gradient(to right, rgba(24, 21, 18, 0) 42%, rgba(24, 21, 18, 0.4) 100%),
+    linear-gradient(to top, rgba(24, 21, 18, 0.32) 0%, rgba(24, 21, 18, 0.12) 30%, rgba(24, 21, 18, 0) 55%);
+}
+/* The photograph keeps its colour under a lighter rise, with a touch more
+   saturation (2 Oct 2026, Vern: "seems muted"). */
+.opener-right img { filter: saturate(1.12) contrast(1.03); }
+
+/* The who-we-work-with ledger: the galleries as a two-column list per
+   buyer, not a run of words with dots, and the buyer's name in a narrower
+   column (2 Oct 2026). */
+.mega-ledger > div { grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); padding: 16px 0 17px; }
+.mega-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 24px; row-gap: 6px; line-height: 1.5; }
+.mega-list li { display: block; }
+.mega-list li + li::before { content: none; }
+.mega-list a { display: inline-block; padding-block: 2px; }
+@media (max-width: 700px) {
+  /* On a phone the words span the whole width, so the standard rise comes back. */
+  .opener-right .scrim-rise {
+    background: linear-gradient(to top, rgba(24, 21, 18, 0.8) 0%, rgba(24, 21, 18, 0.52) 30%, rgba(24, 21, 18, 0.2) 55%, rgba(24, 21, 18, 0) 78%);
+  }
+}

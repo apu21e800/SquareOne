@@ -5,7 +5,7 @@ paste the one-liner. Say `go` at each gate to advance. The file is the contract;
 the agent re-reads it every phase.
 
 ```
-cd C:\Users\cleve\Based_Agency\based-agncy_os\Web_Projects\squareone-website
+cd D:\STUDIO-01\21e8.studio\clients\squareone-website
 claude --add-dir ..\hubss-website
 ```
 

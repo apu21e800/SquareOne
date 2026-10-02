@@ -1,26 +1,33 @@
 "use client"
 
-import { useCallback, useEffect, useMemo, useRef, useState, type TouchEvent } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type TouchEvent } from "react"
 import Image from "next/image"
 import type { WorkPhoto } from "@/lib/work"
+import { sentenceCase } from "@/lib/text"
 
 /**
- * The work, photographed on site — a captioned tile grid of Square One's
- * own installation photography (lib/work.ts), and the viewer Jan shows
- * clients: any tile opens full-screen with its caption, and the arrows,
- * keyboard and swipe walk the set (Vern, 4 Sept 2026: "Jan likes to be
- * able to show clients image galleries").
+ * The work, photographed on site — a captioned grid of Square One's own
+ * installation photography (lib/work.ts), and the viewer Jan shows clients:
+ * any frame opens full-screen with its caption, and the arrows, keyboard
+ * and swipe walk the set (Vern, 4 Sept 2026: "Jan likes to be able to show
+ * clients image galleries").
  *
- * Tiles are 5:3 because the archive shots are 667×402: no crop, no upscale.
- * Captions sit under the image in the type canon's small sizes rather than
- * over it — a scrim on a 667px tile reads as mud. The viewer shows the
- * photograph whole (object-contain) on slate, never cropped.
+ * 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.7, §5 step 5): the same grid,
+ * set the own-company way. Every frame is square-cornered with its caption
+ * UNDER it in the serif (`.cap`) — place, then system and subject; nothing
+ * over the photograph, no scrim, no hover zoom, no expand badge. The filter
+ * chips are underlined words (`.link`); the one in force is plain ink with
+ * `aria-pressed`. "Show all" and "Show fewer" are words too.
  *
- *   filters   system + region chips (only the values present in `photos`)
- *   initial   tiles shown before "Show all" — 8 fits two rows of four
+ * Frames are 5:3 because the archive shots are 667×402: no crop, no
+ * upscale. The viewer shows the photograph whole (object-contain) on slate,
+ * never cropped.
  *
- * The viewer is exported: components/ProjectGallery.tsx gives the case
- * studies the same full-screen walk.
+ *   filters   system + region words (only the values present in `photos`)
+ *   initial   frames shown before "Show all" — 8 fits two rows of four
+ *
+ * The viewer is exported: components/ProjectGallery.tsx and
+ * components/FrameGallery.tsx give their sets the same full-screen walk.
  */
 
 interface WorkGalleryProps {
@@ -42,7 +49,12 @@ export interface ViewerPhoto {
 const ALL = "All"
 const SWIPE = 44
 
-function Chip({
+/** The filter in force reads as the current word, not a link: ink, no
+    underline. own.css sets `.link` unlayered, so the override is inline. */
+const CURRENT: CSSProperties = { textDecoration: "none", color: "var(--ink)" }
+
+/** One filter word — an underlined link, or the plain current word. */
+export function FilterWord({
   active,
   onSelect,
   children,
@@ -52,16 +64,7 @@ function Chip({
   children: React.ReactNode
 }) {
   return (
-    <button
-      type="button"
-      onClick={onSelect}
-      aria-pressed={active}
-      className={`rounded-[2px] border px-4 py-[9px] text-[14px] transition-colors ${
-        active
-          ? "border-[color:var(--ink)] bg-[color:var(--ink)] font-semibold text-white"
-          : "border-[color:var(--hairline)] font-medium text-[color:var(--ink-muted)] hover:border-[color:var(--hairline-strong)] hover:text-[color:var(--ink)]"
-      }`}
-    >
+    <button type="button" onClick={onSelect} aria-pressed={active} className="link" style={active ? CURRENT : undefined}>
       {children}
     </button>
   )
@@ -71,14 +74,15 @@ function Chip({
 export function workAlt(p: WorkPhoto): string {
   const sys = p.systems.join(" and ")
   return p.place
-    ? `${p.subject} in ${sys} — ${p.place}, BC. Installed by Square One Paving.`
+    ? `${p.subject} in ${sys}, ${p.place}, BC. Installed by Square One Paving.`
     : `${p.subject} in ${sys}. Installed by Square One Paving.`
 }
 
 function captionLines(p: WorkPhoto): { primary: string; secondary: string } {
-  const primary = p.place || p.subject
+  const subject = sentenceCase(p.subject)
+  const primary = p.place || subject
   const secondary = p.place
-    ? [p.systems.join(" + "), p.subject].filter(Boolean).join(" · ")
+    ? [p.systems.join(" + "), subject].filter(Boolean).join(" · ")
     : p.systems.join(" + ")
   return { primary, secondary }
 }
@@ -86,6 +90,49 @@ function captionLines(p: WorkPhoto): { primary: string; secondary: string } {
 function toViewer(p: WorkPhoto): ViewerPhoto {
   const { primary, secondary } = captionLines(p)
   return { src: p.src, alt: workAlt(p), primary, secondary }
+}
+
+/**
+ * One frame of a gallery: a square-cornered button holding the photograph,
+ * the caption under it. Shared by the three galleries so they read as one.
+ */
+export function GalleryFrame({
+  src,
+  alt,
+  primary,
+  secondary,
+  aspect = "aspect-[5/3]",
+  sizes = "(max-width: 700px) 50vw, (max-width: 1023px) 33vw, 300px",
+  ariaLabel,
+  onOpen,
+}: {
+  src: string
+  alt: string
+  primary: string
+  secondary?: string
+  aspect?: string
+  sizes?: string
+  ariaLabel: string
+  onOpen: () => void
+}) {
+  return (
+    <figure className="m-0">
+      <button
+        type="button"
+        onClick={onOpen}
+        aria-label={ariaLabel}
+        className={`relative block w-full overflow-hidden bg-surface-stone text-left ${aspect}`}
+      >
+        <Image src={src} alt={alt} fill sizes={sizes} className="object-cover" />
+      </button>
+      {/* Two lines: the place leads in ink, the system and subject follow
+          muted. One line: the quiet caption alone. */}
+      <figcaption className="cap [text-wrap:pretty]">
+        <span className={secondary ? "block text-ink" : "block"}>{primary}</span>
+        {secondary && <span className="block">{secondary}</span>}
+      </figcaption>
+    </figure>
+  )
 }
 
 /* ------------------------------------------------------------------
@@ -148,11 +195,8 @@ export function Lightbox({
     >
       {/* Top bar */}
       <div className="flex h-[64px] shrink-0 items-center justify-between px-6 max-[700px]:px-4">
-        <span
-          className="text-[12px] font-semibold tracking-[0.12em] text-white/70 tabular-nums"
-          style={{ fontFamily: "var(--font-display)" }}
-        >
-          {String(index + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}
+        <span className="text-[14px] italic text-white/70 tabular-nums">
+          {index + 1} of {count}
         </span>
         <button
           ref={closeRef}
@@ -215,17 +259,17 @@ export function Lightbox({
         )}
       </div>
 
-      {/* Caption */}
+      {/* Caption — the serif, under the photograph */}
       <div className="shrink-0 border-t border-[color:var(--hairline-slate)] px-6 py-4 max-[700px]:px-4 max-[700px]:pb-[max(16px,env(safe-area-inset-bottom))]">
         <div className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-1">
-          <div>
-            <div className="text-[15px] leading-[1.4] font-semibold text-white">{photo.primary}</div>
+          <div className="italic">
+            <div className="text-[15px] leading-[1.4] text-white">{photo.primary}</div>
             {photo.secondary && (
-              <div className="mt-[2px] text-[13px] leading-[1.5] text-white/70">{photo.secondary}</div>
+              <div className="mt-[2px] text-[14px] leading-[1.5] text-white/70">{photo.secondary}</div>
             )}
           </div>
-          <div className="text-[12px] text-white/50 max-[700px]:hidden">
-            &larr; &rarr; to move &middot; Esc to close
+          <div className="text-[13px] italic text-white/50 max-[700px]:hidden">
+            Arrow keys to move &middot; Esc to close
           </div>
         </div>
       </div>
@@ -289,31 +333,31 @@ export default function WorkGallery({
   return (
     <div>
       {filters && (systems.length > 1 || regions.length > 1) && (
-        <div className="flex flex-wrap items-center gap-x-8 gap-y-4">
+        <div className="flex flex-col gap-y-3">
           {systems.length > 1 && (
-            <div className="chip-rail flex flex-wrap items-center gap-3 max-[700px]:w-full">
+            <div className="flex flex-wrap items-baseline gap-x-5 gap-y-2">
               <span className="label mr-1">System</span>
-              <Chip active={system === ALL} onSelect={() => setSystem(ALL)}>
+              <FilterWord active={system === ALL} onSelect={() => setSystem(ALL)}>
                 All
-              </Chip>
+              </FilterWord>
               {systems.map((s) => (
-                <Chip key={s} active={system === s} onSelect={() => setSystem(s)}>
+                <FilterWord key={s} active={system === s} onSelect={() => setSystem(s)}>
                   {s}
-                </Chip>
+                </FilterWord>
               ))}
             </div>
           )}
 
           {regions.length > 1 && (
-            <div className="chip-rail flex flex-wrap items-center gap-3 max-[700px]:w-full">
+            <div className="flex flex-wrap items-baseline gap-x-5 gap-y-2">
               <span className="label mr-1">Region</span>
-              <Chip active={region === ALL} onSelect={() => setRegion(ALL)}>
+              <FilterWord active={region === ALL} onSelect={() => setRegion(ALL)}>
                 All
-              </Chip>
+              </FilterWord>
               {regions.map((r) => (
-                <Chip key={r} active={region === r} onSelect={() => setRegion(r)}>
+                <FilterWord key={r} active={region === r} onSelect={() => setRegion(r)}>
                   {r}
-                </Chip>
+                </FilterWord>
               ))}
             </div>
           )}
@@ -330,82 +374,54 @@ export default function WorkGallery({
       {filtered.length > 0 ? (
         <ul
           aria-label={ariaLabel}
+          data-reveal-group
           className={`grid grid-cols-2 gap-x-5 gap-y-8 min-[701px]:grid-cols-3 min-[1024px]:grid-cols-4 max-[700px]:gap-x-3 max-[700px]:gap-y-6 ${
             filters ? "mt-10 max-[700px]:mt-8" : ""
           }`}
         >
           {visible.map((p, i) => {
             const { primary, secondary } = captionLines(p)
-
             return (
-              <li key={p.src}>
-                <figure>
-                  <button
-                    type="button"
-                    onClick={() => show(i)}
-                    aria-label={`View ${primary} full screen`}
-                    className="thumb group relative block w-full aspect-[5/3] overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)] text-left"
-                  >
-                    <Image
-                      src={p.src}
-                      alt={workAlt(p)}
-                      fill
-                      sizes="(max-width: 700px) 50vw, (max-width: 1023px) 33vw, 300px"
-                      className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                    />
-                    <span
-                      aria-hidden="true"
-                      className="absolute right-3 bottom-3 inline-flex h-8 w-8 items-center justify-center rounded-[2px] bg-[rgba(20,24,29,0.55)] text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100"
-                    >
-                      <svg width="14" height="14" viewBox="0 0 14 14">
-                        <path d="M2 6V2h4M12 8v4H8M2 2l4 4M12 12L8 8" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-                      </svg>
-                    </span>
-                  </button>
-                  <figcaption className="mt-3 max-[700px]:mt-2">
-                    <div className="text-[14px] leading-[1.35] font-semibold text-[color:var(--ink)] [text-wrap:pretty] max-[700px]:text-[13px]">
-                      {primary}
-                    </div>
-                    <div className="mt-1 text-[12.5px] leading-[1.45] text-[color:var(--ink-muted)] [text-wrap:pretty] max-[700px]:text-[12px]">
-                      {secondary}
-                    </div>
-                  </figcaption>
-                </figure>
+              <li key={p.src} data-reveal>
+                <GalleryFrame
+                  src={p.src}
+                  alt={workAlt(p)}
+                  primary={primary}
+                  secondary={secondary}
+                  ariaLabel={`View ${primary} full screen`}
+                  onOpen={() => show(i)}
+                />
               </li>
             )
           })}
         </ul>
       ) : (
-        <div className="mt-10 border-t border-[color:var(--hairline)] py-20 text-center">
-          <p className="text-[17px] text-[color:var(--ink-body)]">No photos match this filter.</p>
+        <div className="mt-10 border-t border-hairline py-20 text-center">
+          <p className="text-ink-body">No photos match this filter.</p>
           <button
             type="button"
             onClick={() => {
               setSystem(ALL)
               setRegion(ALL)
             }}
-            className="arrow-link mt-6"
+            className="link mt-6"
           >
-            Clear filters <span aria-hidden="true">&rarr;</span>
+            Clear filters
           </button>
         </div>
       )}
 
       {hidden > 0 && (
-        <div className="mt-10 flex items-center gap-6 max-[700px]:mt-8 max-[700px]:flex-col max-[700px]:items-stretch max-[700px]:gap-3">
-          <button type="button" onClick={() => setExpanded(true)} className="btn-secondary">
+        <div className="mt-10 max-[700px]:mt-8">
+          <button type="button" onClick={() => setExpanded(true)} className="link">
             Show all
           </button>
         </div>
       )}
       {expanded && filtered.length > initial && (
         <div className="mt-10">
-          <button
-            type="button"
-            onClick={() => setExpanded(false)}
-            className="arrow-link"
-          >
-            Show fewer <span aria-hidden="true">&uarr;</span>
+          <button type="button" onClick={() => setExpanded(false)} className="link">
+            Show fewer
           </button>
         </div>
       )}

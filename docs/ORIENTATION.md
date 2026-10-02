@@ -31,22 +31,25 @@ host (lib/site.ts), the documents pipeline, and the type OPTION.
 =======================================================================
 
 Repo (canonical):
-  C:\Users\cleve\Based_Agency\based-agncy_os\Web_Projects\squareone-website
+  D:\STUDIO-01\21e8.studio\clients\squareone-website
+  (moved from C: on 2026-09-24; the old C: path no longer exists)
 Remote:  github.com/apu21e800/SquareOne
 Branch:  s1-v2-prep-2   <- all work happens here. It reaches main only by a
          PR that Vern has authorized (section 11, MERGE TO MAIN).
 Preview: https://square-one-git-s1-v2-prep-2-based-agency.vercel.app
          <- this is what the client reviews
 
-TRAP 1 — nested repos. `based-agncy_os` is itself a git repo containing this
-one. Git run from the wrong directory silently resolves to the PARENT repo
-and reports unrelated files. Always confirm before trusting git output:
+TRAP 1 — nested repos. The agency repo D:\STUDIO-01\21e8.studio
+(apu21e800/21e8.studio, which ignores clients/*/) contains this one. Git run
+from the wrong directory silently resolves to the PARENT repo and reports
+unrelated files. Always confirm before trusting git output:
     git rev-parse --show-toplevel
 
-TRAP 2 — stale D: copies. Copies of this repo sit under D:\STUDIO-01\ from
-an ABANDONED migration. Vern, 2026-09-09: "ignore them entirely." They are
-stale, they are not a fallback, and one of them nearly caused a production
-incident (section 2). C: is the only working copy.
+TRAP 2 — stale copies. Until the 2026-09-24 move, stale copies of this repo
+sat elsewhere under D:\STUDIO-01\ from an ABANDONED migration, and one of
+them nearly caused a production incident (section 2). Checked 2026-09-25:
+both are gone. The path above is the only working copy; if another copy
+ever turns up, ignore it (Vern, 2026-09-09: "ignore them entirely").
 
 
 =======================================================================
@@ -55,8 +58,9 @@ incident (section 2). C: is the only working copy.
 
 Correct project:  square-one / prj_D0j2acUvhY0ObF5lCMP6dnJrGer3
 Team:             team_7Rnb5FldTGPFFZ4Wo5u8BE5M
-The .vercel/project.json on C: is correct — verified 2026-09-09, reads
-{"projectId":"prj_D0j2acUvhY0ObF5lCMP6dnJrGer3","projectName":"square-one"}.
+The .vercel/project.json in the working copy is correct — verified
+2026-09-25 at the path in section 1, reads
+{"projectId":"prj_D0j2acUvhY0ObF5lCMP6dnJrGer3","orgId":"team_7Rnb5FldTGPFFZ4Wo5u8BE5M","projectName":"square-one"}.
 
 THE NEAR-MISS. Two folders on D: holding Square One's code were linked to a
 DIFFERENT project in the same Vercel team — the one that serves hubss.com
@@ -65,10 +69,9 @@ and www.hubss.com, live (verified 2026-09-09 via the Vercel API). A
 website with Square One's.
 
 Both were renamed to `.vercel.WRONG-hubss-link-20260908` on 2026-09-08.
-Verified 2026-09-09: D:\STUDIO-01\01-21E8\clients\squareone\site\ now shows
-only the renamed folder and no active .vercel. (The second folder,
-D:\STUDIO-01\01-21E8\Based_Agency\based-agncy_os\Web_Projects\squareone-website\,
-was not connected to that session and remains unverified — check it.)
+Checked 2026-09-25, by folder name: both are gone.
+D:\STUDIO-01\01-21E8\clients\squareone\ now holds only docs\, and the
+second folder's tree is no longer under D:\STUDIO-01\01-21E8\.
 
 RESIDUAL RISK — the rename fixes the symptom, not the mechanism. square-one
 and hubss-website live in the SAME Vercel team, so both appear in the picker

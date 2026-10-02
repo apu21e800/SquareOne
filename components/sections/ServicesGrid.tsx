@@ -1,131 +1,124 @@
-import Image from "next/image"
 import Link from "next/link"
-
+import Frame from "@/components/ui/Frame"
+import { Section } from "@/components/ui/Container"
 import { services } from "@/lib/services"
 
 /**
- * What we do — streamlined 19 Sept 2026 (Vern, on the four cards: "seems
- * overwhelming. this is too much to digest for the average user. we need to
- * streamline"). The earlier card carried a name, the service tagline, three
- * application chips, an Explore link and a Specs link — five things to read
- * per card, twenty across the row. Now each card is one verb, one trade and
- * one plain line, and the heading tells the visitor how to hold the four:
- * three ways we change a surface, and one way we clean it. The specs live
- * on the service pages and under Specifiers. Later the same day the four
- * photograph blocks came out too ("garish, take up too much space") — the
- * row is four columns of type on one rule, a 72px thumbnail each.
+ * What we do. Display copy per service: the verb, the trade, one line.
  *
  * Display copy only. Routes and slugs come from lib/services.ts untouched —
- * "vapor-blasting" stays the slug, "Vapour blasting" is what the card reads.
+ * "vapor-blasting" stays the slug, "Vapour blasting" is what the row reads.
  * Order is the business order (lib/services.ts).
  */
 const CARD: Record<string, { verb: string; trade: string; line: string }> = {
   "stamped-asphalt": {
     verb: "Pattern it",
     trade: "Stamped asphalt",
-    line: "Brick, cobble or slate, pressed into the asphalt that is already there.",
+    line: "Brick, cobble or slate, pressed into the asphalt already there.",
   },
   "decorative-coatings": {
     verb: "Colour it",
     trade: "Decorative coatings",
-    line: "Bike lanes, plazas, spray parks and courts, in colour that holds under traffic.",
+    line: "Colour for bike lanes, plazas, spray parks and courts.",
   },
   "preformed-thermoplastic": {
     verb: "Mark it",
     trade: "Preformed thermoplastic",
-    line: "Crosswalks, symbols and street art, cut to the drawing and fused into the road.",
+    line: "Crosswalks, symbols and street art, fused into the road.",
   },
   "vapor-blasting": {
     verb: "Clean it",
     trade: "Vapour blasting",
-    line: "Graffiti, old markings and grime lifted wet, with no damage to the surface under them.",
+    line: "Graffiti, old markings and grime, lifted wet.",
   },
 }
 
-const cardImage: Record<string, { src: string; alt: string }> = {
-  // 19 Sept 2026: every tile is a frame from the record (lib/work-captions.ts),
-  // none of them repeated in the hero reel or in Selected Work below.
+const cardImage: Record<string, { src: string; alt: string; caption: string }> = {
+  // 19 Sept 2026: every frame is from the record (lib/work-captions.ts),
+  // none of them repeated in the hero reel or in Selected work below. The
+  // captions say what the alt text already said: the place and the system.
+  // 28 Sept 2026, second image pass (Vern: "more recent images… site
+  // wide"): the Mission parking bays, April 2025, crisp grey herringbone at a
+  // new building under a big sky. The Victoria town centre job moved to the
+  // audience band as its clock-tower plaza frame.
   "stamped-asphalt": {
-    src: "/images/applications/streetscapes/victoria-town-centre-crossing-streetprint-01.jpg",
-    alt: "A red brick StreetPrint town centre crossing between trees in Victoria",
+    src: "/images/applications/parking-lots/mission-parking-bays-and-lot-streetprint-01.jpg",
+    alt: "Grey herringbone StreetPrint parking bays in front of a new commercial building in Mission, clouds over the hills beyond",
+    caption: "Parking bays, Mission · StreetPrint",
   },
+  // 28 Sept 2026 image pass: the Maplewoods fire lane, the strongest
+  // StreetBond frame on the record that the home page does not show elsewhere.
   "decorative-coatings": {
-    src: "/images/applications/public-art/north-vancouver-lynn-valley-plaza-streetbond-01.jpg",
-    alt: "Lynn Valley plaza, North Vancouver — a red StreetBond field with black and white line art",
+    src: "/images/S1_update_v2/photos/Featured%20image%20options/maplewoods-fire-lane-north-vancouver-streetbond-01.jpg",
+    alt: "A decorative fire lane in blue StreetBond waves between townhomes at Maplewoods, North Vancouver",
+    caption: "Maplewoods Townhomes, North Vancouver · StreetBond",
   },
+  // 28 Sept 2026, second image pass: the Beban Park sports crosswalk, March
+  // 2024, in place of the 2022 Burnaby greenway frame.
   "preformed-thermoplastic": {
-    src: "/images/applications/public-art/burnaby-union-street-thunderbird-decomark-01.jpg",
-    alt: "A DecoMark thunderbird on the Union Street greenway in Burnaby, seen from above",
+    src: "/images/S1_update_v2/photos/Featured%20image%20options/Photo-2024-03-19-3-28-23-PM-1-scaled.jpg",
+    alt: "A sports-themed TrafficPatterns crosswalk across the Beban Park lot in Nanaimo, a soccer ball, a baseball, a golf ball and a bicycle set in green and blue waves",
+    caption: "Sports crosswalk, Beban Park, Nanaimo · TrafficPatterns",
   },
+  // 2 Oct 2026: the Granville Island frame moved to the vapour band lower
+  // on the page (the sunlit copy, Vern's pick), so the card shows the
+  // walkway instead; no photograph twice on the home page.
   "vapor-blasting": {
-    src: "/images/services/vapor-blasting/generated/gen-granville-island-vapour-blasting-01-enhanced.jpg",
-    alt: "Square One crew vapour blasting at Granville Island",
+    src: "/images/services/vapor-blasting/walkway-vapour-blasting-01.jpg",
+    alt: "Square One stripping a red coating from a public walkway with the vapour blasting rig",
+    caption: "Public walkway · coating removal",
   },
 }
 
+/**
+ * 27 Sept 2026 (Vern: "service oriented… make it pop"): the four services
+ * lead the page, straight after the reel, as four large frames two by two,
+ * each with its caption under it, then the trade and one line (28 Sept:
+ * "cut the fat", the verb label and the repeated link came off; the frame
+ * and the name are the links).
+ * Square corners, no box, no chips, no arrow: HUB's services are three-up
+ * rounded cards with a chip row and "Specs →"; these are photographs with
+ * words under them.
+ */
 export default function ServicesGrid() {
   return (
-    <section id="services" className="section relative overflow-hidden bg-surface">
-      <div className="container-1280 relative z-[1]">
-        <div data-reveal className="flex flex-wrap items-end justify-between gap-6">
-          <div>
-            <div className="eyebrow">
-              <span className="eyebrow-num">02</span>What we do
-            </div>
-            <h2 className="mt-5 max-w-[22ch] [text-wrap:balance]">
-              Three ways we change a surface, and one way we clean it
-            </h2>
-          </div>
-          <Link href="/services" className="arrow-link whitespace-nowrap">
-            All services <span aria-hidden="true">&rarr;</span>
-          </Link>
-        </div>
-
-        {/* Four columns of type on one rule — no photograph blocks (Vern,
-            19 Sept: "the 4 big image blocks… are garish, take up too much
-            space"). The applications index above already carries the
-            photographs; this row carries the words. Each column is one
-            left edge: a small frame from the record, the trade, the verb, one
-            line, and the link on a shared bottom rule. 21 Sept 2026: it used to
-            set the thumbnail beside the heading and the paragraph beneath it,
-            so every card had two left edges and the four verbs sat at
-            different heights — Vern, "looks like a jumble of text". */}
-        <ol data-reveal-group className="mt-12 grid grid-cols-4 gap-x-8 border-t border-hairline max-[900px]:grid-cols-2 max-[560px]:grid-cols-1">
-          {services.map((service) => {
-            const img = cardImage[service.slug]
-            const card = CARD[service.slug]
-            const href = `/services/${service.slug}`
-            return (
-              <li key={service.slug} data-reveal className="group relative flex flex-col border-b border-hairline py-7 max-[900px]:py-6">
-                <Link href={href} aria-label={`${card?.trade ?? service.name} — the service`} className="absolute inset-0 z-[2]" />
-                {img && (
-                  <span className="thumb relative block aspect-[16/10] w-[96px] shrink-0 overflow-hidden rounded-[2px] bg-surface-stone">
-                    <Image src={img.src} alt="" fill sizes="96px" className="object-cover" />
-                  </span>
-                )}
-                {/* "Preformed thermoplastic" is the one name long enough to
-                    wrap, and it is not shortened — the trade is called what it
-                    is. Between 900 and 1024 the four columns are narrow enough
-                    that it takes two lines, so the label reserves two there and
-                    the four verbs stay on one baseline; above 1024 every name
-                    fits on one line and the reserve would only be dead air. */}
-                <div className="label mt-5 block min-h-0 max-[900px]:mt-4 min-[900px]:min-h-[2.8em] min-[1024px]:min-h-0">
-                  {card?.trade ?? service.name}
-                </div>
-                <h3 className="mt-[2px] transition-colors group-hover:text-[color:var(--accent-deep)]">
-                  {card?.verb ?? service.name}
-                </h3>
-                <p className="mt-[10px] text-[15px] leading-[1.6] text-ink-body [text-wrap:pretty]">
-                  {card?.line ?? service.tagline}
-                </p>
-                <span aria-hidden="true" className="arrow-link mt-auto inline-flex gap-[0.35em] pt-6">
-                  The service <span>&rarr;</span>
-                </span>
-              </li>
-            )
-          })}
-        </ol>
-      </div>
-    </section>
+    <Section
+      id="services"
+      label="What we do"
+      title={<>Three ways we change a surface, <em>and one way we clean it</em></>}
+      link={{ href: "/services", label: "All services" }}
+      wide
+    >
+      {/* 2 Oct 2026 (Vern: "image sections still look too chunky"): four
+          across, as the live site set them, each frame a quarter of the
+          width instead of half. */}
+      <ul data-reveal-group className="grid grid-cols-4 gap-x-7 gap-y-12 max-[900px]:grid-cols-2 max-[900px]:gap-x-6 max-[560px]:grid-cols-1 max-[560px]:gap-y-10">
+        {services.map((service) => {
+          const img = cardImage[service.slug]
+          const card = CARD[service.slug]
+          const href = `/services/${service.slug}`
+          const trade = card?.trade ?? service.name
+          return (
+            <li key={service.slug} data-reveal>
+              {img && (
+                <Frame
+                  src={img.src}
+                  alt={img.alt}
+                  aspect="aspect-[4/3]"
+                  sizes="(max-width: 560px) 100vw, (max-width: 900px) 50vw, (max-width: 1280px) 25vw, 300px"
+                  href={href}
+                />
+              )}
+              <h3 className="mt-4 text-[22px] leading-[1.15]">
+                <Link href={href} className="hover:underline hover:decoration-1 hover:underline-offset-[6px]">
+                  {trade}
+                </Link>
+              </h3>
+              <p className="mt-2 max-w-[34ch] text-[15.5px] leading-[1.55] text-ink-body [text-wrap:pretty]">{card?.line ?? service.tagline}</p>
+            </li>
+          )
+        })}
+      </ul>
+    </Section>
   )
 }

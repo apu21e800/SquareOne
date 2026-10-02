@@ -6,7 +6,9 @@ import { urlFor, type SanityImageSource } from "@/sanity/lib/client"
 /**
  * Renders a CMS post body with the same prose styling the MDX posts get —
  * the surrounding `.prose` wrapper does the typography; this only maps the
- * two custom pieces (photographs with captions, links).
+ * two custom pieces (photographs with captions, links). A photograph is a
+ * square-cornered frame with its caption under it in the serif (`.cap`),
+ * like every other frame on the site (26 Sept 2026).
  */
 const components: PortableTextComponents = {
   types: {
@@ -14,10 +16,10 @@ const components: PortableTextComponents = {
       if (!value?.asset) return null
       return (
         <figure className="my-10">
-          <div className="relative aspect-[3/2] overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)]">
+          <div className="relative aspect-[3/2] overflow-hidden bg-[color:var(--surface-stone)]">
             <Image src={urlFor(value as SanityImageSource, 1600)} alt={value.alt ?? ""} fill sizes="(max-width: 760px) 100vw, 720px" className="object-cover" />
           </div>
-          {value.caption && <figcaption className="label mt-3 normal-case tracking-normal">{value.caption}</figcaption>}
+          {value.caption && <figcaption className="cap">{value.caption}</figcaption>}
         </figure>
       )
     },

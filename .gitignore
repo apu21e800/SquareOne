@@ -70,3 +70,6 @@ public/images/_pre-photo-pass/
 # lint patterns (personal numbers and mailboxes) stay on the machine.
 /Claude outputs/
 /scripts/lint-claims.private.json
+
+# before/after screenshot folders written by the own-company build (docs/OWN-COMPANY-BRIEF.md §8)
+/_shots/

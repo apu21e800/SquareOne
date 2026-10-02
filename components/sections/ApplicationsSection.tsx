@@ -1,122 +1,98 @@
-import Image from "next/image"
 import Link from "next/link"
-import { WORK_APPS, workFor, type WorkPhoto } from "@/lib/work"
+import Frame from "@/components/ui/Frame"
+import { Section } from "@/components/ui/Container"
+import { WORK_APPS, workFor, type WorkApp, type WorkPhoto } from "@/lib/work"
+import { BUYERS } from "@/lib/buyers"
 
-/* Row order is the business hierarchy (lib/work.ts WORK_APPS): commercial
-   and municipal work leads, residential driveways follow, vapour blasting
-   closes as the extra service. Do not resort alphabetically or "by
-   interest" — the order is intentional. Each row is one of the ten galleries
-   the Services panel and /galleries carry, with its photograph count and
-   its lead photograph from the record, so the home page, the menu and the
-   galleries name the same ten things the same way.
+/* Who we work with, and where — 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md
+   §3.1, §9.5). The same eleven links as before — the nine application
+   galleries, driveways and vapour blasting — grouped under the four buyers
+   an installer actually works for, because a contractor's site is organised
+   by who it serves; a supplier's by catalogue. The galleries are untouched
+   (lib/work.ts); only the grouping is new (lib/buyers.ts), and it is the
+   grouping the menu uses too (components/Nav.tsx). Each group: the buyer in the margin
+   column, its rows beside it — thumbnail, name, one line, no arrows.
 
-   Rebuilt 5 Sept 2026 (Vern: "the text feels overwhelming and massive") —
-   the row is now a photograph, a name and one quiet line; two columns from
-   1536px so the index sits in a single screen on a big monitor.
-
-   Moved onto slate 7 Sept 2026, and back onto warm paper 19 Sept 2026 (Vern:
-   "too much dark mode overall — a clean light theme; the footer and the
-   cinema backdrops are fine"). The ten lead photographs carry the row. */
+   Row order inside a group is the business hierarchy from lib/work.ts. Do
+   not resort alphabetically or "by interest" — the order is intentional. */
 
 const VAPOUR = {
   label: "Vapour blasting",
-  desc: "Surface cleaning, priming, graffiti and mould removal — mobile, dustless, no substrate damage. The supporting service.",
+  desc: "Surface cleaning, priming, graffiti and mould removal: mobile, dustless, no damage to the surface under it.",
   href: "/services/vapor-blasting",
-  thumb: "/images/services/vapor-blasting/generated/gen-granville-island-vapour-blasting-01-enhanced.jpg",
+  thumb: "/images/services/vapor-blasting/granville-island-vapour-blasting-01.jpg",
   alt: "Square One crew vapour blasting at Granville Island",
 }
 
 function alt(p: WorkPhoto): string {
   const sys = p.systems.join(" and ")
-  return p.place ? `${p.subject} in ${sys} — ${p.place}, BC` : `${p.subject} in ${sys}`
+  return p.place ? `${p.subject} in ${sys}, ${p.place}, BC` : `${p.subject} in ${sys}`
+}
+
+interface AppRow {
+  label: string
+  desc: string
+  href: string
+  thumb?: string
+  alt: string
+}
+
+function rowFor(slug: WorkApp | "vapour"): AppRow | null {
+  if (slug === "vapour") return VAPOUR
+  const a = WORK_APPS.find((w) => w.slug === slug)
+  if (!a) return null
+  const lead = workFor(a.slug)[0]
+  return {
+    label: a.label,
+    desc: a.blurb,
+    href: a.slug === "driveways" ? "/driveways" : `/applications/${a.slug}`,
+    thumb: lead?.src,
+    alt: lead ? alt(lead) : "",
+  }
 }
 
 export default function ApplicationsSection() {
-  const rows = [
-    ...WORK_APPS.map((a) => {
-      const photos = workFor(a.slug)
-      const lead = photos[0]
-      return {
-        label: a.label,
-        desc: a.blurb,
-        href: a.slug === "driveways" ? "/driveways" : `/applications/${a.slug}`,
-        count: photos.length,
-        thumb: lead?.src,
-        alt: lead ? alt(lead) : "",
-      }
-    }),
-    { ...VAPOUR, count: 0 },
-  ]
-
   return (
-    <section
-      className="section relative overflow-hidden border-t border-hairline bg-surface-warm"
+    <Section
+      label="By client"
+      title="Where the work goes"
+      link={{ href: "/galleries", label: "Every photograph, by application" }}
+      tone="warm"
+      wide
     >
-      <div className="container-1280 relative z-[1]">
-        <div data-reveal className="flex flex-wrap items-baseline justify-between gap-6">
-          <div>
-            <p className="eyebrow">
-              <span className="eyebrow-num">01</span>Applications
-            </p>
-            <h2 className="mt-5">Where these systems are specified</h2>
-          </div>
-          <Link href="/galleries" className="arrow-link whitespace-nowrap">
-            Every photograph, by application <span>&rarr;</span>
-          </Link>
-        </div>
-
-        {/* Contents-rows — the catalogue's table-of-contents move (SOUL-PASS
-            MOVE 2), now with the lead photograph of each gallery.
-
-            21 Sept 2026 (Vern: "feels like a lot of scrolling, not sure we
-            need the numbers"). Twelve rows ran in one column until 1536px,
-            which is wider than most screens, so on a laptop this one section
-            was most of a scroll. It splits into two columns of six from
-            1100px — half the height on the screens people actually use — and
-            the 01–12 markers are gone. They were a table-of-contents
-            affectation: the rows are an index, not a ranking, and the number
-            column was pushing the photograph and the label right. */}
-        <div data-reveal-group className="mt-12 grid grid-cols-1 gap-x-14 min-[1100px]:grid-flow-col min-[1100px]:grid-cols-2 min-[1100px]:grid-rows-6">
-          {rows.map((app) => (
-            <Link
-              key={app.href}
-              href={app.href}
-              data-reveal
-              style={{ borderColor: "var(--hairline)" }}
-              className="app-row group grid grid-cols-[132px_minmax(0,1fr)_auto] items-center gap-x-6 border-b py-4 first:border-t min-[1100px]:[&:nth-child(7)]:border-t min-[1100px]:grid-cols-[104px_minmax(0,1fr)_auto] min-[1100px]:gap-x-5 max-[700px]:grid-cols-[84px_minmax(0,1fr)_auto] max-[700px]:gap-x-4 max-[700px]:py-3"
-            >
-              <span className="relative block aspect-[3/2] w-full overflow-hidden rounded-[2px] bg-surface-stone">
-                {app.thumb && (
-                  <Image
-                    src={app.thumb}
-                    alt={app.alt}
-                    fill
-                    sizes="(max-width: 700px) 84px, (max-width: 1100px) 132px, 104px"
-                    className="object-cover transition-transform duration-500 group-hover:scale-[1.06]"
-                  />
-                )}
-              </span>
-
-              <span className="min-w-0">
-                <span className="block text-[17px] font-semibold leading-[1.3] text-ink transition-colors duration-200 group-hover:text-[color:var(--accent-deep)] max-[700px]:text-[16px]">
-                  {app.label}
-                </span>
-                <span className="mt-[3px] line-clamp-2 block text-[14px] leading-[1.5] text-ink-muted max-[700px]:hidden">
-                  {app.desc}
-                </span>
-              </span>
-
-              <span className="flex items-center gap-4 justify-self-end">
-                {/* No photo counts — the client reads a number as a claim
-                    about the whole body of work (10 and 18 Sept). */}
-                <span aria-hidden="true" className="arrow-link text-ink-muted">
-                  <span>&rarr;</span>
-                </span>
-              </span>
-            </Link>
-          ))}
-        </div>
+      <div className="grid grid-cols-12 gap-x-10 gap-y-2 max-[900px]:grid-cols-1">
+        {BUYERS.map((buyer) => {
+          const rows = buyer.slugs.map(rowFor).filter((r): r is AppRow => r !== null)
+          return (
+            <div key={buyer.label} className="contents">
+              <div className="col-span-3 border-t border-hairline pt-6 pb-4 max-[900px]:col-span-1 max-[900px]:pb-0">
+                <h3 className="text-[20px]">{buyer.label}</h3>
+                <p className="mt-2 max-w-[28ch] text-[15px] leading-[1.5] text-ink-muted">{buyer.note}</p>
+              </div>
+              <ul className="col-span-9 max-[900px]:col-span-1">
+                {rows.map((app) => (
+                  <li key={app.href}>
+                    <Link
+                      href={app.href}
+                      className="group grid grid-cols-[132px_minmax(0,1fr)] items-center gap-x-6 border-t border-hairline py-4 max-[700px]:grid-cols-[96px_minmax(0,1fr)] max-[700px]:gap-x-4"
+                    >
+                      <Frame src={app.thumb} alt={app.alt} aspect="aspect-[3/2]" sizes="132px" />
+                      <span className="min-w-0">
+                        <span className="block text-[18px] font-bold leading-[1.25] text-ink" style={{ fontFamily: "var(--font-display)" }}>
+                          {app.label}
+                        </span>
+                        <span className="mt-[4px] line-clamp-2 block max-w-[64ch] text-[15px] leading-[1.5] text-ink-muted max-[700px]:hidden">
+                          {app.desc}
+                        </span>
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )
+        })}
       </div>
-    </section>
+    </Section>
   )
 }

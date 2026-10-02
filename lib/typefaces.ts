@@ -57,28 +57,31 @@ export const TYPEFACES: Typeface[] = [
     preview: "var(--font-futura), var(--font-poppins), sans-serif",
     previewStyle: { fontWeight: 700, letterSpacing: "-0.01em" },
     licence: "Licensed",
-    live: true,
   },
   {
     id: "futura-caps",
     label: "Futura, capitals",
-    note: "The launch setting — Futura Bold in spaced capitals. Poster voice: strong at a glance, loud over a long page.",
+    note: "The launch setting: Futura Bold in spaced capitals. Poster voice: strong at a glance, loud over a long page.",
     preview: "var(--font-futura), var(--font-poppins), sans-serif",
     previewStyle: { fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em" },
     licence: "Licensed",
   },
   {
+    // Live since 26 Sept 2026 — the own-company surface (app/own.css): the
+    // serif is the site's reading face and its small voice. Needs no
+    // attribute; "futura" is now the alternate that puts Inter back.
     id: "futura-serif",
     label: "Futura + serif",
     note: "The quiet setting with Source Serif for the reading text. Warmer and more editorial; the headlines stay geometric.",
     preview: "var(--font-futura), var(--font-poppins), sans-serif",
     previewStyle: { fontWeight: 700, letterSpacing: "-0.01em" },
     licence: "Licensed",
+    live: true,
   },
   {
     id: "futura-light",
     label: "Futura, light",
-    note: "Futura Book at display size, sentence case, a step larger. The architectural setting — elegant, and it leans on the photographs.",
+    note: "Futura Book at display size, sentence case, a step larger. The architectural setting: elegant, and it leans on the photographs.",
     preview: "var(--font-futura), var(--font-poppins), sans-serif",
     previewStyle: { fontWeight: 400, letterSpacing: "0" },
     licence: "Licensed",

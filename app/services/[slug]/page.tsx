@@ -1,7 +1,5 @@
 import { notFound } from "next/navigation"
 import Link from "next/link"
-import ProjectCaption from "@/components/ui/ProjectCaption"
-import Image from "next/image"
 import type { Metadata } from "next"
 
 import { services, getServiceBySlug } from "@/lib/services"
@@ -13,6 +11,11 @@ import type { WorkApp, WorkAppMeta } from "@/lib/work"
 import { SITE_URL } from "@/lib/site"
 import JsonLd, { breadcrumbSchema, faqSchema } from "@/components/JsonLd"
 import IndexImageHero from "@/components/IndexImageHero"
+import HowAJobGoes from "@/components/sections/HowAJobGoes"
+import MaterialsBand from "@/components/sections/MaterialsBand"
+import Frame from "@/components/ui/Frame"
+import { Section } from "@/components/ui/Container"
+import { sentenceCase } from "@/lib/text"
 import { clampDescription } from "@/lib/seo"
 
 interface Props {
@@ -23,12 +26,25 @@ interface Props {
  * The pillar page sells the service, to specifiers (the 19 Sept 2026 evening
  * ruling): what Square One delivers first, then how it is specified and
  * installed, then the systems as the means, then the projects on record,
- * the questions, and the way in. Copy and section order only — the
- * components and styles are the ones that were here.
+ * the questions, and the way in.
+ *
+ * 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.7): the same skeleton on the
+ * own-company primitives — every band a Section with its label in the
+ * margin column, the five service-specific steps replaced by the one
+ * process band (components/sections/HowAJobGoes), the project tiles and the
+ * "other services" tiles set as frames and rows with their captions under
+ * them, every arrow link an underlined word. Copy, facts and hrefs are the
+ * ones that were here.
  *
  * Display copy only. Routes and slugs come from lib/services.ts untouched —
  * "vapor-blasting" stays the slug, "Vapour blasting" is what the page reads.
  * Mirrors components/sections/ServicesGrid.tsx.
+ *
+ * 2 Oct 2026, the client's notes: the page speaks to the buyer (municipal,
+ * commercial, residential) rather than the specifier: "who it is for" and
+ * "who we work with" in the glance, "product documents" and the "pattern
+ * library" under the process band, "Questions about …" closed by default,
+ * and no specifiers link. The facts are the same facts.
  */
 const displayName: Record<string, string> = {
   "stamped-asphalt": "Stamped asphalt",
@@ -48,105 +64,7 @@ const pageTitle: Record<string, string> = {
   "preformed-thermoplastic": "Preformed Thermoplastic Markings in BC",
 }
 
-/** The service heading — what Square One delivers, in the words a specifier uses. */
-/* 21 Sept 2026: each of these opened by repeating the service name, which
-   the H1 two sections above and the eyebrow beside them already carry — and
-   the extra words pushed a 40px headline into six lines in a 20rem column.
-   The name comes out, the promise stays. */
-const serviceHeading: Record<string, string> = {
-  "stamped-asphalt": "Specified with you, installed by our own crews",
-  "decorative-coatings": "From the colour chart to the cured surface",
-  "preformed-thermoplastic": "From your drawing to the road",
-}
 
-/** The heading over the systems cards. */
-const systemsHeading: Record<string, string> = {
-  "stamped-asphalt": "The systems behind stamped asphalt",
-  "decorative-coatings": "The coatings behind the service",
-  "preformed-thermoplastic": "The four thermoplastic systems",
-}
-
-/**
- * Five steps, every job — the order on record in app/about (site visit,
- * specification, surface prep, application, cure and walk-through) and
- * app/contact (photos and a postal code are enough to start). Steps 03 and
- * 04 carry the part that differs by service: which documents help the
- * specification, and how the road stays open — only as the record says it.
- */
-interface ProcessStep {
-  num: string
-  title: string
-  body: string
-}
-
-const SPEC_STEP: Record<string, string> = {
-  "stamped-asphalt":
-    "A written quote sets out the system, the template and the colour for the surface you have. The templates are dimensioned sheets in the pattern library; the manufacturer's texturing specification, colour card and custom template guidelines are in the specification library for the tender.",
-  "decorative-coatings":
-    "A written quote sets out the system and the colours for the surface you have — straight off the published chart, or matched to a reference you send. The coated-asphalt and coated-concrete specifications, data sheets, SDS and colour guide are in the specification library.",
-  "preformed-thermoplastic":
-    "A written quote sets out the system, the colours and the layout, to the owner's marking standard. The manufacturer's design manuals, custom design guidelines, colour palettes and specifications for each system are in the specification library for the spec package.",
-}
-
-const INSTALL_STEP: Record<string, string> = {
-  "stamped-asphalt":
-    "Surface prep first — cleaning, and vapour blasting where the surface needs it — then the stamp and the colour, by Square One's own crews to the published specification. No demolition and no new base, so closures are short.",
-  "decorative-coatings":
-    "Surface prep first — cleaning, and vapour blasting where the surface needs it — then the primer for the substrate and the coating, by Square One's own crews to the published specification. Coated in place; where a site cannot close, the work is phased in overnight windows.",
-  "preformed-thermoplastic":
-    "Surface prep first — cleaning, and vapour blasting where the surface needs it — then the sheets, cut to the design, heat-fused in place by Square One's own crews to the published specification. A TrafficPatterns crossing is open to traffic within minutes; where a street cannot close, the crossings go in intersection by intersection.",
-}
-
-function processFor(slug: string): ProcessStep[] {
-  return [
-    {
-      num: "01",
-      title: "Photos and a postal code",
-      body: "Send a few photographs of the surface as it is, the address or postal code, and drawings if you have them. That is enough to start.",
-    },
-    {
-      num: "02",
-      title: "Site walk",
-      body: "We walk the site, free: the substrate and its condition, the drainage, the traffic it carries and the layout it has to meet. The sample boards come with us.",
-    },
-    {
-      num: "03",
-      title: "Written quote and specification support",
-      body:
-        SPEC_STEP[slug] ??
-        "A written quote sets out the system, the pattern and the colours for the surface you have; the manufacturer's specifications and colour cards are in the specification library.",
-    },
-    {
-      num: "04",
-      title: "Installation by Square One's crews",
-      body:
-        INSTALL_STEP[slug] ??
-        "Surface prep first — cleaning, and vapour blasting where the surface needs it — then the install, by Square One's own crews to the published specification.",
-    },
-    {
-      num: "05",
-      title: "Walk-through and warranty",
-      body: "Once the surface has cured, we walk the finished work with you. The manufacturer warrants the material; Square One warrants the workmanship.",
-    },
-  ]
-}
-
-const NUMBER_WORDS = [
-  "zero",
-  "one",
-  "two",
-  "three",
-  "four",
-  "five",
-  "six",
-  "seven",
-  "eight",
-  "nine",
-] as const
-
-function numberWord(n: number): string {
-  return NUMBER_WORDS[n] ?? String(n)
-}
 
 /** "Vancouver, BC" → "Vancouver" — the caption carries the city, not the province. */
 function cityName(city: string): string {
@@ -221,16 +139,22 @@ export default async function ServicePage({ params }: Props) {
   const relatedProjects = projects
     .filter((p) => p.service === service.name)
     .filter((p) => service.slug !== "stamped-asphalt" || p.application !== "Driveways")
+    // The opener's photograph is not repeated as a project tile below it.
+    .filter((p) => p.imageUrl !== heroSrc)
     .slice(0, 3)
 
-  const steps = processFor(service.slug)
   const showsPatterns = service.slug === "stamped-asphalt"
   const showsColours = service.slug === "stamped-asphalt" || service.slug === "decorative-coatings"
 
   const specColumns: { label: string; items: string[]; linked?: boolean }[] = [
     { label: "Applications", items: service.applications, linked: true },
-    { label: "Who specifies it", items: service.idealClients },
-    { label: "What you get", items: service.benefits },
+    { label: "Who we work with", items: service.idealClients.slice(0, 5) },
+    // The site walk, the crews and the warranty split are in the process
+    // band on the same page; the list keeps what only this service has.
+    {
+      label: "What you get",
+      items: service.benefits.filter((b) => !/site walk|own crews|warranted by the manufacturer/i.test(b)).slice(0, 5),
+    },
   ]
 
   const serviceSchema = {
@@ -264,7 +188,7 @@ export default async function ServicePage({ params }: Props) {
       <IndexImageHero
         src={heroSrc}
         alt={heroAlt}
-        eyebrow={`Service · One of ${numberWord(services.length)}, Lower Mainland and Vancouver Island`}
+        eyebrow="Services · Lower Mainland and Vancouver Island"
         title={name}
         lede={service.tagline}
         caption={heroSrc === service.imageUrl ? service.imageCaption : undefined}
@@ -274,336 +198,243 @@ export default async function ServicePage({ params }: Props) {
       <section className="bg-surface pt-14 pb-16 max-[700px]:pt-10 max-[700px]:pb-12">
         <div className="container-1280">
           {/* The intro carries the systems and the region — the same sentence
-              search engines and the Service schema read as the description. */}
-          <p className="max-w-[60ch] text-[19px] leading-[1.65] text-ink-body [text-wrap:pretty] max-[700px]:text-[17px]">
-            {service.shortDescription}
-          </p>
-
-          <div className="mt-9 flex flex-wrap items-center gap-[14px]">
-            <Link href="/contact" className="btn-primary">
-              Request a site visit
-            </Link>
-            <Link href="/specifiers" className="btn-secondary">
-              For specifiers
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ── The service ────────────────────────────────────────── */}
-      <section className="section border-y border-[color:var(--hairline)] bg-surface-warm">
-        <div className="container-1280">
-          <div className="grid grid-cols-1 gap-10 min-[901px]:grid-cols-[minmax(0,26rem)_minmax(0,1fr)] min-[901px]:gap-16">
-            <div>
-              <p className="eyebrow">What Square One delivers</p>
-              <h2 className="mt-5 [text-wrap:balance]">
-                {serviceHeading[service.slug] ?? "Specified with you, installed by our own crews"}
-              </h2>
+              search engines and the Service schema read as the description.
+              30 Sept 2026 QA: set on the section grid like every band under
+              it, the label in the margin and the sentence as a standfirst,
+              so the opener no longer leaves the right half of the page empty. */}
+          <div className="sec-grid">
+            <div className="sec-label">
+              <span className="label">In short</span>
             </div>
-
-            {/* fullDescription is one string (other readers expect that); blank
-                lines in it are paragraph breaks — the service, the systems, the record. */}
-            <div className="max-w-[62ch] space-y-5 text-[17px] leading-[1.65] text-ink-body">
-              {service.fullDescription.split(/\n\s*\n/).map((paragraph, i) => (
-                <p key={i}>{paragraph}</p>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── At a glance ───────────────────────────────────────── */}
-      <section className="section bg-surface">
-        <div className="container-1280">
-          <p className="eyebrow">At a glance</p>
-          <h2 className="mt-5 text-pretty">{name}: where it goes, who specifies it, what you get</h2>
-
-          <div className="mt-10 grid grid-cols-1 gap-10 min-[701px]:grid-cols-3 min-[701px]:gap-x-10">
-            {specColumns.map((column) => (
-              <div key={column.label} className="border-t border-[color:var(--hairline)] pt-7">
-                <p className="label">{column.label}</p>
-
-                <ul className="mt-4">
-                  {column.items.map((item) => {
-                    const gallery = column.linked ? galleryFor(item) : undefined
-                    return (
-                      <li
-                        key={item}
-                        className="border-b border-[color:var(--hairline)] py-3 text-[15px] leading-[1.55] text-ink-body"
-                      >
-                        {gallery ? (
-                          <Link
-                            href={galleryHref(gallery)}
-                            className="text-ink-body underline-offset-4 transition-colors hover:text-ink hover:underline"
-                          >
-                            {item}
-                          </Link>
-                        ) : (
-                          item
-                        )}
-                      </li>
-                    )
-                  })}
-                </ul>
+            <div className="sec-body">
+              <p className="standfirst max-w-[46ch] [text-wrap:pretty]">{service.shortDescription}</p>
+              <div className="mt-9 flex flex-wrap items-center gap-x-8 gap-y-4">
+                <Link href="/contact" className="btn-primary">
+                  Get a quote
+                </Link>
+                <Link href="/projects" className="link">
+                  See the projects
+                </Link>
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ── How it is specified and installed ─────────────────── */}
-      <section className="section border-y border-[color:var(--hairline)] bg-surface-warm">
-        <div className="container-1280">
-          <div className="flex flex-wrap items-end justify-between gap-6">
-            <div>
-              <p className="eyebrow">How it is specified and installed</p>
-              <h2 className="mt-5 [text-wrap:balance]">From the drawing to the road, in five steps</h2>
+      {/* ── "What Square One delivers" came off, 28 Sept 2026 (Vern: "too
+             much text… cut the fat"): its lede restated the intro above
+             and the bands below. ── */}
+
+      {/* ── At a glance — three hairline lists ────────────────── */}
+      <Section label="At a glance" title={<>Where it goes, <em>who it is for</em></>} wide>
+        <div className="grid grid-cols-1 gap-10 min-[701px]:grid-cols-3 min-[701px]:gap-x-10">
+          {specColumns.map((column) => (
+            <div key={column.label} className="border-t border-hairline pt-6">
+              <span className="label">{column.label}</span>
+
+              <ul className="mt-3">
+                {column.items.map((item) => {
+                  const gallery = column.linked ? galleryFor(item) : undefined
+                  return (
+                    <li key={item} className="border-b border-hairline py-3 text-[16px] leading-[1.5] text-ink-body">
+                      {gallery ? (
+                        <Link
+                          href={galleryHref(gallery)}
+                          className="spec-glance-a text-ink underline decoration-[color:var(--hairline-strong)] underline-offset-4 transition-colors hover:decoration-[color:var(--ink)]"
+                        >
+                          {sentenceCase(item)}
+                        </Link>
+                      ) : (
+                        sentenceCase(item)
+                      )}
+                    </li>
+                  )
+                })}
+              </ul>
             </div>
-            <p className="max-w-[44ch] text-[15px] leading-[1.6] text-ink-muted [text-wrap:pretty]">
-              The same five steps on every job, municipal or private, across the Lower Mainland and
-              Vancouver Island. The site walk is free and the quote is written.
-            </p>
-          </div>
+          ))}
+        </div>
+      </Section>
 
-          <ol className="mt-10 grid grid-cols-1 gap-x-10 gap-y-10 border-t border-[color:var(--hairline)] min-[701px]:grid-cols-2 min-[1101px]:grid-cols-5">
-            {steps.map((step) => (
-              <li key={step.num} className="pt-7">
-                <div className="text-[13px] font-semibold tracking-[0.08em] text-ink-muted">{step.num}</div>
-                <h3 className="mt-4 text-pretty">{step.title}</h3>
-                <p className="mt-[10px] text-[15px] leading-[1.65] text-ink-body">{step.body}</p>
-              </li>
-            ))}
-          </ol>
-
-          <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-3">
-            <Link href="/resources" className="arrow-link">
-              Specification library <span aria-hidden="true">&rarr;</span>
+      {/* ── How a job goes — the one process band, and the product
+             documents under it ─────────────────────────────────── */}
+      <HowAJobGoes tone="warm" crews={false} cta={false} />
+      <section className="bg-surface-warm pb-20 max-[700px]:pb-14">
+        <div className="container-1280 -mt-12 max-[700px]:-mt-6">
+          <p className="flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-hairline pt-6">
+            <Link href="/resources" className="link">
+              Product documents
             </Link>
             {showsPatterns && (
-              <Link href="/patterns" className="arrow-link">
-                Template sheets <span aria-hidden="true">&rarr;</span>
+              <Link href="/patterns" className="link">
+                Pattern library
               </Link>
             )}
             {showsColours && (
-              <Link href="/products/streetbond#colours" className="arrow-link">
-                StreetBond colour chart <span aria-hidden="true">&rarr;</span>
+              <Link href="/products/streetbond#colours" className="link">
+                StreetBond colour chart
               </Link>
             )}
-            <Link href="/specifiers" className="arrow-link">
-              Everything for specifiers <span aria-hidden="true">&rarr;</span>
-            </Link>
-          </div>
+          </p>
         </div>
       </section>
 
-      {/* ── The systems — the means ───────────────────────────── */}
-      <section className="section bg-surface">
-        <div className="container-1280">
-          <div className="flex flex-wrap items-baseline justify-between gap-6">
-            <div>
-              <p className="eyebrow">The systems</p>
-              <h2 className="mt-5 text-pretty">{systemsHeading[service.slug] ?? `The systems behind ${lowerName}`}</h2>
-            </div>
-            <Link href="/products" className="arrow-link whitespace-nowrap">
-              All systems <span aria-hidden="true">&rarr;</span>
-            </Link>
-          </div>
-
-          <div className="mt-10 grid grid-cols-1 gap-6 min-[701px]:grid-cols-2 min-[1025px]:grid-cols-4">
-            {service.productsIncluded.map((line, i) => {
-              const product = productFor(line)
-              return (
-                <article key={line} className="card-panel">
-                  <div className="text-[13px] font-semibold tracking-[0.08em] text-ink-muted">
-                    {String(i + 1).padStart(2, "0")}
-                  </div>
-                  {/* The product's name is the title; the line from lib/services.ts
-                      (its role in this service) sits under it. */}
-                  <h3 className="mt-5 text-pretty">
-                    {product ? (
-                      <>
+      {/* ── The systems — the means. Only the systems with a page of their
+             own get a panel; a line that is an option rather than a system
+             (anti-skid aggregate, custom colour matching) reads as one
+             sentence under the grid, not as a panel with no photograph
+             (2 Oct 2026, Vern: "the text floating next to the two images"). */}
+      {(() => {
+        const lines = service.productsIncluded.map((line) => ({ line, product: productFor(line) }))
+        const panels = lines.filter((l) => l.product)
+        const options = lines.filter((l) => !l.product).map((l) => l.line.replace(/^\w/, (c) => c.toLowerCase()))
+        const cols = panels.length >= 4 ? "min-[1025px]:grid-cols-4" : panels.length === 3 ? "min-[1025px]:grid-cols-3" : "min-[1025px]:grid-cols-2"
+        return (
+          <Section
+            label="The systems"
+            title={<>The systems <em>behind it</em></>}
+            link={{ href: "/products", label: "All systems" }}
+            wide
+          >
+            <div data-reveal-group className={`grid grid-cols-1 gap-x-10 gap-y-8 min-[701px]:grid-cols-2 ${cols}`}>
+              {panels.map(({ line, product }) =>
+                product ? (
+                  <article key={line} data-reveal className="card-panel">
+                    {/* The system's own photograph leads its panel; the opener's frame is never repeated. */}
+                    {product.image !== heroSrc && (
+                      <Frame
+                        src={product.image}
+                        alt={product.imageAlt}
+                        aspect="aspect-[4/3]"
+                        sizes="(max-width: 700px) 100vw, (max-width: 1024px) 50vw, 400px"
+                        position={product.heroPosition}
+                        href={`/products/${product.slug}`}
+                        className="mb-5"
+                      />
+                    )}
+                    <h3 className="text-pretty">
+                      <Link href={`/products/${product.slug}`} className="underline-offset-4 hover:underline">
                         {product.name}
                         {product.mark && <sup className="ml-[1px] text-[0.55em] font-normal">{product.mark}</sup>}
-                      </>
-                    ) : (
-                      line
-                    )}
-                  </h3>
-                  {product && (
-                    <p className="mt-3 text-[14px] leading-[1.55] text-ink-muted">
+                      </Link>
+                    </h3>
+                    <p className="mt-3 text-[16px] leading-[1.55] text-ink-body">
                       {line.replace(/^[A-Za-z]+(?:XD)?[®™]?\s*/, "").replace(/^[—–-]\s*/, "").replace(/^\w/, (c) => c.toUpperCase())}
                     </p>
-                  )}
-                  {product && (
-                    <Link
-                      href={`/products/${product.slug}`}
-                      className="arrow-link mt-auto pt-6"
-                      aria-label={`${product.name} product page`}
-                    >
-                      {product.name} <span aria-hidden="true">&rarr;</span>
-                    </Link>
-                  )}
-                </article>
+                  </article>
+                ) : null,
+              )}
+            </div>
+            {options.length > 0 && (
+              <p className="mt-10 max-w-[70ch] border-t border-hairline pt-5 text-[15.5px] leading-[1.6] text-ink-muted">
+                Also {options.join(", and ")}.
+              </p>
+            )}
+          </Section>
+        )
+      })()}
+
+      {/* ── Patterns and colours — the sheets fanned, the chip strip, the
+             two links; stamped asphalt only (2 Oct 2026, Vern: "access to
+             the pattern sheets from… the Stamped Asphalt page") ──────── */}
+      {showsPatterns && <MaterialsBand tone="paper" />}
+
+      {/* ── Projects on record — frames, captioned under ──────── */}
+      {relatedProjects.length > 0 && (
+        <Section
+          label="On the record"
+          title={<>{name}, <em>on the record</em></>}
+          link={{ href: "/projects", label: "All projects" }}
+          tone="warm"
+          wide
+        >
+          <ul className="grid grid-cols-1 gap-x-7 gap-y-10 min-[701px]:grid-cols-3">
+            {relatedProjects.map((project) => {
+              const meta = [cityName(project.city), project.systems.join(" + "), project.year]
+                .filter((part): part is string => Boolean(part))
+                .join(" · ")
+              return (
+                <li key={project.slug}>
+                  <Frame
+                    src={project.imageUrl}
+                    alt={`${project.title}, ${project.systems.join(" and ")}`}
+                    aspect="aspect-[4/3]"
+                    sizes="(max-width: 700px) 100vw, (max-width: 1280px) 33vw, 411px"
+                    href={`/projects/${project.slug}`}
+                    caption={
+                      <>
+                        <span className="block not-italic font-bold text-ink" style={{ fontFamily: "var(--font-display)" }}>
+                          {project.title}
+                        </span>
+                        <span className="block">{meta}</span>
+                      </>
+                    }
+                  />
+                </li>
               )
             })}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Projects on record ────────────────────────────────── */}
-      {relatedProjects.length > 0 && (
-        <section className="section border-y border-[color:var(--hairline)] bg-surface-warm">
-          <div className="container-1280">
-            <div className="flex flex-wrap items-baseline justify-between gap-6">
-              <div>
-                <p className="eyebrow">On the record</p>
-                <h2 className="mt-5 text-pretty">{name} projects in BC</h2>
-              </div>
-              <Link href="/projects" className="arrow-link whitespace-nowrap">
-                All projects <span aria-hidden="true">&rarr;</span>
-              </Link>
-            </div>
-
-            <div className="mt-10 grid grid-cols-1 gap-6 min-[701px]:grid-cols-3">
-              {relatedProjects.map((project) => {
-                const src = project.imageUrl
-
-                const meta = [cityName(project.city), project.systems.join(" + "), project.year]
-                  .filter((part): part is string => Boolean(part))
-                  .join(" · ")
-
-                return (
-                  <Link
-                    key={project.slug}
-                    href={`/projects/${project.slug}`}
-                    className="pattern-running-bond card relative block aspect-[4/3] overflow-hidden rounded-[2px]"
-                  >
-                    <Image
-                      src={src}
-                      alt={`${project.title} — ${project.systems.join(" and ")}`}
-                      fill
-                      sizes="(max-width: 700px) 100vw, (max-width: 1280px) 33vw, 411px"
-                      className="object-cover"
-                    />
-
-                    <div aria-hidden="true" className="scrim" />
-
-                    <ProjectCaption title={project.title} meta={meta} />
-                  </Link>
-                )
-              })}
-            </div>
-          </div>
-        </section>
+          </ul>
+        </Section>
       )}
 
       {/* ── Questions ────────────────────────────────────────────── */}
-      <section className="section bg-surface">
-        <div className="container-1280">
-          <div className="grid grid-cols-12 gap-x-12 gap-y-8 max-[900px]:grid-cols-1">
-            <div className="col-span-4 max-[900px]:col-span-1">
-              <div className="eyebrow">Questions</div>
-              <h2 className="mt-5 [text-wrap:balance]">What specifiers ask about {lowerName}</h2>
-              <p className="mt-5 max-w-[36ch] text-[15px] leading-[1.6] text-ink-muted">
-                Short answers, in the same words the page already uses. For the specification
-                itself, the documents are in{" "}
-                <Link href="/resources" className="font-semibold text-ink underline-offset-4 hover:underline">
-                  the library
-                </Link>
-                .
-              </p>
-            </div>
-            <div className="col-span-8 border-t border-[color:var(--hairline)] max-[900px]:col-span-1">
-              {service.faqs.map((faq, i) => (
-                <details key={faq.q} open={i === 0} className="group border-b border-[color:var(--hairline)]">
-                  <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-[20px] [&::-webkit-details-marker]:hidden">
-                    <span className="text-[1.125rem] font-semibold leading-[1.4] tracking-[-0.01em] text-ink">{faq.q}</span>
-                    <span aria-hidden="true" className="flex-shrink-0 text-[22px] font-normal leading-none text-ink-muted">
-                      <span className="group-open:hidden">+</span>
-                      <span className="hidden group-open:inline">&minus;</span>
-                    </span>
-                  </summary>
-                  <p className="max-w-[64ch] pb-6 pr-10 text-[15px] leading-[1.65] text-ink-body max-[700px]:pr-0">{faq.a}</p>
-                </details>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── The way in — one strip, not a second footer ───────── */}
-      <section className="border-t border-[color:var(--hairline)] bg-surface-warm py-12 max-[700px]:py-9">
-        <div className="container-1280 grid grid-cols-12 items-center gap-x-12 gap-y-6 max-[900px]:grid-cols-1">
-          <div className="col-span-7 max-[900px]:col-span-1">
-            <h2 className="text-pretty">Send drawings or a site address</h2>
-            <p className="mt-3 max-w-[56ch] text-[15px] leading-[1.6] text-ink-muted [text-wrap:pretty]">
-              A few photographs and a postal code are enough to start; drawings help. Photos and
-              drawings go by email to{" "}
-              <a href="mailto:office@squareonepaving.com" className="font-semibold text-ink">
-                office@squareonepaving.com
-              </a>{" "}
-              &mdash; put the site address in the subject line.
-            </p>
-          </div>
-          <div className="col-span-5 flex flex-wrap items-center gap-x-8 gap-y-4 min-[901px]:justify-end max-[900px]:col-span-1">
-            <Link href="/contact" className="btn-primary">
-              Request a site visit
+      <Section
+        label="Questions"
+        title={<>Questions <em>about {lowerName}</em></>}
+        intro={
+          <>
+            The product documents are in{" "}
+            <Link href="/resources" className="link">
+              the library
             </Link>
-            <span className="text-[14px] leading-[1.6] text-ink-muted">
-              <a href="tel:+16046126209" className="font-medium text-ink-body">604-612-6209</a> Lower Mainland
-              <br />
-              <a href="tel:+12503910270" className="font-medium text-ink-body">250-391-0270</a> Vancouver Island
-            </span>
-          </div>
+            .
+          </>
+        }
+      >
+        <div className="border-t border-hairline">
+          {service.faqs.map((faq) => (
+            <details key={faq.q} className="group border-b border-hairline">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-[20px] [&::-webkit-details-marker]:hidden">
+                <span className="text-[1.125rem] font-semibold leading-[1.4] text-ink">{faq.q}</span>
+                <span aria-hidden="true" className="flex-shrink-0 text-[22px] font-normal leading-none text-ink-muted">
+                  <span className="group-open:hidden">+</span>
+                  <span className="hidden group-open:inline">&minus;</span>
+                </span>
+              </summary>
+              <p className="max-w-[64ch] pb-6 pr-10 text-[16px] leading-[1.6] text-ink-body max-[700px]:pr-0">{faq.a}</p>
+            </details>
+          ))}
         </div>
-      </section>
+      </Section>
 
-      {/* ── More services ────────────────────────────────────────── */}
-      <section className="section border-t border-[color:var(--hairline)] bg-surface">
-        <div className="container-1280">
-          <div className="flex flex-wrap items-baseline justify-between gap-6">
-            <h2 className="text-pretty">Other services across the Lower Mainland and Vancouver Island</h2>
-            <Link href="/services" className="arrow-link whitespace-nowrap">
-              All services <span aria-hidden="true">&rarr;</span>
-            </Link>
-          </div>
+      {/* The page's own close came off on 28 Sept 2026 (QA: two quote bands in a
+          row); the footer's "Start a project" band is the one close. */}
 
-          <div className="mt-10 grid grid-cols-1 gap-6 min-[701px]:grid-cols-3">
-            {otherServices.map((other) => {
-              const otherName = displayName[other.slug] ?? other.name
-              const src = heroFor("services", other.slug, other.imageUrl) ?? other.imageUrl
-              const alt = src === other.imageUrl ? other.imageAlt : otherName
+      {/* ── More services — three hairline rows ────────────────── */}
+      <Section
+        label="More services"
+        title={<>Other <em>services</em></>}
+        link={{ href: "/services", label: "All services" }}
+      >
+        <ul>
+          {otherServices.map((other) => {
+            const otherName = displayName[other.slug] ?? other.name
+            const src = heroFor("services", other.slug, other.imageUrl) ?? other.imageUrl
+            const alt = src === other.imageUrl ? other.imageAlt : otherName
 
-              return (
-                <Link
-                  key={other.slug}
-                  href={`/services/${other.slug}`}
-                  className="pattern-herringbone card relative block aspect-[4/3] overflow-hidden rounded-[2px]"
-                >
-                  <Image
-                    src={src}
-                    alt={alt}
-                    fill
-                    sizes="(max-width: 700px) 100vw, (max-width: 1280px) 33vw, 411px"
-                    className="object-cover"
-                  />
-
-                  <div aria-hidden="true" className="scrim" />
-
-                  <div className="pointer-events-none absolute bottom-5 left-6 right-6">
-                    <div className="text-[16px] font-semibold leading-[1.3] text-white">
-                      {otherName}
-                    </div>
-                    <div className="mt-1 text-[13px] leading-[1.4] text-[rgba(255,255,255,0.78)]">
-                      {other.tagline}
-                    </div>
-                  </div>
-                </Link>
-              )
-            })}
-          </div>
-        </div>
-      </section>
+            return (
+              <li key={other.slug} className="row row-compact relative">
+                <Link href={`/services/${other.slug}`} aria-label={`${otherName}, the service`} className="absolute inset-0 z-[2]" />
+                <Frame src={src} alt={alt} aspect="aspect-[3/2]" sizes="132px" />
+                <div className="min-w-0">
+                  <h3>{otherName}</h3>
+                  <p className="mt-2 max-w-[52ch] text-[16px] leading-[1.55] text-ink-body [text-wrap:pretty]">{other.tagline}</p>
+                </div>
+              </li>
+            )
+          })}
+        </ul>
+      </Section>
     </main>
   )
 }

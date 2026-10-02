@@ -1,6 +1,8 @@
 import Image from "next/image"
 import Link from "next/link"
 import QuoteForm from "@/components/contact/QuoteForm"
+import Frame from "@/components/ui/Frame"
+import { Section } from "@/components/ui/Container"
 import { workMunicipalities } from "@/lib/work"
 
 /* Contact — rebuilt for the fourth time, 19 Sept 2026 (Vern, with the live
@@ -22,22 +24,47 @@ import { workMunicipalities } from "@/lib/work"
               beside it the office, the mailbox, what to send, and the two
               shortcuts (a homeowner to the patterns, a specifier to the
               library)
-     next     on white: the three steps from a message to a written quote,
-              each with its line, against the StreetHeat rig mid-install at
-              KB Woodward — how the work is actually done
+     next     the three steps from a message to a written quote, numbered,
+              beside the StreetHeat rig mid-install at KB Woodward — how the
+              work is actually done
      where    the two regions with their lines, each on a frame from the
               record, and the municipalities the record carries — drawn from
               lib/work.ts, never typed
 
+   26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.7): the same page on the
+   own-company primitives — the captions under the frames, the label in the
+   margin column, the steps with the site's numeral on hairlines, the region
+   cards as frames with the text under them, every arrow link an underlined
+   word, no orange on a phone number. The form (components/contact/QuoteForm)
+   is untouched. The band keeps its own three steps beside the KB Woodward
+   frame rather than taking the four-step band, so the photograph stays where
+   it is.
+
    Nothing here is new to the record: the free site visit, the sample boards,
    the written quote, the warranty split, the office, the three lines, the
    regions, the cities. Office hours are still not on record, so they are
-   still not here. */
+   still not here.
 
+   28 Sept 2026 (Vern: "Request a quote page is pretty sad, improve it";
+   "mind the hubss.com design patterns"). hubss.com's contact page is a
+   dark photograph with the invitation and the offices on the left and a
+   dark form card on the right. This one leads with the form, on white:
+   the invitation and the three lines across the top, then the form on
+   the left in two numbered sections (the work, then you) with the
+   project type as tiles, and on the right a rail that stays in view,
+   what happens next as a short timeline, what to send, and the seal.
+   The Spirit Trail frame moves below the form as a full-width band; the
+   regions close the page as before. */
+
+/* 2 Oct 2026 (the client: "find a better featured image"): the Spirit Trail
+   frame with the vintage car gave way to the Railways crossing in Langley,
+   crisp lines on new asphalt with the flagger at the far corner, which reads
+   at any width and in the quieter palette. The Spirit Trail file stays in
+   public/images/contact for the record. */
 const OPENER = {
-  src: "/images/contact/west-vancouver-spirit-trail-crew-on-site-streetbond.jpg",
-  alt: "A Square One crew member in a hard hat and high-visibility vest waving a vintage car across a freshly coated StreetBond crossing on the Spirit Trail in West Vancouver",
-  caption: "West Vancouver · Spirit Trail · StreetBond",
+  src: "/images/applications/crosswalks/langley-railways-crossing-crew-on-site-trafficpatternsxd-01.jpg",
+  alt: "A railway-tie pattern TrafficPatternsXD crossing in tan and white running across a wide intersection in Langley, a flagger in high-visibility gear at the far corner",
+  caption: "Langley · Railways crossing · TrafficPatternsXD",
 }
 
 const LINES = [
@@ -46,29 +73,12 @@ const LINES = [
   { region: "Toll-free", display: "1-877-391-0270", href: "tel:+18773910270" },
 ]
 
+// One short line each (2 Oct 2026, Vern: "the quote page is very text heavy").
 const STEPS = [
-  {
-    n: "01",
-    title: "Tell us the job",
-    body: "A description and a location. Photos of the surface as it is and a rough area help; drawings help more.",
-  },
-  {
-    n: "02",
-    title: "We walk the site",
-    body: "Free, across the Lower Mainland and Vancouver Island. The sample boards come along, so pattern and colour are chosen on the surface they will go on.",
-  },
-  {
-    n: "03",
-    title: "You get a written quote",
-    body: "From the crew who install it, to the published specification. The manufacturer warrants the material; Square One warrants the workmanship.",
-  },
+  { title: "Tell us the job", body: "A description and a location." },
+  { title: "We walk the site", body: "Free, with the sample boards." },
+  { title: "You get a written quote", body: "We warrant the workmanship." },
 ]
-
-const PROCESS = {
-  src: "/images/applications/schools-sports-courts/surrey-kb-woodward-installation-decomark-01.jpg",
-  alt: "The infrared heater rig parked on a freshly laid grey octagon with blue web lines mid-install at KB Woodward school, Surrey",
-  caption: "Surrey · KB Woodward · DecoMark, mid-install",
-}
 
 const REGIONS = [
   {
@@ -83,137 +93,101 @@ const REGIONS = [
   {
     name: "Vancouver Island",
     line: LINES[1],
-    where: "A service region with its own line — the crew comes over",
+    where: "A service region with its own line, the crew comes over",
     src: "/images/applications/public-art/oak-bay-village-intersection-wide-streetbond-01.jpg",
-    alt: "A painted medallion of a heron and a salmon in StreetBond filling the Oak Bay Village intersection, seen from above",
-    caption: "Oak Bay · Village intersection · StreetBond",
+    alt: "An octopus and fish on a blue sea, painted in StreetBond on the Cadboro Bay Village traffic circle in Saanich, seen from above",
+    caption: "Cadboro Bay, Saanich · Village traffic circle · StreetBond",
     cities: workMunicipalities("Vancouver Island"),
   },
 ]
 
-function RailBlock({ heading, children }: { heading: string; children: React.ReactNode }) {
-  return (
-    <div className="border-b border-hairline py-6 first:pt-0">
-      <div className="label">{heading}</div>
-      {children}
-    </div>
-  )
-}
-
 export default function ContactPage() {
   return (
     <main className="bg-surface">
-      {/* ── Opener — the invitation, the lines, the crew on site ──────── */}
-      <section className="relative grid min-h-[680px] grid-cols-[52fr_48fr] overflow-hidden bg-surface pt-[var(--bar-h)] max-[900px]:min-h-0 max-[900px]:grid-cols-1">
-        <div
-          className="
-            relative flex items-center
-            pt-20 pb-20 pr-[72px] pl-[max(calc((100vw_-_1280px)/2),40px)]
-            max-[900px]:pt-14 max-[900px]:pr-6 max-[900px]:pb-12 max-[900px]:pl-6
-          "
-        >
-          <div className="relative z-[1] w-full max-w-[560px]">
-            <p className="eyebrow">Contact &middot; Free site visit</p>
-            <h1 className="h1-tight mt-6 [text-wrap:balance]">Tell us the job. We&rsquo;ll walk the site.</h1>
-            <p className="mt-6 max-w-[50ch] text-[18px] leading-[1.65] text-ink-body [text-wrap:pretty] max-[700px]:text-[17px]">
-              A crosswalk, a plaza, a parking area, a driveway &mdash; a description and a location
-              are enough to start, and drawings help. The site visit is free across the Lower Mainland
-              and Vancouver Island, the sample boards come along, and the quote is written by the
-              crew who install it.
+      {/* ── Opener — the invitation, and the lines for whoever would rather call ──────── */}
+      <section className="bg-surface pt-[calc(var(--bar-h)+56px)] pb-12 max-[700px]:pt-[calc(var(--bar-h)+32px)] max-[700px]:pb-8">
+        <div className="container-1280 grid grid-cols-12 items-end gap-x-12 gap-y-10 max-[900px]:grid-cols-1">
+          <div className="col-span-8 max-[900px]:col-span-1">
+            <span className="label">Request a quote &middot; free site visit</span>
+            <h1 className="mt-5 max-w-[16ch] [text-wrap:balance]">Tell us the job. <em>We&rsquo;ll walk the site.</em></h1>
+            <p className="lede mt-6 max-w-[56ch] [text-wrap:pretty]">
+              A description and a location are enough to start. The site visit is free; the quote
+              comes in writing.
             </p>
+          </div>
 
-            {/* 21 Sept 2026 (Vern: "contact page text too big in some
-                areas"). The four lines were set at 26px Futura Bold — h3 size
-                for a telephone number — in a two-column table whose labels ran
-                from eight characters to sixteen, so a river of space opened
-                between the short labels and their numbers and the mailbox had
-                to drop a size of its own to fit. Stacked pairs, two up: the
-                numbers stay the loudest thing in the block without shouting,
-                the mailbox sets at the same size as the rest, and it reads the
-                same way as the footer and the proof line. */}
-            <dl className="mt-10 grid grid-cols-3 gap-x-7 gap-y-6 border-t border-hairline pt-8 max-[700px]:grid-cols-2 max-[420px]:grid-cols-1 max-[420px]:gap-y-5">
-              {[...LINES, { region: "Email", display: "office@squareonepaving.com", href: "mailto:office@squareonepaving.com" }].map((l) => (
-                <div key={l.href} className={l.region === "Email" ? "col-span-3 min-w-0 max-[700px]:col-span-2 max-[420px]:col-span-1" : "min-w-0"}>
-                  <dt className="text-[12px] leading-[1.4] font-medium tracking-[0.02em] text-ink-muted">{l.region}</dt>
+          <div className="col-span-4 max-[900px]:col-span-1">
+            <span className="label">Rather talk?</span>
+            <dl className="q-lines mt-3">
+              {LINES.map((l) => (
+                <div key={l.href}>
+                  <dt>{l.region}</dt>
                   <dd>
-                    <a
-                      href={l.href}
-                      className="mt-[3px] inline-block font-[family-name:var(--font-display)] text-[19px] leading-[1.25] font-bold tracking-[-0.01em] tabular-nums text-ink transition-colors hover:text-[color:var(--accent-deep)] [overflow-wrap:anywhere] max-[700px]:text-[17.5px]"
-                    >
-                      {l.display}
-                    </a>
+                    <a href={l.href}>{l.display}</a>
                   </dd>
                 </div>
               ))}
+              <div>
+                <dt>Email</dt>
+                <dd>
+                  <a href="mailto:office@squareonepaving.com" className="q-mail">
+                    office@squareonepaving.com
+                  </a>
+                </dd>
+              </div>
             </dl>
-
-            <div className="mt-9">
-              <a href="#quote" className="btn-primary">Request a quote</a>
-            </div>
           </div>
-        </div>
-
-        <div className="relative min-w-0 overflow-hidden bg-surface-stone max-[900px]:aspect-[4/3]">
-          <Image
-            src={OPENER.src}
-            alt={OPENER.alt}
-            fill
-            priority
-            fetchPriority="high"
-            sizes="(max-width: 900px) 100vw, 48vw"
-            className="object-cover [object-position:8%_62%]"
-          />
-          <div aria-hidden="true" className="scrim scrim-light" />
-          <div className="caption">{OPENER.caption}</div>
         </div>
       </section>
 
-      {/* ── The form, and the office beside it ──────── */}
-      <section className="border-t border-hairline bg-surface-warm py-24 max-[700px]:py-14">
+      {/* ── The form, and the rail beside it ──────── */}
+      <section className="bg-surface pb-24 max-[700px]:pb-16">
         <div className="container-1280 grid grid-cols-12 items-start gap-x-12 gap-y-14 max-[900px]:grid-cols-1">
-          <div className="col-span-7 max-[900px]:col-span-1">
+          <div className="col-span-8 max-[900px]:col-span-1">
             <QuoteForm />
           </div>
 
-          <aside className="col-span-5 max-[900px]:col-span-1 min-[901px]:pl-4">
-            <RailBlock heading="Office">
-              <address className="mt-[10px] text-[1.25rem] font-semibold not-italic leading-[1.4] tracking-[-0.015em] text-ink">
-                19&ndash;11720 Stewart Crescent
-              </address>
-              <p className="mt-1 text-[14px] text-ink-muted">Maple Ridge, BC V2X 9E7</p>
-            </RailBlock>
+          <aside className="q-rail col-span-4 max-[900px]:col-span-1">
+            <h2 className="label">What happens next</h2>
+            <ol className="q-timeline mt-4">
+              {STEPS.map((s, i) => (
+                <li key={s.title}>
+                  <span className="q-dot" aria-hidden="true">
+                    {i + 1}
+                  </span>
+                  <div>
+                    <h3 className="q-t-title">
+                      <span className="sr-only">Step {i + 1}: </span>
+                      {s.title}
+                    </h3>
+                    <p className="q-t-body">{s.body}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
 
-            <RailBlock heading="What to send">
-              <ul className="mt-3 grid grid-cols-2 gap-x-6 gap-y-[9px] text-[14px] leading-[1.4] text-ink-body max-[420px]:grid-cols-1">
+            <div className="mt-9 border-t border-hairline pt-6">
+              <h2 className="label">What to send</h2>
+              <ul className="q-list mt-3">
                 <li>Photos of the surface as it is</li>
                 <li>The address or postal code</li>
                 <li>Drawings or a sketch, if you have them</li>
                 <li>A rough area in square metres</li>
                 <li>When you need it done</li>
               </ul>
-              <p className="mt-4 text-[13px] leading-[1.5] text-ink-muted">
-                Photos and drawings go by email to{" "}
-                <a href="mailto:office@squareonepaving.com" className="font-medium text-ink-body">office@squareonepaving.com</a>
-                {" "}&mdash; put the site address in the subject line.
+              <p className="mt-4 text-[14.5px] leading-[1.6] text-ink-muted">
+                By email:{" "}
+                <a href="mailto:office@squareonepaving.com" className="link text-[14.5px]">
+                  office@squareonepaving.com
+                </a>
               </p>
-            </RailBlock>
+            </div>
 
-            <RailBlock heading="Two shortcuts">
-              <ul className="mt-3 flex flex-col gap-[14px]">
-                <li>
-                  <Link href="/driveways#patterns" className="arrow-link">
-                    Building a driveway? See the patterns first <span aria-hidden="true">&rarr;</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/specifiers" className="arrow-link">
-                    Writing a spec? Drawings, sheets and documents <span aria-hidden="true">&rarr;</span>
-                  </Link>
-                </li>
-              </ul>
-            </RailBlock>
+            {/* The two shortcuts (patterns, the specifiers' library) came off
+                on 2 Oct 2026 with the client's notes: Driveways is in the
+                menu bar now and the specifiers page is no longer promoted. */}
 
-            <div className="mt-7 flex items-center gap-4">
+            <div className="mt-8 flex items-center gap-4 border-t border-hairline pt-6">
               <Image
                 src="/images/S1_update_v2/Old%20Square%20One%20Web%20Assets/Contact%20Page/BBB-Logo.png"
                 alt="BBB Accredited Business seal"
@@ -221,101 +195,63 @@ export default function ContactPage() {
                 height={51}
                 className="h-8 w-auto flex-shrink-0"
               />
-              <p className="text-[13px] leading-[1.5] text-ink-muted">Decorative pavement across BC since 2000</p>
+              <p className="text-[14px] leading-[1.5] text-ink-muted">Decorative pavement across BC since 2000</p>
             </div>
           </aside>
         </div>
       </section>
 
-      {/* ── What happens next — the three steps, and how the work is done ──────── */}
-      <section className="relative overflow-hidden border-t border-hairline bg-surface py-[7rem] max-[900px]:py-16">
-        <div className="container-1280 relative z-[1] grid grid-cols-12 items-center gap-x-14 gap-y-12 max-[900px]:grid-cols-1">
-          <div className="col-span-6 max-[900px]:col-span-1">
-            <p className="eyebrow">What happens next</p>
-            <h2 className="mt-5 max-w-[18ch] [text-wrap:balance]">From a message to a written quote</h2>
-            <ol className="mt-10 flex flex-col">
-              {STEPS.map((s) => (
-                <li key={s.n} className="grid grid-cols-[52px_1fr] gap-x-5 border-t py-7 first:pt-0 first:border-t-0 max-[420px]:grid-cols-[40px_1fr]" style={{ borderColor: "var(--hairline)" }}>
-                  <span className="label pt-[3px] text-[color:var(--accent-deep)]">{s.n}</span>
-                  <div>
-                    <h3>{s.title}</h3>
-                    <p className="mt-2 max-w-[46ch] text-[15.5px] leading-[1.6] text-ink-body [text-wrap:pretty]">
-                      {s.body}
-                    </p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </div>
-
-          <div className="col-span-6 max-[900px]:col-span-1">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-[2px] bg-surface-stone shadow-[0_18px_44px_rgba(20,22,26,0.14)]">
-              <Image
-                src={PROCESS.src}
-                alt={PROCESS.alt}
-                fill
-                sizes="(max-width: 900px) 100vw, 560px"
-                className="object-cover"
-              />
-              <div aria-hidden="true" className="scrim scrim-light" />
-              <div className="caption">{PROCESS.caption}</div>
-            </div>
-          </div>
+      {/* ── The crew on site — the frame from the record, full width, caption under ──────── */}
+      <section className="bg-surface-warm pt-16 pb-14 max-[700px]:pt-10 max-[700px]:pb-10">
+        <div className="container-1280">
+          <Frame
+            src={OPENER.src}
+            alt={OPENER.alt}
+            caption={OPENER.caption}
+            aspect="aspect-[21/9] max-[700px]:aspect-[4/3]"
+            position="center 36%"
+            sizes="(max-width: 1280px) 100vw, 1280px"
+          />
         </div>
       </section>
 
       {/* ── Where we work — two regions, two lines, the record's cities ──────── */}
-      <section className="section border-t border-hairline bg-surface-warm">
-        <div className="container-1280">
-          <div className="flex flex-wrap items-end justify-between gap-6">
-            <div>
-              <p className="eyebrow">Where we work</p>
-              <h2 className="mt-5 max-w-[20ch] [text-wrap:balance]">Lower Mainland and Vancouver Island</h2>
-              <p className="mt-5 max-w-[52ch] text-[16px] leading-[1.65] text-ink-body [text-wrap:pretty]">
-                The office is in Maple Ridge and the Island has its own line. The record also runs
-                to Squamish, Sechelt and the Okanagan when the job calls for it.
-              </p>
-            </div>
-            <Link href="/projects" className="arrow-link whitespace-nowrap">
-              All projects <span aria-hidden="true">&rarr;</span>
-            </Link>
-          </div>
-
-          <div className="mt-12 grid grid-cols-2 gap-8 max-[900px]:grid-cols-1">
-            {REGIONS.map((r) => (
-              <article key={r.name} className="flex flex-col overflow-hidden rounded-[2px] border border-hairline bg-white">
-                <div className="relative aspect-[3/2] overflow-hidden bg-surface-stone">
-                  <Image
-                    src={r.src}
-                    alt={r.alt}
-                    fill
-                    sizes="(max-width: 900px) 100vw, 616px"
-                    className="object-cover"
-                  />
-                  <div aria-hidden="true" className="scrim scrim-light" />
-                  <div className="caption">{r.caption}</div>
-                </div>
-                <div className="flex flex-1 flex-col p-8 max-[700px]:p-6">
-                  <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
-                    <h3>{r.name}</h3>
-                    <a
-                      href={r.line.href}
-                      className="font-[family-name:var(--font-display)] text-[1.375rem] font-bold leading-[1.2] tracking-[-0.012em] tabular-nums text-ink transition-colors hover:text-[color:var(--accent-deep)]"
-                    >
-                      {r.line.display}
-                    </a>
-                  </div>
-                  <p className="mt-2 text-[14px] leading-[1.5] text-ink-muted">{r.where}</p>
-                  <p className="mt-6 border-t border-hairline pt-5 text-[13.5px] leading-[1.7] text-ink-body">
-                    <span className="label mr-2">On the record</span>
-                    {r.cities.join(" · ")}
-                  </p>
-                </div>
-              </article>
-            ))}
-          </div>
+      <Section
+        label="Where we work"
+        title={<>Lower Mainland <em>and Vancouver Island</em></>}
+        link={{ href: "/projects", label: "All projects" }}
+        intro="The office is in Maple Ridge and the Island has its own line. The record also runs to Squamish, Sechelt and the Okanagan when the job calls for it."
+        tone="warm"
+        wide
+      >
+        <div className="grid grid-cols-2 gap-x-10 gap-y-12 max-[900px]:grid-cols-1">
+          {REGIONS.map((r) => (
+            <article key={r.name}>
+              <Frame
+                src={r.src}
+                alt={r.alt}
+                caption={r.caption}
+                aspect="aspect-[3/2]"
+                sizes="(max-width: 900px) 100vw, 600px"
+              />
+              <div className="mt-6 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+                <h3>{r.name}</h3>
+                <a
+                  href={r.line.href}
+                  className="font-[family-name:var(--font-display)] text-[1.25rem] font-bold leading-[1.2] tabular-nums text-ink underline-offset-4 hover:underline"
+                >
+                  {r.line.display}
+                </a>
+              </div>
+              <p className="mt-2 text-[15px] leading-[1.5] text-ink-muted">{r.where}</p>
+              <div className="mt-5 border-t border-hairline pt-4">
+                <span className="label">On the record</span>
+                <p className="mt-1 text-[15px] leading-[1.7] text-ink-body">{r.cities.map((c) => c.replace(/ /g, "\u00A0")).join(" · ")}</p>
+              </div>
+            </article>
+          ))}
         </div>
-      </section>
+      </Section>
     </main>
   )
 }

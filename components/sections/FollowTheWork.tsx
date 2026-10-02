@@ -37,100 +37,82 @@ export default function FollowTheWork({ settings, tiles }: { settings: SiteSetti
   const handle = handleFrom(settings.instagram) || "@squareonepaving"
   const live = tiles.some((t) => !t.fallback)
 
+  /* 28 Sept 2026 (Vern: "the social media section… is identical to the
+     HUBSS.com section… need to differentiate"). hubss.com runs a label, a
+     heading, a pill button and one full-width row of six rounded squares.
+     This is Square One's own composition: the words and the four networks
+     as a hairline ledger in the left third, and the six photographs as a
+     three-by-two contact sheet of square frames on the right (squares since 2 Oct 2026, Vern), each
+     captioned UNDER the picture in the serif (the site's signature; HUB
+     never captions), no badges over the photographs, square corners. The
+     heading is set here, not read from Site settings, so the HUB phrase
+     ("Follow the work") can never come back through the Studio. */
+  const networks: { platform: SocialTile["platform"]; href: string; note: string }[] = [
+    { platform: "Instagram", href: settings.instagram, note: handle },
+    { platform: "Facebook", href: settings.facebook, note: "Square One Paving" },
+    { platform: "LinkedIn", href: settings.linkedin, note: "Square One Paving" },
+    { platform: "YouTube", href: settings.youtube, note: "Demonstrations" },
+  ]
+  if (settings.tiktok) networks.splice(1, 0, { platform: "TikTok", href: settings.tiktok, note: handle })
+
   return (
-    <section
-      id="follow"
-      aria-labelledby="follow-heading"
-      className="section relative overflow-hidden border-t border-[color:var(--hairline)] bg-[color:var(--surface)]"
-    >
-      <div className="container-1280 relative z-[1]">
-        <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-6">
-          <div data-reveal>
-            <div className="eyebrow">
-              <span className="eyebrow-num">08</span>On Instagram &middot; {handle}
-            </div>
-            <h2 id="follow-heading" className="mt-4 [text-wrap:balance]">
-              {settings.socialHeading}
+    <section id="follow" aria-labelledby="follow-heading" className="sec section bg-surface">
+      <div className="container-1280">
+        <div className="grid grid-cols-12 gap-x-12 gap-y-10 max-[900px]:grid-cols-1">
+          <div className="col-span-4 max-[900px]:col-span-1">
+            <span className="label">From the crews</span>
+            <h2 id="follow-heading" className="mt-4 max-w-[12ch] [text-wrap:balance]">
+              The work, <em>as it goes in</em>
             </h2>
-            <p className="mt-4 max-w-[52ch] text-[16px] leading-[1.65] text-[color:var(--ink-body)]">
-              {settings.socialLede}
-            </p>
+            <ul className="social-ledger mt-8" role="list">
+              {networks.map((n) => (
+                <li key={n.platform}>
+                  <a href={n.href} target="_blank" rel="noopener" className="social-row">
+                    <span className="social-name">
+                      <Glyph platform={n.platform} size={15} />
+                      {n.platform}
+                    </span>
+                    <span className="social-note">{n.note}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3 max-[700px]:w-full">
-            <a href={settings.instagram} target="_blank" rel="noopener" className="btn-primary inline-flex items-center gap-[10px]">
-              <Glyph platform="Instagram" />
-              Instagram
-            </a>
-            {settings.tiktok && (
-              <a href={settings.tiktok} target="_blank" rel="noopener" className="btn-secondary inline-flex items-center gap-[10px]">
-                <Glyph platform="TikTok" />
-                TikTok
-              </a>
-            )}
-          </div>
-        </div>
-
-        <ul
-          data-reveal-group
-          aria-label={live ? "Latest social posts" : "Square One installations"}
-          className="mt-10 grid grid-cols-6 gap-3 max-[1000px]:grid-cols-3 max-[700px]:gap-2"
-        >
-          {tiles.slice(0, 6).map((tile, i) => (
-            <li key={`${tile.url}-${i}`} data-reveal>
-              <a
-                href={tile.url}
-                target="_blank"
-                rel="noopener"
-                aria-label={tile.fallback ? `${tile.caption} — Square One on Instagram` : `${tile.caption} — view on ${tile.platform}`}
-                className="thumb group relative block aspect-square overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)]"
-              >
-                <Image
-                  src={tile.src}
-                  alt={tile.alt}
-                  fill
-                  sizes="(max-width: 700px) 33vw, (max-width: 1000px) 33vw, 200px"
-                  className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-                />
-                <span
-                  aria-hidden="true"
-                  className="absolute inset-0 flex items-end bg-[rgba(24,21,18,0.66)] p-3 text-[12px] leading-[1.4] font-semibold text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100"
+          <ul
+            data-reveal-group
+            aria-label={live ? "Latest social posts" : "Square One installations"}
+            className="col-span-8 grid grid-cols-3 gap-x-5 gap-y-8 max-[900px]:col-span-1 max-[560px]:grid-cols-2 max-[560px]:gap-x-3"
+          >
+            {tiles.slice(0, 6).map((tile, i) => (
+              <li key={`${tile.url}-${i}`} data-reveal className="min-w-0">
+                <a
+                  href={tile.url}
+                  target="_blank"
+                  rel="noopener"
+                  aria-label={tile.fallback ? `${tile.caption}, Square One on Instagram` : `${tile.caption}, view on ${tile.platform}`}
+                  className="social-tile group block"
                 >
-                  {tile.caption}
-                </span>
-                <span
-                  aria-hidden="true"
-                  className="absolute top-2 right-2 inline-flex h-7 w-7 items-center justify-center rounded-[2px] bg-[rgba(24,21,18,0.50)] text-white"
-                >
-                  {tile.isVideo ? (
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
-                      <path d="M3.5 2l6 4-6 4z" />
-                    </svg>
-                  ) : (
-                    <Glyph platform={tile.platform} size={13} />
-                  )}
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-
-        <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-[13px] text-[color:var(--ink-muted)]">
-          <span>{live ? "Newest first." : "Square One's own installation photographs. New posts appear here as they go up."}</span>
-          <span className="flex flex-wrap items-center gap-x-5">
-            {(
-              [
-                ["Facebook", settings.facebook],
-                ["LinkedIn", settings.linkedin],
-                ["YouTube", settings.youtube],
-              ] as [SocialTile["platform"], string][]
-            ).map(([platform, href]) => (
-              <a key={platform} href={href} target="_blank" rel="noopener" className="inline-flex items-center gap-[6px] font-semibold text-[color:var(--ink)] transition-colors hover:text-[color:var(--accent-deep)]">
-                <Glyph platform={platform} size={13} />
-                {platform}
-              </a>
+                  <span className="relative block aspect-square overflow-hidden bg-[color:var(--surface-stone)]">
+                    <Image
+                      src={tile.src}
+                      alt={tile.alt}
+                      fill
+                      sizes="(max-width: 560px) 50vw, (max-width: 900px) 33vw, 260px"
+                      className="object-cover"
+                    />
+                    {tile.isVideo && (
+                      <span aria-hidden="true" className="absolute top-2 right-2 inline-flex h-7 w-7 items-center justify-center bg-[rgba(20,22,26,0.55)] text-white">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+                          <path d="M3.5 2l6 4-6 4z" />
+                        </svg>
+                      </span>
+                    )}
+                  </span>
+                </a>
+              </li>
             ))}
-          </span>
+          </ul>
         </div>
       </div>
     </section>

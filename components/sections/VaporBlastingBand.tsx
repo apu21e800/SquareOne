@@ -25,7 +25,7 @@ export default function VaporBlastingBand() {
             <h2 className="stop mt-5">The cleanest way to restore a surface</h2>
 
             <p className="mt-6 max-w-[56ch] text-[19px] leading-[1.65] text-ink-body">
-              A powerful, portable blasting solution for surface prep &mdash; less water, up to
+              A powerful, portable blasting solution for surface prep: less water, up to
               92% less dust, little to no heat and less environmental impact than the
               alternatives, while getting the job done faster. The same rig primes the surfaces
               we coat ourselves.
@@ -54,7 +54,7 @@ export default function VaporBlastingBand() {
 
           <div className="relative aspect-[4/3] overflow-hidden rounded-[2px] bg-surface-warm min-[901px]:aspect-auto min-[901px]:min-h-[560px]">
             <Image
-              src="/images/services/vapor-blasting/generated/gen-granville-island-vapour-blasting-01-enhanced.jpg"
+              src="/images/services/vapor-blasting/granville-island-vapour-blasting-01.jpg"
               alt="Square One removing a painted marking from the Granville Island boardwalk, Vancouver, with the vapour blasting rig"
               fill
               sizes="(max-width: 900px) 100vw, 55vw"

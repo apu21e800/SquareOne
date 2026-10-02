@@ -3,6 +3,7 @@ import path from "path"
 import matter from "gray-matter"
 import { heroFor } from "./gallery"
 import { ledeOverride } from "./blog-ledes"
+import { plainCase } from "./text"
 import { groq } from "next-sanity"
 import type { PortableTextBlock } from "@portabletext/types"
 import { sanityFetch, urlFor, type SanityImageSource } from "@/sanity/lib/client"
@@ -42,6 +43,10 @@ export function getAllPosts(): BlogPostMeta[] {
       const slug = filename.replace(/\.(mdx|md)$/, "")
       const raw = fs.readFileSync(path.join(BLOG_DIR, filename), "utf8")
       const { data } = matter(raw)
+      // `unlisted: true` in the front-matter takes a post out of every list
+      // (the index, the home page, related posts, search, the sitemap)
+      // without deleting the file (28 Sept 2026 QA; each carries its reason).
+      if (data.unlisted === true) return null
 
       return {
         slug,
@@ -49,11 +54,12 @@ export function getAllPosts(): BlogPostMeta[] {
         description: data.description ?? "",
         date: data.date ?? "",
         author: data.author ?? "Square One Paving",
-        category: data.category ?? "",
+        category: data.category ? plainCase(data.category) : "",
         featured_image: ledeFor(slug, data.featured_image),
         tags: data.tags ?? [],
       } satisfies BlogPostMeta
     })
+    .filter((post): post is BlogPostMeta => post !== null)
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 }
 
@@ -73,7 +79,7 @@ export function getPostBySlug(slug: string): BlogPost | null {
     description: data.description ?? "",
     date: data.date ?? "",
     author: data.author ?? "Square One Paving",
-    category: data.category ?? "",
+    category: data.category ? plainCase(data.category) : "",
     featured_image: ledeFor(slug, data.featured_image),
     tags: data.tags ?? [],
     content,
@@ -133,7 +139,7 @@ function fromDoc(d: CmsPostDoc): CmsPost {
     description: d.seoDescription ?? d.excerpt ?? "",
     date: d.date ?? "",
     author: d.author || "Square One Paving",
-    category: d.category ?? "",
+    category: d.category ? plainCase(d.category) : "",
     featured_image: d.mainImage ? urlFor(d.mainImage, 1600) : "",
     tags: d.tags ?? [],
     body: d.body ?? [],

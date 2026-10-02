@@ -35,6 +35,10 @@ const HELD = new Set([
   // byte-identical to streetbond-dark-red-brick-pattern-driveway-01.jpg — the
   // same roundabout rendered twice in one grid
   "streetbond-driveway.jpg",
+  // 28 Sept 2026 QA: filed under Joyce Station, but it is a Coast Salish
+  // medallion outside a brick-and-glass school (the Victoria High School
+  // building), not 'Carpeting'. Held until Square One says which job it is.
+  "joyce-collingwood-station-plaza-streetbond-01.jpg",
 ])
 
 /** Natural sort so "shot-2.jpg" precedes "shot-10.jpg". */

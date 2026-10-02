@@ -25,7 +25,7 @@ export const LEDE: Record<string, string> = {
   "decorative-paving-stamped-asphalt": `${FIO}/decorative-crosswalk-with-stamped-asphalt-at-granville-island-brewery-crosswalk-sign-scaled-1-2048x1536.jpg`,
   "every-child-matters-new-westminster": `${FIO}/Photo-2023-09-22-1-50-34-PM.jpg`,
   "first-nations-crosswalk-design-granville-street": `${FIO}/TrafficPatterns-Robyn-Sparrow-Design-Granville-68th-Vancouver-BC.jpg`,
-  "joyce-skytrain-art-installation": "/images/projects/joyce-skytrain-art-installation/joyce-collingwood-station-plaza-streetbond-01.jpg",
+  "joyce-skytrain-art-installation": "/images/projects/joyce-skytrain-art-installation/joyce-station-carpeting-renee-van-halm-streetbond-02.jpg",
   "keswick-waterpark-burnaby": `${FIO}/keswick-splash-water-park-burnaby-canada-3.png`,
   "langley-events-centre-streetbond": `${FIO}/Langley-event-3-2048x1536.jpg`,
   "little-italy-vancouver-crosswalks": "/images/applications/commercial-spaces/little-italy-aerial-colourful-intersection-01.jpg",
@@ -58,6 +58,11 @@ export const LEDE: Record<string, string> = {
   "tsuyuki-park-maple-ridge": "",
   "wesburn-water-park-burnaby": "/images/applications/parks-paths/burnaby-wesburn-park-surface-streetbond-01.jpg",
   "west-vancouver-rainbow-crosswalk": "",
+  "agnes-greenway-new-westminster": "/images/applications/crosswalks/new-westminster-agnes-greenway-crossing-trafficpatternsxd-01.jpg",
+  "alexandra-greenway-public-art": "",
+  "confederation-water-park-burnaby": "",
+  "connaught-park-spray-park-renewal": "",
+  "stamped-asphalt-vs-concrete-driveways-bc": "/images/S1_update_v2/photos/Driveways/Number%202.jpg",
 }
 
 /** The fixed photograph for a grandfathered post, "" for none, undefined when the slug is not listed. */

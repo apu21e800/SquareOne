@@ -3,12 +3,16 @@
  * site settings — ready for one command:
  *
  *   npm run cms:seed
- *   npx sanity dataset import sanity/seed/seed.ndjson production --replace
+ *   npm run cms:import -- -p <project id>
  *
- * Run from the repo root with Node 22+. Document ids are stable
+ * (The repo has no sanity.cli.ts, so the import needs the project id on the
+ * command line; without it the CLI stops at "No CLI config found".)
+ *
+ * Run from the repo root with Node 22+, after the site it describes is live:
+ * photographs are referenced by URL on the live site (ASSET_BASE below), so
+ * the import can upload them into Sanity's own CDN. Document ids are stable
  * (post-<slug>, project-<slug>, siteSettings) so a second import updates in
- * place instead of duplicating. Photographs are referenced by URL on the
- * live preview, so the import uploads them into Sanity's own CDN.
+ * place instead of duplicating.
  *
  * The markdown → Portable Text converter covers what the 51 posts use:
  * headings, paragraphs, bullet and numbered lists, bold, italic and links.
@@ -33,8 +37,11 @@ function galleryHero(slug: string): string | undefined {
 const BLOG_DIR = path.join(ROOT, "content/blog")
 const OUT_DIR = path.join(ROOT, "sanity/seed")
 const OUT = path.join(OUT_DIR, "seed.ndjson")
-/** Where the import fetches photographs from — the preview today, the domain after launch. */
-const ASSET_BASE = process.env.CMS_ASSET_BASE ?? "https://square-one-git-s1-v2-prep-2-based-agency.vercel.app"
+/** Where the import fetches photographs from: the live site, which serves
+ *  every file in public/ once the branch is merged. (30 Sept 2026: this was
+ *  the s1-v2-prep-2 preview, which predates the own-company photographs.)
+ *  CMS_ASSET_BASE overrides it, e.g. with a branch preview's address. */
+const ASSET_BASE = process.env.CMS_ASSET_BASE ?? "https://www.squareonepaving.com"
 
 let keyN = 0
 const key = () => `k${(keyN++).toString(36)}`
@@ -106,19 +113,35 @@ function toPortableText(md: string): Block[] {
   return blocks
 }
 
+/** One path segment, percent-encoded exactly once: the record mixes raw
+ *  names ("Featured image options/…") with encoded ones ("Number%202.jpg"). */
+function segment(s: string): string {
+  let raw = s
+  try {
+    raw = decodeURIComponent(s)
+  } catch {
+    /* a stray % — encode it as it stands */
+  }
+  return encodeURIComponent(raw)
+}
+
 function asset(src: string) {
-  const url = /^https?:\/\//.test(src) ? src : ASSET_BASE + src
+  const url = /^https?:\/\//.test(src) ? src : ASSET_BASE + src.split("/").map(segment).join("/")
   return { _type: "image", _sanityAsset: `image@${url}` }
 }
 
 const docs: Record<string, unknown>[] = []
 
-/* ---- Site settings (the record) ---- */
+/* ---- Site settings (the record) ----
+   30 Sept 2026: the footer line (positioning) and the social heading and lede
+   are left out on purpose. A value saved here overrides the site's own line
+   (lib/cms.ts getSiteSettings), and the ones this seed used to write named
+   the manufacturer in every footer and put back hubss.com's "Follow the
+   work". Left blank, the Studio shows the site's current lines on the page;
+   an editor who types one in takes it over. */
 docs.push({
   _id: "siteSettings",
   _type: "siteSettings",
-  positioning:
-    "Decorative pavement for BC since 2000. Installer of HUB Surface Systems products, based in Maple Ridge and working across the Lower Mainland and Vancouver Island.",
   phoneOffice: "604-612-6209",
   phoneIsland: "250-391-0270",
   phoneTollFree: "1-877-391-0270",
@@ -129,8 +152,6 @@ docs.push({
   facebook: "https://www.facebook.com/squareonepaving/",
   linkedin: "https://www.linkedin.com/company/square-one-paving-ltd/",
   youtube: "https://www.youtube.com/channel/UCBDvB4vgdahH67BmP6FeccQ",
-  socialHeading: "Follow the work",
-  socialLede: "Installs as they happen, before-and-afters, and the crews at work.",
 })
 
 /* ---- Blog posts ---- */
@@ -139,6 +160,10 @@ let posts = 0
 for (const file of files) {
   const slug = file.replace(/\.(mdx|md)$/, "")
   const { data, content } = matter(fs.readFileSync(path.join(BLOG_DIR, file), "utf8"))
+  // A post taken off the site (`unlisted: true`, with its reason in the
+  // front-matter) stays off it: the post schema has no such switch, so a
+  // seeded copy would be listed on /blog again (lib/blog.ts getPosts).
+  if (data.unlisted === true) continue
   const lede = ledeOverride(slug) ?? galleryHero(slug) ?? (data.featured_image as string | undefined) ?? ""
   docs.push({
     _id: `post-${slug}`,
@@ -172,7 +197,7 @@ for (const p of projects) {
     ...(p.client ? { client: p.client } : {}),
     ...(p.artist ? { artist: p.artist } : {}),
     excerpt: p.excerpt,
-    images: p.images.map((src, i) => ({ ...asset(src), _key: key(), alt: i === 0 ? p.title : `${p.title} — photo ${i + 1}` })),
+    images: p.images.map((src, i) => ({ ...asset(src), _key: key(), alt: i === 0 ? p.title : `${p.title}, photo ${i + 1}` })),
     featured: Boolean(p.featured),
     heroWide: Boolean(p.heroWide),
   })

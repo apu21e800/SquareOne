@@ -6,28 +6,35 @@
 // Visual layer ports docs/design-v2/Driveways Landing.dc.html. The "Three
 // systems" band (StreetPrint / StreetBond / DuraShield cards) was removed in
 // client review, 16 Sept 2026: "only want the focus on driveways", StreetPrint
-// only. The pattern strip and composer carry the product story now.
+// only. The pattern strip carries the product story now (the composer is held
+// back and renders nowhere — 19 Sept).
 //
-//   01 Hero                       white — split 55/45, photo right
-//   02 Benefits                   warm, hairline top + bottom
-//   03 Patterns               #patterns  white   HUB's sheets, three + library
-//   05 How it works               warm, hairline top + bottom
-//   06 Selected driveways         white
-//   07 Service area               warm, hairline top + bottom
-//   08 Questions we hear          white, hairline top
+//   01 Hero                       paper — split 55/45, photo right, caption under
+//   02 Facts                      warm, one quiet row divided by rules
+//   03 Patterns               #patterns  paper   the template sheets, three + library
+//   05 How it works               warm — the driveway's four steps, numbered
+//   06 Selected driveways         paper
+//   07 Service area               warm — the communities as a hairline list
+//   08 Questions we hear          paper
 //   ── Site Close                 slate — rendered once by app/layout.tsx (Footer)
 //
-// The slate close is the page's ONLY dark region. Nothing above it may go dark.
+// 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.7): the same skeleton on the
+// own-company primitives — labels in the margin column, the caption under the
+// opening frame, the big numerals brought down to one row, the region tiles
+// as a hairline list, the arrow links as underlined words. Every fact, href
+// and photograph is the one that was here.
 // ────────
 
 import Link from "next/link"
 import Image from "next/image"
-import { PatternSheetTeaser } from "@/components/PatternSheetGrid"
+import PatternSheetGrid from "@/components/PatternSheetGrid"
+import { FEATURED_SHEETS } from "@/lib/pattern-sheets"
 import type { Metadata } from "next"
 
 import { workFor } from "@/lib/work"
 import WorkGallery from "@/components/WorkGallery"
 import JsonLd, { breadcrumbSchema, faqSchema } from "@/components/JsonLd"
+import { Section } from "@/components/ui/Container"
 import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
 
@@ -65,7 +72,7 @@ const faqs = [
   },
   {
     q: "Which patterns and colours can I choose?",
-    a: "The StreetPrint templates on Square One's own sheet: ashlar slate, offset brick, standard herringbone, random stone, standard tile and offset tile, with soldier-course, stacked-brick and Texas cobble borders. The manufacturer draws the templates as dimensioned sheets — three are shown above, the rest are in the pattern library. StreetBond colour comes from the published chart of more than fifty; for a house that usually means the greys, black and the earth tones — bedrock, brick, granite, pewter, sierra, black, concrete gray, burnt sienna, brown suede, taupe and graphite. Sample boards come to the site visit.",
+    a: "The StreetPrint templates on Square One's own sheet: ashlar slate, offset brick, standard herringbone, random stone, standard tile and offset tile, with soldier-course, stacked-brick and Texas cobble borders. The manufacturer draws the templates as dimensioned sheets. Three are shown above, the rest are in the pattern library. StreetBond colour comes from the published chart of more than fifty; for a house that usually means the greys, black and the earth tones: bedrock, brick, granite, pewter, sierra, black, concrete gray, burnt sienna, brown suede, taupe and graphite. Sample boards come to the site visit.",
   },
   {
     q: "Is stamped asphalt safe in BC winters?",
@@ -77,7 +84,7 @@ const faqs = [
   },
   {
     q: "Do you install driveways on Vancouver Island?",
-    a: "Yes. Vancouver Island is a Square One service region with its own line, 250-391-0270. The Island driveways on this page — Saanich, North and West Saanich, Sooke, Duncan, Mill Bay and Victoria — were all installed by Square One.",
+    a: "Yes. Vancouver Island is a Square One service region with its own line, 250-391-0270. The Island driveways on this page (Saanich, North and West Saanich, Sooke, Duncan, Mill Bay and Victoria) were all installed by Square One.",
   },
   {
     q: "Do you work outside the Lower Mainland and Vancouver Island?",
@@ -102,7 +109,6 @@ const regions = [
 
 type Shot = { src: string; alt: string }
 
-const FIO = "/images/S1_update_v2/photos/Featured%20image%20options"
 const DRV = "/images/S1_update_v2/photos/Driveways"
 
 /* Every photograph on this page is a Square One driveway. Where the record
@@ -158,253 +164,229 @@ const patterns: (Shot & { label: string })[] = [
   },
 ]
 
-const steps: { num: string; title: string; desc: string }[] = [
+/* The driveway's own four steps — the same sequence as the site's process
+   band (site visit, written quote, install, the finished surface), with the
+   things a homeowner asks about: the boards against the house, no demolition
+   and no new base, the winter rating. Numbered because it is a sequence. */
+const steps: { title: string; desc: string }[] = [
   {
-    num: "01",
     title: "Free site visit",
-    desc: "We come to the house, assess the existing asphalt and walk you through the pattern and colour options with the sample boards against your own siding and stone.",
+    desc: "We assess the asphalt and hold the samples against your house.",
   },
   {
-    num: "02",
     title: "Written quote",
-    desc: "A written quote follows the visit, specifying the system and the pattern for the surface you have. The asphalt has to be sound before it takes a pattern; if it is not, we say so.",
+    desc: "The pattern and the colour, in writing. If the asphalt isn't sound, we say so.",
   },
   {
-    num: "03",
     title: "Installation",
-    desc: "Square One handles the preparation, the stamping, the StreetBond colour and the finishing, and confirms the schedule with your quote. No demolition and no new base.",
+    desc: "Prep, stamping, colour and finish, by our own crews. No demolition.",
   },
   {
-    num: "04",
     title: "Built for BC winters",
-    desc: "A flush, textured surface the manufacturer rates snowplow and de-icing salt safe, installed to its specification. The manufacturer warrants the material; Square One warrants the workmanship.",
+    desc: "Snowplow and de-icing salt safe, as the manufacturer rates it. We warrant the workmanship.",
   },
 ]
 
 export default function DrivewaysPage() {
-  const gallery = workFor("driveways")
+  // The hero frame is not repeated as the first tile of the gallery below it.
+  const gallery = workFor("driveways").filter((p) => p.src !== HERO.src)
 
   return (
     <main>
 
       <JsonLd data={[faqSchema(faqs), breadcrumbSchema(SITE_URL, [{ name: "Driveways", path: "/driveways" }])]} />
 
-      {/* ── 01 Hero ──────── */}
+      {/* ── 01 Hero — the split stays; the caption sits under the frame ──────── */}
       <section className="relative grid min-h-[640px] grid-cols-[55fr_45fr] overflow-hidden bg-surface max-[700px]:min-h-0 max-[700px]:grid-cols-1">
         <div
           className="
             relative flex items-center
             pt-24 pb-24 pr-[72px] pl-[max(calc((100vw_-_1280px)/2),40px)]
-            max-[700px]:pt-[72px] max-[700px]:pr-6 max-[700px]:pb-14 max-[700px]:pl-6
+            max-[700px]:pt-[112px] max-[700px]:pr-6 max-[700px]:pb-12 max-[700px]:pl-6
           "
         >
 
           <div className="relative z-[1]">
-            <div className="eyebrow">
+            <span className="label">
               Residential driveways &middot; Metro Vancouver &amp; Greater Victoria
-            </div>
+            </span>
 
-            <h1 className="stop mt-7">Stamped asphalt driveways for BC homes</h1>
+            <h1 className="mt-6">Stamped asphalt driveways <em>for BC homes</em></h1>
 
-            <p className="mt-7 max-w-[56ch] text-[19px] leading-[1.65] text-ink-body [text-wrap:pretty] max-[700px]:text-[17px]">
-              The look of brick or stone with the wear of asphalt: a StreetPrint&reg; pattern
-              pressed into the driveway you already have and sealed in StreetBond&reg; colour.
-              No demolition, no new base &mdash; and a free site visit before anything is quoted.
+            <p className="lede mt-7 max-w-[56ch] [text-wrap:pretty]">
+              Brick or stone to look at, asphalt to live with: a StreetPrint&reg; pattern pressed
+              into the driveway you have, sealed in StreetBond&reg; colour. No new base.
             </p>
 
-            <div className="mt-11 flex flex-wrap items-center gap-[14px]">
+            <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
               <Link href="/contact" className="btn-primary">
-                Book a free site visit
+                Get a quote
               </Link>
-              <Link href="#patterns" className="btn-secondary">
+              <Link href="#patterns" className="link">
                 See the patterns
               </Link>
             </div>
           </div>
         </div>
 
-        <div className="relative min-w-0 overflow-hidden bg-surface-stone max-[700px]:aspect-[4/3]">
-          <Image
-            src={HERO.src}
-            alt={HERO.alt}
-            fill
-            priority
-            fetchPriority="high"
-            sizes="(max-width: 700px) 100vw, 45vw"
-            className="object-cover [object-position:center_70%]"
-          />
-          <div aria-hidden="true" className="scrim scrim-light" />
-          <div className="caption">{HERO.caption}</div>
-        </div>
+        <figure className="relative m-0 flex min-w-0 flex-col">
+          <span className="relative block min-h-0 flex-1 overflow-hidden bg-surface-stone max-[700px]:aspect-[4/3] max-[700px]:flex-none">
+            <Image
+              src={HERO.src}
+              alt={HERO.alt}
+              fill
+              priority
+              fetchPriority="high"
+              sizes="(max-width: 700px) 100vw, 45vw"
+              className="object-cover [object-position:center_70%]"
+            />
+          </span>
+          <figcaption className="cap px-6 pb-5 max-[700px]:px-6">{HERO.caption}</figcaption>
+        </figure>
       </section>
 
-      {/* ── 02 Benefits ──────── */}
-      <section className="section relative overflow-hidden border-y border-hairline bg-surface-warm">
-
-        <div className="container-1280 relative z-[1] grid grid-cols-3 gap-10 max-[700px]:grid-cols-1 max-[700px]:gap-9">
-          {stats.map((stat) => (
-            <div key={stat.label} className="border-t border-hairline pt-6">
-              <div className="stat-num">{stat.number}</div>
-              <div className="mt-3 max-w-[28ch] text-[15px] leading-[1.5] text-ink-muted">
-                {stat.label}
-              </div>
-            </div>
+      {/* ── 02 Facts — one quiet row, divided by rules ──────── */}
+      <section className="border-y border-hairline bg-surface-warm py-8 max-[700px]:py-6" aria-label="Stamped asphalt driveways, in brief">
+        <ul className="container-1280 grid grid-cols-3 max-[700px]:grid-cols-1 max-[700px]:gap-y-5">
+          {stats.map((stat, i) => (
+            <li
+              key={stat.label}
+              className={`min-w-0 px-7 first:pl-0 last:pr-0 max-[700px]:px-0 max-[700px]:border-l-0 ${i > 0 ? "border-l border-hairline" : ""}`}
+            >
+              <span className="block text-[22px] font-bold leading-none text-ink" style={{ fontFamily: "var(--font-display)" }}>
+                {stat.number}
+              </span>
+              <span className="mt-2 block max-w-[30ch] text-[15px] leading-[1.5] text-ink-muted">{stat.label}</span>
+            </li>
           ))}
-        </div>
+        </ul>
       </section>
 
-      {/* ── 03 Patterns and colours ──────── */}
-      {/* ── 03 Patterns — HUB's template sheets, three of them and the library.
+      {/* ── 03 Patterns — the template sheets, three of them and the library.
              (The composer that lived here is held back — 19 Sept — and is
              untouched in components/DrivewayComposer.tsx.) ──────── */}
-      <section id="patterns" className="section relative overflow-hidden bg-surface">
-        <div className="container-1280 relative z-[1]">
-          <div className="flex flex-wrap items-end justify-between gap-6">
-            <div>
-              <p className="eyebrow">Patterns</p>
-              <h2 className="mt-5">StreetPrint driveway patterns, as the manufacturer draws them</h2>
-            </div>
-            <p className="max-w-[48ch] text-[15px] leading-[1.6] text-ink-muted [text-wrap:pretty]">
-              Every StreetPrint template is a dimensioned drawing before it is a driveway. Three of
-              the sheets are here; the rest are in the pattern library, and the sample boards come to
-              your driveway and get held against the house.
-            </p>
-          </div>
-          <div className="mt-10">
-            <PatternSheetTeaser />
-          </div>
-        </div>
-      </section>
+      <Section
+        id="patterns"
+        label="Patterns"
+        title={<>Driveway patterns, <em>drawn to scale</em></>}
+        intro="Every pattern starts as a dimensioned drawing. The samples come to your driveway."
+        className="scroll-mt-[72px]"
+        wide
+      >
+        <PatternSheetGrid sheets={FEATURED_SHEETS} subnames={false} rail />
+        <p className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-3">
+          <Link href="/patterns" className="link">
+            The pattern library
+          </Link>
+          <Link href="/products/streetprint" className="link">
+            StreetPrint
+          </Link>
+        </p>
+      </Section>
 
-      {/* ── 05 How it works ──────── */}
-      <section className="section relative overflow-hidden border-y border-hairline bg-surface-warm">
+      {/* ── 05 How it works — the driveway's four steps, numbered ──────── */}
+      <Section label="How it works" title={<>How a driveway <em>goes in</em></>} tone="warm" wide>
+        <ol className="grid grid-cols-4 gap-x-10 gap-y-10 max-[900px]:grid-cols-2 max-[560px]:grid-cols-1">
+          {steps.map((step, i) => (
+            <li key={step.title} className="border-t border-hairline pt-6">
+              <span className="step-num" aria-hidden="true">
+                {i + 1}
+              </span>
+              <h3 className="mt-5">
+                <span className="sr-only">Step {i + 1}: </span>
+                {step.title}
+              </h3>
+              <p className="mt-3 max-w-[44ch] text-[16px] leading-[1.6] text-ink-body [text-wrap:pretty]">{step.desc}</p>
+            </li>
+          ))}
+        </ol>
 
-        <div className="container-1280 relative z-[1]">
-          <h2>How a stamped asphalt driveway is installed</h2>
-
-          <div className="mt-10 grid grid-cols-4 gap-x-12 gap-y-10 border-t border-hairline max-[700px]:grid-cols-1">
-            {steps.map((step) => (
-              <div key={step.num} className="pt-7">
-                <div className="text-[13px] font-semibold tracking-[0.08em] text-ink-muted">
-                  {step.num}
-                </div>
-                <h3 className="mt-4">{step.title}</h3>
-                <p className="mt-[10px] max-w-[44ch] text-[15px] leading-[1.65] text-ink-body">
-                  {step.desc}
-                </p>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-3">
-            <Link href="/services/stamped-asphalt" className="arrow-link">
-              Stamped asphalt, the service <span aria-hidden="true">&rarr;</span>
-            </Link>
-            <Link href="/products/streetbond" className="arrow-link">
-              StreetBond colour <span aria-hidden="true">&rarr;</span>
-            </Link>
-            <Link href="/projects" className="arrow-link">
-              Driveway projects <span aria-hidden="true">&rarr;</span>
-            </Link>
-          </div>
-        </div>
-      </section>
+        <p className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-hairline pt-6">
+          <Link href="/services/stamped-asphalt" className="link">
+            Stamped asphalt, the service
+          </Link>
+          <Link href="/products/streetbond" className="link">
+            StreetBond colour
+          </Link>
+          <Link href="/projects" className="link">
+            Driveway projects
+          </Link>
+        </p>
+      </Section>
 
       {/* ── 06 Driveways on record ──────── */}
-      <section id="gallery" className="section relative overflow-hidden bg-surface">
-
-        <div className="container-1280 relative z-[1]">
-          <div className="flex flex-wrap items-baseline justify-between gap-6">
-            <div>
-              <div className="eyebrow">Photographed on site</div>
-              <h2 className="stop stop-tight mt-4">Stamped asphalt driveways from Victoria to Vancouver</h2>
-            </div>
-            <div className="max-w-[44ch]">
-              <p className="text-[15px] leading-[1.6] text-ink-muted">
-                Square One driveways from the record &mdash; Saanich, Sooke, Duncan, Mill Bay and
-                Victoria on the Island; Vancouver, West Vancouver, Burnaby, New Westminster,
-                Richmond, Surrey, Langley and Maple Ridge on the mainland. Filter by region, or go
-                straight to your city.
-              </p>
-              <div className="mt-4 flex flex-wrap gap-x-7 gap-y-2">
-                <Link href="/driveways/vancouver" className="arrow-link">
-                  Vancouver driveways <span aria-hidden="true">&rarr;</span>
-                </Link>
-                <Link href="/driveways/victoria" className="arrow-link">
-                  Victoria driveways <span aria-hidden="true">&rarr;</span>
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-10">
-            <WorkGallery photos={gallery} initial={12} ariaLabel="Driveway installation photographs" />
-          </div>
-        </div>
-      </section>
+      <Section
+        id="gallery"
+        label="Photographed on site"
+        title={<>Driveways from Victoria <em>to Vancouver</em></>}
+        intro={
+          <>
+            Square One driveways from the record, on the Island and the mainland.
+            <span className="mt-4 flex flex-wrap gap-x-8 gap-y-2">
+              <Link href="/driveways/vancouver" className="link">
+                Vancouver driveways
+              </Link>
+              <Link href="/driveways/victoria" className="link">
+                Victoria driveways
+              </Link>
+            </span>
+          </>
+        }
+        className="scroll-mt-[72px]"
+        wide
+      >
+        <WorkGallery photos={gallery} initial={12} ariaLabel="Driveway installation photographs" />
+      </Section>
 
       {/* ── 07 Service area ──────── */}
-      <section className="section relative overflow-hidden border-y border-hairline bg-surface-warm">
-
-        <div className="container-1280 relative z-[1]">
-          <p className="eyebrow">Service area</p>
-
-          <h2 className="mt-5">Where we install driveways</h2>
-
-          <p className="mt-5 max-w-[52ch] text-[17px] leading-[1.6] text-ink-body [text-wrap:pretty]">
-            Across the Lower Mainland and Vancouver Island, from one office in Maple Ridge and
-            the Island&rsquo;s own line. If you are in one of the areas below, we come to you.
-          </p>
-          <p className="mt-4 max-w-[52ch] text-[15px] leading-[1.6] text-ink-muted [text-wrap:pretty]">
-            Elsewhere in BC &mdash; the Okanagan and the Interior are already in our project
-            record &mdash; we travel for the right job. Tell us where, and we will say straight
-            away whether it makes sense.
-          </p>
-
-          <div className="mt-10 grid grid-cols-2 gap-3 min-[701px]:grid-cols-4 lg:grid-cols-6">
-            {regions.map((region) => (
-              <div
-                key={region.name}
-                className="rounded-[2px] border border-hairline bg-surface p-4 text-center"
-              >
-                <p className="text-[13px] font-semibold text-ink">{region.name}</p>
-                <p className="mt-[3px] text-[11px] leading-[1.35] text-ink-muted">{region.sub}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <Section
+        label="Service area"
+        title={<>Where we <em>install driveways</em></>}
+        intro={
+          <>
+            In one of the areas below, we come to you. Elsewhere in BC, ask: we travel for the
+            right job.
+          </>
+        }
+        tone="warm"
+      >
+        <ul className="grid grid-cols-2 gap-x-8 gap-y-6 min-[701px]:grid-cols-3 lg:grid-cols-4">
+          {regions.map((region) => (
+            <li key={region.name} className="border-t border-hairline pt-3">
+              <span className="block text-[16px] font-bold leading-[1.3] text-ink" style={{ fontFamily: "var(--font-display)" }}>
+                {region.name}
+              </span>
+              <span className="mt-1 block text-[14px] italic leading-[1.4] text-ink-muted">{region.sub}</span>
+            </li>
+          ))}
+        </ul>
+      </Section>
 
       {/* ── 08 Questions we hear ──────── */}
-      <section className="section relative overflow-hidden border-t border-hairline bg-surface">
+      <Section label="Questions" title={<>Questions <em>about driveways</em></>}>
+        <div className="border-t border-hairline">
+          {faqs.map((faq, i) => (
+            <details key={faq.q} open={i === 0} className="group border-b border-hairline">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-[22px] [&::-webkit-details-marker]:hidden">
+                <span className="text-[1.125rem] font-semibold leading-[1.4] text-ink">
+                  {faq.q}
+                </span>
+                <span
+                  aria-hidden="true"
+                  className="flex-shrink-0 text-[22px] font-normal leading-none text-ink-muted"
+                >
+                  <span className="group-open:hidden">+</span>
+                  <span className="hidden group-open:inline">&minus;</span>
+                </span>
+              </summary>
 
-        <div className="container-1280 relative z-[1]">
-          <h2>Questions about stamped asphalt driveways</h2>
-
-          <div className="mt-10 max-w-[760px] border-t border-hairline">
-            {faqs.map((faq, i) => (
-              <details key={faq.q} open={i === 0} className="group border-b border-hairline">
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-[22px] [&::-webkit-details-marker]:hidden">
-                  <span className="text-[1.25rem] font-semibold leading-[1.4] tracking-[-0.015em] text-ink">
-                    {faq.q}
-                  </span>
-                  <span
-                    aria-hidden="true"
-                    className="flex-shrink-0 text-[22px] font-normal leading-none text-ink-muted"
-                  >
-                    <span className="group-open:hidden">+</span>
-                    <span className="hidden group-open:inline">&minus;</span>
-                  </span>
-                </summary>
-
-                <p className="max-w-[60ch] pb-6 pr-10 text-[15px] leading-[1.65] text-ink-body max-[700px]:pr-0">
-                  {faq.a}
-                </p>
-              </details>
-            ))}
-          </div>
+              <p className="max-w-[60ch] pb-6 pr-10 text-[16px] leading-[1.6] text-ink-body max-[700px]:pr-0">
+                {faq.a}
+              </p>
+            </details>
+          ))}
         </div>
-      </section>
+      </Section>
 
     </main>
   )

@@ -21,6 +21,12 @@ import { useEffect, useRef, useState } from "react"
  *
  * Both frames must share a camera: the pair here are two renders of the
  * same scene (see the page comment on provenance).
+ *
+ * 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.7): restyled only — square
+ * corners on the figure, the handle and the labels; the labels in the serif
+ * (italic, sentence case) instead of tracked capitals; no hover scale on
+ * the handle; the focus ring in ink. The drag, the opening wipe and the
+ * `tone` prop are as they were.
  */
 export default function BeforeAfter({
   before,
@@ -114,7 +120,7 @@ export default function BeforeAfter({
   return (
     <div
       ref={rootRef}
-      className={`group relative isolate select-none overflow-hidden rounded-[2px] bg-surface-stone [&:has(input:focus-visible)]:outline-2 [&:has(input:focus-visible)]:outline-offset-2 [&:has(input:focus-visible)]:outline-[color:var(--accent)] ${className}`}
+      className={`group relative isolate select-none overflow-hidden bg-surface-stone [&:has(input:focus-visible)]:outline-2 [&:has(input:focus-visible)]:outline-offset-2 [&:has(input:focus-visible)]:outline-[color:var(--ink)] ${className}`}
       style={{ touchAction: "pan-y" }}
     >
       {/* After — the clean wall, full frame underneath */}
@@ -153,7 +159,7 @@ export default function BeforeAfter({
       >
         <div className="absolute inset-y-0 -left-px w-[2px] bg-white/95 shadow-[0_0_0_1px_rgba(24,21,18,0.25)]" />
         <div
-          className="absolute top-1/2 left-1/2 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/70 text-white shadow-[0_4px_18px_rgba(24,21,18,0.35)] backdrop-blur-[2px] transition-transform duration-150 group-hover:scale-105 group-active:scale-95"
+          className="absolute top-1/2 left-1/2 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center border border-white/70 text-white shadow-[0_4px_18px_rgba(24,21,18,0.35)] backdrop-blur-[2px]"
           style={{ background: tone === "water" ? "rgba(31,111,178,0.88)" : "rgba(24,21,18,0.62)" }}
         >
           <svg width="22" height="14" viewBox="0 0 22 14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
@@ -163,17 +169,19 @@ export default function BeforeAfter({
         </div>
       </div>
 
-      {/* Frame labels — each fades as its side is wiped away */}
+      {/* Frame labels — the serif on a square ink chip; each fades as its
+          side is wiped away. These sit on the photograph because they name
+          its two halves; they are the wipe's controls, not captions. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute top-4 left-4 z-[2] rounded-[2px] bg-[rgba(24,21,18,0.62)] px-[10px] py-[6px] font-[family-name:var(--font-display)] text-[11px] font-semibold tracking-[0.14em] text-white uppercase transition-opacity duration-200"
+        className="pointer-events-none absolute top-4 left-4 z-[2] bg-[rgba(24,21,18,0.62)] px-[10px] py-[5px] font-[family-name:var(--font-text)] text-[14px] italic leading-[1.3] text-white transition-opacity duration-200"
         style={{ opacity: clamp < 10 ? 0 : 1 }}
       >
         {beforeLabel}
       </div>
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute top-4 right-4 z-[2] rounded-[2px] bg-[rgba(24,21,18,0.62)] px-[10px] py-[6px] font-[family-name:var(--font-display)] text-[11px] font-semibold tracking-[0.14em] text-white uppercase transition-opacity duration-200"
+        className="pointer-events-none absolute top-4 right-4 z-[2] bg-[rgba(24,21,18,0.62)] px-[10px] py-[5px] font-[family-name:var(--font-text)] text-[14px] italic leading-[1.3] text-white transition-opacity duration-200"
         style={{ opacity: clamp > 90 ? 0 : 1 }}
       >
         {afterLabel}
@@ -182,7 +190,7 @@ export default function BeforeAfter({
       {/* Drag hint — goes the moment the reader takes over */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute bottom-4 left-1/2 z-[2] -translate-x-1/2 rounded-[2px] bg-[rgba(24,21,18,0.62)] px-[10px] py-[6px] font-[family-name:var(--font-display)] text-[11px] font-semibold tracking-[0.14em] text-white uppercase transition-opacity duration-300"
+        className="pointer-events-none absolute bottom-4 left-1/2 z-[2] -translate-x-1/2 bg-[rgba(24,21,18,0.62)] px-[10px] py-[5px] font-[family-name:var(--font-text)] text-[14px] italic leading-[1.3] text-white transition-opacity duration-300"
         style={{ opacity: touched ? 0 : 1 }}
       >
         Drag the line
@@ -195,7 +203,7 @@ export default function BeforeAfter({
         max={100}
         step={0.5}
         value={clamp}
-        aria-label={`${beforeLabel} and ${afterLabel} comparison — move to reveal the cleaned surface`}
+        aria-label={`${beforeLabel} and ${afterLabel} comparison, move to reveal the cleaned surface`}
         aria-valuetext={`${Math.round(clamp)}% ${beforeLabel.toLowerCase()}`}
         onChange={(e) => {
           take()
