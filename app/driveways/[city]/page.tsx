@@ -285,7 +285,10 @@ export default async function DrivewayCityPage({ params }: Props) {
               <Link href="/services/stamped-asphalt" className="link">
                 Stamped asphalt, the service
               </Link>
-              <Link href="/projects" className="link">
+              {/* 6 Oct 2026 (the client, on the same link on /driveways:
+                  "link going to the wrong page"): the driveways below, not
+                  the all-projects index. */}
+              <Link href="#gallery" className="link">
                 Driveway projects
               </Link>
             </p>
@@ -308,6 +311,8 @@ export default async function DrivewayCityPage({ params }: Props) {
 
       {/* ── 04 The work ──────── */}
       <Section
+        id="gallery"
+        className="scroll-mt-[72px]"
         label="Photographed on site"
         title={<>Driveways on record, <em>{c.region === "Lower Mainland" ? "in the Lower Mainland" : "on Vancouver Island"}</em></>}
         intro="Square One driveways, captioned with the pattern and the community."

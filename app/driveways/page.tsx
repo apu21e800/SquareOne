@@ -25,6 +25,7 @@
 // and photograph is the one that was here.
 // ────────
 
+import type { CSSProperties } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import PatternSheetGrid from "@/components/PatternSheetGrid"
@@ -183,7 +184,7 @@ const steps: { title: string; desc: string }[] = [
   },
   {
     title: "Built for BC winters",
-    desc: "Snowplow and de-icing salt safe, as the manufacturer rates it. We warrant the workmanship.",
+    desc: "Snowplow and de-icing salt safe, as the manufacturer rates it.",
   },
 ]
 
@@ -284,11 +285,15 @@ export default function DrivewaysPage() {
         </p>
       </Section>
 
-      {/* ── 05 How it works — the driveway's four steps, numbered ──────── */}
+      {/* ── 05 How it works — the driveway's four steps, numbered, under the
+             same colour-card band as the site's process steps (6 Oct 2026) ──────── */}
       <Section label="How it works" title={<>How a driveway <em>goes in</em></>} tone="warm" wide>
-        <ol className="grid grid-cols-4 gap-x-10 gap-y-10 max-[900px]:grid-cols-2 max-[560px]:grid-cols-1">
+        <ol
+          className="steps-edge grid grid-cols-4 gap-x-10 gap-y-10 max-[900px]:grid-cols-2 max-[560px]:grid-cols-1"
+          style={{ ["--n" as string]: steps.length } as CSSProperties}
+        >
           {steps.map((step, i) => (
-            <li key={step.title} className="border-t border-hairline pt-6">
+            <li key={step.title} style={{ ["--i" as string]: i } as CSSProperties}>
               <span className="step-num" aria-hidden="true">
                 {i + 1}
               </span>
@@ -301,14 +306,17 @@ export default function DrivewaysPage() {
           ))}
         </ol>
 
+        {/* 6 Oct 2026 (the client: "link going to the wrong page"): the colour
+            link lands on the colour chart, and the projects link on the
+            driveways themselves, just below, not the all-projects index. */}
         <p className="mt-12 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-hairline pt-6">
           <Link href="/services/stamped-asphalt" className="link">
             Stamped asphalt, the service
           </Link>
-          <Link href="/products/streetbond" className="link">
+          <Link href="/products/streetbond#colours" className="link">
             StreetBond colour
           </Link>
-          <Link href="/projects" className="link">
+          <Link href="#gallery" className="link">
             Driveway projects
           </Link>
         </p>

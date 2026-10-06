@@ -19,7 +19,7 @@ export function GET() {
     "",
     "Office: 19-11720 Stewart Crescent, Maple Ridge, BC V2X 9E7. Phone 604-612-6209 (Lower Mainland), 250-391-0270 (Vancouver Island), 1-877-391-0270 (toll-free). Email office@squareonepaving.com.",
     "Service area: Metro Vancouver, the Fraser Valley and Vancouver Island; elsewhere in BC by arrangement.",
-    "Process: free site visit, then a written quote. Material is warranted by the manufacturer; workmanship by Square One.",
+    "Process: free site visit, then a written quote, then installation by Square One's own crews to the published specification.",
     "",
     "## Services",
     ...services.map((s) => `- [${s.name}](${SITE_URL}/services/${s.slug}): ${s.tagline}`),

@@ -1125,7 +1125,7 @@ h2.legal-h:not(.label):not(.eyebrow):not(.card-title) { font-size: clamp(1.375re
    is just a total jumble of text"). The four things to draw from are four
    objects: a drawing from the library, a template sheet, the colour chart,
    a sample board. The four services sit side by side with their material
-   on top. The closures, the warranty and the regions are a ledger. ---- */
+   on top. The closures, the installation and the regions are a ledger. ---- */
 .kit-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 36px 28px; }
 .kit-tile { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; }
 .kit-visual {

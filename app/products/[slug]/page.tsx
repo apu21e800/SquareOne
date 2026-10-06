@@ -382,7 +382,7 @@ export default async function ProductPage({ params }: Props) {
               ))}
             </dl>
             <p className="border-t border-hairline pt-4 text-[14.5px] leading-[1.6] text-ink-muted">
-              The manufacturer&rsquo;s figures, from its data sheet. It warrants the material; Square One warrants the workmanship.
+              The manufacturer&rsquo;s figures, from its data sheet.
             </p>
             <p className="mt-5 flex flex-wrap gap-x-7 gap-y-2">
               <Link href={`/services/${product.serviceSlug}`} className="link">

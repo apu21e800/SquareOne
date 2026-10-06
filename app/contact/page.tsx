@@ -41,7 +41,7 @@ import { workMunicipalities } from "@/lib/work"
    it is.
 
    Nothing here is new to the record: the free site visit, the sample boards,
-   the written quote, the warranty split, the office, the three lines, the
+   the written quote, the office, the three lines, the
    regions, the cities. Office hours are still not on record, so they are
    still not here.
 
@@ -77,7 +77,8 @@ const LINES = [
 const STEPS = [
   { title: "Tell us the job", body: "A description and a location." },
   { title: "We walk the site", body: "Free, with the sample boards." },
-  { title: "You get a written quote", body: "We warrant the workmanship." },
+  // 6 Oct 2026 (the client: "remove anything about warranty").
+  { title: "You get a written quote", body: "Before anything starts." },
 ]
 
 const REGIONS = [

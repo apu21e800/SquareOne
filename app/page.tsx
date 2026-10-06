@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   // even: the two phrases people search, then the province, then the name.
   title: { absolute: "BC Stamped Asphalt & Decorative Pavement | Square One Paving" },
   description:
-    clampDescription("Stamped asphalt, coloured coatings and thermoplastic crosswalks for BC cities, developers and homeowners: specified, installed and warranted by Square One since 2000."),
+    clampDescription("Stamped asphalt, coloured coatings and thermoplastic crosswalks for BC cities, developers and homeowners: specified and installed by Square One since 2000."),
   keywords: [
     "decorative pavement BC",
     "stamped asphalt BC",

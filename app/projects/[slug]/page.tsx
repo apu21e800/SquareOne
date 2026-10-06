@@ -284,7 +284,7 @@ export default async function ProjectPage({ params }: Props) {
                   ))}
                   <p className="mt-6 text-[14px] italic leading-[1.55] text-ink-muted">
                     Descriptions and figures are the manufacturer&rsquo;s. Square One
-                    installs the system and warrants the workmanship.
+                    installs the system.
                   </p>
                 </div>
               </aside>

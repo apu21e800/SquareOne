@@ -80,11 +80,11 @@ const services = [
 
 /* Every line is on record: the free site walk and written quote
    (app/contact, app/about), Square One's own crews to the published
-   specification and the warranty split (app/about), the two regions. */
+   specification, the two regions. No warranty wording (6 Oct 2026, the
+   client: "remove anything about warranty"). */
 const facts = [
   "Free site walk, written quote",
   "Installed by our own crews",
-  "Material warranted by the manufacturer, workmanship by Square One",
   "Lower Mainland & Vancouver Island since 2000",
 ]
 

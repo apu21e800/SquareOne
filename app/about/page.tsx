@@ -94,9 +94,10 @@ const trades: { name: string; line: string; href: string; src: string; alt: stri
 
 /* Six things a specifier or a homeowner can hold Square One to. Every line
    restates something on the record — HUB's published product facts
-   (lib/products.ts, attributed), the contact canon, or the warranty split —
-   and nothing about crews, budgets or timelines that Square One has not
-   published. */
+   (lib/products.ts, attributed), the contact canon, the site walk with the
+   sample boards — and nothing about crews, budgets or timelines that Square
+   One has not published. No warranty wording (6 Oct 2026, the client:
+   "remove anything about warranty"). */
 const principles = [
   {
     title: "Built for BC weather",
@@ -107,8 +108,8 @@ const principles = [
     body: "Civic work goes in to the owner's marking standard. A driveway gets the same crews.",
   },
   {
-    title: "Two warranties, one installer",
-    body: "The manufacturer warrants the material. We warrant the workmanship.",
+    title: "Chosen against the real site",
+    body: "Patterns are drawn to scale and colours come off the published chart, held up on sample boards where the work will go.",
   },
 ]
 
@@ -189,7 +190,7 @@ export default function AboutPage() {
               <p>
                 Square One Paving started in 2000 doing one kind of work: decorative pavement, in
                 BC, through BC weather. More than twenty-five years on, we still do that one kind
-                of work, with our own crews, and we warrant the workmanship of every installation.
+                of work, with our own crews.
               </p>
             </div>
 

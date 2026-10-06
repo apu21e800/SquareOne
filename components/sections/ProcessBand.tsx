@@ -33,7 +33,7 @@ const steps: { num: string; title: string; body: string; meta: string }[] = [
   {
     num: "05",
     title: "Cure and walk-through",
-    body: "The surface cures, then we walk the finished work with you. The manufacturer warrants the material; Square One warrants the workmanship.",
+    body: "The surface cures, then we walk the finished work with you.",
     meta: "Handover",
   },
 ]

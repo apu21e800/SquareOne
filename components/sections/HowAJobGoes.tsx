@@ -15,8 +15,8 @@ import { Section } from "@/components/ui/Container"
  * visit and the sample boards (/contact, /about), the written quote and the
  * specification support (/specifiers), Square One's own crews to the
  * published specification, surface prep and vapour blasting where the
- * surface needs it (the service pages), the walk-through and the warranty
- * split (/about). Nothing here is a new claim.
+ * surface needs it (the service pages), the walk-through (/about). Nothing
+ * here is a new claim.
  *
  * The four photographs are the crews from the record, captioned by the
  * place in their file names: Langley (public/images/applications/crosswalks),
@@ -43,7 +43,9 @@ export const STEPS: Step[] = [
   },
   {
     title: "Aftercare",
-    body: "We walk the finished work with you. We warrant the workmanship; the manufacturer warrants the material.",
+    // 6 Oct 2026 (the client, on the preview: "remove anything about
+    // warranty"): the warranty sentence is gone; the walk-through stays.
+    body: "We walk the finished work with you before we leave the site.",
   },
 ]
 

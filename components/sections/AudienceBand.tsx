@@ -13,8 +13,9 @@ import { Section } from "@/components/ui/Container"
  * photograph inset with its caption under it, the text beside it, the
  * three things they order as words, one underlined link. Every line is on
  * record: the pattern library, the colour chart, the specification
- * library, the free site walk, Square One's own crews, the warranty split
- * (app/about, app/patterns, app/resources).
+ * library, the free site walk, the written quote, Square One's own crews
+ * (app/about, app/patterns, app/resources). No warranty wording (6 Oct
+ * 2026, the client: "remove anything about warranty").
  */
 // 2 Oct 2026, the client's notes: the audience is the people who buy
 // decorative hardscapes for commercial and residential sites, and the
@@ -34,8 +35,8 @@ const audiences = [
   },
   {
     label: "Commercial and strata",
-    desc: "Entries, parking, plazas and laneways: a written quote, our own crews, the workmanship warranted.",
-    orders: ["Site walk", "Own crews", "Workmanship warranty"],
+    desc: "Entries, parking, plazas and laneways, quoted in writing before anything starts.",
+    orders: ["Site walk", "Written quote", "Own crews"],
     href: "/applications/parking-lots",
     cta: "Commercial work",
     // 28 Sept 2026, second image pass: the Chilliwack turnaround, April

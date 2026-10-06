@@ -24,7 +24,7 @@ import { clampDescription } from "@/lib/seo"
  * item is already on the site: the specification library, the pattern
  * sheets, the colour chart, the sample boards at the site walk, the four
  * services, the ten application galleries as precedent, the projects on
- * record, the five steps, the warranty split and the two regions. Nothing
+ * record, the five steps, our own crews and the two regions. Nothing
  * here is a new service; counts are read from lib/ so they cannot drift.
  * The manufacturer is never named (19 Sept 2026 evening rulings).
  */
@@ -326,7 +326,8 @@ export default function SpecifiersPage() {
       {/* ── How a job goes, with the specifier's line under step 2 ──────── */}
       <HowAJobGoes tone="warm" specifiers crews={false} cta={false} title={<>From the drawing <em>to the road</em></>} />
 
-      {/* ── For the spec: closures, warranties, regions, as a ledger ──────── */}
+      {/* ── For the spec: closures, installation, regions, as a ledger.
+          No warranty wording (6 Oct 2026, the client) ──────── */}
       <section className="bg-surface-warm pb-20 max-[700px]:pb-14" aria-label="For the specification">
         <div className="container-1280">
           <div className="sec-grid">
@@ -339,8 +340,8 @@ export default function SpecifiersPage() {
                 <dd>Short. The pattern goes into the asphalt already there, and a TrafficPatterns crossing opens to traffic within minutes. Where a site could not close, the work on record went in over phased overnight windows.</dd>
               </div>
               <div>
-                <dt>Warranty</dt>
-                <dd>The manufacturer warrants the material. Square One warrants the workmanship, installed to the published specification by our own crews.</dd>
+                <dt>Installation</dt>
+                <dd>By Square One&rsquo;s own crews, to the published specification.</dd>
               </div>
               <div>
                 <dt>Regions</dt>

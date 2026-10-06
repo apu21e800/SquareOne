@@ -149,11 +149,11 @@ export default async function ServicePage({ params }: Props) {
   const specColumns: { label: string; items: string[]; linked?: boolean }[] = [
     { label: "Applications", items: service.applications, linked: true },
     { label: "Who we work with", items: service.idealClients.slice(0, 5) },
-    // The site walk, the crews and the warranty split are in the process
-    // band on the same page; the list keeps what only this service has.
+    // The site walk and the crews are in the process band on the same
+    // page; the list keeps what only this service has.
     {
       label: "What you get",
-      items: service.benefits.filter((b) => !/site walk|own crews|warranted by the manufacturer/i.test(b)).slice(0, 5),
+      items: service.benefits.filter((b) => !/site walk|own crews/i.test(b)).slice(0, 5),
     },
   ]
 
