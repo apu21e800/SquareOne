@@ -1,4 +1,4 @@
-import type { ReactNode } from "react"
+import type { CSSProperties, ReactNode } from "react"
 import Link from "next/link"
 import Frame from "@/components/ui/Frame"
 import { Section } from "@/components/ui/Container"
@@ -128,9 +128,18 @@ export default function HowAJobGoes({
 }) {
   return (
     <Section id="how-a-job-goes" label={label} title={title} tone={tone} wide>
-      <ol data-reveal-group className="grid grid-cols-4 gap-x-10 gap-y-10 max-[900px]:grid-cols-2 max-[560px]:grid-cols-1">
+      {/* 6 Oct 2026 (Vern: "add some kind of colour to the Four steps
+          section… the lines above each step, keep it in alignment with the
+          rest of the site"): the rule over each step is a slice of the
+          colour card's edge, so the four read as one band, light to dark,
+          the same band as the hero's foot and the footer's top. */}
+      <ol
+        data-reveal-group
+        className="steps-edge grid grid-cols-4 gap-x-10 gap-y-10 max-[900px]:grid-cols-2 max-[560px]:grid-cols-1"
+        style={{ ["--n" as string]: steps.length } as CSSProperties}
+      >
         {steps.map((step, i) => (
-          <li key={step.title} data-reveal className="border-t border-hairline pt-6">
+          <li key={step.title} data-reveal style={{ ["--i" as string]: i } as CSSProperties}>
             <span className="step-num" aria-hidden="true">
               {i + 1}
             </span>

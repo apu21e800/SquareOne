@@ -12,6 +12,8 @@ import Footer from "@/components/Footer"
 import StructuredData from "@/components/StructuredData"
 import MobileStickyCTA from "@/components/MobileStickyCTA"
 import MotionBreath from "@/components/MotionBreath"
+import { EDGE_BAND } from "@/components/ui/ColourEdge"
+import type { CSSProperties } from "react"
 import TypeToggle from "@/components/TypeToggle"
 import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
@@ -149,7 +151,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         {TYPE_SWITCH_ENABLED && <script dangerouslySetInnerHTML={{ __html: TYPE_BOOT }} />}
       </head>
-      <body className="antialiased">
+      <body className="antialiased" style={{ ["--edge-band" as string]: EDGE_BAND } as CSSProperties}>
         <StructuredData />
         {/* Keyboard users skip the bar and the menus (28 Sept 2026). */}
         <a href="#main" className="skip-link">

@@ -1460,10 +1460,58 @@ h1 em, .display-xl em { letter-spacing: -0.008em; }
 .hero-ledger .cap-on-image { font-family: var(--font-text); font-size: 14px; color: rgba(255, 255, 255, 0.86); min-width: 0; }
 .hero-ledger .reel-counter { font-family: var(--font-display); font-size: 13px; font-weight: 700; letter-spacing: 0.04em; font-variant-numeric: tabular-nums; color: rgba(255, 255, 255, 0.9); }
 .hero-ledger .reel-controls { display: flex; align-items: center; gap: 10px; }
-.hero-clock { position: absolute; left: 0; right: 0; bottom: 0; display: flex; gap: 2px; height: 3px; z-index: 2; }
-.hero-clock .reel-seg { flex: 1; height: 3px; background: rgba(255, 255, 255, 0.22); }
-.hero-clock .reel-seg-fill { background: #FFFFFF; }
-.hero-clock .reel-seg-fill.is-running { background: var(--accent); }
+/* The reel's clock (6 Oct 2026): the colour card's edge as a 6px band at
+   the hero's foot. Each segment carries its slice of the one band (sized to
+   the whole bar, positioned by --i of --n); the track is the band under a
+   white veil, the fill the band at full colour, uncovered left to right
+   with a terracotta tip at its leading edge, so the colours never slide
+   and the eye finds the clock. The advance still fires on the fill's
+   animationend. */
+.hero-clock { position: absolute; left: 0; right: 0; bottom: 0; display: flex; gap: 0; height: 6px; z-index: 2; }
+.hero-clock .reel-seg {
+  position: relative;
+  flex: 1;
+  height: 6px;
+  overflow: hidden;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.55)), var(--edge-band);
+  background-size: 100% 100%, calc(var(--n) * 100%) 100%;
+  background-position: 0 0, calc(var(--i) / (var(--n) - 1) * 100%) 0;
+  background-repeat: no-repeat;
+}
+.hero-clock .reel-seg { container-type: inline-size; }
+.hero-clock .reel-seg-fill {
+  inset: 0 auto 0 0;
+  width: 0;
+  overflow: hidden;
+  background: none;
+  transform: none;
+}
+.hero-clock .reel-seg-fill::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: calc(100vw / var(--n));
+  width: 100cqw;
+  background-image: var(--edge-band);
+  background-size: calc(var(--n) * 100%) 100%;
+  background-position: calc(var(--i) / (var(--n) - 1) * 100%) 0;
+  background-repeat: no-repeat;
+}
+.hero-clock .reel-seg-fill.is-running { transform: none; animation: edge-fill 7s linear forwards; }
+.hero-clock .reel-seg-fill.is-running::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 3px;
+  background: var(--accent);
+}
+.hero-clock .reel-seg-fill.is-paused { animation-play-state: paused; }
+.hero-clock .reel-seg-fill.is-done { transform: none; animation: none; width: 100%; }
+@keyframes edge-fill { from { width: 0; } to { width: 100%; } }
 @media (max-width: 700px) {
   .hero-ledger { margin-top: 28px; padding-top: 14px; gap: 14px; }
   .hero-ledger .cap-on-image { font-size: 12.5px; }
@@ -1578,3 +1626,47 @@ h1 em, .display-xl em { letter-spacing: -0.008em; }
     background: linear-gradient(to top, rgba(24, 21, 18, 0.8) 0%, rgba(24, 21, 18, 0.52) 30%, rgba(24, 21, 18, 0.2) 55%, rgba(24, 21, 18, 0) 78%);
   }
 }
+
+/* ============================================================
+   6 Oct 2026: the go-live notes (Vern: "we got the green light").
+   ============================================================ */
+:root {
+  /* Square One orange for the action that starts a job: white on it is
+     5.2 : 1, so it passes as a button fill where #C85A3A (4.1 : 1) does not. */
+  --brand-orange: #B24E2E;
+  --brand-orange-press: #963F24;
+}
+
+/* The button under the H1 on a photograph is Square One orange ("make the
+   Get a quote button under the H1 Square One orange"). */
+.hero-in .btn-primary { background: var(--brand-orange); border-color: var(--brand-orange); color: #FFFFFF; }
+.hero-in .btn-primary:hover { background: var(--brand-orange-press); border-color: var(--brand-orange-press); color: #FFFFFF; }
+/* The ink buttons fill with the orange that passes on hover. */
+.btn-primary:hover, .nav-cta:hover { background: var(--brand-orange); border-color: var(--brand-orange); color: #FFFFFF; }
+.nav-light .nav-cta:hover { background: var(--surface-stone); border-color: var(--surface-stone); color: var(--ink); }
+
+/* The process steps: the rule over each step is its slice of the band. */
+.steps-edge > li {
+  padding-top: 26px;
+  background-image: var(--edge-band);
+  background-size: calc(var(--n) * 100%) 4px;
+  background-position: calc(var(--i) / (var(--n) - 1) * 100%) 0;
+  background-repeat: no-repeat;
+}
+
+/* The quote page ("too bland"): the band over each section of the form, the
+   section numbers and the first step of what happens next in orange, the
+   send button in orange (the page's one action), an orange focus ring. */
+.q-legend {
+  border-top: 0;
+  padding-top: 28px;
+  background-image: var(--edge-band);
+  background-size: 100% 4px;
+  background-position: 0 0;
+  background-repeat: no-repeat;
+}
+.q-step { color: var(--brand-orange); font-weight: 700; }
+.q-timeline li:first-child .q-dot { background: var(--brand-orange); border-color: var(--brand-orange); color: #FFFFFF; }
+.btn-primary.q-send { background: var(--brand-orange); border-color: var(--brand-orange); color: #FFFFFF; }
+.btn-primary.q-send:hover { background: var(--brand-orange-press); border-color: var(--brand-orange-press); color: #FFFFFF; }
+.q-field:focus { border-color: var(--ink); box-shadow: 0 0 0 3px rgba(200, 90, 58, 0.2); }

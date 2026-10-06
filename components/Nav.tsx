@@ -310,7 +310,7 @@ function BuyersMenu({ previews, onNavigate }: MenuProps) {
         <div className="mega-head">
           <span className="label">Who we work with</span>
           <Link href="/galleries" onClick={onNavigate} className="link">
-            Every photograph, by application
+            Photographs, by application
           </Link>
         </div>
         <div className="mega-ledger">

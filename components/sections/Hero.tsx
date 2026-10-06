@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { useCallback, useEffect, useRef, useState, type KeyboardEvent, type TouchEvent } from "react"
+import { useCallback, useEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type TouchEvent } from "react"
 import { HERO_SLIDES, type Slide } from "@/lib/hero-slides"
 
 /* Home hero — an image reel (Vern, 4 Sept 2026: "some sort of image slider
@@ -98,7 +98,7 @@ export default function Hero({ slides, eyebrow, title }: HeroProps) {
       onKeyDown={onKeyDown}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
-      className="relative h-[92vh] min-h-[560px] overflow-hidden bg-surface-slate supports-[height:92svh]:h-[92svh]"
+      className="relative h-[100vh] min-h-[560px] overflow-hidden bg-surface-slate supports-[height:100svh]:h-[100svh]"
     >
       {/* ── Frames ──────── */}
       {SLIDES.map((s, i) => {
@@ -216,10 +216,16 @@ export default function Hero({ slides, eyebrow, title }: HeroProps) {
         </div>
       </div>
 
-      {/* ── The reel's clock: the hero's bottom edge, one segment a frame ──────── */}
-      <div aria-hidden="true" className="hero-clock">
+      {/* ── The reel's clock: the hero's foot, drawn as the colour card's
+             edge, the footer's band. The track is the band behind a white
+             veil; each frame reveals its slice at full colour as it plays
+             (6 Oct 2026, Vern: "the progress bar line under the hero gets
+             lost, nobody even notices it… a gradient like the footer").
+             The hero is the full viewport now, so the next section starts
+             below the fold. ──────── */}
+      <div aria-hidden="true" className="hero-clock" style={{ ["--n" as string]: count } as CSSProperties}>
         {SLIDES.map((s, i) => (
-          <div key={s.src} className="reel-seg">
+          <div key={s.src} className="reel-seg" style={{ ["--i" as string]: i } as CSSProperties}>
             {i < index && <div className="reel-seg-fill is-done" />}
             {i === index &&
               (reduced ? (

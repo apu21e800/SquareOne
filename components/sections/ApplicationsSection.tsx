@@ -56,7 +56,7 @@ export default function ApplicationsSection() {
     <Section
       label="By client"
       title="Where the work goes"
-      link={{ href: "/galleries", label: "Every photograph, by application" }}
+      link={{ href: "/galleries", label: "Photographs, by application" }}
       tone="warm"
       wide
     >

@@ -21,6 +21,15 @@ const EDGE = [
   "Slate",
 ].map(colour)
 
+/** The same eight as one hard-stopped band (6 Oct 2026), for the places the
+    edge is drawn as a rule rather than eight spans: the reel's clock at the
+    foot of the home hero, the lines over the process steps and the quote
+    form's two sections. app/layout.tsx sets it once on <body> as
+    --edge-band, so this list stays the only source of the colours. */
+export const EDGE_BAND = `linear-gradient(to right, ${EDGE.map(
+  (c, i) => `${c.hex} ${((i * 100) / EDGE.length).toFixed(3)}% ${(((i + 1) * 100) / EDGE.length).toFixed(3)}%`,
+).join(", ")})`
+
 export default function ColourEdge({ className = "" }: { className?: string }) {
   return (
     <div aria-hidden="true" className={`colour-edge ${className}`}>
