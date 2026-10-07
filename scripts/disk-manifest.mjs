@@ -10,9 +10,9 @@
  * no photographs ("No photos match this filter") and no project stories.
  *
  * This script writes what those readers need into lib/generated/disk.json:
- * every folder under public/images (its files and subfolders, sorted), the
- * pixel size of every JPEG and PNG (read from the file header exactly as
- * lib/work.ts reads it), and every post's MDX. lib/disk.ts reads the disk
+ * every folder under public/images that git tracks files in (its files and
+ * subfolders, sorted), the pixel size of every JPEG and PNG (read from the
+ * file header exactly as lib/work.ts reads it), and every post's MDX. lib/disk.ts reads the disk
  * first and falls back to this snapshot, so a page rebuilt on a server
  * comes out the same as the one built with the files.
  *
@@ -23,6 +23,7 @@
  *   node scripts/disk-manifest.mjs           write lib/generated/disk.json
  *   node scripts/disk-manifest.mjs --check   exit 1 if it is out of date
  */
+import { execFileSync } from "node:child_process"
 import fs from "node:fs"
 import path from "node:path"
 
@@ -59,34 +60,82 @@ function rel(abs) {
   return path.relative(PUBLIC, abs).split(path.sep).join("/")
 }
 
-function walk(abs, snap) {
-  const entries = fs.readdirSync(abs, { withFileTypes: true })
-  const files = entries.filter((e) => e.isFile()).map((e) => e.name).sort(byCodePoint)
-  const dirs = entries.filter((e) => e.isDirectory()).map((e) => e.name).sort(byCodePoint)
-  snap.dirs[rel(abs)] = { files, dirs }
-  for (const f of files) {
-    if (!DIM_EXT.test(f)) continue
-    let size = [0, 0]
-    try {
-      size = dims(fs.readFileSync(path.join(abs, f)))
-    } catch {
-      // unreadable: [0, 0], as lib/work.ts treats it
-    }
-    snap.dims[rel(path.join(abs, f))] = size
+/**
+ * The files git tracks under public/images and content/blog, as paths from
+ * the repo root: exactly what a Vercel build checks out, so the snapshot is
+ * the same on every machine, whatever else sits in a working copy (an
+ * ignored public/images/_pre-photo-pass, say). Without git (no .git in the
+ * build), the folders on disk, which in a fresh checkout are the same files.
+ */
+function trackedFiles() {
+  try {
+    const out = execFileSync("git", ["ls-files", "-z", "--", "public/images", "content/blog"], {
+      cwd: ROOT,
+      encoding: "utf8",
+      env: { ...process.env, GIT_OPTIONAL_LOCKS: "0" },
+      stdio: ["ignore", "pipe", "ignore"],
+      maxBuffer: 64 * 1024 * 1024,
+    })
+    const files = out.split("\0").filter(Boolean)
+    return files.length > 0 ? files : null
+  } catch {
+    return null
   }
-  for (const d of dirs) walk(path.join(abs, d), snap)
+}
+
+function diskFiles() {
+  const found = []
+  const walk = (abs) => {
+    for (const e of fs.readdirSync(abs, { withFileTypes: true })) {
+      const p = path.join(abs, e.name)
+      if (e.isDirectory()) walk(p)
+      else if (e.isFile()) found.push(path.relative(ROOT, p).split(path.sep).join("/"))
+    }
+  }
+  if (fs.existsSync(IMAGES)) walk(IMAGES)
+  if (fs.existsSync(BLOG)) walk(BLOG)
+  return found
 }
 
 function build() {
   const snap = { version: 1, dirs: {}, dims: {}, blog: {} }
-  if (fs.existsSync(IMAGES)) walk(IMAGES, snap)
-  if (fs.existsSync(BLOG)) {
-    const posts = fs
-      .readdirSync(BLOG, { withFileTypes: true })
-      .filter((e) => e.isFile())
-      .map((e) => e.name)
-      .sort(byCodePoint)
-    for (const name of posts) snap.blog[name] = fs.readFileSync(path.join(BLOG, name), "utf8").replace(/\r\n/g, "\n")
+  const files = (trackedFiles() ?? diskFiles()).filter((f) => fs.existsSync(path.join(ROOT, f)))
+  const dirs = new Map()
+  const entry = (key) => {
+    if (!dirs.has(key)) dirs.set(key, { files: new Set(), dirs: new Set() })
+    return dirs.get(key)
+  }
+  for (const f of files) {
+    if (f.startsWith("content/blog/")) {
+      const name = f.slice("content/blog/".length)
+      if (!name.includes("/")) snap.blog[name] = null
+      continue
+    }
+    // public/images/a/b/c.jpg → images/a/b, file c.jpg; and every ancestor
+    const parts = f.slice("public/".length).split("/")
+    const file = parts.pop()
+    entry(parts.join("/")).files.add(file)
+    for (let i = parts.length - 1; i > 0; i--) entry(parts.slice(0, i).join("/")).dirs.add(parts[i])
+  }
+  for (const key of [...dirs.keys()].sort(byCodePoint)) {
+    const d = dirs.get(key)
+    snap.dirs[key] = { files: [...d.files].sort(byCodePoint), dirs: [...d.dirs].sort(byCodePoint) }
+    for (const name of snap.dirs[key].files) {
+      if (!DIM_EXT.test(name)) continue
+      let size = [0, 0]
+      try {
+        size = dims(fs.readFileSync(path.join(PUBLIC, key, name)))
+      } catch {
+        // unreadable: [0, 0], as lib/work.ts treats it
+      }
+      snap.dims[`${key}/${name}`] = size
+    }
+  }
+  const dimKeys = Object.keys(snap.dims).sort(byCodePoint)
+  snap.dims = Object.fromEntries(dimKeys.map((k) => [k, snap.dims[k]]))
+  for (const name of Object.keys(snap.blog).sort(byCodePoint)) {
+    delete snap.blog[name]
+    snap.blog[name] = fs.readFileSync(path.join(BLOG, name), "utf8").replace(/\r\n/g, "\n")
   }
   // One entry per line, so a new photo or post shows as a line or two in a diff.
   return JSON.stringify(snap, null, 1) + "\n"

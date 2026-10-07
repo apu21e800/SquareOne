@@ -2526,22 +2526,6 @@
   }
  },
  "dims": {
-  "images/og-image.jpg": [
-   1200,
-   900
-  ],
-  "images/og-image.png": [
-   1200,
-   600
-  ],
-  "images/square-one-logo.png": [
-   93,
-   48
-  ],
-  "images/S1_update_v2/Old Square One Web Assets/Download Icon.png": [
-   21,
-   18
-  ],
   "images/S1_update_v2/Old Square One Web Assets/Blog-projects/StreetBond - Gyro Park.jpg": [
    1024,
    580
@@ -2577,6 +2561,10 @@
   "images/S1_update_v2/Old Square One Web Assets/Contact Page/BG-contact-form.png": [
    1024,
    512
+  ],
+  "images/S1_update_v2/Old Square One Web Assets/Download Icon.png": [
+   21,
+   18
   ],
   "images/S1_update_v2/Old Square One Web Assets/Footer/SquareOne-footer-logo.png": [
    242,
@@ -2886,10 +2874,6 @@
    467,
    252
   ],
-  "images/S1_update_v2/Old Square One Web Assets/Galleries/Parking Lots/Parking Lots HERO.jpg": [
-   1024,
-   580
-  ],
   "images/S1_update_v2/Old Square One Web Assets/Galleries/Parking Lots/Gallery/DuraTherm  Decorative Yellow Crosswalk, Chilliwack BC.png": [
    667,
    402
@@ -2946,7 +2930,7 @@
    664,
    402
   ],
-  "images/S1_update_v2/Old Square One Web Assets/Galleries/Parks & Paths/Parks & Paths HERO.jpg": [
+  "images/S1_update_v2/Old Square One Web Assets/Galleries/Parking Lots/Parking Lots HERO.jpg": [
    1024,
    580
   ],
@@ -3014,7 +2998,7 @@
    665,
    402
   ],
-  "images/S1_update_v2/Old Square One Web Assets/Galleries/Public Art/Public Art Hero.jpg": [
+  "images/S1_update_v2/Old Square One Web Assets/Galleries/Parks & Paths/Parks & Paths HERO.jpg": [
    1024,
    580
   ],
@@ -3082,9 +3066,9 @@
    663,
    402
   ],
-  "images/S1_update_v2/Old Square One Web Assets/Galleries/Roundabouts/Roundabout HERO.jpg": [
+  "images/S1_update_v2/Old Square One Web Assets/Galleries/Public Art/Public Art Hero.jpg": [
    1024,
-   582
+   580
   ],
   "images/S1_update_v2/Old Square One Web Assets/Galleries/Roundabouts/Gallery/StreetBond — Coatings  Maridian & Roundabout, Surrey BC.jpg": [
    667,
@@ -3122,9 +3106,9 @@
    667,
    402
   ],
-  "images/S1_update_v2/Old Square One Web Assets/Galleries/Schools & Sports Courts/Schools & Sports Courts HERO.jpg": [
+  "images/S1_update_v2/Old Square One Web Assets/Galleries/Roundabouts/Roundabout HERO.jpg": [
    1024,
-   580
+   582
   ],
   "images/S1_update_v2/Old Square One Web Assets/Galleries/Schools & Sports Courts/Gallery/StreetBond  Central Middle School, Victoria BC.jpg": [
    666,
@@ -3186,9 +3170,9 @@
    667,
    402
   ],
-  "images/S1_update_v2/Old Square One Web Assets/Galleries/Streetscapes/Streetscapes HERO.jpg": [
+  "images/S1_update_v2/Old Square One Web Assets/Galleries/Schools & Sports Courts/Schools & Sports Courts HERO.jpg": [
    1024,
-   598
+   580
   ],
   "images/S1_update_v2/Old Square One Web Assets/Galleries/Streetscapes/Gallery/DecoMark Commercial Drive, Vancouver BC.jpg": [
    667,
@@ -3250,6 +3234,10 @@
    667,
    402
   ],
+  "images/S1_update_v2/Old Square One Web Assets/Galleries/Streetscapes/Streetscapes HERO.jpg": [
+   1024,
+   598
+  ],
   "images/S1_update_v2/Old Square One Web Assets/Nav Bar/Dark Logo/SquareOne-logo-w-text.png": [
    315,
    47
@@ -3285,14 +3273,6 @@
   "images/S1_update_v2/Old Square One Web Assets/Product Pages/DecoMark/DecoMark@2x.png": [
    378,
    188
-  ],
-  "images/S1_update_v2/Old Square One Web Assets/Product Pages/DecoMark/Park Icon.png": [
-   29,
-   30
-  ],
-  "images/S1_update_v2/Old Square One Web Assets/Product Pages/DecoMark/Parking Icon.png": [
-   24,
-   24
   ],
   "images/S1_update_v2/Old Square One Web Assets/Product Pages/DecoMark/Design Options/DecoMark® Colours.png": [
    536,
@@ -3350,6 +3330,14 @@
    517,
    278
   ],
+  "images/S1_update_v2/Old Square One Web Assets/Product Pages/DecoMark/Park Icon.png": [
+   29,
+   30
+  ],
+  "images/S1_update_v2/Old Square One Web Assets/Product Pages/DecoMark/Parking Icon.png": [
+   24,
+   24
+  ],
   "images/S1_update_v2/Old Square One Web Assets/Product Pages/DuraTherm/Branding Icon.png": [
    12,
    27
@@ -3357,6 +3345,14 @@
   "images/S1_update_v2/Old Square One Web Assets/Product Pages/DuraTherm/Crosswalk Icon.png": [
    34,
    22
+  ],
+  "images/S1_update_v2/Old Square One Web Assets/Product Pages/DuraTherm/Design Options/DuraTherm Colours.png": [
+   529,
+   425
+  ],
+  "images/S1_update_v2/Old Square One Web Assets/Product Pages/DuraTherm/Design Options/duratherm-patterns.png": [
+   529,
+   525
   ],
   "images/S1_update_v2/Old Square One Web Assets/Product Pages/DuraTherm/DuraTherm logo@1x.png": [
    196,
@@ -3369,22 +3365,6 @@
   "images/S1_update_v2/Old Square One Web Assets/Product Pages/DuraTherm/Feature Image.png": [
    396,
    362
-  ],
-  "images/S1_update_v2/Old Square One Web Assets/Product Pages/DuraTherm/Parking Icon.png": [
-   24,
-   24
-  ],
-  "images/S1_update_v2/Old Square One Web Assets/Product Pages/DuraTherm/Road Icon.png": [
-   35,
-   19
-  ],
-  "images/S1_update_v2/Old Square One Web Assets/Product Pages/DuraTherm/Design Options/DuraTherm Colours.png": [
-   529,
-   425
-  ],
-  "images/S1_update_v2/Old Square One Web Assets/Product Pages/DuraTherm/Design Options/duratherm-patterns.png": [
-   529,
-   525
   ],
   "images/S1_update_v2/Old Square One Web Assets/Product Pages/DuraTherm/Gallery/DuraTherm Crosswalk, Chilliwack BC.jpg": [
    516,
@@ -3414,21 +3394,17 @@
    517,
    278
   ],
+  "images/S1_update_v2/Old Square One Web Assets/Product Pages/DuraTherm/Parking Icon.png": [
+   24,
+   24
+  ],
+  "images/S1_update_v2/Old Square One Web Assets/Product Pages/DuraTherm/Road Icon.png": [
+   35,
+   19
+  ],
   "images/S1_update_v2/Old Square One Web Assets/Product Pages/PreMark/Bike Icon.png": [
    38,
    25
-  ],
-  "images/S1_update_v2/Old Square One Web Assets/Product Pages/PreMark/PreMark Green Bike Lane, North Vancouver SQUARE.jpg": [
-   396,
-   362
-  ],
-  "images/S1_update_v2/Old Square One Web Assets/Product Pages/PreMark/PreMark.png": [
-   218,
-   89
-  ],
-  "images/S1_update_v2/Old Square One Web Assets/Product Pages/PreMark/PreMark@2x.png": [
-   436,
-   178
   ],
   "images/S1_update_v2/Old Square One Web Assets/Product Pages/PreMark/Design Options/PreMark® Colours.png": [
    301,
@@ -3469,6 +3445,18 @@
   "images/S1_update_v2/Old Square One Web Assets/Product Pages/PreMark/Gallery/YVR Larry Berg Park.jpg": [
    517,
    278
+  ],
+  "images/S1_update_v2/Old Square One Web Assets/Product Pages/PreMark/PreMark Green Bike Lane, North Vancouver SQUARE.jpg": [
+   396,
+   362
+  ],
+  "images/S1_update_v2/Old Square One Web Assets/Product Pages/PreMark/PreMark.png": [
+   218,
+   89
+  ],
+  "images/S1_update_v2/Old Square One Web Assets/Product Pages/PreMark/PreMark@2x.png": [
+   436,
+   178
   ],
   "images/S1_update_v2/Old Square One Web Assets/Product Pages/Product Guide/SterrtBond - Product.png": [
    278,
@@ -3534,30 +3522,6 @@
    38,
    25
   ],
-  "images/S1_update_v2/Old Square One Web Assets/Product Pages/StreetBond/Park Icon.png": [
-   29,
-   30
-  ],
-  "images/S1_update_v2/Old Square One Web Assets/Product Pages/StreetBond/Parking Icon.png": [
-   24,
-   24
-  ],
-  "images/S1_update_v2/Old Square One Web Assets/Product Pages/StreetBond/Road Icon.png": [
-   35,
-   19
-  ],
-  "images/S1_update_v2/Old Square One Web Assets/Product Pages/StreetBond/StreetBond.png": [
-   198,
-   71
-  ],
-  "images/S1_update_v2/Old Square One Web Assets/Product Pages/StreetBond/StreetBond@2x.png": [
-   396,
-   142
-  ],
-  "images/S1_update_v2/Old Square One Web Assets/Product Pages/StreetBond/Streetscapes.jpg": [
-   396,
-   361
-  ],
   "images/S1_update_v2/Old Square One Web Assets/Product Pages/StreetBond/Design Options/StreetBond Bike Lanes Colors.png": [
    507,
    301
@@ -3622,37 +3586,29 @@
    517,
    278
   ],
-  "images/S1_update_v2/Old Square One Web Assets/Product Pages/StreetPrint/Driveway Icon.png": [
-   33,
-   17
-  ],
-  "images/S1_update_v2/Old Square One Web Assets/Product Pages/StreetPrint/Installation Process.png": [
-   517,
-   580
-  ],
-  "images/S1_update_v2/Old Square One Web Assets/Product Pages/StreetPrint/Park Icon.png": [
+  "images/S1_update_v2/Old Square One Web Assets/Product Pages/StreetBond/Park Icon.png": [
    29,
    30
   ],
-  "images/S1_update_v2/Old Square One Web Assets/Product Pages/StreetPrint/Parking Icon.png": [
+  "images/S1_update_v2/Old Square One Web Assets/Product Pages/StreetBond/Parking Icon.png": [
    24,
    24
   ],
-  "images/S1_update_v2/Old Square One Web Assets/Product Pages/StreetPrint/Road Icon.png": [
+  "images/S1_update_v2/Old Square One Web Assets/Product Pages/StreetBond/Road Icon.png": [
    35,
    19
   ],
-  "images/S1_update_v2/Old Square One Web Assets/Product Pages/StreetPrint/StreetPrint.png": [
-   194,
-   75
+  "images/S1_update_v2/Old Square One Web Assets/Product Pages/StreetBond/StreetBond.png": [
+   198,
+   71
   ],
-  "images/S1_update_v2/Old Square One Web Assets/Product Pages/StreetPrint/StreetPrint@2x.png": [
-   388,
-   150
-  ],
-  "images/S1_update_v2/Old Square One Web Assets/Product Pages/StreetPrint/Streetscapes.jpg": [
+  "images/S1_update_v2/Old Square One Web Assets/Product Pages/StreetBond/StreetBond@2x.png": [
    396,
-   362
+   142
+  ],
+  "images/S1_update_v2/Old Square One Web Assets/Product Pages/StreetBond/Streetscapes.jpg": [
+   396,
+   361
   ],
   "images/S1_update_v2/Old Square One Web Assets/Product Pages/StreetPrint/Design Options/StreetBond Bike Lanes.png": [
    507,
@@ -3677,6 +3633,10 @@
   "images/S1_update_v2/Old Square One Web Assets/Product Pages/StreetPrint/Design Options/streetprint patterns.png": [
    517,
    502
+  ],
+  "images/S1_update_v2/Old Square One Web Assets/Product Pages/StreetPrint/Driveway Icon.png": [
+   33,
+   17
   ],
   "images/S1_update_v2/Old Square One Web Assets/Product Pages/StreetPrint/Gallery/StreetPrint — Stamped Asphalt Crosswalk, West Vancouver BC.jpg": [
    517,
@@ -3726,25 +3686,37 @@
    517,
    278
   ],
-  "images/S1_update_v2/Old Square One Web Assets/Product Pages/TrafficPatterns/Branding Icon.png": [
-   13,
-   29
+  "images/S1_update_v2/Old Square One Web Assets/Product Pages/StreetPrint/Installation Process.png": [
+   517,
+   580
   ],
-  "images/S1_update_v2/Old Square One Web Assets/Product Pages/TrafficPatterns/Feature Image.jpg": [
-   396,
-   362
-  ],
-  "images/S1_update_v2/Old Square One Web Assets/Product Pages/TrafficPatterns/Park Icon.png": [
+  "images/S1_update_v2/Old Square One Web Assets/Product Pages/StreetPrint/Park Icon.png": [
    29,
    30
   ],
-  "images/S1_update_v2/Old Square One Web Assets/Product Pages/TrafficPatterns/TrafficPatterns Logo.png": [
-   237,
-   79
+  "images/S1_update_v2/Old Square One Web Assets/Product Pages/StreetPrint/Parking Icon.png": [
+   24,
+   24
   ],
-  "images/S1_update_v2/Old Square One Web Assets/Product Pages/TrafficPatterns/TrafficPatterns Logo@2x.png": [
-   474,
-   158
+  "images/S1_update_v2/Old Square One Web Assets/Product Pages/StreetPrint/Road Icon.png": [
+   35,
+   19
+  ],
+  "images/S1_update_v2/Old Square One Web Assets/Product Pages/StreetPrint/StreetPrint.png": [
+   194,
+   75
+  ],
+  "images/S1_update_v2/Old Square One Web Assets/Product Pages/StreetPrint/StreetPrint@2x.png": [
+   388,
+   150
+  ],
+  "images/S1_update_v2/Old Square One Web Assets/Product Pages/StreetPrint/Streetscapes.jpg": [
+   396,
+   362
+  ],
+  "images/S1_update_v2/Old Square One Web Assets/Product Pages/TrafficPatterns/Branding Icon.png": [
+   13,
+   29
   ],
   "images/S1_update_v2/Old Square One Web Assets/Product Pages/TrafficPatterns/Design Options/Patterns & Boarders.png": [
    557,
@@ -3761,6 +3733,10 @@
   "images/S1_update_v2/Old Square One Web Assets/Product Pages/TrafficPatterns/Design Options/TrafficPatterns - Standard Colours.png": [
    529,
    370
+  ],
+  "images/S1_update_v2/Old Square One Web Assets/Product Pages/TrafficPatterns/Feature Image.jpg": [
+   396,
+   362
   ],
   "images/S1_update_v2/Old Square One Web Assets/Product Pages/TrafficPatterns/Gallery/TrafficPatterns Checker Crosswalk, Coquitlam BC.jpg": [
    517,
@@ -3802,29 +3778,21 @@
    517,
    278
   ],
+  "images/S1_update_v2/Old Square One Web Assets/Product Pages/TrafficPatterns/Park Icon.png": [
+   29,
+   30
+  ],
+  "images/S1_update_v2/Old Square One Web Assets/Product Pages/TrafficPatterns/TrafficPatterns Logo.png": [
+   237,
+   79
+  ],
+  "images/S1_update_v2/Old Square One Web Assets/Product Pages/TrafficPatterns/TrafficPatterns Logo@2x.png": [
+   474,
+   158
+  ],
   "images/S1_update_v2/Old Square One Web Assets/Product Pages/TrafficPatternsXD/Crosswalk Icon.png": [
    39,
    25
-  ],
-  "images/S1_update_v2/Old Square One Web Assets/Product Pages/TrafficPatternsXD/Feature Image.jpg": [
-   396,
-   361
-  ],
-  "images/S1_update_v2/Old Square One Web Assets/Product Pages/TrafficPatternsXD/Parking Icon.png": [
-   31,
-   31
-  ],
-  "images/S1_update_v2/Old Square One Web Assets/Product Pages/TrafficPatternsXD/Road Icon.png": [
-   43,
-   24
-  ],
-  "images/S1_update_v2/Old Square One Web Assets/Product Pages/TrafficPatternsXD/traffic-patterns-xd.png": [
-   260,
-   81
-  ],
-  "images/S1_update_v2/Old Square One Web Assets/Product Pages/TrafficPatternsXD/traffic-patterns-xd@2x.png": [
-   520,
-   162
   ],
   "images/S1_update_v2/Old Square One Web Assets/Product Pages/TrafficPatternsXD/Design Options/TrafficPatternsXD - Colours.png": [
    519,
@@ -3833,6 +3801,10 @@
   "images/S1_update_v2/Old Square One Web Assets/Product Pages/TrafficPatternsXD/Design Options/TrafficPatternsXD - Patterns.png": [
    527,
    504
+  ],
+  "images/S1_update_v2/Old Square One Web Assets/Product Pages/TrafficPatternsXD/Feature Image.jpg": [
+   396,
+   361
   ],
   "images/S1_update_v2/Old Square One Web Assets/Product Pages/TrafficPatternsXD/Gallery/TrafficPatternsXD City Branded Crosswalk, Surrey BC.jpg": [
    517,
@@ -3885,6 +3857,22 @@
   "images/S1_update_v2/Old Square One Web Assets/Product Pages/TrafficPatternsXD/Gallery/YVR   Larry Berg Park.jpg": [
    517,
    278
+  ],
+  "images/S1_update_v2/Old Square One Web Assets/Product Pages/TrafficPatternsXD/Parking Icon.png": [
+   31,
+   31
+  ],
+  "images/S1_update_v2/Old Square One Web Assets/Product Pages/TrafficPatternsXD/Road Icon.png": [
+   43,
+   24
+  ],
+  "images/S1_update_v2/Old Square One Web Assets/Product Pages/TrafficPatternsXD/traffic-patterns-xd.png": [
+   260,
+   81
+  ],
+  "images/S1_update_v2/Old Square One Web Assets/Product Pages/TrafficPatternsXD/traffic-patterns-xd@2x.png": [
+   520,
+   162
   ],
   "images/S1_update_v2/Old Square One Web Assets/Services/Paving Services/Paving Services (Square image).jpg": [
    396,
@@ -6346,6 +6334,14 @@
    1584,
    1569
   ],
+  "images/og-image.jpg": [
+   1200,
+   900
+  ],
+  "images/og-image.png": [
+   1200,
+   600
+  ],
   "images/process/north-vancouver-template-layout-before-stamping-streetprint-01.jpg": [
    1800,
    2400
@@ -6726,38 +6722,6 @@
    517,
    278
   ],
-  "images/products/traffic-patterns/trafficpatterns-1.jpg": [
-   1200,
-   900
-  ],
-  "images/products/traffic-patterns/trafficpatterns-coquitlam-checker-crosswalk-01.jpg": [
-   517,
-   278
-  ],
-  "images/products/traffic-patterns/trafficpatterns-new-westminster-front-street-01.jpg": [
-   517,
-   278
-  ],
-  "images/products/traffic-patterns/trafficpatterns-saanich-lansdowne-01.jpg": [
-   516,
-   278
-  ],
-  "images/products/traffic-patterns/trafficpatterns-sechelt-rainbow-crosswalk-01.jpg": [
-   517,
-   278
-  ],
-  "images/products/traffic-patterns/trafficpatterns-squamish-decorative-crosswalk-01.jpg": [
-   517,
-   278
-  ],
-  "images/products/traffic-patterns/trafficpatterns-ubc-musqueam-plate-01.jpg": [
-   2000,
-   1281
-  ],
-  "images/products/traffic-patterns/trafficpatterns-vancouver-granville-68th-musqueam-01.jpg": [
-   517,
-   278
-  ],
   "images/products/traffic-patterns-xd/trafficpatterns-xd-1.jpg": [
    1200,
    900
@@ -6798,11 +6762,43 @@
    517,
    278
   ],
-  "images/products/trafficpatterns/trafficpatterns-1.jpg": [
+  "images/products/traffic-patterns/trafficpatterns-1.jpg": [
    1200,
    900
   ],
+  "images/products/traffic-patterns/trafficpatterns-coquitlam-checker-crosswalk-01.jpg": [
+   517,
+   278
+  ],
+  "images/products/traffic-patterns/trafficpatterns-new-westminster-front-street-01.jpg": [
+   517,
+   278
+  ],
+  "images/products/traffic-patterns/trafficpatterns-saanich-lansdowne-01.jpg": [
+   516,
+   278
+  ],
+  "images/products/traffic-patterns/trafficpatterns-sechelt-rainbow-crosswalk-01.jpg": [
+   517,
+   278
+  ],
+  "images/products/traffic-patterns/trafficpatterns-squamish-decorative-crosswalk-01.jpg": [
+   517,
+   278
+  ],
+  "images/products/traffic-patterns/trafficpatterns-ubc-musqueam-plate-01.jpg": [
+   2000,
+   1281
+  ],
+  "images/products/traffic-patterns/trafficpatterns-vancouver-granville-68th-musqueam-01.jpg": [
+   517,
+   278
+  ],
   "images/products/trafficpatterns-xd/trafficpatterns-xd-1.jpg": [
+   1200,
+   900
+  ],
+  "images/products/trafficpatterns/trafficpatterns-1.jpg": [
    1200,
    900
   ],
@@ -6882,26 +6878,6 @@
    1332,
    804
   ],
-  "images/services/vapor-blasting/granville-island-vapour-blasting-01.jpg": [
-   2000,
-   1202
-  ],
-  "images/services/vapor-blasting/hero.jpg": [
-   2000,
-   1202
-  ],
-  "images/services/vapor-blasting/nozzle-pavers-01.jpg": [
-   1584,
-   1448
-  ],
-  "images/services/vapor-blasting/parking-lot-vapour-blasting-01.jpg": [
-   2000,
-   1202
-  ],
-  "images/services/vapor-blasting/walkway-vapour-blasting-01.jpg": [
-   2000,
-   1202
-  ],
   "images/services/vapor-blasting/generated/gen-brick-graffiti-after.jpg": [
    2752,
    1536
@@ -6945,6 +6921,30 @@
   "images/services/vapor-blasting/generated/gen-steel-railing-rust.jpg": [
    2752,
    1536
+  ],
+  "images/services/vapor-blasting/granville-island-vapour-blasting-01.jpg": [
+   2000,
+   1202
+  ],
+  "images/services/vapor-blasting/hero.jpg": [
+   2000,
+   1202
+  ],
+  "images/services/vapor-blasting/nozzle-pavers-01.jpg": [
+   1584,
+   1448
+  ],
+  "images/services/vapor-blasting/parking-lot-vapour-blasting-01.jpg": [
+   2000,
+   1202
+  ],
+  "images/services/vapor-blasting/walkway-vapour-blasting-01.jpg": [
+   2000,
+   1202
+  ],
+  "images/square-one-logo.png": [
+   93,
+   48
   ]
  },
  "blog": {
