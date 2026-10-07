@@ -143,7 +143,9 @@ export default function VaporBlastingServicePage() {
   const service = getServiceBySlug("vapor-blasting")
   const faqs = service?.faqs ?? []
   return (
-    <main>
+    // page-vapour: the water's blues on this page's chips, rules and hovers
+    // (app/own.css, 7 Oct 2026).
+    <main className="page-vapour">
       <JsonLd
         data={[
           {

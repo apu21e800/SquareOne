@@ -298,6 +298,8 @@ export default async function ProductPage({ params }: Props) {
             </h1>
           </div>
         </div>
+        {/* The colour card's edge along the foot, as every opener (7 Oct 2026). */}
+        <div aria-hidden="true" className="opener-edge" />
       </section>
 
       {/* ── Header ──────── */}
@@ -306,12 +308,14 @@ export default async function ProductPage({ params }: Props) {
           {/* 28 Sept 2026 (Vern: "S1 is an installer, services over
               products"): the page opens on the service the system belongs
               to, not on the catalogue. */}
-          <p className="label">
+          <p className="label label-sq label-page">
+            <span>
             Installed by Square One under our{" "}
             <Link href={`/services/${product.serviceSlug}`} className="link not-italic">
               {SERVICE_NAME[product.serviceSlug] ?? "services"}
             </Link>{" "}
             service
+            </span>
           </p>
 
           {/* The manufacturer wordmark used to sit here, and the row above it

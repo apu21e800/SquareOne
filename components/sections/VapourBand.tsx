@@ -14,6 +14,10 @@ import Frame from "@/components/ui/Frame"
  * photograph, Square One on the Granville Island boardwalk with the bridge
  * behind, the sunlit copy of the frame the service page opens on. One
  * photograph, the argument beside it, on the darker grey band.
+ *
+ * 7 Oct 2026 (the client: "more complementary blue touches could be added to
+ * the Vapor Blasting pages and sections"): the water's blue on the label's
+ * square, the button and the hovers (app/own.css, .vapour-band).
  */
 const GEN = "/images/services/vapor-blasting/generated"
 
@@ -25,7 +29,7 @@ const GRANVILLE = {
 
 export default function VapourBand() {
   return (
-    <section className="sec relative overflow-hidden bg-surface-stone py-[6.5rem] max-[900px]:py-14">
+    <section className="vapour-band sec relative overflow-hidden bg-surface-stone py-[6.5rem] max-[900px]:py-14">
       <div className="container-1280 relative z-[1] grid grid-cols-12 items-center gap-x-14 gap-y-12 max-[900px]:grid-cols-1">
         {/* ── The photograph ──────── */}
         <div className="col-span-7 max-[900px]:col-span-1">
@@ -42,14 +46,16 @@ export default function VapourBand() {
 
         {/* ── The argument ──────── */}
         <div className="col-span-5 max-[900px]:col-span-1">
-          <span className="label">Vapour blasting</span>
+          <span className="label label-sq">Vapour blasting</span>
           <h2 className="mt-4 max-w-[16ch] [text-wrap:balance]">Graffiti and old markings, <em>lifted wet</em></h2>
           <p className="mt-6 max-w-[40ch] text-ink-body [text-wrap:pretty]">
             The abrasive travels in water: the paint comes off, the dust stays down, and the
             surface underneath is left as it was.
           </p>
           <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-3">
-            <Link href="/services/vapor-blasting" className="btn-primary">
+            {/* The trade that works in water keeps its blue (7 Oct 2026,
+                "more complementary blue touches"). */}
+            <Link href="/services/vapor-blasting" className="btn-primary btn-water">
               The vapour blasting service
             </Link>
             <a href="tel:+16046126209" className="link">

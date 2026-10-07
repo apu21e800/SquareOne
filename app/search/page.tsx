@@ -21,7 +21,7 @@ export default function SearchPage() {
     <main className="bg-[color:var(--surface)]">
       <section className="section pt-24 max-[700px]:pt-[84px]">
         <div className="container-1280">
-          <span className="label">Search</span>
+          <span className="label label-sq label-page">Search</span>
 
           <h1 className="mt-4 max-w-[20ch]">Find it <em>fast</em></h1>
 

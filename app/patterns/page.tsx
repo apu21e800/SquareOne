@@ -62,7 +62,7 @@ export default function PatternsPage() {
 
       <section className="bg-surface pt-[calc(var(--bar-h)+88px)] pb-14 max-[700px]:pt-[calc(var(--bar-h)+48px)] max-[700px]:pb-10">
         <div className="container-1280">
-          <span className="label">StreetPrint&reg; templates</span>
+          <span className="label label-sq label-page">StreetPrint&reg; templates</span>
           <h1 className="mt-5 max-w-[20ch] [text-wrap:balance]">The stamped asphalt <em>pattern library</em></h1>
           {/* One paragraph (2 Oct 2026: the two-column opener was the
               wordiest thing on the page); the applications are in the menu. */}

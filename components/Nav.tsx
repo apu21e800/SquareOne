@@ -491,10 +491,10 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
         </div>
 
         <div className="mt-9">
+          {/* Driveways and Documents are in the first list (7 Oct 2026 QA:
+              the drawer named them twice). */}
           {[
-            { label: "Driveways", href: "/driveways" },
             { label: "Projects", href: "/projects" },
-            { label: "Documents", href: "/resources" },
             { label: "About", href: "/about" },
             { label: "Blog", href: "/blog" },
             { label: "Contact", href: "/contact" },
@@ -680,7 +680,7 @@ export default function Nav({ previews = MENU_PREVIEWS }: { previews?: MenuPrevi
     <MotionConfig reducedMotion="user">
     <div ref={rootRef}>
       <header
-        className={`fixed top-0 right-0 left-0 z-50${light ? " nav-light" : ""}`}
+        className={`site-bar fixed top-0 right-0 left-0 z-50${light ? " nav-light" : ""}${scrolled && !light ? " is-scrolled" : ""}`}
         aria-hidden={hidden || undefined}
         style={{
           background: solid ? "#FFFFFF" : "rgba(255,255,255,0)",

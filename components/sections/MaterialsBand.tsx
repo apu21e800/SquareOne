@@ -62,7 +62,7 @@ export default function MaterialsBand({ tone = "warm" }: { tone?: "paper" | "war
 
         {/* ── The argument, and the colours ──────── */}
         <div className="col-span-6 max-[900px]:col-span-1">
-          <span className="label">Patterns and colours</span>
+          <span className="label label-sq">Patterns and colours</span>
           <h2 className="mt-4 max-w-[16ch] [text-wrap:balance]">Drawn to scale, <em>matched from a card</em></h2>
           <p className="mt-6 max-w-[48ch] text-ink-body [text-wrap:pretty]">
             Every pattern is a dimensioned sheet and every colour a named chip, so what you

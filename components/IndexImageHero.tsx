@@ -103,6 +103,10 @@ export default function IndexImageHero({
           )}
         </div>
       </div>
+      {/* The colour card's edge along the opener's foot (7 Oct 2026), as the
+          home reel's clock draws it: every photograph a page opens on ends on
+          the same ten colours. */}
+      <div aria-hidden="true" className="opener-edge" />
     </section>
   )
 }

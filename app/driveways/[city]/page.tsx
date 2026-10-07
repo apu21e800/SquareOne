@@ -223,7 +223,7 @@ export default async function DrivewayCityPage({ params }: Props) {
       <section className="section bg-surface pt-28 pb-16 max-[700px]:pt-[88px] max-[700px]:pb-10">
         <div className="container-1280 grid grid-cols-12 items-center gap-x-12 gap-y-10 max-[900px]:grid-cols-1">
           <div className={`${hero ? "col-span-6" : "col-span-8"} max-[900px]:col-span-1`}>
-            <Link href="/driveways" className="label w-fit transition-colors hover:text-ink">
+            <Link href="/driveways" className="label label-sq label-page w-fit transition-colors hover:text-ink">
               Driveways &middot; {c.regionLabel}
             </Link>
 
@@ -269,7 +269,7 @@ export default async function DrivewayCityPage({ params }: Props) {
           <div className="col-span-3 max-[900px]:col-span-1">
             {/* The margin label is this band's heading (30 Sept 2026 QA: the
                 three system names were h3s straight after the H1). */}
-            <h2 className="label">Why stamped asphalt here</h2>
+            <h2 className="label label-sq">Why stamped asphalt here</h2>
           </div>
 
           <div className="col-span-5 max-[900px]:col-span-1">

@@ -92,7 +92,7 @@ export default function LegalDocument({ title, updated, applies, lede, sections,
       <header className="container-1280 pt-[calc(var(--bar-h)+64px)] pb-14 max-[700px]:pt-[calc(var(--bar-h)+36px)] max-[700px]:pb-10">
         <div className="grid grid-cols-12 gap-x-12 gap-y-4 max-[900px]:grid-cols-1">
           <div className="col-span-3 max-[900px]:col-span-1">
-            <span className="label pt-3">Legal</span>
+            <span className="label label-sq label-page pt-3">Legal</span>
           </div>
           <div className="col-span-9 max-[900px]:col-span-1">
             <h1 className="max-w-[18ch]">{title}</h1>

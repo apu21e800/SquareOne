@@ -208,7 +208,7 @@ export default function DrivewaysPage() {
         >
 
           <div className="relative z-[1]">
-            <span className="label">
+            <span className="label label-sq label-page">
               Residential driveways &middot; Metro Vancouver &amp; Greater Victoria
             </span>
 
@@ -244,6 +244,8 @@ export default function DrivewaysPage() {
           </span>
           <figcaption className="cap px-6 pb-5 max-[700px]:px-6">{HERO.caption}</figcaption>
         </figure>
+        {/* The colour card's edge along the foot, as every opener (7 Oct 2026). */}
+        <div aria-hidden="true" className="opener-edge" />
       </section>
 
       {/* ── 02 Facts — one quiet row, divided by rules ──────── */}

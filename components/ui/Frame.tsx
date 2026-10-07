@@ -41,7 +41,7 @@ export default function Frame({
 }) {
   const figure = (
     <figure className={`m-0 ${className}`}>
-      <span className={`relative block w-full overflow-hidden bg-surface-stone ${aspect}`}>
+      <span className={`frame-img relative block w-full overflow-hidden bg-surface-stone ${aspect}`}>
         {src ? (
           <Image
             src={src}

@@ -245,7 +245,7 @@ export default async function BlogPostPage({ params }: Props) {
           </nav>
 
           {/* ── Title block ──────── */}
-          {post.category && <span className="label mt-8">{post.category}</span>}
+          {post.category && <span className="label label-sq label-page mt-8">{post.category}</span>}
 
           <div className={`fit-host ${post.category ? "mt-3" : "mt-8"}`}>
             <h1

@@ -121,7 +121,7 @@ export function GalleryFrame({
         type="button"
         onClick={onOpen}
         aria-label={ariaLabel}
-        className={`relative block w-full overflow-hidden bg-surface-stone text-left ${aspect}`}
+        className={`frame-img relative block w-full overflow-hidden bg-surface-stone text-left ${aspect}`}
       >
         <Image src={src} alt={alt} fill sizes={sizes} className="object-cover" />
       </button>

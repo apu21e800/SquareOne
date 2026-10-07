@@ -49,7 +49,7 @@ export default function PatternSheetGrid({
       {shown.map((p, i) => (
         <li key={p.slug}>
           <figure className="m-0">
-            <span className="relative block aspect-[1800/1390] w-full overflow-hidden bg-white">
+            <span className="frame-img frame-paper relative block aspect-[1800/1390] w-full overflow-hidden bg-white">
               <Image
                 src={sheetSrc(p.slug)}
                 alt={`${p.name}, StreetPrint template drawing, dimensioned in inches`}
