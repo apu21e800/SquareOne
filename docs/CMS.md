@@ -48,18 +48,24 @@ PR #11 went live on 7 Oct, so the condition above is met.
    ```
    npm install
    npx sanity login
+   npx sanity datasets list -p <project id>   # "production" must be listed; if not:
+   npx sanity datasets create production --visibility public -p <project id>
    npm run cms:seed                      # writes sanity/seed/seed.ndjson from the repo
    npm run cms:import -- -p <project id> # uploads it, photographs included
    ```
-   The `-p` is required: the repo has no `sanity.cli.ts`. The seed carries
-   the 48 listed posts, the 31 projects, and the contact lines and social
-   links; the photographs are fetched from www.squareonepaving.com (all 88
-   answered 200 on 30 Sept, and again on 7 Oct). Ids are stable, so running
-   it again updates rather than duplicates. Left out on purpose: posts
-   marked `unlisted: true`, and the footer line and social heading, which
-   stay the site's own until an editor writes one in Site settings.
-   Spot-check three long posts in the Studio afterwards (the markdown →
-   Portable Text conversion covers headings, lists, bold, italic, links).
+   The `-p` is required: the repo has no `sanity.cli.ts`. The dataset must
+   exist and be **public** before the import (the import does not create
+   it, and the site reads it over the CDN without a token). The import's
+   warning that a positional dataset argument is deprecated is harmless.
+   The seed carries the 48 listed posts, the 31 projects, and the contact
+   lines and social links; the photographs are fetched from
+   www.squareonepaving.com (all 88 answered 200 on 30 Sept, and again on 7
+   Oct). Ids are stable, so running it again updates rather than
+   duplicates. Left out on purpose: posts marked `unlisted: true`, and the
+   footer line and social heading, which stay the site's own until an
+   editor writes one in Site settings. Spot-check three long posts in the
+   Studio afterwards (the markdown → Portable Text conversion covers
+   headings, lists, bold, italic, links).
 3. **CORS**: sanity.io/manage → project → API → CORS origins → add each of
    these with **Allow credentials** ticked. Without them the Studio cannot
    log in from the site.
