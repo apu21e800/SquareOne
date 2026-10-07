@@ -659,7 +659,7 @@ html[data-type="futura"] .btn-secondary { font-style: normal; }
 .mega-lines a:hover { text-decoration: underline; text-underline-offset: 4px; }
 
 /* The colour card's edge: eight StreetBond colours (components/ui/ColourEdge). */
-.colour-edge { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); height: 5px; }
+.colour-edge { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); height: 6px; }
 .colour-edge > span { display: block; }
 
 /* The phone's drawer, in the same hand. */
@@ -706,7 +706,7 @@ html[data-type="futura"] .btn-secondary { font-style: normal; }
    in the margin of every row (a letterhead, a spec sheet), the service
    area, and the legal line with its way back to the top. ---- */
 .site-foot { background: #FFFFFF; color: var(--ink-body); }
-.site-foot .colour-edge { height: 6px; }
+.site-foot .colour-edge { height: 8px; }
 .foot-statement {
   font-family: var(--font-text);
   font-size: clamp(1.375rem, 2.1vw, 1.875rem);
@@ -1464,16 +1464,19 @@ h1 em, .display-xl em { letter-spacing: -0.008em; }
    the hero's foot. Each segment carries its slice of the one band (sized to
    the whole bar, positioned by --i of --n); the track is the band under a
    white veil, the fill the band at full colour, uncovered left to right
-   with a terracotta tip at its leading edge, so the colours never slide
-   and the eye finds the clock. The advance still fires on the fill's
-   animationend. */
-.hero-clock { position: absolute; left: 0; right: 0; bottom: 0; display: flex; gap: 0; height: 6px; z-index: 2; }
+   with a tip at its leading edge, so the colours never slide and the eye
+   finds the clock. The advance still fires on the fill's animationend.
+   7 Oct 2026, with the punchier band (Vern: "they don't really show up,
+   including under the hero image"): 8px, the veil down from 55% to 15% so
+   the track keeps its colours, and the tip a white playhead, which reads
+   on every chip where the orange tip vanished in the warm half. */
+.hero-clock { position: absolute; left: 0; right: 0; bottom: 0; display: flex; gap: 0; height: 8px; z-index: 2; }
 .hero-clock .reel-seg {
   position: relative;
   flex: 1;
-  height: 6px;
+  height: 8px;
   overflow: hidden;
-  background-image: linear-gradient(rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.55)), var(--edge-band);
+  background-image: linear-gradient(rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.15)), var(--edge-band);
   background-size: 100% 100%, calc(var(--n) * 100%) 100%;
   background-position: 0 0, calc(var(--i) / (var(--n) - 1) * 100%) 0;
   background-repeat: no-repeat;
@@ -1506,8 +1509,8 @@ h1 em, .display-xl em { letter-spacing: -0.008em; }
   top: 0;
   bottom: 0;
   right: 0;
-  width: 3px;
-  background: var(--accent);
+  width: 2px;
+  background: #FFFFFF;
 }
 .hero-clock .reel-seg-fill.is-paused { animation-play-state: paused; }
 .hero-clock .reel-seg-fill.is-done { transform: none; animation: none; width: 100%; }
@@ -1546,7 +1549,7 @@ h1 em, .display-xl em { letter-spacing: -0.008em; }
 /* The footer on charcoal: the brand's own footer colour, four columns,
    the colour card's edge along its top. */
 .site-foot { background: var(--surface-slate); color: #C9CDD2; }
-.site-foot .colour-edge { height: 6px; }
+.site-foot .colour-edge { height: 8px; }
 .foot-line { font-family: var(--font-text); font-size: 15.5px; line-height: 1.6; color: #C9CDD2; text-wrap: pretty; }
 .foot-head { display: block; font-family: var(--font-text); font-size: 13px; font-weight: 500; letter-spacing: 0.02em; color: #9BA1A9; }
 .foot-a { color: #E6E8EB; font-size: 15.5px; text-decoration-color: transparent; }
@@ -1703,33 +1706,37 @@ h1 em, .display-xl em { letter-spacing: -0.008em; }
 
 /* 3 + 1 · The square, coloured: every section's label is led by a square
    chip off the band, a different chip down the page, the way a colour card
-   reads. The two palest chips sit out: on the grey bands they disappear. */
+   reads. 7 Oct 2026, later: re-picked for the punchier band, the orange
+   first, then warm and cool in turn, so neighbouring sections never share
+   a family; every chip holds on white and on both greys. */
 .sec-label > .label, .label.label-sq { display: inline-flex; align-items: center; gap: 10px; }
 .sec-label > .label::before, .label.label-sq::before {
   content: "";
   flex-shrink: 0;
   width: 10px;
   height: 10px;
-  background: var(--chip, var(--edge-7));
+  background: var(--chip, var(--edge-3));
 }
-main > section:nth-of-type(8n + 1) { --chip: var(--edge-7); }
-main > section:nth-of-type(8n + 2) { --chip: var(--edge-8); }
-main > section:nth-of-type(8n + 3) { --chip: var(--edge-5); }
-main > section:nth-of-type(8n + 4) { --chip: var(--edge-3); }
-main > section:nth-of-type(8n + 5) { --chip: var(--edge-9); }
-main > section:nth-of-type(8n + 6) { --chip: var(--edge-6); }
-main > section:nth-of-type(8n + 7) { --chip: var(--edge-4); }
-main > section:nth-of-type(8n + 8) { --chip: var(--edge-10); }
+main > section:nth-of-type(8n + 1) { --chip: var(--edge-3); }
+main > section:nth-of-type(8n + 2) { --chip: var(--edge-9); }
+main > section:nth-of-type(8n + 3) { --chip: var(--edge-7); }
+main > section:nth-of-type(8n + 4) { --chip: var(--edge-2); }
+main > section:nth-of-type(8n + 5) { --chip: var(--edge-10); }
+main > section:nth-of-type(8n + 6) { --chip: var(--edge-4); }
+main > section:nth-of-type(8n + 7) { --chip: var(--edge-6); }
+main > section:nth-of-type(8n + 8) { --chip: var(--edge-1); }
 
 /* The openers end on the band, as the home reel's clock does, and the
-   page's name on their ledger is led by an orange square. */
+   page's name on their ledger is led by an orange square. 8px from 7 Oct
+   2026 (later), with the punchier band, so it reads as the photograph's
+   edge rather than a hairline. */
 .opener-edge {
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
   z-index: 2;
-  height: 6px;
+  height: 8px;
   background-image: var(--edge-band);
 }
 .opener-ledger > span:first-child:not(:empty)::before {
@@ -2020,9 +2027,9 @@ h2.search-group-name:not(.label):not(.eyebrow) { font-size: 17px; letter-spacing
    photograph) is led by the orange square, as an opener's ledger is. */
 .label.label-page::before { background: var(--accent); }
 /* The fact strip under the services: three chips, three facts. */
-.fact-strip .label-sq:nth-child(1)::before { background: var(--edge-5); }
+.fact-strip .label-sq:nth-child(1)::before { background: var(--edge-3); }
 .fact-strip .label-sq:nth-child(2)::before { background: var(--edge-7); }
-.fact-strip .label-sq:nth-child(3)::before { background: var(--edge-8); }
+.fact-strip .label-sq:nth-child(3)::before { background: var(--edge-9); }
 /* 2 · The vapour row on /services and the vapour row in the menu take the
    water's blue for their marks. */
 .row-vapour .label:first-child { color: var(--vapour-deep); font-weight: 600; }

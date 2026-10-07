@@ -176,6 +176,9 @@ export default function AboutPage() {
             sizes="100vw"
             className="object-cover [object-position:center_60%]"
           />
+          {/* The colour card's edge along the photograph's foot, as on every
+              full-bleed photograph a page opens on (7 Oct 2026). */}
+          <span aria-hidden="true" className="opener-edge" />
         </span>
         <figcaption className="cap container-1280 pb-10 max-[700px]:pb-7">
           Marine Drive, White Rock &middot; TrafficPatterns &middot; 2025

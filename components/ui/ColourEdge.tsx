@@ -14,21 +14,30 @@ import { colour } from "@/lib/palette"
  * borrow colours from our actual colour palettes… include some S1 orange,
  * be tasteful"): ten, still led by the greys, warming through the chart's
  * sands into Square One's own orange, then cooling through a blue to the
- * dark end. Every chip but the orange is a named StreetBond colour.
+ * dark end.
+ *
+ * 7 Oct 2026, later (Vern: "make the colours a bit more punchy, they don't
+ * really show up, including under the hero image"): the greys and sands
+ * came out. The ten are the chart's strongest colours, the ones the crews
+ * actually put down on streets, set out the way a colour card reads, warm
+ * to cool: Marigold, Nutmeg, Square One orange, Paprika and Terra Cotta,
+ * then the three cycle-lane greens, Safety Blue and Patriot Blue. Light and
+ * dark alternate down the run, so the band holds on a dark photograph and
+ * on white alike. Every chip but the orange is a named StreetBond colour.
  */
 const SQUARE_ONE_ORANGE = { name: "Square One orange", hex: "#C85A3A" }
 
 const EDGE: { name: string; hex: string }[] = [
-  colour("Pewter"),
-  colour("Driftwood"),
-  colour("Sea Foam"),
-  colour("Gun Metal"),
-  colour("Sandy Beige"),
-  colour("Butterscotch"),
+  colour("Marigold"),
+  colour("Nutmeg"),
   SQUARE_ONE_ORANGE,
+  colour("Paprika"),
+  colour("Terra Cotta"),
+  colour("CL Emerald Green"),
+  colour("CL Celtic Green"),
+  colour("CL Shamrock Green"),
+  colour("SR Safety Blue"),
   colour("Patriot Blue"),
-  colour("Graphite"),
-  colour("Slate"),
 ]
 
 /** The band as hard-stopped stops, for a CSS gradient. */
@@ -48,17 +57,17 @@ export const EDGE_BAND = band(EDGE)
 export const EDGE_COLOURS = EDGE.map((c) => c.hex)
 
 /** Vapour blasting's water (7 Oct 2026, "more complementary blue touches on
-    the vapour blasting pages and sections"): pale to deep, through the
-    chart's SR Safety Blue and Patriot Blue, for the vapour page's rules. */
+    the vapour blasting pages and sections"): light to deep, through the
+    chart's SR Safety Blue and Patriot Blue, for the vapour page's rules.
+    Later the same day, with the band ("more punchy"): the two palest blues
+    and the charcoal end came out, so the water reads as blue throughout. */
 const WATER = [
-  { hex: "#D3E1EE" },
-  { hex: "#A6C4DF" },
-  { hex: "#6E9FCC" },
+  { hex: "#8FBCE6" },
+  { hex: "#5A9BDB" },
   colour("SR Safety Blue"),
   { hex: "#1F6FB2" },
   { hex: "#17568C" },
   colour("Patriot Blue"),
-  { hex: "#2D3033" },
 ]
 export const WATER_BAND = band(WATER)
 
