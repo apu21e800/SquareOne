@@ -1687,11 +1687,13 @@ h1 em, .display-xl em { letter-spacing: -0.008em; }
    --edge-1…--edge-10, and the vapour page's blues as --water-band.
    ============================================================ */
 :root {
-  /* Every photograph keeps one square corner, its first, top left: Square
-     One. The other three round off a little. One token, so the corner can
-     be evened out in one place. */
-  --img-r: 0 10px 10px 10px;
-  --img-r-sm: 0 6px 6px 6px;
+  /* Photographs round off a little on all four corners (the client: "a bit
+     too much right angles"). 7 Oct 2026, later: the first try kept the top
+     left corner square as a nod to the name, and it read as a mistake
+     (Vern: "looks weird with the top left corner not rounded"), so all four
+     match. One token. */
+  --img-r: 10px;
+  --img-r-sm: 6px;
   /* The water, for vapour blasting only: white on --vapour is 5.3 : 1. */
   --vapour: #1F6FB2;
   --vapour-deep: #17568C;
@@ -1748,10 +1750,12 @@ main > section:nth-of-type(8n + 8) { --chip: var(--edge-10); }
   background: rgba(255, 255, 255, 0.14);
 }
 
-/* 6 · The bar over a photograph: a soft frosted scrim behind it, darkest at
-   the top and gone by 128px, so the links and the mark hold on a bright sky
-   or a pale plaza; it fades out as the bar turns white. Once scrolled, the
-   white bar lifts off the page with a shadow you feel more than see. */
+/* 6 · The bar over a photograph: a soft scrim behind it, darkest at the top
+   and gone by 176px, so the links and the mark hold on a bright sky or a
+   pale plaza; it fades out as the bar turns white. No blur (7 Oct 2026,
+   Vern: "top nav overlay looks blurry"): the photograph stays sharp to its
+   top edge. Once scrolled, the white bar lifts off the page with a shadow
+   you feel more than see. */
 .site-bar::before {
   content: "";
   position: absolute;
@@ -1759,13 +1763,17 @@ main > section:nth-of-type(8n + 8) { --chip: var(--edge-10); }
   left: 0;
   right: 0;
   z-index: -1;
-  height: 128px;
+  height: 176px;
   pointer-events: none;
-  background: linear-gradient(to bottom, rgba(14, 16, 20, 0.36) 0%, rgba(14, 16, 20, 0.16) 56%, rgba(14, 16, 20, 0) 100%);
-  -webkit-backdrop-filter: blur(5px);
-  backdrop-filter: blur(5px);
-  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 42%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 0%, #000 42%, transparent 100%);
+  /* Eased stops so the shade has no edge: it thins out over 176px. */
+  background: linear-gradient(
+    to bottom,
+    rgba(14, 16, 20, 0.34) 0%,
+    rgba(14, 16, 20, 0.25) 26%,
+    rgba(14, 16, 20, 0.14) 52%,
+    rgba(14, 16, 20, 0.05) 78%,
+    rgba(14, 16, 20, 0) 100%
+  );
   opacity: 0;
   transition: opacity 0.25s ease;
 }
@@ -1773,12 +1781,12 @@ main > section:nth-of-type(8n + 8) { --chip: var(--edge-10); }
 .nav-light .nav-link { text-shadow: 0 1px 14px rgba(10, 12, 16, 0.38); }
 .site-bar.is-scrolled { box-shadow: 0 10px 30px rgba(20, 22, 26, 0.07); }
 
-/* 7 · Softer corners on the photographs (one square corner each, above). */
+/* 7 · Softer corners on the photographs (--img-r, above). */
 .frame-img, .mega-frame, .kit-visual { border-radius: var(--img-r); isolation: isolate; }
-.frame-paper { border-radius: 0 4px 4px 4px; }
-.doc-thumb { border-radius: 0 4px 4px 4px; }
+.frame-paper { border-radius: 4px; }
+.doc-thumb { border-radius: 4px; }
 .search-thumb { border-radius: var(--img-r-sm); isolation: isolate; }
-.search-thumb-doc { border-radius: 0 4px 4px 4px; }
+.search-thumb-doc { border-radius: 4px; }
 
 /* 2 · Vapour blasting's water: the page's squares, rules, figures, hovers
    and its opener's edge in blue; on the home page, its band's square, button
@@ -2023,3 +2031,24 @@ h2.search-group-name:not(.label):not(.eyebrow) { font-size: 17px; letter-spacing
 .mega-row[href="/services/vapor-blasting"]::before { background: var(--vapour); }
 .mega-row[href="/services/vapor-blasting"][data-active] .mega-num { color: var(--vapour); }
 .mega-row[href="/services/vapor-blasting"][data-active] .mega-name { text-decoration-color: var(--vapour); }
+
+/* QA, 7 Oct 2026: on a tablet or a laptop (701 to 1439px) the vapour
+   opener's words sat over the operator, who stands at the centre of the
+   frame. Above a phone the block of words keeps to 30rem (36rem before),
+   narrower again as the screen narrows, and up to 1439px the frame slides
+   so he stands left of the words. Phones keep their own layout (the words
+   across the foot). Only the vapour page opens right-aligned. The image
+   position is set inline by the component, so that rule needs !important. */
+@media (min-width: 701px) {
+  .opener-right .hero-in { max-width: 30rem; }
+}
+@media (min-width: 701px) and (max-width: 1439px) {
+  .opener-right > img { object-position: 72% 70% !important; }
+}
+@media (min-width: 701px) and (max-width: 1179px) {
+  .opener-right .hero-in { max-width: 27rem; }
+}
+@media (min-width: 701px) and (max-width: 900px) {
+  .opener-right > img { object-position: 82% 70% !important; }
+  .opener-right .hero-in { max-width: 25rem; }
+}
