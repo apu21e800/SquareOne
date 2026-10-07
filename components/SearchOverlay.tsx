@@ -24,6 +24,15 @@ import { previewFor } from "@/lib/doc-previews"
  * "try" words as underlined links instead of chips, the four systems as
  * frames with their names UNDER them instead of over a gradient, no hover
  * zoom, no arrow glyphs, nothing sticky. Behaviour is unchanged.
+ *
+ * 7 Oct 2026 (the client: "search function is very bland, needs better
+ * layout and colour profile"): the colour card's edge across the top, the
+ * query set large in Futura beside a square ink mark, the empty state as
+ * three columns (go straight to, popular searches, the systems), every
+ * result group led by its own square from the band, the rows on a white
+ * sheet over the grey with the active one marked in Square One orange, and
+ * the keys as square caps. Scoring, the index and the keys are unchanged
+ * (lib/search-score.ts).
  */
 
 let INDEX_CACHE: SearchEntry[] | null = null
@@ -44,14 +53,25 @@ async function loadIndex(): Promise<SearchEntry[]> {
 }
 
 const QUICK_LINKS = [
-  { label: "Systems we install", href: "/products" },
-  { label: "Applications", href: "/applications" },
-  { label: "Driveways", href: "/driveways" },
-  { label: "Specifications & documents", href: "/resources" },
-  { label: "Projects", href: "/projects" },
-  { label: "Image galleries", href: "/galleries" },
-  { label: "Get a quote", href: "/contact" },
+  { label: "Systems we install", note: "StreetPrint to PreMark", href: "/products" },
+  { label: "Driveways", note: "Vancouver and Victoria", href: "/driveways" },
+  { label: "Pattern sheets", note: "Every template, to scale", href: "/patterns" },
+  { label: "Documents", note: "Specifications, colour cards, SDS", href: "/resources" },
+  { label: "Projects", note: "Selected work across BC", href: "/projects" },
+  { label: "Get a quote", note: "Free site visit", href: "/contact" },
 ]
+
+/** Each group's square, a chip of the colour card's edge (--edge-n on <body>). */
+const GROUP_CHIP: Record<string, string> = {
+  page: "var(--edge-9)",
+  service: "var(--edge-7)",
+  product: "var(--edge-6)",
+  application: "var(--edge-3)",
+  project: "var(--edge-8)",
+  document: "var(--edge-5)",
+  post: "var(--edge-10)",
+  image: "var(--edge-4)",
+}
 
 /** Searches people actually run — a system, a place, a document, a use. */
 const TRY_QUERIES = ["StreetBond", "crosswalks", "Victoria", "colour guide", "TrafficPatternsXD", "driveway", "SDS", "bike lane"]
@@ -78,7 +98,7 @@ function Highlight({ text, terms }: { text: string; terms: string[] }) {
     <>
       {parts.map((part, i) =>
         isHit.test(part) ? (
-          <mark key={i} className="bg-surface-stone text-inherit">
+          <mark key={i} className="search-hit">
             {part}
           </mark>
         ) : (
@@ -94,7 +114,7 @@ function Thumb({ entry }: { entry: SearchEntry }) {
   if (isDocument(entry)) {
     const p = previewFor(entry.href)
     return (
-      <span className="relative block h-[58px] w-[44px] shrink-0 overflow-hidden border border-hairline bg-white">
+      <span className="search-thumb search-thumb-doc relative block h-[58px] w-[44px] shrink-0 overflow-hidden border border-hairline bg-white">
         {p ? (
           <Image src={p.thumb} alt="" width={320} height={Math.round((320 * p.h) / p.w)} unoptimized loading="lazy" className="absolute inset-0 h-full w-full object-cover object-top" />
         ) : (
@@ -110,7 +130,7 @@ function Thumb({ entry }: { entry: SearchEntry }) {
   // picture at all simply has none.
   if (!entry.image) return null
   return (
-    <span className="relative block h-[54px] w-[72px] shrink-0 overflow-hidden bg-surface-stone">
+    <span className="search-thumb relative block h-[54px] w-[72px] shrink-0 overflow-hidden bg-surface-stone">
       <Image src={entry.image} alt="" fill sizes="72px" className="object-cover" />
     </span>
   )
@@ -214,25 +234,30 @@ export default function SearchOverlay({
       role="dialog"
       aria-modal="true"
       aria-label="Search the site"
-      className="fixed inset-0 z-[400] flex flex-col bg-surface"
+      className="search-sheet fixed inset-0 z-[400] flex flex-col"
       onKeyDown={onKeyDown}
     >
-      {/* ── Input bar ── */}
-      <div className="shrink-0 border-b border-hairline">
-        <div className="container-1280 flex h-[72px] items-center gap-4">
-          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 18 18" className="shrink-0 text-ink-muted">
-            <circle cx="8" cy="8" r="6.25" stroke="currentColor" strokeWidth="1.5" fill="none" />
-            <path d="M12.5 12.5L16.5 16.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-          </svg>
+      <div aria-hidden="true" className="search-edge" />
+
+      {/* ── The query ── */}
+      <div className="search-bar shrink-0">
+        <div className="container-1280 flex h-[88px] items-center gap-4 max-[700px]:h-[68px] max-[700px]:gap-3">
+          <span aria-hidden="true" className="search-mark">
+            <svg width="18" height="18" viewBox="0 0 18 18">
+              <circle cx="8" cy="8" r="6.25" stroke="currentColor" strokeWidth="1.6" fill="none" />
+              <path d="M12.5 12.5L16.5 16.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+            </svg>
+          </span>
           <input
             ref={inputRef}
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search products, projects, documents, places…"
+            placeholder="Search systems, places, projects, documents"
             aria-label="Search the site"
-            className="search-input min-w-0 flex-1 border-0 bg-transparent text-[19px] text-ink outline-none placeholder:text-ink-muted max-[700px]:text-[17px]"
-            style={{ fontFamily: "var(--font-text)" }}
+            spellCheck={false}
+            autoComplete="off"
+            className="search-input min-w-0 flex-1"
           />
           {query && (
             <button
@@ -241,33 +266,29 @@ export default function SearchOverlay({
                 setQuery("")
                 inputRef.current?.focus()
               }}
-              className="link"
+              className="search-clear"
             >
               Clear
             </button>
           )}
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close search"
-            className="ml-2 flex h-10 w-10 items-center justify-center text-ink transition-colors hover:bg-surface-stone"
-          >
-            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16">
-              <path d="M3 3l10 10M13 3L3 13" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+          <button type="button" onClick={onClose} aria-label="Close search" className="search-close">
+            <kbd className="search-key max-[700px]:hidden">Esc</kbd>
+            <svg aria-hidden="true" width="14" height="14" viewBox="0 0 16 16">
+              <path d="M3 3l10 10M13 3L3 13" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
             </svg>
           </button>
         </div>
       </div>
 
       {/* ── Results ── */}
-      <div ref={listRef} className="flex-1 overflow-y-auto">
-        <div className="container-1280 py-8">
+      <div ref={listRef} className="search-body flex-1 overflow-y-auto">
+        <div className="container-1280 py-10 max-[700px]:py-7">
           {query.trim() === "" ? (
-            <div className="grid grid-cols-12 gap-x-12 gap-y-10 max-[900px]:grid-cols-1">
-              <div className="col-span-5 max-[900px]:col-span-1">
-                <span className="label">Go straight to</span>
-                <ul className="mt-3 flex flex-col items-start gap-y-2">
-                  {QUICK_LINKS.map((link) => (
+            <div className="search-empty">
+              <div className="search-col">
+                <span className="search-head">Go straight to</span>
+                <ul className="search-go">
+                  {QUICK_LINKS.map((link, n) => (
                     <li key={link.href}>
                       <button
                         type="button"
@@ -275,16 +296,22 @@ export default function SearchOverlay({
                           onClose()
                           router.push(link.href)
                         }}
-                        className="link"
+                        className="search-go-row"
                       >
-                        {link.label}
+                        <span aria-hidden="true" className="search-sq" style={{ background: `var(--edge-${(n * 3) % 10 + 1})` }} />
+                        <span className="min-w-0">
+                          <span className="search-go-name">{link.label}</span>
+                          <span className="search-go-note">{link.note}</span>
+                        </span>
                       </button>
                     </li>
                   ))}
                 </ul>
+              </div>
 
-                <span className="label mt-10">Try</span>
-                <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2">
+              <div className="search-col">
+                <span className="search-head">Popular searches</span>
+                <div className="search-tries">
                   {TRY_QUERIES.map((q) => (
                     <button
                       key={q}
@@ -293,7 +320,7 @@ export default function SearchOverlay({
                         setQuery(q)
                         inputRef.current?.focus()
                       }}
-                      className="link"
+                      className="search-try"
                     >
                       {q}
                     </button>
@@ -301,18 +328,18 @@ export default function SearchOverlay({
                 </div>
               </div>
 
-              <div className="col-span-7 max-[900px]:col-span-1">
-                <span className="label">The systems</span>
-                <ul className="mt-3 grid grid-cols-4 gap-x-5 gap-y-6 max-[700px]:grid-cols-2">
+              <div className="search-col search-col-wide">
+                <span className="search-head">The systems</span>
+                <ul className="search-systems">
                   {FEATURED.map((f) => (
                     <li key={f.href}>
-                      <Link href={f.href} onClick={onClose} className="block">
+                      <Link href={f.href} onClick={onClose} className="frame-link block">
                         <figure className="m-0">
-                          <span className="relative block aspect-[4/5] w-full overflow-hidden bg-surface-stone">
-                            <Image src={f.src} alt="" fill sizes="(max-width: 700px) 45vw, 200px" className="object-cover" />
+                          <span className="frame-img relative block aspect-[4/3] w-full overflow-hidden bg-surface-stone">
+                            <Image src={f.src} alt="" fill sizes="(max-width: 700px) 45vw, 240px" className="object-cover" />
                           </span>
                           <figcaption className="cap">
-                            <span className="block not-italic font-bold text-ink" style={{ fontFamily: "var(--font-display)" }}>
+                            <span className="block font-bold text-ink" style={{ fontFamily: "var(--font-display)" }}>
                               {f.name}
                             </span>
                             <span className="block">{f.note}</span>
@@ -325,20 +352,38 @@ export default function SearchOverlay({
               </div>
             </div>
           ) : !index ? (
-            <p className="text-[15px] italic text-ink-muted">Loading the index…</p>
+            <p className="search-note">Loading the index…</p>
           ) : total === 0 ? (
-            <p className="text-[15px] italic text-ink-muted">
-              Nothing for &ldquo;{query}&rdquo;, try a product, city or system name.
-            </p>
+            <div className="search-none">
+              <p className="search-none-line">
+                Nothing for &ldquo;{query}&rdquo; yet. Try a system, a city or a kind of work:
+              </p>
+              <div className="search-tries mt-5">
+                {TRY_QUERIES.map((q) => (
+                  <button
+                    key={q}
+                    type="button"
+                    onClick={() => {
+                      setQuery(q)
+                      inputRef.current?.focus()
+                    }}
+                    className="search-try"
+                  >
+                    {q}
+                  </button>
+                ))}
+              </div>
+            </div>
           ) : (
-            <div className="flex flex-col gap-9">
+            <div className="flex flex-col gap-8">
               {groups.map((group) => (
-                <div key={group.type}>
-                  <div className="flex items-baseline justify-between border-b border-hairline pt-1 pb-2">
-                    <span className="label">{group.label}</span>
-                    <span className="text-[14px] italic text-ink-muted tabular-nums">{group.total}</span>
+                <section key={group.type} className="search-group" aria-label={group.label}>
+                  <div className="search-group-head">
+                    <span aria-hidden="true" className="search-sq" style={{ background: GROUP_CHIP[group.type] ?? "var(--edge-4)" }} />
+                    <span className="search-group-name">{group.label}</span>
+                    <span className="search-count">{group.total}</span>
                   </div>
-                  <div className="mt-1">
+                  <div className="search-rows">
                     {group.entries.map((entry) => {
                       idx += 1
                       const i = idx
@@ -346,7 +391,8 @@ export default function SearchOverlay({
                         <div
                           key={`${entry.type}-${entry.href}-${entry.title}`}
                           data-idx={i}
-                          className={`flex items-center gap-4 px-2 py-[8px] ${i === active ? "bg-surface-warm" : ""}`}
+                          data-active={i === active ? "" : undefined}
+                          className="search-row"
                           onMouseEnter={() => setActive(i)}
                         >
                           {/* A real link (middle-click, copy address, screen readers);
@@ -363,17 +409,13 @@ export default function SearchOverlay({
                           >
                             <Thumb entry={entry} />
                             <span className="min-w-0 flex-1">
-                              <span className="block truncate text-[16px] text-ink">
+                              <span className="search-title block truncate">
                                 <Highlight text={entry.title} terms={terms} />
                               </span>
-                              {entry.subtitle && (
-                                <span className="mt-[2px] block truncate text-[14px] italic text-ink-muted">
-                                  {entry.subtitle}
-                                </span>
-                              )}
+                              {entry.subtitle && <span className="search-sub mt-[2px] block truncate">{entry.subtitle}</span>}
                             </span>
                           </Link>
-                          {isDocument(entry) && (
+                          {isDocument(entry) ? (
                             <span className="flex shrink-0 items-center gap-5 max-[700px]:hidden">
                               <a href={entry.href} target="_blank" rel="noopener noreferrer" className="link">
                                 Preview
@@ -382,12 +424,16 @@ export default function SearchOverlay({
                                 Download
                               </a>
                             </span>
+                          ) : (
+                            <kbd aria-hidden="true" className="search-key search-row-key max-[700px]:hidden">
+                              Enter
+                            </kbd>
                           )}
                         </div>
                       )
                     })}
                   </div>
-                </div>
+                </section>
               ))}
 
               <div>
@@ -397,9 +443,9 @@ export default function SearchOverlay({
                     onClose()
                     router.push(`/search?q=${encodeURIComponent(query)}`)
                   }}
-                  className="link"
+                  className="search-all"
                 >
-                  View all {total} results
+                  All {total} results
                 </button>
               </div>
             </div>
@@ -407,13 +453,22 @@ export default function SearchOverlay({
         </div>
       </div>
 
-      {/* ── Hint bar ── */}
-      <div className="shrink-0 border-t border-hairline max-[700px]:hidden">
-        <div className="container-1280 flex h-11 items-center gap-6 text-[13px] italic text-ink-muted">
-          <span>Up and down to move</span>
-          <span>Enter to open</span>
-          <span>Esc to close</span>
-          <span className="ml-auto">Ctrl / &#8984; K opens this anywhere</span>
+      {/* ── The keys ── */}
+      <div className="search-foot shrink-0 max-[700px]:hidden">
+        <div className="container-1280 flex h-12 items-center gap-7">
+          <span>
+            <kbd className="search-key">&uarr;</kbd>
+            <kbd className="search-key">&darr;</kbd> to move
+          </span>
+          <span>
+            <kbd className="search-key">Enter</kbd> to open
+          </span>
+          <span>
+            <kbd className="search-key">Esc</kbd> to close
+          </span>
+          <span className="ml-auto">
+            <kbd className="search-key">Ctrl</kbd> or <kbd className="search-key">&#8984;</kbd> <kbd className="search-key">K</kbd> opens search anywhere
+          </span>
         </div>
       </div>
     </div>

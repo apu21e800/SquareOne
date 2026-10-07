@@ -19,6 +19,18 @@ import { searchEntries, type SearchEntry } from "@/lib/search-score"
 
 const IMAGE_CAP = 24
 
+/** Each group's square, a chip of the colour card's edge (as the overlay). */
+const GROUP_CHIP: Record<string, string> = {
+  page: "var(--edge-9)",
+  service: "var(--edge-7)",
+  product: "var(--edge-6)",
+  application: "var(--edge-3)",
+  project: "var(--edge-8)",
+  document: "var(--edge-5)",
+  post: "var(--edge-10)",
+  image: "var(--edge-4)",
+}
+
 export default function SearchPageClient() {
   const params = useSearchParams()
   const initial = params.get("q") ?? ""
@@ -47,11 +59,13 @@ export default function SearchPageClient() {
 
   return (
     <div>
-      <label className="flex items-center gap-4 border-b border-ink pb-4">
-        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 18 18" className="shrink-0 text-ink-muted">
-          <circle cx="8" cy="8" r="6.25" stroke="currentColor" strokeWidth="1.5" fill="none" />
-          <path d="M12.5 12.5L16.5 16.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-        </svg>
+      <label className="search-page-field flex items-center gap-4 pb-4">
+        <span aria-hidden="true" className="search-mark">
+          <svg width="18" height="18" viewBox="0 0 18 18">
+            <circle cx="8" cy="8" r="6.25" stroke="currentColor" strokeWidth="1.6" fill="none" />
+            <path d="M12.5 12.5L16.5 16.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+          </svg>
+        </span>
         <input
           type="search"
           value={query}
@@ -59,8 +73,9 @@ export default function SearchPageClient() {
           placeholder="Search products, projects, documents, pages…"
           aria-label="Search the site"
           autoFocus
-          className="search-input min-w-0 flex-1 border-0 bg-transparent text-[22px] text-ink outline-none placeholder:text-ink-muted max-[700px]:text-[18px]"
-          style={{ fontFamily: "var(--font-text)" }}
+          spellCheck={false}
+          autoComplete="off"
+          className="search-input min-w-0 flex-1"
         />
       </label>
 
@@ -80,9 +95,10 @@ export default function SearchPageClient() {
             group.type === "image" ? group.entries.slice(0, IMAGE_CAP) : group.entries
           return (
             <div key={group.type}>
-              <div className="flex items-baseline justify-between border-b border-hairline pb-[14px]">
-                <h2 className="label">{group.label}</h2>
-                <span className="shrink-0 text-[14px] italic text-ink-muted tabular-nums">{group.total}</span>
+              <div className="search-group-head search-page-head">
+                <span aria-hidden="true" className="search-sq" style={{ background: GROUP_CHIP[group.type] ?? "var(--edge-4)" }} />
+                <h2 className="search-group-name">{group.label}</h2>
+                <span className="search-count">{group.total}</span>
               </div>
 
               {group.type === "image" ? (
@@ -91,7 +107,7 @@ export default function SearchPageClient() {
                     <li key={entry.image}>
                       <Link href={entry.href} title={`${entry.title}, ${entry.subtitle ?? ""}`} className="block">
                         <figure className="m-0">
-                          <span className="relative block aspect-[4/3] w-full overflow-hidden bg-surface-stone">
+                          <span className="frame-img relative block aspect-[4/3] w-full overflow-hidden bg-surface-stone">
                             <Image
                               src={entry.image!}
                               alt={entry.title}
@@ -114,7 +130,7 @@ export default function SearchPageClient() {
                       className="flex items-center gap-4 border-b border-hairline py-[12px] last:border-b-0"
                     >
                       {entry.image && (
-                        <span className="relative block h-[46px] w-[62px] shrink-0 overflow-hidden bg-surface-stone">
+                        <span className="search-thumb relative block h-[46px] w-[62px] shrink-0 overflow-hidden bg-surface-stone">
                           <Image src={entry.image} alt="" fill sizes="62px" className="object-cover" />
                         </span>
                       )}

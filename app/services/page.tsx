@@ -71,9 +71,11 @@ const services = [
     name: "Vapour blasting",
     tagline: "Clean it, prime it, bring it back.",
     desc: "The supporting service: surface cleaning and priming ahead of a coating or thermoplastic install, and graffiti, mould and marking removal on its own, mobile across the Lower Mainland and Vancouver Island, with up to 92% less dust than dry blasting.",
-    image: "/images/services/vapor-blasting/parking-lot-vapour-blasting-01.jpg",
-    alt: "Square One removing painted parking symbols from an asphalt lot with the vapour blasting rig",
-    caption: "Commercial parking lot · marking removal",
+    // 7 Oct 2026: the sunlit Granville Island frame, as the home band, the
+    // menu and the service's own opener show it.
+    image: "/images/services/vapor-blasting/generated/gen-granville-island-vapour-blasting-01-enhanced.jpg",
+    alt: "A Square One operator vapour blasting a painted marking off the boardwalk at Granville Island, Vancouver, the Burrard Street Bridge behind under a clear sky",
+    caption: "Granville Island, Vancouver · marking removal",
     applications: ["Graffiti removal", "Marking removal", "Surface prep", "Mould and grime"],
   },
 ]
@@ -115,7 +117,7 @@ export default function ServicesPage() {
       >
         <div>
           {services.map((service, i) => (
-            <Row key={service.slug} as="article" className="row-service">
+            <Row key={service.slug} as="article" className={`row-service${service.slug === "vapor-blasting" ? " row-vapour" : ""}`}>
               <Frame
                 src={service.image}
                 alt={service.alt}
@@ -159,10 +161,10 @@ export default function ServicesPage() {
           linked from nowhere. */}
 
       {/* ---- Fact strip — one hairline row in the serif ---- */}
-      <section className="border-t border-hairline bg-surface-stone py-7">
+      <section className="fact-strip border-t border-hairline bg-surface-stone py-7">
         <div className="container-1280 flex flex-wrap justify-center gap-x-12 gap-y-3">
           {facts.map((fact) => (
-            <span key={fact} className="label">
+            <span key={fact} className="label label-sq">
               {fact}
             </span>
           ))}

@@ -120,7 +120,7 @@ export default function BeforeAfter({
   return (
     <div
       ref={rootRef}
-      className={`group relative isolate select-none overflow-hidden bg-surface-stone [&:has(input:focus-visible)]:outline-2 [&:has(input:focus-visible)]:outline-offset-2 [&:has(input:focus-visible)]:outline-[color:var(--ink)] ${className}`}
+      className={`frame-img group relative isolate select-none overflow-hidden bg-surface-stone [&:has(input:focus-visible)]:outline-2 [&:has(input:focus-visible)]:outline-offset-2 [&:has(input:focus-visible)]:outline-[color:var(--ink)] ${className}`}
       style={{ touchAction: "pan-y" }}
     >
       {/* After — the clean wall, full frame underneath */}

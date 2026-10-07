@@ -141,7 +141,7 @@ export default function AboutPage() {
       {/* ── 1 · Header ──────── */}
       <section className="bg-surface pt-[calc(var(--bar-h)+96px)] pb-20 max-[700px]:pt-[calc(var(--bar-h)+56px)] max-[700px]:pb-12">
         <div className="container-1280">
-          <span className="label">About Square One</span>
+          <span className="label label-sq label-page">About Square One</span>
 
           <h1 className="mt-6 max-w-[18ch] [text-wrap:balance]">
             Decorative pavement <em>in BC since 2000</em>

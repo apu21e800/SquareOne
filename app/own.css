@@ -1670,3 +1670,356 @@ h1 em, .display-xl em { letter-spacing: -0.008em; }
 .btn-primary.q-send { background: var(--brand-orange); border-color: var(--brand-orange); color: #FFFFFF; }
 .btn-primary.q-send:hover { background: var(--brand-orange-press); border-color: var(--brand-orange-press); color: #FFFFFF; }
 .q-field:focus { border-color: var(--ink); box-shadow: 0 0 0 3px rgba(200, 90, 58, 0.2); }
+
+/* ============================================================
+   7 Oct 2026: the last round before v2. The client, through Vern:
+     1  the pastel grey band, with more colour, site wide, the palette's own
+        colours and some Square One orange, tastefully
+     2  more complementary blue on vapour blasting
+     3  the square: the company is called Square One, use it tactfully
+     4  "See the work" keeps its white type on hover
+     5  search: a layout and a colour profile
+     6  a tactful scrim so the bar pops
+     7  "a bit too much right angles": softer corners on the photographs
+     8  a QA pass to the standard of the rest
+   The band itself is components/ui/ColourEdge.tsx (ten chips, the orange
+   among them); app/layout.tsx puts it on <body> as --edge-band, each chip as
+   --edge-1…--edge-10, and the vapour page's blues as --water-band.
+   ============================================================ */
+:root {
+  /* Every photograph keeps one square corner, its first, top left: Square
+     One. The other three round off a little. One token, so the corner can
+     be evened out in one place. */
+  --img-r: 0 10px 10px 10px;
+  --img-r-sm: 0 6px 6px 6px;
+  /* The water, for vapour blasting only: white on --vapour is 5.3 : 1. */
+  --vapour: #1F6FB2;
+  --vapour-deep: #17568C;
+  --vapour-tint: #EDF3F9;
+  --vapour-hairline: #D3E1EE;
+}
+
+/* 3 + 1 · The square, coloured: every section's label is led by a square
+   chip off the band, a different chip down the page, the way a colour card
+   reads. The two palest chips sit out: on the grey bands they disappear. */
+.sec-label > .label, .label.label-sq { display: inline-flex; align-items: center; gap: 10px; }
+.sec-label > .label::before, .label.label-sq::before {
+  content: "";
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  background: var(--chip, var(--edge-7));
+}
+main > section:nth-of-type(8n + 1) { --chip: var(--edge-7); }
+main > section:nth-of-type(8n + 2) { --chip: var(--edge-8); }
+main > section:nth-of-type(8n + 3) { --chip: var(--edge-5); }
+main > section:nth-of-type(8n + 4) { --chip: var(--edge-3); }
+main > section:nth-of-type(8n + 5) { --chip: var(--edge-9); }
+main > section:nth-of-type(8n + 6) { --chip: var(--edge-6); }
+main > section:nth-of-type(8n + 7) { --chip: var(--edge-4); }
+main > section:nth-of-type(8n + 8) { --chip: var(--edge-10); }
+
+/* The openers end on the band, as the home reel's clock does, and the
+   page's name on their ledger is led by an orange square. */
+.opener-edge {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  height: 6px;
+  background-image: var(--edge-band);
+}
+.opener-ledger > span:first-child:not(:empty)::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 10px;
+  vertical-align: 1px;
+  background: var(--accent);
+}
+
+/* 4 · The light button over a photograph keeps its white type on hover
+   (the site-wide a:hover took it to ink). */
+.btn-on-image:hover, .hero-in .btn-on-image:hover {
+  color: #FFFFFF;
+  border-color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* 6 · The bar over a photograph: a soft frosted scrim behind it, darkest at
+   the top and gone by 128px, so the links and the mark hold on a bright sky
+   or a pale plaza; it fades out as the bar turns white. Once scrolled, the
+   white bar lifts off the page with a shadow you feel more than see. */
+.site-bar::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: -1;
+  height: 128px;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(14, 16, 20, 0.36) 0%, rgba(14, 16, 20, 0.16) 56%, rgba(14, 16, 20, 0) 100%);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 42%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 42%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.site-bar.nav-light::before { opacity: 1; }
+.nav-light .nav-link { text-shadow: 0 1px 14px rgba(10, 12, 16, 0.38); }
+.site-bar.is-scrolled { box-shadow: 0 10px 30px rgba(20, 22, 26, 0.07); }
+
+/* 7 · Softer corners on the photographs (one square corner each, above). */
+.frame-img, .mega-frame, .kit-visual { border-radius: var(--img-r); isolation: isolate; }
+.frame-paper { border-radius: 0 4px 4px 4px; }
+.doc-thumb { border-radius: 0 4px 4px 4px; }
+.search-thumb { border-radius: var(--img-r-sm); isolation: isolate; }
+.search-thumb-doc { border-radius: 0 4px 4px 4px; }
+
+/* 2 · Vapour blasting's water: the page's squares, rules, figures, hovers
+   and its opener's edge in blue; on the home page, its band's square, button
+   and hovers. Square One orange stays the button that starts a job. */
+.btn-primary.btn-water, .btn-water { background: var(--vapour); border-color: var(--vapour); color: #FFFFFF; }
+.btn-primary.btn-water:hover, .btn-water:hover { background: var(--vapour-deep); border-color: var(--vapour-deep); color: #FFFFFF; }
+.page-vapour { --water-hairline: var(--vapour-hairline); }
+.page-vapour .sec-label > .label::before, .page-vapour .label.label-sq::before,
+.vapour-band .label.label-sq::before { background: var(--vapour); }
+.page-vapour .opener-edge { background-image: var(--water-band); }
+.page-vapour .opener-ledger > span:first-child:not(:empty)::before { background: #8FBCE6; }
+.page-vapour .steps-edge > li { background-image: var(--water-band); }
+.page-vapour .band-water { background: var(--vapour-tint); border-color: var(--vapour-hairline); }
+.page-vapour .band-water li > span:first-child { color: var(--vapour-deep); }
+.page-vapour .link:hover, .vapour-band .link:hover { text-decoration-color: var(--vapour); }
+@media (hover: hover) {
+  .page-vapour .frame-link:hover .cap, .vapour-band .frame-link:hover .cap { text-decoration-color: var(--vapour); }
+}
+.page-vapour details summary > span[aria-hidden="true"] { color: var(--vapour); }
+.page-vapour details[open] summary > span:first-child { color: var(--vapour-deep); }
+
+/* 5 · Search, with a layout and a colour profile: the band across the top,
+   the query large in Futura beside a square ink mark, the sheet on the grey
+   with white panels, a square per group, the active row in orange, the keys
+   as square caps. */
+.search-sheet { background: var(--surface-warm); }
+.search-edge { flex-shrink: 0; height: 6px; background-image: var(--edge-band); }
+.search-bar { background: #FFFFFF; border-bottom: 1px solid var(--hairline); transition: box-shadow 0.2s ease; }
+.search-bar:focus-within { box-shadow: inset 0 -2px 0 var(--accent); }
+.search-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  background: var(--ink);
+  color: #FFFFFF;
+}
+.search-input {
+  border: 0;
+  background: transparent;
+  padding: 6px 0;
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 400;
+  letter-spacing: -0.012em;
+  line-height: 1.2;
+  color: var(--ink);
+}
+.search-input::placeholder { color: #9AA0A7; }
+.search-input:focus, .search-input:focus-visible { outline: none; }
+.search-input::-webkit-search-cancel-button { -webkit-appearance: none; appearance: none; }
+.search-clear {
+  padding: 8px 4px;
+  background: none;
+  font-family: var(--font-text);
+  font-size: 15px;
+  color: var(--ink-body);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 5px;
+  text-decoration-color: var(--hairline-strong);
+  cursor: pointer;
+}
+.search-clear:hover { color: var(--ink); text-decoration-color: var(--accent); }
+.search-close {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  height: 48px;
+  padding: 0 14px;
+  background: #FFFFFF;
+  border: 1px solid var(--hairline-strong);
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.search-close:hover { border-color: var(--ink); background: var(--surface-warm); }
+.search-key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 6px;
+  background: #FFFFFF;
+  border: 1px solid var(--hairline-strong);
+  border-bottom-width: 2px;
+  font-family: var(--font-text);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--ink-body);
+}
+.search-foot { background: #FFFFFF; border-top: 1px solid var(--hairline); font-family: var(--font-text); font-size: 13px; color: var(--ink-muted); }
+.search-foot .search-key { margin-right: 4px; }
+.search-foot .search-key + .search-key { margin-left: 0; }
+
+.search-empty { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 3fr) minmax(0, 5fr); gap: 40px 48px; }
+.search-head {
+  display: block;
+  margin-bottom: 2px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--ink);
+  font-family: var(--font-text);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--ink-muted);
+}
+.search-go { margin: 0; padding: 0; list-style: none; }
+.search-go-row {
+  display: grid;
+  grid-template-columns: 10px minmax(0, 1fr);
+  column-gap: 14px;
+  align-items: baseline;
+  width: 100%;
+  padding: 12px 0;
+  background: none;
+  border-bottom: 1px solid var(--hairline);
+  text-align: left;
+  cursor: pointer;
+}
+.search-sq { display: inline-block; flex-shrink: 0; width: 10px; height: 10px; }
+.search-go-name {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 5px;
+  text-decoration-color: transparent;
+  transition: text-decoration-color 0.15s ease;
+}
+.search-go-row:hover .search-go-name, .search-go-row:focus-visible .search-go-name { text-decoration-color: var(--accent); }
+.search-go-note { display: block; margin-top: 2px; font-family: var(--font-text); font-size: 14px; color: var(--ink-muted); }
+.search-tries { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 14px; }
+.search-try {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 13px;
+  background: #FFFFFF;
+  border: 1px solid var(--hairline);
+  font-family: var(--font-text);
+  font-size: 15px;
+  line-height: 1.2;
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+.search-try::before { content: ""; width: 6px; height: 6px; background: var(--hairline-strong); transition: background 0.15s ease; }
+.search-try:hover { border-color: var(--ink); }
+.search-try:hover::before { background: var(--accent); }
+.search-systems { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 18px; margin: 0; padding: 16px 0 0; list-style: none; }
+
+.search-group { background: #FFFFFF; border: 1px solid var(--hairline); border-radius: var(--img-r); overflow: hidden; }
+.search-group-head { display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--hairline); }
+.search-group-name { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--ink); }
+.search-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 24px;
+  margin-left: auto;
+  padding: 0 7px;
+  background: var(--surface-warm);
+  font-family: var(--font-text);
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-body);
+}
+.search-row { position: relative; display: flex; align-items: center; gap: 16px; padding: 10px 18px; border-top: 1px solid var(--hairline); transition: background 0.12s ease; }
+.search-row:first-child { border-top: 0; }
+.search-row[data-active] { background: var(--surface-warm); }
+.search-row[data-active]::before { content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 3px; background: var(--accent); }
+.search-title { font-family: var(--font-text); font-size: 16.5px; font-weight: 500; color: var(--ink); }
+.search-sub { font-family: var(--font-text); font-size: 14px; color: var(--ink-muted); }
+.search-hit { background: rgba(200, 90, 58, 0.16); color: inherit; padding: 0 1px; }
+.search-row-key { opacity: 0; transition: opacity 0.12s ease; }
+.search-row[data-active] .search-row-key { opacity: 1; }
+.search-all {
+  display: inline-flex;
+  align-items: center;
+  padding: 14px 22px;
+  background: var(--ink);
+  color: #FFFFFF;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.search-all:hover { background: var(--brand-orange); }
+.search-note { font-family: var(--font-text); font-size: 15px; color: var(--ink-muted); }
+.search-none-line { max-width: 40ch; font-family: var(--font-display); font-size: 24px; font-weight: 400; line-height: 1.3; letter-spacing: -0.01em; color: var(--ink); }
+
+@media (max-width: 1100px) {
+  .search-empty { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .search-col-wide { grid-column: 1 / -1; }
+  .search-systems { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (max-width: 700px) {
+  .search-empty { grid-template-columns: minmax(0, 1fr); gap: 34px; }
+  .search-systems { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .search-mark { width: 40px; height: 40px; }
+  .search-input { font-size: 21px; }
+  .search-close { height: 40px; padding: 0 11px; }
+  .search-group-head { padding: 12px 14px; }
+  .search-row { padding: 10px 14px; gap: 12px; }
+  .search-none-line { font-size: 20px; }
+  /* The square caps are for a keyboard; a phone drops them. */
+  .search-close .search-key, .search-row-key { display: none; }
+  .search-thumb { width: 60px; height: 45px; }
+  .search-title { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; font-size: 15.5px; line-height: 1.35; }
+}
+/* The /search page wears the overlay's field and group heads. */
+.search-page-field { border-bottom: 2px solid var(--ink); }
+.search-page-field:focus-within { border-bottom-color: var(--accent); }
+.search-page-head { padding: 0 0 14px; border-bottom: 1px solid var(--hairline); }
+h2.search-group-name:not(.label):not(.eyebrow) { font-size: 17px; letter-spacing: -0.01em; line-height: 1.2; }
+
+/* 3 · A page's own label (the line over a heading that opens a page with no
+   photograph) is led by the orange square, as an opener's ledger is. */
+.label.label-page::before { background: var(--accent); }
+/* The fact strip under the services: three chips, three facts. */
+.fact-strip .label-sq:nth-child(1)::before { background: var(--edge-5); }
+.fact-strip .label-sq:nth-child(2)::before { background: var(--edge-7); }
+.fact-strip .label-sq:nth-child(3)::before { background: var(--edge-8); }
+/* 2 · The vapour row on /services and the vapour row in the menu take the
+   water's blue for their marks. */
+.row-vapour .label:first-child { color: var(--vapour-deep); font-weight: 600; }
+.row-vapour .link:hover { text-decoration-color: var(--vapour); }
+@media (hover: hover) { .row-vapour .frame-link:hover .cap { text-decoration-color: var(--vapour); } }
+.mega-row[href="/services/vapor-blasting"]::before { background: var(--vapour); }
+.mega-row[href="/services/vapor-blasting"][data-active] .mega-num { color: var(--vapour); }
+.mega-row[href="/services/vapor-blasting"][data-active] .mega-name { text-decoration-color: var(--vapour); }

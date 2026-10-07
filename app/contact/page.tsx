@@ -109,7 +109,7 @@ export default function ContactPage() {
       <section className="bg-surface pt-[calc(var(--bar-h)+56px)] pb-12 max-[700px]:pt-[calc(var(--bar-h)+32px)] max-[700px]:pb-8">
         <div className="container-1280 grid grid-cols-12 items-end gap-x-12 gap-y-10 max-[900px]:grid-cols-1">
           <div className="col-span-8 max-[900px]:col-span-1">
-            <span className="label">Request a quote &middot; free site visit</span>
+            <span className="label label-sq label-page">Request a quote &middot; free site visit</span>
             <h1 className="mt-5 max-w-[16ch] [text-wrap:balance]">Tell us the job. <em>We&rsquo;ll walk the site.</em></h1>
             <p className="lede mt-6 max-w-[56ch] [text-wrap:pretty]">
               A description and a location are enough to start. The site visit is free; the quote

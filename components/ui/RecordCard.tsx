@@ -61,7 +61,7 @@ export default function RecordCard({
       <article className="row">
         <Link href={href} className="block" tabIndex={-1} aria-hidden="true">
           <figure className="m-0">
-            <span className="relative block aspect-[4/3] w-full overflow-hidden bg-surface-stone">
+            <span className="frame-img relative block aspect-[4/3] w-full overflow-hidden bg-surface-stone">
               {src ? (
                 <Image
                   src={src}
@@ -101,7 +101,7 @@ export default function RecordCard({
     <article className="max-[600px]:grid max-[600px]:grid-cols-[124px_1fr] max-[600px]:items-start max-[600px]:gap-x-4">
       <Link href={href} className="block" tabIndex={-1} aria-hidden="true">
         <figure className="m-0">
-          <span className="relative block aspect-[4/3] w-full overflow-hidden bg-surface-stone">
+          <span className="frame-img relative block aspect-[4/3] w-full overflow-hidden bg-surface-stone">
             {src ? (
               <Image
                 src={src}

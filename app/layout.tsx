@@ -12,7 +12,7 @@ import Footer from "@/components/Footer"
 import StructuredData from "@/components/StructuredData"
 import MobileStickyCTA from "@/components/MobileStickyCTA"
 import MotionBreath from "@/components/MotionBreath"
-import { EDGE_BAND } from "@/components/ui/ColourEdge"
+import { EDGE_BAND, EDGE_COLOURS, WATER_BAND } from "@/components/ui/ColourEdge"
 import type { CSSProperties } from "react"
 import TypeToggle from "@/components/TypeToggle"
 import { SITE_URL } from "@/lib/site"
@@ -151,7 +151,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         {TYPE_SWITCH_ENABLED && <script dangerouslySetInnerHTML={{ __html: TYPE_BOOT }} />}
       </head>
-      <body className="antialiased" style={{ ["--edge-band" as string]: EDGE_BAND } as CSSProperties}>
+      <body
+        className="antialiased"
+        style={
+          {
+            ["--edge-band" as string]: EDGE_BAND,
+            ["--water-band" as string]: WATER_BAND,
+            // Each chip of the band on its own, for the section labels'
+            // squares (app/own.css, 7 Oct 2026).
+            ...Object.fromEntries(EDGE_COLOURS.map((hex, i) => [`--edge-${i + 1}`, hex])),
+          } as CSSProperties
+        }
+      >
         <StructuredData />
         {/* Keyboard users skip the bar and the menus (28 Sept 2026). */}
         <a href="#main" className="skip-link">

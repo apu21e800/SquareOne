@@ -60,7 +60,7 @@ export default function FollowTheWork({ settings, tiles }: { settings: SiteSetti
       <div className="container-1280">
         <div className="grid grid-cols-12 gap-x-12 gap-y-10 max-[900px]:grid-cols-1">
           <div className="col-span-4 max-[900px]:col-span-1">
-            <span className="label">From the crews</span>
+            <span className="label label-sq">From the crews</span>
             <h2 id="follow-heading" className="mt-4 max-w-[12ch] [text-wrap:balance]">
               The work, <em>as it goes in</em>
             </h2>
@@ -93,7 +93,7 @@ export default function FollowTheWork({ settings, tiles }: { settings: SiteSetti
                   aria-label={tile.fallback ? `${tile.caption}, Square One on Instagram` : `${tile.caption}, view on ${tile.platform}`}
                   className="social-tile group block"
                 >
-                  <span className="relative block aspect-square overflow-hidden bg-[color:var(--surface-stone)]">
+                  <span className="frame-img relative block aspect-square overflow-hidden bg-[color:var(--surface-stone)]">
                     <Image
                       src={tile.src}
                       alt={tile.alt}
