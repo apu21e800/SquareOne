@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
-import type { ReactNode } from "react"
 import type { Metadata } from "next"
 
 import { products, getProductBySlug } from "@/lib/products"
@@ -12,10 +11,23 @@ import { resourceGroups } from "@/lib/resources"
 import { getWork, WORK_APPS } from "@/lib/work"
 import type { WorkApp, WorkAppMeta } from "@/lib/work"
 import WorkGallery from "@/components/WorkGallery"
+import MaterialsBand from "@/components/sections/MaterialsBand"
+import Frame from "@/components/ui/Frame"
+import { Section } from "@/components/ui/Container"
 import { SITE_URL } from "@/lib/site"
 import { fitVars } from "@/lib/type"
 import JsonLd, { breadcrumbSchema } from "@/components/JsonLd"
 import { clampDescription } from "@/lib/seo"
+import { plainCase } from "@/lib/text"
+
+
+/** The service each system is installed under, as the site names it. */
+const SERVICE_NAME: Record<string, string> = {
+  "stamped-asphalt": "Stamped asphalt",
+  "decorative-coatings": "Decorative coatings",
+  "preformed-thermoplastic": "Preformed thermoplastic",
+  "vapor-blasting": "Vapour blasting",
+}
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -69,18 +81,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 /**
  * Product detail — docs/design-v2/Product Detail StreetBond.dc.html
  *
- *   Header      white   tag, wordmark, name, lede, CTAs
- *   Plate       —       full-bleed hero photograph
- *   Overview    band    description, key benefits and the spec panel
- *   Where used  SLATE   applications, each linked to its gallery
+ *   Opener      —       full-bleed hero photograph, the name over it
+ *   Header      paper   the tagline, the one button, the links
+ *   Overview    band    description, key benefits and the specification list
+ *   Where used  STONE   applications, each linked to its gallery
  *   The work    band    Square One installs of this system, from lib/work.ts
- *   Colours     band    the 52 StreetBond colours off HUB's chart (StreetBond only)
- *   Gallery     band    folder-first imagery
- *   Documents   band    the system's specifications, SDS and guides (lib/resources)
- *   Related     band    same service, other systems
+ *   Colours     band    the 52 StreetBond colours off the published chart (StreetBond only)
+ *   Gallery     band    folder-first imagery, each frame captionless
+ *   Documents   band    one line and a link into the library (lib/resources)
+ *   Related     band    same service, other systems, as hairline rows
  *
- * Applications is the page's one dark beat, so the page is not white end to
- * end; the slate close still belongs to components/Footer.tsx.
+ * 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.5, §3.7): every section keeps
+ * its place and its facts; the surface changes. Section headers are the
+ * `Section` primitive (label in the margin column, the one link underlined),
+ * the specification is a plain two-column list without a box, the colours
+ * are a row of square swatches named in the serif, the Documents band is one
+ * line with an underlined link, the related systems are hairline rows. No
+ * arrows, no chips, no text over a photograph, one orange button per view.
  */
 
 const GALLERY_LIMIT = 9
@@ -94,47 +111,9 @@ const COLOUR_CARD_IMAGE: Record<string, { preview: string; w: number; h: number 
   "trafficpatterns-xd": { preview: "/images/colour-cards/trafficpatterns-xd.webp", w: 695, h: 632 },
 }
 
-type BandTone = "white" | "warm" | "stone" | "slate"
+type BandTone = "paper" | "warm"
 
 type BandKey = "overview" | "applications" | "work" | "colours" | "gallery" | "documents" | "related"
-
-/**
- * Light bands alternate white / warm in document order. Optional bands drop out
- * of the sequence rather than out of the alternation, so two sections never
- * share a surface no matter which of them a given product renders.
- */
-function Band({
-  tone,
-  id,
-  tightTop = false,
-  children,
-}: {
-  tone: BandTone
-  id?: string
-  /** The band directly under the header shares its white surface — one gap, not two. */
-  tightTop?: boolean
-  children: ReactNode
-}) {
-  return (
-    <section
-      id={id}
-      className={[
-        tone === "slate"
-          ? "section relative overflow-hidden bg-surface-slate"
-          : tone === "stone"
-            ? "section border-y border-hairline bg-surface-stone"
-            : tone === "warm"
-              ? "section border-y border-hairline bg-surface-warm"
-              : "section bg-surface",
-        tightTop ? "!pt-2" : "",
-      ]
-        .filter(Boolean)
-        .join(" ")}
-    >
-      <div className="container-1280 relative z-[1]">{children}</div>
-    </section>
-  )
-}
 
 /**
  * Applications that name one of the ten galleries get a link into it; anything
@@ -200,7 +179,7 @@ function galleryAlt(product: Product, src: string, index: number): string {
     .map((t) => TOKEN_CASE[t.toLowerCase()] ?? t.charAt(0).toUpperCase() + t.slice(1))
     .join(" ")
   return subject
-    ? `${product.name} reference photograph — ${subject}`
+    ? `${product.name} reference photograph, ${subject}`
     : `${product.name} reference photograph ${index + 1}`
 }
 
@@ -223,9 +202,12 @@ export default async function ProductPage({ params }: Props) {
   // Square One's own photographs of this system, captioned with place and
   // subject. StreetBond also owns its SR variant. Empty for systems with no
   // installs on record (DuraShield) — the band simply does not render.
-  const work = getWork().filter((photo) =>
-    photo.systems.some((system) => system === product.name || (product.name === "StreetBond" && system.startsWith("StreetBond"))),
-  )
+  const work = getWork()
+    .filter((photo) =>
+      photo.systems.some((system) => system === product.name || (product.name === "StreetBond" && system.startsWith("StreetBond"))),
+    )
+    // The opener's photograph is not repeated in the band of work below it.
+    .filter((photo) => photo.src !== product.image)
   // The library groups documents by product name; its anchor slug is its own
   // ("traffic-patterns" for TrafficPatterns), so the link reads it from the group.
   const docGroup = resourceGroups.find((group) => group.product === product.name)
@@ -254,20 +236,29 @@ export default async function ProductPage({ params }: Props) {
   if (docs.length > 0) bands.push("documents")
   if (related.length > 0) bands.push("related")
 
+  // Light bands alternate paper / warm in document order. Optional bands drop
+  // out of the sequence rather than out of the alternation, so two sections
+  // never share a surface no matter which of them a given product renders.
   // "applications" has its own surface (stone), so it sits out of the
-  // white/warm alternation. Because it separates its neighbours, the bands
-  // either side of it may share a surface without touching.
+  // alternation; because it separates its neighbours, the bands either side
+  // of it may share a surface without touching.
   const lightTones = new Map<BandKey, BandTone>()
-  let next: BandTone = "white"
+  let next: BandTone = "paper"
   for (const key of bands) {
     if (key === "applications") continue
     lightTones.set(key, next)
-    next = next === "white" ? "warm" : "white"
+    next = next === "paper" ? "warm" : "paper"
   }
 
-  const toneOf = (key: BandKey): BandTone => lightTones.get(key) ?? "white"
+  const toneOf = (key: BandKey): BandTone => lightTones.get(key) ?? "paper"
 
-  const relatedTone = toneOf("related")
+  const docCount = `${docs.length} document${docs.length === 1 ? "" : "s"}`
+
+  // The description, split at its sentences: the first two open the page,
+  // the rest fold (2 Oct 2026).
+  const sentences = (product.fullDescription.match(/[^.!?]+[.!?]+(?=\s|$)/g) ?? [product.fullDescription]).map((t) => t.trim())
+  const lead = sentences.slice(0, 2).join(" ")
+  const rest = sentences.slice(2).join(" ")
 
   return (
     <main className="bg-surface">
@@ -290,13 +281,16 @@ export default async function ProductPage({ params }: Props) {
         <div aria-hidden="true" className="scrim-rise" />
         <div aria-hidden="true" className="scrim-top" />
         <div className="container-1280 relative z-[1] w-full pb-14 max-[700px]:pb-10">
-          <div className="eyebrow eyebrow-on-image">{product.category}</div>
+          {/* No eyebrow over the photograph (27 Sept 2026) — the openers
+              are drawn the way the home hero is. The category is still
+              said to a screen reader. */}
+          <span className="sr-only">{product.category}</span>
           {/* fit-host + display-fit: the headline sizes itself against this
               column, so a seventeen-character product name comes down a
               step instead of spilling it (lib/type.ts). */}
-          <div className="fit-host mt-5 max-w-[46rem]">
+          <div className="fit-host max-w-[46rem]">
             <h1
-              className={`display-xl display-fit text-white [text-wrap:balance]${product.mark ? "" : " stop"}`}
+              className="display-xl display-fit text-white [text-wrap:balance]"
               style={fitVars(product.name)}
             >
               {product.name}
@@ -307,14 +301,18 @@ export default async function ProductPage({ params }: Props) {
       </section>
 
       {/* ── Header ──────── */}
-      <section className="section bg-surface pt-16 pb-0 max-[700px]:pt-10">
+      <section className="section bg-surface pt-16 pb-14 max-[700px]:pt-10 max-[700px]:pb-10">
         <div className="container-1280">
-          <Link
-            href="/products"
-            className="text-[13px] font-medium text-ink-muted transition-colors hover:text-ink"
-          >
-            &larr;&nbsp;All products
-          </Link>
+          {/* 28 Sept 2026 (Vern: "S1 is an installer, services over
+              products"): the page opens on the service the system belongs
+              to, not on the catalogue. */}
+          <p className="label">
+            Installed by Square One under our{" "}
+            <Link href={`/services/${product.serviceSlug}`} className="link not-italic">
+              {SERVICE_NAME[product.serviceSlug] ?? "services"}
+            </Link>{" "}
+            service
+          </p>
 
           {/* The manufacturer wordmark used to sit here, and the row above it
               said "Installed by Square One since 2000" beside a chip that
@@ -323,132 +321,108 @@ export default async function ProductPage({ params }: Props) {
               the obvious one he named, and a decorative product logo on an
               installer's page blurs exactly the distinction this site works
               to keep — HUB manufactures, Square One installs. */}
-          <p className="mt-8 max-w-[52ch] text-[21px] leading-[1.55] text-ink [text-wrap:pretty] max-[700px]:mt-6 max-[700px]:text-[18px]">
+          <p className="lede mt-8 max-w-[52ch] [text-wrap:pretty] max-[700px]:mt-6">
             {product.tagline}
           </p>
 
-          <div className="mt-10 flex flex-wrap items-center gap-[14px]">
+          {/* One button and one link (2 Oct 2026: the row carried four; the
+              menu reaches the catalogue and the pattern band sits below). */}
+          <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-3">
             <Link href="/contact" className="btn-primary">
-              Request a quote
+              Get a quote
             </Link>
-            <Link href={`/services/${product.serviceSlug}`} className="btn-secondary">
-              See the service
+            <Link href={`/services/${product.serviceSlug}`} className="link">
+              {SERVICE_NAME[product.serviceSlug] ?? "The service"}, the service
             </Link>
-            {product.slug === "streetprint" && (
-              <Link href="/patterns" className="arrow-link">
-                The pattern library <span aria-hidden="true">&rarr;</span>
-              </Link>
-            )}
           </div>
         </div>
       </section>
 
-      {/* ── Overview + the spec panel (character pass, 5 Sept 2026): the
-             description on the left, the system's facts on the right, so
-             the band reads as a data sheet rather than a paragraph adrift. ── */}
-      <Band tone={toneOf("overview")} tightTop>
-        <div className="grid grid-cols-12 gap-x-12 gap-y-10 max-[900px]:grid-cols-1">
+      {/* ── Overview + the specification (character pass, 5 Sept 2026): the
+             description on the left, the system's facts on the right as a
+             plain two-column list, so the band reads as a data sheet rather
+             than a paragraph adrift. ── */}
+      <Section
+        label="Overview"
+        title={overviewHeading[product.slug] ?? `What ${product.name} is, and how it is installed`}
+        tone={toneOf("overview")}
+        wide
+      >
+        {/* 2 Oct 2026 (Vern: "this page is very wordy… look at all that
+            text"): the description opens on its first two sentences, the
+            rest folds under "More about …" the way the questions do, and the
+            key-benefits list is gone from the page (every line of it is a
+            row of the specification beside it; the data stays in
+            lib/products.ts for the schema and llms.txt). */}
+        <div className="grid grid-cols-12 gap-x-10 gap-y-12 max-[900px]:grid-cols-1">
           <div className="col-span-7 max-[900px]:col-span-1">
-            <div className="eyebrow">Overview</div>
-            <h2 className="mt-4 max-w-[24ch] [text-wrap:balance]">
-              {overviewHeading[product.slug] ?? `What ${product.name} is, and how it is installed`}
-            </h2>
-            <p className="mt-6 max-w-[60ch] text-[17px] leading-[1.75] text-ink-body [text-wrap:pretty]">
-              {product.fullDescription}
-            </p>
-
-            {product.keyBenefits.length > 0 && (
-              <>
-                <div className="label mt-12">Key benefits</div>
-                <ul className="mt-4 grid grid-cols-2 gap-x-10 max-[700px]:grid-cols-1 max-[700px]:gap-x-0">
-                  {product.keyBenefits.map((benefit) => (
-                    <li
-                      key={benefit}
-                      className="border-t border-hairline py-[15px] text-[15px] font-medium leading-[1.5] text-ink"
-                    >
-                      {benefit}
-                    </li>
-                  ))}
-                </ul>
-              </>
+            <p className="standfirst max-w-[44ch] [text-wrap:pretty]">{lead}</p>
+            {rest && (
+              <details className="group mt-8 border-t border-b border-hairline">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-[16px] [&::-webkit-details-marker]:hidden">
+                  <span className="text-[16px] font-semibold text-ink">More about {product.name}</span>
+                  <span aria-hidden="true" className="flex-shrink-0 text-[22px] font-normal leading-none text-ink-muted">
+                    <span className="group-open:hidden">+</span>
+                    <span className="hidden group-open:inline">&minus;</span>
+                  </span>
+                </summary>
+                <p className="max-w-[60ch] pb-6 text-[16px] leading-[1.65] text-ink-body [text-wrap:pretty]">{rest}</p>
+              </details>
             )}
           </div>
 
-          <div className="card-panel col-span-5 self-start !p-0 max-[900px]:col-span-1 max-[900px]:max-w-[560px]">
-            <div className="border-b border-hairline px-7 py-[18px] max-[700px]:px-5">
-              <div className="label">Specification</div>
-            </div>
-            <dl className="m-0">
-            {product.specs.map((row) => (
-              <div
-                key={row.k}
-                className="grid grid-cols-[140px_1fr] items-baseline gap-x-6 border-b border-hairline px-7 py-[15px] max-[700px]:grid-cols-1 max-[700px]:gap-y-[3px] max-[700px]:px-5"
-              >
-                <dt className="label pt-[3px]">{row.k}</dt>
-                <dd className="m-0 text-[15px] font-medium leading-[1.5] text-ink [text-wrap:pretty]">{row.v}</dd>
-              </div>
-            ))}
+          <div className="col-span-5 max-[900px]:col-span-1 max-[900px]:max-w-[560px]">
+            <span className="label">Specification</span>
+            <dl className="spec mt-4">
+              {product.specs.map((row) => (
+                <div key={row.k} className="contents">
+                  <dt>{row.k}</dt>
+                  <dd className="[text-wrap:pretty]">{row.v}</dd>
+                </div>
+              ))}
             </dl>
-            <p className="border-t border-hairline px-7 pt-5 text-[13px] leading-[1.6] text-ink-muted max-[700px]:px-5">
-              Figures are the manufacturer&rsquo;s, from the product&rsquo;s own data sheet.
-              The manufacturer warrants the material; Square One installs the system and warrants the workmanship.
+            <p className="border-t border-hairline pt-4 text-[14.5px] leading-[1.6] text-ink-muted">
+              The manufacturer&rsquo;s figures, from its data sheet.
             </p>
-            <div className="flex flex-wrap gap-x-6 gap-y-2 px-7 pb-6 pt-4 max-[700px]:px-5">
-              <Link href={`/services/${product.serviceSlug}`} className="arrow-link">
-                The service <span aria-hidden="true">&rarr;</span>
+            <p className="mt-5 flex flex-wrap gap-x-7 gap-y-2">
+              <Link href={`/services/${product.serviceSlug}`} className="link">
+                The service
               </Link>
               {docs.length > 0 && (
-                <Link href={docsHref} className="arrow-link">
-                  {docs.length} document{docs.length === 1 ? "" : "s"} <span aria-hidden="true">&rarr;</span>
+                <Link href={docsHref} className="link">
+                  {docCount}
                 </Link>
               )}
-            </div>
+            </p>
           </div>
         </div>
-      </Band>
+      </Section>
 
       {/* ── Where it is specified ────────
              Was the page's one dark beat; on stone since 21 Sept 2026 — the
              last slate section outside the footer and the photograph
              openers (Vern, 19 Sept: "too much dark mode… a clean light
              theme; the footer and the cinema backdrops are fine"). */}
-      <Band tone="stone" id="applications">
-        <div className="flex flex-wrap items-baseline justify-between gap-6">
-          <div>
-            <div className="eyebrow">Applications</div>
-            <h2 className="mt-4 max-w-[22ch]">Where {product.name} is specified</h2>
-          </div>
-          <p className="max-w-[36ch] text-[15px] leading-[1.6] text-ink-muted">
-            The surfaces Square One installs it on. The linked ones open the
-            photographs on record for that kind of work.
-          </p>
-        </div>
-
-        <ul className="mt-12 grid grid-cols-3 gap-x-10 max-[900px]:grid-cols-2 max-[600px]:grid-cols-1">
-          {product.applications.map((application, i) => {
+      <Section
+        id="applications"
+        label="Applications"
+        title={<>Where {product.name} <em>goes</em></>}
+        intro="The surfaces we install it on; the linked ones open the photographs."
+        tone="stone"
+        wide
+      >
+        <ul className="grid grid-cols-3 gap-x-10 max-[900px]:grid-cols-2 max-[600px]:grid-cols-1">
+          {product.applications.map((application) => {
             const gallery = galleryFor(application)
             return (
-              <li
-                key={application}
-                className="border-t border-hairline py-5"
-              >
-                <div className="flex items-baseline gap-3">
-                  <span className="text-[12px] font-medium tabular-nums text-ink-muted">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  {gallery ? (
-                    <Link
-                      href={galleryHref(gallery)}
-                      className="text-[17px] font-medium leading-[1.3] text-ink no-underline transition-colors hover:text-[color:var(--accent-deep)]"
-                    >
-                      {application}
-                    </Link>
-                  ) : (
-                    <span className="text-[17px] font-medium leading-[1.3] text-ink">
-                      {application}
-                    </span>
-                  )}
-                </div>
+              <li key={application} className="border-t border-hairline py-4">
+                {gallery ? (
+                  <Link href={galleryHref(gallery)} className="link">
+                    {plainCase(application)}
+                  </Link>
+                ) : (
+                  <span className="text-[16px] text-ink-body">{plainCase(application)}</span>
+                )}
                 {/* The photograph count came off 18 Sept — the client, on
                     DuraShield: "these numbers don't add up". A count reads as
                     a claim about volume, and the record is a sample. */}
@@ -456,117 +430,120 @@ export default async function ProductPage({ params }: Props) {
             )
           })}
         </ul>
-      </Band>
+      </Section>
+
+      {/* ── Patterns and colours, on the two stamped systems (2 Oct 2026,
+             Vern: "access to the pattern sheets from the StreetPrint page…
+             and TPXD page") ──────── */}
+      {(product.slug === "streetprint" || product.slug === "trafficpatterns-xd") && <MaterialsBand tone="paper" />}
 
       {/* ── The work on record ──────── */}
       {work.length > 0 && (
-        <Band tone={toneOf("work")} id="work">
-          <div className="flex flex-wrap items-baseline justify-between gap-6">
-            <div>
-              <div className="eyebrow">Photographed on site</div>
-              <h2 className="mt-4 [text-wrap:balance]">Square One&rsquo;s {product.name} installations across BC</h2>
-            </div>
-            <p className="max-w-[44ch] text-[15px] leading-[1.6] text-ink-muted">
-              Square One installations of {product.name}, captioned with the community
-              and the surface. Filter by region or by the systems installed alongside it.
-            </p>
-          </div>
-          <div className="mt-10">
-            <WorkGallery photos={work} initial={8} ariaLabel={`${product.name} installation photographs`} />
-          </div>
-        </Band>
+        <Section
+          id="work"
+          label="Photographed on site"
+          title={<>{product.name}, <em>installed across BC</em></>}
+          tone={toneOf("work")}
+          wide
+        >
+          <WorkGallery photos={work} initial={8} ariaLabel={`${product.name} installation photographs`} />
+        </Section>
       )}
 
       {/* ── Colour card — the system's own palette, page one, and the PDF ──────── */}
       {!showColours && colourCard && (
-        <Band tone={toneOf("colours")} id="colours">
-          <div className="grid grid-cols-12 items-center gap-x-12 gap-y-10 max-[900px]:grid-cols-1">
+        <Section
+          id="colours"
+          label="Colours"
+          title={<>{product.name} colours, <em>off the published card</em></>}
+          tone={toneOf("colours")}
+          wide
+        >
+          <div className="grid grid-cols-12 gap-x-10 gap-y-10 max-[900px]:grid-cols-1">
             <div className="col-span-5 max-[900px]:col-span-1">
-              <div className="eyebrow">Colours</div>
-              <h2 className="mt-4 max-w-[22ch]">{product.name} colours, off the published card</h2>
-              <p className="mt-5 max-w-[44ch] text-[15px] leading-[1.65] text-ink-body">
+              <p className="max-w-[44ch] text-ink-body [text-wrap:pretty]">
                 {product.name} carries its own colour range, published by the manufacturer as a
                 colour card. Name the colour on the drawing; the sample comes to the site visit,
                 because a screen is not the material.
               </p>
-              <div className="mt-7 flex flex-wrap items-center gap-x-8 gap-y-3">
-                <a href={colourCard.href} target="_blank" rel="noopener" className="btn-primary">
+              <p className="mt-7 flex flex-wrap items-center gap-x-8 gap-y-3">
+                <a href={colourCard.href} target="_blank" rel="noopener" className="link">
                   Open the colour card
                 </a>
-                <Link href={docsHref} className="arrow-link">
-                  All {product.name} documents <span aria-hidden="true">&rarr;</span>
+                <Link href={docsHref} className="link">
+                  All {product.name} documents
                 </Link>
-              </div>
-              <p className="mt-4 text-[12.5px] text-ink-muted">
-                {colourCard.name} &middot; PDF{colourCard.size ? ` · ${colourCard.size}` : ""}
               </p>
             </div>
             <div className="col-span-7 max-[900px]:col-span-1">
               {colourPreview ? (
-                <a
-                  href={colourCard.href}
-                  target="_blank"
-                  rel="noopener"
-                  className="card block overflow-hidden rounded-[2px] border border-hairline bg-white"
-                  aria-label={`Open ${colourCard.name} (PDF)`}
-                >
-                  <Image
-                    src={colourPreview.preview}
-                    alt={`Page one of the ${product.name} colour card`}
-                    width={colourPreview.w}
-                    height={colourPreview.h}
-                    sizes="(max-width: 900px) 100vw, 700px"
-                    className="h-auto w-full"
-                    unoptimized
-                  />
-                </a>
+                <figure className="m-0">
+                  <a
+                    href={colourCard.href}
+                    target="_blank"
+                    rel="noopener"
+                    className="block border border-hairline bg-white"
+                    aria-label={`Open ${colourCard.name} (PDF)`}
+                  >
+                    <Image
+                      src={colourPreview.preview}
+                      alt={`Page one of the ${product.name} colour card`}
+                      width={colourPreview.w}
+                      height={colourPreview.h}
+                      sizes="(max-width: 900px) 100vw, 700px"
+                      className="h-auto w-full"
+                      unoptimized
+                    />
+                  </a>
+                  <figcaption className="cap">
+                    {colourCard.name} &middot; PDF{colourCard.size ? ` · ${colourCard.size}` : ""}
+                  </figcaption>
+                </figure>
               ) : (
-                <a href={colourCard.href} target="_blank" rel="noopener" className="card-panel block">
+                <a href={colourCard.href} target="_blank" rel="noopener" className="block border-t border-hairline pt-5">
                   <span className="label">Colour card</span>
-                  <span className="mt-3 block text-[18px] font-semibold">{colourCard.name}</span>
+                  <span className="mt-2 block text-[18px] font-bold" style={{ fontFamily: "var(--font-display)" }}>
+                    {colourCard.name}
+                  </span>
+                  <span className="cap block">
+                    PDF{colourCard.size ? ` · ${colourCard.size}` : ""}
+                  </span>
                 </a>
               )}
             </div>
           </div>
-        </Band>
+        </Section>
       )}
 
       {/* ── Colours ──────── */}
       {showColours && (
-        <Band tone={toneOf("colours")} id="colours">
-          <div className="flex flex-wrap items-baseline justify-between gap-6">
-            <div>
-              <div className="eyebrow">Colours</div>
-              <h2 className="mt-4 max-w-[26ch]">
-                Fifty-two standard StreetBond colours, plus custom matching
-              </h2>
-            </div>
-            <p className="max-w-[34ch] text-[14px] leading-[1.65] text-ink-muted">
-              Read off the published StreetBond colour chart. On-screen colour is a
-              reference only &mdash; the sample board we bring to the site visit is
-              what decides.
-            </p>
-          </div>
-
-          <div className="mt-12 flex flex-col gap-10">
+        <Section
+          id="colours"
+          label="Colours"
+          title={<>Fifty-two standard colours, <em>plus custom matching</em></>}
+          intro="Read off the published StreetBond colour chart. On-screen colour is a reference only: the sample board we bring to the site visit is what decides."
+          tone={toneOf("colours")}
+          wide
+        >
+          <div className="flex flex-col gap-12">
             {COLOUR_RANGES.map((range) => {
               const swatches = STREETBOND_COLOURS.filter((c) => c.range === range)
               if (swatches.length === 0) return null
               return (
                 <div key={range}>
-                  <div className="flex items-baseline gap-3 border-b border-hairline pb-3">
-                    <span className="label">{range}</span>
-                    <span className="text-[13px] text-ink-muted">{swatches.length}</span>
+                  <div className="flex items-baseline gap-3 border-t border-hairline pt-4">
+                    <span className="label">{plainCase(range)}</span>
+                    <span className="text-[14.5px] italic text-ink-muted">{swatches.length}</span>
                   </div>
-                  <ul className="mt-5 grid grid-cols-[repeat(auto-fill,minmax(108px,1fr))] gap-x-4 gap-y-6">
+                  <ul className="mt-5 grid grid-cols-[repeat(auto-fill,minmax(96px,1fr))] gap-x-4 gap-y-6" role="list">
                     {swatches.map((c) => (
                       <li key={c.name}>
                         <span
                           aria-hidden="true"
-                          className="block h-14 w-full rounded-[2px] border border-black/10"
+                          className="block aspect-square w-full border border-black/10"
                           style={{ backgroundColor: c.hex }}
                         />
-                        <span className="mt-2 block text-[12px] font-medium leading-[1.35] text-ink">
+                        <span className="mt-2 block text-[12.5px] italic leading-[1.3] text-ink-muted">
                           {c.name}
                         </span>
                       </li>
@@ -577,57 +554,23 @@ export default async function ProductPage({ params }: Props) {
             })}
           </div>
 
-          <p className="mt-10 max-w-[62ch] text-[15px] leading-[1.6] text-ink-body">
+          <p className="mt-12 max-w-[62ch] border-t border-hairline pt-6 text-ink-body [text-wrap:pretty]">
             Standard colours can be specified straight off the chart. For anything
             outside it, send us a colour reference and we will match it. The colour
             card itself is in{" "}
-            <Link href={docsHref} className="font-semibold text-ink underline-offset-4 hover:underline">
+            <Link href={docsHref} className="link">
               the document library
             </Link>
             .
           </p>
-        </Band>
+        </Section>
       )}
 
-      {/* ── Gallery ──────── */}
-      {gallery.length > 0 && (
-        <Band tone={toneOf("gallery")} id="gallery">
-          <div className="flex flex-wrap items-end justify-between gap-6">
-            <div>
-              <h2>{product.name} reference photography</h2>
-              {/* Reference frames, not the record: the client flagged three of
-                  these as "not ours" (19 Sept 2026), so the band says what it is. */}
-              <p className="mt-3 max-w-[56ch] text-[14px] leading-[1.55] text-ink-muted">
-                Reference photography of the system from the manufacturer.{" "}
-                {work.length > 0
-                  ? `Square One's own ${product.name} jobs are the frames on the record above.`
-                  : `These frames show the system as the manufacturer photographs it, not Square One's own jobs.`}
-              </p>
-            </div>
-            <Link href="/projects" className="arrow-link whitespace-nowrap">
-              See our projects <span aria-hidden="true">&rarr;</span>
-            </Link>
-          </div>
-
-          <div className="mt-10 grid grid-cols-3 gap-6 max-[700px]:grid-cols-1">
-            {gallery.map((src, i) => (
-              <div
-                key={src}
-                className="thumb relative aspect-[4/3] overflow-hidden rounded-[2px] bg-surface-stone"
-              >
-                <Image
-                  src={src}
-                  alt={galleryAlt(product, src, i)}
-                  fill
-                  sizes="(max-width: 700px) 100vw, (max-width: 1280px) 33vw, 411px"
-                  className="object-cover"
-                />
-                <div aria-hidden="true" className="scrim scrim-light" />
-                </div>
-            ))}
-          </div>
-        </Band>
-      )}
+      {/* ── The manufacturer's reference photography came off on 28 Sept 2026
+          (QA before the client review): the set mixed in frames of Square
+          One's own jobs under a "from the manufacturer" label, and it was
+          the most catalogue-like block on an installer's page. The record
+          above carries the photographs. ──────── */}
 
       {/* ── Documents ────────
           The rail of spec sheets, TDS and guides that used to sit here came
@@ -635,68 +578,49 @@ export default async function ProductPage({ params }: Props) {
           product pages in review: "I think documents only on the resources
           page, we can remove them here." The documents are not gone — every
           one of them is on /resources with its page-one preview, and this
-          band now points there, anchored to this system. Keeping one library
-          in one place is also the easier thing to keep current, which is the
-          whole argument for hosting them at all.  ──────── */}
+          band is one line that points there, anchored to this system.
+          Keeping one library in one place is also the easier thing to keep
+          current, which is the whole argument for hosting them at all.  ──────── */}
       {docs.length > 0 && (
-        <Band tone={toneOf("documents")} id="documents">
-          <div className="flex flex-wrap items-baseline justify-between gap-6">
-            <div>
-              <div className="eyebrow">Specify it</div>
-              <h2 className="mt-4">{product.name} specifications and data sheets</h2>
-              <p className="mt-4 max-w-[52ch] text-[16px] leading-[1.65] text-ink-body [text-wrap:pretty]">
-                {docs.length} {product.name} document{docs.length === 1 ? "" : "s"} &mdash; specification,
-                technical data, safety data and colour &mdash; are kept with the rest of the
-                library, where they are previewed page by page and checked against the
-                manufacturer&rsquo;s current editions.
-              </p>
-            </div>
-            <Link href={docsHref} className="btn-secondary whitespace-nowrap">
-              Open the {product.name} documents
-            </Link>
-          </div>
-        </Band>
+        <Section
+          id="documents"
+          label="Documents"
+          title={<>{product.name} <em>documents</em></>}
+          link={{ href: docsHref, label: "Open the documents" }}
+          intro={`${docCount}: the specification, technical data, safety data and the colour card, in the library.`}
+          tone={toneOf("documents")}
+        />
       )}
 
-      {/* ── Related systems ──────── */}
+      {/* ── Related systems — hairline rows: the category as the small voice,
+             the name, one line; the whole row is the link. ──────── */}
       {related.length > 0 && (
-        <Band tone={relatedTone}>
-          <h2>Related systems we install</h2>
-
-          <div
-            className={`mt-10 grid gap-6 max-[700px]:grid-cols-1 ${
-              related.length >= 3 ? "grid-cols-3" : "grid-cols-2"
-            }`}
-          >
+        <Section title={<>Related <em>systems</em></>} tone={toneOf("related")} wide>
+          <ul role="list">
             {related.map((p) => (
-              <article
+              <li
                 key={p.slug}
-                className={`card card-panel min-h-[190px] ${
-                  relatedTone === "warm" ? "bg-surface" : ""
-                }`}
+                className="relative grid grid-cols-12 gap-x-10 gap-y-1 border-t border-hairline py-6 last:border-b max-[700px]:grid-cols-1"
               >
-                <div className="label">{p.category}</div>
-
-                <h3 className="mt-[18px]">
-                  {p.name}
-                  {p.mark && <sup className="ml-[1px] text-[0.55em] font-normal">{p.mark}</sup>}
-                </h3>
-
-                <p className="mt-2 max-w-[52ch] text-[15px] leading-[1.55] text-ink-body">
-                  {p.tagline}
-                </p>
-
                 <Link
                   href={`/products/${p.slug}`}
-                  className="arrow-link mt-auto pt-6"
-                  aria-label={`Explore ${p.name}`}
-                >
-                  Explore <span aria-hidden="true">&rarr;</span>
-                </Link>
-              </article>
+                  aria-label={`${p.name}, the system`}
+                  className="absolute inset-0 z-[2]"
+                />
+                <span className="label col-span-3 pt-1 max-[700px]:col-span-1">{plainCase(p.category)}</span>
+                <div className="col-span-9 min-w-0 max-[700px]:col-span-1">
+                  <h3>
+                    {p.name}
+                    {p.mark && <sup className="ml-[1px] text-[0.55em] font-normal">{p.mark}</sup>}
+                  </h3>
+                  <p className="mt-2 max-w-[60ch] text-[16px] leading-[1.55] text-ink-body [text-wrap:pretty]">
+                    {p.tagline}
+                  </p>
+                </div>
+              </li>
             ))}
-          </div>
-        </Band>
+          </ul>
+        </Section>
       )}
     </main>
   )

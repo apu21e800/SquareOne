@@ -21,7 +21,7 @@ import { products } from "@/lib/products"
 const stats: { number: string; label: string }[] = [
   { number: "25+", label: "years installing decorative pavement across BC" },
   { number: "04", label: "services: stamped asphalt, coatings, thermoplastic, vapour blasting" },
-  { number: String(products.length).padStart(2, "0"), label: "pavement systems installed — StreetPrint®, StreetBond® and TrafficPatterns™ among them" },
+  { number: String(products.length).padStart(2, "0"), label: "pavement systems installed (StreetPrint®, StreetBond® and TrafficPatterns™ among them)" },
   { number: "Free", label: "site visit and written quote, Lower Mainland and Vancouver Island" },
 ]
 

@@ -11,7 +11,7 @@ import DocPreviewModal, { type PreviewTarget } from "@/components/documents/DocP
  * Specification library — rebuilt 5 Sept 2026 (Vern: "the Resources page
  * aesthetic and filter organization needs work").
  *
- *   Desktop   a sticky rail on the left (System, then Type, with counts) and
+ *   Desktop   a rail on the left (System, then Type, with counts) and
  *             the documents on the right under one search field
  *   Phone     the same two filters as selects — the FilterBar /projects and
  *             /blog use — so the three indexes read as one system
@@ -21,9 +21,16 @@ import DocPreviewModal, { type PreviewTarget } from "@/components/documents/DocP
  *             Download / Open) and Download
  *             (same-origin /docs/, so `download` is honoured)
  *
- * Browsing is grouped by system with a sticky heading per group; a type
- * filter or a search cuts across systems, so those views flatten into one
- * list with the system named on every row.
+ * Browsing is grouped by system with a heading per group; a type filter or
+ * a search cuts across systems, so those views flatten into one list with
+ * the system named on every row.
+ *
+ * 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.7): restyled in place — the
+ * rail's active item is an ink rule, not an orange one; labels and counts
+ * are the small serif voice; rows are divided by hairlines with underlined
+ * Preview and Download words; nothing is sticky (the brief: nothing sticky
+ * but the phone's quote bar); square corners. The previews and the modal
+ * work as they did.
  */
 
 const ALL = "all" as const
@@ -45,14 +52,14 @@ function RailItem({
         type="button"
         aria-pressed={active}
         onClick={onClick}
-        className={`flex w-full items-baseline justify-between gap-3 border-l-2 py-[7px] pl-4 text-left text-[14px] transition-colors ${
+        className={`flex w-full items-baseline justify-between gap-3 border-l py-[6px] pl-4 text-left text-[15.5px] transition-colors ${
           active
-            ? "border-[color:var(--accent)] font-semibold text-[color:var(--ink)]"
-            : "border-transparent font-medium text-[color:var(--ink-muted)] hover:border-[color:var(--hairline-strong)] hover:text-[color:var(--ink)]"
+            ? "border-ink text-ink"
+            : "border-transparent text-ink-muted hover:border-[color:var(--hairline-strong)] hover:text-ink"
         }`}
       >
-        <span>{label}</span>
-        <span className="text-[12px] tabular-nums text-[color:var(--hairline-strong)]">{count}</span>
+        <span className={active ? "underline decoration-1 underline-offset-[5px]" : ""}>{label}</span>
+        <span className="text-[13px] italic tabular-nums text-ink-muted">{count}</span>
       </button>
     </li>
   )
@@ -115,9 +122,9 @@ export default function ResourceLibrary({ groups }: { groups: ResourceGroup[] })
 
       {/* ── Rail ──────── */}
       <aside className="col-span-3 max-[1000px]:hidden">
-        <div className="sticky top-[calc(var(--bar-h)+32px)]">
-          <div className="label">System</div>
-          <ul className="mt-3 border-l border-[color:var(--hairline)]">
+        <div>
+          <span className="label">System</span>
+          <ul className="mt-3 border-l border-hairline" role="list">
             <RailItem active={product === ALL} onClick={() => setProduct(ALL)} label="All systems" count={total} />
             {groups.map((g) => (
               <RailItem
@@ -130,8 +137,8 @@ export default function ResourceLibrary({ groups }: { groups: ResourceGroup[] })
             ))}
           </ul>
 
-          <div className="label mt-9">Type</div>
-          <ul className="mt-3 border-l border-[color:var(--hairline)]">
+          <span className="label mt-9">Type</span>
+          <ul className="mt-3 border-l border-hairline" role="list">
             <RailItem active={docType === ALL} onClick={() => setDocType(ALL)} label="All types" count={total} />
             {TYPE_ORDER.map((t) => (
               <RailItem
@@ -144,7 +151,7 @@ export default function ResourceLibrary({ groups }: { groups: ResourceGroup[] })
             ))}
           </ul>
 
-          <p className="mt-9 max-w-[26ch] text-[13px] leading-[1.6] text-[color:var(--ink-muted)]">
+          <p className="mt-9 max-w-[26ch] text-[14.5px] italic leading-[1.6] text-ink-muted">
             Preview opens page one of the document. The PDF carries the full document.
           </p>
         </div>
@@ -153,8 +160,8 @@ export default function ResourceLibrary({ groups }: { groups: ResourceGroup[] })
       {/* ── Documents ──────── */}
       <div className="col-span-9 min-w-0 max-[1000px]:col-span-1">
         {/* Search */}
-        <label className="flex h-14 items-center gap-3 rounded-[2px] border border-[color:var(--hairline)] bg-white px-4 transition-colors focus-within:border-[color:var(--ink)]">
-          <svg aria-hidden="true" width="17" height="17" viewBox="0 0 18 18" className="shrink-0 text-[color:var(--ink-muted)]">
+        <label className="flex h-14 items-center gap-3 border border-hairline bg-white px-4 transition-colors focus-within:border-ink">
+          <svg aria-hidden="true" width="17" height="17" viewBox="0 0 18 18" className="shrink-0 text-ink-muted">
             <circle cx="8" cy="8" r="6.25" stroke="currentColor" strokeWidth="1.5" fill="none" />
             <path d="M12.5 12.5L16.5 16.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
           </svg>
@@ -164,14 +171,14 @@ export default function ResourceLibrary({ groups }: { groups: ResourceGroup[] })
             onChange={(e) => setQuery(e.target.value)}
             placeholder={`Search ${total} documents`}
             aria-label="Search documents"
-            className="min-w-0 flex-1 border-0 bg-transparent text-[16px] text-[color:var(--ink)] outline-none placeholder:text-[#A9A297]"
+            className="min-w-0 flex-1 border-0 bg-transparent text-[16px] text-ink outline-none placeholder:text-[#A9A297]"
           />
           {query && (
             <button
               type="button"
               onClick={() => setQuery("")}
               aria-label="Clear search"
-              className="text-[13px] font-semibold text-[color:var(--ink-muted)] hover:text-[color:var(--ink)]"
+              className="link cursor-pointer"
             >
               Clear
             </button>
@@ -210,16 +217,12 @@ export default function ResourceLibrary({ groups }: { groups: ResourceGroup[] })
         </div>
 
         {/* Count row (desktop) */}
-        <div className="mt-6 flex items-baseline justify-between gap-6 border-b border-[color:var(--hairline)] pb-3 max-[1000px]:hidden">
+        <div className="mt-6 flex items-baseline justify-between gap-6 border-b border-hairline pb-3 max-[1000px]:hidden">
           <span className="label" aria-live="polite">
             {summary}
           </span>
           {active && (
-            <button
-              type="button"
-              onClick={clear}
-              className="text-[13px] font-semibold text-[color:var(--ink-muted)] underline-offset-4 hover:text-[color:var(--ink)] hover:underline"
-            >
+            <button type="button" onClick={clear} className="link cursor-pointer">
               Clear filters
             </button>
           )}
@@ -227,13 +230,13 @@ export default function ResourceLibrary({ groups }: { groups: ResourceGroup[] })
 
         {shown === 0 ? (
           <div className="py-20 text-center">
-            <p className="text-[17px] text-[color:var(--ink-body)]">No documents match that combination.</p>
-            <button type="button" onClick={clear} className="arrow-link mt-5">
-              Clear filters <span aria-hidden="true">&rarr;</span>
+            <p className="text-ink-body">No documents match that combination.</p>
+            <button type="button" onClick={clear} className="link mt-5 cursor-pointer">
+              Clear filters
             </button>
           </div>
         ) : flat ? (
-          <ul className="mt-2 divide-y divide-[color:var(--hairline)]">
+          <ul className="mt-2 divide-y divide-hairline" role="list">
             {flatRows.map(({ doc, product: p }) => (
               <DocRow key={doc.href} doc={doc} product={p} showProduct onPreview={setTarget} />
             ))}
@@ -242,15 +245,15 @@ export default function ResourceLibrary({ groups }: { groups: ResourceGroup[] })
           <div className="flex flex-col gap-12 pt-6">
             {filtered.map((group) => (
               <section key={group.slug} id={group.slug} aria-labelledby={`lib-${group.slug}`}>
-                <div className="sticky top-[var(--bar-h)] z-10 flex items-baseline justify-between gap-4 border-b border-[color:var(--hairline)] bg-white pt-3 pb-[10px]">
+                <div className="flex items-baseline justify-between gap-4 border-b border-hairline pt-3 pb-[10px]">
                   <h2 id={`lib-${group.slug}`} className="label">
                     {group.product}
                   </h2>
-                  <span className="text-[12px] font-semibold tracking-[0.04em] text-[color:var(--ink-muted)]">
+                  <span className="text-[14.5px] italic text-ink-muted">
                     {group.docs.length === 1 ? "1 document" : `${group.docs.length} documents`}
                   </span>
                 </div>
-                <ul className="mt-1 divide-y divide-[color:var(--hairline)]">
+                <ul className="mt-1 divide-y divide-hairline" role="list">
                   {group.docs.map((doc) => (
                     <DocRow key={doc.href} doc={doc} product={group.product} onPreview={setTarget} />
                   ))}

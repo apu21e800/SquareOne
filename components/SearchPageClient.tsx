@@ -10,6 +10,11 @@ import { searchEntries, type SearchEntry } from "@/lib/search-score"
  * Full search page — same index and scorer as the nav overlay, rendered as
  * a permanent, linkable page (/search?q=…). Image results cap at 24 per
  * query to keep the page honest to scroll; every other group lists in full.
+ *
+ * 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.7): restyled only — the serif
+ * in the field and the rows, square thumbnails, captions under the image
+ * results in the small voice, the document actions as underlined words, no
+ * hover zoom, no arrow glyphs, no orange on hover. Behaviour is unchanged.
  */
 
 const IMAGE_CAP = 24
@@ -42,8 +47,8 @@ export default function SearchPageClient() {
 
   return (
     <div>
-      <label className="flex items-center gap-4 border-b-2 border-[#14161A] pb-4">
-        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 18 18" className="shrink-0 text-[#767B82]">
+      <label className="flex items-center gap-4 border-b border-ink pb-4">
+        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 18 18" className="shrink-0 text-ink-muted">
           <circle cx="8" cy="8" r="6.25" stroke="currentColor" strokeWidth="1.5" fill="none" />
           <path d="M12.5 12.5L16.5 16.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
         </svg>
@@ -54,17 +59,18 @@ export default function SearchPageClient() {
           placeholder="Search products, projects, documents, pages…"
           aria-label="Search the site"
           autoFocus
-          className="min-w-0 flex-1 border-0 bg-transparent text-[22px] text-[#14161A] outline-none placeholder:text-[#A9A297] max-[700px]:text-[18px]"
+          className="search-input min-w-0 flex-1 border-0 bg-transparent text-[22px] text-ink outline-none placeholder:text-ink-muted max-[700px]:text-[18px]"
+          style={{ fontFamily: "var(--font-text)" }}
         />
       </label>
 
-      <p aria-live="polite" className="mt-4 text-[13px] font-semibold tracking-[0.04em] text-[color:var(--ink-muted)]">
+      <p aria-live="polite" className="label mt-4">
         {query.trim() === ""
-          ? "Type to search the whole site — pages, systems, projects, documents, the blog and imagery."
+          ? "Type to search the whole site: pages, systems, projects, documents, the blog and imagery."
           : !index
             ? "Loading the index…"
             : total === 0
-              ? `Nothing for "${query}" — try a product, city or system name.`
+              ? `Nothing for "${query}", try a product, city or system name.`
               : `${total} result${total === 1 ? "" : "s"} for "${query}"`}
       </p>
 
@@ -74,86 +80,70 @@ export default function SearchPageClient() {
             group.type === "image" ? group.entries.slice(0, IMAGE_CAP) : group.entries
           return (
             <div key={group.type}>
-              <div className="flex items-baseline justify-between border-b border-[color:var(--hairline)] pb-[14px]">
+              <div className="flex items-baseline justify-between border-b border-hairline pb-[14px]">
                 <h2 className="label">{group.label}</h2>
-                <span className="shrink-0 text-[12px] font-semibold tracking-[0.04em] text-[color:var(--ink-muted)]">
-                  {group.total}
-                </span>
+                <span className="shrink-0 text-[14px] italic text-ink-muted tabular-nums">{group.total}</span>
               </div>
 
               {group.type === "image" ? (
-                <div className="mt-6 grid grid-cols-6 gap-3 max-[900px]:grid-cols-4 max-[560px]:grid-cols-3">
+                <ul className="mt-6 grid grid-cols-6 gap-x-3 gap-y-5 max-[900px]:grid-cols-4 max-[560px]:grid-cols-3">
                   {entries.map((entry) => (
-                    <Link
-                      key={entry.image}
-                      href={entry.href}
-                      title={`${entry.title} — ${entry.subtitle ?? ""}`}
-                      className="group block"
-                    >
-                      <span className="relative block aspect-[4/3] overflow-hidden rounded-[2px] bg-[#F1EEE9]">
-                        <Image
-                          src={entry.image!}
-                          alt={entry.title}
-                          fill
-                          sizes="(max-width: 560px) 33vw, (max-width: 900px) 25vw, 200px"
-                          className="object-cover transition-transform duration-300 group-hover:scale-[1.04]"
-                        />
-                      </span>
-                      <span className="mt-1 block truncate text-[11px] leading-[1.4] text-[color:var(--ink-muted)]">
-                        {entry.title}
-                      </span>
-                    </Link>
+                    <li key={entry.image}>
+                      <Link href={entry.href} title={`${entry.title}, ${entry.subtitle ?? ""}`} className="block">
+                        <figure className="m-0">
+                          <span className="relative block aspect-[4/3] w-full overflow-hidden bg-surface-stone">
+                            <Image
+                              src={entry.image!}
+                              alt={entry.title}
+                              fill
+                              sizes="(max-width: 560px) 33vw, (max-width: 900px) 25vw, 200px"
+                              className="object-cover"
+                            />
+                          </span>
+                          <figcaption className="cap mt-[6px] truncate text-[13px]">{entry.title}</figcaption>
+                        </figure>
+                      </Link>
+                    </li>
                   ))}
-                </div>
+                </ul>
               ) : (
                 <ul className="mt-2">
                   {entries.map((entry) => (
                     <li
                       key={`${entry.href}-${entry.title}`}
-                      className="flex items-center gap-4 border-b border-[color:var(--hairline)] py-[12px] last:border-b-0"
+                      className="flex items-center gap-4 border-b border-hairline py-[12px] last:border-b-0"
                     >
                       {entry.image && (
-                        <span className="relative block h-[46px] w-[62px] shrink-0 overflow-hidden rounded-[2px] bg-[#F1EEE9]">
+                        <span className="relative block h-[46px] w-[62px] shrink-0 overflow-hidden bg-surface-stone">
                           <Image src={entry.image} alt="" fill sizes="62px" className="object-cover" />
                         </span>
                       )}
                       {entry.download ? (
                         <>
                           <span className="min-w-0 flex-1">
-                            <span className="block truncate text-[15px] font-medium text-[color:var(--ink)]">
-                              {entry.title}
-                            </span>
+                            <span className="block truncate text-[16px] text-ink">{entry.title}</span>
                             {entry.subtitle && (
-                              <span className="mt-[2px] block truncate text-[13px] text-[color:var(--ink-muted)]">
+                              <span className="mt-[2px] block truncate text-[14px] italic text-ink-muted">
                                 {entry.subtitle}
                               </span>
                             )}
                           </span>
-                          <span className="flex shrink-0 items-center gap-4">
-                            <a
-                              href={entry.href}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-[13px] font-semibold text-[color:var(--ink)] underline-offset-4 hover:underline"
-                            >
+                          <span className="flex shrink-0 items-center gap-5">
+                            <a href={entry.href} target="_blank" rel="noopener noreferrer" className="link">
                               Preview
                             </a>
-                            <a
-                              href={entry.href}
-                              download
-                              className="text-[13px] font-semibold text-[color:var(--ink)] underline-offset-4 hover:underline"
-                            >
-                              Download <span aria-hidden="true">&darr;</span>
+                            <a href={entry.href} download className="link">
+                              Download
                             </a>
                           </span>
                         </>
                       ) : (
-                        <Link href={entry.href} className="group min-w-0 flex-1">
-                          <span className="block truncate text-[15px] font-medium text-[color:var(--ink)] transition-colors group-hover:text-[color:var(--accent-deep)]">
+                        <Link href={entry.href} className="min-w-0 flex-1">
+                          <span className="block truncate text-[16px] text-ink underline decoration-1 underline-offset-[5px] decoration-transparent transition-colors hover:decoration-[color:var(--ink)]">
                             {entry.title}
                           </span>
                           {entry.subtitle && (
-                            <span className="mt-[2px] block truncate text-[13px] text-[color:var(--ink-muted)]">
+                            <span className="mt-[2px] block truncate text-[14px] italic text-ink-muted">
                               {entry.subtitle}
                             </span>
                           )}
@@ -165,8 +155,8 @@ export default function SearchPageClient() {
               )}
 
               {group.type === "image" && group.total > IMAGE_CAP && (
-                <p className="mt-3 text-[12px] text-[color:var(--ink-muted)]">
-                  Showing {IMAGE_CAP} of {group.total} images — narrow the search to see the rest.
+                <p className="mt-3 text-[14px] italic text-ink-muted">
+                  Showing {IMAGE_CAP} of {group.total} images, narrow the search to see the rest.
                 </p>
               )}
             </div>

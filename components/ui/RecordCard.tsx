@@ -1,16 +1,34 @@
 import Image from "next/image"
 import Link from "next/link"
+import NoPhoto from "@/components/ui/NoPhoto"
+import type { ReactNode } from "react"
 
 /**
- * The one record card — a project or a blog post reads the same way:
- * photograph with a caption (place · system · year, or topic · year),
- * kicker, title, one or two lines, a quiet meta line. `lead` turns the first
- * card of an index into the wide opener (image left, text right). Used by
+ * The one record — a project or a blog post reads the same way. Used by
  * /projects and /blog so the two indexes are one system.
  *
- * On a phone the standard card folds into a list row — thumbnail left,
+ * 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.7): the photo card — image
+ * with a caption over a gradient, a chip, a title, an arrow — was HUB's
+ * card in light mode. The same record, set the own-company way:
+ *
+ *   standard   the photograph, square-cornered, with its caption UNDER it
+ *              in the serif (place · system · year, or topic · year); then
+ *              the kicker as the small voice, the title (which is the link),
+ *              a line or two, and the quiet meta line. No chip, no arrow, no
+ *              box, no hover zoom.
+ *   lead       the first record of an index as a hairline row: the
+ *              photograph left with its caption under it, the text beside
+ *              it. No border, no background.
+ *
+ * On a phone the standard record folds into a list row — thumbnail left,
  * kicker · title · meta right — so thirty projects or fifty posts scan in a
- * few screens instead of a long scroll of full-width photographs.
+ * few screens instead of a long scroll of full-width photographs. That fold
+ * hides the caption under the thumbnail; the meta line carries the place.
+ *
+ * 30 Sept 2026 QA: the line or two under a title is clamped by the browser
+ * (three lines, the ellipsis at the line's end) instead of cut at a
+ * character count, so a sentence is never sawn off in the middle; the lead
+ * record's title is the h2 of its index.
  */
 export interface RecordCardProps {
   href: string
@@ -20,7 +38,8 @@ export interface RecordCardProps {
   kicker?: string
   title: string
   description?: string
-  meta?: string
+  /** The quiet last line; a node when a phone needs a different one (the place, when the caption is folded away). */
+  meta?: ReactNode
   lead?: boolean
   priority?: boolean
 }
@@ -39,92 +58,85 @@ export default function RecordCard({
 }: RecordCardProps) {
   if (lead) {
     return (
-      <Link
-        href={href}
-        className="card group grid grid-cols-[7fr_5fr] items-stretch overflow-hidden rounded-[2px] border border-[color:var(--hairline)] bg-[color:var(--surface-warm)] max-[820px]:grid-cols-1"
-      >
-        <div className="relative aspect-[16/10] overflow-hidden bg-[color:var(--surface-stone)]">
-          {src && (
-            <Image
-              src={src}
-              alt={alt}
-              fill
-              priority={priority}
-              sizes="(max-width: 820px) 100vw, 700px"
-              className="object-cover"
-            />
-          )}
-          {src && caption && (
-            <>
-              <div aria-hidden="true" className="scrim scrim-light" />
-              <div className="caption">{caption}</div>
-            </>
-          )}
-        </div>
+      <article className="row">
+        <Link href={href} className="block" tabIndex={-1} aria-hidden="true">
+          <figure className="m-0">
+            <span className="relative block aspect-[4/3] w-full overflow-hidden bg-surface-stone">
+              {src ? (
+                <Image
+                  src={src}
+                  alt={alt}
+                  fill
+                  priority={priority}
+                  sizes="(max-width: 700px) 100vw, 520px"
+                  className="object-cover"
+                />
+              ) : (
+                <NoPhoto />
+              )}
+            </span>
+            {caption && <figcaption className="cap">{caption}</figcaption>}
+          </figure>
+        </Link>
 
-        <div className="flex flex-col justify-center px-12 py-10 max-[820px]:px-7 max-[820px]:py-8 max-[600px]:px-6 max-[600px]:py-7">
-          {kicker && (
-            <div>
-              <span className="tag">{kicker}</span>
-            </div>
-          )}
-          <h3 className="mt-5 text-[28px] leading-[1.2] [text-wrap:balance] max-[820px]:text-[22px] max-[600px]:mt-4">{title}</h3>
+        <div className="min-w-0">
+          {kicker && <span className="label">{kicker}</span>}
+          <h2 className={`card-title rc-title-lead [text-wrap:balance] ${kicker ? "mt-2" : ""}`}>
+            <Link href={href} className="text-ink hover:underline hover:underline-offset-[5px] hover:decoration-1">
+              {title}
+            </Link>
+          </h2>
           {description && (
-            <p className="mt-[14px] max-w-[48ch] text-[16px] leading-[1.65] text-[color:var(--ink-body)] [text-wrap:pretty] max-[600px]:line-clamp-3 max-[600px]:text-[15px]">
+            <p className="mt-3 max-w-[52ch] text-[16px] leading-[1.6] text-ink-body [text-wrap:pretty] max-[600px]:line-clamp-3 max-[600px]:text-[15px]">
               {description}
             </p>
           )}
-          {meta && <div className="mt-4 text-[13px] text-[color:var(--ink-muted)]">{meta}</div>}
-          <span className="arrow-link mt-6 max-[600px]:mt-5">
-            Read <span aria-hidden="true">&rarr;</span>
-          </span>
+          {meta && <p className="mt-3 text-[15px] italic text-ink-muted">{meta}</p>}
         </div>
-      </Link>
+      </article>
     )
   }
 
   return (
-    <Link
-      href={href}
-      className="card group block max-[600px]:grid max-[600px]:grid-cols-[124px_1fr] max-[600px]:items-start max-[600px]:gap-x-4"
-    >
-      <div className="relative aspect-[16/10] overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)] max-[600px]:aspect-[4/3]">
-        {src && (
-          <Image
-            src={src}
-            alt={alt}
-            fill
-            sizes="(max-width: 600px) 124px, (max-width: 700px) 100vw, (max-width: 1000px) 50vw, 400px"
-            className="object-cover"
-          />
-        )}
-        {src && caption && (
-          <>
-            <div aria-hidden="true" className="scrim scrim-light max-[600px]:hidden" />
-            <div className="caption max-[600px]:hidden">{caption}</div>
-          </>
-        )}
-      </div>
+    <article className="max-[600px]:grid max-[600px]:grid-cols-[124px_1fr] max-[600px]:items-start max-[600px]:gap-x-4">
+      <Link href={href} className="block" tabIndex={-1} aria-hidden="true">
+        <figure className="m-0">
+          <span className="relative block aspect-[4/3] w-full overflow-hidden bg-surface-stone">
+            {src ? (
+              <Image
+                src={src}
+                alt={alt}
+                fill
+                sizes="(max-width: 600px) 124px, (max-width: 700px) 100vw, (max-width: 1000px) 50vw, 400px"
+                className="object-cover"
+              />
+            ) : (
+              <NoPhoto />
+            )}
+          </span>
+          {caption && <figcaption className="cap max-[600px]:hidden">{caption}</figcaption>}
+        </figure>
+      </Link>
 
-      <div className="min-w-0">
-        {kicker && (
-          <div className="mt-5 max-[600px]:mt-0">
-            <span className="tag max-[600px]:px-2 max-[600px]:py-[3px] max-[600px]:text-[11px]">{kicker}</span>
-          </div>
-        )}
+      <div className="min-w-0 mt-4 max-[600px]:mt-0">
+        {kicker && <span className="label">{kicker}</span>}
 
-        <h3 className="mt-[14px] [text-wrap:pretty] max-[600px]:mt-2 max-[600px]:text-[16px] max-[600px]:leading-[1.35]">{title}</h3>
+        <h3 className={`rc-title [text-wrap:pretty] ${kicker ? "mt-1" : ""}`}>
+          <Link href={href} className="text-ink hover:underline hover:underline-offset-[5px] hover:decoration-1">
+            {title}
+          </Link>
+        </h3>
 
         {description && (
-          <p className="mt-[10px] line-clamp-3 text-[15px] leading-[1.6] text-[color:var(--ink-body)] max-[600px]:hidden">
+          <p className="mt-2 line-clamp-3 text-[15px] leading-[1.55] text-ink-body [text-wrap:pretty] max-[600px]:hidden">
             {description}
           </p>
         )}
 
         {meta && (
-          <div className="mt-[10px] text-[13px] text-[color:var(--ink-muted)] max-[600px]:mt-[6px] max-[600px]:text-[12.5px]">{meta}</div>
+          <p className="mt-2 text-[15px] italic text-ink-muted max-[600px]:mt-1 max-[600px]:text-[14px]">{meta}</p>
         )}
       </div>
-    </Link>
+    </article>
   )
 }

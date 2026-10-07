@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Client
 Square One Paving — BC's trusted decorative pavement studio since 2000.
 Independent BC installer of HUB Surface Systems products, serving the Lower Mainland and Vancouver Island.
-**Installer, not manufacturer.** HUB makes StreetPrint, StreetBond, TrafficPatterns etc.; Square One installs them. Never "our StreetPrint", never "we developed"; performance figures are HUB's and are attributed; ® / ™ on first mention per page; HUB warrants the material, Square One warrants the workmanship; no pricing, lead times or stock claims.
+**Installer, not manufacturer.** HUB makes StreetPrint, StreetBond, TrafficPatterns etc.; Square One installs them. Never "our StreetPrint", never "we developed"; performance figures are HUB's and are attributed; ® / ™ on first mention per page; no warranty wording anywhere on the site (the client on the preview, 6 Oct 2026: "remove anything about warranty"; the terms page's legal "No warranty on the Site" clause is not about the work and stays); no pricing, lead times or stock claims.
 - Office: 19-11720 Stewart Crescent, Maple Ridge, BC V2X 9E7 (office@squareonepaving.com / 604-612-6209)
 - Vancouver Island is a service region with its own line (250-391-0270) — never an office, address or "base"
 - Toll-free 1-877-391-0270. No other phone numbers, emails or addresses belong on the site.
@@ -23,23 +23,18 @@ for municipalities, developers, and contractors across BC.
 FAQPage / BreadcrumbList / Service JSON-LD via `components/JsonLd.tsx`; `/llms.txt` is generated from lib data (app/llms.txt/route.ts); every metadata description goes through `clampDescription` (lib/seo.ts). Service FAQs live in lib/services.ts and may only restate what the page already says.
 
 ## Driveway composer
-`components/DrivewayComposer.tsx` — pattern × colour sample board (drawn, not photographed). On /driveways and /driveways/[city]; the home materials board deep-links into it; the enquiry arrives at /contact pre-filled.
+`components/DrivewayComposer.tsx` — pattern × colour sample board (drawn, not photographed). The file exists but renders nowhere as of 26 Sept 2026: no page imports it (held back from /driveways on 19 Sept; the home materials board links to /patterns and the colour chart instead). Do not build on it; leaving or moving it is the maintainer's call (docs/OWN-COMPANY-BRIEF.md §2).
 
 ## Documents (lib/resources.ts)
 107 hosted PDFs in /public/docs, page-one previews pre-rendered to /public/docs-previews by `node scripts/doc-previews.mjs` (run it after adding or replacing a PDF; needs poppler + Pillow locally). 36 documents carry `hub:` — the identical file on hubss.com, verified against HUB's own registry. Product pages render a typed rail (components/documents/DocumentRail); /resources and the search overlay share the preview modal.
 
 ## Brand
-<!-- Type system: ONE face (canon §2.5 as amended 4 Sept 2026, Vern's call) —
-     Poppins carries display at 600 spaced caps and body at 400/500. Nothing
-     renders below weight 400. The earlier Fraunces + Inter amendment
-     (2026-08-28) is superseded. See app/layout.tsx.
-     11 Sept 2026: a Futura OPTION exists for comparison only — Jost display +
-     Inter text behind <html data-type="futura">, switched by
-     components/TypeToggle (visible on preview deployments) or ?type=futura.
-     Poppins stays the default until Vern and the client choose. -->
-- Colors: Warm beige background (#F5F3F0), orange accent (#C85A3A), stone (#8B8680), charcoal (#2D2D2D)
-- Tone: Professional, practical, BC-focused
-- Positioning: "BC's Trusted Decorative Pavement Applicators" — quality work that lasts
+Current as of 27 Sept 2026 (the own-company restyle, docs/OWN-COMPANY-BRIEF.md). The surface lives in `app/own.css`, which loads last and wins; `app/globals.css` and `app/refine.css` hold the history under it.
+- Type: Futura LT Bold for display, in sentence case; Source Serif 4 for reading text and for the small voice (labels, captions, notes) in italic. No tracked capitals. The type switch (preview deployments only) can still put Inter back.
+- Colour: white ground (#FFFFFF) with two light neutral greys (#F4F5F6, #EAECEE) and hairlines (#E1E4E7); ink #14161A; charcoal (#2D3033) for the footer and the phone quote bar; terracotta for action only: #C85A3A is the brand accent, #B24E2E the button fill (white on it 5.2 : 1), #963F24 pressed. The copper in the logo is the logo's own. Vapour blasting keeps its water blue (#1F6FB2). Never HUB's cream (#F6F4EF), near-black (#101010) or bright orange (#F97316).
+- Shape: square corners everywhere; rows divided by hairlines instead of cards; captions under photographs, never over them (the hero reel and the page openers excepted); a section's label in a left margin column; one primary button per view ("Get a quote"); links are underlined ink; no arrow glyphs; no em dashes in copy.
+- Tone: professional, practical, BC-focused; plain, local, "we". Supplier words (specify, submittal, spec package) only on /specifiers.
+- Positioning: "BC's Trusted Decorative Pavement Applicators": quality work that lasts
 - Service area: Lower Mainland + Vancouver Island
 
 ## Tech Stack
@@ -367,6 +362,13 @@ Bisected on 21 Sept 2026: it is `app/icon.png` alone. The same image at 512px
 So the icon ships at 1024px. If a future pass shrinks or re-encodes it and the
 build starts panicking about dependency tracking, this is why: check the file
 size before looking anywhere else.
+
+Since 28 Sept 2026 the PNG is **`app/icon1.png`**, and the whole set is the
+official logo mark, generated by `python3 scripts/icons.py` from the logo SVG
+in `public/images/S1_update_v2/logos/offical logos/`. With `app/icon.svg` and
+`app/icon.png` side by side, a clean local build gave both routes one Turbopack
+module id and served the PNG at `/icon.svg`; different base names keep them
+apart. Check `.next/server/app/icon.svg.meta` says `image/svg+xml` after a build.
 
 `app/favicon.ico` has its own rule: its sub-images must be **RGBA**. Written in
 RGB the build fails with `Format error decoding Ico: The PNG is not in RGBA

@@ -192,14 +192,14 @@ export interface Pattern {
  */
 export const STREETPRINT_PATTERNS: Pattern[] = [
   { kind: "field", id: "ashlar-slate", name: "Ashlar Slate", family: "HUB Section 4.0" },
-  { kind: "field", id: "random-stone", name: "Random Stone", family: "HUB Section 6.0 — Stone Templates" },
+  { kind: "field", id: "random-stone", name: "Random Stone", family: "HUB Section 6.0: Stone Templates" },
   { kind: "field", id: "offset-brick", name: "Offset Brick", family: "HUB Section 1.0" },
   { kind: "field", id: "herringbone", name: "Standard Herringbone", family: "HUB Section 3.0" },
-  { kind: "field", id: "standard-tile", name: "Standard Tile", family: "HUB Section 9.0 — Tile Sets" },
-  { kind: "field", id: "offset-tile", name: "Offset Tile", family: "HUB Section 9.0 — Tile Sets" },
-  { kind: "border", id: "soldier-course", name: "Soldier Course", family: "HUB Section 10.0 — Border Templates" },
-  { kind: "border", id: "texas-cobble", name: "Texas Cobble", family: "HUB Section 10.0 — Border Templates" },
-  { kind: "border", id: "stacked-brick", name: "Stacked Brick", family: "HUB Section 10.0 — Border Templates" },
+  { kind: "field", id: "standard-tile", name: "Standard Tile", family: "HUB Section 9.0: Tile Sets" },
+  { kind: "field", id: "offset-tile", name: "Offset Tile", family: "HUB Section 9.0: Tile Sets" },
+  { kind: "border", id: "soldier-course", name: "Soldier Course", family: "HUB Section 10.0: Border Templates" },
+  { kind: "border", id: "texas-cobble", name: "Texas Cobble", family: "HUB Section 10.0: Border Templates" },
+  { kind: "border", id: "stacked-brick", name: "Stacked Brick", family: "HUB Section 10.0: Border Templates" },
 ]
 
 /** Square One's own sheet, hosted here — the source for the list above. */

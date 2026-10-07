@@ -37,10 +37,12 @@ export interface SiteSettings {
 
 export const DEFAULT_SETTINGS: SiteSettings = {
   positioning:
-    // 21 Sept 2026: the three trades were listed here and again in the
-    // "What we do" column beside it — the same words twice, in one glance.
-    // The line carries what the column cannot: how long, and where.
-    "Decorative pavement across British Columbia since 2000 — one office in Maple Ridge, crews on both sides of the Strait.",
+    // 26 Sept 2026: the footer is a letterhead now (components/Footer.tsx),
+    // with one row of links instead of a "What we do" column, so the line
+    // can name the trades again without saying them twice. Plain, local,
+    // "we" — the site's voice (docs/OWN-COMPANY-BRIEF.md §3.10).
+    // 28 Sept 2026 ("cut the fat"): one sentence.
+    "We stamp, coat and mark asphalt and concrete, with our own crews on both sides of the Strait, since 2000.",
   phoneOffice: "604-612-6209",
   phoneIsland: "250-391-0270",
   phoneTollFree: "1-877-391-0270",
@@ -51,8 +53,11 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   facebook: "https://www.facebook.com/squareonepaving/",
   linkedin: "https://www.linkedin.com/company/square-one-paving-ltd/",
   youtube: "https://www.youtube.com/channel/UCBDvB4vgdahH67BmP6FeccQ",
-  socialHeading: "Follow the work",
-  socialLede: "Installs as they happen, before-and-afters, and the crews at work.",
+  // 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.10): "Follow the work" was
+  // hubss.com's heading too. A value saved in the Studio's Site settings
+  // still overrides these two.
+  socialHeading: "Recent, on Instagram",
+  socialLede: "The crews at work, installs as they finish, and the odd before-and-after.",
 }
 
 const SETTINGS_QUERY = groq`*[_type == "siteSettings" && _id == "siteSettings"][0]{
@@ -112,20 +117,44 @@ interface SocialDoc {
 /** Until the marketing team fills the grid: six Square One installs, linking to the profile. */
 function fallbackTiles(profileUrl: string): SocialTile[] {
   const bySlug = (slug: string) => projects.find((p) => p.slug === slug)
+  // 28 Sept 2026: six installs that appear nowhere else on the home page.
+  // The grid used to repeat "Selected work", the driveway band and the
+  // vapour photograph a scroll apart. A spread of systems; every frame on
+  // the record (lib/work-captions.ts).
   const picks: { slug?: string; src?: string; alt?: string; caption: string }[] = [
-    { slug: "nanaimo-rainbow-intersection", caption: "Rainbow intersection, Nanaimo · TrafficPatternsXD" },
-    { slug: "white-rock-custom-crosswalk", caption: "Artist-designed crosswalk, White Rock · TrafficPatterns" },
-    { slug: "ubc-musqueam-crosswalk", caption: "UBC & Musqueam crosswalk, Vancouver · TrafficPatterns" },
+    // 2 Oct 2026 (Vern: "need better images for the homepage social media
+    // section"): six of the strongest frames in the library, each one
+    // holding up as a square, none of them a job the home page shows
+    // elsewhere, five systems between them. Every caption is the record's.
     {
-      src: "/images/S1_update_v2/photos/Driveways/Ten%20Mile%20Point%20Driveway%20I.jpg",
-      alt: "StreetPrint stamped asphalt driveway at Ten Mile Point, Saanich",
-      caption: "Ten Mile Point, Saanich · StreetPrint driveway",
+      src: "/images/S1_update_v2/photos/Featured%20image%20options/UBC-crosswalk-3-300dpi.jpg",
+      alt: "The UBC and Musqueam crosswalk on University Boulevard, a Musqueam design in green, blue and cream TrafficPatterns under the UBC letters",
+      caption: "UBC & Musqueam crosswalk, University Boulevard · TrafficPatterns",
     },
-    { slug: "langley-events-centre-streetbond", caption: "Circle of Life, Langley Events Centre · StreetBond" },
     {
-      src: "/images/services/vapor-blasting/generated/gen-granville-island-vapour-blasting-01-enhanced.jpg",
-      alt: "Square One crew vapour blasting at Granville Island",
-      caption: "Vapour blasting, Granville Island · surface prep",
+      src: "/images/applications/public-art/oak-bay-street-mural-crossing-streetbond-01.jpg",
+      alt: "A street mural crossing in Oak Bay, a First Nations design in black, red, yellow and teal StreetBond across the road",
+      caption: "Street mural crossing, Oak Bay · StreetBond",
+    },
+    {
+      src: "/images/S1_update_v2/photos/Featured%20image%20options/maplewoods-fire-lane-north-vancouver-streetbond-01.jpg",
+      alt: "The decorative fire lane at Maplewoods Townhomes in North Vancouver, white waves across blue StreetBond",
+      caption: "Decorative fire lane, Maplewoods, North Vancouver · StreetBond",
+    },
+    {
+      src: "/images/applications/schools-sports-courts/abbotsford-eagle-mountain-labyrinth-decomark-01.jpg",
+      alt: "The red and black DecoMark labyrinth at Eagle Mountain in Abbotsford, seen from above",
+      caption: "Eagle Mountain labyrinth, Abbotsford · DecoMark",
+    },
+    {
+      src: "/images/applications/bike-lanes/sechelt-cowrie-and-trail-lane-markings-decomark-01.jpg",
+      alt: "Salmon and canoe symbols in red DecoMark down the green bike lane at Cowrie and Trail in Sechelt",
+      caption: "Cowrie and Trail lane markings, Sechelt · DecoMark",
+    },
+    {
+      src: "/images/S1_update_v2/photos/Featured%20image%20options/Labyrinth-Maple-Ridge-c%CC%93%C9%99sq%C9%99nel%C9%99-Elementary-2-scaled-1.jpg",
+      alt: "An orange and purple StreetBond labyrinth on the playground at c\u0313\u0259sq\u0259nel\u0259 Elementary in Maple Ridge",
+      caption: "Labyrinth, c\u0313\u0259sq\u0259nel\u0259 Elementary, Maple Ridge · StreetBond",
     },
   ]
   const tiles: SocialTile[] = []

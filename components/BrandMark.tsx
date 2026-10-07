@@ -57,35 +57,41 @@ export default function BrandMark({
   tone?: Tone
   size?: "nav" | "footer"
 }) {
-  // Lockup ratio: the icon sits a shade under 2x the cap height of the
-  // wordmark, with a 10px gutter — tight enough to read as one mark.
+  // The lockup as the official file draws it (public/images/S1_update_v2/
+  // logos/offical logos/Square One logo (dark).svg): "Square One" in Futura
+  // LT Bold, sentence case, tracked -0.008em, the two words set close, the
+  // lettering's cap height a little over half the icon's height, in the
+  // logo's own grey. The site's Futura is the same cut, loaded by
+  // app/layout.tsx, so the lettering is live text that always renders in
+  // the right face (the official SVG's live <text> falls back on machines
+  // without the font, which is why it cannot ship as a file).
+  //
+  // 2 Oct 2026 (Vern: "square one font in the logo should not have
+  // changed"): the restyle had moved the body to the serif, and the wordmark
+  // inherited it as spaced capitals. It no longer inherits anything.
   const iconH = size === "footer" ? 34 : 29
-  const textSize = size === "footer" ? 17 : 15
+  const textSize = Math.round(iconH * 0.76)
   return (
     <span className="flex items-center gap-[10px]">
       <BrandIcon tone={tone} height={iconH} />
-      {/* 21 Sept 2026 (Vern: "the white version of the logo looks like a
-          thinner typeface"). It is the same weight — Futura LT ships 400 and
-          700 only, so 600 resolves to Bold either way. What changes is the
-          rendering: the body carries -webkit-font-smoothing: antialiased, and
-          grayscale antialiasing makes light-on-dark lettering shed apparent
-          weight that dark-on-light keeps. A hairline stroke in the same
-          colour puts it back, which is the usual optical correction and is
-          cheaper than shipping a second cut. */}
       <span
-        className={tone === "light" ? "text-white" : "text-[#14161A]"}
+        className={tone === "light" ? "text-white" : "text-[#595959]"}
         style={{
+          fontFamily: "var(--font-futura), Futura, 'Century Gothic', sans-serif",
           fontSize: textSize,
-          fontWeight: 600,
-          letterSpacing: "0.12em",
-          textTransform: "uppercase",
+          fontWeight: 700,
+          letterSpacing: "-0.008em",
+          lineHeight: 1,
           whiteSpace: "nowrap",
-          ...(tone === "light"
-            ? { WebkitTextStroke: "0.4px currentColor", paintOrder: "stroke fill" as const }
-            : null),
+          textTransform: "none",
+          // The hairline stroke that once thickened the light wordmark is
+          // gone (2 Oct 2026, Vern: "the white logo text looks blurry"); the
+          // bold weight carries it, and a soft shadow lifts it off a bright
+          // photograph without softening the letterforms.
+          ...(tone === "light" ? { textShadow: "0 1px 2px rgba(20, 22, 26, 0.35)" } : null),
         }}
       >
-        Square&nbsp;One
+        Square<span style={{ letterSpacing: "-0.219em" }}> </span>One
       </span>
     </span>
   )

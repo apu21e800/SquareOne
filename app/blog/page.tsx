@@ -18,9 +18,9 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   // One separator: the root template adds " | Square One Paving" (59 chars all in).
-  title: "Blog — Guides & Project Stories from BC",
+  title: "Blog: Guides & Project Stories from BC",
   description:
-    clampDescription("Project stories and practical guides from Square One Paving — stamped asphalt, StreetBond coatings, thermoplastic and vapour blasting across BC since 2000."),
+    clampDescription("Project stories and practical guides from Square One Paving: stamped asphalt, StreetBond coatings, thermoplastic and vapour blasting across BC since 2000."),
   keywords: [
     "decorative pavement blog BC",
     "StreetPrint project BC",
@@ -34,9 +34,9 @@ export const metadata: Metadata = {
     canonical: `${SITE_URL}/blog`,
   },
   openGraph: {
-    title: "Blog — Guides & Project Stories from BC | Square One Paving",
+    title: "Blog: Guides & Project Stories from BC | Square One Paving",
     description:
-      clampDescription("Project stories and practical guides from Square One Paving — decorative pavement across BC since 2000."),
+      clampDescription("Project stories and practical guides from Square One Paving: decorative pavement across BC since 2000."),
     images: [{ url: "/images/og-image.png", width: 1200, height: 600, alt: "Square One Paving" }],
   },
 }
@@ -51,8 +51,9 @@ export default async function BlogPage() {
         src="/images/hero/bowen-island-polka-dot-walkway-streetbond.jpg"
         alt="Blue, green, yellow and grey StreetBond dots along the Snug Cove walkway on Bowen Island, with an eagle asking 'Will you see me before I see you?'"
         eyebrow="Blog"
-        title="Guides and project stories"
-        lede="Materials, methods and what holds up on BC pavement — stamped asphalt, StreetBond coatings and thermoplastic markings, told project by project."
+        title={<>Project stories <em>and guides</em></>}
+        fit="Project stories and guides"
+        lede="What holds up on BC pavement, told project by project."
         caption="Bowen Island · StreetBond"
         imagePosition="center 40%"
       />

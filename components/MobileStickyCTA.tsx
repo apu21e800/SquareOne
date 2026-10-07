@@ -23,6 +23,11 @@ import { useEffect, useState } from "react"
  * bar went to the page you were already on. `usePathname` makes the route
  * reactive, and the bar now reserves its own height at the foot of the
  * document so it can never cover the last band of any page.
+ *
+ * 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.7): restyled only — the two
+ * buttons in Futura, sentence case, no tracking; the quote button keeps the
+ * `--accent-deep` fill (the one orange a view spends). Behaviour and the
+ * reserved height are as they were.
  */
 export default function MobileStickyCTA() {
   const pathname = usePathname()
@@ -48,10 +53,11 @@ export default function MobileStickyCTA() {
       {/* Spacer, phone only — the bar floats over the document, so the foot of
           every page gets its height back or the last 54px (the footer's legal
           row, a form's submit button) sits under it and cannot be tapped. It
-          carries the footer's slate so it reads as the footer, not a seam. */}
+          carries the footer's ground so it reads as the footer, not a seam
+          (white since 28 Sept 2026, when the footer went to paper). */}
       <div
         aria-hidden="true"
-        className="h-[54px] bg-[color:var(--surface-slate)] lg:hidden"
+        className="h-[54px] bg-white lg:hidden"
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       />
 
@@ -69,8 +75,8 @@ export default function MobileStickyCTA() {
           <a
             href="tel:+16046126209"
             tabIndex={visible ? undefined : -1}
-            className="flex items-center justify-center gap-2 border-r py-[15px] text-[14px] font-semibold text-white active:bg-white/[0.06]"
-            style={{ borderColor: "var(--hairline-slate)" }}
+            className="flex items-center justify-center gap-2 border-r py-[15px] text-[15px] font-bold leading-[1.2] text-white active:bg-white/[0.06]"
+            style={{ borderColor: "var(--hairline-slate)", fontFamily: "var(--font-display)" }}
           >
             <svg
               width="14"
@@ -94,9 +100,10 @@ export default function MobileStickyCTA() {
           <Link
             href="/contact"
             tabIndex={visible ? undefined : -1}
-            className="flex items-center justify-center bg-[color:var(--accent-deep)] py-[16px] text-[12px] font-semibold uppercase tracking-[0.12em] text-white active:bg-[#B03D15]"
+            className="flex items-center justify-center bg-[color:var(--accent-deep)] py-[15px] text-[15px] font-bold leading-[1.2] text-white active:bg-[color:var(--accent-press)]"
+            style={{ fontFamily: "var(--font-display)" }}
           >
-            Request a quote
+            Get a quote
           </Link>
         </div>
       </div>

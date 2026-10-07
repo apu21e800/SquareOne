@@ -28,14 +28,14 @@ export default function CTASection() {
             <h2 className="stop mt-5">Let&apos;s build something worth looking at</h2>
 
             <p className="mt-6 max-w-[56ch] text-[19px] leading-[1.65] text-ink-body">
-              A municipal crosswalk, a commercial plaza or your own driveway &mdash; decorative
+              A municipal crosswalk, a commercial plaza or your own driveway: decorative
               pavement installed across the Lower Mainland and Vancouver Island since 2000. Free
               site visit, written quote.
             </p>
 
             <div className="mt-9 flex flex-wrap gap-3">
               <Link href="/contact" className="btn-primary">
-                Request a quote
+                Get a quote
               </Link>
               <Link href="/contact" className="btn-secondary">
                 Book a site visit

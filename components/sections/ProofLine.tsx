@@ -23,7 +23,7 @@ const ITEMS: { label: string; value: string }[] = [
   { label: "Since", value: "2000" },
   { label: "Office", value: "Maple Ridge, BC" },
   { label: "Working", value: "Lower Mainland and Vancouver Island" },
-  { label: "First step", value: "Free site visit and written quote" },
+  { label: "First step", value: "Free site visit" },
 ]
 
 export default function ProofLine() {
@@ -44,7 +44,10 @@ export default function ProofLine() {
             ].join(" ")}
           >
             <dt className="label">{item.label}</dt>
-            <dd className="mt-[7px] text-[15px] leading-[1.4] font-medium tracking-[-0.005em] text-ink [text-wrap:pretty]">
+            <dd
+              className="mt-[6px] text-[16px] leading-[1.35] font-bold tracking-[-0.01em] text-ink [text-wrap:pretty]"
+              style={{ fontFamily: "var(--font-display)" }}
+            >
               {item.value}
             </dd>
           </div>

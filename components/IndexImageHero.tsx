@@ -2,11 +2,15 @@ import Image from "next/image"
 import { fitVars } from "@/lib/type"
 
 /**
- * Full-bleed opening image band for index pages — Rockstar Pass Part 4,
- * retuned for direction C (First-Draft fix round): caps titles run at the
- * h1 scale (display-xl is the homepage hero's alone), the band is taller
- * so a two-line caps title never climbs into the bar, and a top scrim
- * keeps the light nav readable over any sky.
+ * Full-bleed opening image band for index pages.
+ *
+ * 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.7, §5 step 5): the opener stays
+ * — a photograph with the title over it — but the surface changes. The h1
+ * is Futura in sentence case with no orange full stop (`stop` is gone from
+ * the class list; own.css also retires the glyph), and no eyebrow over it.
+ * The caption over the photograph stays: this is an opener, not a row, and
+ * the captions-under-the-frame rule is for rows and galleries. `fitVars`
+ * keeps a long title inside its measure.
  */
 export default function IndexImageHero({
   src,
@@ -20,11 +24,14 @@ export default function IndexImageHero({
   caption,
   imagePosition = "center",
   align = "left",
+  tall = false,
+  narrow = false,
   children,
 }: {
   src: string
   alt: string
-  eyebrow: string
+  /** The page's name, on the ledger under the words (2 Oct 2026). */
+  eyebrow?: string
   title: React.ReactNode
   fit?: string
   lede?: string
@@ -34,12 +41,19 @@ export default function IndexImageHero({
       left of centre, so the words never cover it. The caption swaps to the
       left corner to stay clear of the block. */
   align?: "left" | "right"
+  /** A full-height opener when the photograph needs its whole height
+      (2 Oct 2026, the vapour page: "zoom out a bit on that hero image",
+      then "zoom out more, show more of the arrow and the bridge"). */
+  tall?: boolean
+  /** A narrower block of words on the right (36rem), when the subject
+      stands at the centre of the frame. */
+  narrow?: boolean
   children?: React.ReactNode
 }) {
   return (
     <section
       data-nav-on-image
-      className="relative flex h-[58vh] min-h-[560px] items-end overflow-hidden bg-surface-slate"
+      className={`opener ${align === "right" ? "opener-right" : ""} relative flex ${tall ? "h-[100vh] min-h-[640px] supports-[height:100svh]:h-[100svh]" : "h-[64vh] min-h-[580px]"} items-end overflow-hidden bg-surface-slate`}
     >
       <Image
         src={src}
@@ -58,12 +72,15 @@ export default function IndexImageHero({
         className="container-1280 relative z-[1] w-full pb-14 max-[700px]:pb-10"
         style={{ paddingTop: "calc(var(--bar-h) + 2rem)" }}
       >
-        <div className={align === "right" ? "ml-auto max-w-[44rem] min-[901px]:pl-8" : undefined}>
-          <div className="eyebrow eyebrow-on-image">{eyebrow}</div>
-
-          <div className="fit-host mt-5 max-w-[48rem]">
+        <div className={`hero-in ${align === "right" ? `ml-auto ${narrow ? "max-w-[36rem]" : "max-w-[44rem]"} min-[901px]:pl-8` : ""}`}>
+          {/* No eyebrow over the photograph (27 Sept 2026): a label above a
+              headline over a photo is HUB's shape whatever face it is set
+              in. The page's name goes on the ledger under the words instead
+              (2 Oct 2026, Vern: "hero sections still feel a bit unfinished"),
+              with the photograph's caption beside it, on one hairline. */}
+          <div className="fit-host max-w-[48rem]">
             <h1
-              className="display-fit stop text-white [text-wrap:balance]"
+              className="display-fit text-white [text-wrap:balance]"
               style={fitVars(fit ?? (typeof title === "string" ? title : ""), { max: "3.5rem" })}
             >
               {title}
@@ -77,14 +94,15 @@ export default function IndexImageHero({
           )}
 
           {children}
+
+          {(eyebrow || caption) && (
+            <div className="opener-ledger">
+              <span className="truncate">{eyebrow}</span>
+              {caption && <span className="truncate text-right">{caption}</span>}
+            </div>
+          )}
         </div>
       </div>
-
-      {caption && (
-        <div className={`caption z-[1] max-[700px]:hidden ${align === "right" ? "" : "caption-right"}`}>
-          {caption}
-        </div>
-      )}
     </section>
   )
 }

@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation"
-import Image from "next/image"
 import Link from "next/link"
 import { Metadata } from "next"
 import type { CSSProperties } from "react"
@@ -7,9 +6,20 @@ import { MDXRemote } from "next-mdx-remote/rsc"
 import { getPost, getPosts } from "@/lib/blog"
 import type { AnyPost, BlogPostMeta } from "@/lib/blog"
 import PortableBody from "@/components/blog/PortableBody"
+import Frame from "@/components/ui/Frame"
+import { Row } from "@/components/ui/Container"
 import { SITE_URL } from "@/lib/site"
 import { fitVars } from "@/lib/type"
 import { clampDescription, pageTitle } from "@/lib/seo"
+
+/**
+ * A post — 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.7): the article
+ * column keeps its skeleton and its `prose` body; the header and meta are
+ * in the new voice (the category as the small serif line, no full stop,
+ * the byline in the serif), the lede photograph carries its caption UNDER
+ * it, the tags are words, the two related posts are hairline rows, and
+ * every link is an underlined word — no arrows, no orange on hover.
+ */
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -79,8 +89,8 @@ function wordCount(post: AnyPost): number {
 /**
  * Photo caption — the reference reads "Richmond · TrafficPatternsXD · 2019".
  * Frontmatter carries category and date, so the caption is category + year.
- * Returns "" when there is nothing honest to say, in which case the scrim is
- * dropped too: .scrim exists for caption legibility, never for decoration.
+ * Returns "" when there is nothing honest to say, and then no caption line
+ * renders under the frame.
  */
 function captionFor(post: Pick<BlogPostMeta, "category" | "date">): string {
   const year = post.date ? new Date(post.date).getFullYear() : Number.NaN
@@ -152,21 +162,21 @@ const proseClass = [
   "prose-h3:tracking-[-0.015em] prose-h3:leading-[1.4]",
   "prose-h4:mt-10 prose-h4:mb-3 prose-h4:text-[1rem] prose-h4:font-semibold",
   "prose-h4:tracking-[-0.01em]",
-  // Links — ink at rest, deep orange on hover, so body copy spends no accent
+  // Links — ink, underlined; the underline darkens on hover. No orange.
   "prose-a:font-medium prose-a:underline prose-a:underline-offset-[3px]",
   "prose-a:decoration-[color:var(--hairline-strong)]",
-  "[&_a:hover]:text-[color:var(--accent-deep)]",
-  "[&_a:hover]:decoration-[color:var(--accent-deep)]",
+  "[&_a:hover]:text-[color:var(--ink)]",
+  "[&_a:hover]:decoration-[color:var(--ink)]",
   // Pull quote — 2px ink rule, no italics, no smart quotes
   "prose-blockquote:my-12 prose-blockquote:border-l-2 prose-blockquote:pl-7",
   "prose-blockquote:not-italic prose-blockquote:font-medium",
   "[&_blockquote_p]:text-[23px] [&_blockquote_p]:leading-[1.5]",
   "[&_blockquote_p]:tracking-[-0.01em] [&_blockquote_p]:text-[color:var(--ink)]",
   "[&_blockquote_p]:before:content-none [&_blockquote_p]:after:content-none",
-  // Everything else
-  "prose-img:rounded-[2px] prose-figcaption:text-[13px]",
+  // Everything else — square corners, captions in the small serif
+  "prose-img:rounded-none prose-figcaption:text-[14px] prose-figcaption:italic",
   "prose-hr:border-[color:var(--hairline)] prose-hr:my-14",
-  "prose-code:font-normal prose-pre:rounded-[2px]",
+  "prose-code:font-normal prose-pre:rounded-none",
   "prose-th:border-[color:var(--hairline)] prose-td:border-[color:var(--hairline)]",
 ].join(" ")
 
@@ -221,59 +231,48 @@ export default async function BlogPostPage({ params }: Props) {
           {/* ── Breadcrumb ──────── */}
           <nav
             aria-label="Breadcrumb"
-            className="flex flex-wrap items-center gap-2 text-[13px] text-[color:var(--ink-muted)]"
+            className="flex flex-wrap items-center gap-2 text-[15px] italic text-ink-muted"
           >
-            <Link href="/" className="text-[color:var(--ink-muted)] hover:text-[color:var(--accent-deep)]">
+            <Link href="/" className="link">
               Home
             </Link>
             <span aria-hidden="true">/</span>
-            <Link href="/blog" className="text-[color:var(--ink-muted)] hover:text-[color:var(--accent-deep)]">
+            <Link href="/blog" className="link">
               Blog
             </Link>
             <span aria-hidden="true">/</span>
-            <span className="text-[color:var(--ink)]">{post.title}</span>
+            <span className="text-ink">{post.title}</span>
           </nav>
 
           {/* ── Title block ──────── */}
-          {post.category && (
-            <div className="mt-8">
-              <span className="tag">{post.category}</span>
-            </div>
-          )}
+          {post.category && <span className="label mt-8">{post.category}</span>}
 
-          <div className={`fit-host ${post.category ? "mt-6" : "mt-8"}`}>
+          <div className={`fit-host ${post.category ? "mt-3" : "mt-8"}`}>
             <h1
-              className="display-fit headline-sentence stop [text-wrap:balance]"
+              className="display-fit headline-sentence [text-wrap:balance]"
               style={fitVars(post.title, { max: "3.25rem", sentence: true })}
             >
               {post.title}
             </h1>
           </div>
 
-          <div className="mt-[18px] text-[14px] text-[color:var(--ink-muted)]">
+          <p className="mt-4 text-[15px] italic text-ink-muted">
             By {post.author || "Square One Paving"}
             {post.date && <> &middot; {formatDate(post.date)}</>}
             {wordCount(post) > 0 && <> &middot; {estimateReadTime(wordCount(post))} min read</>}
-          </div>
+          </p>
 
-          {/* ── Lede photograph ──────── */}
+          {/* ── Lede photograph — the caption under it ──────── */}
           {post.featured_image && (
-            <figure className="relative mt-12 aspect-[16/9] overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)]">
-              <Image
-                src={post.featured_image}
-                alt={post.title}
-                fill
-                priority
-                sizes="(max-width: 700px) 100vw, 640px"
-                className="object-cover"
-              />
-              {heroCaption && (
-                <>
-                  <div aria-hidden="true" className="scrim scrim-light" />
-                  <figcaption className="caption">{heroCaption}</figcaption>
-                </>
-              )}
-            </figure>
+            <Frame
+              className="mt-12"
+              src={post.featured_image}
+              alt={post.title}
+              caption={heroCaption || undefined}
+              aspect="aspect-[16/9]"
+              sizes="(max-width: 700px) 100vw, 640px"
+              priority
+            />
           )}
 
           {/* ── Article body ──────── */}
@@ -281,73 +280,72 @@ export default async function BlogPostPage({ params }: Props) {
             {"body" in post ? <PortableBody value={post.body} /> : <MDXRemote source={post.content} />}
           </div>
 
-          {/* ── Quiet conversion panel ──────── */}
-          <aside className="card-panel mt-16">
-            <div className="eyebrow">Planning something similar?</div>
-            <p className="mt-4 text-[16px] leading-[1.6] text-[color:var(--ink-body)]">
+          {/* ── Quiet conversion panel — a hairline block, the one button ──────── */}
+          <aside className="mt-16 border-t border-hairline pt-6">
+            <span className="label">Planning something similar?</span>
+            <p className="mt-3 max-w-[60ch] text-ink-body [text-wrap:pretty]">
               Square One installs across the Lower Mainland and Vancouver Island. Free site
               visit, written quote. More of the work is in the{" "}
-              <Link href="/projects" className="font-medium text-[color:var(--ink)] underline-offset-4 hover:underline">
+              <Link href="/projects" className="link">
                 projects
               </Link>{" "}
               and the{" "}
-              <Link href="/galleries" className="font-medium text-[color:var(--ink)] underline-offset-4 hover:underline">
+              <Link href="/galleries" className="link">
                 galleries
               </Link>
               ; the systems are under{" "}
-              <Link href="/services" className="font-medium text-[color:var(--ink)] underline-offset-4 hover:underline">
+              <Link href="/services" className="link">
                 services
               </Link>
               .
             </p>
-            <Link href="/contact" className="btn-primary mt-7 self-start">
-              Request a quote
-            </Link>
+            <div className="mt-7">
+              <Link href="/contact" className="btn-primary">
+                Get a quote
+              </Link>
+            </div>
           </aside>
 
-          {/* ── Filed under ──────── */}
+          {/* ── Filed under — the tags as words ──────── */}
           {post.tags && post.tags.length > 0 && (
-            <div className="mt-14 border-t border-[color:var(--hairline)] pt-7">
-              <div className="label">Filed under</div>
-              <div className="mt-4 flex flex-wrap gap-[10px]">
+            <div className="mt-14 border-t border-hairline pt-7">
+              <span className="label">Filed under</span>
+              <p className="mt-2">
                 {post.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-[2px] border border-[color:var(--hairline)] px-3 py-[6px] text-[13px] font-medium text-[color:var(--ink-muted)]"
-                  >
+                  <span key={tag} className="tag">
                     {tag}
                   </span>
                 ))}
-              </div>
+              </p>
             </div>
           )}
 
-          {/* ── Related notes ──────── */}
+          {/* ── Related posts — hairline rows ──────── */}
           {related.length > 0 && (
             <section className="mt-14">
               <h2>Related posts</h2>
 
-              <div className="mt-8 grid grid-cols-2 gap-6 max-[700px]:grid-cols-1 max-[700px]:gap-10">
+              <ul className="mt-6">
                 {related.map((entry) => (
                   <RelatedNote key={entry.slug} post={entry} />
                 ))}
-              </div>
+              </ul>
             </section>
           )}
 
           {/* ── Foot of article ──────── */}
-          <div className="mt-14 flex flex-wrap items-center justify-between gap-5 border-t border-[color:var(--hairline)] pt-7">
-            <Link href="/blog" className="arrow-link">
-              &larr; Back to Blog
+          <div className="mt-14 flex flex-wrap items-baseline justify-between gap-5 border-t border-hairline pt-7">
+            <Link href="/blog" className="link">
+              Back to the blog
             </Link>
 
-            <div className="flex items-center gap-5">
+            <div className="flex items-baseline gap-5">
               <span className="label">Share</span>
               <a
                 href={`https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[13px] font-semibold text-[color:var(--ink-muted)] hover:text-[color:var(--accent-deep)]"
+                className="link"
               >
                 LinkedIn
               </a>
@@ -355,7 +353,7 @@ export default async function BlogPostPage({ params }: Props) {
                 href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[13px] font-semibold text-[color:var(--ink-muted)] hover:text-[color:var(--accent-deep)]"
+                className="link"
               >
                 Facebook
               </a>
@@ -367,44 +365,20 @@ export default async function BlogPostPage({ params }: Props) {
   )
 }
 
-/* ── Related note card ──────── */
+/* ── Related post — a compact hairline row: the frame, the title, one line ──────── */
 
 function RelatedNote({ post }: { post: BlogPostMeta }) {
-  const caption = captionFor(post)
-
   return (
-    <Link href={`/blog/${post.slug}`} className="card block">
-      <div className="relative aspect-[16/10] overflow-hidden rounded-[2px] bg-[color:var(--surface-stone)]">
-        {post.featured_image && (
-          <Image
-            src={post.featured_image}
-            alt={post.title}
-            fill
-            sizes="(max-width: 700px) 100vw, 300px"
-            className="object-cover"
-          />
-        )}
-        {post.featured_image && caption && (
-          <>
-            <div aria-hidden="true" className="scrim scrim-light" />
-            <div className="caption">{caption}</div>
-          </>
-        )}
+    <Row as="li" compact className="relative">
+      <Link href={`/blog/${post.slug}`} aria-label={post.title} className="absolute inset-0 z-[2]" />
+      <Frame src={post.featured_image || undefined} alt="" aspect="aspect-[3/2]" sizes="132px" />
+      <div className="min-w-0">
+        <h3 className="[text-wrap:pretty]">{post.title}</h3>
+        <p className="mt-2 text-[15px] italic text-ink-muted">
+          {post.category ? `${post.category} · ` : ""}
+          {post.date ? formatDate(post.date) : ""}
+        </p>
       </div>
-
-      {post.category && (
-        <div className="mt-4">
-          <span className="tag">{post.category}</span>
-        </div>
-      )}
-
-      <h3 className="mt-3 [text-wrap:pretty]">{post.title}</h3>
-
-      {post.date && (
-        <div className="mt-2 text-[13px] text-[color:var(--ink-muted)]">
-          {formatDate(post.date)}
-        </div>
-      )}
-    </Link>
+    </Row>
   )
 }

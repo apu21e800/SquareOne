@@ -2,15 +2,13 @@ import type { Metadata } from "next"
 import Hero from "@/components/sections/Hero"
 import { HERO_SLIDES } from "@/lib/hero-slides"
 import ProofLine from "@/components/sections/ProofLine"
+import HowAJobGoes from "@/components/sections/HowAJobGoes"
 import AudienceBand from "@/components/sections/AudienceBand"
-import EditorialBand from "@/components/sections/EditorialBand"
 import ServicesGrid from "@/components/sections/ServicesGrid"
 import MaterialsBand from "@/components/sections/MaterialsBand"
 import ProjectsPreview from "@/components/sections/ProjectsPreview"
-import ApplicationsSection from "@/components/sections/ApplicationsSection"
 import DrivewaysBand from "@/components/sections/DrivewaysBand"
 import VapourBand from "@/components/sections/VapourBand"
-import BlogFeed from "@/components/sections/BlogFeed"
 import FollowTheWork from "@/components/sections/FollowTheWork"
 import { getSiteSettings, getSlots, getSocialPosts, slotImage, slotText } from "@/lib/cms"
 import { SITE_URL } from "@/lib/site"
@@ -21,7 +19,7 @@ export const metadata: Metadata = {
   // even: the two phrases people search, then the province, then the name.
   title: { absolute: "BC Stamped Asphalt & Decorative Pavement | Square One Paving" },
   description:
-    clampDescription("Stamped asphalt, coloured coatings and thermoplastic crosswalks for BC cities, developers and homeowners — specified, installed and warranted by Square One since 2000."),
+    clampDescription("Stamped asphalt, coloured coatings and thermoplastic crosswalks for BC cities, developers and homeowners: specified and installed by Square One since 2000."),
   keywords: [
     "decorative pavement BC",
     "stamped asphalt BC",
@@ -39,14 +37,20 @@ export const metadata: Metadata = {
   openGraph: {
     title: "BC Stamped Asphalt & Decorative Pavement | Square One Paving",
     description:
-      clampDescription("Stamped asphalt, StreetBond coatings and thermoplastic crosswalks for BC cities, developers and homeowners — Lower Mainland and Vancouver Island, since 2000."),
+      clampDescription("Stamped asphalt, StreetBond coatings and thermoplastic crosswalks for BC cities, developers and homeowners (Lower Mainland and Vancouver Island, since 2000)."),
     images: [
-      { url: "/images/og-image.png", width: 1200, height: 600, alt: "Square One Paving — stamped asphalt and decorative pavement installers in BC" },
+      { url: "/images/og-image.png", width: 1200, height: 600, alt: "Square One Paving, stamped asphalt and decorative pavement installers in BC" },
     ],
   },
 }
 
 /**
+ * 26 Sept 2026 — the own-company restyle (docs/OWN-COMPANY-BRIEF.md §9).
+ * Same bands, same order, one added (How a job goes, after the proof line);
+ * every band drawn on the new primitives (components/ui/Container.tsx
+ * Section and Row, components/ui/Frame.tsx) and the surface in app/own.css.
+ * The reel is exactly as it was.
+ *
  * Homepage composition — the character pass, 5 Sept 2026 (Vern: "everything
  * is very white", "the huge useless image", "the free site walk section
  * blends together", "weave the clients in somehow else").
@@ -96,32 +100,36 @@ export default async function Home() {
           /about. */}
       <ProofLine />
 
-      <AudienceBand />
-
-      {/* The funnel's front door (Vern, 19 Sept evening: "work more like a
-          sales funnel for contractors. Applications etc."): where the work
-          goes comes before what we do. */}
-      <ApplicationsSection />
-
+      {/* 28 Sept 2026 (Vern: "too much text… cut the fat, get straight to
+          the point, make the sale"): eight bands where there were eleven,
+          each a headline, one line and the pictures. The order is the sale:
+          what we do, the work that proves it, how a job goes, who it is
+          for, the two offers people come for (driveways, vapour), the
+          patterns and colours, the crews on Instagram, then the quote
+          (the close band in the footer). "Where the work goes" and the
+          blog feed came off the home page; both are one click away in the
+          menu. */}
       <ServicesGrid />
-
-      {/* Patterns and colours — back on the home page, 19 Sept evening
-          (Vern: "the client did like some semblance of the colours and
-          patterns on the homepage"), as the specifier's composition: three
-          drawing sheets fanned on the slate, eight named colours, two ways
-          in. Not a catalogue. */}
-      <MaterialsBand />
 
       <ProjectsPreview />
 
-      <EditorialBand statement={slotText(slots, "home.statement", "Twenty-five years on BC ground")} />
+      {/* 2 Oct 2026, the client: "a bit overkill info wise, trim some fat".
+          The crew photographs under the four steps came off. The
+          patterns-and-colours band came off too and came back the same day
+          (Vern: "the template and colour palette sections are missing"),
+          lower on the page. Eight bands. */}
+      <HowAJobGoes tone="paper" crews={false} />
+
+      {/* 2 Oct 2026 (Vern: "a few large grey background sections to break
+          things up"): the audience band and the vapour band sit on stone,
+          the darker grey; the projects and the close on the lighter one. */}
+      <AudienceBand tone="stone" />
 
       <DrivewaysBand />
 
-      {/* Vapour blasting, its own band (Vern, 19 Sept) — the wipe, on the slate. */}
-      <VapourBand />
+      <MaterialsBand />
 
-      <BlogFeed />
+      <VapourBand />
 
       <FollowTheWork settings={settings} tiles={tiles} />
     </main>

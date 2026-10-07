@@ -93,8 +93,8 @@ function imageEntries(): SearchEntry[] {
     project.images.forEach((image, i) => {
       entries.push({
         type: "image",
-        title: i === 0 ? project.title : `${project.title} — photo ${i + 1}`,
-        subtitle: `Project — ${project.city.split(",")[0].trim()}`,
+        title: i === 0 ? project.title : `${project.title}, photo ${i + 1}`,
+        subtitle: `Project: ${project.city.split(",")[0].trim()}`,
         href: `/projects/${project.slug}`,
         image,
         keywords: `${project.systems.join(" ")} ${project.application} ${project.city}`,
@@ -108,7 +108,7 @@ function imageEntries(): SearchEntry[] {
     const label = appLabel.get(photo.app) ?? photo.app
     entries.push({
       type: "image",
-      title: photo.place ? `${photo.subject} — ${photo.place}` : photo.subject,
+      title: photo.place ? `${photo.subject}, ${photo.place}` : photo.subject,
       subtitle: `${photo.systems.join(" + ")} · ${label}`,
       href: photo.app === "driveways" ? "/driveways" : `/applications/${photo.app}`,
       image: photo.src,
@@ -129,7 +129,7 @@ function imageEntries(): SearchEntry[] {
         entries.push({
           type: "image",
           title: humanize(file),
-          subtitle: owner ? `Product — ${owner}` : "Products",
+          subtitle: owner ? `Product: ${owner}` : "Products",
           href: `/products/${slug}`,
           image: `/images/products/${dir}/${file}`,
           keywords: owner ?? "",
@@ -140,11 +140,13 @@ function imageEntries(): SearchEntry[] {
 
   // Vapour blasting field records
   const vapourDir = path.join(IMAGE_ROOT, "services", "vapor-blasting")
-  for (const file of listImages(vapourDir)) {
+  // hero.jpg is the Granville Island photograph a second time (an older
+  // copy, unreferenced); one frame of it in the results is enough.
+  for (const file of listImages(vapourDir).filter((f) => f !== "hero.jpg")) {
     entries.push({
       type: "image",
       title: humanize(file),
-      subtitle: "Service — Vapour blasting",
+      subtitle: "Service: Vapour blasting",
       href: "/services/vapor-blasting",
       image: `/images/services/vapor-blasting/${file}`,
       keywords: "vapour blasting restoration cleaning",
@@ -154,22 +156,25 @@ function imageEntries(): SearchEntry[] {
   return entries
 }
 
+/* Every page carries the photograph its opener shows (2 Oct 2026, Vern, on
+   "streetprint" turning up Patterns with the company mark as its picture:
+   "weird"); the mark no longer stands in for a page. */
 const STATIC_PAGES: SearchEntry[] = [
-  { type: "page", title: "Home", subtitle: "Decorative pavement for BC since 2000", href: "/", keywords: "square one paving homepage decorative pavement bc" },
-  { type: "page", title: "Services", subtitle: "Stamped asphalt, coatings, thermoplastic, vapour blasting", href: "/services", keywords: "what we do services index" },
-  { type: "page", title: "Products", subtitle: "The nine systems we install", href: "/products", keywords: "systems catalogue products index" },
-  { type: "page", title: "Applications", subtitle: "Where the work lives — crosswalks to driveways", href: "/applications", keywords: "applications index where we work" },
-  { type: "page", title: "Driveways", subtitle: "Stamped asphalt for Victoria & Vancouver homes", href: "/driveways", keywords: "residential homeowner driveway victoria vancouver" },
-  { type: "page", title: "Driveways in Vancouver", subtitle: "Stamped asphalt driveways across Metro Vancouver", href: "/driveways/vancouver", keywords: "vancouver driveway lower mainland north shore burnaby richmond langley homeowner" },
-  { type: "page", title: "Driveways in Victoria", subtitle: "Stamped asphalt driveways across Greater Victoria and the Island", href: "/driveways/victoria", keywords: "victoria driveway saanich oak bay sooke langford island homeowner" },
-  { type: "page", title: "Vapour blasting", subtitle: "Cleaning, priming, graffiti and mould removal", href: "/services/vapor-blasting", keywords: "vapor blasting dustless restoration surface prep graffiti mould" },
-  { type: "page", title: "Projects", subtitle: "Selected work across BC", href: "/projects", keywords: "projects portfolio work" },
-  { type: "page", title: "Blog", subtitle: "Guides and project stories from BC ground", href: "/blog", keywords: "blog articles guides news stories journal" },
-  { type: "page", title: "Patterns", subtitle: "StreetPrint template sheets, dimensioned", href: "/patterns", keywords: "patterns templates herringbone offset brick ashlar slate tiles border streetprint stamped" },
-  { type: "page", title: "Resources", subtitle: "Specifications, colour cards, SDS and guides", href: "/resources", keywords: "documents specs specifications library downloads sds colour cards" },
-  { type: "page", title: "For specifiers", subtitle: "Drawings, specifications and samples for landscape architects and engineers", href: "/specifiers", keywords: "specifiers landscape architect engineer municipal tender specification drawings template sheets colour chart sample boards precedent" },
-  { type: "page", title: "About", subtitle: "The crew behind 25 years of BC surfaces", href: "/about", keywords: "company about team gord jan history" },
-  { type: "page", title: "Contact", subtitle: "Free site visit and written quote", href: "/contact", keywords: "quote request phone email contact maple ridge" },
+  { type: "page", title: "Home", subtitle: "Decorative pavement for BC since 2000", href: "/", image: "/images/applications/parks-paths/surrey-marine-spray-park-from-above-streetbond-01.jpg", keywords: "square one paving homepage decorative pavement bc" },
+  { type: "page", title: "Services", subtitle: "Stamped asphalt, coatings, thermoplastic, vapour blasting", href: "/services", image: "/images/applications/public-art/new-westminster-boundary-pump-station-full-field-streetbond-01.jpg", keywords: "what we do services index" },
+  { type: "page", title: "Products", subtitle: "The nine systems we install", href: "/products", image: "/images/S1_update_v2/photos/Featured%20image%20options/504448297_1112360024259349_5235743119624258372_n-1.jpg", keywords: "systems catalogue products index" },
+  { type: "page", title: "Applications", subtitle: "Where the work lives: crosswalks to driveways", href: "/applications", image: "/images/hero/white-rock-marine-drive-wave-crosswalk.jpg", keywords: "applications index where we work" },
+  { type: "page", title: "Driveways", subtitle: "Stamped asphalt for Victoria & Vancouver homes", href: "/driveways", image: "/images/S1_update_v2/photos/Driveways/Number%201.jpg", keywords: "residential homeowner driveway victoria vancouver" },
+  { type: "page", title: "Driveways in Vancouver", subtitle: "Stamped asphalt driveways across Metro Vancouver", href: "/driveways/vancouver", image: "/images/S1_update_v2/photos/Driveways/Number%202.jpg", keywords: "vancouver driveway lower mainland north shore burnaby richmond langley homeowner" },
+  { type: "page", title: "Driveways in Victoria", subtitle: "Stamped asphalt driveways across Greater Victoria and the Island", href: "/driveways/victoria", image: "/images/S1_update_v2/photos/Driveways/Ten%20Mile%20Point%20Driveway%20I.jpg", keywords: "victoria driveway saanich oak bay sooke langford island homeowner" },
+  { type: "page", title: "Vapour blasting", subtitle: "Cleaning, priming, graffiti and mould removal", href: "/services/vapor-blasting", image: "/images/services/vapor-blasting/generated/gen-granville-island-vapour-blasting-01-enhanced.jpg", keywords: "vapor blasting dustless restoration surface prep graffiti mould" },
+  { type: "page", title: "Projects", subtitle: "Selected work across BC", href: "/projects", image: "/images/applications/public-art/oak-bay-village-intersection-wide-streetbond-01.jpg", keywords: "projects portfolio work" },
+  { type: "page", title: "Blog", subtitle: "Project stories and guides from BC ground", href: "/blog", image: "/images/hero/bowen-island-polka-dot-walkway-streetbond.jpg", keywords: "blog articles guides news stories journal" },
+  { type: "page", title: "Patterns", subtitle: "StreetPrint template sheets, dimensioned", href: "/patterns", image: "/images/patterns/herringbone.webp", keywords: "patterns templates herringbone offset brick ashlar slate tiles border streetprint stamped" },
+  { type: "page", title: "Documents", subtitle: "Specifications, colour cards, SDS and guides", href: "/resources", image: "/images/S1_update_v2/photos/Featured%20image%20options/Photo-2025-03-07-2-54-05-PM-scaled.jpg", keywords: "documents resources specs specifications library downloads sds colour cards" },
+  // /specifiers is hidden for now (2 Oct 2026, Vern): linked from nowhere, not in search.
+  { type: "page", title: "About", subtitle: "The crew behind 25 years of BC surfaces", href: "/about", image: "/images/applications/parks-paths/maple-ridge-spray-park-surface-streetbond-01.jpg", keywords: "company about team gord jan history" },
+  { type: "page", title: "Contact", subtitle: "Free site visit and written quote", href: "/contact", image: "/images/applications/crosswalks/langley-railways-crossing-crew-on-site-trafficpatternsxd-01.jpg", keywords: "quote request phone email contact maple ridge" },
 ]
 
 /** Mirrors the /applications card set — one entry per application page, plus the pillar and the extra service. */

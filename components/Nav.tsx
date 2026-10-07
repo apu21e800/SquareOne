@@ -1,40 +1,22 @@
 "use client"
 
 import { useCallback, useEffect, useRef, useState } from "react"
-import Link from "next/link"
 import Image from "next/image"
+import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { AnimatePresence, MotionConfig, motion, type Transition } from "framer-motion"
 import BrandMark from "@/components/BrandMark"
 import SearchOverlay from "@/components/SearchOverlay"
-import { services, type Service } from "@/lib/services"
-import { APP_LEADS } from "@/lib/app-leads"
+import { BUYERS } from "@/lib/buyers"
+import { MENU_PREVIEWS, type MenuPreviews } from "@/lib/menu"
+import ColourEdge from "@/components/ui/ColourEdge"
 
 /* ------------------------------------------------------------------
    Data — derived from lib/, never duplicated.
    ------------------------------------------------------------------ */
 
-type MenuKey = "applications" | "services"
+type MenuKey = "services" | "buyers"
 
-
-const SERVICE_ORDER = [
-  "stamped-asphalt",
-  "decorative-coatings",
-  "preformed-thermoplastic",
-  "vapor-blasting",
-]
-
-/** Canadian English in prose; slugs and routes stay untouched. */
-const SERVICE_LABEL: Record<string, string> = {
-  "stamped-asphalt": "Stamped asphalt",
-  "decorative-coatings": "Decorative coatings",
-  "preformed-thermoplastic": "Preformed thermoplastic",
-  "vapor-blasting": "Vapour blasting",
-}
-
-const serviceLinks: Service[] = SERVICE_ORDER.map((slug) =>
-  services.find((s) => s.slug === slug),
-).filter((s): s is Service => s !== undefined)
 
 interface PrimaryLink {
   label: string
@@ -43,90 +25,55 @@ interface PrimaryLink {
   menu?: MenuKey
 }
 
-/** Five items (Vern, 5 Sept 2026: "too many items across the top"), in the
-    order a contractor or specifier actually shops (Vern, 19 Sept: "needs to
-    work more like a sales funnel for contractors. Applications etc."):
-    where the work goes → what we do → the proof → the people who draw it →
-    the company. Products left the bar the same night — the client was not
-    sure they belonged there; the eight systems live one click deeper, on
-    /products, reached by a single link in the Services panel, the drawer
-    and the footer (Vern, 19 Sept: "lead potential clients towards
-    services"). */
+/** 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.1): services lead. (The
+    "text menus, no mega menu" of that day became the sheet below on 28
+    Sept.) What we do → Who we work with → Projects → For
+    specifiers → About, the office number, Get a quote. A contractor's site
+    is organised by what it does and who it does it for; a supplier's by
+    catalogue. The application galleries are all still here, grouped under
+    the four buyers (BUYERS, shared with the home page). */
+// 2 Oct 2026, the client's notes: "add Driveways to the top nav", "for
+// specifiers section is not required", "remove phone number from main nav".
+// Vern, later the same day: "just hide the specifiers section for now", so
+// /specifiers is linked from nowhere (the route still answers); the office
+// number stays in the menu strip and the drawer.
 const PRIMARY_LINKS: PrimaryLink[] = [
-  { label: "Applications", href: "/applications", match: ["/applications", "/driveways", "/galleries"], menu: "applications" },
-  { label: "Services", href: "/services", match: ["/services", "/products"], menu: "services" },
+  { label: "What we do", href: "/services", match: ["/services", "/products", "/patterns"], menu: "services" },
+  { label: "Who we work with", href: "/applications", match: ["/applications", "/galleries"], menu: "buyers" },
+  { label: "Driveways", href: "/driveways", match: ["/driveways"] },
   { label: "Projects", href: "/projects", match: ["/projects"] },
-  { label: "Specifiers", href: "/specifiers", match: ["/specifiers", "/resources"] },
-  { label: "About", href: "/about", match: ["/about"] },
+  { label: "About", href: "/about", match: ["/about", "/blog", "/specifiers", "/resources"] },
 ]
 
-/** The drawer keeps every route the desktop panels reach. */
-const DRAWER_LINKS: { label: string; href: string }[] = [
-  { label: "Applications", href: "/applications" },
-  { label: "Services", href: "/services" },
-  { label: "Projects", href: "/projects" },
-  { label: "Specifiers", href: "/specifiers" },
-  { label: "Resources", href: "/resources" },
-  { label: "Galleries", href: "/galleries" },
-  { label: "Blog", href: "/blog" },
-  { label: "About", href: "/about" },
-]
 
-/** Services panel — the four trades and the residential line as photo tiles. */
-const SERVICE_TILES: { href: string; name: string; note: string; src: string; alt: string }[] = [
-  {
-    href: "/services/stamped-asphalt",
-    name: "Stamped asphalt",
-    // Jan, 19 Sept: two kinds under stamped asphalt — StreetPrint regular, TrafficPatternsXD durable.
-    note: "StreetPrint and TrafficPatternsXD",
-    src: "/images/hero/victoria-ellis-point-walkway-streetprint.jpg",
-    alt: "British Cobble StreetPrint walkway at Ellis Point, Victoria",
-  },
-  {
-    href: "/services/decorative-coatings",
-    name: "Decorative coatings",
-    note: "Colour that holds under traffic",
-    src: "/images/products/streetbond/streetbond-multicolour-plaza-transit-dusk-01.jpg",
-    alt: "StreetBond multicolour plaza at Joyce Station, Vancouver",
-  },
-  {
-    href: "/services/preformed-thermoplastic",
-    name: "Preformed thermoplastic",
-    note: "Crosswalks, symbols, civic art",
-    src: "/images/projects/ubc-musqueam-crosswalk/ubc-musqueam-crosswalk-trafficpatterns-01.jpg",
-    alt: "Musqueam crosswalk artwork at UBC, Vancouver",
-  },
-  {
-    href: "/driveways",
-    name: "Driveways",
-    note: "For homeowners — Vancouver & Victoria",
-    src: "/images/S1_update_v2/photos/Driveways/Number%201.jpg",
-    alt: "Ashlar slate StreetPrint driveway installed by Square One",
-  },
-  {
-    href: "/services/vapor-blasting",
-    name: "Vapour blasting",
-    note: "Cleaning, priming, graffiti removal",
-    src: "/images/services/vapor-blasting/generated/gen-road-marking-removal-02.jpg",
-    alt: "Vapour blasting a painted line off wet asphalt — an illustration of the service",
-  },
-]
-
-/** Where the work goes — the ten application galleries (mirrors lib/work.ts WORK_APPS), each with its gallery's lead photograph. */
+/** Where the work goes — the ten application galleries (mirrors lib/work.ts WORK_APPS). */
+/* The menu's names are the short ones (2 Oct 2026, Vern: "a lot of text
+   jammed into the who-we-work-with mega menu"); the pages keep their full
+   titles. */
 const APPLICATIONS: { label: string; href: string; slug: string }[] = [
   { label: "Crosswalks", href: "/applications/crosswalks", slug: "crosswalks" },
   { label: "Streetscapes", href: "/applications/streetscapes", slug: "streetscapes" },
-  { label: "Roundabouts & traffic calming", href: "/applications/roundabouts", slug: "roundabouts" },
+  { label: "Roundabouts", href: "/applications/roundabouts", slug: "roundabouts" },
   { label: "Parking lots", href: "/applications/parking-lots", slug: "parking-lots" },
   { label: "Parks & paths", href: "/applications/parks-paths", slug: "parks-paths" },
-  { label: "Schools & sports courts", href: "/applications/schools-sports-courts", slug: "schools-sports-courts" },
+  { label: "Schools & courts", href: "/applications/schools-sports-courts", slug: "schools-sports-courts" },
   { label: "Bike lanes", href: "/applications/bike-lanes", slug: "bike-lanes" },
   { label: "Public art", href: "/applications/public-art", slug: "public-art" },
-  { label: "Branding & wayfinding", href: "/applications/branding-wayfinding", slug: "branding-wayfinding" },
+  { label: "Wayfinding", href: "/applications/branding-wayfinding", slug: "branding-wayfinding" },
   { label: "Driveways", href: "/driveways", slug: "driveways" },
+  { label: "Vapour blasting", href: "/services/vapor-blasting", slug: "vapour" },
 ]
 
-const HAIRLINE = "#E7E3DC"
+const byslug = (slug: string) => APPLICATIONS.find((a) => a.slug === slug)
+
+/** The four buyers, each with its galleries (the same grouping as the home page's ApplicationsSection). */
+const BUYER_GROUPS = BUYERS.map((b) => ({
+  label: b.short ?? b.label,
+  note: b.note,
+  items: b.slugs.map(byslug).filter((a): a is NonNullable<typeof a> => Boolean(a)),
+}))
+
+const HAIRLINE = "#E1E4E7"
 
 const panelTransition: Transition = { duration: 0.15, ease: "easeOut" }
 
@@ -139,7 +86,7 @@ function Wordmark({ onClick, light = false }: { onClick?: () => void; light?: bo
     <Link
       href="/"
       onClick={onClick}
-      aria-label="Square One Paving — home"
+      aria-label="Square One Paving, home"
       className="flex shrink-0 items-center"
     >
       <BrandMark tone={light ? "light" : "dark"} />
@@ -147,305 +94,436 @@ function Wordmark({ onClick, light = false }: { onClick?: () => void; light?: bo
   )
 }
 
-/** One photographic tile — the shared voice of both panels. */
-function MegaTile({
-  href,
-  src,
-  alt,
-  name,
-  note,
-  aspect = "aspect-[16/10]",
-  compact = false,
-  onNavigate,
-}: {
+/* ------------------------------------------------------------------
+   2 Oct 2026 (Vern: "still feels text heavy… including the mega menu"):
+   the one-line notes under every name, in the panels and the phone
+   drawer, came off. The names, the sample squares and the photograph
+   carry the menu; the notes stay in lib/menu.ts for the search index.
+
+   The mega menu — second pass, 28 Sept 2026 (Vern: "give the mega menu
+   some personality, it's rather lacking… mind the hubss.com design
+   patterns"). HUB's menu is four photo tiles in a row on near-black, a
+   spaced-caps label under each and a list under that. This one is an
+   installer's sample case:
+
+     · what we do is an index, numbered, with the material itself beside
+       each name: a square cut from Square One's own photographs, the way
+       the sample boards come to a site walk
+     · who we work with is a ledger: the buyer in the margin, their
+       galleries as a run of words beside them
+     · one photograph on the right follows the pointer (and the keyboard),
+       revealed by the line from the before/after, the caption under it
+     · a strip along the bottom starts a project; the colour card's edge
+       closes the sheet
+
+   One sheet stays mounted while either menu is open, so moving between
+   the two swaps the contents instead of fading one panel over another.
+   ------------------------------------------------------------------ */
+
+interface Row {
   href: string
-  src: string
-  alt: string
   name: string
-  note?: string
-  aspect?: string
-  /** Five-across tiles: a smaller name below 1536px, and the note only from 1536px up. */
-  compact?: boolean
-  onNavigate: () => void
-}) {
-  return (
-    <Link
-      href={href}
-      onClick={onNavigate}
-      data-mega-item
-      className={`group relative block overflow-hidden rounded-[2px] bg-[#F1EEE9] ${aspect}`}
-    >
-      <Image
-        src={src}
-        alt={alt}
-        fill
-        sizes="(max-width: 1280px) 33vw, 420px"
-        className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-      />
-      <span aria-hidden="true" className="scrim" />
-      <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-4">
-        <span className="min-w-0">
-          <span
-            className={`block font-semibold uppercase text-white ${
-              compact ? "text-[12px] tracking-[0.08em] min-[1536px]:text-[13px] min-[1536px]:tracking-[0.1em]" : "text-[13px] tracking-[0.1em]"
-            }`}
-            style={{ fontFamily: "var(--font-display)" }}
-          >
-            {name}
-          </span>
-          {note && (
-            <span className={`mt-[3px] block text-[12px] leading-[1.45] text-white/75 ${compact ? "max-[1535px]:hidden" : ""}`}>
-              {note}
-            </span>
-          )}
-        </span>
-        <span
-          aria-hidden="true"
-          className="mb-[1px] shrink-0 text-[15px] leading-none text-white/70 transition-transform duration-200 group-hover:translate-x-1 group-hover:text-white"
-        >
-          &rarr;
-        </span>
+  note: string
+  swatch?: string
+  /** A photograph for the swatch, cut by the image route, in place of the pre-cut webp. */
+  swatchSrc?: string
+  swatchPosition?: string
+}
+
+const SERVICE_ROWS: Row[] = [
+  // Jan, 19 Sept: two kinds under stamped asphalt, StreetPrint regular and TrafficPatternsXD durable.
+  { href: "/services/stamped-asphalt", name: "Stamped asphalt", note: "Brick, cobble or slate pressed into the asphalt already there", swatch: "stamped-asphalt" },
+  { href: "/services/decorative-coatings", name: "Decorative coatings", note: "Colour that holds under traffic, on asphalt or concrete", swatch: "decorative-coatings" },
+  { href: "/services/preformed-thermoplastic", name: "Preformed thermoplastic", note: "Crosswalks, symbols and street art, cut to the drawing", swatch: "preformed-thermoplastic" },
+  {
+    href: "/services/vapor-blasting",
+    name: "Vapour blasting",
+    note: "Graffiti, markings and grime lifted wet; surfaces primed",
+    swatch: "vapor-blasting",
+    swatchSrc: "/images/services/vapor-blasting/generated/gen-granville-island-vapour-blasting-01-enhanced.jpg",
+    swatchPosition: "30% 58%",
+  },
+]
+
+const SERVICE_MORE: Row[] = [
+  { href: "/driveways", name: "Driveways", note: "For homeowners in Metro Vancouver and Greater Victoria" },
+  // 2 Oct 2026 (Vern): the pattern sheets, reachable from the menu.
+  { href: "/patterns", name: "Pattern sheets", note: "The StreetPrint templates, drawn to scale" },
+  { href: "/products", name: "The systems we install", note: "The eight systems behind the four services" },
+  // 2 Oct 2026: the document library gets a way in from the menu.
+  { href: "/resources", name: "Documents", note: "Specifications, data sheets and colour cards" },
+]
+
+/** The preview follows the pointer after a breath, so a pass across the
+    rows on the way somewhere else does not set off a string of wipes. */
+function usePreview(initial: string) {
+  const [state, setState] = useState({ active: initial, prev: initial })
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const show = useCallback((href: string) => {
+    if (timer.current) clearTimeout(timer.current)
+    timer.current = setTimeout(() => {
+      setState((s) => (s.active === href ? s : { active: href, prev: s.active }))
+    }, 70)
+  }, [])
+  useEffect(
+    () => () => {
+      if (timer.current) clearTimeout(timer.current)
+    },
+    [],
+  )
+  return [state, show] as const
+}
+
+function Swatch({ name, size, src, position }: { name: string; size: number; src?: string; position?: string }) {
+  // A row can point its swatch at a photograph instead of the pre-cut webp
+  // (2 Oct 2026, vapour blasting: the sunlit Granville Island frame, "same
+  // profile but sunny day, needs to go in the mega menu too"); the image
+  // route cuts the small square, so no new file crosses the bridge.
+  if (src) {
+    return (
+      <span className="mega-swatch relative" style={{ width: size, height: size }} aria-hidden="true">
+        <Image src={src} alt="" fill sizes={`${size * 2}px`} className="object-cover" style={{ objectPosition: position ?? "center" }} />
       </span>
-    </Link>
+    )
+  }
+  return (
+    <span className="mega-swatch" style={{ width: size, height: size }} aria-hidden="true">
+      <Image src={`/images/menu/swatch-${name}.webp`} alt="" width={size} height={size} unoptimized />
+    </span>
   )
 }
 
-interface MegaPanelProps {
-  onNavigate: () => void
-  onMouseEnter: () => void
-  onMouseLeave: () => void
+/** The frame on the right: every photograph for this menu is stacked in it,
+    the active one on top, wiped in behind the line. */
+function MegaPreview({
+  keys,
+  previews,
+  active,
+  prev,
+}: {
+  keys: string[]
+  previews: MenuPreviews
+  active: string
+  prev: string
+}) {
+  const current = previews[active]
+  return (
+    <figure className="mega-preview">
+      <div className="mega-frame">
+        {keys.map((k) => {
+          const p = previews[k]
+          if (!p) return null
+          const state = k === active ? " is-active" : k === prev ? " is-prev" : ""
+          return (
+            <Image
+              key={k}
+              src={p.src}
+              alt=""
+              aria-hidden="true"
+              fill
+              loading="eager"
+              sizes="(min-width: 1280px) 500px, 40vw"
+              className={`mega-shot${state}`}
+            />
+          )
+        })}
+        {current && <span key={active} className="mega-line" aria-hidden="true" />}
+      </div>
+      <figcaption className="cap">{current?.caption ?? " "}</figcaption>
+    </figure>
+  )
 }
 
-/** The panel frame — fixed under the bar, the site's container width. */
-function Panel({
-  label,
-  children,
+interface MenuProps {
+  previews: MenuPreviews
+  onNavigate: () => void
+}
+
+function ServicesMenu({ previews, onNavigate }: MenuProps) {
+  const [pv, show] = usePreview(SERVICE_ROWS[0].href)
+  const keys = [...SERVICE_ROWS, ...SERVICE_MORE].map((r) => r.href)
+  return (
+    <>
+      <div className="col-span-7">
+        <div className="mega-head">
+          <span className="label">What we do</span>
+          <Link href="/services" onClick={onNavigate} className="link">
+            All services
+          </Link>
+        </div>
+        <ol className="mega-index">
+          {SERVICE_ROWS.map((row, i) => (
+            <li key={row.href}>
+              <Link
+                href={row.href}
+                onClick={onNavigate}
+                onMouseEnter={() => show(row.href)}
+                onFocus={() => show(row.href)}
+                className="mega-row"
+                data-active={pv.active === row.href || undefined}
+              >
+                <span className="mega-num" aria-hidden="true">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                {row.swatch && <Swatch name={row.swatch} size={56} src={row.swatchSrc} position={row.swatchPosition} />}
+                <span className="min-w-0">
+                  <span className="mega-name">{row.name}</span>
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ol>
+        {/* 2 Oct 2026 (Vern: "Driveways, The Systems, Documents in the mega
+            menu don't land right, skip the icons"): one hairline row of
+            words under the four services, no swatches. */}
+        <p className="mega-also">
+          <span className="mega-also-label">Also</span>
+          {SERVICE_MORE.map((row) => (
+            <Link
+              key={row.href}
+              href={row.href}
+              onClick={onNavigate}
+              onMouseEnter={() => show(row.href)}
+              onFocus={() => show(row.href)}
+              className="mega-also-a"
+              data-active={pv.active === row.href || undefined}
+            >
+              {row.name}
+            </Link>
+          ))}
+        </p>
+      </div>
+      <div className="col-span-5">
+        <MegaPreview keys={keys} previews={previews} active={pv.active} prev={pv.prev} />
+      </div>
+    </>
+  )
+}
+
+function BuyersMenu({ previews, onNavigate }: MenuProps) {
+  const first = BUYER_GROUPS[0]?.items[0]?.href ?? "/applications/crosswalks"
+  const [pv, show] = usePreview(first)
+  const keys = BUYER_GROUPS.flatMap((g) => g.items.map((a) => a.href))
+  return (
+    <>
+      <div className="col-span-7">
+        <div className="mega-head">
+          <span className="label">Who we work with</span>
+          <Link href="/galleries" onClick={onNavigate} className="link">
+            Photographs, by application
+          </Link>
+        </div>
+        <div className="mega-ledger">
+          {BUYER_GROUPS.map((g) => (
+            <div key={g.label}>
+              <div>
+                <span className="mega-name">{g.label}</span>
+              </div>
+              <ul className="mega-run mega-list">
+                {g.items.map((a) => (
+                  <li key={a.href}>
+                    <Link
+                      href={a.href}
+                      onClick={onNavigate}
+                      onMouseEnter={() => show(a.href)}
+                      onFocus={() => show(a.href)}
+                      data-active={pv.active === a.href || undefined}
+                    >
+                      {a.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="col-span-5">
+        <MegaPreview keys={keys} previews={previews} active={pv.active} prev={pv.prev} />
+      </div>
+    </>
+  )
+}
+
+/** The strip that closes every menu: the free site visit, the two lines, the button. */
+function MegaStrip({ onNavigate }: { onNavigate: () => void }) {
+  return (
+    <div className="mega-strip">
+      <div className="container-1280 flex items-center gap-x-8 py-[18px]">
+        <p className="min-w-0 flex-1 text-[16px] leading-[1.45] text-ink-body">
+          <span className="font-bold text-ink" style={{ fontFamily: "var(--font-display)" }}>
+            Free site visit, written quote.
+          </span>{" "}
+        </p>
+        <dl className="mega-lines">
+          <div>
+            <dt>Lower Mainland</dt>
+            <dd>
+              <a href="tel:+16046126209">604-612-6209</a>
+            </dd>
+          </div>
+          <div>
+            <dt>Vancouver Island</dt>
+            <dd>
+              <a href="tel:+12503910270">250-391-0270</a>
+            </dd>
+          </div>
+        </dl>
+        <Link href="/contact" onClick={onNavigate} className="btn-primary shrink-0">
+          Get a quote
+        </Link>
+      </div>
+    </div>
+  )
+}
+
+function MegaSheet({
+  menu,
+  previews,
+  onNavigate,
   onMouseEnter,
   onMouseLeave,
 }: {
-  label: string
-  children: React.ReactNode
+  menu: MenuKey
+  previews: MenuPreviews
+  onNavigate: () => void
   onMouseEnter: () => void
   onMouseLeave: () => void
 }) {
   return (
     <motion.div
       role="region"
-      aria-label={label}
-      initial={{ opacity: 0, y: 6 }}
+      aria-label={menu === "services" ? "What we do" : "Who we work with"}
+      initial={{ opacity: 0, y: -6 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 6 }}
+      exit={{ opacity: 0, y: -4, transition: { duration: 0.12 } }}
       transition={panelTransition}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      className="fixed top-[72px] right-0 left-0 z-40 hidden border-t border-b border-[#E7E3DC] bg-white min-[1024px]:block"
+      className="mega-panel hidden min-[1024px]:block"
     >
-      <div className="mx-auto py-8" style={{ maxWidth: "var(--container)", paddingInline: "var(--gutter)" }}>
-        {children}
+      <div key={menu} className="mega-swap container-1280 grid grid-cols-12 gap-x-12 pt-8 pb-9">
+        {menu === "services" ? (
+          <ServicesMenu previews={previews} onNavigate={onNavigate} />
+        ) : (
+          <BuyersMenu previews={previews} onNavigate={onNavigate} />
+        )}
       </div>
+      <MegaStrip onNavigate={onNavigate} />
+      <ColourEdge />
     </motion.div>
   )
 }
 
-function ServicesMega({ onNavigate, onMouseEnter, onMouseLeave }: MegaPanelProps) {
-  return (
-    <Panel label="Services menu" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
-      {/* ── The trades, the residential line, and the supporting service —
-             one row of five photographs, in the business order ──────── */}
-      <div className="grid grid-cols-5 gap-4">
-        {SERVICE_TILES.map((tile) => (
-          <MegaTile
-            key={tile.href}
-            href={tile.href}
-            src={tile.src}
-            alt={tile.alt}
-            name={tile.name}
-            note={tile.note}
-            aspect="aspect-[4/3]"
-            compact
-            onNavigate={onNavigate}
-          />
-        ))}
-      </div>
-
-      <div className="mt-5 flex flex-wrap items-center justify-between gap-x-8 gap-y-3 border-t border-[#E7E3DC] pt-5">
-        <Link href="/services" onClick={onNavigate} className="arrow-link">
-          All services <span>&rarr;</span>
-        </Link>
-        <div className="flex flex-wrap items-center gap-x-8 gap-y-2">
-          {/* The eight systems live one click deeper (the client, 19 Sept:
-              not sure Products belongs in the menu; Vern: "lead potential
-              clients towards services") — a single quiet link, not a grid. */}
-          <Link href="/products" onClick={onNavigate} className="arrow-link">
-            The systems we install <span>&rarr;</span>
-          </Link>
-          <Link href="/specifiers" onClick={onNavigate} className="arrow-link">
-            For specifiers <span>&rarr;</span>
-          </Link>
-          <Link href="/resources" onClick={onNavigate} className="arrow-link">
-            Specifications &amp; documents <span>&rarr;</span>
-          </Link>
-        </div>
-      </div>
-    </Panel>
-  )
-}
-
-function ApplicationsMega({ onNavigate, onMouseEnter, onMouseLeave }: MegaPanelProps) {
-  // Where the work goes — the ten kinds of work as photographs, two rows of
-  // five, each the lead frame of its gallery. This is the front door of the
-  // funnel: a contractor or specifier shops by application, not by system.
-  return (
-    <Panel label="Applications menu" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
-      <div className="grid grid-cols-5 gap-4">
-        {APPLICATIONS.map((a) => (
-          <MegaTile
-            key={a.href}
-            href={a.href}
-            src={APP_LEADS[a.slug] ?? "/images/og-image.png"}
-            alt=""
-            name={a.label}
-            aspect="aspect-[16/10]"
-            compact
-            onNavigate={onNavigate}
-          />
-        ))}
-      </div>
-      <div className="mt-5 flex flex-wrap items-center justify-between gap-x-8 gap-y-3 border-t border-[#E7E3DC] pt-5">
-        <Link href="/applications" onClick={onNavigate} className="arrow-link">
-          All applications <span>&rarr;</span>
-        </Link>
-        <div className="flex flex-wrap items-center gap-x-8 gap-y-2">
-          <Link href="/galleries" onClick={onNavigate} className="arrow-link">
-            Image galleries <span>&rarr;</span>
-          </Link>
-          <Link href="/projects" onClick={onNavigate} className="arrow-link">
-            Projects <span>&rarr;</span>
-          </Link>
-          <Link href="/specifiers" onClick={onNavigate} className="arrow-link">
-            For specifiers <span>&rarr;</span>
-          </Link>
-        </div>
-      </div>
-    </Panel>
-  )
-}
+/* ------------------------------------------------------------------
+   The phone's drawer — the same character as the sheet: the services
+   with their swatches, the buyers as a ledger, the lines and the button.
+   ------------------------------------------------------------------ */
 
 function MobileDrawer({ onClose }: { onClose: () => void }) {
   const pathname = usePathname()
+  const bigRow =
+    "block border-b border-hairline py-[15px] text-[21px] leading-tight font-bold tracking-[-0.01em] text-ink"
   return (
     <motion.div
       role="dialog"
       aria-modal="true"
       aria-label="Navigation menu"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.18, ease: "easeOut" }}
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 8 }}
+      transition={{ duration: 0.2, ease: "easeOut" }}
       className="fixed inset-0 z-[300] flex flex-col bg-white min-[1024px]:hidden"
     >
-      <div className="flex h-[72px] shrink-0 items-center justify-between border-b border-[#E7E3DC] px-6">
+      <div className="flex h-[72px] shrink-0 items-center justify-between border-b border-hairline px-6">
         <Wordmark onClick={onClose} />
         <button
           type="button"
           onClick={onClose}
           aria-label="Close menu"
-          className="px-3 py-2 text-[28px] leading-none font-normal text-[#14161A]"
+          className="px-3 py-2 text-[28px] leading-none font-normal text-ink"
         >
           &times;
         </button>
       </div>
 
-      <nav aria-label="Mobile" className="flex-1 overflow-auto px-6 pt-2 pb-6">
-        {/* The five services as a swipeable photo rail — the desktop panel's
-            first row, one thumb-width at a time. */}
-        <div className="-mx-6 flex snap-x snap-mandatory gap-3 overflow-x-auto px-6 pt-3 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {SERVICE_TILES.map((tile) => (
-            <Link
-              key={tile.href}
-              href={tile.href}
-              onClick={onClose}
-              className="relative block aspect-[4/3] w-[62vw] max-w-[260px] shrink-0 snap-start overflow-hidden rounded-[2px] bg-[#F1EEE9]"
-            >
-              <Image src={tile.src} alt={tile.alt} fill sizes="62vw" className="object-cover" />
-              <span aria-hidden="true" className="scrim" />
-              <span className="absolute inset-x-0 bottom-0 p-3">
-                <span className="block text-[12px] font-semibold uppercase tracking-[0.1em] text-white" style={{ fontFamily: "var(--font-display)" }}>
-                  {tile.name}
+      <nav aria-label="Mobile" className="flex-1 overflow-auto px-6 pt-5 pb-8">
+        <div className="flex items-baseline justify-between">
+          <span className="label">What we do</span>
+          <Link href="/services" onClick={onClose} className="link text-[15px]">
+            All services
+          </Link>
+        </div>
+        <ul className="mt-2 border-t border-hairline">
+          {[...SERVICE_ROWS, ...SERVICE_MORE].map((row) => (
+            <li key={row.href}>
+              <Link href={row.href} onClick={onClose} className="drawer-row">
+                {row.swatch && <Swatch name={row.swatch} size={44} src={row.swatchSrc} position={row.swatchPosition} />}
+                <span className="min-w-0">
+                  <span className="drawer-name">{row.name}</span>
                 </span>
-                <span className="mt-[2px] block text-[12px] text-white/75">{tile.note}</span>
-              </span>
-            </Link>
+              </Link>
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-9 flex items-baseline justify-between">
+          <span className="label">Who we work with</span>
+          <Link href="/galleries" onClick={onClose} className="link text-[15px]">
+            All photographs
+          </Link>
+        </div>
+        <div className="mt-2 border-t border-hairline">
+          {BUYER_GROUPS.map((g) => (
+            <div key={g.label} className="border-b border-hairline py-4">
+              <span className="drawer-name text-[17px]">{g.label}</span>
+              <ul className="mega-run mt-1 text-[16px]">
+                {g.items.map((a) => (
+                  <li key={a.href}>
+                    <Link href={a.href} onClick={onClose}>
+                      {a.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           ))}
         </div>
 
-        {DRAWER_LINKS.map((link) => (
-          <Link
-            key={link.href}
-            href={link.href}
-            onClick={onClose}
-            className="block border-b border-[#E7E3DC] py-[18px] text-[24px] leading-tight font-medium tracking-[-0.02em] text-[#14161A]"
-          >
-            {link.label}
-          </Link>
-        ))}
-
-        <div className="label mt-9">Services</div>
-        <div className="mt-3 flex flex-col">
-          {serviceLinks.map((service) => (
-            <Link
-              key={service.slug}
-              href={`/services/${service.slug}`}
-              onClick={onClose}
-              className="py-[9px] text-[16px] font-medium text-[#3D4147]"
-            >
-              {SERVICE_LABEL[service.slug] ?? service.name}
-            </Link>
-          ))}
-          <Link href="/driveways" onClick={onClose} className="py-[9px] text-[16px] font-medium text-[#3D4147]">
-            Driveways
-          </Link>
-          <Link href="/specifiers" onClick={onClose} className="py-[9px] text-[16px] font-medium text-[#3D4147]">
-            For specifiers
-          </Link>
-          <Link href="/products" onClick={onClose} className="py-[9px] text-[16px] font-medium text-[#3D4147]">
-            The systems we install
-          </Link>
-        </div>
-
-        <div className="label mt-8">Applications</div>
-        <div className="mt-3 grid grid-cols-2 gap-x-4">
-          {APPLICATIONS.filter((a) => a.href !== "/driveways").map((a) => (
-            <Link key={a.href} href={a.href} onClick={onClose} className="flex items-center gap-3 py-[7px] text-[15px] font-medium text-[#3D4147]">
-              {APP_LEADS[a.slug] && (
-                <span className="relative block h-[30px] w-[40px] shrink-0 overflow-hidden rounded-[2px] bg-[#F1EEE9]">
-                  <Image src={APP_LEADS[a.slug]} alt="" fill sizes="40px" className="object-cover" />
-                </span>
-              )}
-              <span className="min-w-0 leading-[1.25]">{a.label}</span>
+        <div className="mt-9">
+          {[
+            { label: "Driveways", href: "/driveways" },
+            { label: "Projects", href: "/projects" },
+            { label: "Documents", href: "/resources" },
+            { label: "About", href: "/about" },
+            { label: "Blog", href: "/blog" },
+            { label: "Contact", href: "/contact" },
+          ].map((link) => (
+            <Link key={link.href} href={link.href} onClick={onClose} className={bigRow} style={{ fontFamily: "var(--font-display)" }}>
+              {link.label}
             </Link>
           ))}
         </div>
-
       </nav>
 
-      <div className="flex shrink-0 flex-wrap items-center gap-x-6 gap-y-1 border-t border-[#E7E3DC] px-6 py-4 text-[13px] text-[#767B82]">
+      <div className="flex shrink-0 flex-wrap items-center gap-x-6 gap-y-1 border-t border-hairline px-6 py-4 text-[14px] text-ink-muted">
         <span>
-          <a href="tel:+16046126209" className="font-medium text-[#14161A]">604-612-6209</a> Maple Ridge
+          <a href="tel:+16046126209" className="font-medium text-ink">604-612-6209</a> Lower Mainland
         </span>
         <span>
-          <a href="tel:+12503910270" className="font-medium text-[#14161A]">250-391-0270</a> Vancouver Island
+          <a href="tel:+12503910270" className="font-medium text-ink">250-391-0270</a> Vancouver Island
         </span>
       </div>
 
       <Link
         href={pathname === "/contact" ? "/contact#quote" : "/contact"}
         onClick={onClose}
-        className="flex h-16 shrink-0 items-center justify-center bg-[#F26430] text-[13px] font-semibold tracking-[0.12em] uppercase text-white transition-colors hover:bg-[#D8511F] hover:text-white"
+        className="flex h-16 shrink-0 items-center justify-center bg-[color:var(--accent-deep)] text-[15px] font-bold text-white transition-colors hover:bg-[color:var(--accent-press)] hover:text-white"
         style={{ fontFamily: "var(--font-display)" }}
       >
-        Request a quote
+        Get a quote
       </Link>
+      <ColourEdge />
     </motion.div>
   )
 }
@@ -454,11 +532,12 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
    Nav
    ------------------------------------------------------------------ */
 
-export default function Nav() {
+export default function Nav({ previews = MENU_PREVIEWS }: { previews?: MenuPreviews }) {
   const pathname = usePathname()
   const [scrolled, setScrolled] = useState(false)
   const [onImage, setOnImage] = useState(false)
   const [atFooter, setAtFooter] = useState(false)
+  const [deep, setDeep] = useState(false)
   const [menu, setMenu] = useState<MenuKey | null>(null)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
@@ -503,9 +582,12 @@ export default function Nav() {
     setDrawerOpen(false)
   }, [clearCloseTimer])
 
-  // Bar goes opaque past 24px
+  // Bar goes opaque past 24px; "deep" once the visitor has really scrolled
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24)
+    const onScroll = () => {
+      setScrolled(window.scrollY > 24)
+      setDeep(window.scrollY > 320)
+    }
     onScroll()
     window.addEventListener("scroll", onScroll, { passive: true })
     return () => window.removeEventListener("scroll", onScroll)
@@ -587,7 +669,10 @@ export default function Nav() {
   // Menus and the drawer sit on white, so the light treatment yields to them
   const light = onImage && !scrolled && menu === null
   // Hidden only while nothing is open and the footer is on screen.
-  const hidden = atFooter && menu === null && !drawerOpen && !searchOpen
+  // 28 Sept 2026 QA: on a short page (search, the 404) the footer is in view
+  // on arrival, and the bar vanished before anyone scrolled. It steps off
+  // only once the visitor has scrolled into the page.
+  const hidden = atFooter && deep && menu === null && !drawerOpen && !searchOpen
 
   return (
     // reducedMotion="user": the CSS kill switch cannot stop framer's JS
@@ -601,7 +686,7 @@ export default function Nav() {
           background: solid ? "#FFFFFF" : "rgba(255,255,255,0)",
           backdropFilter: solid ? "blur(8px)" : "none",
           WebkitBackdropFilter: solid ? "blur(8px)" : "none",
-          borderBottom: `1px solid ${solid ? HAIRLINE : "rgba(231,227,220,0)"}`,
+          borderBottom: `1px solid ${solid ? HAIRLINE : "rgba(225,228,231,0)"}`,
           transform: hidden ? "translateY(-100%)" : "translateY(0)",
           pointerEvents: hidden ? "none" : "auto",
           transition: "background 0.25s ease, border-color 0.25s ease, transform 0.32s cubic-bezier(0.4, 0, 0.2, 1)",
@@ -612,7 +697,7 @@ export default function Nav() {
 
           <nav
             aria-label="Primary"
-            className="ml-auto hidden items-center gap-6 min-[1024px]:flex min-[1280px]:gap-8"
+            className="ml-auto hidden items-center gap-6 min-[1024px]:flex min-[1280px]:gap-7"
           >
             {PRIMARY_LINKS.map((link) => {
               const menuKey = link.menu
@@ -667,6 +752,9 @@ export default function Nav() {
             })}
           </nav>
 
+          {/* The office number left the bar on 2 Oct 2026 (the client's
+              note); it stays in the menu strip and the drawer. */}
+
           <button
             type="button"
             onClick={() => {
@@ -689,9 +777,9 @@ export default function Nav() {
             href={pathname === "/contact" ? "/contact#quote" : "/contact"}
             onClick={closeAll}
             style={{ fontFamily: "var(--font-display)" }}
-            className="nav-cta ml-2 hidden shrink-0 rounded-[2px] border px-[19px] py-[11px] text-[12px] font-semibold tracking-[0.1em] uppercase transition-colors min-[1024px]:inline-block"
+            className="nav-cta ml-2 hidden shrink-0 border transition-colors min-[1024px]:inline-block"
           >
-            Request a quote
+            Get a quote
           </Link>
 
           <button
@@ -722,7 +810,7 @@ export default function Nav() {
         </div>
       </header>
 
-      {/* The page steps back while a panel is open; a click on it closes the panel */}
+      {/* The page steps back while a menu is open; a click on it closes the menu. */}
       <AnimatePresence>
         {menu && (
           <motion.div
@@ -738,20 +826,13 @@ export default function Nav() {
       </AnimatePresence>
 
       <AnimatePresence>
-        {menu === "applications" && (
-          <ApplicationsMega
+        {menu && (
+          <MegaSheet
+            key="mega"
+            menu={menu}
+            previews={previews}
             onNavigate={closeAll}
-            onMouseEnter={() => openMenu("applications")}
-            onMouseLeave={scheduleClose}
-          />
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {menu === "services" && (
-          <ServicesMega
-            onNavigate={closeAll}
-            onMouseEnter={() => openMenu("services")}
+            onMouseEnter={() => openMenu(menu)}
             onMouseLeave={scheduleClose}
           />
         )}
