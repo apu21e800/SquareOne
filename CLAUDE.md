@@ -200,6 +200,7 @@ npm run start   # Run production build locally
 ```
 
 ## Development Notes
+- **Disk reads go through `lib/disk.ts`** (7 Oct 2026). With Sanity connected every page also rebuilds itself on Vercel's servers every 60 seconds, and there `public/` is not in the function bundle (excluded in next.config.ts for size) and `content/blog` sits only beside the blog routes. The first production build with Sanity on (7 Oct 2026) served "No photos match this filter" on every gallery and lost the project stories once its pages had rebuilt. `lib/disk.ts` reads the disk first and falls back to `lib/generated/disk.json`, which `scripts/disk-manifest.mjs` writes before every build and dev server (package.json `prebuild`, `predev`; `npm run check` fails if the committed copy is stale, so run the script after adding photos or posts and commit the JSON). Never read `public/` or `content/` with `fs` directly in code that renders a page.
 - TypeScript strict mode enabled — never use `any`
 - All data changes (services, products, projects) require code changes in `lib/` files
 - Blog is the only content type that supports non-developer edits (MDX files in `content/blog/`)
