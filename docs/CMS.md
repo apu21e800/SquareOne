@@ -33,6 +33,13 @@ what the seed carries is what the live site already says. About 20 minutes.
 Seed first, variables second: the site starts reading Sanity the moment the
 variables are in, and by then the record is already there.
 
+**Before you start** (checked 7 Oct 2026): the machine that runs step 2's
+commands needs **Node 22.12 or newer**: `node -v` must print v22.12 or
+higher. The Sanity tools in this repo (sanity 6, @sanity/cli 8) refuse
+anything older, and `npm run cms:seed` runs on Node's own TypeScript
+support. If it prints less, install Node 22 LTS from nodejs.org first.
+PR #11 went live on 7 Oct, so the condition above is met.
+
 1. **Create the project** at sanity.io → Create project → name "Square One
    Paving", dataset `production`, Free plan. Copy the project id (8
    characters) from sanity.io/manage.
@@ -47,12 +54,12 @@ variables are in, and by then the record is already there.
    The `-p` is required: the repo has no `sanity.cli.ts`. The seed carries
    the 48 listed posts, the 31 projects, and the contact lines and social
    links; the photographs are fetched from www.squareonepaving.com (all 88
-   answered 200 on 30 Sept). Ids are stable, so running it again updates
-   rather than duplicates. Left out on purpose: posts marked `unlisted:
-   true`, and the footer line and social heading, which stay the site's
-   own until an editor writes one in Site settings. Spot-check three long
-   posts in the Studio afterwards (the markdown → Portable Text conversion
-   covers headings, lists, bold, italic, links).
+   answered 200 on 30 Sept, and again on 7 Oct). Ids are stable, so running
+   it again updates rather than duplicates. Left out on purpose: posts
+   marked `unlisted: true`, and the footer line and social heading, which
+   stay the site's own until an editor writes one in Site settings.
+   Spot-check three long posts in the Studio afterwards (the markdown →
+   Portable Text conversion covers headings, lists, bold, italic, links).
 3. **CORS**: sanity.io/manage → project → API → CORS origins → add each of
    these with **Allow credentials** ticked. Without them the Studio cannot
    log in from the site.
