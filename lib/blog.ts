@@ -1,5 +1,5 @@
-import fs from "fs"
 import path from "path"
+import { listDir, readText } from "./disk"
 import matter from "gray-matter"
 import { heroFor } from "./gallery"
 import { ledeOverride } from "./blog-ledes"
@@ -30,9 +30,11 @@ export interface BlogPost {
 
 export interface BlogPostMeta extends Omit<BlogPost, "content"> {}
 
+/* The MDX is read through lib/disk.ts (7 Oct 2026): pages outside the blog
+   routes rebuild on servers where content/blog is not on disk, and fall back
+   to the build's snapshot of the same files. */
 function ensureBlogDir() {
-  if (!fs.existsSync(BLOG_DIR)) return []
-  return fs.readdirSync(BLOG_DIR).filter((f) => f.endsWith(".mdx") || f.endsWith(".md"))
+  return (listDir(BLOG_DIR)?.files ?? []).filter((f) => f.endsWith(".mdx") || f.endsWith(".md"))
 }
 
 export function getAllPosts(): BlogPostMeta[] {
@@ -41,7 +43,8 @@ export function getAllPosts(): BlogPostMeta[] {
   return files
     .map((filename) => {
       const slug = filename.replace(/\.(mdx|md)$/, "")
-      const raw = fs.readFileSync(path.join(BLOG_DIR, filename), "utf8")
+      const raw = readText(path.join(BLOG_DIR, filename))
+      if (raw === null) return null
       const { data } = matter(raw)
       // `unlisted: true` in the front-matter takes a post out of every list
       // (the index, the home page, related posts, search, the sitemap)
@@ -64,13 +67,9 @@ export function getAllPosts(): BlogPostMeta[] {
 }
 
 export function getPostBySlug(slug: string): BlogPost | null {
-  const mdxPath = path.join(BLOG_DIR, `${slug}.mdx`)
-  const mdPath = path.join(BLOG_DIR, `${slug}.md`)
-  const filePath = fs.existsSync(mdxPath) ? mdxPath : fs.existsSync(mdPath) ? mdPath : null
+  const raw = readText(path.join(BLOG_DIR, `${slug}.mdx`)) ?? readText(path.join(BLOG_DIR, `${slug}.md`))
+  if (raw === null) return null
 
-  if (!filePath) return null
-
-  const raw = fs.readFileSync(filePath, "utf8")
   const { data, content } = matter(raw)
 
   return {

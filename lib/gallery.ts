@@ -12,9 +12,11 @@
 //
 // Server-only: reads disk at build time. Safe in Server Components and in
 // generateStaticParams-backed pages; never import from a "use client" module.
+// 7 Oct 2026: the folders are read through lib/disk.ts, which falls back to
+// the build's snapshot when a page rebuilds on a server without public/.
 
-import fs from "node:fs"
 import path from "node:path"
+import { listDir } from "./disk"
 
 export type GalleryKind = "projects" | "products" | "applications" | "services" | "blog"
 
@@ -55,16 +57,11 @@ export function galleryFor(kind: GalleryKind, slug: string): string[] {
 
   const dir = path.join(PUBLIC_DIR, "images", kind, slug)
 
-  let entries: fs.Dirent[]
-  try {
-    entries = fs.readdirSync(dir, { withFileTypes: true })
-  } catch {
-    return []
-  }
+  const listing = listDir(dir)
+  if (!listing) return []
 
-  return entries
-    .filter((e) => e.isFile() && IMAGE_EXT.test(e.name) && !e.name.startsWith(".") && !HELD.has(e.name))
-    .map((e) => e.name)
+  return listing.files
+    .filter((name) => IMAGE_EXT.test(name) && !name.startsWith(".") && !HELD.has(name))
     .sort(naturalCompare)
     .map((name) => `/images/${kind}/${slug}/${encodeURIComponent(name)}`)
 }

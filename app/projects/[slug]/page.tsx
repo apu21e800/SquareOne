@@ -181,6 +181,9 @@ export default async function ProjectPage({ params }: Props) {
                 sizes="100vw"
                 className="object-cover"
               />
+              {/* The colour card's edge along the frame's foot, as on every
+                  full-bleed photograph a page opens on (7 Oct 2026). */}
+              <span aria-hidden="true" className="opener-edge" />
             </div>
             <div className="container-1280">
               <figcaption className="cap">{caption}</figcaption>

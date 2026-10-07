@@ -1,5 +1,5 @@
-import fs from "node:fs"
 import path from "node:path"
+import { imageSize, listDir } from "./disk"
 import { curate } from "@/lib/curation"
 import { WORK_CAPTIONS } from "@/lib/work-captions"
 
@@ -295,30 +295,9 @@ const EXTRAS: Extra[] = [
 
 const IMAGE_EXT = /\.(jpe?g|png)$/i
 
-/** Pixel dimensions from the file header — PNG IHDR or the first JPEG SOF marker. */
+/** Pixel dimensions from the file header (lib/disk.ts; the build's snapshot when the file is not on this disk). */
 function dims(file: string): [number, number] {
-  let buf: Buffer
-  try {
-    buf = fs.readFileSync(file)
-  } catch {
-    return [0, 0]
-  }
-  if (buf.length > 24 && buf.toString("latin1", 1, 4) === "PNG") {
-    return [buf.readUInt32BE(16), buf.readUInt32BE(20)]
-  }
-  let i = 2
-  while (i + 9 < buf.length) {
-    if (buf[i] !== 0xff) {
-      i += 1
-      continue
-    }
-    const marker = buf[i + 1]
-    if (marker === 0xc0 || marker === 0xc1 || marker === 0xc2) {
-      return [buf.readUInt16BE(i + 7), buf.readUInt16BE(i + 5)]
-    }
-    i += 2 + buf.readUInt16BE(i + 2)
-  }
-  return [0, 0]
+  return imageSize(file)
 }
 
 function webPath(rel: string, file: string): string {
@@ -331,11 +310,7 @@ function normName(file: string): string {
 }
 
 function listFiles(dir: string): string[] {
-  try {
-    return fs.readdirSync(dir).filter((f) => IMAGE_EXT.test(f))
-  } catch {
-    return []
-  }
+  return (listDir(dir)?.files ?? []).filter((f) => IMAGE_EXT.test(f))
 }
 
 // ── The record ──────────────────────────────────────────────────────────────

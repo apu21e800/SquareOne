@@ -23,7 +23,7 @@ const IMAGE_CAP = 24
 const GROUP_CHIP: Record<string, string> = {
   page: "var(--edge-9)",
   service: "var(--edge-7)",
-  product: "var(--edge-6)",
+  product: "var(--edge-2)",
   application: "var(--edge-3)",
   project: "var(--edge-8)",
   document: "var(--edge-5)",

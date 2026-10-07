@@ -1,4 +1,4 @@
-import fs from "fs"
+import { listDir } from "./disk"
 import path from "path"
 
 import { services } from "@/lib/services"
@@ -72,11 +72,9 @@ const PRODUCT_DIR_TO_SLUG: Record<string, string> = {
 }
 
 function listImages(dir: string): string[] {
-  if (!fs.existsSync(dir)) return []
-  return fs
-    .readdirSync(dir, { withFileTypes: true })
-    .filter((e) => e.isFile())
-    .map((e) => e.name)
+  const listing = listDir(dir)
+  if (!listing) return []
+  return listing.files
     .filter(
       (name) =>
         IMAGE_EXT.has(path.extname(name).toLowerCase()) &&
@@ -118,12 +116,12 @@ function imageEntries(): SearchEntry[] {
 
   // Products — dir names map to product slugs; airmark is not sold and stays out
   const productsRoot = path.join(IMAGE_ROOT, "products")
-  if (fs.existsSync(productsRoot)) {
-    for (const dir of fs.readdirSync(productsRoot)) {
+  const productDirs = listDir(productsRoot)
+  if (productDirs) {
+    for (const dir of productDirs.dirs) {
       const slug = PRODUCT_DIR_TO_SLUG[dir]
       if (!slug) continue
       const abs = path.join(productsRoot, dir)
-      if (!fs.statSync(abs).isDirectory()) continue
       const owner = productName.get(slug)
       for (const file of listImages(abs)) {
         entries.push({
