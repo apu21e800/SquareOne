@@ -2124,9 +2124,10 @@ h2.search-group-name:not(.label):not(.eyebrow) { font-size: 17px; letter-spacing
      the openers on a laptop (560, 580 and 640px) put their foot below a
      short phone's screen: an SE in Safari shows 553px, so the vapour
      opener's ledger and the reel's clock sat under the fold. On a phone the
-     floor is the screen itself, and the home reel grows to its words only
-     when they need more than the screen (a zoomed page) instead of sliding
-     them under the bar.
+     floor is the screen itself, and every hero grows to its words when they
+     need more than the screen (a phone on its side, a zoomed page) instead
+     of sliding them up under the bar (the independent review, 9 Oct: with
+     the floor alone the vapour headline sat on the logo at 667 by 331).
    - The words take less height: the headline a size smaller and set closer,
      the line under it 15.5px on 1.42, the gaps tighter, the buttons 46px
      tall (still a full finger).
@@ -2142,7 +2143,7 @@ h2.search-group-name:not(.label):not(.eyebrow) { font-size: 17px; letter-spacing
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    padding-top: var(--bar-h);
+    padding-top: calc(var(--bar-h) + 2rem);
   }
   .reel > .reel-words { position: relative; }
   .reel .hero-in { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
@@ -2152,10 +2153,15 @@ h2.search-group-name:not(.label):not(.eyebrow) { font-size: 17px; letter-spacing
   .hero-actions .btn-primary, .hero-actions .btn-on-image { padding-block: 13px; }
   .hero-ledger { margin-top: 16px; padding-top: 4px; }
 
-  .opener { min-height: min(580px, 100svh); }
-  .opener.opener-tall { min-height: min(640px, 100svh); }
+  .opener { height: auto; min-height: max(64vh, min(580px, 100svh)); }
+  .opener.opener-tall { min-height: 100vh; min-height: 100svh; }
   .opener-tall .hero-in { padding-bottom: 32px; }
   .opener .opener-lede { margin-top: 12px; font-size: 15.5px; line-height: 1.45; }
   .opener .hero-actions { margin-top: 20px; }
   .opener-ledger { margin-top: 22px; padding-top: 10px; }
+}
+/* A phone on its side has no room to spare under the words: the buttons
+   come first, so the 72px under the ledger shrinks to 24. */
+@media (max-width: 700px) and (max-height: 480px) {
+  .reel .hero-in { padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px)); }
 }
