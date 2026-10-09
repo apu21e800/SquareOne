@@ -6,7 +6,8 @@ drafter and Buffer social drafts), rewritten for Square One's voice and canon.
 network until a person presses Publish in Studio or approves a post in Buffer.
 
 It needs Sanity connected first (docs/CMS.md). Until the keys below are set,
-every run answers "not switched on: …" and does nothing.
+every run is refused or answers what is missing, and does nothing. Without
+`CRON_SECRET` the routes refuse everyone (401); the reason is in the log only.
 
 ## What happens
 
@@ -55,11 +56,13 @@ every run answers "not switched on: …" and does nothing.
 ## Setup (Vern, once, after Sanity is connected)
 
 All of these go in **Vercel → square-one → Settings → Environments →
-Production**. Don't paste a key into chat: have Claude Code put it in Vercel.
+Production**. Paste each key into Vercel yourself; never into a chat.
 
 1. `SANITY_API_WRITE_TOKEN`: sanity.io/manage → the project → API → Tokens
    → Add API token, name "automation", permission **Editor**.
-2. `ANTHROPIC_API_KEY`: console.anthropic.com → API keys.
+2. `ANTHROPIC_API_KEY`: console.anthropic.com → API keys. The same key the
+   quote form's spam screen uses (lib/form-screen.ts), so one monthly spend
+   limit on it covers both.
 3. `CRON_SECRET`: any long random string. Vercel sends it with every cron
    call, and the routes refuse anything without it.
 4. `BLOG_DRAFT_NOTIFY`: who gets the emails, comma-separated. The emails go
@@ -74,21 +77,24 @@ Production**. Don't paste a key into chat: have Claude Code put it in Vercel.
    once: Vercel → square-one → Settings → Cron Jobs → draft-post → Run.
 
 Optional: `BLOG_DRAFT_MODEL` and `SOCIAL_DRAFT_MODEL` choose the Claude model
-(the default is the one hubss.com's drafters use). `AUTOMATION_PAUSED=1`
-stops both jobs without removing a key.
+(the default, `claude-opus-4-5`, is the one hubss.com's drafters use; checked
+9 Oct 2026, Anthropic retires it no sooner than 24 Nov 2026, so set one of
+these to a current model when it is deprecated). `AUTOMATION_PAUSED=1` stops
+both jobs without removing a key.
 
 ## Steering it
 
 - **Add a job to write up:** Studio → Projects (case studies) → + → title,
   web address, kind of work, service, systems, city, region, the story (two
   to four sentences: what was installed, where, and why it matters, only
-  what's on record) and the photographs. The next weekly run takes it first.
-  (The site's /projects pages still read `lib/projects.ts`; a project added
-  in Studio feeds the blog, not the projects list, until /projects is wired
-  to the CMS.)
+  what's on record) and the photographs. It is on /projects at once, and the
+  next weekly run takes it first. A project marked "Take off the site" is
+  never drafted; the drafter writes from the Studio's version of a project,
+  as the site shows it (lib/automation/facts.ts, since 9 Oct 2026).
 - **Draft one particular project now:** call
   `/api/cron/draft-post?project=<its slug>` with the `CRON_SECRET` header
-  (ask Claude Code to do it; it can read the secret from Vercel).
+  (ask Claude Code on your machine to do it, without pasting the secret
+  anywhere).
 - **Draft a project again:** delete its log, `automation.draftlog.<project
   slug>`, in Studio's Vision tool, or use `?project=` as above.
 - **Social drafts again for a post:** delete `automation.sociallog.<post

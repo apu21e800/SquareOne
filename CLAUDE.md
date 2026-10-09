@@ -79,8 +79,11 @@ Copy .env.local.example → .env.local and fill in:
   SANITY_API_WRITE_TOKEN, BLOG_DRAFT_NOTIFY, BUFFER_API_KEY, AUTOMATION_PAUSED.
 
 ## Blog and social automation (lib/automation/, docs/AUTOMATION.md)
-Two Vercel crons (vercel.json, production only). Weekly, `/api/cron/draft-post`
-writes a project story from the record for the next project with no post and
+Two Vercel crons (vercel.json, production only). Both refuse every call
+without `CRON_SECRET` (401, constant-time check, lib/automation/cron.ts).
+Weekly, `/api/cron/draft-post`
+writes a project story from the record (the Studio's version of it, as the
+site shows it; never a project marked "Take off the site") for the next project with no post and
 saves it as an **unpublished** Sanity draft with "Notes for the editor" (fact
 check, style check). Daily, `/api/cron/social-drafts` turns each newly
 published post into Instagram, Facebook and LinkedIn **drafts** in Buffer.

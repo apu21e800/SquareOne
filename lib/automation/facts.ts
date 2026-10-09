@@ -49,7 +49,7 @@ export interface Subject {
   photos: SubjectPhoto[]
   /** "record": lib/projects.ts, with a page on the site; "studio": added in Studio only. */
   source: "record" | "studio"
-  /** Slug of the post that already tells it (record only). */
+  /** Slug of the post that already tells it (the Studio's "Blog post", else the record's). */
   post?: string
   /** Location awaiting a yes from Square One (record only). */
   flag?: boolean
@@ -68,48 +68,73 @@ interface StudioProject {
   client?: string
   artist?: string
   excerpt?: string
-  images?: { asset?: string; alt?: string }[] | null
+  story?: string[] | null
+  /** The slug of the post picked in Studio's "Blog post" field. */
+  post?: string | null
+  hidden?: boolean | null
+  images?: { asset?: string; alt?: string; file?: string | null }[] | null
   _createdAt?: string
 }
 
 const STUDIO_PROJECTS = `*[_type == "project" && !(_id in path("drafts.**")) && defined(slug.current)]{
   "slug": slug.current, title, application, service, systems, city, region, year, client, artist, excerpt,
-  "images": images[]{ "asset": asset._ref, alt }, _createdAt
+  story, "post": post->slug.current, hidden,
+  "images": images[]{ "asset": asset._ref, alt, "file": asset->originalFilename }, _createdAt
 }`
 
-/** Every project on record and in Studio, merged by slug, newest work first. */
+const filled = (v?: string | null) => (typeof v === "string" && v.trim() ? v.trim() : undefined)
+const named = (src: string) => {
+  const last = src.split("/").pop() ?? ""
+  try {
+    return decodeURIComponent(last)
+  } catch {
+    return last
+  }
+}
+
+/**
+ * Every project on record and in Studio, merged by slug, newest work first.
+ * Since 9 Oct 2026 the site shows the Studio's version of a project
+ * (lib/projects-cms.ts), so the drafter writes from the same: the Studio's
+ * words and photographs field by field, the record filling the gaps, and a
+ * project marked "Take off the site" is never a subject.
+ */
 export async function loadSubjects(store: Store): Promise<Subject[]> {
   const studio = (await store.fetch<StudioProject[] | null>(STUDIO_PROJECTS)) ?? []
   const bySlug = new Map(studio.map((p) => [p.slug, p]))
+  const hidden = new Set(studio.filter((p) => p.hidden).map((p) => p.slug))
 
-  const record: Subject[] = RECORD.map((p) => {
+  const record: Subject[] = RECORD.filter((p) => !hidden.has(p.slug)).map((p) => {
     const s = bySlug.get(p.slug)
-    // The seed uploaded the record's photographs; use those assets when they're there.
-    const assets = (s?.images ?? []).filter((i) => i?.asset)
-    const photos: SubjectPhoto[] = p.images.map((src, i) => ({ src, asset: assets[i]?.asset, alt: assets[i]?.alt }))
+    // The Studio's photographs, in its order; one that is the site's own file
+    // (the seed uploaded them) keeps its web path, for its caption.
+    const inStudio: SubjectPhoto[] = (s?.images ?? [])
+      .filter((i) => i?.asset)
+      .map((i) => ({ asset: i.asset, alt: i.alt, src: i.file ? p.images.find((src) => named(src) === named(i.file as string)) : undefined }))
+    const story = (s?.story ?? []).map((x) => filled(x)).filter((x): x is string => Boolean(x))
     return {
       slug: p.slug,
-      title: p.title,
-      city: p.city,
-      region: p.region,
-      application: p.application,
-      service: p.service,
-      systems: p.systems,
-      year: p.year,
-      client: p.client,
-      artist: p.artist,
-      excerpt: p.excerpt,
-      story: p.story ?? [],
-      photos,
+      title: filled(s?.title) ?? p.title,
+      city: filled(s?.city) ?? p.city,
+      region: filled(s?.region) ?? p.region,
+      application: filled(s?.application) ?? p.application,
+      service: filled(s?.service) ?? p.service,
+      systems: s?.systems?.length ? s.systems : p.systems,
+      year: s ? filled(s.year) : p.year,
+      client: s ? filled(s.client) : p.client,
+      artist: s ? filled(s.artist) : p.artist,
+      excerpt: filled(s?.excerpt) ?? p.excerpt,
+      story: story.length ? story : p.story ?? [],
+      photos: inStudio.length ? inStudio : p.images.map((src) => ({ src })),
       source: "record" as const,
-      post: p.post,
+      post: filled(s?.post) ?? p.post,
       flag: p.flag,
     }
   })
-  const recordSlugs = new Set(record.map((r) => r.slug))
+  const recordSlugs = new Set(RECORD.map((r) => r.slug))
 
   const added: Subject[] = studio
-    .filter((p) => !recordSlugs.has(p.slug) && p.title && p.city && p.excerpt)
+    .filter((p) => !recordSlugs.has(p.slug) && !p.hidden && p.title && p.city && p.excerpt)
     .map((p) => ({
       slug: p.slug,
       title: p.title ?? p.slug,
@@ -122,9 +147,10 @@ export async function loadSubjects(store: Store): Promise<Subject[]> {
       client: p.client || undefined,
       artist: p.artist || undefined,
       excerpt: p.excerpt ?? "",
-      story: [],
+      story: (p.story ?? []).map((x) => filled(x)).filter((x): x is string => Boolean(x)),
       photos: (p.images ?? []).filter((i) => i?.asset).map((i) => ({ asset: i.asset, alt: i.alt })),
       source: "studio" as const,
+      post: filled(p.post),
       createdAt: p._createdAt,
     }))
     .sort((a, b) => (b.createdAt ?? "").localeCompare(a.createdAt ?? ""))
