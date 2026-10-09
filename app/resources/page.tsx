@@ -1,6 +1,8 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import IndexImageHero from "@/components/IndexImageHero"
+import OpenerTitle from "@/components/ui/OpenerTitle"
+import { getPageOpener } from "@/lib/page-content"
 import ResourceLibrary from "@/components/ResourceLibrary"
 import { resourceGroups, resourceCount } from "@/lib/resources"
 import { SITE_URL } from "@/lib/site"
@@ -32,18 +34,20 @@ export const metadata: Metadata = {
  * line's links are underlined words; the library itself is restyled in
  * components/ResourceLibrary.tsx.
  */
-export default function ResourcesPage() {
+export default async function ResourcesPage() {
+  // The opener, with whatever the Studio says on top (lib/page-content.ts, 9 Oct 2026).
+  const o = await getPageOpener("/resources")
   return (
     <main className="bg-[color:var(--surface)]">
       <IndexImageHero
-        src="/images/S1_update_v2/photos/Featured%20image%20options/Photo-2025-03-07-2-54-05-PM-scaled.jpg"
-        alt="Rail ties in tan TrafficPatternsXD thermoplastic set into dark stamped asphalt, the railroad-inspired crosswalk in the City of Langley, installed by Square One Paving"
+        src={o.src}
+        alt={o.alt}
         eyebrow="Documents"
-        title={<>The document <em>library</em></>}
-        fit="The document library"
-        lede={`${resourceCount} documents: the manufacturer's specifications, data sheets, colour cards and design manuals for every system Square One installs. Preview one, or download it for your plans.`}
-        caption="City of Langley · TrafficPatternsXD"
-        imagePosition="center 60%"
+        title={<OpenerTitle head={o.head} tail={o.tail} />}
+        fit={o.fit}
+        lede={o.lede ?? `${resourceCount} documents: the manufacturer's specifications, data sheets, colour cards and design manuals for every system Square One installs. Preview one, or download it for your plans.`}
+        caption={o.caption}
+        imagePosition={o.position}
       />
 
       {/* ── The library ──────── */}

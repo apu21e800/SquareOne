@@ -118,6 +118,14 @@ that is the site's own file (same original name, uncropped) is served from the
 site. With the Studio as seeded, all 31 come out exactly as the record
 (`npm run test:projects`). Search (lib/search-index.ts) still reads the record.
 
+**lib/page-content.ts**, **lib/openers.ts**, **lib/work-cms.ts** — the Studio's
+Home page (hero reel, headline, line), Page openers (every page's opening
+photograph and words) and Gallery photos (9 Oct 2026, docs/CMS.md). A page's
+own opener is data in `lib/openers.ts`, never hand-written in the page; pages
+read `getPageOpener(path)`. Galleries read `getStudioWork()` and friends, not
+`getWork()`, wherever a page shows them. Fields left empty keep the site's own;
+`npm run test:pages`.
+
 **lib/blog.ts** — MDX blog system using gray-matter
 - Reads from `content/blog/*.mdx` (or `.md`)
 - Interface: `BlogPost` with slug, title, description, date, author, category, featured_image, tags, content
@@ -279,13 +287,16 @@ npm run build   # Production build (validates types, generates static pages)
 npm run start   # Run production build locally
 npm run check   # disk manifest, tsc, lint-claims, check-links
 npm run test:forms  # the quote form's spam rules and route decisions (no network, no mail)
+npm run test:projects  # projects from the Studio
+npm run test:pages  # the hero, page openers and galleries from the Studio
+npm run test:automation  # the cron gate and the drafter's subjects
 ```
 
 ## Development Notes
 - **Disk reads go through `lib/disk.ts`** (7 Oct 2026). With Sanity connected every page also rebuilds itself on Vercel's servers every 60 seconds, and there `public/` is not in the function bundle (excluded in next.config.ts for size) and `content/blog` sits only beside the blog routes. The first production build with Sanity on (7 Oct 2026) served "No photos match this filter" on every gallery and lost the project stories once its pages had rebuilt. `lib/disk.ts` reads the disk first and falls back to `lib/generated/disk.json`, which `scripts/disk-manifest.mjs` writes before every build and dev server (package.json `prebuild`, `predev`; `npm run check` fails if the committed copy is stale, so run the script after adding photos or posts and commit the JSON). Never read `public/` or `content/` with `fs` directly in code that renders a page.
 - TypeScript strict mode enabled — never use `any`
 - All data changes (services, products, projects) require code changes in `lib/` files
-- Blog is the only content type that supports non-developer edits (MDX files in `content/blog/`)
+- The office edits in the Studio (/studio): the home hero, page openers, gallery photos, projects, blog posts, the social grid and site settings (docs/CMS.md)
 - Contact form requires RESEND_API_KEY to actually send emails (dev mode just logs the decision)
 - Every JSON-LD block goes through `components/JsonLd.tsx` (`scriptJson` escapes
   <, > and & so Studio text can't break out of the tag); never

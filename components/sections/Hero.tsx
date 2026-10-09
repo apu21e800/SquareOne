@@ -3,7 +3,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { useCallback, useEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type TouchEvent } from "react"
-import { HERO_SLIDES, type Slide } from "@/lib/hero-slides"
+import { HERO_HEADLINE, HERO_HEADLINE_END, HERO_LINE, HERO_SLIDES, type Slide } from "@/lib/hero-slides"
 import { paletteById } from "@/lib/palettes"
 import { nextPalette, setPalette, usePalette } from "@/lib/use-palette"
 
@@ -25,9 +25,11 @@ interface HeroProps {
   slides?: Slide[]
   eyebrow?: string
   title?: string
+  /** The headline's lighter ending, from the Studio's Home page (9 Oct 2026). */
+  titleEnd?: string
 }
 
-export default function Hero({ slides, eyebrow, title }: HeroProps) {
+export default function Hero({ slides, eyebrow, title, titleEnd }: HeroProps) {
   const SLIDES = slides && slides.length > 0 ? slides : HERO_SLIDES
   const count = SLIDES.length
   const [pos, setPos] = useState({ index: 0, prev: -1 })
@@ -184,20 +186,25 @@ export default function Hero({ slides, eyebrow, title }: HeroProps) {
       <div className="absolute inset-x-0 bottom-0 z-[2]">
         <div className="hero-in container-1280 pb-[40px] max-[700px]:pb-[30px]">
           <h1 className="display-xl max-w-none text-white">
-            {title ?? (
+            {title ? (
+              titleEnd ? (
+                <>
+                  {`${title} `}
+                  <em>{titleEnd}</em>
+                </>
+              ) : (
+                title
+              )
+            ) : (
               <>
-                Surfaces that <em>define a place</em>
+                {`${HERO_HEADLINE} `}
+                <em>{HERO_HEADLINE_END}</em>
               </>
             )}
           </h1>
 
           <p className="mt-6 max-w-[46ch] text-[19px] leading-[1.5] text-white/90 [text-wrap:pretty] max-[700px]:mt-5 max-[700px]:text-[17px]">
-            {eyebrow ?? (
-              <>
-                Stamped asphalt, coloured coatings and crosswalks, installed by our own crews across
-                the Lower Mainland and Vancouver Island since 2000.
-              </>
-            )}
+            {eyebrow ?? HERO_LINE}
           </p>
 
           <div className="hero-actions mt-9 max-[700px]:mt-7">

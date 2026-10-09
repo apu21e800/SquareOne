@@ -1,6 +1,8 @@
 import Link from "next/link"
 import type { Metadata } from "next"
 import IndexImageHero from "@/components/IndexImageHero"
+import OpenerTitle from "@/components/ui/OpenerTitle"
+import { getPageOpener } from "@/lib/page-content"
 import Frame from "@/components/ui/Frame"
 
 import { products, type Product } from "@/lib/products"
@@ -47,7 +49,9 @@ const categoryOrder: Product["category"][] = [
   "Surface Protection",
 ]
 
-export default function ProductsPage() {
+export default async function ProductsPage() {
+  // The opener, with whatever the Studio says on top (lib/page-content.ts, 9 Oct 2026).
+  const o = await getPageOpener("/products")
   const groups = categoryOrder
     .map((category) => ({
       category,
@@ -58,14 +62,14 @@ export default function ProductsPage() {
   return (
     <main className="bg-[color:var(--surface)]">
       <IndexImageHero
-        src="/images/S1_update_v2/photos/Featured%20image%20options/504448297_1112360024259349_5235743119624258372_n-1.jpg"
-        alt="The rainbow intersection in Nanaimo at street level, bands of TrafficPatternsXD colour across the road in front of the shops"
+        src={o.src}
+        alt={o.alt}
         eyebrow="The systems we install"
-        title={<>The right system <em>for the surface</em></>}
-        fit="The right system for the surface"
-        lede="Eight pavement systems, from pattern to protection. If it is not listed here, we do not install it."
-        caption="Nanaimo · Rainbow intersection · TrafficPatternsXD"
-        imagePosition="center 84%"
+        title={<OpenerTitle head={o.head} tail={o.tail} />}
+        fit={o.fit}
+        lede={o.lede}
+        caption={o.caption}
+        imagePosition={o.position}
       />
 
       {/* One photographic wall — eight systems, no half-empty category rows.

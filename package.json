@@ -14,11 +14,12 @@
     "test:forms": "tsx scripts/test-form-screen.ts",
     "test:projects": "tsx scripts/test-projects-cms.ts",
     "test:automation": "tsx scripts/test-automation.ts",
+    "test:pages": "tsx scripts/test-page-content.ts",
     "check": "node scripts/disk-manifest.mjs --check && npx tsc --noEmit --incremental false && node scripts/lint-claims.mjs && node scripts/check-links.mjs",
     "images:add": "node scripts/add-images.mjs",
     "warm": "node scripts/warm.mjs",
     "cms:seed": "node --experimental-strip-types scripts/cms-seed.ts",
-    "cms:import": "npx sanity dataset import sanity/seed/seed.ndjson production --replace"
+    "cms:import": "npx sanity dataset import sanity/seed/seed.ndjson production --missing"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",

@@ -23,6 +23,8 @@ import fs from "node:fs"
 import path from "node:path"
 import matter from "gray-matter"
 import { projects } from "../lib/projects.ts"
+import { OPENERS } from "../lib/openers.ts"
+import { HERO_HEADLINE, HERO_HEADLINE_END, HERO_LINE, HERO_SLIDES } from "../lib/hero-slides.ts"
 import { ledeOverride } from "../lib/blog-ledes.ts"
 
 const ROOT = process.cwd()
@@ -203,6 +205,40 @@ for (const p of projects) {
   })
 }
 
+/* ---- The home page's hero, the page openers, the galleries (9 Oct 2026) ----
+   What the pages show today, so the office starts from it in the Studio.
+   Photographs are fetched from www like the rest; the site recognises its
+   own files by name and keeps serving them itself (lib/page-content.ts), so
+   importing these changes nothing anyone sees until someone edits. */
+docs.push({
+  _id: "homePage",
+  _type: "homePage",
+  headline: HERO_HEADLINE,
+  headlineEnd: HERO_HEADLINE_END,
+  line: HERO_LINE,
+  reel: HERO_SLIDES.map((s) => ({
+    _key: key(),
+    _type: "slide",
+    image: asset(s.src),
+    alt: s.alt,
+    caption: [s.place, s.system, s.year].filter(Boolean).join(" \u00b7 "),
+  })),
+})
+for (const o of OPENERS) {
+  docs.push({
+    _id: `pageHero-${o.page.replace(/^\//, "").replace(/[^a-z0-9]+/gi, "-")}`,
+    _type: "pageHero",
+    page: o.page,
+    image: asset(o.src),
+    alt: o.alt,
+    ...(o.caption ? { caption: o.caption } : {}),
+    headline: o.head,
+    ...(o.tail ? { headlineEnd: o.tail } : {}),
+    ...(o.lede ? { line: o.lede } : {}),
+  })
+}
+docs.push({ _id: "gallerySettings", _type: "gallerySettings", removed: [] })
+
 fs.mkdirSync(OUT_DIR, { recursive: true })
 fs.writeFileSync(OUT, docs.map((d) => JSON.stringify(d)).join("\n") + "\n")
-console.log(`wrote ${OUT}: ${docs.length} documents (${posts} posts, ${projects.length} projects, 1 settings)`)
+console.log(`wrote ${OUT}: ${docs.length} documents (${posts} posts, ${projects.length} projects, the home page, ${OPENERS.length} page openers, galleries, 1 settings)`)

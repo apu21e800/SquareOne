@@ -4,6 +4,8 @@ import Link from "next/link"
 import { getProjects } from "@/lib/projects-cms"
 import { WORK_APPS } from "@/lib/work"
 import IndexImageHero from "@/components/IndexImageHero"
+import OpenerTitle from "@/components/ui/OpenerTitle"
+import { getPageOpener } from "@/lib/page-content"
 import { Section } from "@/components/ui/Container"
 import ProjectsIndexClient, { type ProjectCard } from "./ProjectsIndexClient"
 import { SITE_URL } from "@/lib/site"
@@ -48,6 +50,8 @@ const APP_HREF: Record<string, string> = Object.fromEntries(
 )
 
 export default async function ProjectsPage() {
+  // The opener, with whatever the Studio says on top (lib/page-content.ts, 9 Oct 2026).
+  const o = await getPageOpener("/projects")
   const projects = await getProjects()
   // 28 Sept 2026 (Vern: "more recent images… up front"): newest first. The
   // projects with a published year lead, latest year first; the rest keep
@@ -73,14 +77,14 @@ export default async function ProjectsPage() {
           frame, so it showed twice on this page; the Cadboro Bay traffic
           circle (May 2026) is on the record and leads no project. */}
       <IndexImageHero
-        src="/images/applications/public-art/oak-bay-village-intersection-wide-streetbond-01.jpg"
-        alt="An octopus and fish on a blue sea, painted in StreetBond on the Cadboro Bay Village traffic circle in Saanich, the village shops behind"
+        src={o.src}
+        alt={o.alt}
         eyebrow="Projects"
-        title={<>Decorative pavement projects <em>across BC</em></>}
-        fit="Decorative pavement projects across BC"
-        lede="Municipal, commercial and residential work, each with the system and the place on record."
-        caption="Cadboro Bay, Saanich · Village traffic circle · StreetBond"
-        imagePosition="center 55%"
+        title={<OpenerTitle head={o.head} tail={o.tail} />}
+        fit={o.fit}
+        lede={o.lede}
+        caption={o.caption}
+        imagePosition={o.position}
       />
 
       <ProjectsIndexClient projects={cards} />

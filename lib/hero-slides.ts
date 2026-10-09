@@ -14,6 +14,13 @@ export interface Slide {
   caption?: string
 }
 
+/** The headline over the reel and the line under it, as the site ships them.
+    The Studio's Home page changes them (lib/page-content.ts, 9 Oct 2026). */
+export const HERO_HEADLINE = "Surfaces that"
+export const HERO_HEADLINE_END = "define a place"
+export const HERO_LINE =
+  "Stamped asphalt, coloured coatings and crosswalks, installed by our own crews across the Lower Mainland and Vancouver Island since 2000."
+
 export const HERO_SLIDES: Slide[] = [
   // 28 Sept 2026, second image pass (Vern: "choose better more recent images
   // for the hero slider… we have lots to choose from"). Seven frames, every

@@ -3,7 +3,8 @@ import Link from "next/link"
 import { sentenceCase } from "@/lib/text"
 import { notFound } from "next/navigation"
 
-import { workForRegion, type WorkPhoto, type WorkRegion } from "@/lib/work"
+import type { WorkPhoto, WorkRegion } from "@/lib/work"
+import { studioWorkForRegion } from "@/lib/work-cms"
 import WorkGallery from "@/components/WorkGallery"
 import JsonLd, { breadcrumbSchema, faqSchema } from "@/components/JsonLd"
 import Frame from "@/components/ui/Frame"
@@ -200,7 +201,8 @@ export default async function DrivewayCityPage({ params }: Props) {
   const c = CITIES[city]
   if (!c) notFound()
 
-  const photos = workForRegion("driveways", c.region)
+  // The Studio's driveway photographs for this region included (lib/work-cms.ts, 9 Oct 2026).
+  const photos = await studioWorkForRegion("driveways", c.region)
   const hero = photos.find((p) => p.src === c.heroSrc) ?? photos.find((p) => p.hires && p.w >= 1600)
   const gallery = hero ? photos.filter((p) => p.src !== hero.src) : photos
   const other = CITIES[c.other]

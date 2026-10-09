@@ -11,6 +11,7 @@ import DrivewaysBand from "@/components/sections/DrivewaysBand"
 import VapourBand from "@/components/sections/VapourBand"
 import FollowTheWork from "@/components/sections/FollowTheWork"
 import { getSiteSettings, getSlots, getSocialPosts, slotImage, slotText } from "@/lib/cms"
+import { getHomeHero } from "@/lib/page-content"
 import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
 
@@ -82,18 +83,23 @@ export const metadata: Metadata = {
 export default async function Home() {
   // CMS overlays (lib/cms.ts): every reader falls back to the built-in copy
   // and photography, so the page renders the same with no Sanity project.
-  const [settings, tiles, slots] = await Promise.all([getSiteSettings(), getSocialPosts(6), getSlots()])
-  const slides = HERO_SLIDES.map((slide, i) => {
-    const key = `home.hero.${i + 1}`
-    const img = slotImage(slots, key, { src: slide.src, alt: slide.alt })
-    return img.src === slide.src ? slide : { ...slide, src: img.src, alt: img.alt, caption: img.caption }
-  })
-  const eyebrow = slotText(slots, "home.hero.eyebrow", "")
-  const title = slotText(slots, "home.hero.title", "")
+  const [settings, tiles, slots, home] = await Promise.all([getSiteSettings(), getSocialPosts(6), getSlots(), getHomeHero(HERO_SLIDES)])
+  // 9 Oct 2026: the Studio's Home page first (lib/page-content.ts), then the
+  // older slots (home.hero.1 to 5, .title, .eyebrow), then the built-in reel.
+  const slides =
+    home.slides ??
+    HERO_SLIDES.map((slide, i) => {
+      const key = `home.hero.${i + 1}`
+      const img = slotImage(slots, key, { src: slide.src, alt: slide.alt })
+      return img.src === slide.src ? slide : { ...slide, src: img.src, alt: img.alt, caption: img.caption }
+    })
+  const eyebrow = home.line ?? slotText(slots, "home.hero.eyebrow", "")
+  const title = home.title ?? slotText(slots, "home.hero.title", "")
+  const titleEnd = home.title !== undefined ? home.titleEnd : undefined
 
   return (
     <main>
-      <Hero slides={slides} eyebrow={eyebrow || undefined} title={title || undefined} />
+      <Hero slides={slides} eyebrow={eyebrow || undefined} title={title || undefined} titleEnd={titleEnd} />
 
       {/* One quiet line of facts under the hero (19 Sept: the stats band
           read as chunky — Vern). components/sections/StatsBar.tsx stays for

@@ -32,10 +32,12 @@ import PatternSheetGrid from "@/components/PatternSheetGrid"
 import { FEATURED_SHEETS } from "@/lib/pattern-sheets"
 import type { Metadata } from "next"
 
-import { workFor } from "@/lib/work"
+import { studioWorkFor } from "@/lib/work-cms"
 import WorkGallery from "@/components/WorkGallery"
 import JsonLd, { breadcrumbSchema, faqSchema } from "@/components/JsonLd"
 import { Section } from "@/components/ui/Container"
+import OpenerTitle from "@/components/ui/OpenerTitle"
+import { getPageOpener } from "@/lib/page-content"
 import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
 
@@ -116,11 +118,9 @@ const DRV = "/images/S1_update_v2/photos/Driveways"
    carries a location it is in the caption; where it does not, the caption
    says only what the photo shows. Nothing is stock. */
 
-const HERO: Shot & { caption: string } = {
-  src: `${DRV}/Number%201.jpg`,
-  alt: "Grey ashlar slate StreetPrint stamped asphalt driveway at a three-bay garage, installed by Square One Paving",
-  caption: "StreetPrint · Ashlar slate · Square One install",
-}
+/* The opener's photograph (Number 1, the ashlar slate driveway at a
+   three-bay garage), its words and its caption live in lib/openers.ts since
+   9 Oct 2026, where the Studio can change them. */
 
 /* The hero lede above carries the first mention of StreetPrint® and StreetBond® on this page. */
 const stats: { number: string; label: string }[] = [
@@ -188,9 +188,12 @@ const steps: { title: string; desc: string }[] = [
   },
 ]
 
-export default function DrivewaysPage() {
+export default async function DrivewaysPage() {
+  // The opener, with whatever the Studio says on top (lib/page-content.ts, 9 Oct 2026).
+  const o = await getPageOpener("/driveways")
   // The hero frame is not repeated as the first tile of the gallery below it.
-  const gallery = workFor("driveways").filter((p) => p.src !== HERO.src)
+  // The driveways gallery, the Studio's photographs included (lib/work-cms.ts, 9 Oct 2026).
+  const gallery = (await studioWorkFor("driveways")).filter((p) => p.src !== o.src)
 
   return (
     <main>
@@ -212,12 +215,11 @@ export default function DrivewaysPage() {
               Residential driveways &middot; Metro Vancouver &amp; Greater Victoria
             </span>
 
-            <h1 className="mt-6">Stamped asphalt driveways <em>for BC homes</em></h1>
+            <h1 className="mt-6">
+              <OpenerTitle head={o.head} tail={o.tail} />
+            </h1>
 
-            <p className="lede mt-7 max-w-[56ch] [text-wrap:pretty]">
-              Brick or stone to look at, asphalt to live with: a StreetPrint&reg; pattern pressed
-              into the driveway you have, sealed in StreetBond&reg; colour. No new base.
-            </p>
+            <p className="lede mt-7 max-w-[56ch] [text-wrap:pretty]">{o.lede}</p>
 
             <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
               <Link href="/contact" className="btn-primary">
@@ -233,16 +235,17 @@ export default function DrivewaysPage() {
         <figure className="relative m-0 flex min-w-0 flex-col">
           <span className="relative block min-h-0 flex-1 overflow-hidden bg-surface-stone max-[700px]:aspect-[4/3] max-[700px]:flex-none">
             <Image
-              src={HERO.src}
-              alt={HERO.alt}
+              src={o.src}
+              alt={o.alt}
               fill
               priority
               fetchPriority="high"
               sizes="(max-width: 700px) 100vw, 45vw"
               className="object-cover [object-position:center_70%]"
+              style={o.position && o.position !== "center 70%" ? { objectPosition: o.position } : undefined}
             />
           </span>
-          <figcaption className="cap px-6 pb-5 max-[700px]:px-6">{HERO.caption}</figcaption>
+          {o.caption && <figcaption className="cap px-6 pb-5 max-[700px]:px-6">{o.caption}</figcaption>}
         </figure>
         {/* The colour card's edge along the foot, as every opener (7 Oct 2026). */}
         <div aria-hidden="true" className="opener-edge" />

@@ -5,6 +5,8 @@ import JsonLd, { breadcrumbSchema, faqSchema } from "@/components/JsonLd"
 import BeforeAfter from "@/components/BeforeAfter"
 import Frame from "@/components/ui/Frame"
 import IndexImageHero from "@/components/IndexImageHero"
+import OpenerTitle from "@/components/ui/OpenerTitle"
+import { getPageOpener } from "@/lib/page-content"
 import { Section } from "@/components/ui/Container"
 import HowAJobGoes, { VAPOUR_STEPS } from "@/components/sections/HowAJobGoes"
 import { getServiceBySlug } from "@/lib/services"
@@ -78,16 +80,12 @@ export const metadata: Metadata = {
 const DIR = "/images/services/vapor-blasting"
 const GEN = `${DIR}/generated`
 
-/** The opener: Square One on the Granville Island boardwalk, the Burrard
-    Street Bridge behind, the sunlit copy of the photograph, in the wider
-    framing Vern made for the hero (2 Oct 2026: "I added more room around
-    the edges so it fits better"). The operator stands at the centre, so
-    the words keep to a narrower block on the right. */
-const HERO = {
-  src: `${GEN}/gen-granville-island-vapour-blasting-01-wide.jpg`,
-  alt: "A Square One operator vapour blasting a painted marking off the boardwalk at Granville Island, Vancouver, the Burrard Street Bridge behind under a clear sky",
-  caption: "Granville Island, Vancouver · marking removal",
-}
+/* The opener (Square One on the Granville Island boardwalk, the Burrard
+   Street Bridge behind, in the wider framing Vern made for the hero, 2 Oct
+   2026: "I added more room around the edges so it fits better") lives in
+   lib/openers.ts since 9 Oct 2026, where the Studio can change it. The
+   operator stands at the centre, so the words keep to a narrower block on
+   the right. */
 
 // ── Headline facts: Square One's own published numbers ─────────────────────────
 
@@ -139,7 +137,9 @@ const cities = [
 
 const YOUTUBE = "https://www.youtube.com/channel/UCBDvB4vgdahH67BmP6FeccQ"
 
-export default function VaporBlastingServicePage() {
+export default async function VaporBlastingServicePage() {
+  // The opener, with whatever the Studio says on top (lib/page-content.ts, 9 Oct 2026).
+  const o = await getPageOpener("/services/vapor-blasting")
   const service = getServiceBySlug("vapor-blasting")
   const faqs = service?.faqs ?? []
   return (
@@ -172,14 +172,14 @@ export default function VaporBlastingServicePage() {
              right (the operator stands left of centre), the page's name and
              the caption on the ledger under them ── */}
       <IndexImageHero
-        src={HERO.src}
-        alt={HERO.alt}
+        src={o.src}
+        alt={o.alt}
         eyebrow="Vapour blasting"
-        title={<>Clean it, prime it, <em>bring it back</em></>}
-        fit="Clean it, prime it, bring it back"
-        lede="Graffiti, old markings, paint and grime off almost any hard surface, with the dust held down in water. The rig comes to you."
-        caption={HERO.caption}
-        imagePosition="center 70%"
+        title={<OpenerTitle head={o.head} tail={o.tail} />}
+        fit={o.fit}
+        lede={o.lede}
+        caption={o.caption}
+        imagePosition={o.position}
         align="right"
         tall
         narrow

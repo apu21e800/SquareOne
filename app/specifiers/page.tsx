@@ -3,6 +3,8 @@ import Image from "next/image"
 import Link from "next/link"
 
 import IndexImageHero from "@/components/IndexImageHero"
+import OpenerTitle from "@/components/ui/OpenerTitle"
+import { getPageOpener } from "@/lib/page-content"
 import JsonLd, { breadcrumbSchema } from "@/components/JsonLd"
 import Frame from "@/components/ui/Frame"
 import { Section } from "@/components/ui/Container"
@@ -94,7 +96,9 @@ const TYPE_LABEL: Record<ResourceType, string> = {
  * the specifier's line under step 2; the closure facts the old step 4
  * carried keep a block of their own. No arrow glyphs, no em dashes.
  */
-export default function SpecifiersPage() {
+export default async function SpecifiersPage() {
+  // The opener, with whatever the Studio says on top (lib/page-content.ts, 9 Oct 2026).
+  const o = await getPageOpener("/specifiers")
   const typesHeld = TYPE_ORDER.filter((t) => resourceGroups.some((g) => g.docs.some((d) => d.type === t)))
   const systemsFor = (slug: string) => products.filter((p) => p.serviceSlug === slug)
 
@@ -120,13 +124,13 @@ export default function SpecifiersPage() {
       <JsonLd data={[breadcrumbSchema(SITE_URL, [{ name: "For specifiers", path: "/specifiers" }])]} />
 
       <IndexImageHero
-        src="/images/applications/streetscapes/victoria-town-centre-crossing-streetprint-01.jpg"
-        alt="Brick-red StreetPrint stamped asphalt crossing at the edge of a town centre plaza in Victoria, with shops and trees beyond"
+        src={o.src}
+        alt={o.alt}
         eyebrow="For specifiers"
-        title={<>Drawings, specifications <em>and samples</em></>}
-        lede="What a landscape architect, an engineer or a municipal specifier needs to put decorative pavement on a drawing and out to tender, and a site walk with the samples when you are ready."
-        caption="Victoria · Town centre crossing · StreetPrint"
-        imagePosition="center 60%"
+        title={<OpenerTitle head={o.head} tail={o.tail} />}
+        lede={o.lede}
+        caption={o.caption}
+        imagePosition={o.position}
       />
 
       {/* ── The figures a specifier reads first, every one read from lib/ ── */}
