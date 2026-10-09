@@ -30,9 +30,9 @@ import { colour, type Swatch } from "@/lib/palette"
  *
  * How the ten are arranged, in every palette (CLAUDE.md, 7 Oct: greys and
  * sands "vanished on photographs and on white"):
- *  - chip 3 is the accent: Square One orange, or the redline. It is the chip
- *    the first section label on every page takes, the fact strip's first and
- *    search's application square, so the accent leads wherever it appears;
+ *  - chip 3 is Square One orange, in every palette. It is the chip the first
+ *    section label on every page takes, the fact strip's first and search's
+ *    application square, so the brand's orange leads wherever it appears;
  *  - chips 5 and 8 are the palette's two lightest. The section labels take
  *    chips 3, 9, 7, 2, 10, 4, 6 and 1 down a page and never 5 or 8, so the
  *    pale chips only ever sit in the band, between darker neighbours;
@@ -132,16 +132,18 @@ export const PALETTES: Palette[] = [
     water: ["#A9BDB9", colour("Sea Foam").hex, colour("Bike Path Green").hex, "#6E8C8A", "#56707A", colour("Patriot Blue").hex],
   },
   {
-    // For the people who draw it: cyanotype blues, light to ink, and one
-    // redline, the colour a drawing set is marked up in. Not chart colours,
-    // so the titles are the drawing room's own names.
+    // For the people who draw it: cyanotype blues, light to ink, marked up
+    // in Square One orange. A redline was tried first; Vern, 9 Oct: "instead
+    // of the red use suitable orange", and the brand's own orange is the
+    // complement of the blues. Not chart colours, so the blues carry the
+    // drawing room's own names.
     id: "blueprint",
     name: "Blueprint",
-    line: "Cyanotype blues, one redline",
+    line: "Cyanotype blues, marked up in orange",
     chips: [
       own("#4F86BD", "Cyanotype"),
       own("#1E5490", "Prussian blue"),
-      own("#D7362E", "Redline"),
+      SQUARE_ONE_ORANGE,
       own("#3B78B5", "Drafting blue"),
       own("#A7C6E1", "Tracing paper"),
       own("#2F6AA8", "Section blue"),
