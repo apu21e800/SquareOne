@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
+import { withBotId } from "botid/next/config";
 
 const nextConfig: NextConfig = {
+  // No "X-Powered-By: Next.js" on every response (security sweep, 9 Oct 2026):
+  // it tells a scanner which exploits to try and tells a visitor nothing.
+  poweredByHeader: false,
   // lib/gallery.ts reads public/images at BUILD time, which made Next trace the
   // whole public/ tree (images + PDFs) into every serverless function that
   // touches it — 364MB, over Vercel's 250MB limit, so deploys failed outright.
@@ -237,4 +241,7 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// withBotId adds the two rewrites Vercel BotID's browser check is served
+// through, on this site's own address (the quote form's spam fix, 9 Oct 2026;
+// instrumentation-client.ts, lib/form-screen.ts).
+export default withBotId(nextConfig);

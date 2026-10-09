@@ -76,14 +76,19 @@ PR #11 went live on 7 Oct, so the condition above is met.
    same under **Preview**) → add:
    - `NEXT_PUBLIC_SANITY_PROJECT_ID` = the project id
    - `NEXT_PUBLIC_SANITY_DATASET` = `production`
-   - `SANITY_REVALIDATE_SECRET` = any long random string (used in step 5)
+   - `SANITY_REVALIDATE_SECRET` = any long random string (used in step 5;
+     paste it into Vercel and into Sanity, never into a chat or a ticket)
    Redeploy production (variables only reach new builds). `/studio` now
    loads the editing desk instead of "Not connected yet".
 5. **Webhook** so publishing is instant: sanity.io/manage → API → Webhooks
-   → URL `https://www.squareonepaving.com/api/revalidate?secret=<the secret>`
-   (www, the address the site answers on; the bare domain only redirects),
-   method POST, trigger on create/update/delete, dataset
-   `production`. Without it, pages refresh on their own within 60 seconds.
+   → URL `https://www.squareonepaving.com/api/revalidate` (www, the address
+   the site answers on; the bare domain only redirects), method POST,
+   trigger on create/update/delete, dataset `production`, and the same
+   secret as `SANITY_REVALIDATE_SECRET` in the webhook's **Secret** field.
+   Sanity signs every call with it and the route refuses anything unsigned
+   (since 9 Oct 2026; the secret no longer goes in the URL, where request
+   logs would keep it). Without the webhook, pages refresh on their own
+   within 60 seconds.
    New posts also appear in search and the sitemap after the next deploy (a
    Vercel Deploy Hook can be added to the same webhook for that).
 6. **Invite editors**: sanity.io/manage → Members → invite Gord, Jan and
@@ -111,7 +116,8 @@ PR #11 went live on 7 Oct, so the condition above is met.
   Client + image URLs: `sanity/lib/client.ts`. Readers with fallbacks:
   `lib/cms.ts`, `lib/blog.ts` (`getPosts`, `getPost`).
 - Reads are cached 60 s (`next: { revalidate: 60, tags: ["sanity"] }`) and
-  purged by `POST /api/revalidate?secret=…`.
+  purged by `POST /api/revalidate`, signed by Sanity's webhook secret
+  (`parseBody` from `next-sanity/webhook`; unsigned calls get 401).
 - Add an editable spot: read `getSlots()` in the page, pass
   `slotText(slots, "page.key", fallback)` / `slotImage(...)` into the
   section, and list the key in this file.

@@ -9,6 +9,7 @@ import PortableBody from "@/components/blog/PortableBody"
 import Frame from "@/components/ui/Frame"
 import { Row } from "@/components/ui/Container"
 import { SITE_URL } from "@/lib/site"
+import JsonLd from "@/components/JsonLd"
 import { fitVars } from "@/lib/type"
 import { clampDescription, pageTitle } from "@/lib/seo"
 
@@ -216,10 +217,9 @@ export default async function BlogPostPage({ params }: Props) {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      {/* Through JsonLd, escaped: the headline and summary come from the
+          Studio (security sweep, 9 Oct 2026). */}
+      <JsonLd data={jsonLd} />
 
       <main className="bg-[color:var(--surface)]">
         <article
