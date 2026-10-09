@@ -133,7 +133,7 @@ export default function Hero({ slides, eyebrow, title, titleEnd }: HeroProps) {
       onKeyDown={onKeyDown}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
-      className="relative h-[100vh] min-h-[560px] overflow-hidden bg-surface-slate supports-[height:100svh]:h-[100svh]"
+      className="reel relative h-[100vh] min-h-[560px] overflow-hidden bg-surface-slate supports-[height:100svh]:h-[100svh]"
     >
       {/* ── Frames ──────── */}
       {SLIDES.map((s, i) => {
@@ -182,8 +182,13 @@ export default function Hero({ slides, eyebrow, title, titleEnd }: HeroProps) {
           second action is back beside the first, as the live site had it,
           and the caption, the counter and the controls sit on one hairline
           ledger under the words instead of floating in the corners. The
-          reel's clock is the hero's bottom edge, in seven segments. */}
-      <div className="absolute inset-x-0 bottom-0 z-[2]">
+          reel's clock is the hero's bottom edge, in seven segments.
+
+          9 Oct 2026, on a phone (Vern: "buttons are too low in the hero
+          image on mobile. all hero content should fit on mobile"): the
+          words are smaller and set closer, sit higher, and the hero is never
+          taller than the screen (`.reel` in app/own.css). */}
+      <div className="reel-words absolute inset-x-0 bottom-0 z-[2]">
         <div className="hero-in container-1280 pb-[40px] max-[700px]:pb-[30px]">
           <h1 className="display-xl max-w-none text-white">
             {title ? (
@@ -203,7 +208,7 @@ export default function Hero({ slides, eyebrow, title, titleEnd }: HeroProps) {
             )}
           </h1>
 
-          <p className="mt-6 max-w-[46ch] text-[19px] leading-[1.5] text-white/90 [text-wrap:pretty] max-[700px]:mt-5 max-[700px]:text-[17px]">
+          <p className="hero-lede mt-6 max-w-[46ch] text-[19px] leading-[1.5] text-white/90 [text-wrap:pretty] max-[700px]:mt-5 max-[700px]:text-[17px]">
             {eyebrow ?? HERO_LINE}
           </p>
 

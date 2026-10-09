@@ -2116,3 +2116,46 @@ h2.search-group-name:not(.label):not(.eyebrow) { font-size: 17px; letter-spacing
   .opener-right > img { object-position: 82% 70% !important; }
   .opener-right .hero-in { max-width: 25rem; }
 }
+
+/* The hero on a phone (9 Oct 2026; Vern: "buttons are too low in the hero
+   image on mobile. all hero content should fit on mobile. maybe reduce size
+   of graphic, reduce line height (including text)").
+   - Never taller than the screen. The floors that hold the home reel and
+     the openers on a laptop (560, 580 and 640px) put their foot below a
+     short phone's screen: an SE in Safari shows 553px, so the vapour
+     opener's ledger and the reel's clock sat under the fold. On a phone the
+     floor is the screen itself, and the home reel grows to its words only
+     when they need more than the screen (a zoomed page) instead of sliding
+     them under the bar.
+   - The words take less height: the headline a size smaller and set closer,
+     the line under it 15.5px on 1.42, the gaps tighter, the buttons 46px
+     tall (still a full finger).
+   - The words sit higher: 72px of photograph under the ledger, so the
+     buttons and the caption clear a browser bar that floats over the foot
+     of the page (Safari on iOS 26) and the edge of the thumb's reach.
+   Tablets and laptops are unchanged. */
+@media (max-width: 700px) {
+  .reel {
+    height: auto;
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-top: var(--bar-h);
+  }
+  .reel > .reel-words { position: relative; }
+  .reel .hero-in { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
+  .reel .display-xl { font-size: clamp(1.875rem, 8.4vw, 2.375rem); line-height: 0.94; }
+  .reel .hero-lede { margin-top: 12px; font-size: 15.5px; line-height: 1.42; }
+  .reel .hero-actions { margin-top: 20px; }
+  .hero-actions .btn-primary, .hero-actions .btn-on-image { padding-block: 13px; }
+  .hero-ledger { margin-top: 16px; padding-top: 4px; }
+
+  .opener { min-height: min(580px, 100svh); }
+  .opener.opener-tall { min-height: min(640px, 100svh); }
+  .opener-tall .hero-in { padding-bottom: 32px; }
+  .opener .opener-lede { margin-top: 12px; font-size: 15.5px; line-height: 1.45; }
+  .opener .hero-actions { margin-top: 20px; }
+  .opener-ledger { margin-top: 22px; padding-top: 10px; }
+}
