@@ -73,6 +73,25 @@ Copy .env.local.example → .env.local and fill in:
 - SANITY_REVALIDATE_SECRET — the Sanity webhook's signing secret (docs/CMS.md);
   /api/revalidate refuses anything it didn't sign.
 - NEXT_PUBLIC_SITE_URL — public site URL for canonical/sitemap/robots/schema/OG (defaults to https://www.squareonepaving.com in `lib/site.ts` — www, because Vercel serves production on www and the old site's whole Google index was www; every absolute URL derives from `SITE_URL` there — never hard-code the host)
+- The CMS (docs/CMS.md) and the blog and social automation (docs/AUTOMATION.md)
+  have their own: NEXT_PUBLIC_SANITY_PROJECT_ID, NEXT_PUBLIC_SANITY_DATASET,
+  SANITY_REVALIDATE_SECRET; CRON_SECRET, ANTHROPIC_API_KEY,
+  SANITY_API_WRITE_TOKEN, BLOG_DRAFT_NOTIFY, BUFFER_API_KEY, AUTOMATION_PAUSED.
+
+## Blog and social automation (lib/automation/, docs/AUTOMATION.md)
+Two Vercel crons (vercel.json, production only). Both refuse every call
+without `CRON_SECRET` (401, constant-time check, lib/automation/cron.ts).
+Weekly, `/api/cron/draft-post`
+writes a project story from the record (the Studio's version of it, as the
+site shows it; never a project marked "Take off the site") for the next project with no post and
+saves it as an **unpublished** Sanity draft with "Notes for the editor" (fact
+check, style check). Daily, `/api/cron/social-drafts` turns each newly
+published post into Instagram, Facebook and LinkedIn **drafts** in Buffer.
+Nothing publishes itself. The drafter may state only what
+`lib/automation/facts.ts` hands it; `lib/automation/style.ts` is the house style
+and the canon as rules (keep it free of the literal tokens lint-claims bans:
+lint-claims reads lib/). The pipelines take their services as arguments, so
+they can be run end to end against fakes; they never read the filesystem.
 
 ## Architecture
 
@@ -88,7 +107,16 @@ All content is managed via TypeScript interfaces in `lib/`:
 - Categories: "Stamped Asphalt" | "Decorative Coatings" | "Thermoplastic" | "Surface Protection"
 - Export: `products[]` array + `getProductBySlug(slug)` helper
 
-**lib/projects.ts** — Project portfolio data (interface defined here)
+**lib/projects.ts** — Project portfolio data (interface defined here); since
+9 Oct 2026 the fallback behind the Studio.
+
+**lib/projects-cms.ts** — `getProjects()` / `getProject(slug)`: what every page
+that shows a project reads (/projects, project pages, the home six, application
+and service pages, the sitemap). The Studio's version wins field by field, the
+record fills gaps and stands in when Sanity can't be reached; a Studio photo
+that is the site's own file (same original name, uncropped) is served from the
+site. With the Studio as seeded, all 31 come out exactly as the record
+(`npm run test:projects`). Search (lib/search-index.ts) still reads the record.
 
 **lib/blog.ts** — MDX blog system using gray-matter
 - Reads from `content/blog/*.mdx` (or `.md`)
@@ -225,9 +253,12 @@ tags: ["stamped asphalt", "crosswalks", "bc"]
 - Product auto-appears on `/products` and linked service page
 
 ### Projects
-- Add to `lib/projects.ts` → `projects[]` array
-- Upload images to `/public/images/projects/[project-slug]/`
-- Project auto-appears on `/projects` listing
+- The office adds and edits projects in the Studio (docs/CMS.md); a new one
+  is listed at once and gets its page on first request.
+- A developer can still add to `lib/projects.ts` → `projects[]` (the
+  fallback). For a slug the Studio also has, the Studio's fields win, so
+  edit there, not in the file. Extra photographs can still go in
+  `/public/images/projects/[project-slug]/`.
 
 ### Services
 - Add to `lib/services.ts` → `services[]` array (rarely changes — only 4 core services)

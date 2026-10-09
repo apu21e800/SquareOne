@@ -9,7 +9,7 @@ Studio and the page updates within a minute.
 | In the Studio            | What it changes on the site                                                      |
 | ------------------------ | -------------------------------------------------------------------------------- |
 | **Blog posts**           | Create, edit, publish. Lead photograph, category, body with photos and links.    |
-| **Projects**             | The case studies — title, story, city, systems, photographs, "feature on home".  |
+| **Projects**             | The case studies: /projects, each project's page, the home page's six, and the application and service pages. Add one, edit its words and photographs, or "Take off the site". |
 | **Social grid**          | The Instagram strip on the home page ("Recent, on Instagram"): photo + caption + link to the post. |
 | **Site settings**        | Phones, email, address, Instagram / TikTok / Facebook / LinkedIn / YouTube links, the social heading. |
 | **Text slots**           | Headings and lines anywhere the site exposes a key (list below).                 |
@@ -61,7 +61,9 @@ PR #11 went live on 7 Oct, so the condition above is met.
    lines and social links; the photographs are fetched from
    www.squareonepaving.com (all 88 answered 200 on 30 Sept, and again on 7
    Oct). Ids are stable, so running it again updates rather than
-   duplicates. Left out on purpose: posts marked `unlisted: true`, and the
+   duplicates. **Run the import once.** It uses `--replace`, so once the
+   office has edited anything in the Studio, running it again overwrites
+   their changes with the repo's copy. Left out on purpose: posts marked `unlisted: true`, and the
    footer line and social heading, which stay the site's own until an
    editor writes one in Site settings. Spot-check three long posts in the
    Studio afterwards (the markdown → Portable Text conversion covers
@@ -96,6 +98,14 @@ PR #11 went live on 7 Oct, so the condition above is met.
 
 ## Editing guide for the team (short)
 
+- **Project**: Projects → + → title, application, service line, systems,
+  city and region, the summary, then the photographs (the first one leads;
+  drag the focal point onto the pavement). Year, client and designer only
+  when Square One has said so publicly. "The project, told" adds paragraphs
+  under the summary; "Blog post" links the post that tells it in full.
+  Publish. To take one off the site, tick "Take off the site" (deleting a
+  project that came with the site doesn't remove it).
+
 - **Blog post**: Blog posts → + → title, date, category, lead photo (drag the
   focal point onto the pavement), a one-paragraph summary, then the body.
   Publish. The web address is set from the title once — leave it alone
@@ -121,5 +131,20 @@ PR #11 went live on 7 Oct, so the condition above is met.
 - Add an editable spot: read `getSlots()` in the page, pass
   `slotText(slots, "page.key", fallback)` / `slotImage(...)` into the
   section, and list the key in this file.
-- Projects: the schema and seed exist; the site still renders case studies
-  from `lib/projects.ts`. Wiring `/projects` to the CMS is the next pass.
+- Projects (9 Oct 2026): every page that shows a project reads
+  `getProjects()` / `getProject()` in `lib/projects-cms.ts`. The Studio's
+  version wins field by field; `lib/projects.ts` fills the gaps (the seed
+  left out a page's paragraphs and blog link, so those stay the record's
+  until typed into "The project, told" and "Blog post"), and is the whole
+  answer when Sanity can't be reached. A photograph the Studio holds that
+  is the same file the site serves (by original file name) is served from
+  the site; new or cropped ones from Sanity's CDN. With the Studio as seeded,
+  all 31 projects come out exactly as the record (`npm run test:projects`,
+  and checked against the live dataset on 9 Oct). Deleting a seeded project
+  in the Studio doesn't remove it ("Take off the site" does). /projects/[slug]
+  builds the known ones ahead and a new one on its first request. The site
+  search reads the record, so a new project shows there after the next
+  deploy (as new posts do).
+- Posts drafted by the automation (docs/AUTOMATION.md) carry `editorNotes`,
+  a field shown in Studio only when it has something in it; the site never
+  queries it.

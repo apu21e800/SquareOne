@@ -12,6 +12,8 @@
     "lint:claims": "node scripts/lint-claims.mjs",
     "check:links": "node scripts/check-links.mjs",
     "test:forms": "tsx scripts/test-form-screen.ts",
+    "test:projects": "tsx scripts/test-projects-cms.ts",
+    "test:automation": "tsx scripts/test-automation.ts",
     "check": "node scripts/disk-manifest.mjs --check && npx tsc --noEmit --incremental false && node scripts/lint-claims.mjs && node scripts/check-links.mjs",
     "images:add": "node scripts/add-images.mjs",
     "warm": "node scripts/warm.mjs",

@@ -5,7 +5,7 @@ import { notFound } from "next/navigation"
 import { WORK_APPS, workAppMeta, workFor, type WorkApp } from "@/lib/work"
 import { APP_HEROES } from "@/lib/app-heroes"
 import IndexImageHero from "@/components/IndexImageHero"
-import { getProjectsByApplication } from "@/lib/projects"
+import { getProjects } from "@/lib/projects-cms"
 import { products } from "@/lib/products"
 import WorkGallery from "@/components/WorkGallery"
 import Frame from "@/components/ui/Frame"
@@ -244,7 +244,8 @@ export default async function ApplicationPage({ params }: Props) {
   const copy = COPY[slug as keyof typeof COPY]
   const hero = APP_HEROES[slug as keyof typeof APP_HEROES]
   const photos = workFor(meta.slug)
-  const caseStudies = getProjectsByApplication(meta.label)
+  // The Studio's projects (lib/projects-cms.ts, 9 Oct 2026), this application's.
+  const caseStudies = (await getProjects()).filter((p) => p.application === meta.label)
   // The gallery skips the opener's frame and the case-study leads told in
   // full further down, so no photograph appears twice on the page.
   const onPage = new Set([hero.src, ...caseStudies.map((p) => p.imageUrl)])
