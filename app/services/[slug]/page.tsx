@@ -4,7 +4,7 @@ import type { Metadata } from "next"
 
 import { services, getServiceBySlug } from "@/lib/services"
 import { products } from "@/lib/products"
-import { projects } from "@/lib/projects"
+import { getProjects } from "@/lib/projects-cms"
 import { heroFor } from "@/lib/gallery"
 import { WORK_APPS } from "@/lib/work"
 import type { WorkApp, WorkAppMeta } from "@/lib/work"
@@ -136,7 +136,8 @@ export default async function ServicePage({ params }: Props) {
   const heroAlt = heroSrc === service.imageUrl ? service.imageAlt : name
   // Client review, 16 Sept: stamped asphalt is sold here as commercial and
   // municipal work — driveways have their own page.
-  const relatedProjects = projects
+  // The Studio's projects (lib/projects-cms.ts, 9 Oct 2026).
+  const relatedProjects = (await getProjects())
     .filter((p) => p.service === service.name)
     .filter((p) => service.slug !== "stamped-asphalt" || p.application !== "Driveways")
     // The opener's photograph is not repeated as a project tile below it.

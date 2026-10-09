@@ -1,6 +1,6 @@
 import Frame from "@/components/ui/Frame"
 import { Section } from "@/components/ui/Container"
-import { getFeaturedProjects, projects } from "@/lib/projects"
+import { getProjects } from "@/lib/projects-cms"
 
 /** "Vancouver, BC" → "Vancouver" — the caption carries the city, not the province. */
 function cityName(city: string): string {
@@ -31,8 +31,11 @@ const FEATURED_ORDER = [
  * chips, no hover zoom. No project count anywhere: a published count reads
  * as a ceiling on the work (the client, 10 Sept 2026).
  */
-export default function ProjectsPreview() {
-  const featured = getFeaturedProjects()
+export default async function ProjectsPreview() {
+  // 9 Oct 2026: the six read the Studio's version of each project (lib/projects-cms.ts);
+  // which six, and their order, stay FEATURED_ORDER.
+  const projects = await getProjects()
+  const featured = projects.filter((p) => p.featured)
   const curated = FEATURED_ORDER.map((slug) =>
     projects.find((p) => p.slug === slug),
   ).filter((p): p is NonNullable<typeof p> => Boolean(p))

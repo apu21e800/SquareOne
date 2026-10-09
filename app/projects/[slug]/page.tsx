@@ -3,7 +3,8 @@ import Link from "next/link"
 import Image from "next/image"
 import type { Metadata } from "next"
 
-import { projects, getProjectBySlug } from "@/lib/projects"
+import type { Project } from "@/lib/projects"
+import { getProject, getProjects } from "@/lib/projects-cms"
 import { products } from "@/lib/products"
 import { getPostBySlug } from "@/lib/blog"
 import { galleryFor } from "@/lib/gallery"
@@ -23,6 +24,10 @@ import { clampDescription, pageTitle } from "@/lib/seo"
  * surface: no full stop, the caption UNDER the photograph, the systems as a
  * hairline block instead of a box, links as underlined words, the two
  * related projects as hairline rows with their captions under the frames.
+ *
+ * 9 Oct 2026: the project comes from the Studio (lib/projects-cms.ts), with
+ * lib/projects.ts behind it; a project added in the Studio gets its page on
+ * first request (dynamicParams), the rest are built ahead.
  */
 
 interface Props {
@@ -71,12 +76,12 @@ function applicationHref(label: string): string | undefined {
 }
 
 export async function generateStaticParams() {
-  return projects.map((p) => ({ slug: p.slug }))
+  return (await getProjects()).map((p) => ({ slug: p.slug }))
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
-  const project = getProjectBySlug(slug)
+  const project = await getProject(slug)
   if (!project) return {}
   return {
     title: { absolute: pageTitle(project.title) },
@@ -92,7 +97,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProjectPage({ params }: Props) {
   const { slug } = await params
-  const project = getProjectBySlug(slug)
+  const projects = await getProjects()
+  const project = projects.find((p) => p.slug === slug)
 
   if (!project) {
     notFound()
@@ -134,7 +140,7 @@ export default async function ProjectPage({ params }: Props) {
 
   // Related — same application first, then same region, always with different hero images.
   const seen = new Set<string>([project.imageUrl])
-  const related: typeof projects = []
+  const related: Project[] = []
   for (const pool of [
     projects.filter((p) => p.slug !== slug && p.application === project.application),
     projects.filter((p) => p.slug !== slug && p.region === project.region),

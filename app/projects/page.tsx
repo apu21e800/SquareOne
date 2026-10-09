@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 
-import { projects } from "@/lib/projects"
+import { getProjects } from "@/lib/projects-cms"
 import { WORK_APPS } from "@/lib/work"
 import IndexImageHero from "@/components/IndexImageHero"
 import { Section } from "@/components/ui/Container"
@@ -27,6 +27,9 @@ import { clampDescription } from "@/lib/seo"
  * own photography. The gallery-scale record lives on the application
  * pages, linked from the bottom row.
  *
+ * 9 Oct 2026: the projects come from the Studio (lib/projects-cms.ts), with
+ * lib/projects.ts behind it, so a project added there is listed here.
+ *
  * No counts anywhere on this page — not of projects, not of photographs.
  * The client, 10 Sept 2026: "we have done 1000s of jobs and it makes it
  * seem like we have only done 194." A published count reads as a ceiling.
@@ -44,7 +47,8 @@ const APP_HREF: Record<string, string> = Object.fromEntries(
   WORK_APPS.map((a) => [a.slug, a.slug === "driveways" ? "/driveways" : `/applications/${a.slug}`]),
 )
 
-export default function ProjectsPage() {
+export default async function ProjectsPage() {
+  const projects = await getProjects()
   // 28 Sept 2026 (Vern: "more recent images… up front"): newest first. The
   // projects with a published year lead, latest year first; the rest keep
   // the record's own order behind them (Array.prototype.sort is stable).
