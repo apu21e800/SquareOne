@@ -38,10 +38,12 @@ Current as of 7 Oct 2026 (the own-company restyle of 27 Sept, docs/OWN-COMPANY-B
 - Service area: Lower Mainland + Vancouver Island
 
 ## Tech Stack
-- Next.js 16.1.6 (App Router)
+- Next.js 16.4.0 (App Router), pinned exactly (`next`, `eslint-config-next`,
+  `@next/mdx`); moved from 16.1.6 in the security sweep of 9 Oct 2026. Take
+  patch releases of the same major as they come; test before a major.
 - Tailwind CSS 4
 - TypeScript (strict)
-- Resend for transactional email (contact form with honeypot spam protection)
+- Resend for transactional email (the quote form; spam handling under "Forms and spam")
 - MDX for blog content (gray-matter + next-mdx-remote)
 - Framer Motion for animations
 - Form validation: react-hook-form + zod
@@ -55,14 +57,21 @@ Copy .env.local.example → .env.local and fill in:
   mailto carrying what they typed; it never returns a false "thank you". (It
   did until 21 Sept 2026, and every enquiry from launch to that date went
   nowhere — recoverable only from the Vercel runtime logs.)
-- CONTACT_FROM — the sending identity, e.g. `Square One <noreply@send.squareonepaving.com>`.
-  Resend only sends from a domain verified in the account. The **root**
-  squareonepaving.com carries Google Workspace MX and `v=spf1
-  include:_spf.google.com ~all`; **never edit those** or the client loses their
-  email. Verify the subdomain `send.squareonepaving.com` in Resend instead and
-  point this at it. Defaults to `noreply@squareonepaving.com` (root), which only
-  works if the root itself is verified.
+- CONTACT_FROM — the sending identity. Defaults to
+  `Square One <noreply@squareonepaving.com>`. Resend only sends from a domain
+  verified in the account, and the **root** is verified (checked 9 Oct 2026:
+  DKIM at `resend._domainkey.squareonepaving.com`, bounces handled at
+  `send.squareonepaving.com`, which is Resend's return path, not a sending
+  domain; never set this to an address @send.). The root also carries Google
+  Workspace MX and `v=spf1 include:_spf.google.com ~all`; **never edit those**
+  or the client loses their email. No DMARC record yet (Vern's call, at GoDaddy).
 - CONTACT_EMAIL — receiving address (defaults to office@squareonepaving.com)
+- ANTHROPIC_API_KEY — the quote form's spam screen (lib/form-screen.ts). Unset,
+  narrow backup rules decide. Production only, with a monthly spend limit.
+- FORM_SCREENED_EMAIL — where held-back enquiries go, marked "[Screened]".
+  Unset, they go to CONTACT_EMAIL, still marked, so nothing is ever lost.
+- SANITY_REVALIDATE_SECRET — the Sanity webhook's signing secret (docs/CMS.md);
+  /api/revalidate refuses anything it didn't sign.
 - NEXT_PUBLIC_SITE_URL — public site URL for canonical/sitemap/robots/schema/OG (defaults to https://www.squareonepaving.com in `lib/site.ts` — www, because Vercel serves production on www and the old site's whole Google index was www; every absolute URL derives from `SITE_URL` there — never hard-code the host)
 
 ## Architecture
@@ -139,15 +148,57 @@ Products link to services via `serviceSlug`:
 When adding new content, check `next.config.ts` redirects first to avoid conflicts.
 
 ### API Routes
-**POST /api/contact** — Contact form submission
+**POST /api/contact** — the quote form (see "Forms and spam" below)
 - Sends via Resend from `CONTACT_FROM` to `CONTACT_EMAIL`, reply-to the enquirer
-- Honeypot field (`website`) — if filled, answers success without sending
-- Validates the email, caps every field, best-effort per-IP throttle (5 / 10 min)
+- A real visitor's message is never refused or dropped; doubtful mail goes to
+  `FORM_SCREENED_EMAIL` marked "[Screened]". The rules and the mail live in
+  `lib/contact.ts` (a route file may only export its handlers).
 - **Never fails silently.** No key in production → 503; Resend rejection → 502;
   both carry the phone lines, and the form shows a mailto with what they typed.
-  Every failure path logs the whole enquiry so a lead is recoverable.
-- Dev (NODE_ENV !== production) with no key: logs and succeeds
+  The log keeps one line per request and no personal details (9 Oct 2026;
+  until then failures logged the whole enquiry).
+- Dev (NODE_ENV !== production) with no key: logs the decision and succeeds
 - Email format: HTML table + a plain-text part, PT timezone timestamp
+
+**POST /api/revalidate** — Sanity's webhook; signed (`parseBody` from
+`next-sanity/webhook`), fails closed with no secret or a bad signature.
+
+## Forms and spam (9 Oct 2026)
+The quote form posts to /api/contact through lib/post-form.ts. The same fix
+as the manufacturer's site of 6 Oct 2026, where SEO pitches and phishing
+were reaching the office. The rule since: a real visitor's message is never
+refused or dropped; anything doubtful goes to FORM_SCREENED_EMAIL instead of
+office@, marked "[Screened]" with a banner saying why and its links disabled,
+and the visitor sees "sent".
+- Vercel BotID: instrumentation-client.ts adds proof to the form's request;
+  the route asks BotID about it (2.5 s limit). Only a request with no proof
+  and no Origin from this site gets a 403 (a script). A doubted browser, a
+  filled honeypot (`website`, sent as typed since 9 Oct; it used to be
+  hardcoded "") and a flood from one connection (over five in ten minutes)
+  are held, not refused.
+- lib/post-form.ts: if BotID's script can't load (content blockers, strict
+  office networks), the form sends again without it after an error or 15 s,
+  and the route screens it ("unchecked"). Each press of the send button
+  carries one `submissionId`, passed to Resend as the idempotency key, so a
+  resent form is mailed once (a duplicate answer from Resend means "sent").
+- An address the office can't answer ("jane@shaw") with no phone number is
+  sent back to the visitor to check, as before 9 Oct; with a phone it goes
+  through without a reply-to.
+- lib/form-screen.ts: Claude Haiku reads the submission (phone numbers, email
+  addresses, postal codes and plain street addresses redacted; never the
+  phone field, the full email or the "Where is it?" field) and calls it
+  genuine or spam. If it can't answer, narrow rules decide (an outside link
+  that isn't .ca/.gov/.edu, this site, the maker's site or the sender's own;
+  a pitch phrase) and log an error. Keep the prompt's last line: when unsure,
+  genuine. The prompt never names the maker. The privacy page (section 4)
+  says exactly what the screen is sent; change both together.
+- `npm run test:forms` tests the rules, the redaction and the route's
+  decisions (lib/contact.ts) with no network and no mail.
+- One log line per request, `[contact] {"form","outcome","gate","by","reason"}`,
+  no personal details.
+- Probing production: only with a body the route rejects without mailing.
+  `{}` from a script gets 403 (no BotID proof, no Origin); `{}` with
+  `Origin: https://www.squareonepaving.com` gets 400. Never a filled-in form.
 
 ## Adding Content
 
@@ -195,8 +246,8 @@ Secondary: Browse projects/products → Contact form
 npm run dev     # Start dev server (http://localhost:3000)
 npm run build   # Production build (validates types, generates static pages)
 npm run start   # Run production build locally
-
-# No test/lint scripts configured — ESLint config present but not in package.json scripts
+npm run check   # disk manifest, tsc, lint-claims, check-links
+npm run test:forms  # the quote form's spam rules and route decisions (no network, no mail)
 ```
 
 ## Development Notes
@@ -204,8 +255,10 @@ npm run start   # Run production build locally
 - TypeScript strict mode enabled — never use `any`
 - All data changes (services, products, projects) require code changes in `lib/` files
 - Blog is the only content type that supports non-developer edits (MDX files in `content/blog/`)
-- Contact form requires RESEND_API_KEY to actually send emails (dev mode just logs to console)
-- Form has honeypot spam protection via hidden `website` field
+- Contact form requires RESEND_API_KEY to actually send emails (dev mode just logs the decision)
+- Every JSON-LD block goes through `components/JsonLd.tsx` (`scriptJson` escapes
+  <, > and & so Studio text can't break out of the tag); never
+  `JSON.stringify` straight into a <script>
 - Images are direct file references — no image optimization service, uses Next.js `<Image>` component
 
 ## Deployment

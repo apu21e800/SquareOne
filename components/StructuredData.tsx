@@ -1,4 +1,5 @@
 import { SITE_URL } from "@/lib/site"
+import { scriptJson } from "@/components/JsonLd"
 // JSON-LD structured data for SEO — PavingContractor + WebSite.
 // Honesty rules (S1-BUILD-PROMPT constitution): no invented ratings, no
 // phantom endpoints, no unverified profiles. AggregateRating returns only
@@ -98,7 +99,7 @@ export default function StructuredData() {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(json) }}
+      dangerouslySetInnerHTML={{ __html: scriptJson(json) }}
     />
   )
 }

@@ -17,6 +17,11 @@ export const metadata: Metadata = {
  * search. The substance is unchanged — what is collected, what it is used
  * for, PIPEDA, the two processors, cookies, the three-year retention line,
  * the rights, the contact block — only the words are ours.
+ *
+ * 9 Oct 2026, the quote form's spam fix (lib/form-screen.ts): section 4 names
+ * the two new steps, Vercel's bot check and Anthropic's spam screen, and
+ * exactly what the screen is and is not sent. Keep it in step with
+ * describeSubmission() there.
  */
 const sections = [
   {
@@ -33,7 +38,7 @@ const sections = [
   },
   {
     heading: "4. Who else handles it",
-    body: `Two outside services touch this information on our behalf.\n\nThe form's email is delivered by Resend, which carries the message from the site to our inbox. The site is hosted by Vercel, which serves the pages and keeps the server logs; that processing happens in North America.\n\nEach of them works under a privacy policy of its own. We choose providers whose data protection holds to the standard PIPEDA sets.`,
+    body: `Three outside services touch this information on our behalf.\n\nThe form's email is delivered by Resend, which carries the message from the site to our inbox. The site is hosted by Vercel, which serves the pages and keeps the server logs; that processing happens in North America. When you send the quote form, Vercel also runs a quick check in your browser to confirm it was sent by a person and not an automated script.\n\nTo keep spam out of our inbox, what you send through the quote form is read by Claude, an AI model from Anthropic, a US company, before it reaches us. It is sent your name, your organization, the part of your email address after the @, the type of project and your message, with phone numbers and email addresses taken out of it. It is never sent the phone number or the job address you give in the form, or your full email address. We use it only to sort enquiries from spam, and a message it doubts is set aside for a person to review, not thrown away.\n\nEach of them works under a privacy policy of its own. We choose providers whose data protection holds to the standard PIPEDA sets.`,
   },
   {
     heading: "5. Cookies",
@@ -57,7 +62,7 @@ export default function PrivacyPage() {
   return (
     <LegalDocument
       title="Privacy policy"
-      updated="26 September 2026"
+      updated="9 October 2026"
       applies="squareonepaving.com, and the enquiries sent to Square One Paving"
       lede={
         <p>

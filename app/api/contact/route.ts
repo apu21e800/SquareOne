@@ -1,48 +1,50 @@
 import { NextRequest, NextResponse } from "next/server"
 import { Resend } from "resend"
+import { checkBotId } from "botid/server"
+import { screenSubmission, redact } from "@/lib/form-screen"
+import {
+  FALLBACK,
+  FROM_EMAIL,
+  MAX_BODY_BYTES,
+  SCREENED_TO_EMAIL,
+  TO_EMAIL,
+  alreadySent,
+  buildEmailHtml,
+  buildEmailText,
+  gateWithoutProof,
+  holdBeforeScreen,
+  logOutcome,
+  readPayload,
+  replyToFor,
+  subjectLine,
+  type Hold,
+} from "@/lib/contact"
 
-const TO_EMAIL = process.env.CONTACT_EMAIL ?? "office@squareonepaving.com"
+/**
+ * POST /api/contact, the quote form (components/contact/QuoteForm.tsx).
+ *
+ * 9 Oct 2026: the forms' spam fix (lib/form-screen.ts has the story, and
+ * lib/contact.ts the rules). A real visitor's message is never refused or
+ * dropped: doubtful mail goes to the screened inbox marked "[Screened]", and
+ * the visitor sees "sent" either way. Only a request with no BotID proof that
+ * wasn't posted from this site's own pages is turned away (a script).
+ *
+ * What stays from 21 Sept 2026: the route never fails silently. No mail key
+ * in production answers 503, and a rejected send 502, both with the office's
+ * lines; the form then shows them and a mailto carrying what was typed.
+ */
 
-/* Who the enquiry is sent as. Resend will only send from a domain verified
-   in the account, and the safe way to verify is a subdomain — the root of
-   squareonepaving.com carries Google Workspace MX and a Google SPF record
-   that must not be edited. So a `send.` subdomain is verified instead, and
-   the from address follows it. Configurable so verifying a different
-   subdomain (or the root, later) is an env change, not a deploy. */
-const FROM_EMAIL = process.env.CONTACT_FROM ?? "Square One <noreply@squareonepaving.com>"
+/** BotID's answer normally takes milliseconds; past this, carry on without it. */
+const BOTID_TIMEOUT_MS = 2500
 
-/** What the office can be reached on when the send itself fails. */
-const FALLBACK = "Call 604-612-6209 (Lower Mainland) or 250-391-0270 (Vancouver Island), or email office@squareonepaving.com."
-
-interface ContactPayload {
-  formType: "contact"
-  name?: string
-  email?: string
-  company?: string
-  phone?: string
-  projectType?: string
-  location?: string
-  message?: string
-  website?: string // honeypot
-}
-
-/** Field ceilings — a quote request is not a file upload. */
-const LIMITS: Record<string, number> = {
-  name: 120, email: 200, company: 160, phone: 40, projectType: 80, location: 200, message: 4000,
-}
-
-/* Deliberately permissive: this rejects "nonsense", not unusual-but-valid
-   addresses. A lead lost to an over-strict regex costs more than a bounce. */
-const EMAIL_RE = /^[^\s@]+@[^\s@.]+(\.[^\s@.]+)+$/
-
-/* Best-effort throttle. Serverless keeps this per warm instance, so it is a
-   speed bump for the obvious flood, never a security control. Five requests
-   per ten minutes is far above what a real enquirer needs. */
+/* Best-effort flood guard. Serverless keeps this per warm instance, so it is
+   a speed bump, never a security control. Five sends per ten minutes is far
+   above what a real enquirer needs; past it, mail is held, not refused. */
 const WINDOW_MS = 10 * 60 * 1000
 const MAX_PER_WINDOW = 5
 const hits = new Map<string, number[]>()
 
-function rateLimited(ip: string): boolean {
+function flooded(ip: string): boolean {
   const now = Date.now()
   const recent = (hits.get(ip) ?? []).filter((t) => now - t < WINDOW_MS)
   recent.push(now)
@@ -51,130 +53,145 @@ function rateLimited(ip: string): boolean {
   return recent.length > MAX_PER_WINDOW
 }
 
-/** Everything a visitor typed is shown in the office's inbox as text, never as markup. */
-function esc(value: string): string {
-  return value.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] ?? c)
-}
-
-function buildEmailHtml(data: ContactPayload): string {
-  const cell = (label: string, value: string, top = false) =>
-    `<tr><td style="padding:4px 16px 4px 0;color:#888;font-size:12px;white-space:nowrap${top ? ";vertical-align:top" : ""}"><strong>${label}</strong></td><td style="font-size:14px${top ? ";white-space:pre-wrap" : ""}">${esc(value)}</td></tr>`
-  const rows = [
-    data.name && cell("Name", data.name),
-    data.email && cell("Email", data.email),
-    data.company && cell("Company", data.company),
-    data.phone && cell("Phone", data.phone),
-    data.projectType && cell("Project", data.projectType),
-    data.location && cell("Location", data.location),
-    data.message && cell("Message", data.message, true),
-  ].filter(Boolean).join("\n")
-
-  return `
-    <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:32px 24px">
-      <div style="height:3px;background:#C8601A;margin-bottom:28px"></div>
-      <h2 style="margin:0 0 20px;color:#111;font-size:18px;font-weight:800;letter-spacing:-0.02em">
-        New enquiry from squareonepaving.com
-      </h2>
-      <table style="width:100%;border-collapse:collapse;line-height:1.9">
-        <tbody>${rows}</tbody>
-      </table>
-      <hr style="margin:24px 0;border:none;border-top:1px solid #eee">
-      <p style="font-size:11px;color:#aaa;margin:0">
-        Submitted via squareonepaving.com &middot; ${new Date().toLocaleString("en-CA", { timeZone: "America/Vancouver" })} PT
-      </p>
-    </div>
-  `
-}
-
-/** The same enquiry as plain text, for clients that will not render HTML. */
-function buildEmailText(data: ContactPayload): string {
-  return [
-    "New enquiry from squareonepaving.com",
-    "",
-    data.name && `Name: ${data.name}`,
-    data.email && `Email: ${data.email}`,
-    data.company && `Company: ${data.company}`,
-    data.phone && `Phone: ${data.phone}`,
-    data.projectType && `Project: ${data.projectType}`,
-    data.location && `Location: ${data.location}`,
-    data.message && `\n${data.message}`,
-    "",
-    `Submitted ${new Date().toLocaleString("en-CA", { timeZone: "America/Vancouver" })} PT`,
-  ].filter(Boolean).join("\n")
+/**
+ * BotID's view of the request. "human": checked and fine. "bot": checked and
+ * doubted. "unchecked": the check failed or took too long, or the browser
+ * could not run it and the form sent without it (lib/post-form.ts). "script":
+ * no check and not sent from this site's pages at all.
+ */
+async function botGate(req: NextRequest): Promise<"human" | "bot" | "unchecked" | "script"> {
+  if (!req.headers.has("x-is-human")) return gateWithoutProof(req.headers.get("origin"), req.headers.get("host"))
+  let timer: ReturnType<typeof setTimeout> | undefined
+  try {
+    const verification = await Promise.race([
+      checkBotId(),
+      new Promise<never>((_, reject) => {
+        timer = setTimeout(() => reject(new Error(`no answer in ${BOTID_TIMEOUT_MS} ms`)), BOTID_TIMEOUT_MS)
+      }),
+    ])
+    return verification.isBot ? "bot" : "human"
+  } catch (err) {
+    console.error("[contact] BotID check failed; screening instead:", err instanceof Error ? err.message : "unknown")
+    return "unchecked"
+  } finally {
+    clearTimeout(timer)
+  }
 }
 
 export async function POST(req: NextRequest) {
   try {
-    const body = (await req.json().catch(() => null)) as ContactPayload | null
-    if (!body || typeof body !== "object") {
-      return NextResponse.json({ error: "We couldn't read that request. Please try again." }, { status: 400 })
+    if (Number(req.headers.get("content-length") ?? 0) > MAX_BODY_BYTES) {
+      logOutcome("unknown", "rejected", "-", "size", "body too large")
+      return NextResponse.json({ error: `Sorry, we couldn't send that. ${FALLBACK}` }, { status: 413 })
     }
 
-    // Honeypot: a filled hidden field is a bot. Answer as though it worked.
-    if (body.website) {
-      return NextResponse.json({ success: true })
+    // 1. Was it sent from this site in a browser? (instrumentation-client.ts
+    //    adds BotID's proof to the form's request.) Only a request with no
+    //    proof that didn't come from the site's own pages is refused.
+    const gate = await botGate(req)
+    if (gate === "script") {
+      logOutcome("unknown", "blocked", gate)
+      return NextResponse.json({ error: `Sorry, we couldn't send that. ${FALLBACK}` }, { status: 403 })
     }
 
-    const email = (body.email ?? "").trim()
-    if (!body.formType || !email) {
-      return NextResponse.json({ error: "Please add an email address so we can reply." }, { status: 400 })
+    const text = await req.text().catch(() => "")
+    if (text.length > MAX_BODY_BYTES) {
+      logOutcome("unknown", "rejected", gate, "size", "body too large")
+      return NextResponse.json({ error: `Sorry, we couldn't send that. ${FALLBACK}` }, { status: 413 })
     }
-    if (!EMAIL_RE.test(email) || email.length > LIMITS.email) {
-      return NextResponse.json({ error: "That email address doesn't look right — please check it." }, { status: 400 })
+    let raw: unknown = null
+    try {
+      raw = JSON.parse(text)
+    } catch {
+      /* not JSON: readPayload says so */
     }
+    const parsed = readPayload(raw)
+    if ("error" in parsed) {
+      logOutcome("unknown", "rejected", gate, "validation", parsed.code)
+      return NextResponse.json({ error: parsed.error }, { status: 400 })
+    }
+    const body = parsed
 
-    // Trim and cap every field before it reaches the inbox.
-    const clean: ContactPayload = { formType: "contact", email }
-    for (const key of ["name", "company", "phone", "projectType", "location", "message"] as const) {
-      const raw = body[key]
-      if (typeof raw === "string" && raw.trim()) clean[key] = raw.trim().slice(0, LIMITS[key])
-    }
-
+    // 2. Who should read it? The office, unless something says otherwise;
+    //    then the screened inbox, with the reason on top. Never nobody.
     const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown"
-    if (rateLimited(ip)) {
-      return NextResponse.json(
-        { error: `That's a few requests in a short time. ${FALLBACK}` },
-        { status: 429 },
-      )
+    let hold: Hold | undefined = holdBeforeScreen(body, gate, flooded(ip))
+    let decidedBy = hold?.by ?? ""
+    if (!hold) {
+      const verdict = await screenSubmission({
+        name: body.name,
+        company: body.company,
+        email: body.email,
+        projectType: body.projectType,
+        hasPhone: Boolean(body.phone),
+        hasLocation: Boolean(body.location),
+        message: body.message,
+      })
+      decidedBy = verdict.by
+      if (verdict.verdict === "spam") {
+        hold = { by: verdict.by === "model" ? "Claude" : "the backup rules", reason: verdict.reason }
+      }
     }
+    const logBy = hold?.by ?? decidedBy
+    const logReason = hold?.reason ?? ""
 
     if (!process.env.RESEND_API_KEY) {
-      // Development: there is no key and none is expected — log and move on.
+      // Development: there is no key and none is expected. The log line
+      // still shows the decision.
       if (process.env.NODE_ENV !== "production") {
-        console.log("[contact API] No RESEND_API_KEY (dev) — would send:", clean)
+        logOutcome(body.formType, hold ? "held-not-sent" : "delivered-not-sent", gate, logBy, logReason)
         return NextResponse.json({ success: true })
       }
       // Production: a missing key means the enquiry goes nowhere. Saying
-      // "thank you" here loses the job silently, which is the one outcome
-      // worth avoiding — so the visitor gets the phone and the mailto.
-      console.error("[contact API] UNDELIVERED — RESEND_API_KEY is not set in production. The enquiry follows so it can be recovered from these logs:", JSON.stringify(clean))
-      return NextResponse.json(
-        { error: `Our contact form is offline for a moment. ${FALLBACK}` },
-        { status: 503 },
-      )
+      // "thank you" here loses the job silently, the one outcome worth
+      // avoiding, so the visitor gets the phone lines and the mailto.
+      logOutcome(body.formType, hold ? "held-undelivered" : "undelivered", gate, "config", "RESEND_API_KEY is not set in production")
+      return NextResponse.json({ error: `Our contact form is offline for a moment. ${FALLBACK}` }, { status: 503 })
     }
 
     const resend = new Resend(process.env.RESEND_API_KEY)
-    const { error } = await resend.emails.send({
-      from: FROM_EMAIL,
-      to: [TO_EMAIL],
-      replyTo: email,
-      subject: `New enquiry — ${clean.name ?? "Unknown"}${clean.company ? ` @ ${clean.company}` : ""}${clean.projectType ? ` · ${clean.projectType}` : ""}`,
-      html: buildEmailHtml(clean),
-      text: buildEmailText(clean),
-    })
+    const replyTo = replyToFor(body.email)
+    // One key per press of the send button: if the form sends again (its
+    // first try was slow, or its answer was lost), Resend mails it once.
+    const send = (to: string, key: string | undefined) =>
+      resend.emails.send(
+        {
+          from: FROM_EMAIL,
+          to: [to],
+          ...(replyTo ? { replyTo } : {}),
+          subject: subjectLine(body, hold),
+          html: buildEmailHtml(body, hold),
+          text: buildEmailText(body, hold),
+        },
+        key ? { idempotencyKey: key } : undefined,
+      )
+    const key = body.submissionId ? `quote-form/${body.submissionId}` : undefined
+
+    let { error } = await send(hold ? SCREENED_TO_EMAIL : TO_EMAIL, key)
+    if (error && !alreadySent(error) && hold && SCREENED_TO_EMAIL !== TO_EMAIL) {
+      // The screened inbox refused it (a mistyped FORM_SCREENED_EMAIL, say):
+      // the office gets it, still marked, rather than nobody. Its own key:
+      // the first one is spent on the refused send.
+      ;({ error } = await send(TO_EMAIL, key && `${key}/office`))
+    }
+
+    if (error && alreadySent(error)) {
+      logOutcome(body.formType, "duplicate", gate, logBy, "already sent for this press of the button")
+      return NextResponse.json({ success: true })
+    }
 
     if (error) {
-      // Log the enquiry itself, not just the reason it failed — a lead that
-      // only exists in a rejected API call is a lead nobody can recover.
-      console.error("[contact API] UNDELIVERED — Resend rejected the send:", error)
-      console.error("[contact API] undelivered enquiry:", JSON.stringify(clean))
+      // Never the enquiry itself in the log: the visitor has the phone lines
+      // and a mailto carrying everything they typed.
+      logOutcome(body.formType, "undelivered", gate, "resend", redact(`${error.name}: ${error.message}`))
       return NextResponse.json({ error: `We couldn't send that just now. ${FALLBACK}` }, { status: 502 })
     }
 
+    // The visitor sees the same "sent" either way, so a spammer learns nothing.
+    logOutcome(body.formType, hold ? "held" : "delivered", gate, logBy, logReason)
     return NextResponse.json({ success: true })
   } catch (err) {
-    console.error("[contact API] UNDELIVERED — unexpected error:", err)
+    logOutcome("unknown", "error", "-", "exception", err instanceof Error ? redact(`${err.name}: ${err.message}`) : "unknown")
     return NextResponse.json({ error: `Something went wrong at our end. ${FALLBACK}` }, { status: 500 })
   }
 }

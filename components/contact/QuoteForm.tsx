@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import { postForm } from "@/lib/post-form"
 
 /* The quote form — the one thing /contact exists for. Split out of the page
    on 19 Sept 2026 so the page itself can be a server component and read the
@@ -35,7 +36,13 @@ import { useEffect, useRef, useState } from "react"
    email are untouched. The values the tiles sent, for the record:
    "Residential Driveway", "Patio or Walkway", "Parking Area / Commercial",
    "Municipal: Crosswalk or Bike Lane", "Municipal: Road or Plaza",
-   "Vapour Blasting / Surface Prep", "Multiple Services", "Other / Not Sure". */
+   "Vapour Blasting / Surface Prep", "Multiple Services", "Other / Not Sure".
+
+   9 Oct 2026, the forms' spam fix (lib/form-screen.ts): the form sends
+   through lib/post-form.ts, which carries Vercel BotID's proof and sends
+   again without it if a blocker stops the check. The honeypot's value now
+   travels with the submit (it was hardcoded "", so the route never saw what
+   a bot typed into it); a filled one is held for review, never dropped. */
 
 const field = "q-field"
 
@@ -177,6 +184,13 @@ export default function QuoteForm() {
       onSubmit={async (e) => {
         e.preventDefault()
         if (sending.current) return
+        const honeypot = e.currentTarget.elements.namedItem("website")
+        // One id per press: if the send is retried (lib/post-form.ts), the
+        // office still gets one email.
+        const submissionId =
+          typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+            ? crypto.randomUUID()
+            : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}`
         sending.current = true
         setLoading(true)
         setError("")
@@ -189,14 +203,11 @@ export default function QuoteForm() {
           projectType: form.projectType,
           location: form.location.trim(),
           message: form.message.trim(),
-          website: "",
+          website: honeypot instanceof HTMLInputElement ? honeypot.value : "",
+          submissionId,
         }
         try {
-          const res = await fetch("/api/contact", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
-          })
+          const res = await postForm(payload)
           const data = await res.json().catch(() => ({}))
           if (!res.ok || data.error) {
             setError(data.error ?? "We couldn't send that just now.")
