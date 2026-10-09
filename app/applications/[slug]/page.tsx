@@ -2,10 +2,13 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 
-import { WORK_APPS, workAppMeta, workFor, type WorkApp } from "@/lib/work"
+import { WORK_APPS, workAppMeta, type WorkApp } from "@/lib/work"
+import { studioWorkFor } from "@/lib/work-cms"
 import { APP_HEROES } from "@/lib/app-heroes"
 import IndexImageHero from "@/components/IndexImageHero"
 import { getProjects } from "@/lib/projects-cms"
+import OpenerTitle from "@/components/ui/OpenerTitle"
+import { getOpenerDoc, mergeOpener } from "@/lib/page-content"
 import { products } from "@/lib/products"
 import WorkGallery from "@/components/WorkGallery"
 import Frame from "@/components/ui/Frame"
@@ -243,7 +246,14 @@ export default async function ApplicationPage({ params }: Props) {
 
   const copy = COPY[slug as keyof typeof COPY]
   const hero = APP_HEROES[slug as keyof typeof APP_HEROES]
-  const photos = workFor(meta.slug)
+  // The opener as the page has it, with whatever the Studio says on top
+  // (a "Page opener" for this application; lib/page-content.ts, 9 Oct 2026).
+  const o = mergeOpener(
+    { page: `/applications/${slug}`, label: meta.label, src: hero.src, alt: hero.alt, caption: hero.caption, position: hero.position, head: copy.headline },
+    await getOpenerDoc(`/applications/${slug}`),
+  )
+  // This application's gallery, the Studio's photographs included (lib/work-cms.ts, 9 Oct 2026).
+  const photos = await studioWorkFor(meta.slug)
   // The Studio's projects (lib/projects-cms.ts, 9 Oct 2026), this application's.
   const caseStudies = (await getProjects()).filter((p) => p.application === meta.label)
   // The gallery skips the opener's frame and the case-study leads told in
@@ -274,12 +284,13 @@ export default async function ApplicationPage({ params }: Props) {
       <JsonLd data={[breadcrumbSchema(SITE_URL, [{ name: "Applications", path: "/applications" }, { name: meta.label, path: `/applications/${slug}` }])]} />
       {/* ── 01 Opener — the record's frame for this kind of work ─────────────────── */}
       <IndexImageHero
-        src={hero.src}
-        alt={hero.alt}
+        src={o.src}
+        alt={o.alt}
         eyebrow={`Applications · ${meta.label}`}
-        title={copy.headline}
-        caption={hero.caption}
-        imagePosition={hero.position}
+        title={<OpenerTitle head={o.head} tail={o.tail} />}
+        lede={o.lede}
+        caption={o.caption}
+        imagePosition={o.position}
       />
 
       {/* ── 01b Intro: the lede and the way in on the left, the record as a

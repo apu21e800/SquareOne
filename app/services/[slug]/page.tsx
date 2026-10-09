@@ -5,6 +5,8 @@ import type { Metadata } from "next"
 import { services, getServiceBySlug } from "@/lib/services"
 import { products } from "@/lib/products"
 import { getProjects } from "@/lib/projects-cms"
+import OpenerTitle from "@/components/ui/OpenerTitle"
+import { getOpenerDoc, mergeOpener } from "@/lib/page-content"
 import { heroFor } from "@/lib/gallery"
 import { WORK_APPS } from "@/lib/work"
 import type { WorkApp, WorkAppMeta } from "@/lib/work"
@@ -134,6 +136,21 @@ export default async function ServicePage({ params }: Props) {
   // The alt describes the photograph on record; a folder drop-in that
   // replaces it is described by the service name until it is captioned.
   const heroAlt = heroSrc === service.imageUrl ? service.imageAlt : name
+  // The opener as the page has it, with whatever the Studio says on top
+  // (a "Page opener" for this service; lib/page-content.ts, 9 Oct 2026).
+  const o = mergeOpener(
+    {
+      page: `/services/${service.slug}`,
+      label: name,
+      src: heroSrc,
+      alt: heroAlt,
+      caption: heroSrc === service.imageUrl ? service.imageCaption : undefined,
+      position: service.imagePosition ?? "center",
+      head: name,
+      lede: service.tagline,
+    },
+    await getOpenerDoc(`/services/${service.slug}`),
+  )
   // Client review, 16 Sept: stamped asphalt is sold here as commercial and
   // municipal work — driveways have their own page.
   // The Studio's projects (lib/projects-cms.ts, 9 Oct 2026).
@@ -187,13 +204,13 @@ export default async function ServicePage({ params }: Props) {
              delivers, in one breath (19 Sept 2026: every pillar page now
              opens on a photograph from the record) ───── */}
       <IndexImageHero
-        src={heroSrc}
-        alt={heroAlt}
+        src={o.src}
+        alt={o.alt}
         eyebrow="Services · Lower Mainland and Vancouver Island"
-        title={name}
-        lede={service.tagline}
-        caption={heroSrc === service.imageUrl ? service.imageCaption : undefined}
-        imagePosition={service.imagePosition ?? "center"}
+        title={<OpenerTitle head={o.head} tail={o.tail} />}
+        lede={o.lede}
+        caption={o.caption}
+        imagePosition={o.position}
       />
 
       <section className="bg-surface pt-14 pb-16 max-[700px]:pt-10 max-[700px]:pb-12">

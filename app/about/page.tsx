@@ -9,6 +9,8 @@ import { clampDescription } from "@/lib/seo"
 import HowAJobGoes from "@/components/sections/HowAJobGoes"
 import Frame from "@/components/ui/Frame"
 import { Section } from "@/components/ui/Container"
+import OpenerTitle from "@/components/ui/OpenerTitle"
+import { getPageOpener } from "@/lib/page-content"
 
 export const metadata: Metadata = {
   // One separator: the root template adds " | Square One Paving" (58 chars all in).
@@ -135,7 +137,9 @@ const serviceRegions = [
   "Okanagan",
 ]
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  // The opener, with whatever the Studio says on top (lib/page-content.ts, 9 Oct 2026).
+  const o = await getPageOpener("/about")
   return (
     <main>
       {/* ── 1 · Header ──────── */}
@@ -144,7 +148,7 @@ export default function AboutPage() {
           <span className="label label-sq label-page">About Square One</span>
 
           <h1 className="mt-6 max-w-[18ch] [text-wrap:balance]">
-            Decorative pavement <em>in BC since 2000</em>
+            <OpenerTitle head={o.head} tail={o.tail} />
           </h1>
 
           <div className="mt-9 grid grid-cols-12 gap-x-10 gap-y-6 max-[900px]:grid-cols-1">
@@ -157,8 +161,7 @@ export default function AboutPage() {
                   the twenty-five years and 300 photographs do better and
                   provably. Flagged to Vern: if Square One has a citation for
                   it, it can come back with the citation. */}
-              Crosswalks, streetscapes, plazas, parks, school grounds and driveways, installed by
-              our own crews from one office in Maple Ridge, on both sides of the Strait.
+              {o.lede}
             </p>
           </div>
         </div>
@@ -168,21 +171,20 @@ export default function AboutPage() {
       <figure className="m-0 bg-surface">
         <span className="relative block h-[62vh] min-h-[420px] overflow-hidden bg-surface-stone">
           <Image
-            src="/images/hero/white-rock-marine-drive-wave-crosswalk.jpg"
-            alt="Artist-designed crosswalk of waves, sand and sky in TrafficPatterns on Marine Drive, White Rock, installed by Square One Paving"
+            src={o.src}
+            alt={o.alt}
             fill
             priority
             fetchPriority="high"
             sizes="100vw"
             className="object-cover [object-position:center_60%]"
+            style={o.position && o.position !== "center 60%" ? { objectPosition: o.position } : undefined}
           />
           {/* The colour card's edge along the photograph's foot, as on every
               full-bleed photograph a page opens on (7 Oct 2026). */}
           <span aria-hidden="true" className="opener-edge" />
         </span>
-        <figcaption className="cap container-1280 pb-10 max-[700px]:pb-7">
-          Marine Drive, White Rock &middot; TrafficPatterns &middot; 2025
-        </figcaption>
+        {o.caption && <figcaption className="cap container-1280 pb-10 max-[700px]:pb-7">{o.caption}</figcaption>}
       </figure>
 
       {/* ── 3 · Our story ──────── */}

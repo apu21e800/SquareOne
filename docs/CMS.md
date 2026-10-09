@@ -8,17 +8,18 @@ Studio and the page updates within a minute.
 
 | In the Studio            | What it changes on the site                                                      |
 | ------------------------ | -------------------------------------------------------------------------------- |
+| **Home page**            | The hero: its photographs (add, remove, reorder, caption, set each one's focal point), the headline and the line under it. |
+| **Page openers**         | The photograph and words each page opens on: About, Services, Vapour blasting, Products, Applications, Projects, Galleries, Driveways, Resources, For specifiers, Blog, and each service and application page (and each product page's photograph). |
+| **Gallery photos**       | Add a photograph to any gallery (crosswalks, driveways…), with what it shows, where and the systems; make one lead its gallery; take one off. |
+| **Galleries: photos taken off** | Take off a photograph that came with the site (paste its address). |
 | **Blog posts**           | Create, edit, publish. Lead photograph, category, body with photos and links.    |
 | **Projects**             | The case studies: /projects, each project's page, the home page's six, and the application and service pages. Add one, edit its words and photographs, or "Take off the site". |
 | **Social grid**          | The Instagram strip on the home page ("Recent, on Instagram"): photo + caption + link to the post. |
 | **Site settings**        | Phones, email, address, Instagram / TikTok / Facebook / LinkedIn / YouTube links, the social heading. |
-| **Text slots**           | Headings and lines anywhere the site exposes a key (list below).                 |
-| **Photo slots**          | Photographs anywhere the site exposes a key — the home reel first.               |
+| **Advanced → Text and Photo slots** | The first way in (30 Sept): a key per spot (`home.hero.title`, `home.hero.1`…). The Home page above does the same more simply and wins over them. |
 
-Slot keys wired today: `home.hero.eyebrow`, `home.hero.title`, `home.hero.1`
-… `home.hero.5` (photo + caption), `home.statement`. Every page picks up
-Site settings in the footer. More keys are added as pages are wired; a key
-with no slot document shows the built-in value, so nothing can go blank.
+Every field left empty keeps what the site shows today, so nothing can go
+blank. Every page picks up Site settings in the footer.
 
 The site never depends on the CMS to build. With no project id every reader
 falls back to the built-in content (lib/cms.ts), which is why the preview
@@ -93,10 +94,34 @@ PR #11 went live on 7 Oct, so the condition above is met.
    within 60 seconds.
    New posts also appear in search and the sitemap after the next deploy (a
    Vercel Deploy Hook can be added to the same webhook for that).
-6. **Invite editors**: sanity.io/manage → Members → invite Gord, Jan and
+6. **Bring in the pages** (9 Oct 2026, once): so the Studio opens on what
+   the site shows today (the hero's seven photographs, every page's opener),
+   run `npm run cms:seed` then `npm run cms:import -- -p g4yp3p0k`. The
+   import now only adds what the Studio doesn't have (`--missing`); it never
+   overwrites anything already there, so it is safe to run again. The site
+   recognises its own photographs by name and keeps serving them itself, so
+   nothing changes on the site until someone edits.
+7. **Invite editors**: sanity.io/manage → Members → invite Gord, Jan and
    the marketing team (Editor role). They sign in at /studio with Google.
 
 ## Editing guide for the team (short)
+
+- **The home page's hero**: Home page → Hero photographs. Drag to reorder,
+  ⋯ → Remove to take one out, + Add item for a new one (a photograph of our
+  own work at least 1600px wide, what it shows, the caption: place · system
+  · year). Click a photograph and drag the focal point onto the pavement:
+  that part stays in frame. Keep three or more. Publish.
+- **A page's opening photograph or words**: Page openers → the page. Change
+  the photograph (with what it shows and its caption), the headline, its
+  lighter ending, or the line under it. A page with no entry yet: + → pick
+  the page; only what you fill in changes.
+- **A photograph in a gallery**: Gallery photos → + → the photograph, the
+  gallery, what it shows, where (only if we say so publicly) and the region.
+  It shows near the top of its gallery, newest first; tick "Lead the
+  gallery" to put it first. "Take off the site" hides it.
+- **Take off a photograph that came with the site**: on the site, right-click
+  it → Copy image address; Galleries: photos taken off → + → paste. Delete
+  the line to bring it back.
 
 - **Project**: Projects → + → title, application, service line, systems,
   city and region, the summary, then the photographs (the first one leads;
@@ -131,6 +156,19 @@ PR #11 went live on 7 Oct, so the condition above is met.
 - Add an editable spot: read `getSlots()` in the page, pass
   `slotText(slots, "page.key", fallback)` / `slotImage(...)` into the
   section, and list the key in this file.
+- Hero, openers and galleries (9 Oct 2026): `lib/page-content.ts`
+  (`getHomeHero`, `getPageOpener`, `getOpenerDoc` + `mergeOpener` for
+  service, application and product pages) and `lib/work-cms.ts`
+  (`getStudioWork`, `studioWorkFor`, `studioWorkForRegion`). The pages'
+  own openers live in `lib/openers.ts` and the reel in `lib/hero-slides.ts`,
+  which the seed copies into the Studio. A Studio photograph that is the
+  page's own file (same original name, uncropped) is served from the site.
+  With the Studio empty or as seeded, all 117 pages match www
+  (`npm run test:pages`; compared page by page on 9 Oct). Gallery photos
+  from the Studio go straight after a gallery's first photograph (or first,
+  with "Lead the gallery"), so a gallery's face only changes when the office
+  says so. Search (lib/search-index.ts) and the contact page's cities still
+  read the record.
 - Projects (9 Oct 2026): every page that shows a project reads
   `getProjects()` / `getProject()` in `lib/projects-cms.ts`. The Studio's
   version wins field by field; `lib/projects.ts` fills the gaps (the seed

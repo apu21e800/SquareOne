@@ -2,13 +2,15 @@ import { notFound } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
 import type { Metadata } from "next"
+import { getOpenerDoc, mergeOpener } from "@/lib/page-content"
 
 import { products, getProductBySlug } from "@/lib/products"
 import type { Product } from "@/lib/products"
 import { STREETBOND_COLOURS, COLOUR_RANGES } from "@/lib/palette"
 import { galleryWithFallback } from "@/lib/gallery"
 import { resourceGroups } from "@/lib/resources"
-import { getWork, WORK_APPS } from "@/lib/work"
+import { WORK_APPS } from "@/lib/work"
+import { getStudioWork } from "@/lib/work-cms"
 import type { WorkApp, WorkAppMeta } from "@/lib/work"
 import WorkGallery from "@/components/WorkGallery"
 import MaterialsBand from "@/components/sections/MaterialsBand"
@@ -188,6 +190,13 @@ export default async function ProductPage({ params }: Props) {
   const product = getProductBySlug(slug)
   if (!product) notFound()
 
+  // The opener's photograph as the page has it, or the Studio's ("Page
+  // opener", photograph only: the product's name is its name; 9 Oct 2026).
+  const o = mergeOpener(
+    { page: `/products/${slug}`, label: product.name, src: product.image, alt: product.imageAlt, position: product.heroPosition ?? "center", head: product.name },
+    await getOpenerDoc(`/products/${slug}`),
+  )
+
   const related = products
     .filter((p) => p.slug !== slug && p.serviceSlug === product.serviceSlug)
     .slice(0, 3)
@@ -202,7 +211,8 @@ export default async function ProductPage({ params }: Props) {
   // Square One's own photographs of this system, captioned with place and
   // subject. StreetBond also owns its SR variant. Empty for systems with no
   // installs on record (DuraShield) — the band simply does not render.
-  const work = getWork()
+  // The Studio's gallery photographs of this system included (lib/work-cms.ts, 9 Oct 2026).
+  const work = (await getStudioWork())
     .filter((photo) =>
       photo.systems.some((system) => system === product.name || (product.name === "StreetBond" && system.startsWith("StreetBond"))),
     )
@@ -269,14 +279,14 @@ export default async function ProductPage({ params }: Props) {
         className="relative flex h-[60vh] min-h-[440px] items-end overflow-hidden bg-surface-slate"
       >
         <Image
-          src={product.image}
-          alt={product.imageAlt}
+          src={o.src}
+          alt={o.alt}
           fill
           priority
           fetchPriority="high"
           sizes="100vw"
           className="object-cover"
-          style={{ objectPosition: product.heroPosition ?? "center" }}
+          style={{ objectPosition: o.position }}
         />
         <div aria-hidden="true" className="scrim-rise" />
         <div aria-hidden="true" className="scrim-top" />

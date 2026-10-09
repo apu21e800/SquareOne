@@ -1,9 +1,12 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 
-import { WORK_APPS, getWork, workFor, workForRegion, type WorkPhoto } from "@/lib/work"
+import { WORK_APPS, type WorkPhoto } from "@/lib/work"
+import { getStudioWork } from "@/lib/work-cms"
 import { products } from "@/lib/products"
 import IndexImageHero from "@/components/IndexImageHero"
+import OpenerTitle from "@/components/ui/OpenerTitle"
+import { getPageOpener } from "@/lib/page-content"
 import WorkGallery from "@/components/WorkGallery"
 import Frame from "@/components/ui/Frame"
 import { Section } from "@/components/ui/Container"
@@ -90,12 +93,15 @@ function GalleryCover({
   )
 }
 
-export default function GalleriesPage() {
-  const all = getWork()
+export default async function GalleriesPage() {
+  // The opener, with whatever the Studio says on top (lib/page-content.ts, 9 Oct 2026).
+  const o = await getPageOpener("/galleries")
+  // The galleries with the Studio's photographs in them (lib/work-cms.ts, 9 Oct 2026).
+  const all = await getStudioWork()
   const cover = coverPicker()
 
   const byApplication = WORK_APPS.map((a) => {
-    const photos = workFor(a.slug)
+    const photos = all.filter((p) => p.app === a.slug)
     return {
       slug: a.slug,
       label: a.label,
@@ -128,8 +134,8 @@ export default function GalleriesPage() {
     .sort((a, b) => b.count - a.count)
 
   const driveways = [
-    { label: "Vancouver & the Lower Mainland", href: "/driveways/vancouver", photos: workForRegion("driveways", "Lower Mainland") },
-    { label: "Victoria & Vancouver Island", href: "/driveways/victoria", photos: workForRegion("driveways", "Vancouver Island") },
+    { label: "Vancouver & the Lower Mainland", href: "/driveways/vancouver", photos: all.filter((p) => p.app === "driveways" && p.region === "Lower Mainland") },
+    { label: "Victoria & Vancouver Island", href: "/driveways/victoria", photos: all.filter((p) => p.app === "driveways" && p.region === "Vancouver Island") },
   ].filter((g) => g.photos.length > 0)
 
   const threeUp = "(max-width: 700px) 100vw, (max-width: 1280px) 33vw, 411px"
@@ -138,14 +144,14 @@ export default function GalleriesPage() {
   return (
     <main className="bg-[color:var(--surface)]">
       <IndexImageHero
-        src="/images/hero/white-rock-pier-crosswalk-trafficpatternsxd.jpg"
-        alt="Red brick-pattern TrafficPatternsXD crosswalk with white edge lines, leading across the road to the White Rock Pier and the beach"
+        src={o.src}
+        alt={o.alt}
         eyebrow="Galleries"
-        title={<>Photographs of <em>our own work</em></>}
-        fit="Photographs of our own work"
-        lede="Our own installation photographs, captioned with the system and the place."
-        caption="White Rock Pier · TrafficPatternsXD · 2019"
-        imagePosition="center 62%"
+        title={<OpenerTitle head={o.head} tail={o.tail} />}
+        fit={o.fit}
+        lede={o.lede}
+        caption={o.caption}
+        imagePosition={o.position}
       />
 
       {/* ── By application ──────── */}

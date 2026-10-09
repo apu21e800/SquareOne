@@ -1,5 +1,7 @@
 import type { Metadata } from "next"
 import IndexImageHero from "@/components/IndexImageHero"
+import OpenerTitle from "@/components/ui/OpenerTitle"
+import { getPageOpener } from "@/lib/page-content"
 import { getPosts } from "@/lib/blog"
 import BlogFilterClient from "@/components/blog/BlogFilterClient"
 import { SITE_URL } from "@/lib/site"
@@ -42,20 +44,22 @@ export const metadata: Metadata = {
 }
 
 export default async function BlogPage() {
+  // The opener, with whatever the Studio says on top (lib/page-content.ts, 9 Oct 2026).
+  const o = await getPageOpener("/blog")
   const posts = await getPosts()
 
   return (
     <main className="bg-[color:var(--surface)]">
       {/* ---- Header — full-bleed image band (Rockstar Part 4) ---- */}
       <IndexImageHero
-        src="/images/hero/bowen-island-polka-dot-walkway-streetbond.jpg"
-        alt="Blue, green, yellow and grey StreetBond dots along the Snug Cove walkway on Bowen Island, with an eagle asking 'Will you see me before I see you?'"
+        src={o.src}
+        alt={o.alt}
         eyebrow="Blog"
-        title={<>Project stories <em>and guides</em></>}
-        fit="Project stories and guides"
-        lede="What holds up on BC pavement, told project by project."
-        caption="Bowen Island · StreetBond"
-        imagePosition="center 40%"
+        title={<OpenerTitle head={o.head} tail={o.tail} />}
+        fit={o.fit}
+        lede={o.lede}
+        caption={o.caption}
+        imagePosition={o.position}
       />
 
       {/* ---- Category filter + posts (client component, data wiring unchanged) ---- */}

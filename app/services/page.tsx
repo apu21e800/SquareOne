@@ -1,5 +1,7 @@
 import Link from "next/link"
 import IndexImageHero from "@/components/IndexImageHero"
+import OpenerTitle from "@/components/ui/OpenerTitle"
+import { getPageOpener } from "@/lib/page-content"
 import Frame from "@/components/ui/Frame"
 import { Section, Row } from "@/components/ui/Container"
 import type { Metadata } from "next"
@@ -92,19 +94,21 @@ const facts = [
 
 /** The three things a specifier opens first, and the record as precedent. */
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  // The opener, with whatever the Studio says on top (lib/page-content.ts, 9 Oct 2026).
+  const o = await getPageOpener("/services")
   return (
     <main className="bg-surface">
       {/* ---- Header — full-bleed image band ---- */}
       <IndexImageHero
-        src="/images/applications/public-art/new-westminster-boundary-pump-station-full-field-streetbond-01.jpg"
-        alt="The Boundary Road pump station in New Westminster from above, a quilt of red, blue, yellow, pink, black and white StreetBond squares across the whole plaza, installed by Square One"
+        src={o.src}
+        alt={o.alt}
         eyebrow="What we do"
-        title={<>What <em>we do</em></>}
-        fit="What we do"
-        lede="Three ways to change a surface and one to clean it: a free site walk, a written quote and our own crews, across the Lower Mainland and Vancouver Island since 2000."
-        caption="New Westminster · Boundary Road pump station · StreetBond"
-        imagePosition="center 45%"
+        title={<OpenerTitle head={o.head} tail={o.tail} />}
+        fit={o.fit}
+        lede={o.lede}
+        caption={o.caption}
+        imagePosition={o.position}
       />
 
       {/* ---- The four services, as rows ---- */}

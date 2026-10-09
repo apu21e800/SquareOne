@@ -1,5 +1,7 @@
 import Link from "next/link"
 import IndexImageHero from "@/components/IndexImageHero"
+import OpenerTitle from "@/components/ui/OpenerTitle"
+import { getPageOpener } from "@/lib/page-content"
 import Frame from "@/components/ui/Frame"
 import { Metadata } from "next"
 import { SITE_URL } from "@/lib/site"
@@ -177,18 +179,20 @@ const credentials = [
  * button; the projects link moved off the photograph onto paper, under the
  * grid.
  */
-export default function ApplicationsPage() {
+export default async function ApplicationsPage() {
+  // The opener, with whatever the Studio says on top (lib/page-content.ts, 9 Oct 2026).
+  const o = await getPageOpener("/applications")
   return (
     <main>
       <IndexImageHero
-        src="/images/hero/white-rock-marine-drive-wave-crosswalk.jpg"
-        alt="Wave-motif TrafficPatternsXD decorative crosswalk on Marine Drive, White Rock"
+        src={o.src}
+        alt={o.alt}
         eyebrow="Applications"
-        title={<>Decorative pavement, <em>by application</em></>}
-        fit="Decorative pavement, by application"
-        lede="StreetPrint® stamped asphalt, StreetBond® coatings and preformed thermoplastic, by where it goes. Our own crews, since 2000."
-        caption="White Rock · TrafficPatternsXD"
-        imagePosition="center 78%"
+        title={<OpenerTitle head={o.head} tail={o.tail} />}
+        fit={o.fit}
+        lede={o.lede}
+        caption={o.caption}
+        imagePosition={o.position}
       >
         <div className="mt-9">
           <Link href="/contact" className="btn-primary">
