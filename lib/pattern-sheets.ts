@@ -67,7 +67,12 @@ export const PATTERN_SHEETS: PatternSheet[] = [
   { slug: "offset-tile-8in", name: "8″ Offset Tile", note: "Square tiles in staggered rows, each row stepped over from the last.", kind: "field", offered: true, squareOneName: "Offset Tile" },
   // ── Borders ───────────────────────────────────────────────────────────
   { slug: "double-tile-border", name: "Double Tile Border", note: "A two-row band of square tiles along the edge.", kind: "border", offered: false },
-  { slug: "flexible-tile-border", name: "Flexible Tile Border", note: "One row of square tiles that bends with a curved edge.", kind: "border", offered: true, squareOneName: "Texas Cobble" },
+  // 8 Oct 2026 (Vern, after the client: "remove the one border patterns sheet,
+  // we will add the borders later after I prep the border drawings"). Off the
+  // library until his drawings replace it; the Borders section on /patterns
+  // only renders when a border is offered, so it goes with it. Texas Cobble is
+  // still one of Square One's borders — the drawing is what is being redone.
+  { slug: "flexible-tile-border", name: "Flexible Tile Border", note: "One row of square tiles that bends with a curved edge.", kind: "border", offered: false, squareOneName: "Texas Cobble" },
 ]
 
 // 25 Sept 2026: the 19 Sept do-up (4aca1ef) switched all fourteen on, which
