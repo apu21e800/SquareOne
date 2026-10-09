@@ -1,4 +1,7 @@
-import { colour } from "@/lib/palette"
+"use client"
+
+import { paletteById } from "@/lib/palettes"
+import { usePalette } from "@/lib/use-palette"
 
 /**
  * The colour card's edge (28 Sept 2026): StreetBond colours from the chart,
@@ -25,65 +28,24 @@ import { colour } from "@/lib/palette"
  * dark alternate down the run, so the band holds on a dark photograph and
  * on white alike. Every chip but the orange is a named StreetBond colour.
  */
-const SQUARE_ONE_ORANGE = { name: "Square One orange", hex: "#C85A3A" }
-
-const EDGE: { name: string; hex: string }[] = [
-  colour("Marigold"),
-  colour("Nutmeg"),
-  SQUARE_ONE_ORANGE,
-  colour("Paprika"),
-  colour("Terra Cotta"),
-  colour("CL Emerald Green"),
-  colour("CL Celtic Green"),
-  colour("CL Shamrock Green"),
-  colour("SR Safety Blue"),
-  colour("Patriot Blue"),
-]
-
-/** The band as hard-stopped stops, for a CSS gradient. */
-function band(list: { hex: string }[]): string {
-  return `linear-gradient(to right, ${list
-    .map((c, i) => `${c.hex} ${((i * 100) / list.length).toFixed(3)}% ${(((i + 1) * 100) / list.length).toFixed(3)}%`)
-    .join(", ")})`
-}
-
-/** The same colours as one hard-stopped band (6 Oct 2026), for the places
-    the edge is drawn as a rule rather than spans: the reel's clock, the
-    page openers' foot, the process steps, the quote form's sections and the
-    search's top edge. app/layout.tsx sets it once on <body> as --edge-band,
-    with each chip as --edge-1…--edge-10 for the section labels' squares, so
-    this list stays the only source of the colours. */
-export const EDGE_BAND = band(EDGE)
-export const EDGE_COLOURS = EDGE.map((c) => c.hex)
-
-/** Vapour blasting's water (7 Oct 2026, "more complementary blue touches on
-    the vapour blasting pages and sections"): light to deep, through the
-    chart's SR Safety Blue and Patriot Blue, for the vapour page's rules.
-    Later the same day, with the band ("more punchy"): the two palest blues
-    and the charcoal end came out, so the water reads as blue throughout. */
-const WATER = [
-  { hex: "#8FBCE6" },
-  { hex: "#5A9BDB" },
-  colour("SR Safety Blue"),
-  { hex: "#1F6FB2" },
-  { hex: "#17568C" },
-  colour("Patriot Blue"),
-]
-export const WATER_BAND = band(WATER)
+/*
+ * 8 Oct 2026: the colours moved to lib/palettes.ts, which now holds four
+ * palettes (Spectrum, the band above, plus Greyscale, Earth and Blueprint)
+ * and writes them as CSS variables keyed by html[data-palette]. The chips
+ * here draw from --edge-1 … --edge-10, so they follow the palette without
+ * waiting for React; only their hover names come from the palette in state.
+ */
 
 export default function ColourEdge({ className = "" }: { className?: string }) {
+  const palette = paletteById(usePalette())
   return (
     <div
       aria-hidden="true"
       className={`colour-edge ${className}`}
-      style={{ gridTemplateColumns: `repeat(${EDGE.length}, minmax(0, 1fr))` }}
+      style={{ gridTemplateColumns: `repeat(${palette.chips.length}, minmax(0, 1fr))` }}
     >
-      {EDGE.map((c) => (
-        <span
-          key={c.name}
-          title={c.name === SQUARE_ONE_ORANGE.name ? c.name : `StreetBond ${c.name}`}
-          style={{ background: c.hex }}
-        />
+      {palette.chips.map((c, i) => (
+        <span key={i} title={c.title} style={{ background: `var(--edge-${i + 1})` }} />
       ))}
     </div>
   )

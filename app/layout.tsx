@@ -12,8 +12,7 @@ import Footer from "@/components/Footer"
 import StructuredData from "@/components/StructuredData"
 import MobileStickyCTA from "@/components/MobileStickyCTA"
 import MotionBreath from "@/components/MotionBreath"
-import { EDGE_BAND, EDGE_COLOURS, WATER_BAND } from "@/components/ui/ColourEdge"
-import type { CSSProperties } from "react"
+import { PALETTE_BOOT, PALETTE_CSS } from "@/lib/palettes"
 import TypeToggle from "@/components/TypeToggle"
 import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
@@ -147,22 +146,21 @@ export const viewport: Viewport = { themeColor: "#FFFFFF" }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" data-scroll-behavior="smooth" className={`${poppins.variable} ${futura.variable} ${inter.variable} ${sourceSerif.variable}`}>
+    <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning className={`${poppins.variable} ${futura.variable} ${inter.variable} ${sourceSerif.variable}`}>
       <head>
+        {/* The colour card's variables, all four palettes (lib/palettes.ts),
+            and the line that picks one before the first paint. Both live in
+            production: the palette switch in the home hero is a feature, not
+            a preview tool (8 Oct 2026). */}
+        <style dangerouslySetInnerHTML={{ __html: PALETTE_CSS }} />
+        <script dangerouslySetInnerHTML={{ __html: PALETTE_BOOT }} />
         {TYPE_SWITCH_ENABLED && <script dangerouslySetInnerHTML={{ __html: TYPE_BOOT }} />}
       </head>
-      <body
-        className="antialiased"
-        style={
-          {
-            ["--edge-band" as string]: EDGE_BAND,
-            ["--water-band" as string]: WATER_BAND,
-            // Each chip of the band on its own, for the section labels'
-            // squares (app/own.css, 7 Oct 2026).
-            ...Object.fromEntries(EDGE_COLOURS.map((hex, i) => [`--edge-${i + 1}`, hex])),
-          } as CSSProperties
-        }
-      >
+      {/* The band's variables used to sit here as an inline style on <body>
+          (7 Oct 2026). An inline style beats any stylesheet, so a palette set
+          on <html> could never reach a page; they are on :root now, from the
+          <style> above, and <body> inherits them. */}
+      <body className="antialiased">
         <StructuredData />
         {/* Keyboard users skip the bar and the menus (28 Sept 2026). */}
         <a href="#main" className="skip-link">

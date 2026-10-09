@@ -1460,6 +1460,63 @@ h1 em, .display-xl em { letter-spacing: -0.008em; }
 .hero-ledger .cap-on-image { font-family: var(--font-text); font-size: 14px; color: rgba(255, 255, 255, 0.86); min-width: 0; }
 .hero-ledger .reel-counter { font-family: var(--font-display); font-size: 13px; font-weight: 700; letter-spacing: 0.04em; font-variant-numeric: tabular-nums; color: rgba(255, 255, 255, 0.9); }
 .hero-ledger .reel-controls { display: flex; align-items: center; gap: 10px; }
+/* The colour card switch (8 Oct 2026; components/sections/Hero.tsx,
+   lib/palettes.ts). A copy of the band, 24 by 8, in a 40px square so it is
+   the reel buttons' size to a finger; it draws --edge-band, so it is always
+   the palette in force and changes with each press. The name rises above it
+   for a moment on a dark slip edged with the same band. Square corners, as
+   the interface has them. Over a photograph every focus ring in the ledger is
+   white. */
+.hero-ledger :focus-visible { outline-color: #FFFFFF; }
+.palette-switch { position: relative; display: flex; align-items: center; }
+.palette-chip {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px;
+  border: 1px solid transparent; border-radius: var(--radius);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.palette-chip > span {
+  display: block; width: 24px; height: 8px;
+  background-image: var(--edge-band);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.4);
+  transition: transform 0.2s ease;
+}
+.palette-chip:hover { border-color: rgba(255, 255, 255, 0.34); background: rgba(255, 255, 255, 0.06); }
+.palette-chip:hover > span { transform: scaleY(1.25); }
+.palette-chip:active > span { transform: scaleY(0.85); }
+.palette-toast {
+  position: absolute; right: 0; bottom: calc(100% + 10px);
+  display: flex; align-items: baseline; gap: 8px;
+  white-space: nowrap;
+  padding: 9px 12px 9px;
+  font-family: var(--font-text); font-size: 13px; line-height: 1.3; color: rgba(255, 255, 255, 0.9);
+  background: rgba(20, 22, 26, 0.82);
+  border-bottom: 4px solid transparent;
+  border-image: var(--edge-band) 1;
+  opacity: 0; transform: translateY(4px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  pointer-events: none;
+}
+.palette-toast strong { font-family: var(--font-display); font-weight: 700; font-size: 14px; color: #FFFFFF; }
+.palette-toast[data-shown] { opacity: 1; transform: none; animation: palette-in 0.2s ease; }
+/* It mounts on the first press already shown, so the rise is an animation
+   rather than a transition; the fade on the way out is the transition. */
+@keyframes palette-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+/* On a phone the switch sits right of centre: a slip anchored to it ran off
+   the left edge (52px at 390), and held inside the screen it covered the two
+   buttons. There the slip is not used; the name stands in the caption's place
+   in the ledger while it shows, and the caption returns after. */
+.hero-ledger .cap-palette { display: none; }
+.hero-ledger .cap-palette strong { font-family: var(--font-display); font-weight: 700; color: #FFFFFF; margin-right: 4px; }
+@media (max-width: 700px) {
+  .palette-toast { display: none; }
+  .hero-ledger [data-palette-shown] .cap-text { display: none; }
+  .hero-ledger [data-palette-shown] .cap-palette { display: inline; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .palette-chip > span, .palette-toast { transition: none; transform: none; animation: none; }
+}
 /* The reel's clock (6 Oct 2026): the colour card's edge as a 6px band at
    the hero's foot. Each segment carries its slice of the one band (sized to
    the whole bar, positioned by --i of --n); the track is the band under a
