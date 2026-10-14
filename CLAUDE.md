@@ -26,7 +26,9 @@ FAQPage / BreadcrumbList / Service JSON-LD via `components/JsonLd.tsx`; `/llms.t
 - Google Analytics 4: Square One's own property ("www.squareonepaving.com -
   GA4", `G-00DJDXYG7N`, lib/analytics.ts), loaded by components/GoogleAnalytics.tsx
   from app/layout.tsx in production only (`VERCEL_ENV`), never in an editor's
-  preview. Events: `generate_lead` when the quote form sends (only the project
+  preview and never on /studio. gtag() is defined inline at once; Google's
+  script itself loads `lazyOnload`, after the page, so it never competes with
+  the hero photograph. Events: `generate_lead` when the quote form sends (only the project
   type goes with it), `phone_click`, `email_click`, and `cta_click` for a link
   into /contact (components/AnalyticsEvents.tsx, lib/gtag.ts). The privacy page
   (sections 1, 4, 5) says what it counts and the cookies it sets; change both

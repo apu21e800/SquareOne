@@ -16,7 +16,6 @@ import { PALETTE_BOOT, PALETTE_CSS } from "@/lib/palettes"
 import TypeToggle from "@/components/TypeToggle"
 import PreviewTools from "@/components/PreviewTools"
 import GoogleAnalytics from "@/components/GoogleAnalytics"
-import AnalyticsEvents from "@/components/AnalyticsEvents"
 import { GA_MEASUREMENT_ID, analyticsOn } from "@/lib/analytics"
 import { inDraftMode } from "@/sanity/lib/client"
 import { SITE_URL } from "@/lib/site"
@@ -184,12 +183,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         {preview && <PreviewTools />}
         {/* Google Analytics (14 Oct 2026, lib/analytics.ts): production only,
             and never in an editor's preview, which isn't a visit. */}
-        {analyticsOn && !preview && (
-          <>
-            <GoogleAnalytics id={GA_MEASUREMENT_ID} />
-            <AnalyticsEvents />
-          </>
-        )}
+        {analyticsOn && !preview && <GoogleAnalytics id={GA_MEASUREMENT_ID} />}
       </body>
     </html>
   )

@@ -8,8 +8,11 @@ import { gaEvent } from "@/lib/gtag"
  * hubss.com's): a phone number, the email address, and a link into the
  * quote page from anywhere else on the site, with the page it came from and
  * the link's words. The quote form reports its own "generate_lead" once a
- * request is sent (components/contact/QuoteForm.tsx). Nothing a visitor
- * typed is ever sent; the numbers and the address are Square One's own.
+ * request is sent (components/contact/QuoteForm.tsx; it also counts the
+ * sends the spam screen holds back). Nothing a visitor typed is ever sent:
+ * the phone numbers are Square One's own, and the email link's address
+ * (and the mailto the form builds when a send fails) never go. Mounted by
+ * components/GoogleAnalytics.tsx, so only where the tag is.
  */
 const LEAD_PATHS = ["/contact"]
 
@@ -32,7 +35,7 @@ export default function AnalyticsEvents() {
       if (href.startsWith("tel:")) {
         gaEvent("phone_click", { phone_number: href.slice(4), from })
       } else if (href.startsWith("mailto:")) {
-        gaEvent("email_click", { email_address: href.slice(7).split("?")[0], from })
+        gaEvent("email_click", { from })
       } else {
         const to = sameSitePath(href)
         if (!to || to === from || !LEAD_PATHS.some((p) => to === p || to.startsWith(`${p}/`))) return
