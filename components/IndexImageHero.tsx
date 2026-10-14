@@ -53,7 +53,7 @@ export default function IndexImageHero({
   return (
     <section
       data-nav-on-image
-      className={`opener ${align === "right" ? "opener-right" : ""} relative flex ${tall ? "h-[100vh] min-h-[640px] supports-[height:100svh]:h-[100svh]" : "h-[64vh] min-h-[580px]"} items-end overflow-hidden bg-surface-slate`}
+      className={`opener ${align === "right" ? "opener-right" : ""} relative flex ${tall ? "opener-tall h-[100vh] min-h-[640px] supports-[height:100svh]:h-[100svh]" : "h-[64vh] min-h-[580px]"} items-end overflow-hidden bg-surface-slate`}
     >
       <Image
         src={src}
@@ -88,7 +88,7 @@ export default function IndexImageHero({
           </div>
 
           {lede && (
-            <p className="mt-5 max-w-[52ch] text-[18px] leading-[1.6] text-white/85 [text-wrap:pretty] max-[700px]:text-[16px]">
+            <p className="opener-lede mt-5 max-w-[52ch] text-[18px] leading-[1.6] text-white/85 [text-wrap:pretty] max-[700px]:text-[16px]">
               {lede}
             </p>
           )}
