@@ -23,7 +23,9 @@ import { cronAuth, cronGate, cronReady } from "../lib/automation/cron"
 import { factsBlock, loadSubjects, type Subject } from "../lib/automation/facts"
 import { DRAFT_LOG, notifyNotConfigured, planProblem, runDrafter, TOP_UP_BEFORE_MS, type BlogDeps, type BlogResult } from "../lib/automation/blog"
 import { failureHint } from "../lib/automation/outcome"
-import { PROJECT_STORIES_TAG, QUESTIONS_BRIEF } from "../lib/automation/plan"
+import { PROJECT_STORIES_TAG, QUESTIONS_BRIEF, ROUNDUP_BRIEF } from "../lib/automation/plan"
+import { LIMITS } from "../lib/automation/drafter"
+import { lintCopy } from "../lib/automation/style"
 import type { Claude, Mail, SanityDoc, Store, ToolRequest } from "../lib/automation/services"
 import { projects as RECORD } from "../lib/projects"
 import { services } from "../lib/services"
@@ -295,6 +297,22 @@ async function main() {
     assert.match(g, /QUESTIONS TO ANSWER \(from the planner: these are NOT facts[\s\S]*- What has to be true of an old driveway/)
   })
 
+  await check("a planner's roundup brief (an old copy of the records) is left out: the records as they stand today are the facts", () => {
+    const brief = [ROUNDUP_BRIEF, "- Maple Ridge Spray Park (Maple Ridge, BC). Installed at: a client since corrected."].join("\n")
+    const f = factsBlock({ kind: "roundup", subjects: [job("nanaimo-rainbow-intersection"), job("langley-railroad-crosswalk"), job("white-rock-custom-crosswalk")], services, brief })
+    assert.doesNotMatch(f, /FROM SQUARE ONE'S EDITOR/)
+    assert.doesNotMatch(f, /a client since corrected/)
+  })
+  await check("no warranty wording in the FACTS or the rules, and the style check flags any", () => {
+    for (const s of subjects.slice(0, 3)) assert.doesNotMatch(factsBlock({ kind: "project", subjects: [s], services }), /warrant/i)
+    assert.ok(lintCopy("The manufacturer warrants the material; Square One warrants the workmanship.").some((i) => i.rule === "promise"))
+  })
+  await check("the style check catches the manufacturer in any case, never a transit hub", () => {
+    assert.ok(lintCopy("It came from hub surface systems.").some((i) => i.rule === "maker"))
+    assert.ok(lintCopy("A HUB product.").some((i) => i.rule === "maker"))
+    assert.ok(!lintCopy("Built for a busy transit hub.").some((i) => i.rule === "maker"))
+  })
+
   console.log("which plan item")
   const base = projectDocs()
   await check("the top Ready item, before any Idea, whatever their priority", async () => {
@@ -433,6 +451,50 @@ async function main() {
     const report = claude.calls.find((c) => c.tool.name === "report")!
     assert.match(report.system, /QUESTIONS in the FACTS are not facts/)
   })
+  await check("each Claude call has a time limit inside the route's 300 s, and no retries", async () => {
+    const { claude } = await run([...base, item("storyIdea-a", { title: "Rainbow intersection, Nanaimo", type: "project", projects: [ref("nanaimo-rainbow-intersection")] })])
+    const by = (tool: string) => claude.calls.find((c) => c.tool.name === tool)!
+    assert.equal(by("save_draft").timeoutMs, LIMITS.write)
+    assert.equal(by("report").timeoutMs, LIMITS.check)
+    assert.ok(claude.calls.every((c) => c.maxRetries === 0))
+    assert.ok(LIMITS.write + LIMITS.rewrite + LIMITS.check <= 260_000)
+  })
+  await check("a web address a post had, or its id, is never drafted over", async () => {
+    const moved: SanityDoc = { _id: "post-rainbow-intersection-nanaimo", _type: "post", title: "An old post whose web address changed", slug: { _type: "slug", current: "another-address" } }
+    const { result, created } = await run([...base, moved, item("storyIdea-a", { title: "Rainbow intersection, Nanaimo", type: "project", projects: [ref("nanaimo-rainbow-intersection")] })])
+    assert.equal(result.drafted && result.slug, "rainbow-intersection-nanaimo-2")
+    assert.ok(created.some((d) => d._id === "drafts.post-rainbow-intersection-nanaimo-2"))
+  })
+  await check("once the draft exists, a later failure never turns into a 'no draft' email", async () => {
+    const docs = [...base, item("storyIdea-a", { title: "Rainbow intersection, Nanaimo", type: "project", projects: [ref("nanaimo-rainbow-intersection")] })]
+    const s = sanity(docs)
+    const m = fakeMail()
+    const realFetch = s.store.fetch
+    s.store.patch = async () => {
+      throw new Error("Sanity said no")
+    }
+    s.store.createOrReplace = async () => {
+      throw new Error("Sanity said no again")
+    }
+    s.store.fetch = async <T,>(q: string, p?: Record<string, unknown>) => {
+      if (q.includes('"ideasLeft"')) throw new Error("count failed")
+      return realFetch<T>(q, p)
+    }
+    const result = await runDrafter({}, { claude: fakeClaude().claude, store: s.store, mail: m.mail, now: clock() })
+    assert.ok(result.drafted, JSON.stringify(result))
+    assert.equal(m.sent.length, 1)
+    assert.match(m.sent[0].subject, /Blog draft ready/)
+    assert.match(m.sent[0].text, /couldn't be marked Drafted \(Sanity said no\)/)
+    const throwing = await runDrafter({}, {
+      claude: fakeClaude().claude,
+      store: sanity(docs).store,
+      mail: async () => {
+        throw new Error("Resend is down")
+      },
+      now: clock(),
+    })
+    assert.ok(throwing.drafted && throwing.notified.length === 0, "drafted, with nobody told")
+  })
   await check("asked for by id: that item, whatever its status; one that can't be written is refused, quietly", async () => {
     const asked = await run([...base, item("storyIdea-x", { title: "Again", type: "project", status: "drafted", projects: [ref("nanaimo-rainbow-intersection")] })], { idea: "storyIdea-x" })
     assert.equal(asked.result.drafted && asked.result.picked, "asked for")
@@ -505,6 +567,8 @@ async function main() {
     assert.match(failureHint(new Error('404 {"type":"error","error":{"type":"not_found_error","message":"model: claude-opus-4-5"}}')), /BLOG_DRAFT_MODEL/)
     assert.match(failureHint(new Error("Buffer API 401: Unauthorized")), /BUFFER_API_KEY/)
     assert.match(failureHint(new Error("something odd")), /Logs, filtered on \[blog\]/)
+    assert.match(failureHint(new Error("Request timed out.")), /Claude took too long/)
+    assert.doesNotMatch(failureHint(new Error("Socket timed out on request to https://g4yp3p0k.api.sanity.io")), /Claude/)
   })
   await check("a stuck plan (nothing can be written) emails what to fix", async () => {
     const { result, sent } = await run([...base, item("storyIdea-a", { title: "Nothing ticked", type: "guide" })])

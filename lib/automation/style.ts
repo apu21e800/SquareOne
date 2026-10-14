@@ -138,13 +138,12 @@ function excerptAt(text: string, index: number, length: number): string {
 
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 
-/** The sentence around a match, for a rule that needs its context. */
-function sentenceAround(text: string, index: number): string {
-  const before = text.slice(0, index)
-  const start = Math.max(before.lastIndexOf(". "), before.lastIndexOf("\n")) + 1
-  const rest = text.slice(index)
-  const stop = rest.search(/[.!?](?:\s|$)|\n/)
-  return text.slice(start, stop === -1 ? text.length : index + stop + 1)
+/** The company that makes the systems, which the site never names (the "maker" rule). */
+const MAKER = /\bHUB\b|\b[Hh][Uu][Bb]\s*[Ss][Uu][Rr][Ff][Aa][Cc][Ee]\b|\b[Hh][Uu][Bb][Ss][Ss]\b|\b[Ee][Nn][Nn][Ii][Ss][\s-]*[Ff][Ll][Ii][Nn][Tt]\b|\b[Ii]ntegrated\s+[Pp]aving\s+[Cc]oncepts\b|\bPPG\b/gu
+
+/** True when the text names the company that makes the systems (the planner's check, lib/automation/planner.ts). */
+export function namesTheMaker(text: string): boolean {
+  return new RegExp(MAKER.source, "u").test(text)
 }
 
 interface Hit {
@@ -282,9 +281,10 @@ const CHECKS: Check[] = [
 
   // ── Square One's canon ────────────────────────────────────────────────────
   {
-    // The site never names the company that makes the systems.
+    // The site never names the company that makes the systems. "HUB" only in
+    // capitals ("a transit hub" is fine); the longer names in any case.
     rule: "maker",
-    re: /\bHUB\b|\bHub\s+Surface\b|\bEnnis[\s-]Flint\b|\bIntegrated\s+Paving\s+Concepts\b|\bPPG\b/gu,
+    re: MAKER,
     hit: `The manufacturer is never named on the site: say “the manufacturer”.`,
   },
   {
@@ -306,14 +306,9 @@ const CHECKS: Check[] = [
   {
     rule: "promise",
     re: /\bguarantee(?:s|d)?\b|\bwarrant(?:y|ies|s|ed)\b|\bcertifi(?:ed|cation|cations)\b|\bauthori[sz]ed\s+(?:installers?|applicators?|dealers?|contractors?)\b|\baward[\s-]winning\b|\bpreferred\s+(?:installer|applicator|contractor)\b/giu,
-    hit: (m, text) => {
-      // The one warranty line the record carries is fine, however it is worded:
-      // "the manufacturer warrants the material; Square One warrants the
-      // workmanship", "Material warranted by the manufacturer; workmanship by Square One".
-      const around = sentenceAround(text, m.index)
-      if (/^warrant/i.test(m[0]) && /warrants?\s+the\s+(?:material|workmanship)|(?:material|workmanship)\s+(?:is\s+)?warranted\s+by/i.test(around)) return null
-      return `A guarantee, warranty, certification or award the record doesn't carry: cut it. (The record says only that the manufacturer warrants the material and Square One the workmanship.)`
-    },
+    // No warranty wording at all, the manufacturer's included: the client took
+    // it off the site on 6 Oct 2026 ("remove anything about warranty").
+    hit: `A guarantee, warranty, certification or award: cut it. The site carries no warranty wording at all.`,
   },
   {
     rule: "price",

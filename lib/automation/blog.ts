@@ -309,10 +309,14 @@ export async function draftNextPost(opts: { idea?: string; project?: string }, d
   const { draft, style } = await polishDraft(deps.claude, written)
   const check = await checkDraft(deps.claude, draft, facts)
 
-  // A web address nobody uses, drafts included.
+  // A web address nobody uses, drafts included, and an id no post has: a
+  // draft whose id is "drafts.post-<slug>" belongs to the post "post-<slug>",
+  // so a post whose web address was changed must not be drafted over.
   const base = cleanSlug(draft.slug || draft.title) || cleanSlug(title) || `blog-draft-${Date.now()}`
   let slug = base
-  for (let n = 2; await store.fetch<number>(`count(*[_type == "post" && slug.current == $slug])`, { slug }); n++) slug = `${base}-${n}`
+  const taken = (s: string) =>
+    store.fetch<number>(`count(*[(_type == "post" && slug.current == $slug) || _id in [$id, $draftId]])`, { slug: s, id: `post-${s}`, draftId: `drafts.post-${s}` })
+  for (let n = 2; await taken(slug); n++) slug = `${base}-${n}`
 
   // ── the lead photograph ───────────────────────────────────────────────────
   const photo = await leadPhoto(kind, jobs, guide?.services ?? [], store)
@@ -323,6 +327,8 @@ export async function draftNextPost(opts: { idea?: string; project?: string }, d
   await store.create(doc)
 
   // ── the records ───────────────────────────────────────────────────────────
+  // The draft exists from here on: nothing below may turn the run into a
+  // "no draft" email, so each step is on its own and a failure is noted.
   let planNote = ""
   if (item) {
     try {
@@ -334,32 +340,43 @@ export async function draftNextPost(opts: { idea?: string; project?: string }, d
     }
   }
   if (kind === "project") {
-    await store.createOrReplace({
-      _id: `${DRAFT_LOG}${jobs[0].slug}`,
-      _type: "automationDraftLog",
-      project: jobs[0].slug,
-      post: slug,
-      title: doc.title,
-      createdAt: deps.now().toISOString(),
-      factCheck: check.verdict,
-      toCheck: check.unsupported.length,
-      styleLeft: style.left.length,
-    })
+    await store
+      .createOrReplace({
+        _id: `${DRAFT_LOG}${jobs[0].slug}`,
+        _type: "automationDraftLog",
+        project: jobs[0].slug,
+        post: slug,
+        title: doc.title,
+        createdAt: deps.now().toISOString(),
+        factCheck: check.verdict,
+        toCheck: check.unsupported.length,
+        styleLeft: style.left.length,
+      })
+      .catch((err: unknown) => console.error(`[blog] couldn't log ${jobs[0].slug}: ${err instanceof Error ? err.message : String(err)}`))
   }
   console.log(
     `[blog] drafted "${doc.title}" (${kind}) as ${doc._id} from ${item ? item._id : jobs[0].slug}; fact check: ${check.verdict} (${check.unsupported.length}); style: ${style.left.length} of ${style.flagged} left${style.error ? ` (rewrite failed: ${style.error})` : ""}`,
   )
 
   // ── the email, then the plan ──────────────────────────────────────────────
-  const { ideasLeft, next } = (await store.fetch<{ ideasLeft: number; next: string | null } | null>(
-    `{ "ideasLeft": count(${OPEN}), "next": ${OPEN} | ${NEXT_ORDER}[0].title }`,
-  )) ?? { ideasLeft: 0, next: null }
+  const { ideasLeft, next } = await store
+    .fetch<{ ideasLeft: number; next: string | null } | null>(`{ "ideasLeft": count(${OPEN}), "next": ${OPEN} | ${NEXT_ORDER}[0].title }`)
+    .then((r) => r ?? { ideasLeft: -1, next: null })
+    .catch((err: unknown) => {
+      console.error(`[blog] couldn't count the plan: ${err instanceof Error ? err.message : String(err)}`)
+      return { ideasLeft: -1, next: null }
+    })
   const to = notifyList()
-  const sent = await deps.mail({
-    to,
-    subject: `Blog draft ready in Studio: ${doc.title}`,
-    text: draftEmail({ title: doc.title, excerpt: doc.excerpt, slug, check, style, photo: Boolean(photo), picked, from: title, ideasLeft, next, passedOver, planNote }),
-  })
+  const sent = await deps
+    .mail({
+      to,
+      subject: `Blog draft ready in Studio: ${doc.title}`,
+      text: draftEmail({ title: doc.title, excerpt: doc.excerpt, slug, check, style, photo: Boolean(photo), picked, from: title, ideasLeft, next, passedOver, planNote }),
+    })
+    .catch((err: unknown) => {
+      console.error(`[blog] the email failed: ${err instanceof Error ? err.message : String(err)}`)
+      return false
+    })
   // After the email, so a slow planner can't cost it.
   let planAdded: string[] = []
   if (deps.now().getTime() - started < TOP_UP_BEFORE_MS) planAdded = (await keepPlanStocked(deps, subjects)).added
@@ -450,9 +467,13 @@ function draftEmail(a: {
     a.excerpt,
     "",
     fromLine,
-    a.ideasLeft < PLAN_LOW
-      ? `The plan is running low: ${a.ideasLeft} item${a.ideasLeft === 1 ? "" : "s"} left. New ideas are added by themselves when it gets low; you can add your own in Studio → Blog plan.`
-      : `${a.ideasLeft} items left in the plan.`,
+    ...(a.ideasLeft < 0
+      ? []
+      : [
+          a.ideasLeft < PLAN_LOW
+            ? `The plan is running low: ${a.ideasLeft} item${a.ideasLeft === 1 ? "" : "s"} left. New ideas are added by themselves when it gets low; you can add your own in Studio → Blog plan.`
+            : `${a.ideasLeft} items left in the plan.`,
+        ]),
     ...(a.next ? [`Next up: "${a.next}". To change it, reorder or edit the Blog plan in Studio.`] : []),
     ...(a.passedOver.length ? [`Passed over: ${a.passedOver.map((p) => `"${p.title}" (${p.why})`).join("; ")}. Fix them in Studio → Blog plan, or set them to Not doing.`] : []),
     ...(a.planNote ? [a.planNote] : []),

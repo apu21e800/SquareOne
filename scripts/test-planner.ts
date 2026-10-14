@@ -165,12 +165,18 @@ async function main() {
       "Which system is best for a school crosswalk?",
       "How does Vision Zero shape a crosswalk's design?",
       "What does a case study of a stamped driveway show?",
+      "HUB coatings: how do they hold up through a BC winter?",
+      "How do hub surface systems coatings hold up?",
+      "Surrey stratas: what should a council ask before a recoat?",
+      "Victoria driveways, how are they stamped?",
     ])
       assert.equal(goodQuestion(q), false, q)
     for (const q of [
       "How does a stamped asphalt driveway hold up to a BC winter?",
       "What should a StreetPrint specification cover in British Columbia?",
       "What has to be true of an old driveway before it is stamped?",
+      "Should a strata council recoat its fire lane before winter?",
+      "StreetBond on a fire lane: how is it looked after?",
     ])
       assert.equal(goodQuestion(q), true, q)
   })
@@ -206,6 +212,15 @@ async function main() {
     assert.equal(vet([guide({ title: "Fire lanes for Surrey stratas" })]).docs.length, 0)
     assert.equal(vet([guide({ title: "A fire lane case study" })]).docs.length, 0)
     assert.equal(vet([guide({ title: "Stamped asphalt driveways in BC winters", searchPhrase: "bc winter driveway" })]).docs.length, 1)
+    assert.equal(vet([guide({ title: "Surrey stratas and their fire lanes" })]).docs.length, 0, "a guide's title may not open with a place")
+  })
+  await check("the manufacturer, or a claim in the search phrase, drops an idea of either kind", () => {
+    const roundup = (over: Partial<RawIdea>): RawIdea => ({ kind: "roundup", title: "Crosswalks with a story behind them", searchPhrase: "custom crosswalk designs", jobIds: jobs.filter((j) => j.application === "Crosswalks").slice(0, 3).map((j) => j.id), ...over })
+    assert.equal(vet([roundup({})]).docs.length, 1)
+    assert.match(vet([roundup({ title: "HUB crosswalks across BC" })]).dropped[0]?.why ?? "", /manufacturer/)
+    assert.match(vet([roundup({ searchPhrase: "hub surface systems crosswalk" })]).dropped[0]?.why ?? "", /manufacturer/)
+    assert.match(vet([guide({ searchPhrase: "best fire lane coating" })]).dropped[0]?.why ?? "", /claim/)
+    assert.equal(vet([guide({ title: "Coatings for a transit hub plaza", searchPhrase: "transit hub plaza" })]).docs.length, 1, "a transit hub is not the manufacturer")
   })
 
   console.log("Roundups")

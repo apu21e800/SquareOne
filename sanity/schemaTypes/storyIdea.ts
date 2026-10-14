@@ -82,7 +82,9 @@ export const storyIdea = defineType({
       name: "projects",
       title: "Projects",
       type: "array",
-      of: [defineArrayMember({ type: "reference", to: [{ type: "project" }] })],
+      // Weak: a project in the plan can still be deleted from Projects (the
+      // drafter then passes the item over and says so).
+      of: [defineArrayMember({ type: "reference", to: [{ type: "project" }], weak: true })],
       description:
         "The documented jobs the article tells, from Projects: one for a project story, three to six for a roundup. The drafter writes only what their records say, and the first one's lead photograph opens the draft.",
       hidden: ({ document }) => kindOf(document) === "guide",

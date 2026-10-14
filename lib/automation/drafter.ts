@@ -40,7 +40,7 @@ export const HOUSE_RULES = `THE CANON, which beats everything else:
 - Square One installs the systems; it doesn't make them: never "our StreetPrint", never "we developed".
 - A project is "installed at" its site, never "for" someone.
 - A figure about how a system performs (service life, slip resistance) is the manufacturer's, and is said so: "the manufacturer publishes a 10–20 year service life".
-- No guarantee, warranty, certification, award, price or lead time. The only warranty line on record: the manufacturer warrants the material; Square One warrants the workmanship.
+- No guarantee, warranty (in any wording: the client took warranty talk off the site on 6 Oct 2026), certification, award, price or lead time.
 - The office is in Maple Ridge. Vancouver Island is a service region with its own phone line, never an office or a base.
 - "Blog" and "project story", never "journal" or "case study". No counts as a selling point ("hundreds of crosswalks"): say "since 2000", or show the one job.
 
@@ -93,6 +93,15 @@ export interface DraftBrief {
   kind: PlanKind
   searchPhrase?: string | null
 }
+
+/**
+ * Time limits inside the route's 300 s (app/api/cron/draft-post), so a slow
+ * or stuck call ends the run with an email instead of being cut off
+ * silently: writing 150 s, the style rewrite 40 s, the fact check 60 s, no
+ * retries (a retry of a timed-out call would run past the route's limit; the
+ * next run, or Run in Vercel, tries again).
+ */
+export const LIMITS = { write: 150_000, rewrite: 40_000, check: 60_000 } as const
 
 const SAVE_DRAFT: Anthropic.Tool = {
   name: "save_draft",
@@ -151,7 +160,7 @@ export async function writeDraft(claude: Claude, brief: DraftBrief, facts: strin
     ``,
     `Save it with save_draft.`,
   ].join("\n")
-  const draft = await claude<Draft>({ model: BLOG_MODEL, system: VOICE, user, tool: SAVE_DRAFT, maxTokens: 6000 })
+  const draft = await claude<Draft>({ model: BLOG_MODEL, system: VOICE, user, tool: SAVE_DRAFT, maxTokens: 6000, timeoutMs: LIMITS.write, maxRetries: 0 })
   if (!draft.body?.trim() || !draft.title?.trim()) throw new Error("The draft came back empty")
   return { ...draft, tags: Array.isArray(draft.tags) ? draft.tags : [], factsUsed: Array.isArray(draft.factsUsed) ? draft.factsUsed : [] }
 }
@@ -159,7 +168,7 @@ export async function writeDraft(claude: Claude, brief: DraftBrief, facts: strin
 export async function checkDraft(claude: Claude, draft: Draft, facts: string): Promise<FactCheck> {
   const system = `You fact-check blog posts for Square One Paving before a person publishes them. You are strict and literal. Compare the DRAFT with the FACTS and list every statement about Square One, the project, the systems, numbers, years, durations, dimensions, places, sites, clients, artists or people that the FACTS do not support: numbers that differ, capabilities the FACTS don't claim, a performance figure not attributed to the manufacturer, any place, business, agency or person the FACTS don't name, and any promise (a guarantee, a lead time, a price). Also list any sentence that names the company that makes the systems, or says Square One makes or developed them. QUESTIONS in the FACTS are not facts: a statement that only a question supports is unsupported. General context with no numbers that isn't about Square One or the systems is fine; don't list it. Links are fine. If everything is supported, the verdict is "clean" and the list is empty.`
   const user = `FACTS:\n${facts}\n\nDRAFT:\n# ${draft.title}\n\n${draft.excerpt}\n\n${draft.body}\n\nReport with the report tool.`
-  const result = await claude<FactCheck>({ model: BLOG_MODEL, system, user, tool: REPORT, maxTokens: 3000 })
+  const result = await claude<FactCheck>({ model: BLOG_MODEL, system, user, tool: REPORT, maxTokens: 3000, timeoutMs: LIMITS.check, maxRetries: 0 })
   const unsupported = Array.isArray(result.unsupported) ? result.unsupported : []
   return { verdict: unsupported.length ? "needs edits" : "clean", unsupported }
 }
@@ -237,7 +246,7 @@ function asWritten(rewrite: string, original: string): string {
 export async function styleRewrite(
   claude: Claude,
   pieces: CopyPiece[],
-  opts: { model: string; system: string; maxGrowth?: number },
+  opts: { model: string; system: string; maxGrowth?: number; timeoutMs?: number },
 ): Promise<StylePass> {
   const text: Record<string, string> = Object.fromEntries(pieces.map((p) => [p.key, p.text]))
   const flag = (p: CopyPiece) => flagSentences(text[p.key] ?? "", { headings: p.headings, ignore: p.ignore })
@@ -255,6 +264,7 @@ export async function styleRewrite(
       user,
       tool: REWRITE,
       maxTokens: 4000,
+      ...(opts.timeoutMs ? { timeoutMs: opts.timeoutMs, maxRetries: 0 } : {}),
     })
     const growth = opts.maxGrowth ?? 1.3
     for (const r of Array.isArray(res.rewrites) ? res.rewrites : []) {
@@ -298,7 +308,7 @@ export async function polishDraft(claude: Claude, draft: Draft): Promise<{ draft
       { key: "excerpt", label: "Summary", text: draft.excerpt, headings: "none" },
       { key: "body", label: "Body", text: draft.body, headings: "markdown" },
     ],
-    { model: BLOG_MODEL, system: VOICE },
+    { model: BLOG_MODEL, system: VOICE, timeoutMs: LIMITS.rewrite },
   )
   return { draft: { ...draft, title: style.text.title, excerpt: style.text.excerpt, body: style.text.body }, style }
 }

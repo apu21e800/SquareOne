@@ -144,7 +144,7 @@ async function main() {
       status: "idea",
       priority: 2,
       type: "project",
-      projects: [{ _type: "reference", _ref: j.docId, _key: j.slug.slice(0, 40) }],
+      projects: [{ _type: "reference", _ref: j.docId, _key: j.slug.slice(0, 40), _weak: true }],
     })
   }
 

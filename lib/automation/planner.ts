@@ -32,12 +32,12 @@ import type Anthropic from "@anthropic-ai/sdk"
 import { services as SERVICES } from "@/lib/services"
 import { products } from "@/lib/products"
 import { APP_COPY } from "@/lib/application-copy"
-import { PRODUCT_NAMES } from "@/lib/automation/style"
+import { namesTheMaker, PRODUCT_NAMES, PROPER_NAMES } from "@/lib/automation/style"
 import { isConflict } from "@/lib/automation/outcome"
 import { DRAFT_LOG_PREFIX } from "@/lib/automation/logs"
 import type { Subject } from "@/lib/automation/facts"
 import { BLOG_MODEL, type Claude, type Store } from "@/lib/automation/services"
-import { APPLICATION_OPTIONS, isApplication, isService, isSystem, QUESTIONS_BRIEF, ROUNDUP_MAX, ROUNDUP_MIN, SERVICE_OPTIONS, SYSTEM_OPTIONS } from "@/lib/automation/plan"
+import { APPLICATION_OPTIONS, isApplication, isService, isSystem, QUESTIONS_BRIEF, ROUNDUP_BRIEF, ROUNDUP_MAX, ROUNDUP_MIN, SERVICE_OPTIONS, SYSTEM_OPTIONS } from "@/lib/automation/plan"
 
 /** Top up when fewer than this many Ideas and Ready items are left: three weeks at two a week. */
 export const PLAN_MIN = 6
@@ -59,7 +59,8 @@ export interface RawIdea {
   jobIds?: string[]
 }
 
-type Ref = { _type: "reference"; _ref: string; _key: string }
+/** Weak, as the schema's: a project in the plan can still be deleted from Projects. */
+type Ref = { _type: "reference"; _ref: string; _key: string; _weak: true }
 
 /** A plan item, as written to Sanity (sanity/schemaTypes/storyIdea.ts). */
 export type PlanDoc = {
@@ -203,19 +204,33 @@ const CASE_STUDY = /\bcase\s+stud(y|ies)\b/i
 /** Names a guide may use: Square One, its systems and its market. No place, client, agency or borrowed standard. */
 const NAMES = [...PRODUCT_NAMES, "Square One", "British Columbia", "BC", "Canada", "Canadian"].sort((a, b) => b.length - a.length)
 
-/** True when every capitalised word after the first is one of NAMES: no place, client or agency. */
-export function namesOnlyKnown(s: string): boolean {
-  let rest = s
+/** Places, peoples and other proper names (lib/automation/style.ts), which a guide's title or question may not start with either. */
+const OTHER_NAMES = PROPER_NAMES.filter((n) => !NAMES.includes(n)).sort((a, b) => b.length - a.length)
+
+/** The words a question may start with in capitals. */
+const QUESTION_WORDS = new Set(["How", "What", "Which", "When", "Why", "Where", "Who", "Whose", "Should", "Can", "Could", "Does", "Do", "Is", "Are", "Will", "Would", "Must", "Has", "Have"])
+
+/**
+ * True when the text names nothing but NAMES: no place, client, agency or
+ * the manufacturer. Every capitalised word after the first must be one of
+ * NAMES; the first may be an ordinary word in capitals, but never another
+ * proper name ("Surrey stratas…"), and a question must open with a question
+ * word or one of NAMES.
+ */
+export function namesOnlyKnown(s: string, opts: { question?: boolean } = {}): boolean {
+  const text = s.trim()
+  if (namesTheMaker(text)) return false
+  if (OTHER_NAMES.some((n) => text === n || text.startsWith(`${n} `) || text.startsWith(`${n}'`) || text.startsWith(`${n}\u2019`) || text.startsWith(`${n},`))) return false
+  let rest = text
   for (const n of NAMES) rest = rest.split(n).join(" ")
-  return !rest
-    .trim()
-    .split(/\s+/)
-    .slice(1)
-    .some((w) => /^[A-Z]/.test(w) && w !== "I")
+  const words = rest.trim().split(/\s+/)
+  if (opts.question && !NAMES.some((n) => text.startsWith(n)) && !QUESTION_WORDS.has(words[0] ?? "")) return false
+  return !words.slice(1).some((w) => /^[A-Z]/.test(w) && w !== "I")
 }
 
 /** A question a guide's brief may carry: a real question that names nothing and assumes nothing. */
-export const goodQuestion = (q: string) => q.length >= 12 && q.length <= 200 && q.endsWith("?") && !/\d/.test(q) && !LOADED.test(q) && !CASE_STUDY.test(q) && namesOnlyKnown(q)
+export const goodQuestion = (q: string) =>
+  q.length >= 12 && q.length <= 200 && q.endsWith("?") && !/\d/.test(q) && !LOADED.test(q) && !CASE_STUDY.test(q) && namesOnlyKnown(q, { question: true })
 
 /** A job's record, as written (only an em dash, which the house style never prints, becomes a comma). */
 function jobLine(j: PlannerJob): string {
@@ -232,7 +247,6 @@ function jobLine(j: PlannerJob): string {
     .join(" ")
 }
 
-const ROUNDUP_HEAD = "Documented Square One jobs to feature, a short section each. These records are everything known about them: use them as written and add nothing about these jobs."
 const ROUNDUP_TAIL = "Then tell the reader what to know before planning the same kind of work, from Square One's service and system pages."
 
 /**
@@ -269,8 +283,12 @@ export function vetIdeas(
       drop("a figure in the title or search phrase")
       continue
     }
-    if (LOADED.test(title)) {
-      drop("the title makes a claim")
+    if (LOADED.test(title) || LOADED.test(searchPhrase)) {
+      drop("the title or search phrase makes a claim")
+      continue
+    }
+    if (namesTheMaker(title) || namesTheMaker(searchPhrase)) {
+      drop("it names the manufacturer")
       continue
     }
     if (CASE_STUDY.test(title) || CASE_STUDY.test(searchPhrase)) {
@@ -307,8 +325,8 @@ export function vetIdeas(
         priority: 3,
         searchPhrase,
         type: "roundup",
-        projects: picked.map((j) => ({ _type: "reference", _ref: j.docId, _key: cleanSlug(j.id).slice(0, 40) || j.docId })),
-        brief: [ROUNDUP_HEAD, ...picked.map(jobLine), ROUNDUP_TAIL].join("\n"),
+        projects: picked.map((j) => ({ _type: "reference", _ref: j.docId, _key: cleanSlug(j.id).slice(0, 40) || j.docId, _weak: true })),
+        brief: [ROUNDUP_BRIEF, ...picked.map(jobLine), ROUNDUP_TAIL].join("\n"),
       }
       for (const j of picked) used.add(j.id)
       tells = picked.map((j) => j.id)

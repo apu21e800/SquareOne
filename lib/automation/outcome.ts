@@ -77,6 +77,10 @@ export function failureHint(err: unknown, job: Job = "blog"): string {
     const which = names.length ? `${names.join(" and ")} ${names.length > 1 ? "are" : "is"}` : "A key is"
     return `${which} missing in Vercel (Production). Add it and redeploy.`
   }
+  // The Anthropic SDK's own words; Sanity's client says "timed out on request to".
+  if (/Request timed out/.test(message)) {
+    return "Claude took too long this time. Nothing to change: the next run tries again, or run it now from Vercel → square-one → Settings → Cron Jobs."
+  }
   if (/ran out of room|returned no \w+ call|came back empty/i.test(message)) {
     return "Claude didn't finish the draft. Nothing to change: the next run tries again, or run it now from Vercel → square-one → Settings → Cron Jobs."
   }

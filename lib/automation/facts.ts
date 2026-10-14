@@ -31,7 +31,7 @@ import { APP_COPY } from "@/lib/application-copy"
 import { DEFAULT_SETTINGS, mergeSettings, withSettings, type SiteSettings } from "@/lib/site-settings"
 import { DRIVEWAYS_COPY, mergeDrivewaysCopy, type DrivewaysCopy } from "@/lib/page-copy"
 import { mergeService, type ServiceDoc } from "@/lib/services-cms"
-import { APPLICATION_OPTIONS, GUIDE_CATEGORY, QUESTIONS_BRIEF, type PlanKind } from "@/lib/automation/plan"
+import { APPLICATION_OPTIONS, GUIDE_CATEGORY, QUESTIONS_BRIEF, ROUNDUP_BRIEF, type PlanKind } from "@/lib/automation/plan"
 import type { Store } from "@/lib/automation/services"
 
 export interface SubjectPhoto {
@@ -244,7 +244,8 @@ export function companyFacts(settings: SiteSettings = DEFAULT_SETTINGS): string[
   return [
     `Square One Paving installs decorative pavement in British Columbia: ${RECORD_SERVICES.map((x) => x.name.toLowerCase()).join(", ")}.`,
     s.positioning,
-    "Square One is the installer: the manufacturer makes the systems and warrants the material; Square One warrants the workmanship.",
+    // No warranty wording (the client, 6 Oct 2026: "remove anything about warranty").
+    "Square One is the installer: the manufacturer makes the systems; Square One installs them with its own crews.",
     `The office is at ${s.addressLine1}, ${s.addressLine2}. Square One works across the Lower Mainland and Vancouver Island; Vancouver Island is a service region with its own phone line (${s.phoneIsland}), not an office.`,
     `Office phone ${s.phoneOffice}; toll-free ${s.phoneTollFree}; email ${s.email}.`,
     "A job starts with a free site walk with the sample boards, then a written quote. Quotes: [Get a quote](/contact).",
@@ -377,7 +378,9 @@ export function factsBlock(input: FactsInput): string {
       "QUESTIONS TO ANSWER (from the planner: these are NOT facts and support no statement; answer each only from the facts above, and leave out any they don't answer):",
       brief.slice(QUESTIONS_BRIEF.length).trim(),
     )
-  } else if (brief) {
+  } else if (brief && !brief.startsWith(ROUNDUP_BRIEF)) {
+    // (A planner's roundup brief is an old copy of the jobs' records: the
+    // JOBS above are the records as they stand today.)
     lines.push("", "FROM SQUARE ONE'S EDITOR (the brief; treat as true):", brief)
   }
   return lines.join("\n")

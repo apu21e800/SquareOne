@@ -41,6 +41,15 @@ export const PROJECT_STORIES_TAG = "Project stories"
  */
 export const QUESTIONS_BRIEF = "Questions to answer (not facts):"
 
+/**
+ * The first line of a roundup's brief written by the planner: the jobs'
+ * records as they stood when it was planned, for a person reading the plan.
+ * The FACTS block leaves such a brief out, because it carries each job's
+ * record as it stands on the day of drafting (a job since taken off the site,
+ * or corrected, must not come back from an old copy).
+ */
+export const ROUNDUP_BRIEF = "Documented Square One jobs to feature, a short section each. These records are everything known about them: use them as written and add nothing about these jobs."
+
 export type PlanStatus = "idea" | "ready" | "drafted" | "published" | "dropped"
 
 export const PLAN_STATUSES: readonly { value: PlanStatus; title: string }[] = [
