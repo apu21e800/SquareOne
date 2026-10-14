@@ -6,6 +6,8 @@ since 14 Oct 2026 the blog runs from a plan that keeps itself stocked, as
 hubss.com's does.
 **It drafts; people publish.** Nothing reaches squareonepaving.com or a social
 network until a person presses Publish in Studio or approves a post in Buffer.
+Social media came into scope on 14 Oct 2026: three streams into Square One's
+own Buffer.
 
 It needs Sanity connected first (docs/CMS.md). Until the keys below are set,
 every run is refused or answers what is missing, and does nothing. Without
@@ -68,27 +70,54 @@ project story for each real job Vern names, from Projects (with
 article of its own (nine on 14 Oct 2026). Nothing is invented: a job has to
 be in Projects, with its photographs, before it can be planned.
 
-**Social drafts: off for Square One (14 Oct 2026).** Social media is out of
-scope for now (Vern will offer it later), so the daily cron is not in
-vercel.json and nothing calls `/api/cron/social-drafts`; the route still
-refuses anything without `CRON_SECRET`. The code stays, as it worked on
-9 Oct. To switch it on: a Buffer account in Square One's name (never HUB's)
-with Instagram, Facebook and LinkedIn connected, `BUFFER_API_KEY` in
-Vercel, and this line back in vercel.json's `crons`:
-`{ "path": "/api/cron/social-drafts", "schedule": "30 15 * * *" }`.
-What it does then, daily at 15:30 UTC (lib/automation/social.ts):
+**Social, daily at 14:00 UTC** (7 am Pacific in summer, 6 am in winter),
+since 14 Oct 2026, as hubss.com's: `/api/cron/social-drafts`
+(lib/automation/social.ts). It drafts into **Square One's own Buffer**; a
+person approves every draft there, and nothing ever posts from the code.
 
-1. Finds posts published in Studio, dated 1 Oct 2026 or later, with no
-   social drafts yet (the imported library is older, so it never floods
-   Buffer). At most two a day, oldest first.
-2. Claude writes an Instagram, a Facebook and a LinkedIn version from the
-   post alone, one ask each (read the story; "Link in bio" on Instagram),
-   through the same style pass.
-3. Each becomes a **draft** in that channel's Buffer queue, with the post's
-   photograph cropped for the network (4:5 for Instagram, 1200 × 630 for the
-   others) and a tracked link (`utm_source` = network, `utm_medium=social`,
-   `utm_campaign=blog`). An email says what was drafted and what was
-   skipped. Other channels (TikTok, YouTube) are skipped and named.
+| Stream | What it drafts from | How often | Links to | `utm_campaign` |
+|---|---|---|---|---|
+| Articles | a blog post published in Studio, dated 1 Oct 2026 or later | up to 2 a day, the day after it goes live | the post | `blog` |
+| From the field | a published **Field post** (Studio → From the field): 1 to 10 phone photos of a finished job, where, the service, a line of facts | 1 a day | the service's page | `field` |
+| From the library | a documented project (Studio → Projects, the featured ones first) or a service page, taking turns (lib/automation/social-library.ts) | once a week, Mondays (the very first at once); a new field post takes the week's turn | the project's or the service's page | `library` |
+
+With two articles a week (Tuesdays and Thursdays) and one job post, that is
+three posts a week on each channel. With one article a week, set
+`JOB_POSTS_PER_WEEK` to 2 (lib/automation/social-library.ts) and the
+library goes Mondays and Thursdays.
+
+1. Claude writes a version per channel from the source alone (a field or
+   library post never says "read the story" unless the link is one, and a
+   library post is never called new), through the same style pass as the
+   blog drafts.
+2. Each becomes a **draft** in that channel's Buffer queue with the photo
+   cropped for it on Sanity's CDN, centred on the focal point the office set:
+   1200 × 630 for feeds, 4:5 (1080 × 1350) for Instagram and for any portrait
+   phone photo. A photo that lives only on the site (a service page's) is
+   uploaded to Sanity first so it can be cropped the same way.
+3. Channels: **Facebook** and **Instagram** (Buffer Free), **LinkedIn**
+   (Square One has a company page; Free allows three channels), and
+   **Google Business Profile** (a fourth channel, so Buffer Essentials): the
+   post on Square One's listing in Search and Maps, with a "Learn more"
+   button to the page (`metadata.google`), no link, phone number or hashtag
+   in its text. Anything else connected (TikTok, YouTube, X) is skipped and
+   named. Every Buffer field the job uses was checked against Buffer's live
+   API reference on 14 Oct 2026 (lib/automation/buffer.ts).
+4. An email to `BLOG_DRAFT_NOTIFY` per item: what was drafted, what was
+   skipped and why, the style check. Studio → Social drafts keeps the same
+   record (read only).
+
+**Nothing fails silently, nothing is drafted twice** (lib/automation/outcome.ts,
+ported from hubss.com's social-outcome): each item is claimed
+(`socialLog-<key>`) before anything goes to Buffer; an item no channel took
+for a reason that can clear (a refusal, a disconnected channel) has its claim
+dropped and is retried daily for 14 days from its first failure
+(`socialRetry-<key>`), then given up with an email; disconnected and locked
+channels are skipped with the reason; every Buffer and Sanity call gives up
+after 20 seconds and no item starts after two minutes, so a run always
+finishes and reports inside Vercel's five minutes; a run that stops (Buffer
+refused the key, no channel it can write for, a key missing in Vercel)
+emails what to do, naming the key, every day until it's fixed.
 
 ## Setup (Vern, once, after Sanity is connected)
 
@@ -106,17 +135,32 @@ Production**. Paste each key into Vercel yourself; never into a chat.
    for the first runs, until the first drafts are read together). The emails
    go out through Resend with the quote form's `RESEND_API_KEY` and
    `CONTACT_FROM`, which are already set.
-5. For the social drafts, `BUFFER_API_KEY`: a Buffer account in Square One's
-   name; connect the Facebook page, the Instagram professional account
-   (linked to that page) and the LinkedIn company page; then
-   publish.buffer.com/settings/api → create a key. (The same setup as
-   hubss.com's, in its docs/buffer-setup.md.)
+5. For the social drafts, `BUFFER_API_KEY`, last (it switches the job on):
+   - **Square One's own Buffer account** (buffer.com), signed up with a
+     Square One address, on the Free plan to start. Square One owns it and
+     pays for any upgrade; 21e8 runs it. Keep it Square One only: the key
+     reaches every channel on the login and the job drafts into all of them,
+     so another client's channel must never be connected there.
+   - Connect the Facebook page, the Instagram professional account (linked to
+     that page) and the LinkedIn company page. Google Business Profile is a
+     fourth channel: Buffer Essentials (billed per channel), when Square One
+     wants its posts on Search and Maps.
+   - **The posting schedule** (Buffer → each channel → Posting schedule):
+     Square One's slots, Vancouver time (Vern sets them). "Add to Queue" puts
+     an approved draft in the next free slot; a channel with no slots can't
+     queue.
+   - publish.buffer.com/settings/api → New key, named "squareonepaving.com
+     social drafts", expiry **1 year** (the longest; the default is 30 days).
+     Buffer shows it once: it goes straight into Vercel. A calendar reminder
+     two weeks before it expires saves the missed day; when it does expire,
+     the job emails which key to replace.
 6. Seed the plan: `npm run plan:seed -- --dry-run`, then (after `npx sanity
    login`) `SEED_JOBS=<the jobs' web addresses, comma-separated> npx sanity
    exec scripts/seed-blog-plan.ts --with-user-token`.
 7. Redeploy production (variables only reach new builds). The first live
-   run only on Vern's yes, with him: Vercel → square-one → Settings → Cron
-   Jobs → draft-post → Run, then read the draft together.
+   run of each job only on Vern's yes, with him: Vercel → square-one →
+   Settings → Cron Jobs → draft-post (or social-drafts) → Run, then read the
+   drafts together. Without `BUFFER_API_KEY` the social job does nothing.
 
 Optional: `BLOG_DRAFT_MODEL` and `SOCIAL_DRAFT_MODEL` choose the Claude model
 (the default, `claude-opus-4-5`, is the one hubss.com's drafters use; checked
@@ -145,6 +189,13 @@ both jobs without removing a key.
   the plan: `?project=<its web address>`.
 - **Rejecting a draft:** delete it in Studio, and set its plan item to Not
   doing (or back to Idea to have it written again).
+- **A field post:** Studio → From the field → + : the photos (best first,
+  each with a line saying what it shows and its focal point), where, the
+  service, and a sentence or two of facts. Publish, and the next daily run
+  drafts it into Buffer.
+- **A social draft nobody wants:** delete it in Buffer. Its record stays, so
+  it isn't drafted again. To have an item drafted again, delete its record
+  `socialLog-<key>` from Vern's machine (the Studio can't delete it).
 
 ## Checking what happened
 
@@ -153,11 +204,13 @@ both jobs without removing a key.
 - Studio → Blog plan: what was drafted (Drafted, with the draft's web
   address), what's next, and the Ideas the planner added (priority 3).
 - Studio → Blog posts: drafts show as drafts, with Notes for the editor.
-- Vercel → square-one → Logs, filter `[blog]` or `[social]`.
+- Studio → Social drafts: one record per item that went to Buffer, with the
+  channels, the Buffer post ids, anything skipped and the style check.
+- Vercel → square-one → Logs, filter `[blog]`, `[planner]` or `[social]`.
 - From your machine: `npx sanity documents query '*[_id in
-  path("automation.**")]{_id}' -p g4yp3p0k` lists every log. Sanity keeps
-  any document with a dot in its id away from unauthenticated reads, so the
-  logs (like drafts) are not readable through the public API.
+  path("automation.**")]{_id}' -p g4yp3p0k` lists the blog's draft logs
+  (private ids). The Blog plan and the social records are ordinary documents
+  in the public dataset: nothing private goes in them.
 
 ## For developers
 
@@ -175,6 +228,10 @@ both jobs without removing a key.
 - `vercel.json` gained `crons` only; its headers are unchanged. The post
   schema gained `editorNotes`, shown only when set and never read by the
   site.
+- `npm run test:social` runs the social job end to end against stand-ins
+  (Buffer, Sanity through groq-js, Claude, the mail): the three streams, the
+  claim, retries and give-ups, the skips, the time limits, the crops and the
+  exact shape sent to Buffer.
 - `npm run test:automation` runs the drafter end to end against stand-ins,
   with its real GROQ queries over an in-memory dataset (groq-js); `npm run
   test:planner` checks the planner's vetting and top-up. Both run in CI

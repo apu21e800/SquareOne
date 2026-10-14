@@ -4,8 +4,9 @@
  * Sanity Studio: the office's editing desk, served by the site at /studio.
  * Content (sanity/structure.ts): Website Pages (the home, about, contact and
  * driveways pages' words, every page's opener, the photo galleries, the
- * social grid), Services, Projects, the Blog plan, the Blog and Site
- * Settings, and (under Advanced) the older text/photo slots. Edit on the page (14 Oct 2026): the
+ * social grid), Services, Projects, the Blog plan, the Blog, From the
+ * field, Social drafts and Site Settings, and (under Advanced) the older
+ * text/photo slots. Edit on the page (14 Oct 2026): the
  * same, clicked on the page itself.
  */
 import { defineConfig } from "sanity"
@@ -14,7 +15,7 @@ import { presentationTool } from "sanity/presentation"
 import { dataset, projectId } from "./sanity/env"
 import { schemaTypes } from "./sanity/schemaTypes"
 import { resolve } from "./sanity/presentation"
-import { FIXED_TYPES, SINGLETONS, structure } from "./sanity/structure"
+import { FIXED_TYPES, MACHINE_TYPES, SINGLETONS, structure } from "./sanity/structure"
 import { datedPublish } from "./sanity/actions"
 
 export default defineConfig({
@@ -27,11 +28,13 @@ export default defineConfig({
     types: schemaTypes,
     // A single document is created through its list item, never from "new
     // document"; the four services come with the site (npm run sync:pages).
-    templates: (templates) => templates.filter((t) => !SINGLETONS.has(t.schemaType) && !FIXED_TYPES.has(t.schemaType)),
+    // The social job's records are its own (read only).
+    templates: (templates) => templates.filter((t) => !SINGLETONS.has(t.schemaType) && !FIXED_TYPES.has(t.schemaType) && !MACHINE_TYPES.has(t.schemaType)),
   },
   document: {
     actions: (actions, { schemaType }) => {
-      if (SINGLETONS.has(schemaType) || FIXED_TYPES.has(schemaType)) return actions.filter((a) => !["unpublish", "delete", "duplicate"].includes(a.action ?? ""))
+      // The social job's records too: deleting one would have its item drafted into Buffer again.
+      if (SINGLETONS.has(schemaType) || FIXED_TYPES.has(schemaType) || MACHINE_TYPES.has(schemaType)) return actions.filter((a) => !["unpublish", "delete", "duplicate"].includes(a.action ?? ""))
       // A blog post's first Publish dates it today (sanity/actions.ts).
       if (schemaType === "post") return actions.map((a) => (a.action === "publish" ? datedPublish(a) : a))
       return actions

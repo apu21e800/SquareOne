@@ -118,10 +118,18 @@ version of each, as the site shows it), and saves it as an **unpublished**
 Sanity draft with "Notes for the editor" (fact check, style check); marks the
 item Drafted; emails the next idea; and, when the plan is low, adds new Ideas
 (lib/automation/planner.ts, ported from hubss.com's insights-planner). A run
-that can't draft emails the fix, naming the key (lib/automation/outcome.ts). The social drafts (`/api/cron/social-drafts`, posts into
-Instagram, Facebook and LinkedIn **drafts** in Buffer) are built but off
-since 14 Oct 2026: not scheduled in vercel.json, social being out of scope
-for now (docs/AUTOMATION.md says how to switch them on).
+that can't draft emails the fix, naming the key (lib/automation/outcome.ts). Daily at 14:00 UTC, `/api/cron/social-drafts`
+(lib/automation/social.ts, ported from hubss.com's social pipeline) drafts
+into Square One's own Buffer from three streams: new blog posts, field posts
+(Studio → From the field: the crew's photos, the place, the service, a line
+of facts; linked to the service page) and, once a week, a library post (a
+documented project or a service page). Facebook, Instagram, LinkedIn and
+Google Business Profile (`metadata.google`, a Learn more button). Claim-first
+`socialLog-<key>`, 14-day retries (`socialRetry-<key>`), outcome emails, a
+run failure that names the key, disconnected and locked channels skipped,
+20 s per call and no item after 120 s, crops of 1200 × 630 and 4:5 on the
+focal point. Every Buffer field checked against Buffer's live API reference
+on 14 Oct 2026. Dormant until `BUFFER_API_KEY` is set.
 Nothing publishes itself. The drafter may state only what
 `lib/automation/facts.ts` hands it; `lib/automation/style.ts` is the house style
 and the canon as rules (keep it free of the literal tokens lint-claims bans:
@@ -361,6 +369,7 @@ npm run test:studio   # focal points, first-Publish dates, Site Settings, every 
 npm run sync:pages -- --dry-run  # what the fill-only sync would put into the Studio's empty fields
 npm run test:automation  # the cron gate, the drafter end to end against stand-ins, fail-loud emails
 npm run test:planner     # the Blog plan's top-up: vetting, no repeats, each job told once
+npm run test:social      # the social job end to end against stand-ins: streams, claims, retries, crops, Buffer's shapes
 npm run plan:seed -- --dry-run  # the Blog plan's first project stories, from documented jobs
 ```
 

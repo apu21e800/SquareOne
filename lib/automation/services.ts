@@ -67,6 +67,10 @@ export interface Store {
   createOrReplace(doc: SanityDoc): Promise<void>
   /** Sets fields on an existing document (a plan item marked Drafted). */
   patch(id: string, set: Record<string, unknown>): Promise<void>
+  /** Creates the document unless one with its id exists (the first failure of a social item). */
+  createIfNotExists(doc: SanityDoc): Promise<void>
+  /** Deletes the automation's own record (a social claim dropped so the item is tried again). */
+  delete(id: string): Promise<void>
   /** Uploads a photograph from a public URL; resolves to the asset id, or null if it could not be fetched. */
   uploadImage(url: string, filename: string): Promise<string | null>
 }
@@ -74,12 +78,13 @@ export interface Store {
 /**
  * The dataset with SANITY_API_WRITE_TOKEN (an Editor token), no CDN, "raw"
  * perspective so it sees drafts too: a draft must never take a slug another
- * draft already uses.
+ * draft already uses. `timeoutMs`: the social job's 20 s per call, so no call
+ * can outlast the function (lib/automation/social.ts).
  */
-export function sanityStore(): Store {
+export function sanityStore(opts: { timeoutMs?: number } = {}): Store {
   const token = process.env.SANITY_API_WRITE_TOKEN
   if (!token) throw new Error("SANITY_API_WRITE_TOKEN is not set on this server")
-  const client = createClient({ projectId, dataset, apiVersion, useCdn: false, perspective: "raw", token })
+  const client = createClient({ projectId, dataset, apiVersion, useCdn: false, perspective: "raw", token, ...(opts.timeoutMs ? { timeout: opts.timeoutMs } : {}) })
   return {
     fetch: <T,>(query: string, params: Record<string, unknown> = {}) => client.fetch<T>(query, params),
     create: async (doc) => {
@@ -91,10 +96,17 @@ export function sanityStore(): Store {
     patch: async (id, set) => {
       await client.patch(id).set(set).commit()
     },
+    createIfNotExists: async (doc) => {
+      await client.createIfNotExists(doc)
+    },
+    delete: async (id) => {
+      await client.delete(id)
+    },
     uploadImage: async (url, filename) => {
-      const res = await fetch(url)
+      const res = await fetch(url, { signal: AbortSignal.timeout(opts.timeoutMs ?? 60_000) })
       if (!res.ok) return null
-      const asset = await client.assets.upload("image", Buffer.from(await res.arrayBuffer()), { filename })
+      // Uploads have no timeout unless asked for one.
+      const asset = await client.assets.upload("image", Buffer.from(await res.arrayBuffer()), { filename, timeout: opts.timeoutMs ?? 60_000 })
       return asset._id
     },
   }

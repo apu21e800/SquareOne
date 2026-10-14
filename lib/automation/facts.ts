@@ -40,6 +40,9 @@ export interface SubjectPhoto {
   /** A Sanity image asset id, when the photo is already in the dataset. */
   asset?: string
   alt?: string
+  /** The focal point and crop the office set in the Studio (the social crops centre on them). */
+  hotspot?: { x: number; y: number; width?: number; height?: number } | null
+  crop?: { top: number; bottom: number; left: number; right: number } | null
 }
 
 export interface Subject {
@@ -84,14 +87,14 @@ interface StudioProject {
   /** The slug of the post picked in Studio's "Blog post" field. */
   post?: string | null
   hidden?: boolean | null
-  images?: { asset?: string; alt?: string; file?: string | null }[] | null
+  images?: { asset?: string; alt?: string; file?: string | null; hotspot?: SubjectPhoto["hotspot"]; crop?: SubjectPhoto["crop"] }[] | null
   _createdAt?: string
 }
 
 const STUDIO_PROJECTS = `*[_type == "project" && !(_id in path("drafts.**")) && defined(slug.current)]{
   _id, "slug": slug.current, title, application, service, systems, city, region, year, client, artist, excerpt,
   story, "post": post->slug.current, hidden,
-  "images": images[]{ "asset": asset._ref, alt, "file": asset->originalFilename }, _createdAt
+  "images": images[]{ "asset": asset._ref, alt, "file": asset->originalFilename, hotspot, crop }, _createdAt
 }`
 
 const filled = (v?: string | null) => (typeof v === "string" && v.trim() ? v.trim() : undefined)
@@ -122,7 +125,13 @@ export async function loadSubjects(store: Store): Promise<Subject[]> {
     // (the seed uploaded them) keeps its web path, for its caption.
     const inStudio: SubjectPhoto[] = (s?.images ?? [])
       .filter((i) => i?.asset)
-      .map((i) => ({ asset: i.asset, alt: i.alt, src: i.file ? p.images.find((src) => named(src) === named(i.file as string)) : undefined }))
+      .map((i) => ({
+        asset: i.asset,
+        alt: i.alt,
+        src: i.file ? p.images.find((src) => named(src) === named(i.file as string)) : undefined,
+        ...(i.hotspot ? { hotspot: i.hotspot } : {}),
+        ...(i.crop ? { crop: i.crop } : {}),
+      }))
     const story = (s?.story ?? []).map((x) => filled(x)).filter((x): x is string => Boolean(x))
     return {
       slug: p.slug,
@@ -162,7 +171,7 @@ export async function loadSubjects(store: Store): Promise<Subject[]> {
       artist: p.artist || undefined,
       excerpt: p.excerpt ?? "",
       story: (p.story ?? []).map((x) => filled(x)).filter((x): x is string => Boolean(x)),
-      photos: (p.images ?? []).filter((i) => i?.asset).map((i) => ({ asset: i.asset, alt: i.alt })),
+      photos: (p.images ?? []).filter((i) => i?.asset).map((i) => ({ asset: i.asset, alt: i.alt, ...(i.hotspot ? { hotspot: i.hotspot } : {}), ...(i.crop ? { crop: i.crop } : {}) })),
       source: "studio" as const,
       post: filled(p.post),
       createdAt: p._createdAt,
