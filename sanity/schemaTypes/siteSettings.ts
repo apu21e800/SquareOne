@@ -1,6 +1,6 @@
 import { defineField, defineType } from "sanity"
 import { copyCheck, headingCheck } from "./style"
-import { DEFAULT_SETTINGS as D, PHONE_SHAPE } from "../../lib/site-settings"
+import { DEFAULT_SETTINGS as D, EMAIL_SHAPE, PHONE_SHAPE } from "../../lib/site-settings"
 
 /**
  * One document: the facts the whole site repeats (phones, email, address,
@@ -54,7 +54,7 @@ export const siteSettings = defineType({
       title: "Email",
       description: `The office's address, wherever the site prints an email. Left empty, ${D.email}.`,
       initialValue: D.email,
-      validation: (r) => r.custom((v) => (typeof v !== "string" || !v.trim() || /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(v.trim()) ? true : "That isn't an email address.")),
+      validation: (r) => r.custom((v) => (typeof v !== "string" || !v.trim() || EMAIL_SHAPE.test(v.trim()) ? true : "Just the address, like office@squareonepaving.com.")),
     }),
     defineField({ name: "addressLine1", type: "string", title: "Address line 1", description: "The street line, as the footer prints it.", initialValue: D.addressLine1 }),
     defineField({

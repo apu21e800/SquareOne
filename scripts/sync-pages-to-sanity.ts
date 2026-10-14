@@ -152,18 +152,16 @@ const pages: Plan[] = [
   },
 ]
 
-/* The /services page sets vapour blasting's line shorter than its record
-   ("…, with up to 92% less dust."); the Studio starts from what the page
-   shows (app/services/page.tsx). */
-const LIVE_TAGLINE: Record<string, string> = { "vapor-blasting": "Clean it, prime it, bring it back." }
-
+/* The record's taglines, as the service pages, the other services' cards and
+   llms.txt print them. (/services sets vapour blasting's line shorter; it
+   keeps its own until the office changes the tagline here.) */
 const servicePlans: Plan[] = services.map((s) => ({
   id: `service-${s.slug}`,
   type: "service",
   create: { name: s.name, slug: s.slug },
   fill: (doc) => {
     const f: Fill = new Map()
-    fillValue(doc, f, "tagline", LIVE_TAGLINE[s.slug] ?? s.tagline)
+    fillValue(doc, f, "tagline", s.tagline)
     if (s.slug !== "vapor-blasting") {
       fillValue(doc, f, "shortDescription", s.shortDescription)
       fillValue(doc, f, "idealClients", s.idealClients)

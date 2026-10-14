@@ -162,6 +162,28 @@ async function main() {
     assert.equal(mergeSettings({ tiktok: "https://www.tiktok.com/@squareonepaving" }).tiktok, "https://www.tiktok.com/@squareonepaving")
   })
 
+  await check("a value that would break every link keeps the site's own", () => {
+    const s = mergeSettings({
+      email: "mailto:hello@squareonepaving.com",
+      phoneOffice: "604\u200B-612-6209",
+      phoneIsland: "(250) 391-0270",
+      instagram: "http://instagram.com/squareonepaving",
+      facebook: "javascript:alert(1)",
+    })
+    assert.equal(s.email, "hello@squareonepaving.com", "a pasted mailto: comes off")
+    assert.equal(s.phoneOffice, "604-612-6209", "an invisible character comes off")
+    assert.equal(s.phoneIsland, DEFAULT_SETTINGS.phoneIsland, "a number in another shape keeps the site's")
+    assert.equal(s.instagram, DEFAULT_SETTINGS.instagram, "only https links")
+    assert.equal(s.facebook, DEFAULT_SETTINGS.facebook)
+    assert.equal(mergeSettings({ email: "office@squareonepaving" }).email, DEFAULT_SETTINGS.email)
+    assert.equal(mailtoHref("mailto:office@squareonepaving.com"), "mailto:office@squareonepaving.com")
+  })
+
+  await check("the footer line keeps the preview's marks, so it stays clickable", () => {
+    const line = vercelStegaCombine("Decorative pavement since 2000.", { origin: "sanity.io", href: "/studio/intent/edit/id=siteSettings;type=siteSettings;path=positioning" })
+    assert.equal(mergeSettings({ positioning: line }).positioning, line)
+  })
+
   await check("phone links and the search engines' numbers", () => {
     assert.equal(telHref("604-612-6209"), "tel:+16046126209")
     assert.equal(telHref("1-877-391-0270"), "tel:+18773910270")

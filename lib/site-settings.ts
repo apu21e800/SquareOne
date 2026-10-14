@@ -59,19 +59,49 @@ export const DEFAULT_SETTINGS: SiteSettings = {
 
 const KEYS = Object.keys(DEFAULT_SETTINGS) as (keyof SiteSettings)[]
 
-/** The Studio's value for each field when it has one, else the code's. */
+/** A phone line as people write it, the only shape the Studio accepts: "604-612-6209", "1-877-391-0270". */
+export const PHONE_SHAPE = /^(1-)?\d{3}-\d{3}-\d{4}$/
+
+/** An email address, the only shape the Studio accepts. */
+export const EMAIL_SHAPE = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/
+
+const PHONES = new Set<keyof SiteSettings>(["phoneOffice", "phoneIsland", "phoneTollFree"])
+const ACCOUNTS = new Set<keyof SiteSettings>(["instagram", "tiktok", "facebook", "linkedin", "youtube"])
+
+/**
+ * A Studio value the site can print safely, or undefined. Phones, the email
+ * and the accounts become links on every page, the quote form's email
+ * fallback among them: one that doesn't have the right shape (a pasted
+ * "mailto:", a stray character) keeps the code's value instead of breaking
+ * every link at once. The Studio refuses them at Publish too.
+ */
+function usable(key: keyof SiteSettings, v: unknown): string | undefined {
+  if (typeof v !== "string") return undefined
+  const link = PHONES.has(key) || key === "email" || ACCOUNTS.has(key)
+  // In a link, invisible characters a paste can carry (zero-width spaces, a
+  // byte-order mark) go first. Prose keeps them: in an editor's preview they
+  // are the marks that make the footer line clickable (sanity/lib/stega.ts).
+  const s = (link ? v.replace(/[\u200B-\u200D\u2060\uFEFF]/g, "") : v).trim()
+  if (!s) return undefined
+  if (PHONES.has(key)) return PHONE_SHAPE.test(s) ? s : undefined
+  if (key === "email") {
+    const email = s.replace(/^mailto:/i, "")
+    return EMAIL_SHAPE.test(email) ? email : undefined
+  }
+  if (ACCOUNTS.has(key)) return /^https:\/\/[^\s]+$/.test(s) ? s : undefined
+  return s
+}
+
+/** The Studio's value for each field when it has a usable one, else the code's. */
 export function mergeSettings(doc: Partial<Record<keyof SiteSettings, unknown>> | null | undefined): SiteSettings {
   const out: SiteSettings = { ...DEFAULT_SETTINGS }
   if (!doc) return out
   for (const key of [...KEYS, "tiktok" as const]) {
-    const v = doc[key]
-    if (typeof v === "string" && v.trim()) (out as unknown as Record<string, string>)[key] = v.trim()
+    const v = usable(key, doc[key])
+    if (v !== undefined) (out as unknown as Record<string, string>)[key] = v
   }
   return out
 }
-
-/** A phone line as people write it, the only shape the Studio accepts: "604-612-6209", "1-877-391-0270". */
-export const PHONE_SHAPE = /^(1-)?\d{3}-\d{3}-\d{4}$/
 
 /** The digits with the country code: "16046126209". */
 function digits(phone: string): string {
@@ -92,7 +122,7 @@ export function schemaPhone(phone: string): string {
 
 /** A mailto: link, with an optional "?subject=…" already encoded. */
 export function mailtoHref(email: string, query = ""): string {
-  return `mailto:${email.trim()}${query}`
+  return `mailto:${email.trim().replace(/^mailto:/i, "")}${query}`
 }
 
 /** "@squareonepaving" from an Instagram or TikTok profile URL; "" when it is not a profile. */
