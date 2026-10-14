@@ -39,7 +39,15 @@ every run is refused or answers what is missing, and does nothing. Without
    photo, and the facts it used. An email goes to `BLOG_DRAFT_NOTIFY` with
    the Studio link.
 
-**Daily, 15:30 UTC:** `/api/cron/social-drafts` (lib/automation/social.ts)
+**Social drafts: off for Square One (14 Oct 2026).** Social media is out of
+scope for now (Vern will offer it later), so the daily cron is not in
+vercel.json and nothing calls `/api/cron/social-drafts`; the route still
+refuses anything without `CRON_SECRET`. The code stays, as it worked on
+9 Oct. To switch it on: a Buffer account in Square One's name (never HUB's)
+with Instagram, Facebook and LinkedIn connected, `BUFFER_API_KEY` in
+Vercel, and this line back in vercel.json's `crons`:
+`{ "path": "/api/cron/social-drafts", "schedule": "30 15 * * *" }`.
+What it does then, daily at 15:30 UTC (lib/automation/social.ts):
 
 1. Finds posts published in Studio, dated 1 Oct 2026 or later, with no
    social drafts yet (the imported library is older, so it never floods

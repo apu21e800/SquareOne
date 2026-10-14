@@ -44,6 +44,15 @@ Current as of 7 Oct 2026 (the own-company restyle of 27 Sept, docs/OWN-COMPANY-B
 - Tailwind CSS 4
 - TypeScript (strict)
 - Resend for transactional email (the quote form; spam handling under "Forms and spam")
+- Dependencies, 14 Oct 2026: resend 6.32 (drops svix and its vulnerable uuid),
+  sharp 0.35.5 (local image scripts only), undici, dompurify, picomatch,
+  brace-expansion and source-map-js patched by targeted updates. `npm audit`
+  then shows no critical and nothing a visitor can reach: what remains sits in
+  the Studio's command-line and build tooling (Sanity CLI and codegen, eslint,
+  the typography plugin, Vercel's framework detection) and goes with the next
+  Sanity minor update. Never `npm audit fix --force`: it downgrades Sanity.
+  The tree, all 420 commits on every ref, and the live JavaScript (pages and
+  Studio) were scanned for keys and secrets the same day: none.
 - MDX for blog content (gray-matter + next-mdx-remote)
 - Framer Motion for animations
 - Form validation: react-hook-form + zod
@@ -85,8 +94,10 @@ Weekly, `/api/cron/draft-post`
 writes a project story from the record (the Studio's version of it, as the
 site shows it; never a project marked "Take off the site") for the next project with no post and
 saves it as an **unpublished** Sanity draft with "Notes for the editor" (fact
-check, style check). Daily, `/api/cron/social-drafts` turns each newly
-published post into Instagram, Facebook and LinkedIn **drafts** in Buffer.
+check, style check). The social drafts (`/api/cron/social-drafts`, posts into
+Instagram, Facebook and LinkedIn **drafts** in Buffer) are built but off
+since 14 Oct 2026: not scheduled in vercel.json, social being out of scope
+for now (docs/AUTOMATION.md says how to switch them on).
 Nothing publishes itself. The drafter may state only what
 `lib/automation/facts.ts` hands it; `lib/automation/style.ts` is the house style
 and the canon as rules (keep it free of the literal tokens lint-claims bans:
