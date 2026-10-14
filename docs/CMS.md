@@ -6,20 +6,33 @@ Studio and the page updates within a minute.
 
 ## What they can edit
 
+The Studio's list, in this order since 14 Oct 2026 (the automation brief):
+Website Pages, Services, Projects, Blog, Site Settings, then Advanced. The
+Blog plan, From the field and Social drafts join it as the blog and social
+automation are built (docs/AUTOMATION.md).
+
 | In the Studio            | What it changes on the site                                                      |
 | ------------------------ | -------------------------------------------------------------------------------- |
-| **Home page**            | The hero: its photographs (add, remove, reorder, caption, set each one's focal point), the headline and the line under it. |
-| **Page openers**         | The photograph and words each page opens on: About, Services, Vapour blasting, Products, Applications, Projects, Galleries, Driveways, Resources, For specifiers, Blog, and each service and application page (and each product page's photograph). |
-| **Gallery photos**       | Add a photograph to any gallery (crosswalks, driveways…), with what it shows, where and the systems; make one lead its gallery; take one off. |
-| **Galleries: photos taken off** | Take off a photograph that came with the site (paste its address). |
-| **Blog posts**           | Create, edit, publish. Lead photograph, category, body with photos and links.    |
-| **Projects**             | The case studies: /projects, each project's page, the home page's six, and the application and service pages. Add one, edit its words and photographs, or "Take off the site". |
-| **Social grid**          | The Instagram strip on the home page ("Recent, on Instagram"): photo + caption + link to the post. |
-| **Site settings**        | Phones, email, address, Instagram / TikTok / Facebook / LinkedIn / YouTube links, the social heading. |
+| **Website Pages → Home page** | The hero (its photographs: add, remove, reorder, caption, focal point; the headline and the line under it) and, under "The sections below", the words of every band on the home page: each label, heading and line, the four service cards and the three "who we work with" cards. |
+| **Website Pages → About, Contact, Driveways page** | The words below each page's opener: About's story, mission, trades, three points, statement and regions; the quote page's headline, steps and "what to send"; the driveways page's sections, four steps and questions. |
+| **Website Pages → Page openers** | The photograph and words each page opens on: About, Services, Vapour blasting, Products, Applications, Projects, Galleries, Driveways, Resources, For specifiers, Blog, and each service and application page (and each product page's photograph). |
+| **Website Pages → Gallery photos** | Add a photograph to any gallery (crosswalks, driveways…), with what it shows, where and the systems; make one lead its gallery; take one off. |
+| **Website Pages → Galleries: photos taken off** | Take off a photograph that came with the site (paste its address). |
+| **Website Pages → Social grid** | The Instagram strip on the home page: photo + caption + link to the post. |
+| **Services**             | The four services' words: the tagline, the intro, who we work with, what you get, the questions. The four are fixed: they can't be added to or deleted. |
+| **Projects**             | /projects, each project's page, the home page's six, and the application and service pages. Add one, edit its words and photographs (drag to reorder; Add item, then Upload or Select one already in the media library), or "Take off the site". |
+| **Blog**                 | Create, edit, publish. Lead photograph, category, body with photos and links. The first Publish dates a post that day (Vancouver). |
+| **Site Settings**        | Phones, email, address, the footer line, Instagram / TikTok / Facebook / LinkedIn / YouTube links: read everywhere they print (the footer, the menu, the phone bar, the quote form, the contact and about pages, every "or call" line, the legal pages, llms.txt and the search engines' data). |
 | **Advanced → Text and Photo slots** | The first way in (30 Sept): a key per spot (`home.hero.title`, `home.hero.1`…). The Home page above does the same more simply and wins over them. |
 
 Every field left empty keeps what the site shows today, so nothing can go
-blank. Every page picks up Site settings in the footer.
+blank. `npm run sync:pages` fills the empty fields with the site's own words
+(fill-only, with a dry run), so the office starts from what is live.
+
+Every photograph needs its alt text ("What the photo shows"; a gallery
+photo's "What it shows"), and its focal point frames it everywhere it
+shows: heroes, openers, gallery tiles, project and blog frames, measured
+inside any crop (lib/focal.ts).
 
 The site never depends on the CMS to build. With no project id every reader
 falls back to the built-in content (lib/cms.ts), which is why the preview
@@ -131,6 +144,17 @@ PR #11 went live on 7 Oct, so the condition above is met.
   dashes used as dashes, no "not just X, it's Y", the systems never "ours",
   "installed at", no prices or promises, headings in sentence case). They
   never stop Publish. Posts from before 1 Oct 2026 are left alone.
+- **The words on a page**: Website Pages → Home, About, Contact or
+  Driveways page. Each band is a box: its label, its heading, the heading's
+  lighter ending, and the line under it. A heading and its ending go
+  together: change one and check the other. Empty a field to go back to the
+  site's own words.
+- **A service's words**: Services → the service. The tagline also sits
+  under the service page's headline (unless its Page opener has its own
+  line). Questions go to Google too: answer only what the page says.
+- **Phone numbers, the email, the address**: Site Settings. Change one there
+  and it changes everywhere on the site, the FAQ answers and the legal pages
+  included (lib/site-settings.ts). Write phones as 604-612-6209.
 - **The home page's hero**: Home page → Hero photographs. Drag to reorder,
   ⋯ → Remove to take one out, + Add item for a new one (a photograph of our
   own work at least 1600px wide, what it shows, the caption: place · system
@@ -156,9 +180,11 @@ PR #11 went live on 7 Oct, so the condition above is met.
   Publish. To take one off the site, tick "Take off the site" (deleting a
   project that came with the site doesn't remove it).
 
-- **Blog post**: Blog posts → + → title, date, category, lead photo (drag the
-  focal point onto the pavement), a one-paragraph summary, then the body.
-  Publish. The web address is set from the title once — leave it alone
+- **Blog post**: Blog → + → title, category, lead photo (drag the focal
+  point onto the pavement, say what it shows), a one-paragraph summary, then
+  the body. Publish. The first Publish dates the post that day (a date in
+  the future is kept), so a draft that waited a week goes out dated the day
+  it went live. The web address is set from the title once; leave it alone
   after publishing.
 - **Photos**: JPG, at least 1600px wide for lead photographs; 1200px for
   body photos. Always fill in "What the photo shows".
@@ -227,6 +253,43 @@ PR #11 went live on 7 Oct, so the condition above is met.
   Studio words are measured or reused, clean them: `fitVars`,
   `pageTitle`, `clampDescription` and `scriptJson` call `stegaClean`.
   `npm run test:preview`.
+- The Studio at hubss.com's level (14 Oct 2026, the automation brief's
+  Phase A):
+  - `/studio` renders in the browser only (`app/studio/[[...tool]]/page.tsx`,
+    `next/dynamic` with `ssr: false`); the noindex is in
+    `app/studio/layout.tsx` and an `X-Robots-Tag` in `vercel.json`.
+  - The list: `sanity/structure.ts` (`SINGLETONS`, `FIXED_TYPES`), tested by
+    `npm run test:studio`.
+  - The first Publish dates a post: `sanity/actions.ts` wraps Publish for
+    `post` (Sanity's documented "set a value, then publish"),
+    `sanity/lib/publish-date.ts` decides (never published, date blank or past:
+    today in Vancouver; a future date or a later Publish: left alone).
+  - Every page's words: `lib/page-copy.ts` (the code's words, verbatim, and
+    the merge: the Studio's field when it has one, a heading and its ending
+    as a pair, a list only when it has a real line), read by
+    `lib/page-content.ts` (`getHomeCopy`, `getAboutCopy`, `getContactCopy`,
+    `getDrivewaysCopy`), schemas in `sanity/schemaTypes/words.ts`.
+    `components/ui/Heading.tsx` sets a heading and its lighter ending.
+  - Services: `lib/services-cms.ts` (`getStudioServices`,
+    `getStudioService`, `mergeService`) over `lib/services.ts`; schema
+    `sanity/schemaTypes/service.ts`. The /services index keeps its own line
+    for a service until the Studio's tagline differs from the record's.
+  - Site Settings: `lib/site-settings.ts` (defaults, `mergeSettings`,
+    `telHref`, `schemaPhone`, `addressParts`, `withSettings` for prose),
+    `getSiteSettings()` in `lib/cms.ts`, and
+    `components/SiteSettingsProvider.tsx` for client components (the layout
+    reads them once). Kept on the code's copy on purpose: the quote form's
+    server failure message (`lib/contact.ts` FALLBACK) and blog posts' text.
+  - Photos: `lib/focal.ts` turns the hotspot into `object-position` inside
+    the crop; `Project.photoMeta` (alt, focal point, preview mark) by
+    address; `WorkPhoto.position`/`edit`; `BlogPost.featured_alt`,
+    `featured_position`, `featured_edit`.
+  - Seeding: `npm run sync:pages -- --dry-run` (no token), then
+    `npx sanity exec scripts/sync-pages-to-sanity.ts --with-user-token`
+    after `npx sanity login` (`sanity.cli.ts` names the project). Fill-only;
+    a document with a draft open is left alone and named.
+  - CI: `.github/workflows/test.yml` runs `npm run check` and every
+    no-network test on each push and pull request.
 - Style warnings (14 Oct 2026): `sanity/schemaTypes/style.ts` runs
   `lib/automation/style.ts` (the drafter's house style, browser-safe: no
   lookbehind) as `.warning()` validations on the words a visitor reads.

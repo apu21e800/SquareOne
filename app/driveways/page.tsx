@@ -42,6 +42,8 @@ import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
 import { getSiteSettings } from "@/lib/cms"
 import { withSettings } from "@/lib/site-settings"
+import { getDrivewaysCopy } from "@/lib/page-content"
+import Heading from "@/components/ui/Heading"
 
 export const metadata: Metadata = {
   openGraph: { title: "Stamped Asphalt Driveways in BC", images: [{ url: "/images/S1_update_v2/photos/Driveways/Ten%20Mile%20Point%20Driveway%20I.jpg" }] },
@@ -63,39 +65,11 @@ export const metadata: Metadata = {
   },
 }
 
-/* Every answer restates something already on this page or in the record —
-   lib/products.ts, lib/services.ts, lib/pattern-sheets.ts, lib/palette.ts.
-   Performance figures are HUB's and say so. */
-const FAQS = [
-  {
-    q: "Can you install stamped asphalt over my existing driveway?",
-    a: "Yes, when the asphalt is sound. StreetPrint is stamped into asphalt in good condition, reheated in place, and StreetBond is coated straight over asphalt or concrete, so there is no demolition and no new base. We assess the surface at the site visit first: the asphalt has to be sound before it takes a pattern, and if it is not, we say so.",
-  },
-  {
-    q: "How long does a stamped asphalt driveway last?",
-    a: "The manufacturer publishes a 10–20 year service life for StreetPrint under municipal traffic, and an 8+ year life cycle for StreetBond, which is refreshed with a recoat rather than replaced. A driveway carries a fraction of the traffic a road does.",
-  },
-  {
-    q: "Which patterns and colours can I choose?",
-    a: "The StreetPrint templates on Square One's own sheet: ashlar slate, offset brick, standard herringbone, random stone, standard tile and offset tile, with soldier-course, stacked-brick and Texas cobble borders. The manufacturer draws the templates as dimensioned sheets. Three are shown above; more are in the pattern library. StreetBond colour comes from the published chart of more than fifty; for a house that usually means the greys, black and the earth tones: bedrock, brick, granite, pewter, sierra, black, concrete gray, burnt sienna, brown suede, taupe and graphite. Sample boards come to the site visit.",
-  },
-  {
-    q: "Is stamped asphalt safe in BC winters?",
-    a: "Yes. The imprinted surface is textured, so tyres and shoes have more to hold than on smooth asphalt, and the manufacturer rates StreetPrint snowplow and de-icing salt safe. Square One has installed it across BC since 2000, through wet coastal winters and the freeze-thaw cycles inland.",
-  },
-  {
-    q: "How do I get a quote?",
-    a: "Contact us with your address and a description of the work, or a photo of the driveway. We schedule a free site visit, assess the surface, and follow up with a written quote.",
-  },
-  {
-    q: "Do you install driveways on Vancouver Island?",
-    a: "Yes. Vancouver Island is a Square One service region with its own line, 250-391-0270. The Island driveways on this page (Saanich, North and West Saanich, Sooke, Duncan, Mill Bay and Victoria) were all installed by Square One.",
-  },
-  {
-    q: "Do you work outside the Lower Mainland and Vancouver Island?",
-    a: "For the right project, yes. Okanagan and Interior installations are in the project record. Send the address and a description and we will tell you straight away whether it makes sense for both of us.",
-  },
-]
+/* The questions and answers are the Driveways page's words since 14 Oct
+   2026 (lib/page-copy.ts, DRIVEWAYS_COPY.faqs). Every answer restates
+   something already on this page or in the record: lib/products.ts,
+   lib/services.ts, lib/pattern-sheets.ts, lib/palette.ts. Performance
+   figures are HUB's and say so. */
 
 const regions = [
   { name: "Vancouver", sub: "Metro Vancouver" },
@@ -167,33 +141,20 @@ const patterns: (Shot & { label: string })[] = [
   },
 ]
 
-/* The driveway's own four steps — the same sequence as the site's process
+/* The driveway's own four steps, the same sequence as the site's process
    band (site visit, written quote, install, the finished surface), with the
    things a homeowner asks about: the boards against the house, no demolition
-   and no new base, the winter rating. Numbered because it is a sequence. */
-const steps: { title: string; desc: string }[] = [
-  {
-    title: "Free site visit",
-    desc: "We assess the asphalt and hold the samples against your house.",
-  },
-  {
-    title: "Written quote",
-    desc: "The pattern and the colour, in writing. If the asphalt isn't sound, we say so.",
-  },
-  {
-    title: "Installation",
-    desc: "Prep, stamping, colour and finish, by our own crews. No demolition.",
-  },
-  {
-    title: "Built for BC winters",
-    desc: "Snowplow and de-icing salt safe, as the manufacturer rates it.",
-  },
-]
+   and no new base, the winter rating. Numbered because it is a sequence.
+   Their words are the Driveways page's (lib/page-copy.ts). */
+const STEPS = ["visit", "quote", "install", "winters"] as const
 
 export default async function DrivewaysPage() {
   // The answers that name a line, as Site Settings has it (lib/site-settings.ts).
   const site = await getSiteSettings()
-  const faqs = FAQS.map((f) => ({ ...f, a: withSettings(f.a, site) }))
+  // The page's words: the Studio's Driveways page, the site's own where blank (lib/page-copy.ts).
+  const words = await getDrivewaysCopy()
+  const faqs = words.faqs.map((f) => ({ ...f, a: withSettings(f.a, site) }))
+  const steps = STEPS.map((key) => ({ key, ...words.steps[key] }))
   // The opener, with whatever the Studio says on top (lib/page-content.ts, 9 Oct 2026).
   const o = await getPageOpener("/driveways")
   // The hero frame is not repeated as the first tile of the gallery below it.
@@ -278,9 +239,9 @@ export default async function DrivewaysPage() {
              untouched in components/DrivewayComposer.tsx.) ──────── */}
       <Section
         id="patterns"
-        label="Patterns"
-        title={<>Driveway patterns, <em>drawn to scale</em></>}
-        intro="Every pattern starts as a dimensioned drawing. The samples come to your driveway."
+        label={words.patterns.label}
+        title={<Heading words={words.patterns} />}
+        intro={words.patterns.line}
         className="scroll-mt-[72px]"
         wide
       >
@@ -297,13 +258,13 @@ export default async function DrivewaysPage() {
 
       {/* ── 05 How it works — the driveway's four steps, numbered, under the
              same colour-card band as the site's process steps (6 Oct 2026) ──────── */}
-      <Section label="How it works" title={<>How a driveway <em>goes in</em></>} tone="warm" wide>
+      <Section label={words.process.label} title={<Heading words={words.process} />} tone="warm" wide>
         <ol
           className="steps-edge grid grid-cols-4 gap-x-10 gap-y-10 max-[900px]:grid-cols-2 max-[560px]:grid-cols-1"
           style={{ ["--n" as string]: steps.length } as CSSProperties}
         >
           {steps.map((step, i) => (
-            <li key={step.title} style={{ ["--i" as string]: i } as CSSProperties}>
+            <li key={step.key} style={{ ["--i" as string]: i } as CSSProperties}>
               <span className="step-num" aria-hidden="true">
                 {i + 1}
               </span>
@@ -311,7 +272,7 @@ export default async function DrivewaysPage() {
                 <span className="sr-only">Step {i + 1}: </span>
                 {step.title}
               </h3>
-              <p className="mt-3 max-w-[44ch] text-[16px] leading-[1.6] text-ink-body [text-wrap:pretty]">{step.desc}</p>
+              <p className="mt-3 max-w-[44ch] text-[16px] leading-[1.6] text-ink-body [text-wrap:pretty]">{step.text}</p>
             </li>
           ))}
         </ol>
@@ -335,11 +296,11 @@ export default async function DrivewaysPage() {
       {/* ── 06 Driveways on record ──────── */}
       <Section
         id="gallery"
-        label="Photographed on site"
-        title={<>Driveways from Victoria <em>to Vancouver</em></>}
+        label={words.gallery.label}
+        title={<Heading words={words.gallery} />}
         intro={
           <>
-            Square One driveways from the record, on the Island and the mainland.
+            {words.gallery.line}
             <span className="mt-4 flex flex-wrap gap-x-8 gap-y-2">
               <Link href="/driveways/vancouver" className="link">
                 Vancouver driveways
@@ -358,14 +319,9 @@ export default async function DrivewaysPage() {
 
       {/* ── 07 Service area ──────── */}
       <Section
-        label="Service area"
-        title={<>Where we <em>install driveways</em></>}
-        intro={
-          <>
-            In one of the areas below, we come to you. Elsewhere in BC, ask: we travel for the
-            right job.
-          </>
-        }
+        label={words.area.label}
+        title={<Heading words={words.area} />}
+        intro={words.area.line}
         tone="warm"
       >
         <ul className="grid grid-cols-2 gap-x-8 gap-y-6 min-[701px]:grid-cols-3 lg:grid-cols-4">
@@ -381,7 +337,7 @@ export default async function DrivewaysPage() {
       </Section>
 
       {/* ── 08 Questions we hear ──────── */}
-      <Section label="Questions" title={<>Questions <em>about driveways</em></>}>
+      <Section label={words.questions.label} title={<Heading words={words.questions} />}>
         <div className="border-t border-hairline">
           {faqs.map((faq, i) => (
             <details key={faq.q} open={i === 0} className="group border-b border-hairline">

@@ -16,7 +16,12 @@ import type { FilterDefault } from "next-sanity"
  * [..., "children", {_key}, "text"]).
  */
 export const STEGA_FIELDS: Record<string, ReadonlySet<string>> = {
-  homePage: new Set(["headline", "headlineEnd", "line", "caption"]),
+  // The hero, and since 14 Oct 2026 the sections below it (lib/page-copy.ts).
+  homePage: new Set(["headline", "headlineEnd", "line", "caption", "label", "head", "tail", "title", "text"]),
+  aboutPage: new Set(["label", "head", "tail", "line", "storyText", "title", "text"]),
+  contactPage: new Set(["label", "head", "tail", "line", "nextLabel", "title", "text", "sendLabel", "send"]),
+  drivewaysPage: new Set(["label", "head", "tail", "line", "title", "text", "q", "a"]),
+  service: new Set(["tagline", "shortDescription", "idealClients", "benefits", "q", "a"]),
   pageHero: new Set(["headline", "headlineEnd", "line", "caption"]),
   galleryPhoto: new Set(["subject", "place"]),
   project: new Set(["title", "excerpt", "story", "client", "artist"]),

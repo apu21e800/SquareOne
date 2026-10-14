@@ -3,6 +3,7 @@ import { editAttr, inDraftMode, sanityFetch, urlFor, type SanityImageSource } fr
 import { OPENER_BY_PAGE, type OpenerDefault } from "@/lib/openers"
 import type { Slide } from "@/lib/hero-slides"
 import { focalPosition, isCropped } from "@/lib/focal"
+import { mergeAboutCopy, mergeContactCopy, mergeDrivewaysCopy, mergeHomeCopy, type AboutCopy, type ContactCopy, type DrivewaysCopy, type HomeCopy } from "@/lib/page-copy"
 
 /**
  * The home page's hero and every page's opener, as the Studio has them
@@ -185,4 +186,32 @@ export async function getHomeHero(builtIn: Slide[]) {
     out.slides = (out.slides ?? builtIn).map((s, i) => ({ ...s, edit: editAttr(true, home, fromStudio ? field(i) : "reel") }))
   }
   return out
+}
+
+/* ------------------------------------------------------------------
+   The words below the openers (14 Oct 2026, lib/page-copy.ts): the home
+   page's sections and the about, contact and driveways pages, each the
+   site's own with the Studio's on top, field by field.
+   ------------------------------------------------------------------ */
+
+const COPY_QUERY = groq`*[_id == $id][0]`
+
+async function copyDoc(id: string): Promise<Record<string, unknown> | null> {
+  return sanityFetch<Record<string, unknown> | null>(COPY_QUERY, { id }, ["sanity", "pages"])
+}
+
+export async function getHomeCopy(): Promise<HomeCopy> {
+  return mergeHomeCopy(await copyDoc("homePage"))
+}
+
+export async function getAboutCopy(): Promise<AboutCopy> {
+  return mergeAboutCopy(await copyDoc("aboutPage"))
+}
+
+export async function getContactCopy(): Promise<ContactCopy> {
+  return mergeContactCopy(await copyDoc("contactPage"))
+}
+
+export async function getDrivewaysCopy(): Promise<DrivewaysCopy> {
+  return mergeDrivewaysCopy(await copyDoc("drivewaysPage"))
 }

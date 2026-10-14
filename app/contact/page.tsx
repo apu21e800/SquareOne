@@ -6,6 +6,8 @@ import { Section } from "@/components/ui/Container"
 import { workMunicipalities } from "@/lib/work"
 import { getSiteSettings } from "@/lib/cms"
 import { mailtoHref, telHref, type SiteSettings } from "@/lib/site-settings"
+import { getContactCopy } from "@/lib/page-content"
+import Heading from "@/components/ui/Heading"
 
 /* Contact — rebuilt for the fourth time, 19 Sept 2026 (Vern, with the live
    page in front of him: "contact page is still boring"; "no sucky images,
@@ -77,12 +79,9 @@ const linesFor = (s: SiteSettings) => [
 ]
 
 // One short line each (2 Oct 2026, Vern: "the quote page is very text heavy").
-const STEPS = [
-  { title: "Tell us the job", body: "A description and a location." },
-  { title: "We walk the site", body: "Free, with the sample boards." },
-  // 6 Oct 2026 (the client: "remove anything about warranty").
-  { title: "You get a written quote", body: "Before anything starts." },
-]
+// The words are the Contact page's in the Studio since 14 Oct 2026
+// (lib/page-copy.ts); no warranty wording (6 Oct 2026, the client).
+const STEPS = ["first", "second", "third"] as const
 
 const regionsFor = (s: SiteSettings, LINES: ReturnType<typeof linesFor>) => [
   {
@@ -110,18 +109,19 @@ export default async function ContactPage() {
   const site = await getSiteSettings()
   const LINES = linesFor(site)
   const REGIONS = regionsFor(site, LINES)
+  // The page's words: the Studio's Contact page, the site's own where blank (lib/page-copy.ts).
+  const words = await getContactCopy()
   return (
     <main className="bg-surface">
       {/* ── Opener — the invitation, and the lines for whoever would rather call ──────── */}
       <section className="bg-surface pt-[calc(var(--bar-h)+56px)] pb-12 max-[700px]:pt-[calc(var(--bar-h)+32px)] max-[700px]:pb-8">
         <div className="container-1280 grid grid-cols-12 items-end gap-x-12 gap-y-10 max-[900px]:grid-cols-1">
           <div className="col-span-8 max-[900px]:col-span-1">
-            <span className="label label-sq label-page">Request a quote &middot; free site visit</span>
-            <h1 className="mt-5 max-w-[16ch] [text-wrap:balance]">Tell us the job. <em>We&rsquo;ll walk the site.</em></h1>
-            <p className="lede mt-6 max-w-[56ch] [text-wrap:pretty]">
-              A description and a location are enough to start. The site visit is free; the quote
-              comes in writing.
-            </p>
+            <span className="label label-sq label-page">{words.intro.label}</span>
+            <h1 className="mt-5 max-w-[16ch] [text-wrap:balance]">
+              <Heading words={words.intro} />
+            </h1>
+            <p className="lede mt-6 max-w-[56ch] [text-wrap:pretty]">{words.intro.line}</p>
           </div>
 
           <div className="col-span-4 max-[900px]:col-span-1">
@@ -156,10 +156,10 @@ export default async function ContactPage() {
           </div>
 
           <aside className="q-rail col-span-4 max-[900px]:col-span-1">
-            <h2 className="label">What happens next</h2>
+            <h2 className="label">{words.nextLabel}</h2>
             <ol className="q-timeline mt-4">
-              {STEPS.map((s, i) => (
-                <li key={s.title}>
+              {STEPS.map((key) => ({ key, ...words.steps[key] })).map((s, i) => (
+                <li key={s.key}>
                   <span className="q-dot" aria-hidden="true">
                     {i + 1}
                   </span>
@@ -168,20 +168,18 @@ export default async function ContactPage() {
                       <span className="sr-only">Step {i + 1}: </span>
                       {s.title}
                     </h3>
-                    <p className="q-t-body">{s.body}</p>
+                    <p className="q-t-body">{s.text}</p>
                   </div>
                 </li>
               ))}
             </ol>
 
             <div className="mt-9 border-t border-hairline pt-6">
-              <h2 className="label">What to send</h2>
+              <h2 className="label">{words.sendLabel}</h2>
               <ul className="q-list mt-3">
-                <li>Photos of the surface as it is</li>
-                <li>The address or postal code</li>
-                <li>Drawings or a sketch, if you have them</li>
-                <li>A rough area in square metres</li>
-                <li>When you need it done</li>
+                {words.send.map((item, i) => (
+                  <li key={i}>{item}</li>
+                ))}
               </ul>
               <p className="mt-4 text-[14.5px] leading-[1.6] text-ink-muted">
                 By email:{" "}
@@ -225,10 +223,10 @@ export default async function ContactPage() {
 
       {/* ── Where we work — two regions, two lines, the record's cities ──────── */}
       <Section
-        label="Where we work"
-        title={<>Lower Mainland <em>and Vancouver Island</em></>}
+        label={words.regions.label}
+        title={<Heading words={words.regions} />}
         link={{ href: "/projects", label: "All projects" }}
-        intro="The office is in Maple Ridge and the Island has its own line. The record also runs to Squamish, Sechelt and the Okanagan when the job calls for it."
+        intro={words.regions.line}
         tone="warm"
         wide
       >

@@ -18,6 +18,10 @@ import { mergeProjects, type ProjectDoc } from "../lib/projects-cms"
 import { projects as RECORD } from "../lib/projects"
 import { organization } from "../components/StructuredData"
 import { structure } from "../sanity/structure"
+import { vercelStegaCombine } from "@vercel/stega"
+import { ABOUT_COPY, CONTACT_COPY, DRIVEWAYS_COPY, HOME_COPY, mergeAboutCopy, mergeContactCopy, mergeDrivewaysCopy, mergeFaqs, mergeHomeCopy, mergeLines, mergeSection } from "../lib/page-copy"
+import { mergeService } from "../lib/services-cms"
+import { services } from "../lib/services"
 
 let failures = 0
 async function check(name: string, fn: () => void | Promise<void>) {
@@ -204,14 +208,72 @@ async function main() {
     assert.deepEqual(Object.keys(org), ["@type", "@id", "name", "alternateName", "url", "logo", "image", "description", "telephone", "email", "foundingDate", "contactPoint", "areaServed", "address", "sameAs", "hasOfferCatalog"])
   })
 
+  console.log("every page's words: the Studio's, the site's own where blank")
+
+  const marked = (text: string) => vercelStegaCombine(text, { origin: "sanity.io", href: "/studio/intent/edit/id=x;type=homePage;path=x" })
+
+  await check("nothing in the Studio: every page exactly as the code has it", () => {
+    assert.deepEqual(mergeHomeCopy(null), HOME_COPY)
+    assert.deepEqual(mergeAboutCopy(undefined), ABOUT_COPY)
+    assert.deepEqual(mergeContactCopy({}), CONTACT_COPY)
+    assert.deepEqual(mergeDrivewaysCopy("odd"), DRIVEWAYS_COPY)
+  })
+
+  await check("a field the office fills wins; a blank one, even with the preview's marks, keeps the site's", () => {
+    const s = mergeSection(HOME_COPY.vapour, { label: "  ", line: "Paint off, dust down. " , head: marked("") })
+    assert.equal(s.label, HOME_COPY.vapour.label)
+    assert.equal(s.line, "Paint off, dust down.")
+    assert.equal(s.head, HOME_COPY.vapour.head)
+    assert.equal(s.tail, HOME_COPY.vapour.tail)
+  })
+
+  await check("a new heading brings its own ending, or none: never the old one glued on", () => {
+    const withEnding = mergeSection(HOME_COPY.projects, { head: "Recent", tail: "jobs" })
+    assert.deepEqual([withEnding.head, withEnding.tail], ["Recent", "jobs"])
+    const alone = mergeSection(HOME_COPY.projects, { head: "Recent work" })
+    assert.deepEqual([alone.head, alone.tail], ["Recent work", undefined])
+    const endingOnly = mergeSection(HOME_COPY.projects, { tail: "jobs" })
+    assert.deepEqual([endingOnly.head, endingOnly.tail], ["", "jobs"])
+  })
+
+  await check("a line only where the page prints one", () => {
+    assert.equal(mergeSection(HOME_COPY.projects, { line: "Six of the best." }).line, undefined)
+    assert.equal(mergeSection(HOME_COPY.materials, { line: "Sheets and chips." }).line, "Sheets and chips.")
+  })
+
+  await check("cards, lists and questions: per card, and a list only when it has a real line", () => {
+    const home = mergeHomeCopy({ audienceCards: { homeowners: { text: "Driveways, walkways and laneways." } } })
+    assert.equal(home.audienceCards.homeowners.text, "Driveways, walkways and laneways.")
+    assert.equal(home.audienceCards.homeowners.title, HOME_COPY.audienceCards.homeowners.title)
+    assert.deepEqual(home.audienceCards.municipal, HOME_COPY.audienceCards.municipal)
+    assert.deepEqual(mergeLines(["a"], ["", "  "]), ["a"])
+    assert.deepEqual(mergeLines(["a"], [" b ", ""]), ["b"])
+    assert.deepEqual(mergeFaqs([{ q: "Q", a: "A" }], [{ q: "Only a question" }]), [{ q: "Q", a: "A" }])
+    assert.deepEqual(mergeFaqs([{ q: "Q", a: "A" }], [{ q: " New? ", a: "Yes." }, { q: "", a: "orphan" }]), [{ q: "New?", a: "Yes." }])
+  })
+
+  await check("a service: the Studio's words on the record's name, address, systems and photographs", () => {
+    const record = services[0]
+    assert.deepEqual(mergeService(record, null), record)
+    const s = mergeService(record, { tagline: "Pattern pressed in.", idealClients: [], benefits: ["", "Fast"], faqs: [{ q: "Is it fast?", a: "Yes." }, { q: "No answer" }] })
+    assert.equal(s.tagline, "Pattern pressed in.")
+    assert.equal(s.shortDescription, record.shortDescription)
+    assert.deepEqual(s.idealClients, record.idealClients)
+    assert.deepEqual(s.benefits, ["Fast"])
+    assert.deepEqual(s.faqs, [{ q: "Is it fast?", a: "Yes." }])
+    assert.equal(s.name, record.name)
+    assert.equal(s.slug, record.slug)
+    assert.deepEqual(s.productsIncluded, record.productsIncluded)
+  })
+
   console.log("the Studio's list")
 
-  await check("in the brief's order: Website Pages, Projects, Blog, Site Settings", () => {
+  await check("in the brief's order: Website Pages, Services, Projects, Blog, Site Settings", () => {
     const titles = topLevelTitles()
     const want = ["Website Pages", "Services", "Projects", "Blog plan", "Blog", "From the field", "Social drafts", "Site Settings"]
     const present = want.filter((t) => titles.includes(t))
     assert.deepEqual(titles.filter((t) => want.includes(t)), present, titles.join(" | "))
-    for (const t of ["Website Pages", "Projects", "Blog", "Site Settings"]) assert.ok(titles.includes(t), `${t} is in the list`)
+    for (const t of ["Website Pages", "Services", "Projects", "Blog", "Site Settings"]) assert.ok(titles.includes(t), `${t} is in the list`)
     assert.equal(titles[titles.length - 1], "Advanced", "the older slots stay last")
   })
 

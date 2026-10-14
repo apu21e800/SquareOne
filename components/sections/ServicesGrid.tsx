@@ -2,36 +2,16 @@ import Link from "next/link"
 import Frame from "@/components/ui/Frame"
 import { Section } from "@/components/ui/Container"
 import { services } from "@/lib/services"
+import Heading from "@/components/ui/Heading"
+import { HOME_COPY, SERVICE_CARD_KEY, type HomeCopy } from "@/lib/page-copy"
 
 /**
- * What we do. Display copy per service: the verb, the trade, one line.
- *
- * Display copy only. Routes and slugs come from lib/services.ts untouched —
- * "vapor-blasting" stays the slug, "Vapour blasting" is what the row reads.
- * Order is the business order (lib/services.ts).
+ * What we do. Each card's name and line are the Home page's words
+ * (lib/page-copy.ts, the Studio's Home page since 14 Oct 2026); routes and
+ * slugs come from lib/services.ts untouched: "vapor-blasting" stays the
+ * slug, "Vapour blasting" is what the card reads. Order is the business
+ * order (lib/services.ts).
  */
-const CARD: Record<string, { verb: string; trade: string; line: string }> = {
-  "stamped-asphalt": {
-    verb: "Pattern it",
-    trade: "Stamped asphalt",
-    line: "Brick, cobble or slate, pressed into the asphalt already there.",
-  },
-  "decorative-coatings": {
-    verb: "Colour it",
-    trade: "Decorative coatings",
-    line: "Colour for bike lanes, plazas, spray parks and courts.",
-  },
-  "preformed-thermoplastic": {
-    verb: "Mark it",
-    trade: "Preformed thermoplastic",
-    line: "Crosswalks, symbols and street art, fused into the road.",
-  },
-  "vapor-blasting": {
-    verb: "Clean it",
-    trade: "Vapour blasting",
-    line: "Graffiti, old markings and grime, lifted wet.",
-  },
-}
 
 const cardImage: Record<string, { src: string; alt: string; caption: string }> = {
   // 19 Sept 2026: every frame is from the record (lib/work-captions.ts),
@@ -80,12 +60,19 @@ const cardImage: Record<string, { src: string; alt: string; caption: string }> =
  * rounded cards with a chip row and "Specs →"; these are photographs with
  * words under them.
  */
-export default function ServicesGrid() {
+export default function ServicesGrid({
+  words = HOME_COPY.services,
+  cards = HOME_COPY.serviceCards,
+}: {
+  /** The section's words and each card's name and line (lib/page-copy.ts; the Studio's Home page). */
+  words?: HomeCopy["services"]
+  cards?: HomeCopy["serviceCards"]
+}) {
   return (
     <Section
       id="services"
-      label="What we do"
-      title={<>Three ways we change a surface, <em>and one way we clean it</em></>}
+      label={words.label}
+      title={<Heading words={words} />}
       link={{ href: "/services", label: "All services" }}
       wide
     >
@@ -95,9 +82,10 @@ export default function ServicesGrid() {
       <ul data-reveal-group className="grid grid-cols-4 gap-x-7 gap-y-12 max-[900px]:grid-cols-2 max-[900px]:gap-x-6 max-[560px]:grid-cols-1 max-[560px]:gap-y-10">
         {services.map((service) => {
           const img = cardImage[service.slug]
-          const card = CARD[service.slug]
+          const key = SERVICE_CARD_KEY[service.slug]
+          const card = key ? cards[key] : undefined
           const href = `/services/${service.slug}`
-          const trade = card?.trade ?? service.name
+          const trade = card?.title ?? service.name
           return (
             <li key={service.slug} data-reveal>
               {img && (
@@ -114,7 +102,7 @@ export default function ServicesGrid() {
                   {trade}
                 </Link>
               </h3>
-              <p className="mt-2 max-w-[34ch] text-[15.5px] leading-[1.55] text-ink-body [text-wrap:pretty]">{card?.line ?? service.tagline}</p>
+              <p className="mt-2 max-w-[34ch] text-[15.5px] leading-[1.55] text-ink-body [text-wrap:pretty]">{card?.text ?? service.tagline}</p>
             </li>
           )
         })}

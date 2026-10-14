@@ -2,6 +2,8 @@ import Frame from "@/components/ui/Frame"
 import { Section } from "@/components/ui/Container"
 import { getProjects } from "@/lib/projects-cms"
 import { photoMetaFor } from "@/lib/projects"
+import Heading from "@/components/ui/Heading"
+import { HOME_COPY, type SectionWords } from "@/lib/page-copy"
 
 /** "Vancouver, BC" → "Vancouver" — the caption carries the city, not the province. */
 function cityName(city: string): string {
@@ -32,7 +34,7 @@ const FEATURED_ORDER = [
  * chips, no hover zoom. No project count anywhere: a published count reads
  * as a ceiling on the work (the client, 10 Sept 2026).
  */
-export default async function ProjectsPreview() {
+export default async function ProjectsPreview({ words = HOME_COPY.projects }: { words?: SectionWords } = {}) {
   // 9 Oct 2026: the six read the Studio's version of each project (lib/projects-cms.ts);
   // which six, and their order, stay FEATURED_ORDER.
   const projects = await getProjects()
@@ -77,7 +79,7 @@ export default async function ProjectsPreview() {
   }
 
   return (
-    <Section id="work" label="Projects" title={<>Selected <em>work</em></>} link={{ href: "/projects", label: "All projects" }} tone="warm" wide>
+    <Section id="work" label={words.label} title={<Heading words={words} />} link={{ href: "/projects", label: "All projects" }} tone="warm" wide>
       <ul data-reveal-group className="grid grid-cols-3 gap-x-7 gap-y-11 max-[1100px]:grid-cols-2 max-[560px]:grid-cols-1" role="list">
         {featuredProjects.map((p) => item(p))}
       </ul>

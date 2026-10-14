@@ -21,14 +21,31 @@ export const resolve: PresentationPluginOptions["resolve"] = {
     { route: "/", filter: `_type == "homePage" && _id == "homePage"` },
     { route: "/blog/:slug", filter: `_type == "post" && slug.current == $slug` },
     { route: "/projects/:slug", filter: `_type == "project" && slug.current == $slug` },
-    { route: "/contact", filter: `_type == "siteSettings" && _id == "siteSettings"` },
+    // A service's words come before its opener's photograph (14 Oct 2026).
+    { route: "/services/:slug", filter: `_type == "service" && slug == $slug` },
+    { route: "/contact", filter: `_type == "contactPage" && _id == "contactPage"` },
     ...OPENER_PAGES.map((o) => ({ route: o.page, filter: `_type == "pageHero" && page == ${JSON.stringify(o.page)}` })),
   ]),
   locations: {
     homePage: defineLocations({
-      message: "The home page's hero: its photographs, headline and line.",
+      message: "The home page: the hero's photographs, headline and line, and the words of every section below it.",
       tone: "positive",
       locations: [{ title: "Home page", href: "/" }],
+    }),
+    aboutPage: defineLocations({ locations: [{ title: "About", href: "/about" }] }),
+    contactPage: defineLocations({ locations: [{ title: "Contact (the quote page)", href: "/contact" }] }),
+    drivewaysPage: defineLocations({ locations: [{ title: "Driveways", href: "/driveways" }] }),
+    service: defineLocations({
+      select: { name: "name", slug: "slug" },
+      resolve: (doc) =>
+        doc?.slug
+          ? {
+              locations: [
+                { title: doc.name || "The service's page", href: `/services/${doc.slug}` },
+                { title: "Services", href: "/services" },
+              ],
+            }
+          : null,
     }),
     pageHero: defineLocations({
       select: { page: "page" },
@@ -70,7 +87,7 @@ export const resolve: PresentationPluginOptions["resolve"] = {
     gallerySettings: defineLocations({ locations: [{ title: "Galleries", href: "/galleries" }] }),
     socialPost: defineLocations({ locations: [{ title: "Home page (the social grid)", href: "/" }] }),
     siteSettings: defineLocations({
-      message: "In every page's footer, and on the contact page.",
+      message: "On every page: the phone lines, the email, the address and the accounts, wherever they print.",
       tone: "caution",
       locations: [
         { title: "Home page (footer)", href: "/" },

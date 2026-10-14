@@ -7,6 +7,8 @@ import { Section, Row } from "@/components/ui/Container"
 import type { Metadata } from "next"
 import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
+import { getStudioServices } from "@/lib/services-cms"
+import { services as RECORD } from "@/lib/services"
 
 export const metadata: Metadata = {
   openGraph: { title: "Decorative Pavement Services in BC", description: clampDescription("Stamped asphalt, decorative coatings, preformed thermoplastic and vapour blasting: specified with you and installed by our own crews across the Lower Mainland and Vancouver Island since 2000."), images: [{ url: "/images/applications/public-art/new-westminster-boundary-pump-station-full-field-streetbond-01.jpg" }] },
@@ -97,6 +99,14 @@ const facts = [
 export default async function ServicesPage() {
   // The opener, with whatever the Studio says on top (lib/page-content.ts, 9 Oct 2026).
   const o = await getPageOpener("/services")
+  // A tagline the office changed in the Studio (Services) shows here; until
+  // then each row keeps its own line (lib/services-cms.ts, 14 Oct 2026).
+  const studio = await getStudioServices()
+  const taglineFor = (slug: string, own: string) => {
+    const merged = studio.find((s) => s.slug === slug)?.tagline
+    const record = RECORD.find((s) => s.slug === slug)?.tagline
+    return merged && merged !== record ? merged : own
+  }
   return (
     <main className="bg-surface">
       {/* ---- Header — full-bleed image band ---- */}
@@ -146,7 +156,7 @@ export default async function ServicesPage() {
                   </Link>
                 </h3>
                 <p className="mt-4 max-w-[44ch] text-[18px] leading-[1.5] text-ink-body [text-wrap:pretty] max-[700px]:text-[17px]">
-                  {service.tagline}
+                  {taglineFor(service.slug, service.tagline)}
                 </p>
                 <p className="label mt-5">{service.applications.join(" · ")}</p>
                 <p className="mt-5">

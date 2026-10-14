@@ -1,6 +1,7 @@
 import { defineArrayMember, defineField, defineType, type ValidationContext } from "sanity"
 import { copyCheck, headingCheck } from "./style"
 import { OPENERS, RECORD_OPENER_PAGES } from "../../lib/openers"
+import { homeSectionFields } from "./words"
 
 /**
  * The home page's hero, every page's opener, and the photo galleries
@@ -44,9 +45,15 @@ export const homePage = defineType({
   name: "homePage",
   title: "Home page",
   type: "document",
+  // 14 Oct 2026: the sections below the hero joined the hero here
+  // (sanity/schemaTypes/words.ts, lib/page-copy.ts).
+  groups: [
+    { name: "hero", title: "The hero", default: true },
+    { name: "sections", title: "The sections below" },
+  ],
   fields: [
-    ...headlineFields,
-    defineField({ name: "line", type: "text", rows: 3, title: "Line under the headline", description: "Left empty, the site's own line.", validation: (r) => r.custom(copyCheck).warning() }),
+    ...headlineFields.map((f) => ({ ...f, group: "hero" })),
+    defineField({ name: "line", type: "text", rows: 3, title: "Line under the headline", description: "Left empty, the site's own line.", validation: (r) => r.custom(copyCheck).warning(), group: "hero" }),
     defineField({
       name: "reel",
       type: "array",
@@ -68,7 +75,9 @@ export const homePage = defineType({
         r.custom((value) =>
           Array.isArray(value) && value.length > 0 && value.length < 3 ? "Add at least three photographs, or leave it empty for the site's own reel." : true,
         ),
+      group: "hero",
     }),
+    ...homeSectionFields.map((f) => ({ ...f, group: "sections" })),
   ],
   preview: { prepare: () => ({ title: "Home page" }) },
 })

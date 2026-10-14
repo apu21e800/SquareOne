@@ -1,4 +1,4 @@
-import { services } from "@/lib/services"
+import { getStudioServices } from "@/lib/services-cms"
 import { products } from "@/lib/products"
 import { WORK_APPS } from "@/lib/work"
 import { SITE_URL } from "@/lib/site"
@@ -17,6 +17,8 @@ export async function GET() {
   // The contact line, from Site Settings (lib/site-settings.ts).
   const site = await getSiteSettings()
   const office = addressParts(site)
+  // The services' taglines as the Studio has them (lib/services-cms.ts).
+  const services = await getStudioServices()
   const lines: string[] = [
     "# Square One Paving",
     "",

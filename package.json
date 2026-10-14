@@ -22,6 +22,7 @@
     "images:add": "node scripts/add-images.mjs",
     "warm": "node scripts/warm.mjs",
     "cms:seed": "node --experimental-strip-types scripts/cms-seed.ts",
+    "sync:pages": "tsx scripts/sync-pages-to-sanity.ts",
     "cms:import": "npx sanity dataset import sanity/seed/seed.ndjson production --missing"
   },
   "dependencies": {

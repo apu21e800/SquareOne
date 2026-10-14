@@ -2,6 +2,8 @@ import Link from "next/link"
 import Image from "next/image"
 import { STREETBOND_COLOURS } from "@/lib/palette"
 import { OFFERED_SHEETS, FEATURED_SHEETS, sheetSrc, SHEET_W, SHEET_H } from "@/lib/pattern-sheets"
+import Heading from "@/components/ui/Heading"
+import { HOME_COPY, type SectionWords } from "@/lib/page-copy"
 
 /**
  * Patterns and colours, on the home page — fourth pass, 19 Sept 2026.
@@ -29,7 +31,14 @@ const STRIP = ["Brick", "Terra Cotta", "Sandy Beige", "Driftwood", "Pewter", "Sl
 /** The same band on the pages where stamped asphalt is sold (2 Oct 2026,
     Vern: "access to the pattern sheets from the StreetPrint page, Stamped
     Asphalt page and TPXD page… something like this, we had it before"). */
-export default function MaterialsBand({ tone = "warm" }: { tone?: "paper" | "warm" | "stone" }) {
+export default function MaterialsBand({
+  tone = "warm",
+  words = HOME_COPY.materials,
+}: {
+  tone?: "paper" | "warm" | "stone"
+  /** The band's words (lib/page-copy.ts; the Studio's Home page). */
+  words?: SectionWords
+}) {
   const [a, b, c] = FEATURED_SHEETS
   const bg = tone === "stone" ? "bg-surface-stone" : tone === "paper" ? "bg-surface" : "bg-surface-warm"
   return (
@@ -62,12 +71,11 @@ export default function MaterialsBand({ tone = "warm" }: { tone?: "paper" | "war
 
         {/* ── The argument, and the colours ──────── */}
         <div className="col-span-6 max-[900px]:col-span-1">
-          <span className="label label-sq">Patterns and colours</span>
-          <h2 className="mt-4 max-w-[16ch] [text-wrap:balance]">Drawn to scale, <em>matched from a card</em></h2>
-          <p className="mt-6 max-w-[48ch] text-ink-body [text-wrap:pretty]">
-            Every pattern is a dimensioned sheet and every colour a named chip, so what you
-            choose is what gets installed.
-          </p>
+          <span className="label label-sq">{words.label}</span>
+          <h2 className="mt-4 max-w-[16ch] [text-wrap:balance]">
+            <Heading words={words} />
+          </h2>
+          <p className="mt-6 max-w-[48ch] text-ink-body [text-wrap:pretty]">{words.line}</p>
 
           <div className="mt-10">
             <ul className="mt-4 grid grid-cols-8 gap-[6px] max-[560px]:grid-cols-4" role="list">

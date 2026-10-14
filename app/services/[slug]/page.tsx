@@ -2,7 +2,8 @@ import { notFound } from "next/navigation"
 import Link from "next/link"
 import type { Metadata } from "next"
 
-import { services, getServiceBySlug } from "@/lib/services"
+import { services } from "@/lib/services"
+import { getStudioService, getStudioServices } from "@/lib/services-cms"
 import { products } from "@/lib/products"
 import { getProjects } from "@/lib/projects-cms"
 import { photoMetaFor } from "@/lib/projects"
@@ -116,7 +117,8 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
-  const service = getServiceBySlug(slug)
+  // The Studio's words on top of the record (lib/services-cms.ts, 14 Oct 2026).
+  const service = await getStudioService(slug)
   if (!service) return {}
   return {
     title: pageTitle[service.slug] ?? `${service.name} in BC`,
@@ -128,7 +130,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ServicePage({ params }: Props) {
   const { slug } = await params
-  const service = getServiceBySlug(slug)
+  // The Studio's words on top of the record (lib/services-cms.ts, 14 Oct 2026).
+  const all = await getStudioServices()
+  const service = all.find((s) => s.slug === slug)
   if (!service) notFound()
   // The answers that name a line, as Site Settings has it (lib/site-settings.ts).
   const site = await getSiteSettings()
@@ -137,7 +141,7 @@ export default async function ServicePage({ params }: Props) {
   const name = displayName[service.slug] ?? service.name
   const lowerName = name.toLowerCase()
 
-  const otherServices = services.filter((s) => s.slug !== service.slug)
+  const otherServices = all.filter((s) => s.slug !== service.slug)
   const heroSrc = heroFor("services", service.slug, service.imageUrl) ?? service.imageUrl
   // The alt describes the photograph on record; a folder drop-in that
   // replaces it is described by the service name until it is captioned.

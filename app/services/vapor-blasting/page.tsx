@@ -9,7 +9,7 @@ import OpenerTitle from "@/components/ui/OpenerTitle"
 import { getPageOpener } from "@/lib/page-content"
 import { Section } from "@/components/ui/Container"
 import HowAJobGoes, { VAPOUR_STEPS } from "@/components/sections/HowAJobGoes"
-import { getServiceBySlug } from "@/lib/services"
+import { getStudioService } from "@/lib/services-cms"
 import { clampDescription } from "@/lib/seo"
 import { getSiteSettings } from "@/lib/cms"
 import { mailtoHref, telHref, withSettings } from "@/lib/site-settings"
@@ -142,7 +142,8 @@ export default async function VaporBlastingServicePage() {
   const site = await getSiteSettings()
   // The opener, with whatever the Studio says on top (lib/page-content.ts, 9 Oct 2026).
   const o = await getPageOpener("/services/vapor-blasting")
-  const service = getServiceBySlug("vapor-blasting")
+  // The questions are the Studio's when it has them (lib/services-cms.ts, 14 Oct 2026).
+  const service = await getStudioService("vapor-blasting")
   const faqs = (service?.faqs ?? []).map((f) => ({ ...f, a: withSettings(f.a, site) }))
   return (
     // page-vapour: the water's blues on this page's chips, rules and hovers

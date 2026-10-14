@@ -1,5 +1,7 @@
 import Image from "next/image"
 import { handleFrom, type SiteSettings, type SocialTile } from "@/lib/cms"
+import Heading from "@/components/ui/Heading"
+import { HOME_COPY, type SectionWords } from "@/lib/page-copy"
 
 /**
  * Follow the work — the home page's social strip (hubss.com parity; Vern,
@@ -32,7 +34,16 @@ function Glyph({ platform, size = 14 }: { platform: SocialTile["platform"]; size
   )
 }
 
-export default function FollowTheWork({ settings, tiles }: { settings: SiteSettings; tiles: SocialTile[] }) {
+export default function FollowTheWork({
+  settings,
+  tiles,
+  words = HOME_COPY.social,
+}: {
+  settings: SiteSettings
+  tiles: SocialTile[]
+  /** The strip's words (lib/page-copy.ts; the Studio's Home page). */
+  words?: SectionWords
+}) {
   if (tiles.length === 0) return null
   const handle = handleFrom(settings.instagram) || "@squareonepaving"
   const live = tiles.some((t) => !t.fallback)
@@ -45,8 +56,8 @@ export default function FollowTheWork({ settings, tiles }: { settings: SiteSetti
      three-by-two contact sheet of square frames on the right (squares since 2 Oct 2026, Vern), each
      captioned UNDER the picture in the serif (the site's signature; HUB
      never captions), no badges over the photographs, square corners. The
-     heading is set here, not read from Site settings, so the HUB phrase
-     ("Follow the work") can never come back through the Studio. */
+     words are the Home page's (lib/page-copy.ts, 14 Oct 2026), never Site
+     Settings' old "Follow the work" fields, which held HUB's phrase. */
   const networks: { platform: SocialTile["platform"]; href: string; note: string }[] = [
     { platform: "Instagram", href: settings.instagram, note: handle },
     { platform: "Facebook", href: settings.facebook, note: "Square One Paving" },
@@ -60,9 +71,9 @@ export default function FollowTheWork({ settings, tiles }: { settings: SiteSetti
       <div className="container-1280">
         <div className="grid grid-cols-12 gap-x-12 gap-y-10 max-[900px]:grid-cols-1">
           <div className="col-span-4 max-[900px]:col-span-1">
-            <span className="label label-sq">From the crews</span>
+            <span className="label label-sq">{words.label}</span>
             <h2 id="follow-heading" className="mt-4 max-w-[12ch] [text-wrap:balance]">
-              The work, <em>as it goes in</em>
+              <Heading words={words} />
             </h2>
             <ul className="social-ledger mt-8" role="list">
               {networks.map((n) => (

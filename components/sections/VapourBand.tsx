@@ -2,6 +2,8 @@ import Link from "next/link"
 import Frame from "@/components/ui/Frame"
 import { getSiteSettings } from "@/lib/cms"
 import { telHref } from "@/lib/site-settings"
+import Heading from "@/components/ui/Heading"
+import { HOME_COPY, type SectionWords } from "@/lib/page-copy"
 
 /**
  * Vapour blasting on the home page — its own band, 19 Sept 2026 (Vern: "give
@@ -29,7 +31,7 @@ const GRANVILLE = {
   caption: "Granville Island, Vancouver · marking removal",
 }
 
-export default async function VapourBand() {
+export default async function VapourBand({ words = HOME_COPY.vapour }: { words?: SectionWords } = {}) {
   const site = await getSiteSettings()
   return (
     <section className="vapour-band sec relative overflow-hidden bg-surface-stone py-[6.5rem] max-[900px]:py-14">
@@ -49,12 +51,11 @@ export default async function VapourBand() {
 
         {/* ── The argument ──────── */}
         <div className="col-span-5 max-[900px]:col-span-1">
-          <span className="label label-sq">Vapour blasting</span>
-          <h2 className="mt-4 max-w-[16ch] [text-wrap:balance]">Graffiti and old markings, <em>lifted wet</em></h2>
-          <p className="mt-6 max-w-[40ch] text-ink-body [text-wrap:pretty]">
-            The abrasive travels in water: the paint comes off, the dust stays down, and the
-            surface underneath is left as it was.
-          </p>
+          <span className="label label-sq">{words.label}</span>
+          <h2 className="mt-4 max-w-[16ch] [text-wrap:balance]">
+            <Heading words={words} />
+          </h2>
+          <p className="mt-6 max-w-[40ch] text-ink-body [text-wrap:pretty]">{words.line}</p>
           <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-3">
             {/* The trade that works in water keeps its blue (7 Oct 2026,
                 "more complementary blue touches"). */}
