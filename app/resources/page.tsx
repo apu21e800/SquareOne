@@ -42,6 +42,7 @@ export default async function ResourcesPage() {
       <IndexImageHero
         src={o.src}
         alt={o.alt}
+        edit={o.edit}
         eyebrow="Documents"
         title={<OpenerTitle head={o.head} tail={o.tail} />}
         fit={o.fit}

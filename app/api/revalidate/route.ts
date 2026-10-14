@@ -27,6 +27,10 @@ export async function POST(req: NextRequest) {
     signed = false
   }
   if (!signed) return NextResponse.json({ ok: false, reason: "bad signature" }, { status: 401 })
-  revalidateTag("sanity", "max")
+  // { expire: 0 }: the first request after a Publish waits for the fresh
+  // page instead of being served the old one (Next 16's "max" would show
+  // the old copy once more). An editor who publishes and reloads sees the
+  // change (14 Oct 2026; hubss.com found the same).
+  revalidateTag("sanity", { expire: 0 })
   return NextResponse.json({ ok: true, revalidated: "sanity", at: new Date().toISOString() })
 }

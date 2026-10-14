@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity"
+import { bodyCheck, copyCheck } from "./style"
 
 /** A blog post — the same fields the file-based posts carry, plus a body. */
 export const post = defineType({
@@ -21,7 +22,7 @@ export const post = defineType({
       hidden: ({ document }) => !document?.editorNotes,
       group: "content",
     }),
-    defineField({ name: "title", type: "string", title: "Title", validation: (r) => r.required().max(110), group: "content" }),
+    defineField({ name: "title", type: "string", title: "Title", validation: (r) => [r.required().max(110), r.custom(copyCheck).warning()], group: "content" }),
     defineField({
       name: "slug",
       type: "slug",
@@ -49,11 +50,11 @@ export const post = defineType({
       fields: [{ name: "alt", type: "string", title: "What the photo shows" }],
       group: "content",
     }),
-    defineField({ name: "excerpt", type: "text", title: "One-paragraph summary", rows: 3, validation: (r) => r.max(300), description: "Shown on the blog index and in link previews.", group: "content" }),
-    defineField({ name: "body", type: "blockContent", title: "Body", group: "content" }),
+    defineField({ name: "excerpt", type: "text", title: "One-paragraph summary", rows: 3, validation: (r) => [r.max(300), r.custom(copyCheck).warning()], description: "Shown on the blog index and in link previews.", group: "content" }),
+    defineField({ name: "body", type: "blockContent", title: "Body", validation: (r) => r.custom(bodyCheck).warning(), group: "content" }),
     defineField({ name: "tags", type: "array", of: [{ type: "string" }], title: "Tags", options: { layout: "tags" }, group: "seo" }),
-    defineField({ name: "seoTitle", type: "string", title: "Search title (optional)", description: "Overrides the title in Google and link previews. Leave blank to use the title.", group: "seo" }),
-    defineField({ name: "seoDescription", type: "text", title: "Search description (optional)", rows: 2, validation: (r) => r.max(160), group: "seo" }),
+    defineField({ name: "seoTitle", type: "string", title: "Search title (optional)", description: "Overrides the title in Google and link previews. Leave blank to use the title.", validation: (r) => r.custom(copyCheck).warning(), group: "seo" }),
+    defineField({ name: "seoDescription", type: "text", title: "Search description (optional)", rows: 2, validation: (r) => [r.max(160), r.custom(copyCheck).warning()], group: "seo" }),
   ],
   orderings: [{ title: "Newest first", name: "dateDesc", by: [{ field: "date", direction: "desc" }] }],
   preview: {

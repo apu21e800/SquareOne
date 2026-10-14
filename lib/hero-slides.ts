@@ -12,6 +12,8 @@ export interface Slide {
   position: string
   /** Set by a CMS photo slot; replaces the place · system · year line. */
   caption?: string
+  /** Edit on the page (14 Oct 2026): opens this photograph's field, in an editor's preview only. */
+  edit?: string
 }
 
 /** The headline over the reel and the line under it, as the site ships them.

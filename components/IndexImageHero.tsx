@@ -26,6 +26,7 @@ export default function IndexImageHero({
   align = "left",
   tall = false,
   narrow = false,
+  edit,
   children,
 }: {
   src: string
@@ -48,11 +49,14 @@ export default function IndexImageHero({
   /** A narrower block of words on the right (36rem), when the subject
       stands at the centre of the frame. */
   narrow?: boolean
+  /** Edit on the page (14 Oct 2026): the Studio field the photograph opens, in an editor's preview only. */
+  edit?: string
   children?: React.ReactNode
 }) {
   return (
     <section
       data-nav-on-image
+      data-sanity={edit}
       className={`opener ${align === "right" ? "opener-right" : ""} relative flex ${tall ? "opener-tall h-[100vh] min-h-[640px] supports-[height:100svh]:h-[100svh]" : "h-[64vh] min-h-[580px]"} items-end overflow-hidden bg-surface-slate`}
     >
       <Image

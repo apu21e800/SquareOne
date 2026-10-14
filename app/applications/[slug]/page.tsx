@@ -8,7 +8,7 @@ import { APP_HEROES } from "@/lib/app-heroes"
 import IndexImageHero from "@/components/IndexImageHero"
 import { getProjects } from "@/lib/projects-cms"
 import OpenerTitle from "@/components/ui/OpenerTitle"
-import { getOpenerDoc, mergeOpener } from "@/lib/page-content"
+import { openerFor } from "@/lib/page-content"
 import { products } from "@/lib/products"
 import WorkGallery from "@/components/WorkGallery"
 import Frame from "@/components/ui/Frame"
@@ -248,9 +248,8 @@ export default async function ApplicationPage({ params }: Props) {
   const hero = APP_HEROES[slug as keyof typeof APP_HEROES]
   // The opener as the page has it, with whatever the Studio says on top
   // (a "Page opener" for this application; lib/page-content.ts, 9 Oct 2026).
-  const o = mergeOpener(
+  const o = await openerFor(
     { page: `/applications/${slug}`, label: meta.label, src: hero.src, alt: hero.alt, caption: hero.caption, position: hero.position, head: copy.headline },
-    await getOpenerDoc(`/applications/${slug}`),
   )
   // This application's gallery, the Studio's photographs included (lib/work-cms.ts, 9 Oct 2026).
   const photos = await studioWorkFor(meta.slug)
@@ -286,6 +285,7 @@ export default async function ApplicationPage({ params }: Props) {
       <IndexImageHero
         src={o.src}
         alt={o.alt}
+        edit={o.edit}
         eyebrow={`Applications · ${meta.label}`}
         title={<OpenerTitle head={o.head} tail={o.tail} />}
         lede={o.lede}

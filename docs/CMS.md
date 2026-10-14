@@ -91,7 +91,10 @@ PR #11 went live on 7 Oct, so the condition above is met.
    Sanity signs every call with it and the route refuses anything unsigned
    (since 9 Oct 2026; the secret no longer goes in the URL, where request
    logs would keep it). Without the webhook, pages refresh on their own
-   within 60 seconds.
+   within 60 seconds. Fill the Secret in when you create the webhook:
+   on hubss.com, changing it later on that page didn't take. Since 14 Oct
+   2026 a signed call makes the next page load wait for the fresh page
+   (`{ expire: 0 }`), so an editor who publishes and reloads sees the change.
    New posts also appear in search and the sitemap after the next deploy (a
    Vercel Deploy Hook can be added to the same webhook for that).
 6. **Bring in the pages** (9 Oct 2026, once): so the Studio opens on what
@@ -101,11 +104,28 @@ PR #11 went live on 7 Oct, so the condition above is met.
    overwrites anything already there, so it is safe to run again. The site
    recognises its own photographs by name and keeps serving them itself, so
    nothing changes on the site until someone edits.
-7. **Invite editors**: sanity.io/manage → Members → invite Gord, Jan and
-   the marketing team (Editor role). They sign in at /studio with Google.
+7. **Invite editors**: sanity.io/manage → Members → Invite, role
+   **Administrator**. The Growth trial ends about 6 Nov 2026 and the project
+   falls to Free, which has only Administrator and Viewer: an Editor would
+   become a Viewer and lose editing (Growth, $15 a seat a month, keeps
+   Editor). They sign in at /studio with Google.
+8. **Edit on the page** (14 Oct 2026): sanity.io/manage → API → Tokens →
+   Add API token, name "edit on the page", permission **Viewer**. Paste it
+   into Vercel → Production as `SANITY_API_READ_TOKEN` (Secret), never
+   into a chat, then redeploy. Without it the Studio's "Edit on the page"
+   says the site isn't set up yet, and nothing else changes.
 
 ## Editing guide for the team (short)
 
+- **Edit on the page** (the easiest way in): Studio → **Edit on the page**
+  (top bar). The site opens beside its document. Hover anything outlined
+  and click it: its field opens. Type, and the page beside it changes as
+  you go; nothing reaches the site until **Publish**. Photographs on the
+  home page's hero and the page openers open their field the same way.
+- **Yellow warnings** are suggestions in Square One's house style (no
+  dashes used as dashes, no "not just X, it's Y", the systems never "ours",
+  "installed at", no prices or promises, headings in sentence case). They
+  never stop Publish. Posts from before 1 Oct 2026 are left alone.
 - **The home page's hero**: Home page → Hero photographs. Drag to reorder,
   ⋯ → Remove to take one out, + Add item for a new one (a photograph of our
   own work at least 1600px wide, what it shows, the caption: place · system
@@ -157,8 +177,8 @@ PR #11 went live on 7 Oct, so the condition above is met.
   `slotText(slots, "page.key", fallback)` / `slotImage(...)` into the
   section, and list the key in this file.
 - Hero, openers and galleries (9 Oct 2026): `lib/page-content.ts`
-  (`getHomeHero`, `getPageOpener`, `getOpenerDoc` + `mergeOpener` for
-  service, application and product pages) and `lib/work-cms.ts`
+  (`getHomeHero`, `getPageOpener`, and `openerFor` for service,
+  application and product pages) and `lib/work-cms.ts`
   (`getStudioWork`, `studioWorkFor`, `studioWorkForRegion`). The pages'
   own openers live in `lib/openers.ts` and the reel in `lib/hero-slides.ts`,
   which the seed copies into the Studio. A Studio photograph that is the
@@ -183,6 +203,28 @@ PR #11 went live on 7 Oct, so the condition above is met.
   builds the known ones ahead and a new one on its first request. The site
   search reads the record, so a new project shows there after the next
   deploy (as new posts do).
+- Edit on the page (14 Oct 2026): `presentationTool` in `sanity.config.ts`,
+  its page map in `sanity/presentation.ts` (which document each page opens,
+  and which pages show a document). The Studio turns on Next's draft mode
+  through `app/api/draft-mode/enable` (next-sanity's
+  `defineEnableDraftMode`, checking the Studio's one-time secret with the
+  Viewer token, `SANITY_API_READ_TOKEN`); `app/api/draft-mode/disable`
+  turns it off and returns only to a path on this site (`lib/preview.ts`).
+  In draft mode `sanityFetch` reads drafts, uncached, with invisible marks
+  on the words a visitor reads (`sanity/lib/stega.ts` lists the fields per
+  document type: never slugs, links, phones, emails, addresses, alt text,
+  categories), and `app/layout.tsx` mounts `components/PreviewTools.tsx`
+  (VisualEditing, plus an "Exit preview" bar outside the Studio's frame).
+  `editAttr()` adds the `data-sanity` that makes the hero's and the
+  openers' photographs clickable, in the preview only. Visitors never get
+  any of it: draft mode is one editor's cookie, and `next build` keeps
+  every page static (compared page by page with www, 14 Oct 2026). Where
+  Studio words are measured or reused, clean them: `fitVars`,
+  `pageTitle`, `clampDescription` and `scriptJson` call `stegaClean`.
+  `npm run test:preview`.
+- Style warnings (14 Oct 2026): `sanity/schemaTypes/style.ts` runs
+  `lib/automation/style.ts` (the drafter's house style, browser-safe: no
+  lookbehind) as `.warning()` validations on the words a visitor reads.
 - Posts drafted by the automation (docs/AUTOMATION.md) carry `editorNotes`,
   a field shown in Studio only when it has something in it; the site never
   queries it.

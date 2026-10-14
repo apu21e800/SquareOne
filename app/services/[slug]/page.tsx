@@ -6,7 +6,7 @@ import { services, getServiceBySlug } from "@/lib/services"
 import { products } from "@/lib/products"
 import { getProjects } from "@/lib/projects-cms"
 import OpenerTitle from "@/components/ui/OpenerTitle"
-import { getOpenerDoc, mergeOpener } from "@/lib/page-content"
+import { openerFor } from "@/lib/page-content"
 import { heroFor } from "@/lib/gallery"
 import { WORK_APPS } from "@/lib/work"
 import type { WorkApp, WorkAppMeta } from "@/lib/work"
@@ -138,7 +138,7 @@ export default async function ServicePage({ params }: Props) {
   const heroAlt = heroSrc === service.imageUrl ? service.imageAlt : name
   // The opener as the page has it, with whatever the Studio says on top
   // (a "Page opener" for this service; lib/page-content.ts, 9 Oct 2026).
-  const o = mergeOpener(
+  const o = await openerFor(
     {
       page: `/services/${service.slug}`,
       label: name,
@@ -149,7 +149,6 @@ export default async function ServicePage({ params }: Props) {
       head: name,
       lede: service.tagline,
     },
-    await getOpenerDoc(`/services/${service.slug}`),
   )
   // Client review, 16 Sept: stamped asphalt is sold here as commercial and
   // municipal work — driveways have their own page.
@@ -206,6 +205,7 @@ export default async function ServicePage({ params }: Props) {
       <IndexImageHero
         src={o.src}
         alt={o.alt}
+        edit={o.edit}
         eyebrow="Services · Lower Mainland and Vancouver Island"
         title={<OpenerTitle head={o.head} tail={o.tail} />}
         lede={o.lede}

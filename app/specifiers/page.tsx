@@ -126,6 +126,7 @@ export default async function SpecifiersPage() {
       <IndexImageHero
         src={o.src}
         alt={o.alt}
+        edit={o.edit}
         eyebrow="For specifiers"
         title={<OpenerTitle head={o.head} tail={o.tail} />}
         lede={o.lede}

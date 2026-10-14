@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity"
+import { copyCheck } from "./style"
 
 /**
  * One tile in the home page "Follow the work" grid. The marketing team posts
@@ -12,7 +13,7 @@ export const socialPost = defineType({
   fields: [
     defineField({ name: "platform", type: "string", title: "Platform", options: { list: ["Instagram", "TikTok", "Facebook", "LinkedIn", "YouTube"], layout: "radio" }, initialValue: "Instagram", validation: (r) => r.required() }),
     defineField({ name: "image", type: "image", title: "Photograph", options: { hotspot: true }, fields: [{ name: "alt", type: "string", title: "What the photo shows" }], validation: (r) => r.required() }),
-    defineField({ name: "caption", type: "string", title: "Caption", validation: (r) => r.required().max(140) }),
+    defineField({ name: "caption", type: "string", title: "Caption", validation: (r) => [r.required().max(140), r.custom(copyCheck).warning()] }),
     defineField({ name: "url", type: "url", title: "Link to the post", description: "Paste the post's own link (instagram.com/p/… or tiktok.com/@…/video/…).", validation: (r) => r.required().uri({ scheme: ["http", "https"] }) }),
     defineField({ name: "date", type: "date", title: "Posted on", validation: (r) => r.required() }),
     defineField({ name: "isVideo", type: "boolean", title: "Video / reel", initialValue: false }),
