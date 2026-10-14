@@ -233,7 +233,7 @@ export default async function DrivewaysPage() {
         </div>
 
         <figure className="relative m-0 flex min-w-0 flex-col">
-          <span className="relative block min-h-0 flex-1 overflow-hidden bg-surface-stone max-[700px]:aspect-[4/3] max-[700px]:flex-none">
+          <span data-sanity={o.edit} className="relative block min-h-0 flex-1 overflow-hidden bg-surface-stone max-[700px]:aspect-[4/3] max-[700px]:flex-none">
             <Image
               src={o.src}
               alt={o.alt}

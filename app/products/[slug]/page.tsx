@@ -275,6 +275,7 @@ export default async function ProductPage({ params }: Props) {
       {/* ── 60vh opener — the product on real ground (Rockstar Part 4) ─ */}
       <section
         data-nav-on-image
+        data-sanity={o.edit}
         className="relative flex h-[60vh] min-h-[440px] items-end overflow-hidden bg-surface-slate"
       >
         <Image

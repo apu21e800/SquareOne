@@ -95,6 +95,8 @@ PR #11 went live on 7 Oct, so the condition above is met.
    on hubss.com, changing it later on that page didn't take. Since 14 Oct
    2026 a signed call makes the next page load wait for the fresh page
    (`{ expire: 0 }`), so an editor who publishes and reloads sees the change.
+   Leave "Trigger on drafts" off: every save while someone types would
+   expire the pages.
    New posts also appear in search and the sitemap after the next deploy (a
    Vercel Deploy Hook can be added to the same webhook for that).
 6. **Bring in the pages** (9 Oct 2026, once): so the Studio opens on what
@@ -122,6 +124,9 @@ PR #11 went live on 7 Oct, so the condition above is met.
   and click it: its field opens. Type, and the page beside it changes as
   you go; nothing reaches the site until **Publish**. Photographs on the
   home page's hero and the page openers open their field the same way.
+  The preview always shows your latest typing (its Drafts / Published
+  switch doesn't change it). Don't use "Share preview access": anyone
+  with that link could read unpublished work.
 - **Yellow warnings** are suggestions in Square One's house style (no
   dashes used as dashes, no "not just X, it's Y", the systems never "ours",
   "installed at", no prices or promises, headings in sentence case). They
