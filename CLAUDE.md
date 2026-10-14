@@ -44,6 +44,15 @@ Current as of 7 Oct 2026 (the own-company restyle of 27 Sept, docs/OWN-COMPANY-B
 - Tailwind CSS 4
 - TypeScript (strict)
 - Resend for transactional email (the quote form; spam handling under "Forms and spam")
+- Dependencies, 14 Oct 2026: resend 6.32 (drops svix and its vulnerable uuid),
+  sharp 0.35.5 (local image scripts only), undici, dompurify, picomatch,
+  brace-expansion and source-map-js patched by targeted updates. `npm audit`
+  then shows no critical and nothing a visitor can reach: what remains sits in
+  the Studio's command-line and build tooling (Sanity CLI and codegen, eslint,
+  the typography plugin, Vercel's framework detection) and goes with the next
+  Sanity minor update. Never `npm audit fix --force`: it downgrades Sanity.
+  The tree, all 420 commits on every ref, and the live JavaScript (pages and
+  Studio) were scanned for keys and secrets the same day: none.
 - MDX for blog content (gray-matter + next-mdx-remote)
 - Framer Motion for animations
 - Form validation: react-hook-form + zod
@@ -85,8 +94,10 @@ Weekly, `/api/cron/draft-post`
 writes a project story from the record (the Studio's version of it, as the
 site shows it; never a project marked "Take off the site") for the next project with no post and
 saves it as an **unpublished** Sanity draft with "Notes for the editor" (fact
-check, style check). Daily, `/api/cron/social-drafts` turns each newly
-published post into Instagram, Facebook and LinkedIn **drafts** in Buffer.
+check, style check). The social drafts (`/api/cron/social-drafts`, posts into
+Instagram, Facebook and LinkedIn **drafts** in Buffer) are built but off
+since 14 Oct 2026: not scheduled in vercel.json, social being out of scope
+for now (docs/AUTOMATION.md says how to switch them on).
 Nothing publishes itself. The drafter may state only what
 `lib/automation/facts.ts` hands it; `lib/automation/style.ts` is the house style
 and the canon as rules (keep it free of the literal tokens lint-claims bans:
@@ -217,6 +228,13 @@ and the visitor sees "sent".
   and the route screens it ("unchecked"). Each press of the send button
   carries one `submissionId`, passed to Resend as the idempotency key, so a
   resent form is mailed once (a duplicate answer from Resend means "sent").
+- The route answers before that second try: every send to Resend has to be
+  over 12 s after the request arrived (`ANSWER_BY_MS`), and one Resend hasn't
+  answered by then counts as failed, so the visitor gets the phone lines and
+  the mailto (14 Oct 2026; before, a send hanging past 15 s let the second
+  try report "sent" and could lose the enquiry). Worst case now: the office
+  gets it twice. Tested with Resend stood in by a local stub
+  (`RESEND_BASE_URL`): answers 200, hangs 502 at 12 s, in progress 200.
 - An address the office can't answer ("jane@shaw") with no phone number is
   sent back to the visitor to check, as before 9 Oct; with a phone it goes
   through without a reply-to.
