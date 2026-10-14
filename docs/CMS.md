@@ -7,9 +7,9 @@ Studio and the page updates within a minute.
 ## What they can edit
 
 The Studio's list, in this order since 14 Oct 2026 (the automation brief):
-Website Pages, Services, Projects, Blog, Site Settings, then Advanced. The
-Blog plan, From the field and Social drafts join it as the blog and social
-automation are built (docs/AUTOMATION.md).
+Website Pages, Services, Projects, Blog plan, Blog, Site Settings, then
+Advanced. From the field and Social drafts join it after Blog as the social
+automation is built (docs/AUTOMATION.md).
 
 | In the Studio            | What it changes on the site                                                      |
 | ------------------------ | -------------------------------------------------------------------------------- |
@@ -21,7 +21,8 @@ automation are built (docs/AUTOMATION.md).
 | **Website Pages → Social grid** | The Instagram strip on the home page: photo + caption + link to the post. |
 | **Services**             | The four services' words: the tagline, the intro, who we work with, what you get, the questions. The four are fixed: they can't be added to or deleted. |
 | **Projects**             | /projects, each project's page, the home page's six, and the application and service pages. Add one, edit its words and photographs (drag to reorder; Add item, then Upload or Select one already in the media library), or "Take off the site". |
-| **Blog**                 | Create, edit, publish. Lead photograph, category, body with photos and links. The first Publish dates a post that day (Vancouver). |
+| **Blog plan**            | What the drafter writes next, on Tuesdays and Thursdays: project stories, project roundups and guides. Set one to Ready to have it next; it marks them Drafted and adds new Ideas when the plan runs low (docs/AUTOMATION.md). Nothing here is on the site. |
+| **Blog**                 | Create, edit, publish. Lead photograph, category, body with photos and links. The first Publish dates a post that day (Vancouver). The drafter's posts arrive here unpublished, with Notes for the editor. |
 | **Site Settings**        | Phones, email, address, the footer line, Instagram / TikTok / Facebook / LinkedIn / YouTube links: read everywhere they print (the footer, the menu, the phone bar, the quote form, the contact and about pages, every "or call" line, the legal pages, llms.txt and the search engines' data). |
 | **Advanced → Text and Photo slots** | The first way in (30 Sept): a key per spot (`home.hero.title`, `home.hero.1`…). The Home page above does the same more simply and wins over them. |
 

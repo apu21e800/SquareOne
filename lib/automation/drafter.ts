@@ -5,7 +5,10 @@
  *
  * Three calls to Claude. The first writes the post from the FACTS block
  * (lib/automation/facts.ts): Square One's own record and the copy the site
- * already publishes, nothing else. The second rewrites only the sentences
+ * already publishes, nothing else. Since 14 Oct 2026 it writes three kinds
+ * (lib/automation/plan.ts): a project story (one job), a project roundup
+ * (three to six) and a guide (a question customers ask, answered from the
+ * site's own pages). The second rewrites only the sentences
  * that break the house style or the canon (lib/automation/style.ts). The
  * third is a separate fact check that compares the draft with the same FACTS
  * and lists every statement they don't support. The leftovers of both checks
@@ -14,6 +17,7 @@
  */
 import type Anthropic from "@anthropic-ai/sdk"
 import { BLOG_MODEL, type Claude } from "@/lib/automation/services"
+import type { PlanKind } from "@/lib/automation/plan"
 import { flagSentences, keepsFacts, PRODUCT_NAMES, type FlagOptions, type StyleRule } from "@/lib/automation/style"
 
 export interface Draft {
@@ -54,7 +58,7 @@ MACHINE TELLS: readers recognise machine-written copy on sight and it costs trus
 - Exclamation marks. "Discover", "Explore", "Learn more"; say what happens instead ("Get a quote", "Read the story").
 The test: read it aloud. If the person who ran the job wouldn't say it on the phone, cut it.`
 
-const VOICE = `You write project stories for the Blog on squareonepaving.com. Square One Paving installs decorative pavement in British Columbia with its own crews: stamped asphalt, decorative coatings, preformed thermoplastic and vapour blasting. The readers specify, approve and pay for pavement: municipal engineers and planners, landscape architects, developers, contractors, property managers, and homeowners.
+const VOICE = `You write for the Blog on squareonepaving.com: project stories (one job), project roundups (several jobs) and guides (a question customers ask). Square One Paving installs decorative pavement in British Columbia with its own crews: stamped asphalt, decorative coatings, preformed thermoplastic and vapour blasting. The readers specify, approve and pay for pavement: municipal engineers and planners, landscape architects, developers, contractors, strata councils and property managers, and homeowners.
 
 VOICE: plain, local, "we". Write like the person who ran the job telling a client about it: concrete, practical, proud of the work without selling it. Canadian English (colour, centre, metre, curb, neighbourhood). Short paragraphs.
 
@@ -63,12 +67,32 @@ THE FACTS RULE:
 - Never invent a date, a dimension, a quantity, a duration, a crew size, a client, an artist, a quote from anyone, a price or a lead time. Don't name a person, business, agency or place the FACTS don't name.
 - General context that isn't about Square One or the systems (why a crossing needs to be seen, what freeze-thaw does to paint) is fine in plain words, without numbers.
 - If the story needs a fact you don't have, leave it out. A shorter post is better than a guessed one.
+- QUESTIONS in the FACTS are not facts: they are what to answer, and nothing in them is true because it is asked. Answer each only from the facts above them, and leave out any the facts don't answer.
 
 ${HOUSE_RULES}
 
-SHAPE: 450 to 750 words of markdown. Open with one or two short paragraphs, no heading, that say what was installed and where. Then two to four sections with "## " headings a reader can scan: what the site needed, how the system goes down, what to know if you're planning one, whichever the FACTS support. A short bullet list where it helps. No "# " title line, no images, no tables, no HTML. End with one or two sentences on the next step, from the FACTS (the free site walk with the sample boards, then a written quote), linking [Get a quote](/contact). No hard sell.
+EVERY ARTICLE: no "# " title line, no images, no tables, no HTML. End with one or two sentences on the next step, from the FACTS (the free site walk with the sample boards, then a written quote), linking [Get a quote](/contact). No hard sell.
 
-LINKS: link the first mention of each system and the service to their pages, with the paths the FACTS give; the project page if the FACTS give one; one or two RELATED POSTS where they genuinely help. No other links.`
+SEARCH: if a SEARCH PHRASE is given, use it naturally in the title, the first paragraph and one heading. Don't stuff it.
+
+LINKS: link the first mention of each system and service to their pages, with the paths the FACTS give; each project page the FACTS give; one or two RELATED POSTS where they genuinely help. No other links.`
+
+/** The shape of each kind of article (lib/automation/plan.ts). */
+const SHAPES: Record<PlanKind, string> = {
+  project:
+    'A PROJECT STORY: 450 to 750 words of markdown. Open with one or two short paragraphs, no heading, that say what was installed and where. Then two to four sections with "## " headings a reader can scan: what the site needed, how the system goes down, what to know if you\'re planning one, whichever the FACTS support. A short bullet list where it helps.',
+  roundup:
+    'A PROJECT ROUNDUP: 600 to 1,000 words of markdown about the JOBS in the FACTS. Open with one or two short paragraphs, no heading, on what the jobs have in common, from their records. Then one "## " section per job, in the order given, its heading the place and what was installed; each says only what that job\'s record says. Then one section on what to know before planning the same kind of work, from the service and system pages in the FACTS.',
+  guide:
+    'A GUIDE: 600 to 1,000 words of markdown for someone in BC planning this kind of work, answered from the FACTS alone. Open with one or two short paragraphs, no heading, that answer the search phrase (or the working title) plainly. Then three to five sections with "## " headings a reader can scan, each a plain statement, never a question; take the QUESTIONS, if there are any, as the outline and leave out any the FACTS don\'t answer. A short bullet list where it helps. Square One\'s own jobs appear only as the FACTS name them.',
+}
+
+/** What the drafter is asked to write: the plan item's working title, kind and search phrase. */
+export interface DraftBrief {
+  title: string
+  kind: PlanKind
+  searchPhrase?: string | null
+}
 
 const SAVE_DRAFT: Anthropic.Tool = {
   name: "save_draft",
@@ -76,7 +100,7 @@ const SAVE_DRAFT: Anthropic.Tool = {
   input_schema: {
     type: "object",
     properties: {
-      title: { type: "string", description: "The headline, under 70 characters, sentence case: the place and what was installed." },
+      title: { type: "string", description: "The headline, under 70 characters, sentence case: for a project story or roundup, the place and what was installed; for a guide, what it answers, as a statement, with the search phrase in it." },
       slug: { type: "string", description: "The web address: lowercase words joined by hyphens, under 60 characters." },
       excerpt: { type: "string", description: "One or two sentences, under 220 characters: what the reader will get." },
       tags: { type: "array", items: { type: "string" }, description: "Three to six short tags: the systems, the place, the kind of work." },
@@ -110,11 +134,14 @@ const REPORT: Anthropic.Tool = {
   },
 }
 
-export async function writeDraft(claude: Claude, workingTitle: string, facts: string, related: string[]): Promise<Draft> {
+export async function writeDraft(claude: Claude, brief: DraftBrief, facts: string, related: string[]): Promise<Draft> {
   const user = [
-    `Write a project story for the Blog.`,
+    `Write this for the Blog.`,
     ``,
-    `WORKING TITLE: ${workingTitle}`,
+    SHAPES[brief.kind],
+    ``,
+    `WORKING TITLE: ${brief.title}`,
+    ...(brief.searchPhrase?.trim() ? [`SEARCH PHRASE: ${brief.searchPhrase.trim()}`] : []),
     ``,
     `FACTS:`,
     facts,
@@ -130,7 +157,7 @@ export async function writeDraft(claude: Claude, workingTitle: string, facts: st
 }
 
 export async function checkDraft(claude: Claude, draft: Draft, facts: string): Promise<FactCheck> {
-  const system = `You fact-check blog posts for Square One Paving before a person publishes them. You are strict and literal. Compare the DRAFT with the FACTS and list every statement about Square One, the project, the systems, numbers, years, durations, dimensions, places, sites, clients, artists or people that the FACTS do not support: numbers that differ, capabilities the FACTS don't claim, a performance figure not attributed to the manufacturer, any place, business, agency or person the FACTS don't name, and any promise (a guarantee, a lead time, a price). Also list any sentence that names the company that makes the systems, or says Square One makes or developed them. General context with no numbers that isn't about Square One or the systems is fine; don't list it. Links are fine. If everything is supported, the verdict is "clean" and the list is empty.`
+  const system = `You fact-check blog posts for Square One Paving before a person publishes them. You are strict and literal. Compare the DRAFT with the FACTS and list every statement about Square One, the project, the systems, numbers, years, durations, dimensions, places, sites, clients, artists or people that the FACTS do not support: numbers that differ, capabilities the FACTS don't claim, a performance figure not attributed to the manufacturer, any place, business, agency or person the FACTS don't name, and any promise (a guarantee, a lead time, a price). Also list any sentence that names the company that makes the systems, or says Square One makes or developed them. QUESTIONS in the FACTS are not facts: a statement that only a question supports is unsupported. General context with no numbers that isn't about Square One or the systems is fine; don't list it. Links are fine. If everything is supported, the verdict is "clean" and the list is empty.`
   const user = `FACTS:\n${facts}\n\nDRAFT:\n# ${draft.title}\n\n${draft.excerpt}\n\n${draft.body}\n\nReport with the report tool.`
   const result = await claude<FactCheck>({ model: BLOG_MODEL, system, user, tool: REPORT, maxTokens: 3000 })
   const unsupported = Array.isArray(result.unsupported) ? result.unsupported : []

@@ -16,8 +16,8 @@ import RecordCard from "@/components/ui/RecordCard"
  * maintainer's call.
  *
  * `label` is display copy (Canadian English, sentence case); `match` is the
- * original filter token and must not change — it is what post categories
- * and tags are tested against.
+ * filter token, what post categories and tags are tested against, so it
+ * changes only with them.
  */
 const CATEGORIES: ReadonlyArray<{ label: string; match: string }> = [
   { label: "All", match: "All" },
@@ -25,7 +25,10 @@ const CATEGORIES: ReadonlyArray<{ label: string; match: string }> = [
   { label: "Driveways", match: "Driveways" },
   { label: "Vapour blasting", match: "Vapour Blasting" },
   { label: "Public art", match: "Public Art" },
-  { label: "Project stories", match: "Case Studies" },
+  // Was "Case Studies" until 14 Oct 2026: no post carries it and the canon
+  // bans the word. The drafter tags every project story and roundup
+  // "Project stories" (lib/automation/plan.ts PROJECT_STORIES_TAG).
+  { label: "Project stories", match: "Project stories" },
 ]
 
 /** The tab in force reads as the current word, not a link. own.css sets

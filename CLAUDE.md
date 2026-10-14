@@ -110,11 +110,15 @@ Copy .env.local.example → .env.local and fill in:
 ## Blog and social automation (lib/automation/, docs/AUTOMATION.md)
 Two Vercel crons (vercel.json, production only). Both refuse every call
 without `CRON_SECRET` (401, constant-time check, lib/automation/cron.ts).
-Weekly, `/api/cron/draft-post`
-writes a project story from the record (the Studio's version of it, as the
-site shows it; never a project marked "Take off the site") for the next project with no post and
-saves it as an **unpublished** Sanity draft with "Notes for the editor" (fact
-check, style check). The social drafts (`/api/cron/social-drafts`, posts into
+Tuesdays and Thursdays at 13:00 UTC, `/api/cron/draft-post` takes the top
+Ready item in Studio's **Blog plan** (else the top Idea): a project story,
+a project roundup or a guide (lib/automation/plan.ts; never a "case study"),
+written only from Square One's own pages and documented jobs (the Studio's
+version of each, as the site shows it), and saves it as an **unpublished**
+Sanity draft with "Notes for the editor" (fact check, style check); marks the
+item Drafted; emails the next idea; and, when the plan is low, adds new Ideas
+(lib/automation/planner.ts, ported from hubss.com's insights-planner). A run
+that can't draft emails the fix, naming the key (lib/automation/outcome.ts). The social drafts (`/api/cron/social-drafts`, posts into
 Instagram, Facebook and LinkedIn **drafts** in Buffer) are built but off
 since 14 Oct 2026: not scheduled in vercel.json, social being out of scope
 for now (docs/AUTOMATION.md says how to switch them on).
@@ -355,7 +359,9 @@ npm run test:pages  # the hero, page openers and galleries from the Studio
 npm run test:preview  # Edit on the page: preview marks, exit path, clickable photos, style warnings
 npm run test:studio   # focal points, first-Publish dates, Site Settings, every page's words, the Studio list
 npm run sync:pages -- --dry-run  # what the fill-only sync would put into the Studio's empty fields
-npm run test:automation  # the cron gate and the drafter's subjects
+npm run test:automation  # the cron gate, the drafter end to end against stand-ins, fail-loud emails
+npm run test:planner     # the Blog plan's top-up: vetting, no repeats, each job told once
+npm run plan:seed -- --dry-run  # the Blog plan's first project stories, from documented jobs
 ```
 
 ## Development Notes

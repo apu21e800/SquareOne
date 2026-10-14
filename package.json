@@ -14,6 +14,7 @@
     "test:forms": "tsx scripts/test-form-screen.ts",
     "test:projects": "tsx scripts/test-projects-cms.ts",
     "test:automation": "tsx scripts/test-automation.ts",
+    "test:planner": "tsx scripts/test-planner.ts",
     "test:pages": "tsx scripts/test-page-content.ts",
     "test:preview": "tsx scripts/test-preview.ts",
     "test:studio": "tsx scripts/test-studio.ts",
@@ -23,6 +24,7 @@
     "warm": "node scripts/warm.mjs",
     "cms:seed": "node --experimental-strip-types scripts/cms-seed.ts",
     "sync:pages": "tsx scripts/sync-pages-to-sanity.ts",
+    "plan:seed": "tsx scripts/seed-blog-plan.ts",
     "cms:import": "npx sanity dataset import sanity/seed/seed.ndjson production --missing"
   },
   "dependencies": {

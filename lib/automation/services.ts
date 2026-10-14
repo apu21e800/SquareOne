@@ -28,13 +28,21 @@ export interface ToolRequest {
   user: string
   tool: Anthropic.Tool
   maxTokens: number
+  /** Give up after this long (the SDK's own default is ten minutes). */
+  timeoutMs?: number
+  /** Retries on a dropped connection or an overloaded API (the SDK's default is two). */
+  maxRetries?: number
 }
 
 /** One call that must answer through `tool`; resolves to the tool's input. */
 export type Claude = <T>(req: ToolRequest) => Promise<T>
 
 export const anthropicClaude: Claude = async <T,>(req: ToolRequest): Promise<T> => {
-  const res = await new Anthropic().messages.create({
+  const client = new Anthropic({
+    ...(req.timeoutMs ? { timeout: req.timeoutMs } : {}),
+    ...(req.maxRetries !== undefined ? { maxRetries: req.maxRetries } : {}),
+  })
+  const res = await client.messages.create({
     model: req.model,
     max_tokens: req.maxTokens,
     system: req.system,
@@ -54,8 +62,11 @@ export type SanityDoc = { _id: string; _type: string } & Record<string, unknown>
 
 export interface Store {
   fetch<T>(query: string, params?: Record<string, unknown>): Promise<T>
+  /** Fails (409) when the id is taken: what makes a plan item or a log claim-first. */
   create(doc: SanityDoc): Promise<void>
   createOrReplace(doc: SanityDoc): Promise<void>
+  /** Sets fields on an existing document (a plan item marked Drafted). */
+  patch(id: string, set: Record<string, unknown>): Promise<void>
   /** Uploads a photograph from a public URL; resolves to the asset id, or null if it could not be fetched. */
   uploadImage(url: string, filename: string): Promise<string | null>
 }
@@ -76,6 +87,9 @@ export function sanityStore(): Store {
     },
     createOrReplace: async (doc) => {
       await client.createOrReplace(doc)
+    },
+    patch: async (id, set) => {
+      await client.patch(id).set(set).commit()
     },
     uploadImage: async (url, filename) => {
       const res = await fetch(url)

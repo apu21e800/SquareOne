@@ -7,11 +7,13 @@ import { socialPost } from "./socialPost"
 import { siteSettings } from "./siteSettings"
 import { copySlot, imageSlot } from "./slots"
 import { service } from "./service"
+import { storyIdea } from "./storyIdea"
 import { aboutPage, contactPage, drivewaysPage } from "./words"
 
 export const schemaTypes: SchemaTypeDefinition[] = [
   post,
   project,
+  storyIdea,
   homePage,
   aboutPage,
   contactPage,

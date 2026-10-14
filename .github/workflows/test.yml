@@ -59,3 +59,6 @@ jobs:
 
       - name: Blog and social automation
         run: npm run test:automation
+
+      - name: The Blog plan keeps itself stocked
+        run: npm run test:planner
