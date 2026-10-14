@@ -37,6 +37,16 @@ import {
 /** BotID's answer normally takes milliseconds; past this, carry on without it. */
 const BOTID_TIMEOUT_MS = 2500
 
+/* The route answers before the form's own second try at 15 s
+   (lib/post-form.ts), so the sends to Resend must be over this long after the
+   request arrived: BotID 2.5 s and the screen 5 s leave them at least 4.5 s.
+   A send Resend hasn't answered by then counts as failed and the visitor gets
+   the phone lines and the mailto. Before 14 Oct 2026 a send could hang past
+   15 s, the form's second try then got "already being sent" and showed
+   "sent", and if the hung send failed the enquiry was lost (the independent
+   review of 14 Oct). Now the worst case is the office getting it twice. */
+const ANSWER_BY_MS = 12_000
+
 /* Best-effort flood guard. Serverless keeps this per warm instance, so it is
    a speed bump, never a security control. Five sends per ten minutes is far
    above what a real enquirer needs; past it, mail is held, not refused. */
@@ -79,6 +89,7 @@ async function botGate(req: NextRequest): Promise<"human" | "bot" | "unchecked" 
 }
 
 export async function POST(req: NextRequest) {
+  const started = Date.now()
   try {
     if (Number(req.headers.get("content-length") ?? 0) > MAX_BODY_BYTES) {
       logOutcome("unknown", "rejected", "-", "size", "body too large")
@@ -153,18 +164,28 @@ export async function POST(req: NextRequest) {
     const replyTo = replyToFor(body.email)
     // One key per press of the send button: if the form sends again (its
     // first try was slow, or its answer was lost), Resend mails it once.
-    const send = (to: string, key: string | undefined) =>
-      resend.emails.send(
-        {
-          from: FROM_EMAIL,
-          to: [to],
-          ...(replyTo ? { replyTo } : {}),
-          subject: subjectLine(body, hold),
-          html: buildEmailHtml(body, hold),
-          text: buildEmailText(body, hold),
-        },
-        key ? { idempotencyKey: key } : undefined,
-      )
+    const send = async (to: string, key: string | undefined) => {
+      const ms = Math.max(1500, started + ANSWER_BY_MS - Date.now())
+      try {
+        return await resend.emails.send(
+          {
+            from: FROM_EMAIL,
+            to: [to],
+            ...(replyTo ? { replyTo } : {}),
+            subject: subjectLine(body, hold),
+            html: buildEmailHtml(body, hold),
+            text: buildEmailText(body, hold),
+          },
+          { ...(key ? { idempotencyKey: key } : {}), signal: AbortSignal.timeout(ms) },
+        )
+      } catch (err) {
+        // Resend throws only when our own deadline aborts the send.
+        if (err instanceof Error && (err.name === "TimeoutError" || err.name === "AbortError")) {
+          return { data: null, error: { name: "timeout", message: `no answer from Resend in ${ms} ms` } }
+        }
+        throw err
+      }
+    }
     const key = body.submissionId ? `quote-form/${body.submissionId}` : undefined
 
     let { error } = await send(hold ? SCREENED_TO_EMAIL : TO_EMAIL, key)

@@ -228,6 +228,13 @@ and the visitor sees "sent".
   and the route screens it ("unchecked"). Each press of the send button
   carries one `submissionId`, passed to Resend as the idempotency key, so a
   resent form is mailed once (a duplicate answer from Resend means "sent").
+- The route answers before that second try: every send to Resend has to be
+  over 12 s after the request arrived (`ANSWER_BY_MS`), and one Resend hasn't
+  answered by then counts as failed, so the visitor gets the phone lines and
+  the mailto (14 Oct 2026; before, a send hanging past 15 s let the second
+  try report "sent" and could lose the enquiry). Worst case now: the office
+  gets it twice. Tested with Resend stood in by a local stub
+  (`RESEND_BASE_URL`): answers 200, hangs 502 at 12 s, in progress 200.
 - An address the office can't answer ("jane@shaw") with no phone number is
   sent back to the visitor to check, as before 9 Oct; with a phone it goes
   through without a reply-to.
