@@ -16,11 +16,12 @@
 import "./test-env"
 import assert from "node:assert/strict"
 import { evaluate, parse } from "groq-js"
-import { BufferApiError, CREATE_DRAFT, draftInput, type Buffer, type BufferChannel, type DraftPostInput } from "../lib/automation/buffer"
+import { BufferApiError, CREATE_DRAFT, draftInput, MANY_ORGS, pickOrganization, type Buffer, type BufferChannel, type DraftPostInput } from "../lib/automation/buffer"
+import { namesTheMaker } from "../lib/automation/style"
 import { daysSince, decideOutcome, failureHint, GIVE_UP_DAYS, isConflict, NO_CHANNELS, unusableReason, type SkipKind } from "../lib/automation/outcome"
 import { assetSize, idFor, libraryDue, libraryQueue, nextLibraryItem, slotStart, socialImageUrl, weekStart } from "../lib/automation/social-library"
 import { googleText } from "../lib/automation/social-drafter"
-import { draftSocialForNewPosts, fieldItem, NETWORKS, notifyRunFailure, SOCIAL_SINCE, START_LIMIT_MS, utmLink } from "../lib/automation/social"
+import { CHANNEL_LIMIT_MS, draftSocialForNewPosts, fieldItem, NETWORKS, notifyRunFailure, SOCIAL_SINCE, START_LIMIT_MS, utmLink } from "../lib/automation/social"
 import { loadSubjects, type Subject } from "../lib/automation/facts"
 import type { Claude, Mail, SanityDoc, Store, ToolRequest } from "../lib/automation/services"
 import { projects as RECORD } from "../lib/projects"
@@ -99,11 +100,12 @@ function fakeBuffer(channels: BufferChannel[], refuse: (input: DraftPostInput) =
   return { buffer, sent }
 }
 
-/** Claude: the social copy with the links it was given; the style pass finds nothing to rewrite. */
-function fakeClaude(over: Partial<Record<"linkedin" | "facebook" | "instagram" | "google", string>> = {}) {
+/** Claude: the social copy with the links it was given; the style pass finds nothing to rewrite. `fail` throws for a source whose words match. */
+function fakeClaude(over: Partial<Record<"linkedin" | "facebook" | "instagram" | "google", string>> = {}, fail?: { when: RegExp; error: Error }) {
   const calls: ToolRequest[] = []
   const claude: Claude = async <T,>(r: ToolRequest): Promise<T> => {
     calls.push(r)
+    if (fail && fail.when.test(r.user)) throw fail.error
     if (r.tool.name === "save_social") {
       const link = (k: string) => new RegExp(`- ${k}: (\\S+)`).exec(r.user)?.[1] ?? ""
       return {
@@ -498,6 +500,74 @@ async function main() {
     await notifyRunFailure(m.mail, new Error("BUFFER_API_KEY is not set"))
     assert.match(m.sent[0].subject, /^Social drafts didn't run/)
     assert.match(m.sent[0].text, /What to do: BUFFER_API_KEY is missing in Vercel/)
+  })
+  console.log("From the review (14 Oct 2026)")
+  await check("one Buffer organization only, or the one BUFFER_ORG_ID names; never a guess", () => {
+    assert.deepEqual(pickOrganization([{ id: "o1" }]), [{ id: "o1" }])
+    assert.throws(() => pickOrganization([{ id: "o1" }, { id: "hub" }]), new RegExp(MANY_ORGS))
+    assert.deepEqual(pickOrganization([{ id: "o1" }, { id: "hub" }], "o1"), [{ id: "o1" }])
+    assert.throws(() => pickOrganization([{ id: "o1" }], "nope"), /BUFFER_ORG_ID/)
+    assert.match(failureHint(new Error(`${MANY_ORGS} (2): the job drafts into one only`), "social"), /BUFFER_ORG_ID/)
+  })
+  await check("a scheduled version of a post (Content Releases) is never drafted before it's live", async () => {
+    const scheduled = { ...post("next-week", "2026-10-14"), _id: "versions.rABC.post-next-week" }
+    const { result, sentToBuffer } = await run([scheduled, jobPostThisWeek("2026-10-13T14:00:00Z")])
+    assert.equal(result.posts.length, 0)
+    assert.equal(sentToBuffer.length, 0)
+  })
+  await check("past 220 s no channel is started (the skipped ones are named), and the run settles in time", async () => {
+    const { result } = await run([post("late", "2026-10-14"), jobPostThisWeek("2026-10-13T14:00:00Z")], { step: 50_000 })
+    const r = result.posts[0]
+    assert.ok(r, "the item ran")
+    assert.ok(r.skipped.some((x) => /out of time/.test(x.why) && x.kind === "retry"), JSON.stringify(r.skipped))
+    assert.ok(CHANNEL_LIMIT_MS < 300_000 - 20_000 - 40_000 - 15_000 + 1)
+  })
+  await check("a draft call Buffer never answered isn't tried again (it may be saved): look in Buffer first", async () => {
+    const { result, dataset } = await run([post("quiet", "2026-10-14"), jobPostThisWeek("2026-10-13T14:00:00Z")], {
+      refuse: () => new BufferApiError("Buffer API unreachable: The operation was aborted due to timeout", 0),
+    })
+    const r = result.posts[0]
+    assert.equal(r.outcome, "nothing-possible")
+    assert.ok(r.skipped.every((x) => x.kind === "lasting" && /look in Buffer's drafts/.test(x.why)))
+    assert.ok(dataset.some((d) => d._id === "socialLog-quiet"), "kept: never a second set")
+  })
+  await check("one item Claude can't write up is retried behind the others; the run carries on", async () => {
+    const claude = fakeClaude({}, { when: /The bad-one story/, error: new Error("The google copy came back empty") })
+    const { result, dataset, mails } = await run([post("bad-one", "2026-10-11"), post("good-one", "2026-10-12"), jobPostThisWeek("2026-10-13T14:00:00Z")], { claude })
+    assert.deepEqual(result.posts.map((p) => [p.key, p.outcome]), [["bad-one", "retry"], ["good-one", "drafted"]])
+    assert.ok(dataset.some((d) => d._id === "socialRetry-bad-one"))
+    assert.ok(!dataset.some((d) => d._id === "socialLog-bad-one"))
+    assert.ok(mails.some((m) => /^Social drafts not made yet: The bad-one story/.test(m.subject)))
+  })
+  await check(`after ${GIVE_UP_DAYS} days it is given up for good, with a record`, async () => {
+    const claude = fakeClaude({}, { when: /The bad-one story/, error: new Error("The google copy came back empty") })
+    const { result, dataset } = await run(
+      [post("bad-one", "2026-10-01"), { _id: "socialRetry-bad-one", _type: "socialRetry", slug: "bad-one", firstFailedAt: "2026-10-01T14:00:00Z" }, jobPostThisWeek("2026-10-13T14:00:00Z")],
+      { claude, at: "2026-10-16T14:05:00Z" },
+    )
+    assert.equal(result.posts[0].outcome, "gave-up")
+    assert.ok(dataset.some((d) => d._id === "socialLog-bad-one"))
+    assert.ok(!dataset.some((d) => d._id === "socialRetry-bad-one"))
+  })
+  await check("a refused key still stops the whole run (the route emails)", async () => {
+    const claude = fakeClaude({}, { when: /./, error: Object.assign(new Error('401 {"type":"error","error":{"type":"authentication_error","message":"invalid x-api-key"}}'), { status: 401 }) })
+    const s = sanity([post("any", "2026-10-14"), jobPostThisWeek("2026-10-13T14:00:00Z")])
+    await assert.rejects(draftSocialForNewPosts({ claude: claude.claude, store: s.store, buffer: fakeBuffer(FOUR).buffer, mail: fakeMail().mail, now: clock("2026-10-15T14:00:00Z") }), /authentication_error/)
+  })
+  await check("a phone number in any shape keeps a post off Google", () => {
+    for (const t of ["(604)612-6209", "Call 6046126209", "604\u2013612\u20136209", "604\u2011612\u20116209", "+1 604 612 6209"]) assert.match(googleText(t).problem ?? "", /phone number/, t)
+  })
+  await check("the manufacturer run together in a hashtag is caught; a transit hub isn't", () => {
+    assert.equal(namesTheMaker("#HUBSurfaceSystems"), true)
+    assert.equal(namesTheMaker("#HubSurfaceSystems"), true)
+    assert.equal(namesTheMaker("#hubsurfacesystems"), true)
+    assert.equal(namesTheMaker("#transithub and a busy hub"), false)
+  })
+  await check("no retouched or generated photo is ever posted as a job: vapour blasting posts its real one", () => {
+    for (const i of queue) assert.doesNotMatch(i.photo?.src ?? "", /\/generated\//, i.key)
+    const vapour = queue.find((i) => i.key === "lib:service:vapor-blasting")!
+    assert.equal(vapour.photo?.src, "/images/services/vapor-blasting/granville-island-vapour-blasting-01.jpg")
+    assert.doesNotMatch(vapour.photo?.alt ?? "", /clear sky/)
   })
   await check("UTM links: the network, social, the stream's campaign, what it was", () => {
     assert.equal(

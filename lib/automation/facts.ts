@@ -91,7 +91,7 @@ interface StudioProject {
   _createdAt?: string
 }
 
-const STUDIO_PROJECTS = `*[_type == "project" && !(_id in path("drafts.**")) && defined(slug.current)]{
+const STUDIO_PROJECTS = `*[_type == "project" && !(_id in path("drafts.**")) && !(_id in path("versions.**")) && defined(slug.current)]{
   _id, "slug": slug.current, title, application, service, systems, city, region, year, client, artist, excerpt,
   story, "post": post->slug.current, hidden,
   "images": images[]{ "asset": asset._ref, alt, "file": asset->originalFilename, hotspot, crop }, _createdAt
@@ -201,7 +201,7 @@ export function ineligible(s: Subject, drafted: Set<string>): string | null {
 export async function loadServices(store: Store): Promise<Service[]> {
   const docs =
     (await store.fetch<ServiceDoc[] | null>(
-      `*[_type == "service" && !(_id in path("drafts.**")) && defined(slug)]{ slug, tagline, shortDescription, idealClients, benefits, faqs[]{ q, a } }`,
+      `*[_type == "service" && !(_id in path("drafts.**")) && !(_id in path("versions.**")) && defined(slug)]{ slug, tagline, shortDescription, idealClients, benefits, faqs[]{ q, a } }`,
     )) ?? []
   const bySlug = new Map(docs.filter((d) => d?.slug).map((d) => [d.slug as string, d]))
   return RECORD_SERVICES.map((s) => mergeService(s, bySlug.get(s.slug)))
@@ -410,7 +410,7 @@ export interface PublishedPost {
   excerpt?: string
 }
 
-export const PUBLISHED_POSTS = `*[_type == "post" && !(_id in path("drafts.**")) && defined(slug.current)]{ title, "slug": slug.current, category, tags, excerpt }`
+export const PUBLISHED_POSTS = `*[_type == "post" && !(_id in path("drafts.**")) && !(_id in path("versions.**")) && defined(slug.current)]{ title, "slug": slug.current, category, tags, excerpt }`
 
 /** Up to five published posts that share the jobs' systems, places or kind of work, or a guide's systems and kinds of work. */
 export function relatedFor(input: { subjects: readonly Subject[]; systems?: readonly string[]; words?: readonly string[]; categories: readonly string[] }, posts: readonly PublishedPost[]): string[] {

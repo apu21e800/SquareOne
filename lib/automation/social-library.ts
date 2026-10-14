@@ -106,6 +106,25 @@ function projectItem(s: Subject): LibraryItem | null {
   }
 }
 
+/**
+ * Service heroes that are retouched (the vapour blasting page's sky is
+ * generated): the library posts the real photo of the same job instead. The
+ * shot list's rule: a generated frame is never presented as a job.
+ */
+const REAL_PHOTOS: Record<string, { src: string; alt: string }> = {
+  "vapor-blasting": {
+    src: "/images/services/vapor-blasting/granville-island-vapour-blasting-01.jpg",
+    alt: "A Square One operator vapour blasting a painted marking off the boardwalk at Granville Island, Vancouver, the Burrard Street Bridge behind",
+  },
+}
+
+/** A photo the library may post: the real one, never a generated or retouched frame. */
+function servicePhoto(s: Service): SocialPhoto | undefined {
+  const real = REAL_PHOTOS[s.slug]
+  if (real) return { src: real.src, alt: real.alt }
+  return /\/generated\//.test(s.imageUrl) ? undefined : { src: s.imageUrl, alt: clean(s.imageAlt) }
+}
+
 function serviceItem(s: Service): LibraryItem {
   return {
     key: `lib:service:${s.slug}`,
@@ -124,7 +143,7 @@ function serviceItem(s: Service): LibraryItem {
       .join("\n"),
     path: `/services/${s.slug}`,
     linkTo: `the ${s.name.toLowerCase()} page on squareonepaving.com`,
-    photo: { src: s.imageUrl, alt: clean(s.imageAlt) },
+    ...(servicePhoto(s) ? { photo: servicePhoto(s) } : {}),
   }
 }
 

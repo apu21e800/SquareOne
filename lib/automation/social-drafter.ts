@@ -145,7 +145,9 @@ export async function polishSocialCopy(claude: Claude, copy: SocialCopy): Promis
  */
 export function googleText(text: string): { text: string; problem?: string } {
   const t = text.replace(/https?:\/\/\S+/g, "").replace(/[ \t]+\n/g, "\n").replace(/[ \t]{2,}/g, " ").trim()
-  if (/(?:\+?1[\s.-]?)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}\b/.test(t)) return { text: t, problem: "the Google copy has a phone number, which Google refuses" }
+  // Any dash (en, em, non-breaking hyphen, minus) reads as a hyphen; the separators are optional.
+  const plain = t.replace(/[\u2010-\u2015\u2212]/g, "-")
+  if (/(?:\+?1[\s.-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}\b/.test(plain)) return { text: t, problem: "the Google copy has a phone number, which Google refuses" }
   if (t.length > GOOGLE_MAX) return { text: t, problem: `the Google copy is longer than ${GOOGLE_MAX} characters` }
   return { text: t }
 }

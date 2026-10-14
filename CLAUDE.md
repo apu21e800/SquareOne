@@ -105,7 +105,8 @@ Copy .env.local.example → .env.local and fill in:
 - The CMS (docs/CMS.md) and the blog and social automation (docs/AUTOMATION.md)
   have their own: NEXT_PUBLIC_SANITY_PROJECT_ID, NEXT_PUBLIC_SANITY_DATASET,
   SANITY_REVALIDATE_SECRET; CRON_SECRET, ANTHROPIC_API_KEY,
-  SANITY_API_WRITE_TOKEN, BLOG_DRAFT_NOTIFY, BUFFER_API_KEY, AUTOMATION_PAUSED.
+  SANITY_API_WRITE_TOKEN, BLOG_DRAFT_NOTIFY, BUFFER_API_KEY, BUFFER_ORG_ID
+  (only if the Buffer login is in more than one organization), AUTOMATION_PAUSED.
 
 ## Blog and social automation (lib/automation/, docs/AUTOMATION.md)
 Two Vercel crons (vercel.json, production only). Both refuse every call

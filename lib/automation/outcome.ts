@@ -86,6 +86,20 @@ export function daysSince(date: string, now: Date): number {
   return Number.isNaN(t) ? 0 : Math.max(0, (now.getTime() - t) / 86_400_000)
 }
 
+/**
+ * An error that stops the whole run rather than one item: a key refused or
+ * missing, Anthropic out of credit, busy or gone quiet, the model retired.
+ * Anything else (Claude returning nothing usable for one source, Sanity
+ * refusing one record) is that item's problem: it is retried for
+ * GIVE_UP_DAYS while the run carries on with the others.
+ */
+export function isRunLevel(err: unknown): boolean {
+  const message = err instanceof Error ? err.message : String(err)
+  const status = statusOf(err)
+  if (status !== undefined && [401, 403, 429, 529].includes(status)) return true
+  return /authentication_error|x-api-key|permission_error|credit balance|usage limits?|spend(ing)? limit|not_found_error|overloaded_error|rate_limit_error|Request timed out|Session not found|Insufficient permissions|is not set|Not configured/i.test(message)
+}
+
 /** Sanity refused a create because the id is taken: another run, or the same plan item twice. */
 export function isConflict(err: unknown): boolean {
   return statusOf(err) === 409 || /already exists/i.test(err instanceof Error ? err.message : String(err))
@@ -99,6 +113,9 @@ export function failureHint(err: unknown, job: Job = "blog"): string {
   // Buffer first: its client puts "Buffer" in every message it throws.
   if (bufferStatus === 401 || bufferStatus === 403 || /Buffer API 40[13]\b|\((UNAUTHENTICATED|UNAUTHORIZED|FORBIDDEN)\)/.test(message)) {
     return "Buffer refused the API key: it has expired (a key lasts a year at most) or was deleted. Make a new one in Square One's Buffer at publish.buffer.com/settings/api (choose 1 year), replace BUFFER_API_KEY in Vercel (Production) and redeploy."
+  }
+  if (/The Buffer key reaches more than one organization|BUFFER_ORG_ID names/.test(message)) {
+    return "The Buffer login behind BUFFER_API_KEY belongs to more than one Buffer organization, so the job stopped before drafting anything. Keep Square One's Buffer login in Square One's organization only, or put the id of Square One's organization in Vercel (Production) as BUFFER_ORG_ID, and redeploy."
   }
   if (message.startsWith(NO_CHANNELS)) return "Connect Square One's channels in its Buffer account: the Facebook page and Instagram (and Google Business Profile on Essentials)."
   if (/disconnected in Buffer/.test(message)) return "Reconnect the channel in Square One's Buffer; the next daily run drafts into it."

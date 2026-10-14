@@ -115,9 +115,14 @@ dropped and is retried daily for 14 days from its first failure
 (`socialRetry-<key>`), then given up with an email; disconnected and locked
 channels are skipped with the reason; every Buffer and Sanity call gives up
 after 20 seconds and no item starts after two minutes, so a run always
-finishes and reports inside Vercel's five minutes; a run that stops (Buffer
-refused the key, no channel it can write for, a key missing in Vercel)
-emails what to do, naming the key, every day until it's fixed.
+finishes and reports inside Vercel's five minutes (a draft call Buffer
+never answered is not retried, since it may have saved it: the email says to
+look in Buffer first); an item Claude can't write up is retried behind the
+others for 14 days rather than holding the queue; a run that stops (Buffer
+refused the key, the key reaches more than one Buffer organization, no
+channel it can write for, a key missing in Vercel) emails what to do, naming
+the key, every day until it's fixed. A retouched or generated photo is never
+posted as a job (vapour blasting posts its real Granville Island photo).
 
 ## Setup (Vern, once, after Sanity is connected)
 
@@ -154,6 +159,10 @@ Production**. Paste each key into Vercel yourself; never into a chat.
      Buffer shows it once: it goes straight into Vercel. A calendar reminder
      two weeks before it expires saves the missed day; when it does expire,
      the job emails which key to replace.
+   - The job drafts into one Buffer organization only. If the login ever
+     belongs to more than one, it stops before drafting anything and emails;
+     then either keep the login in Square One's organization alone, or put
+     Square One's organization id in Vercel as `BUFFER_ORG_ID`.
 6. Seed the plan: `npm run plan:seed -- --dry-run`, then (after `npx sanity
    login`) `SEED_JOBS=<the jobs' web addresses, comma-separated> npx sanity
    exec scripts/seed-blog-plan.ts --with-user-token`.

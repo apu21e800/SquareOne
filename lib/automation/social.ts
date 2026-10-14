@@ -47,10 +47,10 @@
 import { portableToText } from "@/lib/automation/markdown"
 import { styleReport } from "@/lib/automation/drafter"
 import { loadServices, loadSubjects, serviceFor } from "@/lib/automation/facts"
-import { BUFFER_TIMEOUT_MS, type Buffer, type BufferChannel } from "@/lib/automation/buffer"
+import { BUFFER_TIMEOUT_MS, BufferApiError, type Buffer, type BufferChannel } from "@/lib/automation/buffer"
 import { googleText, polishSocialCopy, writeSocialCopy, type SocialCopy, type SocialSource } from "@/lib/automation/social-drafter"
 import { absolute, idFor, libraryDue, libraryQueue, nextLibraryItem, socialImageUrl, type LibraryItem, type SocialPhoto } from "@/lib/automation/social-library"
-import { daysSince, decideOutcome, failureHint, GIVE_UP_DAYS, isConflict, NO_CHANNELS, unusableReason, type ChannelSkip, type Outcome } from "@/lib/automation/outcome"
+import { daysSince, decideOutcome, failureHint, GIVE_UP_DAYS, isConflict, isRunLevel, NO_CHANNELS, unusableReason, type ChannelSkip, type Outcome } from "@/lib/automation/outcome"
 import { APPLICATION_OPTIONS, SERVICE_OPTIONS, SYSTEM_OPTIONS } from "@/lib/automation/plan"
 import { notifyList, type Claude, type Mailer, type Store } from "@/lib/automation/services"
 
@@ -59,9 +59,15 @@ export const SOCIAL_SINCE = "2026-10-01"
 const MAX_POSTS_PER_RUN = 2
 const MAX_FIELD_PER_RUN = 1
 
-/** Time limits inside the route's 300 s (see the header). */
+/**
+ * Time limits inside the route's 300 s (see the header). The worst case after
+ * a claim at 150 s: channels started until 220 s (each call 20 s at most),
+ * then settling (two Sanity calls) and the email (15 s at most) by 295 s.
+ */
 export const START_LIMIT_MS = 120_000
 const CLAIM_LIMIT_MS = 150_000
+export const CHANNEL_LIMIT_MS = 220_000
+const MAIL_TIMEOUT_MS = 15_000
 /** Each Sanity call the social store makes (app/api/cron/social-drafts). */
 export const SANITY_TIMEOUT_MS = BUFFER_TIMEOUT_MS
 
@@ -161,7 +167,7 @@ interface DuePost {
   photo?: { asset?: string | null; alt?: string | null; hotspot?: SocialPhoto["hotspot"]; crop?: SocialPhoto["crop"] } | null
 }
 
-const DUE = `*[_type == "post" && !(_id in path("drafts.**")) && defined(slug.current) && date >= $since] | order(date asc) {
+const DUE = `*[_type == "post" && !(_id in path("drafts.**")) && !(_id in path("versions.**")) && defined(slug.current) && date >= $since] | order(date asc) {
   title, "slug": slug.current, date, category, excerpt, seoDescription, body,
   "photo": mainImage{ "asset": asset._ref, alt, hotspot, crop }
 }`
@@ -312,7 +318,15 @@ export async function draftSocialForNewPosts(deps: SocialDeps): Promise<{ posts:
       console.log(`[social] out of time for today; ${item.key} waits for the next run`)
       break
     }
-    const result = await draftItem(deps, item, channels, failing.get(item.key), now, started)
+    let result: SocialResult | null | "out of time"
+    try {
+      result = await draftItem(deps, item, channels, failing.get(item.key), now, started)
+    } catch (err) {
+      // A key refused, Anthropic down: the run stops and the route emails.
+      // Anything else is this item's problem, and the run carries on.
+      if (isRunLevel(err)) throw err
+      result = await itemFailed(deps, item, err, failing.get(item.key), now)
+    }
     if (result === "out of time") break
     done++
     if (result) results.push(result)
@@ -360,6 +374,15 @@ async function draftItem(
     outcome: "retry",
   }
 
+  // The photo before the claim too: a site-only photo is uploaded to Sanity
+  // (two calls of 20 s at most), and the claim's clock shouldn't pay for it.
+  let photo: (SocialPhoto & { url?: string }) | undefined
+  try {
+    photo = await resolvePhoto(store, item.photo)
+  } catch (err) {
+    console.warn(`[social] ${item.key}: no photo (${errorText(err)})`)
+  }
+
   // Claim the item before anything goes to Buffer (see the header). The copy
   // is written first, so a failure there (Anthropic down) leaves no claim.
   if (deps.now().getTime() - started > CLAIM_LIMIT_MS) {
@@ -382,16 +405,14 @@ async function draftItem(
   // Everything from here to the settling is inside a try: nothing may escape
   // between the claim and its settling, or the item would stay claimed with
   // nothing drafted.
-  let photo: (SocialPhoto & { url?: string }) | undefined
-  try {
-    photo = await resolvePhoto(store, item.photo)
-  } catch (err) {
-    console.warn(`[social] ${item.key}: no photo (${errorText(err)})`)
-  }
   for (const ch of channels) {
     const service = ch.service.toLowerCase()
     const rule = NETWORKS[service]
     const label = ch.displayName || ch.name
+    if (deps.now().getTime() - started > CHANNEL_LIMIT_MS) {
+      result.skipped.push({ service, channel: label, why: "out of time for today's run", kind: "retry" })
+      continue
+    }
     if (!rule) {
       result.skipped.push({ service, channel: label, why: "not a network this job writes for (TikTok and YouTube need a video)", kind: "lasting" })
       continue
@@ -426,7 +447,14 @@ async function draftItem(
       drafts.push({ _key: ch.id, _type: "bufferDraft", service, channel: label, bufferPostId: id })
       result.drafted.push({ service, channel: label })
     } catch (err) {
-      result.skipped.push({ service, channel: label, why: errorText(err), kind: "retry" })
+      // No answer is not a no: Buffer may have saved the draft before the
+      // call gave up. Trying again could leave a second one, so this channel
+      // is done and the email says to look in Buffer first.
+      if (err instanceof BufferApiError && err.status === 0) {
+        result.skipped.push({ service, channel: label, why: "Buffer didn't answer in time: look in Buffer's drafts before making this one by hand (it may be there)", kind: "lasting" })
+      } else {
+        result.skipped.push({ service, channel: label, why: errorText(err), kind: "retry" })
+      }
     }
   }
 
@@ -491,13 +519,56 @@ function channelList(xs: { service: string; channel: string }[]) {
   return xs.map((x) => `${x.channel} (${x.service})`).join(", ")
 }
 
-/** One email to the editor (BLOG_DRAFT_NOTIFY). Never throws: a lost email mustn't stop the run. */
+/** One email to the editor (BLOG_DRAFT_NOTIFY), given up after 15 s. Never throws: a lost email mustn't stop the run. */
 async function emailEditors(mail: Mailer, subject: string, text: string): Promise<void> {
+  let timer: ReturnType<typeof setTimeout> | undefined
   try {
-    await mail({ to: notifyList(), subject, text })
+    await Promise.race([
+      mail({ to: notifyList(), subject, text }),
+      new Promise((_, reject) => {
+        timer = setTimeout(() => reject(new Error("the email took longer than 15 s")), MAIL_TIMEOUT_MS)
+      }),
+    ])
   } catch (err) {
     console.error(`[social] email failed: ${errorText(err)}`)
+  } finally {
+    if (timer) clearTimeout(timer)
   }
+}
+
+/**
+ * An item that couldn't even be written up (Claude returned nothing usable
+ * for it, Sanity refused its record): retried by the next runs, behind the
+ * others, for GIVE_UP_DAYS from its first failure, then given up for good,
+ * so one bad item can't hold the queue or email every day for ever.
+ */
+async function itemFailed(deps: SocialDeps, item: SocialItem, err: unknown, firstFailedAt: string | undefined, now: Date): Promise<SocialResult> {
+  const why = errorText(err)
+  console.error(`[social] ${item.key}: couldn't be drafted: ${why}`)
+  const failingDays = firstFailedAt ? daysSince(firstFailedAt, now) : null
+  const gaveUp = failingDays !== null && failingDays > GIVE_UP_DAYS
+  const result: SocialResult = {
+    key: item.key,
+    title: item.title,
+    stream: item.stream,
+    drafted: [],
+    skipped: [{ service: "all", channel: "every channel", why, kind: "retry" }],
+    styleCheck: "",
+    outcome: gaveUp ? "gave-up" : "retry",
+  }
+  if (gaveUp) {
+    // Its record is what tells the next runs it's done.
+    await deps.store
+      .createIfNotExists({ _id: idFor("socialLog", item.key), _type: "socialLog", slug: item.key, title: item.title, source: item.stream, createdAt: now.toISOString(), drafts: [], skipped: [{ _key: "s0", _type: "skippedChannel", service: "all", channel: "every channel", why }], styleCheck: "" })
+      .catch((e: unknown) => (result.recordProblem = `Its record under Social drafts couldn't be written (${errorText(e)}), so the next run tries it again.`))
+    await deps.store.delete(idFor("socialRetry", item.key)).catch(() => {})
+  } else if (!firstFailedAt) {
+    await deps.store
+      .createIfNotExists({ _id: idFor("socialRetry", item.key), _type: "socialRetry", slug: item.key, firstFailedAt: now.toISOString() })
+      .catch((e: unknown) => console.error(`[social] ${item.key}: couldn't note the first failure: ${errorText(e)}`))
+  }
+  await notify(deps.mail, result)
+  return result
 }
 
 /** How an email names what the drafts are for. */

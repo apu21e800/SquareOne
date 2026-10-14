@@ -114,6 +114,19 @@ export function draftInput(input: DraftPostInput): Record<string, unknown> {
   }
 }
 
+export const MANY_ORGS = "The Buffer key reaches more than one organization"
+
+/** The one organization the job drafts into. Pure, for the tests. */
+export function pickOrganization(orgs: readonly { id: string }[], wanted?: string): { id: string }[] {
+  if (wanted?.trim()) {
+    const org = orgs.find((o) => o.id === wanted.trim())
+    if (!org) throw new Error(`BUFFER_ORG_ID names an organization the Buffer key can't reach (it reaches ${orgs.length})`)
+    return [org]
+  }
+  if (orgs.length !== 1) throw new Error(`${MANY_ORGS} (${orgs.length}): the job drafts into one only`)
+  return [orgs[0]]
+}
+
 export const CREATE_DRAFT = `mutation CreateDraft($input: CreatePostInput!) {
   createPost(input: $input) {
     ... on PostActionSuccess { post { id } }
@@ -122,11 +135,17 @@ export const CREATE_DRAFT = `mutation CreateDraft($input: CreatePostInput!) {
 }`
 
 export const bufferApi: Buffer = {
-  /** Every channel in every organization on the account. */
+  /**
+   * Every channel in Square One's organization. A key reaches every
+   * organization its login belongs to, so the job refuses to guess: one
+   * organization, or the one BUFFER_ORG_ID names; anything else stops the run
+   * and emails the editor, before a single draft (Square One's posts must
+   * never land in another client's Buffer).
+   */
   async channels() {
     const { account } = await gql<{ account: { organizations: { id: string }[] } }>(`query { account { organizations { id } } }`)
     const out: BufferChannel[] = []
-    for (const org of account.organizations) {
+    for (const org of pickOrganization(account.organizations, process.env.BUFFER_ORG_ID)) {
       // Organization ids are opaque tokens; JSON.stringify makes a safe GraphQL string.
       const { channels } = await gql<{ channels: BufferChannel[] }>(
         `query { channels(input: { organizationId: ${JSON.stringify(org.id)} }) { id name displayName service isQueuePaused isDisconnected isLocked } }`,
