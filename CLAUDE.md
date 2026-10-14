@@ -22,6 +22,22 @@ for municipalities, developers, and contractors across BC.
 ## Answer-engine SEO
 FAQPage / BreadcrumbList / Service JSON-LD via `components/JsonLd.tsx`; `/llms.txt` is generated from lib data (app/llms.txt/route.ts); every metadata description goes through `clampDescription` (lib/seo.ts). Service FAQs live in lib/services.ts and may only restate what the page already says.
 
+## Search and analytics (14 Oct 2026)
+- Google Analytics 4: Square One's own property ("www.squareonepaving.com -
+  GA4", `G-00DJDXYG7N`, lib/analytics.ts), loaded by components/GoogleAnalytics.tsx
+  from app/layout.tsx in production only (`VERCEL_ENV`), never in an editor's
+  preview. Events: `generate_lead` when the quote form sends (only the project
+  type goes with it), `phone_click`, `email_click`, and `cta_click` for a link
+  into /contact (components/AnalyticsEvents.tsx, lib/gtag.ts). The privacy page
+  (sections 1, 4, 5) says what it counts and the cookies it sets; change both
+  together. The new site ran without it from 19 Sept to this change.
+- IndexNow: .github/workflows/indexnow.yml runs `npm run indexnow`
+  (scripts/indexnow-submit.mjs) six minutes after every push to main and tells
+  Bing (and the engines sharing IndexNow) to recrawl every sitemap URL. The key
+  file is `public/800ef1ca999f919c8042b3de6d86c0cd.txt`; it is public by design.
+- The sitemap gives a lastmod only where the site knows one (blog posts);
+  never the build time. robots.txt lets every crawler in, AI search included.
+
 ## Driveway composer
 `components/DrivewayComposer.tsx` — pattern × colour sample board (drawn, not photographed). The file exists but renders nowhere as of 26 Sept 2026: no page imports it (held back from /driveways on 19 Sept; the home materials board links to /patterns and the colour chart instead). Do not build on it; leaving or moving it is the maintainer's call (docs/OWN-COMPANY-BRIEF.md §2).
 

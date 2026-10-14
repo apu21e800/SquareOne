@@ -22,11 +22,16 @@ export const metadata: Metadata = {
  * the two new steps, Vercel's bot check and Anthropic's spam screen, and
  * exactly what the screen is and is not sent. Keep it in step with
  * describeSubmission() there.
+ *
+ * 14 Oct 2026: Google Analytics back on the site (lib/analytics.ts).
+ * Sections 1, 4 and 5 say what it counts, the cookies it sets and how to
+ * keep it out. Keep section 5 in step with components/AnalyticsEvents.tsx
+ * and the quote form's generate_lead event.
  */
 const sections = [
   {
     heading: "1. What we collect",
-    body: `Most of the personal information we hold arrives through the quote form and by email: your name, your email address, a phone number, the company or organization you work for if you give one, and whatever you tell us about the job: where it is, what kind of work it is, and the details you type into the form.\n\nThe emails and form submissions themselves are kept, as the record of what was asked and what we said.\n\nThe site gathers less than the form does. Our hosting provider keeps ordinary server logs: which pages were requested, the browser that asked for them, and the page that sent you here.\n\nPersonal information reaches us in one of two ways: because you chose to send it, or because your browser sent a request to the site.`,
+    body: `Most of the personal information we hold arrives through the quote form and by email: your name, your email address, a phone number, the company or organization you work for if you give one, and whatever you tell us about the job: where it is, what kind of work it is, and the details you type into the form.\n\nThe emails and form submissions themselves are kept, as the record of what was asked and what we said.\n\nThe site gathers less than the form does. Our hosting provider keeps ordinary server logs: which pages were requested, the browser that asked for them, and the page that sent you here. Google Analytics counts visits to the site, as section 5 explains.\n\nPersonal information reaches us in one of two ways: because you chose to send it, or because your browser sent a request to the site.`,
   },
   {
     heading: "2. What we use it for",
@@ -38,11 +43,11 @@ const sections = [
   },
   {
     heading: "4. Who else handles it",
-    body: `Three outside services touch this information on our behalf.\n\nThe form's email is delivered by Resend, which carries the message from the site to our inbox. The site is hosted by Vercel, which serves the pages and keeps the server logs; that processing happens in North America. When you send the quote form, Vercel also runs a quick check in your browser to confirm it was sent by a person and not an automated script.\n\nTo keep spam out of our inbox, what you send through the quote form is read by Claude, an AI model from Anthropic, a US company, before it reaches us. It is sent your name, your organization, the part of your email address after the @, the type of project and your message, with phone numbers and email addresses taken out of it. It is never sent the phone number or the job address you give in the form, or your full email address. We use it only to sort enquiries from spam, and a message it doubts is set aside for a person to review, not thrown away.\n\nEach of them works under a privacy policy of its own. We choose providers whose data protection holds to the standard PIPEDA sets.`,
+    body: `Four outside services touch this information on our behalf.\n\nThe form's email is delivered by Resend, which carries the message from the site to our inbox. The site is hosted by Vercel, which serves the pages and keeps the server logs; that processing happens in North America. When you send the quote form, Vercel also runs a quick check in your browser to confirm it was sent by a person and not an automated script.\n\nTo keep spam out of our inbox, what you send through the quote form is read by Claude, an AI model from Anthropic, a US company, before it reaches us. It is sent your name, your organization, the part of your email address after the @, the type of project and your message, with phone numbers and email addresses taken out of it. It is never sent the phone number or the job address you give in the form, or your full email address. We use it only to sort enquiries from spam, and a message it doubts is set aside for a person to review, not thrown away.\n\nGoogle Analytics, from Google, a US company, counts visits to the site for us (section 5). It never receives what you type into the quote form.\n\nEach of them works under a privacy policy of its own. We choose providers whose data protection holds to the standard PIPEDA sets.`,
   },
   {
     heading: "5. Cookies",
-    body: `This site sets no cookie to advertise to you, to measure you for analytics, or to follow you from one site to another.\n\nYour browser may keep a display preference in its own local storage, and our hosting provider may set a cookie where one is needed to serve the site securely.\n\nClear them or block them in your browser settings if you prefer; the site stays open to you either way.`,
+    body: `We use Google Analytics to count visits: which pages are read, how people arrive (a search, a link or another site), the kind of device and browser, the rough area a visit comes from (worked out by Google from the connection; Google Analytics doesn't store IP addresses), and whether a quote request was sent or a phone number or our email address was tapped. To tell one visit from the next it sets two cookies, _ga and _ga_00DJDXYG7N, which last up to two years. We use what it tells us only to see which pages help people find us and get in touch.\n\nThe site sets no cookie to advertise to you or to follow you from one site to another.\n\nYour browser may keep a display preference in its own local storage, and our hosting provider may set a cookie where one is needed to serve the site securely.\n\nTo keep Google Analytics out, block cookies for this site in your browser settings or use Google's opt-out add-on (tools.google.com/dlpage/gaoptout); the site stays open to you either way.`,
   },
   {
     heading: "6. How long we keep it",
@@ -62,7 +67,7 @@ export default function PrivacyPage() {
   return (
     <LegalDocument
       title="Privacy policy"
-      updated="9 October 2026"
+      updated="14 October 2026"
       applies="squareonepaving.com, and the enquiries sent to Square One Paving"
       lede={
         <p>
