@@ -1,11 +1,13 @@
 import { SITE_URL } from "@/lib/site"
 import { scriptJson } from "@/components/JsonLd"
+import { DEFAULT_SETTINGS, addressParts, schemaPhone, type SiteSettings } from "@/lib/site-settings"
 // JSON-LD structured data for SEO — PavingContractor + WebSite.
 // Honesty rules (S1-BUILD-PROMPT constitution): no invented ratings, no
 // phantom endpoints, no unverified profiles. AggregateRating returns only
 // when real, verifiable reviews exist.
 
-const ORG_BASE = {
+/** Who Square One is: everything here but the lines, email, address and accounts. */
+const ORG_HEAD = {
   "@type": "PavingContractor",
   "@id": `${SITE_URL}/#organization`,
   name: "Square One Paving",
@@ -14,62 +16,35 @@ const ORG_BASE = {
   logo: `${SITE_URL}/images/logo/SquareOne-wordmark-dark.svg`,
   image: `${SITE_URL}/images/og-image.png`,
   description: "BC's decorative pavement studio since 2000. Stamped asphalt, decorative coatings, preformed thermoplastic, and vapour blasting for municipalities, developers, and residential clients across British Columbia.",
-  telephone: "+1-604-612-6209",
-  email: "office@squareonepaving.com",
-  foundingDate: "2000",
-  // The three published lines (CLAUDE.md contact canon) — the office is the
-  // primary `telephone`; the Island and toll-free lines ride as contact
-  // points so the schema says exactly what the footer says, and no more.
-  contactPoint: [
-    { "@type": "ContactPoint", telephone: "+1-604-612-6209", contactType: "customer service", areaServed: "Lower Mainland, BC", availableLanguage: "en" },
-    { "@type": "ContactPoint", telephone: "+1-250-391-0270", contactType: "customer service", areaServed: "Vancouver Island, BC", availableLanguage: "en" },
-    { "@type": "ContactPoint", telephone: "+1-877-391-0270", contactType: "customer service", areaServed: "CA", availableLanguage: "en" },
+}
+
+// No priceRange (would be invented), no founder (not stated anywhere on
+// record), no geo / openingHours until Vern supplies them — a wrong
+// coordinate or opening hour is worse than none.
+const AREA_SERVED = [
+  { "@type": "AdministrativeArea", name: "British Columbia" },
+  { "@type": "AdministrativeArea", name: "Lower Mainland" },
+  { "@type": "AdministrativeArea", name: "Vancouver Island" },
+  { "@type": "City", name: "Vancouver" },
+  { "@type": "City", name: "Victoria" },
+  { "@type": "City", name: "Surrey" },
+  { "@type": "City", name: "Burnaby" },
+  { "@type": "City", name: "Richmond" },
+  { "@type": "City", name: "Coquitlam" },
+  { "@type": "City", name: "Maple Ridge" },
+  { "@type": "City", name: "Nanaimo" },
+  { "@type": "City", name: "Ladysmith" },
+]
+
+const OFFER_CATALOG = {
+  "@type": "OfferCatalog",
+  name: "Decorative Pavement Services",
+  itemListElement: [
+    { "@type": "Offer", itemOffered: { "@type": "Service", name: "Stamped Asphalt", url: `${SITE_URL}/services/stamped-asphalt`, description: "StreetPrint and TrafficPatternsXD stamped asphalt installations across BC." } },
+    { "@type": "Offer", itemOffered: { "@type": "Service", name: "Decorative Coatings", url: `${SITE_URL}/services/decorative-coatings`, description: "StreetBond and DuraShield coatings for transit, public realm, commercial and residential surfaces." } },
+    { "@type": "Offer", itemOffered: { "@type": "Service", name: "Preformed Thermoplastic", url: `${SITE_URL}/services/preformed-thermoplastic`, description: "TrafficPatterns, DecoMark, DuraTherm and PreMark thermoplastic markings." } },
+    { "@type": "Offer", itemOffered: { "@type": "Service", name: "Vapour Blasting", url: `${SITE_URL}/services/vapor-blasting`, description: "Mobile vapour blasting for surface preparation, and graffiti and marking removal." } },
   ],
-  // No priceRange (would be invented), no founder (not stated anywhere on
-  // record), no geo / openingHours until Vern supplies them — a wrong
-  // coordinate or opening hour is worse than none.
-  areaServed: [
-    { "@type": "AdministrativeArea", name: "British Columbia" },
-    { "@type": "AdministrativeArea", name: "Lower Mainland" },
-    { "@type": "AdministrativeArea", name: "Vancouver Island" },
-    { "@type": "City", name: "Vancouver" },
-    { "@type": "City", name: "Victoria" },
-    { "@type": "City", name: "Surrey" },
-    { "@type": "City", name: "Burnaby" },
-    { "@type": "City", name: "Richmond" },
-    { "@type": "City", name: "Coquitlam" },
-    { "@type": "City", name: "Maple Ridge" },
-    { "@type": "City", name: "Nanaimo" },
-    { "@type": "City", name: "Ladysmith" },
-  ],
-  address: [
-    {
-      "@type": "PostalAddress",
-      streetAddress: "19-11720 Stewart Crescent",
-      addressLocality: "Maple Ridge",
-      addressRegion: "BC",
-      postalCode: "V2X 9E7",
-      addressCountry: "CA",
-    },
-  ],
-  // sameAs mirrors the footer's published social links exactly — schema
-  // may only point where the site itself points.
-  sameAs: [
-    "https://www.facebook.com/squareonepaving/",
-    "https://www.instagram.com/squareonepaving/",
-    "https://www.linkedin.com/company/square-one-paving-ltd/",
-    "https://www.youtube.com/channel/UCBDvB4vgdahH67BmP6FeccQ",
-  ],
-  hasOfferCatalog: {
-    "@type": "OfferCatalog",
-    name: "Decorative Pavement Services",
-    itemListElement: [
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Stamped Asphalt", url: `${SITE_URL}/services/stamped-asphalt`, description: "StreetPrint and TrafficPatternsXD stamped asphalt installations across BC." } },
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Decorative Coatings", url: `${SITE_URL}/services/decorative-coatings`, description: "StreetBond and DuraShield coatings for transit, public realm, commercial and residential surfaces." } },
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Preformed Thermoplastic", url: `${SITE_URL}/services/preformed-thermoplastic`, description: "TrafficPatterns, DecoMark, DuraTherm and PreMark thermoplastic markings." } },
-      { "@type": "Offer", itemOffered: { "@type": "Service", name: "Vapour Blasting", url: `${SITE_URL}/services/vapor-blasting`, description: "Mobile vapour blasting for surface preparation, and graffiti and marking removal." } },
-    ],
-  },
 }
 
 const WEBSITE = {
@@ -91,10 +66,46 @@ const WEBSITE = {
   },
 }
 
-export default function StructuredData() {
+/**
+ * The organisation's lines, email, address and accounts, from Site Settings
+ * (lib/site-settings.ts, 14 Oct 2026): the schema says exactly what the
+ * footer says, and no more. The office is the primary `telephone`; the
+ * Island and toll-free lines ride as contact points.
+ */
+export function organization(s: SiteSettings) {
+  const address = addressParts(s)
+  return {
+    ...ORG_HEAD,
+    telephone: schemaPhone(s.phoneOffice),
+    email: s.email,
+    foundingDate: "2000",
+    contactPoint: [
+      { "@type": "ContactPoint", telephone: schemaPhone(s.phoneOffice), contactType: "customer service", areaServed: "Lower Mainland, BC", availableLanguage: "en" },
+      { "@type": "ContactPoint", telephone: schemaPhone(s.phoneIsland), contactType: "customer service", areaServed: "Vancouver Island, BC", availableLanguage: "en" },
+      { "@type": "ContactPoint", telephone: schemaPhone(s.phoneTollFree), contactType: "customer service", areaServed: "CA", availableLanguage: "en" },
+    ],
+    areaServed: AREA_SERVED,
+    address: [
+      {
+        "@type": "PostalAddress",
+        streetAddress: address.street,
+        addressLocality: address.locality,
+        addressRegion: address.region,
+        postalCode: address.postalCode,
+        addressCountry: "CA",
+      },
+    ],
+    // sameAs mirrors the footer's published social links exactly: schema
+    // may only point where the site itself points.
+    sameAs: [s.facebook, s.instagram, s.linkedin, s.youtube, ...(s.tiktok ? [s.tiktok] : [])],
+    hasOfferCatalog: OFFER_CATALOG,
+  }
+}
+
+export default function StructuredData({ settings = DEFAULT_SETTINGS }: { settings?: SiteSettings }) {
   const json = {
     "@context": "https://schema.org",
-    "@graph": [ORG_BASE, WEBSITE],
+    "@graph": [organization(settings), WEBSITE],
   }
   return (
     <script

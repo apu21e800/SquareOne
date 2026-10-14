@@ -16,6 +16,7 @@
     "test:automation": "tsx scripts/test-automation.ts",
     "test:pages": "tsx scripts/test-page-content.ts",
     "test:preview": "tsx scripts/test-preview.ts",
+    "test:studio": "tsx scripts/test-studio.ts",
     "indexnow": "node scripts/indexnow-submit.mjs",
     "check": "node scripts/disk-manifest.mjs --check && npx tsc --noEmit --incremental false && node scripts/lint-claims.mjs && node scripts/check-links.mjs",
     "images:add": "node scripts/add-images.mjs",

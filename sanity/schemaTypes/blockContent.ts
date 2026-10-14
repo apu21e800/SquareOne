@@ -1,4 +1,4 @@
-import { defineArrayMember, defineType } from "sanity"
+import { defineArrayMember, defineField, defineType } from "sanity"
 
 /** Blog body — headings, lists, quotes, links and photographs with captions. */
 export const blockContent = defineType({
@@ -38,10 +38,17 @@ export const blockContent = defineType({
     defineArrayMember({
       type: "image",
       title: "Photograph",
+      description: "Press the crosshair and drag the focal point onto the pavement: the 3:2 frame crops around it.",
       options: { hotspot: true },
       fields: [
-        { name: "alt", type: "string", title: "What the photo shows", description: "Read aloud to screen readers and shown if the image fails. Say what and where, e.g. “StreetBond spray park pad, Wesburn Park, Burnaby”." },
-        { name: "caption", type: "string", title: "Caption (optional)" },
+        defineField({
+          name: "alt",
+          type: "string",
+          title: "What the photo shows",
+          description: "Read aloud to screen readers and shown if the image fails. Say what and where, e.g. “StreetBond spray park pad, Wesburn Park, Burnaby”.",
+          validation: (r) => r.required().error("Say what the photograph shows: it is read aloud to people who can't see it."),
+        }),
+        defineField({ name: "caption", type: "string", title: "Caption (optional)", description: "Shown under the photograph." }),
       ],
     }),
   ],

@@ -1,6 +1,8 @@
 import Link from "next/link"
 import Frame from "@/components/ui/Frame"
 import { Section } from "@/components/ui/Container"
+import { getSiteSettings } from "@/lib/cms"
+import { telHref } from "@/lib/site-settings"
 
 /* Home — the residential line, after the commercial applications (business
    hierarchy canon: commercial first, driveways second).
@@ -41,7 +43,8 @@ const CITIES: { href: string; name: string; region: string; src: string; alt: st
   },
 ]
 
-export default function DrivewaysBand() {
+export default async function DrivewaysBand() {
+  const site = await getSiteSettings()
   return (
     <Section
       label="Driveways · Vancouver and Victoria"
@@ -83,7 +86,7 @@ export default function DrivewaysBand() {
             </Link>
           </div>
           <p className="mt-4 text-[15px] text-ink-muted">
-            or call <a href="tel:+16046126209" className="link">604-612-6209</a>
+            or call <a href={telHref(site.phoneOffice)} className="link">{site.phoneOffice}</a>
           </p>
         </div>
       </div>

@@ -55,6 +55,8 @@ export default function ProjectGallery({
               sizes="(max-width: 700px) 100vw, (max-width: 1280px) 50vw, 628px"
               ariaLabel={`${caption}, view full screen (photograph ${i + 2} of ${photos.length})`}
               onOpen={() => show(i + 1)}
+              position={photo.position}
+              edit={photo.edit}
             />
           </li>
         ))}

@@ -60,6 +60,10 @@ export interface WorkPhoto {
   region?: WorkRegion
   hires?: boolean
   flag?: boolean
+  /** A Studio photograph's focal point, as CSS object-position (lib/focal.ts). */
+  position?: string
+  /** Edit on the page: opens the photograph's document, in an editor's preview only. */
+  edit?: string
 }
 
 export interface WorkAppMeta {

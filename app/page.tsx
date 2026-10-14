@@ -91,7 +91,7 @@ export default async function Home() {
     HERO_SLIDES.map((slide, i) => {
       const key = `home.hero.${i + 1}`
       const img = slotImage(slots, key, { src: slide.src, alt: slide.alt })
-      return img.src === slide.src ? slide : { ...slide, src: img.src, alt: img.alt, caption: img.caption }
+      return img.src === slide.src ? slide : { ...slide, src: img.src, alt: img.alt, caption: img.caption, ...(img.position ? { position: img.position } : {}) }
     })
   const eyebrow = home.line ?? slotText(slots, "home.hero.eyebrow", "")
   const title = home.title ?? slotText(slots, "home.hero.title", "")

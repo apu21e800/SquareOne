@@ -4,6 +4,8 @@ import QuoteForm from "@/components/contact/QuoteForm"
 import Frame from "@/components/ui/Frame"
 import { Section } from "@/components/ui/Container"
 import { workMunicipalities } from "@/lib/work"
+import { getSiteSettings } from "@/lib/cms"
+import { mailtoHref, telHref, type SiteSettings } from "@/lib/site-settings"
 
 /* Contact — rebuilt for the fourth time, 19 Sept 2026 (Vern, with the live
    page in front of him: "contact page is still boring"; "no sucky images,
@@ -67,10 +69,11 @@ const OPENER = {
   caption: "Langley · Railways crossing · TrafficPatternsXD",
 }
 
-const LINES = [
-  { region: "Lower Mainland", display: "604-612-6209", href: "tel:+16046126209" },
-  { region: "Vancouver Island", display: "250-391-0270", href: "tel:+12503910270" },
-  { region: "Toll-free", display: "1-877-391-0270", href: "tel:+18773910270" },
+/** The three lines, from Site Settings (lib/site-settings.ts, 14 Oct 2026). */
+const linesFor = (s: SiteSettings) => [
+  { region: "Lower Mainland", display: s.phoneOffice, href: telHref(s.phoneOffice) },
+  { region: "Vancouver Island", display: s.phoneIsland, href: telHref(s.phoneIsland) },
+  { region: "Toll-free", display: s.phoneTollFree, href: telHref(s.phoneTollFree) },
 ]
 
 // One short line each (2 Oct 2026, Vern: "the quote page is very text heavy").
@@ -81,11 +84,12 @@ const STEPS = [
   { title: "You get a written quote", body: "Before anything starts." },
 ]
 
-const REGIONS = [
+const regionsFor = (s: SiteSettings, LINES: ReturnType<typeof linesFor>) => [
   {
     name: "Lower Mainland",
     line: LINES[0],
-    where: "The office, 19–11720 Stewart Crescent, Maple Ridge",
+    // The office's street and town, from Site Settings' two address lines.
+    where: `The office, ${s.addressLine1}, ${s.addressLine2.split(",")[0].trim()}`,
     src: "/images/applications/public-art/vancouver-18th-and-cambie-crossing-streetbond-01.jpg",
     alt: "A StreetBond street mural in green, cream, lilac and red rolling across the crossing at 18th and Cambie, Vancouver, on a sunny afternoon",
     caption: "Vancouver · 18th and Cambie · StreetBond",
@@ -102,7 +106,10 @@ const REGIONS = [
   },
 ]
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const site = await getSiteSettings()
+  const LINES = linesFor(site)
+  const REGIONS = regionsFor(site, LINES)
   return (
     <main className="bg-surface">
       {/* ── Opener — the invitation, and the lines for whoever would rather call ──────── */}
@@ -131,8 +138,8 @@ export default function ContactPage() {
               <div>
                 <dt>Email</dt>
                 <dd>
-                  <a href="mailto:office@squareonepaving.com" className="q-mail">
-                    office@squareonepaving.com
+                  <a href={mailtoHref(site.email)} className="q-mail">
+                    {site.email}
                   </a>
                 </dd>
               </div>
@@ -178,8 +185,8 @@ export default function ContactPage() {
               </ul>
               <p className="mt-4 text-[14.5px] leading-[1.6] text-ink-muted">
                 By email:{" "}
-                <a href="mailto:office@squareonepaving.com" className="link text-[14.5px]">
-                  office@squareonepaving.com
+                <a href={mailtoHref(site.email)} className="link text-[14.5px]">
+                  {site.email}
                 </a>
               </p>
             </div>

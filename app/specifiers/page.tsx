@@ -18,6 +18,8 @@ import { OFFERED_SHEETS } from "@/lib/pattern-sheets"
 import { STREETBOND_COLOURS } from "@/lib/palette"
 import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
+import { getSiteSettings } from "@/lib/cms"
+import { mailtoHref, telHref } from "@/lib/site-settings"
 
 /**
  * For specifiers: one page that gathers what a landscape architect, a civil
@@ -97,6 +99,8 @@ const TYPE_LABEL: Record<ResourceType, string> = {
  * carried keep a block of their own. No arrow glyphs, no em dashes.
  */
 export default async function SpecifiersPage() {
+  // The lines and the email, from Site Settings (lib/site-settings.ts).
+  const site = await getSiteSettings()
   // The opener, with whatever the Studio says on top (lib/page-content.ts, 9 Oct 2026).
   const o = await getPageOpener("/specifiers")
   const typesHeld = TYPE_ORDER.filter((t) => resourceGroups.some((g) => g.docs.some((d) => d.type === t)))
@@ -370,8 +374,8 @@ export default async function SpecifiersPage() {
               <Link href="/contact" className="btn-primary">
                 Get a quote
               </Link>
-              <a href="mailto:office@squareonepaving.com" className="link">
-                office@squareonepaving.com
+              <a href={mailtoHref(site.email)} className="link">
+                {site.email}
               </a>
             </div>
             <p className="mt-5 max-w-[52ch] text-[15px] italic leading-[1.6] text-ink-muted">
@@ -385,15 +389,15 @@ export default async function SpecifiersPage() {
               <ul className="mt-3 flex flex-col gap-[10px] text-[16px] leading-[1.5]">
                 <li className="flex items-baseline justify-between gap-4">
                   <span className="text-ink-muted">Lower Mainland</span>
-                  <a href="tel:+16046126209" className="whitespace-nowrap tabular-nums text-ink">604-612-6209</a>
+                  <a href={telHref(site.phoneOffice)} className="whitespace-nowrap tabular-nums text-ink">{site.phoneOffice}</a>
                 </li>
                 <li className="flex items-baseline justify-between gap-4">
                   <span className="text-ink-muted">Vancouver Island</span>
-                  <a href="tel:+12503910270" className="whitespace-nowrap tabular-nums text-ink">250-391-0270</a>
+                  <a href={telHref(site.phoneIsland)} className="whitespace-nowrap tabular-nums text-ink">{site.phoneIsland}</a>
                 </li>
                 <li className="flex items-baseline justify-between gap-4">
                   <span className="text-ink-muted">Toll-free</span>
-                  <a href="tel:+18773910270" className="whitespace-nowrap tabular-nums text-ink">1-877-391-0270</a>
+                  <a href={telHref(site.phoneTollFree)} className="whitespace-nowrap tabular-nums text-ink">{site.phoneTollFree}</a>
                 </li>
               </ul>
             </div>

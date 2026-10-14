@@ -1,6 +1,7 @@
 import Frame from "@/components/ui/Frame"
 import { Section } from "@/components/ui/Container"
 import { getProjects } from "@/lib/projects-cms"
+import { photoMetaFor } from "@/lib/projects"
 
 /** "Vancouver, BC" → "Vancouver" — the caption carries the city, not the province. */
 function cityName(city: string): string {
@@ -58,6 +59,7 @@ export default async function ProjectsPreview() {
         <Frame
           src={project.imageUrl}
           alt={alt}
+          position={photoMetaFor(project, project.imageUrl)?.position}
           aspect="aspect-[3/2]"
           sizes="(max-width: 560px) 100vw, (max-width: 1100px) 50vw, 400px"
           href={`/projects/${project.slug}`}

@@ -1,20 +1,25 @@
-import type { Metadata } from "next"
-import Link from "next/link"
-import { cmsEnabled } from "@/sanity/env"
-import Studio from "./Studio"
-
-export const metadata: Metadata = {
-  title: { absolute: "Studio | Square One Paving" },
-  robots: { index: false, follow: false },
-}
-
-export const dynamic = "force-static"
+"use client"
 
 /**
- * /studio — the editing desk. Covers the page (fixed, above the site chrome)
+ * /studio: the editing desk. Covers the page (fixed, above the site chrome)
  * so the Studio owns the viewport. Until Vercel carries a Sanity project id
  * it shows the setup note instead of a broken Studio.
+ *
+ * Rendered in the browser only (14 Oct 2026, as hubss.com has since 7 Oct).
+ * The Studio can't render on a server: every visit used to try there first,
+ * fail, and start again in the browser. Skipping the server pass changes
+ * nothing an editor sees. A client page can't export metadata, so the
+ * noindex lives in app/studio/layout.tsx, with the matching X-Robots-Tag
+ * header in vercel.json.
  */
+import nextDynamic from "next/dynamic"
+import Link from "next/link"
+import { cmsEnabled } from "@/sanity/env"
+
+export const dynamic = "force-dynamic"
+
+const Studio = nextDynamic(() => import("./Studio"), { ssr: false })
+
 export default function StudioPage() {
   if (!cmsEnabled) {
     return (

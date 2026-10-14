@@ -40,6 +40,8 @@ import OpenerTitle from "@/components/ui/OpenerTitle"
 import { getPageOpener } from "@/lib/page-content"
 import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
+import { getSiteSettings } from "@/lib/cms"
+import { withSettings } from "@/lib/site-settings"
 
 export const metadata: Metadata = {
   openGraph: { title: "Stamped Asphalt Driveways in BC", images: [{ url: "/images/S1_update_v2/photos/Driveways/Ten%20Mile%20Point%20Driveway%20I.jpg" }] },
@@ -64,7 +66,7 @@ export const metadata: Metadata = {
 /* Every answer restates something already on this page or in the record —
    lib/products.ts, lib/services.ts, lib/pattern-sheets.ts, lib/palette.ts.
    Performance figures are HUB's and say so. */
-const faqs = [
+const FAQS = [
   {
     q: "Can you install stamped asphalt over my existing driveway?",
     a: "Yes, when the asphalt is sound. StreetPrint is stamped into asphalt in good condition, reheated in place, and StreetBond is coated straight over asphalt or concrete, so there is no demolition and no new base. We assess the surface at the site visit first: the asphalt has to be sound before it takes a pattern, and if it is not, we say so.",
@@ -189,6 +191,9 @@ const steps: { title: string; desc: string }[] = [
 ]
 
 export default async function DrivewaysPage() {
+  // The answers that name a line, as Site Settings has it (lib/site-settings.ts).
+  const site = await getSiteSettings()
+  const faqs = FAQS.map((f) => ({ ...f, a: withSettings(f.a, site) }))
   // The opener, with whatever the Studio says on top (lib/page-content.ts, 9 Oct 2026).
   const o = await getPageOpener("/driveways")
   // The hero frame is not repeated as the first tile of the gallery below it.

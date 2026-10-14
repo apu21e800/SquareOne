@@ -1,5 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
+import { getSiteSettings } from "@/lib/cms"
+import { telHref } from "@/lib/site-settings"
 
 /* The 404 (28 Sept 2026, the finish pass). Until today a missing page was
    Next's default: a black "404" and one line, centred, in the system face.
@@ -20,7 +22,8 @@ const WAYS = [
   { href: "/products", name: "The systems we install", swatch: "systems" },
 ]
 
-export default function NotFound() {
+export default async function NotFound() {
+  const site = await getSiteSettings()
   return (
     <main className="bg-surface">
       <section className="container-1280 pt-[calc(var(--bar-h)+72px)] pb-24 max-[700px]:pt-[calc(var(--bar-h)+40px)] max-[700px]:pb-16">
@@ -59,8 +62,8 @@ export default function NotFound() {
               <Link href="/search" className="link">
                 Search the site
               </Link>
-              <a href="tel:+16046126209" className="link">
-                604-612-6209
+              <a href={telHref(site.phoneOffice)} className="link">
+                {site.phoneOffice}
               </a>
             </div>
           </div>

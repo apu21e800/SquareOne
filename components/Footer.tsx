@@ -4,6 +4,7 @@ import FooterClose from "@/components/FooterClose"
 import BackToTop from "@/components/BackToTop"
 import ColourEdge from "@/components/ui/ColourEdge"
 import { getSiteSettings } from "@/lib/cms"
+import { mailtoHref, telHref } from "@/lib/site-settings"
 
 /* Site close — rebuilt 4 Sept 2026 at Vern's call ("just looks like a jumble
    of text") as a dark CTA into a four-column footer; rebuilt 26 Sept 2026
@@ -69,11 +70,8 @@ const PAGES: { label: string; links: FooterLink[] }[] = [
   },
 ]
 
-/** "604-612-6209" → "tel:+16046126209" */
-const tel = (display: string) => {
-  const digits = display.replace(/\D/g, "")
-  return `tel:+${digits.length === 10 ? "1" + digits : digits}`
-}
+/** "604-612-6209" → "tel:+16046126209" (lib/site-settings.ts). */
+const tel = telHref
 
 export default async function Footer() {
   const year = new Date().getFullYear()
@@ -153,10 +151,8 @@ export default async function Footer() {
               <Link href="/" className="inline-flex items-center" aria-label="Square One Paving, home">
                 <BrandMark tone="light" size="footer" />
               </Link>
-              <p className="foot-line mt-6 max-w-[30ch]">
-                Decorative pavement across British Columbia since 2000. One office in Maple Ridge,
-                crews on both sides of the Strait.
-              </p>
+              {/* Site Settings' "Positioning line (footer)" (14 Oct 2026). */}
+              <p className="foot-line mt-6 max-w-[30ch]">{site.positioning}</p>
               <ul className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3" aria-label="Square One elsewhere">
                 {networks.map((n) => (
                   <li key={n.label}>
@@ -203,7 +199,7 @@ export default async function Footer() {
                 <div className="foot-mail">
                   <dt>Email</dt>
                   <dd>
-                    <a href={`mailto:${site.email}`} className="foot-a">
+                    <a href={mailtoHref(site.email)} className="foot-a">
                       {site.email}
                     </a>
                   </dd>

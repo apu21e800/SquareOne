@@ -2,6 +2,7 @@ import { groq } from "next-sanity"
 import { editAttr, inDraftMode, sanityFetch, urlFor, type SanityImageSource } from "@/sanity/lib/client"
 import { OPENER_BY_PAGE, type OpenerDefault } from "@/lib/openers"
 import type { Slide } from "@/lib/hero-slides"
+import { focalPosition, isCropped } from "@/lib/focal"
 
 /**
  * The home page's hero and every page's opener, as the Studio has them
@@ -73,13 +74,15 @@ function decoded(name: string): string {
 }
 
 const baseName = (src: string) => decoded(src.split("/").pop() ?? "")
-const cropped = (c?: ImageField["crop"]) => Boolean(c && ((c.top ?? 0) || (c.bottom ?? 0) || (c.left ?? 0) || (c.right ?? 0)))
+const cropped = (c?: ImageField["crop"]) => isCropped(c)
 const ownFile = (src: string, file: string | undefined, image: ImageField) => Boolean(file) && !cropped(image.crop) && baseName(src) === decoded(file as string)
 
-/** The focal point the office dragged, as CSS object-position. */
-export function hotspotPosition(h?: ImageField["hotspot"]): string | undefined {
-  if (!h || typeof h.x !== "number" || typeof h.y !== "number") return undefined
-  return `${Math.round(h.x * 100)}% ${Math.round(h.y * 100)}%`
+/**
+ * The focal point the office dragged, as CSS object-position on the
+ * photograph as served: inside the crop, when there is one (lib/focal.ts).
+ */
+export function hotspotPosition(h?: ImageField["hotspot"], crop?: ImageField["crop"]): string | undefined {
+  return focalPosition(h, crop)
 }
 
 const cdn = (image: ImageField, width = 2400) => urlFor(image as SanityImageSource, width)
@@ -92,7 +95,7 @@ export function mergeOpener(d: OpenerDefault, doc: PageHeroDoc | null | undefine
     src = own ? d.src : cdn(doc.image)
     alt = text(doc.alt) ?? (own ? d.alt : [d.head, d.tail].filter(Boolean).join(" "))
     caption = text(doc.caption) ?? (own ? d.caption : undefined)
-    position = hotspotPosition(doc.image.hotspot) ?? (own ? d.position : "center")
+    position = hotspotPosition(doc.image.hotspot, doc.image.crop) ?? (own ? d.position : "center")
   } else if (doc) {
     alt = text(doc.alt) ?? d.alt
     caption = text(doc.caption) ?? d.caption
@@ -112,7 +115,7 @@ export function mergeHome(builtIn: Slide[], doc: HomeDoc | null | undefined): { 
     out.slides = reel.map((s) => {
       const image = s.image as ImageField
       const own = builtIn.find((b) => ownFile(b.src, s.file, image))
-      const position = hotspotPosition(image.hotspot)
+      const position = hotspotPosition(image.hotspot, image.crop)
       if (own) {
         const slide: Slide = { ...own, alt: text(s.alt) ?? own.alt, position: position ?? own.position }
         const caption = text(s.caption)

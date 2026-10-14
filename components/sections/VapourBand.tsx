@@ -1,5 +1,7 @@
 import Link from "next/link"
 import Frame from "@/components/ui/Frame"
+import { getSiteSettings } from "@/lib/cms"
+import { telHref } from "@/lib/site-settings"
 
 /**
  * Vapour blasting on the home page — its own band, 19 Sept 2026 (Vern: "give
@@ -27,7 +29,8 @@ const GRANVILLE = {
   caption: "Granville Island, Vancouver · marking removal",
 }
 
-export default function VapourBand() {
+export default async function VapourBand() {
+  const site = await getSiteSettings()
   return (
     <section className="vapour-band sec relative overflow-hidden bg-surface-stone py-[6.5rem] max-[900px]:py-14">
       <div className="container-1280 relative z-[1] grid grid-cols-12 items-center gap-x-14 gap-y-12 max-[900px]:grid-cols-1">
@@ -58,8 +61,8 @@ export default function VapourBand() {
             <Link href="/services/vapor-blasting" className="btn-primary btn-water">
               The vapour blasting service
             </Link>
-            <a href="tel:+16046126209" className="link">
-              604-612-6209
+            <a href={telHref(site.phoneOffice)} className="link">
+              {site.phoneOffice}
             </a>
           </div>
         </div>

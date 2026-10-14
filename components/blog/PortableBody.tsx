@@ -2,6 +2,7 @@ import Image from "next/image"
 import { PortableText, type PortableTextComponents } from "@portabletext/react"
 import type { PortableTextBlock } from "@portabletext/types"
 import { urlFor, type SanityImageSource } from "@/sanity/lib/client"
+import { focalPosition, type SanityCrop, type SanityHotspot } from "@/lib/focal"
 
 /**
  * Renders a CMS post body with the same prose styling the MDX posts get —
@@ -12,12 +13,14 @@ import { urlFor, type SanityImageSource } from "@/sanity/lib/client"
  */
 const components: PortableTextComponents = {
   types: {
-    image: ({ value }: { value: { asset?: SanityImageSource; alt?: string; caption?: string } }) => {
+    image: ({ value }: { value: { asset?: SanityImageSource; alt?: string; caption?: string; hotspot?: SanityHotspot; crop?: SanityCrop } }) => {
       if (!value?.asset) return null
+      // The 3:2 frame crops around the focal point the office dragged (lib/focal.ts).
+      const position = focalPosition(value.hotspot, value.crop)
       return (
         <figure className="my-10">
           <div className="relative aspect-[3/2] overflow-hidden bg-[color:var(--surface-stone)]">
-            <Image src={urlFor(value as SanityImageSource, 1600)} alt={value.alt ?? ""} fill sizes="(max-width: 760px) 100vw, 720px" className="object-cover" />
+            <Image src={urlFor(value as SanityImageSource, 1600)} alt={value.alt ?? ""} fill sizes="(max-width: 760px) 100vw, 720px" className="object-cover" style={position ? { objectPosition: position } : undefined} />
           </div>
           {value.caption && <figcaption className="cap">{value.caption}</figcaption>}
         </figure>

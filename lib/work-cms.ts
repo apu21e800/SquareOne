@@ -1,5 +1,6 @@
 import { groq } from "next-sanity"
-import { sanityFetch, urlFor, type SanityImageSource } from "@/sanity/lib/client"
+import { editAttr, inDraftMode, sanityFetch, urlFor, type SanityImageSource } from "@/sanity/lib/client"
+import { croppedSize, focalPosition, type SanityCrop, type SanityHotspot } from "@/lib/focal"
 import { getWork, WORK_APPS, type WorkApp, type WorkPhoto, type WorkRegion } from "@/lib/work"
 
 /**
@@ -22,7 +23,8 @@ import { getWork, WORK_APPS, type WorkApp, type WorkPhoto, type WorkRegion } fro
 
 export interface GalleryPhotoDoc {
   _id?: string
-  image?: { asset?: { _ref: string }; crop?: unknown; hotspot?: unknown }
+  _type?: string
+  image?: { asset?: { _ref: string }; crop?: SanityCrop | null; hotspot?: SanityHotspot | null }
   dims?: { width?: number; height?: number } | null
   gallery?: string
   subject?: string
@@ -37,7 +39,7 @@ export interface GalleryPhotoDoc {
 
 const QUERY = groq`{
   "photos": *[_type == "galleryPhoto" && defined(image.asset) && defined(gallery)] | order(coalesce(date, _createdAt) desc, _createdAt desc) {
-    _id, image{ asset, crop, hotspot }, "dims": image.asset->metadata.dimensions{ width, height },
+    _id, _type, image{ asset, crop, hotspot }, "dims": image.asset->metadata.dimensions{ width, height },
     gallery, subject, place, region, systems, lead, hidden, date, _createdAt
   },
   "removed": *[_type == "gallerySettings" && _id == "gallerySettings"][0].removed
@@ -75,14 +77,16 @@ export function photoPath(address: string): string {
   return s.startsWith("/") ? s : `/${s}`
 }
 
-function fromDoc(d: GalleryPhotoDoc): WorkPhoto | null {
+function fromDoc(d: GalleryPhotoDoc, preview = false): WorkPhoto | null {
   const subject = d.subject?.trim()
   if (!d.image?.asset || !d.gallery || !APPS.has(d.gallery) || !subject || d.hidden) return null
-  const w0 = d.dims?.width ?? 0
-  const h0 = d.dims?.height ?? 0
-  if (!w0 || !h0) return null
+  if (!d.dims?.width || !d.dims?.height) return null
+  // The size of the photograph as served: the Studio's crop, when there is one.
+  const { width: w0, height: h0 } = croppedSize(d.dims.width, d.dims.height, d.image.crop)
   const w = Math.min(w0, MAX_W)
   const h = Math.round((h0 * w) / w0)
+  const position = focalPosition(d.image.hotspot, d.image.crop)
+  const edit = editAttr(preview, { _id: d._id, _type: d._type ?? "galleryPhoto" }, "image")
   return {
     src: urlFor(d.image as SanityImageSource, w),
     w,
@@ -93,11 +97,13 @@ function fromDoc(d: GalleryPhotoDoc): WorkPhoto | null {
     place: d.place?.trim() ?? "",
     region: d.region && REGIONS.has(d.region) ? (d.region as WorkRegion) : undefined,
     hires: w0 >= 1600,
+    ...(position ? { position } : {}),
+    ...(edit ? { edit } : {}),
   }
 }
 
 /** The record with the Studio's photographs placed in it and its removals taken out. Pure, for the tests. */
-export function mergeWork(record: WorkPhoto[], docs: GalleryPhotoDoc[] | null, removed: string[] | null): WorkPhoto[] {
+export function mergeWork(record: WorkPhoto[], docs: GalleryPhotoDoc[] | null, removed: string[] | null, preview = false): WorkPhoto[] {
   const gone = new Set((removed ?? []).filter((r) => typeof r === "string").map(photoPath).filter(Boolean))
   const added = (docs ?? []).filter((d) => !d.hidden)
   if (!gone.size && !added.length) return record
@@ -107,7 +113,7 @@ export function mergeWork(record: WorkPhoto[], docs: GalleryPhotoDoc[] | null, r
   const lead = new Map<string, WorkPhoto[]>()
   const rest = new Map<string, WorkPhoto[]>()
   for (const d of added) {
-    const p = fromDoc(d)
+    const p = fromDoc(d, preview)
     if (!p) continue
     const into = d.lead ? lead : rest
     into.set(p.app, [...(into.get(p.app) ?? []), p])
@@ -130,7 +136,7 @@ export function mergeWork(record: WorkPhoto[], docs: GalleryPhotoDoc[] | null, r
 /** Every photograph in the galleries, the Studio's included. */
 export async function getStudioWork(): Promise<WorkPhoto[]> {
   const res = await sanityFetch<{ photos: GalleryPhotoDoc[] | null; removed: string[] | null }>(QUERY, {}, ["sanity", "galleries"])
-  return mergeWork(getWork(), res?.photos ?? null, res?.removed ?? null)
+  return mergeWork(getWork(), res?.photos ?? null, res?.removed ?? null, await inDraftMode())
 }
 
 /** One gallery, the Studio's photographs included. */

@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react"
 import { postForm } from "@/lib/post-form"
 import { gaEvent } from "@/lib/gtag"
+import { useSiteSettings } from "@/components/SiteSettingsProvider"
+import { mailtoHref, telHref, type SiteSettings } from "@/lib/site-settings"
 
 /* The quote form — the one thing /contact exists for. Split out of the page
    on 19 Sept 2026 so the page itself can be a server component and read the
@@ -53,11 +55,11 @@ function Optional() {
   return <span className="q-optional"> optional</span>
 }
 
-/** The three lines, in the order the rest of the site names them. */
-const LINES = [
-  { label: "Lower Mainland", display: "604-612-6209", href: "tel:+16046126209" },
-  { label: "Vancouver Island", display: "250-391-0270", href: "tel:+12503910270" },
-  { label: "Toll-free", display: "1-877-391-0270", href: "tel:+18773910270" },
+/** The three lines, in the order the rest of the site names them (Site Settings). */
+const linesOf = (s: SiteSettings) => [
+  { label: "Lower Mainland", display: s.phoneOffice, href: telHref(s.phoneOffice) },
+  { label: "Vancouver Island", display: s.phoneIsland, href: telHref(s.phoneIsland) },
+  { label: "Toll-free", display: s.phoneTollFree, href: telHref(s.phoneTollFree) },
 ]
 
 type Form = {
@@ -77,6 +79,7 @@ export default function QuoteForm() {
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
   const [form, setForm] = useState<Form>(EMPTY)
+  const site = useSiteSettings()
   const doneRef = useRef<HTMLDivElement>(null)
   const errorRef = useRef<HTMLParagraphElement>(null)
   const sending = useRef(false)
@@ -131,7 +134,7 @@ export default function QuoteForm() {
       form.message && `\n${form.message}`,
     ].filter(Boolean).join("\n")
     const subject = `Quote request${form.name ? `: ${form.name}` : ""}`
-    return `mailto:office@squareonepaving.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines)}`
+    return mailtoHref(site.email, `?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines)}`)
   }
 
   if (submitted) {
@@ -154,7 +157,7 @@ export default function QuoteForm() {
         <div className="mt-7 border-t border-hairline pt-6">
           <div className="label">If it&rsquo;s urgent, call</div>
           <ul className="mt-3 flex flex-col gap-2">
-            {LINES.map((l) => (
+            {linesOf(site).map((l) => (
               <li key={l.href} className="flex flex-wrap items-baseline gap-x-3">
                 <a
                   href={l.href}
@@ -168,8 +171,8 @@ export default function QuoteForm() {
           </ul>
           <p className="mt-4 text-[14px] leading-[1.6] text-ink-muted">
             Photographs and drawings help. Send them to{" "}
-            <a href="mailto:office@squareonepaving.com" className="font-medium text-ink-body underline-offset-4 hover:underline">
-              office@squareonepaving.com
+            <a href={mailtoHref(site.email)} className="font-medium text-ink-body underline-offset-4 hover:underline">
+              {site.email}
             </a>{" "}
             with the site address in the subject line.
           </p>
@@ -365,9 +368,9 @@ export default function QuoteForm() {
           </p>
           <p className="mt-2 text-[14px] leading-[1.6] text-ink-body">
             Nothing is lost: call{" "}
-            <a href="tel:+16046126209" className="font-medium text-ink underline-offset-4 hover:underline">604-612-6209</a>{" "}
+            <a href={telHref(site.phoneOffice)} className="font-medium text-ink underline-offset-4 hover:underline">{site.phoneOffice}</a>{" "}
             (Lower Mainland) or{" "}
-            <a href="tel:+12503910270" className="font-medium text-ink underline-offset-4 hover:underline">250-391-0270</a>{" "}
+            <a href={telHref(site.phoneIsland)} className="font-medium text-ink underline-offset-4 hover:underline">{site.phoneIsland}</a>{" "}
             (Vancouver Island), or{" "}
             <a href={mailtoFallback()} className="font-medium text-ink underline-offset-4 hover:underline">
               send it by email

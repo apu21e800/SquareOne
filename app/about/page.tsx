@@ -11,6 +11,8 @@ import Frame from "@/components/ui/Frame"
 import { Section } from "@/components/ui/Container"
 import OpenerTitle from "@/components/ui/OpenerTitle"
 import { getPageOpener } from "@/lib/page-content"
+import { getSiteSettings } from "@/lib/cms"
+import { addressParts, mailtoHref, telHref } from "@/lib/site-settings"
 
 export const metadata: Metadata = {
   // One separator: the root template adds " | Square One Paving" (58 chars all in).
@@ -140,6 +142,9 @@ const serviceRegions = [
 export default async function AboutPage() {
   // The opener, with whatever the Studio says on top (lib/page-content.ts, 9 Oct 2026).
   const o = await getPageOpener("/about")
+  // The office's address and lines, from Site Settings (lib/site-settings.ts).
+  const site = await getSiteSettings()
+  const office = addressParts(site)
   return (
     <main>
       {/* ── 1 · Header ──────── */}
@@ -322,17 +327,15 @@ export default async function AboutPage() {
         <div className="grid grid-cols-1 gap-10 min-[701px]:grid-cols-2 min-[701px]:gap-6">
           <div className="border-t border-hairline pt-6">
             <span className="label">Office</span>
-            <h3 className="mt-2">Maple Ridge, BC</h3>
-            <p className="mt-2 text-[16px] leading-[1.6] text-ink-muted">
-              19&ndash;11720 Stewart Crescent, V2X 9E7
-            </p>
+            <h3 className="mt-2">{`${office.locality}, ${office.region}`}</h3>
+            <p className="mt-2 text-[16px] leading-[1.6] text-ink-muted">{`${site.addressLine1}, ${office.postalCode}`}</p>
             <p className="mt-2 text-[16px] leading-[1.8]">
-              <a href="tel:+16046126209" className="link">604-612-6209</a>
+              <a href={telHref(site.phoneOffice)} className="link">{site.phoneOffice}</a>
               {" · "}
-              <a href="tel:+18773910270" className="link">1-877-391-0270</a>
+              <a href={telHref(site.phoneTollFree)} className="link">{site.phoneTollFree}</a>
             </p>
             <p className="mt-1 text-[16px] leading-[1.8]">
-              <a href="mailto:office@squareonepaving.com" className="link">office@squareonepaving.com</a>
+              <a href={mailtoHref(site.email)} className="link">{site.email}</a>
             </p>
           </div>
 
@@ -343,7 +346,7 @@ export default async function AboutPage() {
               Crews serve Greater Victoria, the Cowichan Valley and Nanaimo
             </p>
             <p className="mt-2 text-[16px] leading-[1.8]">
-              <a href="tel:+12503910270" className="link">250-391-0270</a>
+              <a href={telHref(site.phoneIsland)} className="link">{site.phoneIsland}</a>
             </p>
           </div>
         </div>

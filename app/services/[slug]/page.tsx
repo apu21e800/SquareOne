@@ -5,6 +5,7 @@ import type { Metadata } from "next"
 import { services, getServiceBySlug } from "@/lib/services"
 import { products } from "@/lib/products"
 import { getProjects } from "@/lib/projects-cms"
+import { photoMetaFor } from "@/lib/projects"
 import OpenerTitle from "@/components/ui/OpenerTitle"
 import { openerFor } from "@/lib/page-content"
 import { heroFor } from "@/lib/gallery"
@@ -19,6 +20,8 @@ import Frame from "@/components/ui/Frame"
 import { Section } from "@/components/ui/Container"
 import { sentenceCase } from "@/lib/text"
 import { clampDescription } from "@/lib/seo"
+import { getSiteSettings } from "@/lib/cms"
+import { withSettings } from "@/lib/site-settings"
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -127,6 +130,9 @@ export default async function ServicePage({ params }: Props) {
   const { slug } = await params
   const service = getServiceBySlug(slug)
   if (!service) notFound()
+  // The answers that name a line, as Site Settings has it (lib/site-settings.ts).
+  const site = await getSiteSettings()
+  const faqs = service.faqs.map((f) => ({ ...f, a: withSettings(f.a, site) }))
 
   const name = displayName[service.slug] ?? service.name
   const lowerName = name.toLowerCase()
@@ -192,7 +198,7 @@ export default async function ServicePage({ params }: Props) {
       <JsonLd
         data={[
           serviceSchema,
-          faqSchema(service.faqs),
+          faqSchema(faqs),
           breadcrumbSchema(SITE_URL, [
             { name: "Services", path: "/services" },
             { name, path: `/services/${service.slug}` },
@@ -376,6 +382,7 @@ export default async function ServicePage({ params }: Props) {
                   <Frame
                     src={project.imageUrl}
                     alt={`${project.title}, ${project.systems.join(" and ")}`}
+                    position={photoMetaFor(project, project.imageUrl)?.position}
                     aspect="aspect-[4/3]"
                     sizes="(max-width: 700px) 100vw, (max-width: 1280px) 33vw, 411px"
                     href={`/projects/${project.slug}`}
@@ -410,7 +417,7 @@ export default async function ServicePage({ params }: Props) {
         }
       >
         <div className="border-t border-hairline">
-          {service.faqs.map((faq) => (
+          {faqs.map((faq) => (
             <details key={faq.q} className="group border-b border-hairline">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-[20px] [&::-webkit-details-marker]:hidden">
                 <span className="text-[1.125rem] font-semibold leading-[1.4] text-ink">{faq.q}</span>
