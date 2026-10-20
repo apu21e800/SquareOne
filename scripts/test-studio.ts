@@ -290,9 +290,9 @@ async function main() {
 
   console.log("the Studio's list")
 
-  await check("in the brief's order: Website Pages, Services, Projects, Blog plan, Blog, From the field, Social drafts, Site Settings", () => {
+  await check("in the brief's order, in plain words: Website Pages, Services, Projects, Blog ideas, Blog posts, Job photos, Sent to Buffer, Site Settings", () => {
     const titles = topLevelTitles()
-    const want = ["Website Pages", "Services", "Projects", "Blog plan", "Blog", "From the field", "Social drafts", "Site Settings"]
+    const want = ["Website Pages", "Services", "Projects", "Blog ideas", "Blog posts", "Job photos", "Sent to Buffer", "Site Settings"]
     const present = want.filter((t) => titles.includes(t))
     assert.deepEqual(titles.filter((t) => want.includes(t)), present, titles.join(" | "))
     for (const t of want) assert.ok(titles.includes(t), `${t} is in the list`)

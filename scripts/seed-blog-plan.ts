@@ -148,7 +148,7 @@ async function main() {
     })
   }
 
-  console.log(`${DRY_RUN ? "Would add" : "Adding"} ${docs.length} project stor${docs.length === 1 ? "y" : "ies"} to the Blog plan, in this order:`)
+  console.log(`${DRY_RUN ? "Would add" : "Adding"} ${docs.length} project stor${docs.length === 1 ? "y" : "ies"} to Blog ideas, in this order:`)
   for (const d of docs) console.log(`  ${d._id}  "${d.title}"`)
   if (skipped.length) console.log(`Left out:\n${skipped.map((s) => `  ${s}`).join("\n")}`)
   if (DRY_RUN || !docs.length) return

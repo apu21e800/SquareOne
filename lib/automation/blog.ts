@@ -32,6 +32,7 @@ import { checkDraft, polishDraft, styleReport, writeDraft, type Draft, type Fact
 import {
   captionFor,
   categoryForArticle,
+  documentedJobs,
   factsBlock,
   loadDriveways,
   loadServices,
@@ -41,8 +42,10 @@ import {
   recordTags,
   relatedFor,
   serviceFor,
+  jobPlace,
   type PublishedPost,
   type Subject,
+  type SubjectPhoto,
 } from "@/lib/automation/facts"
 import { notifyList, type Claude, type Mailer, type SanityDoc, type Store } from "@/lib/automation/services"
 import { topUpPlan } from "@/lib/automation/planner"
@@ -252,15 +255,15 @@ export async function draftNextPost(opts: { idea?: string; project?: string }, d
         ? {
             drafted: false,
             alert: true,
-            reason: `the Blog plan was empty, so this run added ${added.length} new idea${added.length === 1 ? "" : "s"} instead of drafting: ${added.map((t) => `"${t}"`).join(", ")}`,
-            hint: "Look them over in Studio → Blog plan: reorder them, set one to Ready, or set any to Not doing. The next run drafts the top one.",
+            reason: `there were no Blog ideas left, so this run added ${added.length} new idea${added.length === 1 ? "" : "s"} instead of drafting: ${added.map((t) => `"${t}"`).join(", ")}`,
+            hint: "Look them over in Studio → Blog ideas: reorder them, set one to Ready, or set any to Not doing. The next run drafts the top one.",
             planAdded: added,
           }
         : {
             drafted: false,
             alert: true,
-            reason: `the Blog plan has no Ready items or Ideas left, and no new ideas could be added${error ? ` (${error instanceof Error ? error.message : String(error)})` : ""}`,
-            hint: error ? failureHint(error, "blog") : "Add an idea in Studio → Blog plan: a project story about a job in Projects is the quickest.",
+            reason: `there are no Ready items or Ideas left in Blog ideas, and no new ones could be added${error ? ` (${error instanceof Error ? error.message : String(error)})` : ""}`,
+            hint: error ? failureHint(error, "blog") : "Add an idea in Studio → Blog ideas: a project story about a job in Projects is the quickest.",
             planAdded: [],
           }
     }
@@ -277,8 +280,8 @@ export async function draftNextPost(opts: { idea?: string; project?: string }, d
       return {
         drafted: false,
         alert: true,
-        reason: `none of the ${candidates.length} open item${candidates.length === 1 ? "" : "s"} in the Blog plan can be drafted: ${passedOver.map((p) => `"${p.title}" (${p.why})`).join("; ")}`,
-        hint: "Fix those items in Studio → Blog plan, set them to Not doing, or add a new one.",
+        reason: `none of the ${candidates.length} open item${candidates.length === 1 ? "" : "s"} in Blog ideas can be drafted: ${passedOver.map((p) => `"${p.title}" (${p.why})`).join("; ")}`,
+        hint: "Fix those items in Studio → Blog ideas, set them to Not doing, or add a new one.",
         passedOver,
       }
     }
@@ -291,7 +294,9 @@ export async function draftNextPost(opts: { idea?: string; project?: string }, d
   const guide = kind === "guide" && item ? guideOf(item) : undefined
   const [services, settings, posts] = await Promise.all([loadServices(store), loadSettings(store), store.fetch<PublishedPost[] | null>(PUBLISHED_POSTS)])
   const driveways = guide?.applications.includes("driveways") ? await loadDriveways(store) : undefined
-  const facts = factsBlock({ kind, subjects: jobs, services, guide, driveways, settings, brief: item?.brief })
+  // A guide's documented jobs (20 Oct 2026): the article may lead with one, and its photograph is then the article's.
+  const documented = guide ? documentedJobs(subjects, guide, item?.brief) : []
+  const facts = factsBlock({ kind, subjects: jobs, services, guide, driveways, settings, brief: item?.brief, documented })
   const category = categoryForArticle(kind, jobs)
   const guideSystems = (guide?.systems ?? []).map((slug) => SYSTEM_OPTIONS.find((o) => o.value === slug)?.title ?? slug)
   const guideWords = [
@@ -319,10 +324,10 @@ export async function draftNextPost(opts: { idea?: string; project?: string }, d
   for (let n = 2; await taken(slug); n++) slug = `${base}-${n}`
 
   // ── the lead photograph ───────────────────────────────────────────────────
-  const photo = await leadPhoto(kind, jobs, guide?.services ?? [], store)
+  const photo = await leadPhoto({ kind, jobs, documented, leadJob: draft.leadJob, serviceSlugs: guide?.services ?? [] }, store)
 
   const date = pacificDate(deps.now())
-  const from = item ? `the Blog plan item "${title}"` : `the project "${jobs[0].title}"`
+  const from = item ? `the Blog idea "${title}"` : `the project "${jobs[0].title}"`
   const doc = buildDraftDocument({ kind, from, subjects: jobs, draft, check, style, slug, photo, date, category, systems: guideSystems })
   await store.create(doc)
 
@@ -336,7 +341,7 @@ export async function draftNextPost(opts: { idea?: string; project?: string }, d
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err)
       console.error(`[blog] couldn't mark ${item._id} Drafted: ${message}`)
-      planNote = `The plan item couldn't be marked Drafted (${message}): set it to Drafted in Studio → Blog plan, or the next run writes it again.`
+      planNote = `The plan item couldn't be marked Drafted (${message}): set it to Drafted in Studio → Blog ideas, or the next run writes it again.`
     }
   }
   if (kind === "project") {
@@ -404,12 +409,37 @@ export async function draftNextPost(opts: { idea?: string; project?: string }, d
 export interface LeadPhoto {
   asset: string
   alt: string
+  /** The focal point and crop the office set on the job's photograph in Studio, when it is one of Studio's. */
+  hotspot?: SubjectPhoto["hotspot"]
+  crop?: SubjectPhoto["crop"]
   /** The PHOTO line of the editor's notes. */
   note: string
 }
 
-/** The draft's lead photograph: the job's own (a story), the first job's (a roundup, as a stand-in), or the first service page's (a guide, as a stand-in). */
-async function leadPhoto(kind: PlanKind, jobs: readonly Subject[], serviceSlugs: readonly string[], store: Store): Promise<LeadPhoto | null> {
+/**
+ * The job whose photograph leads the article (20 Oct 2026, as hubss.com's
+ * leadJobFor): a project story's own job; for a roundup, the job the draft
+ * leads with if it is one of the roundup's, else the first; for a guide, the
+ * documented job the draft leads with, if it is one of those its facts listed
+ * and has a photograph (an id the drafter made up or misspelt gets the
+ * stand-in). Pure.
+ */
+export function leadJobFor(kind: PlanKind, jobs: readonly Subject[], documented: readonly Subject[], leadJob: string | undefined): { job: Subject; named: boolean } | null {
+  const id = leadJob?.trim()
+  if (kind === "project") return jobs[0] ? { job: jobs[0], named: true } : null
+  if (kind === "roundup") {
+    const named = id ? jobs.find((j) => j.slug === id && j.photos.length) : undefined
+    return named ? { job: named, named: true } : jobs[0] ? { job: jobs[0], named: false } : null
+  }
+  const named = id ? documented.find((j) => j.slug === id && j.photos.length) : undefined
+  return named ? { job: named, named: true } : null
+}
+
+/** The draft's lead photograph: its lead job's (leadJobFor), else, for a guide, the first service page's as a stand-in. */
+async function leadPhoto(
+  a: { kind: PlanKind; jobs: readonly Subject[]; documented: readonly Subject[]; leadJob?: string; serviceSlugs: readonly string[] },
+  store: Store,
+): Promise<LeadPhoto | null> {
   const upload = async (src: string) => {
     const name = decodeURIComponent(src.split("/").pop() ?? "photo.jpg")
     return store.uploadImage(`${SITE_URL}${encodePath(src)}`, name).catch((err: unknown) => {
@@ -417,23 +447,33 @@ async function leadPhoto(kind: PlanKind, jobs: readonly Subject[], serviceSlugs:
       return null
     })
   }
-  if (kind !== "guide") {
-    const job = jobs[0]
-    const lead = job?.photos[0]
-    if (!job || !lead) return null
-    const asset = lead.asset ?? (lead.src ? await upload(lead.src) : null)
-    if (!asset) return null
-    const alt = captionFor(lead) || `${job.title}, ${job.city}`
-    return {
-      asset,
-      alt,
-      note:
-        kind === "project"
-          ? `PHOTO: the project's lead photograph (${alt}). Drag the focal point onto the pavement.`
-          : `PHOTO: a stand-in, the lead photograph of "${job.title}" (${alt}). Drag the focal point onto the pavement, or swap in another job's photograph.`,
+  const lead = leadJobFor(a.kind, a.jobs, a.documented, a.leadJob)
+  if (a.leadJob && a.kind === "guide" && !lead) console.warn(`[blog] the draft leads with "${a.leadJob}", which is not one of its documented jobs with a photograph; the photo is the stand-in`)
+  if (lead) {
+    const { job } = lead
+    const photo = job.photos[0]
+    const asset = photo ? (photo.asset ?? (photo.src ? await upload(photo.src) : null)) : null
+    if (photo && asset) {
+      const alt = captionFor(photo) || `${job.title}, ${jobPlace(job)}`
+      const framed = Boolean(photo.asset && photo.hotspot)
+      const focal = framed ? "Its focal point is the one set on the project in Studio." : "Drag the focal point onto the pavement."
+      return {
+        asset,
+        alt,
+        ...(photo.asset && photo.hotspot ? { hotspot: photo.hotspot } : {}),
+        ...(photo.asset && photo.crop ? { crop: photo.crop } : {}),
+        note:
+          a.kind === "project"
+            ? `PHOTO: the project's lead photograph (${alt}). ${focal}`
+            : lead.named
+              ? `PHOTO: the lead photograph of "${job.title}" (${alt}), the job the article leads with. ${focal}`
+              : `PHOTO: a stand-in, the lead photograph of "${job.title}" (${alt}). ${focal} Or swap in another job's photograph.`,
+      }
     }
+    if (a.kind !== "guide") return null
   }
-  const service = serviceSlugs.map((s) => serviceFor(s)).find((s) => s?.imageUrl)
+  if (a.kind !== "guide") return null
+  const service = a.serviceSlugs.map((s) => serviceFor(s)).find((s) => s?.imageUrl)
   if (!service) return null
   const asset = await upload(service.imageUrl)
   if (!asset) return null
@@ -471,11 +511,11 @@ function draftEmail(a: {
       ? []
       : [
           a.ideasLeft < PLAN_LOW
-            ? `The plan is running low: ${a.ideasLeft} item${a.ideasLeft === 1 ? "" : "s"} left. New ideas are added by themselves when it gets low; you can add your own in Studio → Blog plan.`
+            ? `The plan is running low: ${a.ideasLeft} item${a.ideasLeft === 1 ? "" : "s"} left. New ideas are added by themselves when it gets low; you can add your own in Studio → Blog ideas.`
             : `${a.ideasLeft} items left in the plan.`,
         ]),
-    ...(a.next ? [`Next up: "${a.next}". To change it, reorder or edit the Blog plan in Studio.`] : []),
-    ...(a.passedOver.length ? [`Passed over: ${a.passedOver.map((p) => `"${p.title}" (${p.why})`).join("; ")}. Fix them in Studio → Blog plan, or set them to Not doing.`] : []),
+    ...(a.next ? [`Next up: "${a.next}". To change it, reorder or edit Blog ideas in Studio.`] : []),
+    ...(a.passedOver.length ? [`Passed over: ${a.passedOver.map((p) => `"${p.title}" (${p.why})`).join("; ")}. Fix them in Studio → Blog ideas, or set them to Not doing.`] : []),
     ...(a.planNote ? [a.planNote] : []),
     "",
     a.check.unsupported.length
@@ -506,7 +546,7 @@ function tagList(first: readonly string[], rest: readonly string[]): string[] {
  */
 export function buildDraftDocument(a: {
   kind: PlanKind
-  /** What it was written from, for the notes: `the Blog plan item "…"`. */
+  /** What it was written from, for the notes: `the Blog idea "…"`. */
   from: string
   subjects: readonly Subject[]
   draft: Draft
@@ -554,7 +594,17 @@ export function buildDraftDocument(a: {
     body,
     tags,
     editorNotes: notes,
-    ...(a.photo ? { mainImage: { _type: "image", asset: { _type: "reference", _ref: a.photo.asset }, alt: a.photo.alt } } : {}),
+    ...(a.photo
+      ? {
+          mainImage: {
+            _type: "image",
+            asset: { _type: "reference", _ref: a.photo.asset },
+            alt: a.photo.alt,
+            ...(a.photo.hotspot ? { hotspot: a.photo.hotspot } : {}),
+            ...(a.photo.crop ? { crop: a.photo.crop } : {}),
+          },
+        }
+      : {}),
   }
 }
 

@@ -80,6 +80,7 @@ export type StyleRule =
   | "exclamation"
   | "emoji"
   | "title-case"
+  | "versus"
   | "maker"
   | "installer"
   | "installed-for"
@@ -453,6 +454,32 @@ function plainHeading(text: string): string {
  */
 export function lintHeading(text: string): StyleIssue[] {
   if (!text || !text.trim()) return []
+  return [...versusIssues(text), ...titleCaseIssues(text)]
+}
+
+/**
+ * "A vs B" in a title or a heading (Vern's standard, 20 Oct 2026, as
+ * hubss.com's): a choice between materials is written as what to specify
+ * where, by job, never as a contest.
+ */
+const VERSUS = /\b(?:vs\.?|versus)(?=\s|$|[,:;!?)])/giu
+
+function versusIssues(text: string): StyleIssue[] {
+  const plain = plainHeading(text)
+  const m = new RegExp(VERSUS.source, "iu").exec(plain)
+  if (!m) return []
+  return [
+    {
+      rule: "versus",
+      message: `“${m[0]}” in a title or heading sets up a contest: say what goes where, by job, like “Where thermoplastic goes, and where a coating does the job”.`,
+      excerpt: excerptAt(text, 0, text.length),
+      index: 0,
+      length: text.length,
+    },
+  ]
+}
+
+function titleCaseIssues(text: string): StyleIssue[] {
   const plain = plainHeading(text)
   const raw = plain.split(/\s+/).filter(Boolean)
   const kinds: Kind[] = []

@@ -71,6 +71,12 @@ export interface Store {
   createIfNotExists(doc: SanityDoc): Promise<void>
   /** Deletes the automation's own record (a social claim dropped so the item is tried again). */
   delete(id: string): Promise<void>
+  /**
+   * Publishes a draft in one transaction: the live document written, the
+   * draft removed (lib/automation/project-posts.ts, a post set to go live by
+   * itself). Both happen or neither does.
+   */
+  publish(live: SanityDoc, draftId: string): Promise<void>
   /** Uploads a photograph from a public URL; resolves to the asset id, or null if it could not be fetched. */
   uploadImage(url: string, filename: string): Promise<string | null>
 }
@@ -101,6 +107,9 @@ export function sanityStore(opts: { timeoutMs?: number } = {}): Store {
     },
     delete: async (id) => {
       await client.delete(id)
+    },
+    publish: async (live, draftId) => {
+      await client.transaction().createOrReplace(live).delete(draftId).commit()
     },
     uploadImage: async (url, filename) => {
       const res = await fetch(url, { signal: AbortSignal.timeout(opts.timeoutMs ?? 60_000) })

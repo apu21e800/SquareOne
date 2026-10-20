@@ -174,7 +174,7 @@ export function blogFailureEmail(what: string, hint: string): { subject: string;
       "",
       `What to do: ${hint}`,
       "",
-      "The Blog plan is as it was, so the next run (Tuesday or Thursday morning) tries the same item again.",
+      "Blog ideas are as they were, so the next run (Tuesday or Thursday morning) tries the same item again.",
     ].join("\n"),
   }
 }

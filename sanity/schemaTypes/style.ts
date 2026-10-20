@@ -7,7 +7,7 @@ import { lintCopy, lintHeading, type StyleIssue } from "../../lib/automation/sty
  * them (lib/automation/style.ts): no dashes used as dashes, no "not just X,
  * it's Y", no filler or stock phrases, the manufacturer never named, never
  * "our" system, "installed at", no guarantee, price or lead time, Vancouver
- * Island never an office, headings in sentence case.
+ * Island never an office, headings in sentence case and without "vs".
  *
  * Warnings only: they never stop Publish. A rule would rather miss a slip
  * than cry wolf. Posts dated before 1 Oct 2026 (the library imported from
@@ -32,8 +32,9 @@ function importedPost(doc: unknown): boolean {
 export const copyCheck: CustomValidator<string | undefined> = (value, context) =>
   typeof value === "string" && !importedPost(context.document) ? say(lintCopy(value)) : true
 
-/** A headline: the copy rules, plus sentence case. */
-export const headingCheck: CustomValidator<string | undefined> = (value) => (typeof value === "string" ? say(lintHeading(value)) : true)
+/** A headline: sentence case, and no "vs" (left alone on the imported library's posts, as the copy rules are). */
+export const headingCheck: CustomValidator<string | undefined> = (value, context) =>
+  typeof value === "string" && !importedPost(context.document) ? say(lintHeading(value)) : true
 
 /** Paragraphs typed one per box (a project's story). */
 export const paragraphsCheck: CustomValidator<string[] | undefined> = (paragraphs) => {
