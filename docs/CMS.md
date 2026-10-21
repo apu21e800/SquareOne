@@ -6,10 +6,10 @@ Studio and the page updates within a minute.
 
 ## What they can edit
 
-The Studio's list, in this order since 14 Oct 2026 (the automation brief):
-Website Pages, Services, Projects, Blog plan, Blog, From the field, Social
-drafts, Site Settings, then Advanced (docs/AUTOMATION.md for the blog and
-social automation).
+The Studio's list, in this order since 14 Oct 2026 (the automation brief),
+in plain words since 20 Oct: Website Pages, Services, Projects, Blog ideas,
+Blog posts, Job photos, Sent to Buffer, Site Settings, then Advanced
+(docs/AUTOMATION.md for the blog and social automation).
 
 | In the Studio            | What it changes on the site                                                      |
 | ------------------------ | -------------------------------------------------------------------------------- |
@@ -21,10 +21,10 @@ social automation).
 | **Website Pages → Social grid** | The Instagram strip on the home page: photo + caption + link to the post. |
 | **Services**             | The four services' words: the tagline, the intro, who we work with, what you get, the questions. The four are fixed: they can't be added to or deleted. |
 | **Projects**             | /projects, each project's page, the home page's six, and the application and service pages. Add one, edit its words and photographs (drag to reorder; Add item, then Upload or Select one already in the media library), or "Take off the site". |
-| **Blog plan**            | What the drafter writes next, on Tuesdays and Thursdays: project stories, project roundups and guides. Set one to Ready to have it next; it marks them Drafted and adds new Ideas when the plan runs low (docs/AUTOMATION.md). Nothing here is on the site. |
-| **Blog**                 | Create, edit, publish. Lead photograph, category, body with photos and links. The first Publish dates a post that day (Vancouver). The drafter's posts arrive here unpublished, with Notes for the editor. |
-| **From the field**       | A finished job from a phone: 1 to 10 photos, where, the service, a line of facts. Publish, and the next daily run drafts posts from it into Square One's Buffer. Not shown on the site. |
-| **Social drafts**        | Read only: what the daily social job left in Buffer for each blog post, field post or library post, and the style check on its copy. |
+| **Blog ideas**           | What the drafter writes next, on Tuesdays and Thursdays: project stories, project roundups and guides. Set one to Ready to have it next; it marks them Drafted and adds new Ideas when the list runs low (docs/AUTOMATION.md). Nothing here is on the site. |
+| **Blog posts**           | Create, edit, publish. A new post needs its title, a lead photograph (with what it shows), the body and its section; everything else is optional. The first Publish dates a post that day (Vancouver). **Goes live by itself** (with **Goes live at**) publishes a draft at the morning run on its day, if it has what Publish asks for (an edit made at that moment wins). The drafter's posts arrive here unpublished, with Notes for the editor; a project article written from Job photos arrives set to go live two weekdays later, after an email (held for a read if a check finds something, a customer's phone number or address among them). |
+| **Job photos**           | A finished job from a phone: 3 to 10 photos, where, the service, a line of facts. Publish, and the next morning's run drafts posts from it in Square One's Buffer, for approval. Fill in **The story** too and it becomes a project article on the Blog instead (the 15:00 UTC run, one a day). Not shown on the site by itself. A phone number, email or street address that isn't Square One's gets a yellow warning: it stays off the site. |
+| **Sent to Buffer**       | Read only: what the daily run left in Buffer for each blog post, Job photos post or library post, and the style check on its copy. |
 | **Site Settings**        | Phones, email, address, the footer line, Instagram / TikTok / Facebook / LinkedIn / YouTube links: read everywhere they print (the footer, the menu, the phone bar, the quote form, the contact and about pages, every "or call" line, the legal pages, llms.txt and the search engines' data). |
 | **Advanced → Text and Photo slots** | The first way in (30 Sept): a key per spot (`home.hero.title`, `home.hero.1`…). The Home page above does the same more simply and wins over them. |
 
@@ -183,12 +183,21 @@ PR #11 went live on 7 Oct, so the condition above is met.
   Publish. To take one off the site, tick "Take off the site" (deleting a
   project that came with the site doesn't remove it).
 
-- **Blog post**: Blog → + → title, category, lead photo (drag the focal
-  point onto the pavement, say what it shows), a one-paragraph summary, then
-  the body. Publish. The first Publish dates the post that day (a date in
-  the future is kept), so a draft that waited a week goes out dated the day
-  it went live. The web address is set from the title once; leave it alone
-  after publishing.
+- **Blog post**: Blog posts → + → title, then Generate for the web address,
+  the section, the lead photo (drag the focal point onto the pavement, say
+  what it shows), a one-paragraph summary, then the body. Publish. The first
+  Publish dates the post that day (a date in the future is kept), so a draft
+  that waited a week goes out dated the day it went live. Leave the web
+  address alone after publishing.
+- **Going live later**: turn on **Goes live by itself** and set **Goes live
+  at**: the morning run (7 a.m. Vancouver time, all year) publishes
+  it on that day. Turn it off to hold it; Publish puts it live at once.
+- **Job photos**: Job photos → + → 3 to 10 photos (best first; for each,
+  what it shows and the focal point), where (town, BC), the service, and a
+  line or two of facts. Publish: its posts are drafted in Buffer the next
+  morning. Add **The story** (a few sentences in your own words: the site,
+  what was needed, what went in, how it has held up) and it becomes a
+  project article instead; you'll get an email to read it before it goes.
 - **Photos**: JPG, at least 1600px wide for lead photographs; 1200px for
   body photos. Always fill in "What the photo shows".
 - **Social grid**: post to Instagram/TikTok first, then Social grid → + →

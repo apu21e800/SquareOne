@@ -31,7 +31,7 @@ import { APP_COPY } from "@/lib/application-copy"
 import { DEFAULT_SETTINGS, mergeSettings, withSettings, type SiteSettings } from "@/lib/site-settings"
 import { DRIVEWAYS_COPY, mergeDrivewaysCopy, type DrivewaysCopy } from "@/lib/page-copy"
 import { mergeService, type ServiceDoc } from "@/lib/services-cms"
-import { APPLICATION_OPTIONS, GUIDE_CATEGORY, QUESTIONS_BRIEF, ROUNDUP_BRIEF, type PlanKind } from "@/lib/automation/plan"
+import { APPLICATION_OPTIONS, GUIDE_CATEGORY, QUESTIONS_BRIEF, ROUNDUP_BRIEF, SYSTEM_OPTIONS, type PlanKind } from "@/lib/automation/plan"
 import type { Store } from "@/lib/automation/services"
 
 export interface SubjectPhoto {
@@ -334,6 +334,77 @@ function applicationLines(slug: string, driveways: DrivewaysCopy, settings: Site
   return ["", `THE KIND OF WORK, as the site publishes it (${label}; page: /applications/${slug}):`, `- ${clean(copy.headline)}.`, ...copy.intro.map((p) => `- ${clean(p)}`)]
 }
 
+// ── documented jobs (20 Oct 2026, as hubss.com's documentedJobs) ────────────
+
+/** The featured projects (lib/projects.ts): the strongest photographs, after jobs already told in a post. */
+const FEATURED: ReadonlySet<string> = new Set(RECORD.filter((p) => p.featured).map((p) => p.slug))
+
+/** At most this many jobs go into one guide's facts. */
+export const DOCUMENTED_JOBS_MAX = 8
+
+/** The heading the jobs go under in the FACTS; the drafter's SHAPE refers to it. */
+export const DOCUMENTED_JOBS_HEADING =
+  "DOCUMENTED JOBS (Square One's own jobs, real places on the record: say only what these lines say about them; when one fits, the article leads with it and its photograph is the article's photograph):"
+
+/** "Langley, BC": the place as the articles write it, town and province (the record already writes both). */
+export const jobPlace = (s: Pick<Subject, "city">) => (/,\s*(?:BC|B\.C\.|British Columbia)\s*$/i.test(s.city.trim()) ? s.city.trim() : `${s.city.trim()}, BC`)
+
+const fold = (s: string) => s.toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/[®™]/g, "").trim()
+
+/** What a guide is about, by slug (lib/automation/plan.ts). */
+export interface JobSelection {
+  services: readonly string[]
+  systems: readonly string[]
+  applications: readonly string[]
+}
+
+/**
+ * Square One's documented jobs for a guide: the projects on the site
+ * (location confirmed) whose service, system or kind of work is one the guide
+ * is about. Best first: a job the brief itself names, then the jobs that
+ * match on more of the three, then a job already told in a post (its story is
+ * fuller), then the featured ones (the strongest photographs), then those with
+ * a year; the Studio's order last. At most DOCUMENTED_JOBS_MAX. Pure.
+ */
+export function documentedJobs(subjects: readonly Subject[], sel: JobSelection, brief?: string | null, featured: ReadonlySet<string> = FEATURED): Subject[] {
+  const services = new Set(sel.services)
+  const systems = new Set(sel.systems.map((slug) => fold(SYSTEM_OPTIONS.find((o) => o.value === slug)?.title ?? slug)))
+  const apps = new Set(sel.applications.map((slug) => fold(APPLICATION_OPTIONS.find((o) => o.value === slug)?.title ?? slug)))
+  const text = fold(brief ?? "")
+  const named = (s: Subject) => !!text && text.includes(fold(s.title)) && text.includes(fold(s.city.split(",")[0]))
+  const fit = (s: Subject) =>
+    (services.has(serviceFor(s.service)?.slug ?? "") ? 1 : 0) + (s.systems.some((x) => systems.has(fold(x))) ? 1 : 0) + (apps.has(fold(s.application)) ? 1 : 0)
+  const tier = (s: Subject) => (s.post ? 0 : featured.has(s.slug) ? 1 : s.year ? 2 : 3)
+  return subjects
+    .map((s, i) => ({ s, i, named: named(s), fit: fit(s) }))
+    .filter((x) => !x.s.flag && (x.named || x.fit > 0))
+    .sort((a, b) => Number(b.named) - Number(a.named) || b.fit - a.fit || tier(a.s) - tier(b.s) || a.i - b.i)
+    .slice(0, DOCUMENTED_JOBS_MAX)
+    .map((x) => x.s)
+}
+
+/** One documented job for a guide's facts: its id (the web address), place, what went in, its own words, whether it has a photograph. */
+export function jobFacts(s: Subject, services: readonly Service[] = RECORD_SERVICES): string {
+  const service = serviceFor(s.service, services)
+  const systems = [...new Set(s.systems)]
+  return [
+    `JOB (id: ${s.slug}): ${s.title}`,
+    `- Where: ${jobPlace(s)}`,
+    s.year ? `- Installed: ${s.year}` : "",
+    service ? `- Service: ${service.name} (page: /services/${service.slug})` : "",
+    systems.length ? `- Systems: ${systems.join(", ")}` : "",
+    s.application ? `- Kind of work: ${s.application}` : "",
+    s.client ? `- Installed at: ${s.client}` : "",
+    s.artist ? `- Artist or designer: ${s.artist}` : "",
+    `- The record: ${clean(s.excerpt)}`,
+    `- Project page: /projects/${s.slug}`,
+    s.post ? `- Told in full in the post /blog/${s.post}` : "",
+    `- Photograph: ${s.photos.length ? "yes" : "no"}`,
+  ]
+    .filter(Boolean)
+    .join("\n")
+}
+
 /** What one plan item is written from. */
 export interface FactsInput {
   kind: PlanKind
@@ -347,6 +418,8 @@ export interface FactsInput {
   settings?: SiteSettings
   /** The plan item's brief: the editor's (treated as true) or the planner's questions (not facts). */
   brief?: string | null
+  /** A guide's documented jobs (documentedJobs): the article may lead with one. */
+  documented?: readonly Subject[]
 }
 
 /** The whole FACTS block for one article. */
@@ -357,7 +430,11 @@ export function factsBlock(input: FactsInput): string {
     lines.push("", "THE PROJECT:", ...jobLines(subjects[0], input.services))
   } else if (subjects.length) {
     lines.push("", "THE JOBS (documented; each job's record is everything known about it, so add nothing about any of them):")
-    subjects.forEach((s, i) => lines.push("", `JOB ${i + 1}:`, ...jobLines(s, input.services)))
+    subjects.forEach((s, i) => lines.push("", `JOB ${i + 1} (id: ${s.slug}):`, ...jobLines(s, input.services)))
+  }
+  if (input.kind === "guide" && input.documented?.length) {
+    lines.push("", DOCUMENTED_JOBS_HEADING)
+    for (const s of input.documented) lines.push("", jobFacts(s, input.services))
   }
 
   const guide = input.kind === "guide" ? input.guide : undefined
@@ -392,6 +469,37 @@ export function factsBlock(input: FactsInput): string {
     // JOBS above are the records as they stand today.)
     lines.push("", "FROM SQUARE ONE'S EDITOR (the brief; treat as true):", brief)
   }
+  return lines.join("\n")
+}
+
+/**
+ * The FACTS for a project article written from a Job photos post (20 Oct
+ * 2026, lib/automation/project-posts.ts): the post's own record of the job
+ * (`record`, jobRecord), then the pages of its service, its systems and its
+ * kind of work, as the site publishes them. No other job: the article is
+ * this one job, with this post's photographs.
+ */
+export function jobPostFacts(input: {
+  record: string
+  service?: string | null
+  systems?: readonly string[] | null
+  application?: string | null
+  services: readonly Service[]
+  settings?: SiteSettings
+  driveways?: DrivewaysCopy
+}): string {
+  const settings = input.settings ?? DEFAULT_SETTINGS
+  const lines: string[] = ["ABOUT SQUARE ONE:", ...companyFacts(settings).map((l) => `- ${l}`), "", input.record]
+  const service = input.service ? serviceFor(input.service, input.services) : undefined
+  if (service) lines.push(...serviceLines(service, false, settings))
+  const shown = new Set<string>()
+  for (const slug of input.systems ?? []) {
+    const product = productFor(slug)
+    if (!product || shown.has(product.slug)) continue
+    shown.add(product.slug)
+    lines.push(...systemLines(product))
+  }
+  if (input.application) lines.push(...applicationLines(input.application, input.driveways ?? DRIVEWAYS_COPY, settings))
   return lines.join("\n")
 }
 

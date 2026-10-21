@@ -3,8 +3,9 @@ import { copyCheck } from "./style"
 import { APPLICATION_OPTIONS, PLAN_KINDS, PLAN_STATUSES, ROUNDUP_MAX, ROUNDUP_MIN, SERVICE_OPTIONS, SYSTEM_OPTIONS, type PlanKind } from "../../lib/automation/plan"
 
 /**
- * The Blog plan (14 Oct 2026, as hubss.com's Insights plan): the list of
- * articles Square One wants written, in the order they get written.
+ * Blog ideas (14 Oct 2026, as hubss.com's Insights plan; "the Blog plan"
+ * until 20 Oct): the list of articles Square One wants written, in the order
+ * they get written.
  *
  * Every Tuesday and Thursday morning the drafter (lib/automation/blog.ts)
  * takes the top item marked Ready (else the top Idea), writes a first draft
@@ -26,7 +27,7 @@ const optionList = (list: readonly { value: string; title: string }[]) => list.m
 
 export const storyIdea = defineType({
   name: "storyIdea",
-  title: "Blog plan",
+  title: "Blog idea",
   type: "document",
   liveEdit: true,
   fields: [

@@ -2,17 +2,25 @@
  * Social drafts, three streams into one approval queue (Square One's own
  * Buffer), ported from hubss.com's lib/social-pipeline.ts on 14 Oct 2026.
  * Nothing is posted from here: a person approves each draft in Buffer, and
- * Buffer posts it on its schedule. Run daily at 14:00 UTC by
- * app/api/cron/social-drafts (vercel.json).
+ * Buffer posts it on its schedule (Vern, 20 Oct 2026: Square One's posts wait
+ * for the office's final edits). SOCIAL_AUTO_QUEUE=on would queue them
+ * instead (lib/automation/buffer.ts); copy the style pass couldn't fix waits
+ * as a draft either way, and the emails say which. Run daily at 14:00 UTC by
+ * app/api/cron/social-drafts (vercel.json), after the run has published the
+ * day's scheduled posts (lib/automation/project-posts.ts).
  *
  *  1. Articles: a blog post qualifies once it is published in the Studio, is
  *     dated on or after SOCIAL_SINCE, and has no socialLog yet. The imported
  *     library is dated earlier, so it never floods Buffer; a draft that sat in
  *     Studio for weeks still gets its social drafts the day after it goes
- *     live. Up to MAX_POSTS_PER_RUN a day, oldest first.
- *  2. From the field: a published field post (Studio → From the field: the
+ *     live. A post the same run published waits for the next day's run.
+ *     Up to MAX_POSTS_PER_RUN a day, oldest first.
+ *  2. From the field: a published Job photos post (Studio → Job photos: the
  *     crew's photos of a finished job, the place, the service, a line of
- *     facts) gets posts linked to the service's page. One a day.
+ *     facts) gets posts linked to the service's page. One a day. A post with
+ *     its story filled in gets none of its own: it becomes a project article
+ *     (lib/automation/project-posts.ts), and the article's posts carry the
+ *     job, once.
  *  3. From the library: once a week, a documented project or a service page
  *     (lib/automation/social-library.ts). A new field post takes the week's
  *     turn, so the crew's photos go first; with two articles a week that is
@@ -26,7 +34,7 @@
  * Every link carries UTM tags (utm_source = the network, utm_medium=social,
  * utm_campaign = blog, field or library, utm_content = what it was). The
  * copy goes through the same style pass as the blog drafts; whatever is left
- * is written on the item's log (Studio → Social drafts) and in the email.
+ * is written on the item's log (Studio → Sent to Buffer) and in the email.
  *
  * Failures are loud and cost nothing (lib/automation/outcome.ts):
  *  - Each item is claimed (its socialLog created) before anything goes to
@@ -47,12 +55,13 @@
 import { portableToText } from "@/lib/automation/markdown"
 import { styleReport } from "@/lib/automation/drafter"
 import { loadServices, loadSubjects, serviceFor } from "@/lib/automation/facts"
-import { BUFFER_TIMEOUT_MS, BufferApiError, type Buffer, type BufferChannel } from "@/lib/automation/buffer"
+import { BUFFER_TIMEOUT_MS, BufferApiError, socialAutoQueue, type Buffer, type BufferChannel } from "@/lib/automation/buffer"
 import { googleText, polishSocialCopy, writeSocialCopy, type SocialCopy, type SocialSource } from "@/lib/automation/social-drafter"
 import { absolute, idFor, libraryDue, libraryQueue, nextLibraryItem, socialImageUrl, type LibraryItem, type SocialPhoto } from "@/lib/automation/social-library"
 import { daysSince, decideOutcome, failureHint, GIVE_UP_DAYS, isConflict, isRunLevel, NO_CHANNELS, unusableReason, type ChannelSkip, type Outcome } from "@/lib/automation/outcome"
 import { APPLICATION_OPTIONS, SERVICE_OPTIONS, SYSTEM_OPTIONS } from "@/lib/automation/plan"
-import { notifyList, type Claude, type Mailer, type Store } from "@/lib/automation/services"
+import { emailEditors as sendToEditors } from "@/lib/automation/editor-mail"
+import type { Claude, Mailer, Store } from "@/lib/automation/services"
 
 /** Posts dated before this never get social drafts (the imported library runs to April 2026). */
 export const SOCIAL_SINCE = "2026-10-01"
@@ -67,7 +76,6 @@ const MAX_FIELD_PER_RUN = 1
 export const START_LIMIT_MS = 120_000
 const CLAIM_LIMIT_MS = 150_000
 export const CHANNEL_LIMIT_MS = 220_000
-const MAIL_TIMEOUT_MS = 15_000
 /** Each Sanity call the social store makes (app/api/cron/social-drafts). */
 export const SANITY_TIMEOUT_MS = BUFFER_TIMEOUT_MS
 
@@ -131,6 +139,8 @@ export interface SocialResult {
   skipped: ChannelSkip[]
   /** The style pass on the copy: "clean", or the sentences to fix in Buffer. */
   styleCheck: string
+  /** Straight into Buffer's queue (SOCIAL_AUTO_QUEUE on and the copy clean); otherwise drafts waiting for approval. */
+  queued: boolean
   /** See lib/automation/outcome.ts. Only "retry" leaves the item to the next run. */
   outcome: Outcome
   /** Studio's record of the item couldn't be written: what that means, for the email. */
@@ -144,6 +154,8 @@ export interface FieldDoc {
   _id: string
   place?: string | null
   note?: string | null
+  /** The story for a project article (lib/automation/project-posts.ts): with one, the job goes out as its article instead. */
+  writeUp?: string | null
   date?: string | null
   service?: string | null
   systems?: string[] | null
@@ -152,7 +164,7 @@ export interface FieldDoc {
 }
 
 const FIELD = `*[_type == "fieldPost" && !(_id in path("drafts.**")) && !(_id in path("versions.**"))] | order(coalesce(date, _createdAt) asc){
-  _id, place, note, date, service, systems, application,
+  _id, place, note, writeUp, date, service, systems, application,
   "photo": photos[0]{ "asset": asset._ref, alt, hotspot, crop }
 }`
 
@@ -189,7 +201,7 @@ export function fieldItem(doc: FieldDoc, services = SERVICE_OPTIONS): SocialItem
     source: {
       kind: "field",
       title,
-      type: "Field post",
+      type: "Job photos post",
       excerpt: note,
       text: [
         `Where: ${place}.`,
@@ -247,11 +259,21 @@ function libraryItem(lib: LibraryItem): SocialItem {
   }
 }
 
-export async function draftSocialForNewPosts(deps: SocialDeps): Promise<{ posts: SocialResult[]; waiting: number }> {
+/** A Job photos post with its story: it goes out as its project article, never on its own. */
+export const hasStory = (d: Pick<FieldDoc, "writeUp">) => !!d.writeUp?.trim()
+
+/**
+ * `holdBack`: the web addresses of posts this same run has just published
+ * (lib/automation/project-posts.ts publishDueDrafts): their social drafts wait
+ * for the next day's run, so the posts follow the article the day after it is
+ * live. `startedAt`: when the route started, so the time limits count the
+ * steps before this one too (app/api/cron/social-drafts).
+ */
+export async function draftSocialForNewPosts(deps: SocialDeps, opts: { holdBack?: ReadonlySet<string>; startedAt?: number } = {}): Promise<{ posts: SocialResult[]; waiting: number }> {
   const { store } = deps
   // The run's date, for its records; the clock is read again only for the time limits.
   const now = deps.now()
-  const started = now.getTime()
+  const started = Math.min(opts.startedAt ?? now.getTime(), now.getTime())
   const [loggedKeys, retries, fieldDocs, lastJobPostAt, duePosts] = await Promise.all([
     store.fetch<string[] | null>(`*[_type == "socialLog"].slug`),
     store.fetch<{ slug: string; firstFailedAt: string }[] | null>(`*[_type == "socialRetry"]{ slug, firstFailedAt }`),
@@ -272,14 +294,14 @@ export async function draftSocialForNewPosts(deps: SocialDeps): Promise<{ posts:
   // Oldest first, so a backlog goes out in the order it was published; one
   // that has failed before goes behind the ones not tried yet (a stable sort).
   const articles = failedLast(
-    (duePosts ?? []).filter((p) => p.slug && !logged.has(p.slug)),
+    (duePosts ?? []).filter((p) => p.slug && !logged.has(p.slug) && !opts.holdBack?.has(p.slug)),
     (p) => p.slug,
   )
   // Built now, so a published field post missing its note, photo or service
   // is skipped instead of holding the day's field slot for ever.
   const fields = failedLast(
     (fieldDocs ?? [])
-      .filter((d) => !logged.has(`field:${d._id}`))
+      .filter((d) => !logged.has(`field:${d._id}`) && !hasStory(d))
       .flatMap((d) => {
         const item = fieldItem(d)
         if (!item) console.warn(`[social] field:${d._id}: no note, photo, place or service; skipped until it has them`)
@@ -363,6 +385,9 @@ async function draftItem(
   const { store } = deps
   const written = await writeSocialCopy(deps.claude, item.source, { linkedin: utmLink(item, "linkedin"), facebook: utmLink(item, "facebook") })
   const { copy, style } = await polishSocialCopy(deps.claude, written)
+  // Queued only when the switch is on AND nothing is left for a person to
+  // fix: a sentence the rewrite couldn't mend never posts by itself.
+  const queued = socialAutoQueue() && style.left.length === 0
 
   const result: SocialResult = {
     key: item.key,
@@ -371,6 +396,7 @@ async function draftItem(
     drafted: [],
     skipped: [],
     styleCheck: styleReport(style, "in Buffer before approving").join("\n"),
+    queued,
     outcome: "retry",
   }
 
@@ -391,7 +417,7 @@ async function draftItem(
   }
   const logId = idFor("socialLog", item.key)
   try {
-    await store.create({ _id: logId, _type: "socialLog", slug: item.key, title: item.title, source: item.stream, createdAt: now.toISOString(), drafts: [], skipped: [], styleCheck: result.styleCheck })
+    await store.create({ _id: logId, _type: "socialLog", slug: item.key, title: item.title, source: item.stream, createdAt: now.toISOString(), queued, drafts: [], skipped: [], styleCheck: result.styleCheck })
   } catch (err) {
     if (isConflict(err)) {
       console.log(`[social] ${item.key}: another run has it; skipped`)
@@ -400,7 +426,7 @@ async function draftItem(
     throw err
   }
 
-  // _type names the array items for Studio's "Social drafts" view (sanity/schemaTypes/socialLog.ts).
+  // _type names the array items for Studio's "Sent to Buffer" view (sanity/schemaTypes/socialLog.ts).
   const drafts: { _key: string; _type: "bufferDraft"; service: string; channel: string; bufferPostId: string }[] = []
   // Everything from here to the settling is inside a try: nothing may escape
   // between the claim and its settling, or the item would stay claimed with
@@ -443,6 +469,7 @@ async function draftItem(
         ...(imageUrl ? { imageUrl } : {}),
         ...(imageUrl && !rule.noAlt ? { imageAlt: photo?.alt || item.title } : {}),
         ...(rule.metadata ? { metadata: rule.metadata(utmLink(item, rule.utm)) } : {}),
+        draft: !queued,
       })
       drafts.push({ _key: ch.id, _type: "bufferDraft", service, channel: label, bufferPostId: id })
       result.drafted.push({ service, channel: label })
@@ -468,7 +495,7 @@ async function draftItem(
       await store.delete(logId)
       console.warn(`[social] ${item.key}: nothing drafted, the next run tries again. ${reasons}`)
     } catch (err) {
-      result.recordProblem = `Its record under Social drafts in Studio couldn't be cleared (${errorText(err)}), so the job won't try this again by itself.`
+      result.recordProblem = `Its record under Sent to Buffer in Studio couldn't be cleared (${errorText(err)}), so the job won't try this again by itself.`
       console.error(`[social] ${item.key}: nothing drafted, and the claim couldn't be dropped: ${errorText(err)}. ${reasons}`)
     }
     // The first failure starts the GIVE_UP_DAYS clock. If this write fails,
@@ -491,7 +518,7 @@ async function draftItem(
         styleCheck: result.styleCheck,
       })
     } catch (err) {
-      result.recordProblem = `Studio's record of this under Social drafts couldn't be filled in (${errorText(err)}). Nothing is lost: the drafts are in Buffer, and it won't be drafted again.`
+      result.recordProblem = `Studio's record of this under Sent to Buffer couldn't be filled in (${errorText(err)}). Nothing is lost: the drafts are in Buffer, and it won't be drafted again.`
       console.error(`[social] ${item.key}: the log couldn't be filled in: ${errorText(err)}`)
     }
     console.log(
@@ -519,21 +546,9 @@ function channelList(xs: { service: string; channel: string }[]) {
   return xs.map((x) => `${x.channel} (${x.service})`).join(", ")
 }
 
-/** One email to the editor (BLOG_DRAFT_NOTIFY), given up after 15 s. Never throws: a lost email mustn't stop the run. */
+/** One email to the editors (BLOG_DRAFT_NOTIFY), given up after 15 s (lib/automation/editor-mail.ts). Never throws: a lost email mustn't stop the run. */
 async function emailEditors(mail: Mailer, subject: string, text: string): Promise<void> {
-  let timer: ReturnType<typeof setTimeout> | undefined
-  try {
-    await Promise.race([
-      mail({ to: notifyList(), subject, text }),
-      new Promise((_, reject) => {
-        timer = setTimeout(() => reject(new Error("the email took longer than 15 s")), MAIL_TIMEOUT_MS)
-      }),
-    ])
-  } catch (err) {
-    console.error(`[social] email failed: ${errorText(err)}`)
-  } finally {
-    if (timer) clearTimeout(timer)
-  }
+  await sendToEditors(mail, subject, text, "social")
 }
 
 /**
@@ -554,13 +569,14 @@ async function itemFailed(deps: SocialDeps, item: SocialItem, err: unknown, firs
     drafted: [],
     skipped: [{ service: "all", channel: "every channel", why, kind: "retry" }],
     styleCheck: "",
+    queued: false,
     outcome: gaveUp ? "gave-up" : "retry",
   }
   if (gaveUp) {
     // Its record is what tells the next runs it's done.
     await deps.store
       .createIfNotExists({ _id: idFor("socialLog", item.key), _type: "socialLog", slug: item.key, title: item.title, source: item.stream, createdAt: now.toISOString(), drafts: [], skipped: [{ _key: "s0", _type: "skippedChannel", service: "all", channel: "every channel", why }], styleCheck: "" })
-      .catch((e: unknown) => (result.recordProblem = `Its record under Social drafts couldn't be written (${errorText(e)}), so the next run tries it again.`))
+      .catch((e: unknown) => (result.recordProblem = `Its record under Sent to Buffer couldn't be written (${errorText(e)}), so the next run tries it again.`))
     await deps.store.delete(idFor("socialRetry", item.key)).catch(() => {})
   } else if (!firstFailedAt) {
     await deps.store
@@ -573,7 +589,7 @@ async function itemFailed(deps: SocialDeps, item: SocialItem, err: unknown, firs
 
 /** How an email names what the drafts are for. */
 export function describe(r: Pick<SocialResult, "stream" | "title">): string {
-  if (r.stream === "From the field") return `the field post "${r.title}"`
+  if (r.stream === "From the field") return `the Job photos post "${r.title}"`
   if (r.stream === "From the library") return `"${r.title}" from Square One's library (a documented project or a service page)`
   return `the new blog post "${r.title}"`
 }
@@ -586,19 +602,24 @@ async function notify(mail: Mailer, r: SocialResult) {
   const what = describe(r)
 
   if (r.outcome === "drafted") {
+    const heldForStyle = !r.queued && socialAutoQueue()
     await emailEditors(
       mail,
-      `Social drafts ready in Buffer: ${r.title}${tag}`,
+      r.queued ? `Social posts queued in Buffer: ${r.title}${tag}` : `Social drafts ready in Buffer: ${r.title}${tag}`,
       [
-        `Social drafts for ${what} are waiting in Buffer. Nothing posts until you approve and schedule them.`,
+        r.queued
+          ? `Social posts for ${what} are queued in Buffer and post at the next free times. To change one, edit it in Buffer's queue; to stop one, delete it there.`
+          : heldForStyle
+            ? `Social drafts for ${what} are waiting in Buffer, not queued: the style check below found something to fix first. Nothing posts until you fix and approve them.`
+            : `Social drafts for ${what} are waiting in Buffer for your final edits. Nothing posts until you approve them: open each draft, make any change, and add it to the queue (or delete it).`,
         "",
-        `Drafted: ${channelList(r.drafted)}`,
+        `${r.queued ? "Queued" : "Drafted"}: ${channelList(r.drafted)}`,
         ...(r.skipped.length ? ["", "Skipped:", ...skippedLines] : []),
         ...record,
         "",
         r.styleCheck,
         "",
-        "Review them: https://publish.buffer.com/drafts",
+        r.queued ? "See the queue: https://publish.buffer.com/" : "Review them: https://publish.buffer.com/drafts",
       ].join("\n"),
     )
     return
@@ -646,7 +667,7 @@ export async function notifyRunFailure(mail: Mailer, err: unknown): Promise<void
     mail,
     `Social drafts didn't run: ${message.length > 80 ? `${message.slice(0, 77)}...` : message}`,
     [
-      "Today's social drafts job stopped. Nothing was posted and nothing is lost: any new blog post, field post or library post it didn't finish gets its Buffer drafts on the first daily run after this is fixed.",
+      "Today's social drafts job stopped. Nothing was posted and nothing is lost: any new blog post, Job photos post or library post it didn't finish gets its Buffer drafts on the first daily run after this is fixed.",
       "",
       `What happened: ${message}`,
       "",

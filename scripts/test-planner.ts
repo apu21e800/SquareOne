@@ -346,6 +346,7 @@ async function main() {
       patch: async () => {},
       createIfNotExists: async () => {},
       delete: async () => {},
+      publish: async () => {},
       uploadImage: async () => null,
     }
     return { store, created }

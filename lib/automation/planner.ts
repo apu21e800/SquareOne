@@ -228,9 +228,12 @@ export function namesOnlyKnown(s: string, opts: { question?: boolean } = {}): bo
   return !words.slice(1).some((w) => /^[A-Z]/.test(w) && w !== "I")
 }
 
+/** "A vs B": never in a title, a search phrase or a question (the standard of 20 Oct 2026, as hubss.com's). A choice is what to specify where. */
+export const VS = /\b(?:vs\.?|versus)(?=\s|$|[,:;!?)])/i
+
 /** A question a guide's brief may carry: a real question that names nothing and assumes nothing. */
 export const goodQuestion = (q: string) =>
-  q.length >= 12 && q.length <= 200 && q.endsWith("?") && !/\d/.test(q) && !LOADED.test(q) && !CASE_STUDY.test(q) && namesOnlyKnown(q, { question: true })
+  q.length >= 12 && q.length <= 200 && q.endsWith("?") && !/\d/.test(q) && !LOADED.test(q) && !CASE_STUDY.test(q) && !VS.test(q) && namesOnlyKnown(q, { question: true })
 
 /** A job's record, as written (only an em dash, which the house style never prints, becomes a comma). */
 function jobLine(j: PlannerJob): string {
@@ -293,6 +296,10 @@ export function vetIdeas(
     }
     if (CASE_STUDY.test(title) || CASE_STUDY.test(searchPhrase)) {
       drop("a case study: Square One says project story")
+      continue
+    }
+    if (VS.test(title) || VS.test(searchPhrase)) {
+      drop('a "vs" title or search phrase (a choice is what to specify where, by job)')
       continue
     }
     const same = repeats({ title, searchPhrase }, seen)
@@ -387,7 +394,7 @@ const PROPOSE: Anthropic.Tool = {
           type: "object",
           properties: {
             kind: { type: "string", enum: ["guide", "roundup"] },
-            title: { type: "string", description: "Working title, sentence case, no em dash, no figures, no claim." },
+            title: { type: "string", description: 'Working title, sentence case, no em dash, no figures, no claim, no "vs" (a choice is what goes where, by job).' },
             searchPhrase: { type: "string", description: "What the reader types into Google, two to five words, lower case." },
             services: { type: "array", items: { type: "string" }, description: "Guides: zero to two SERVICES slugs." },
             systems: { type: "array", items: { type: "string" }, description: "Guides: zero to three SYSTEMS slugs." },
@@ -406,13 +413,13 @@ const PROPOSE: Anthropic.Tool = {
 const SYSTEM = `You plan articles for the Blog on squareonepaving.com. Square One Paving installs decorative pavement in British Columbia with its own crews: stamped asphalt, decorative coatings, preformed thermoplastic and vapour blasting. The readers are the people who buy it in BC: municipalities and their engineers and planners, strata councils and property managers, developers and contractors, businesses with a parking lot, and homeowners with a driveway. The articles are found through search and bring them to a free site walk and a written quote.
 
 Propose articles of two kinds:
-- guide: a question these readers type into Google, answered from Square One's own pages about one to three SERVICES, SYSTEMS or KINDS OF WORK: driveways, parking lots, strata laneways and fire lanes, municipal crosswalks and streetscapes, parks, schools. Choosing between options, what has to be true of the site first, how it goes in, how long it lasts and how to look after it. Give three to six neutral questions the article answers. A question names no place, client, agency, standard or brand other than Square One's systems and BC, holds no figures, and doesn't assume its answer: "How does a stamped asphalt driveway hold up to a BC winter?", never "Why does StreetPrint outlast concrete?" or "What makes it the only choice for a strata?".
+- guide: a question these readers type into Google, answered from Square One's own pages about one to three SERVICES, SYSTEMS or KINDS OF WORK: driveways, parking lots, strata laneways and fire lanes, municipal crosswalks and streetscapes, parks, schools. Choosing between options, what has to be true of the site first, how it goes in, how long it lasts and how to look after it. Give three to six neutral questions the article answers. A question names no place, client, agency, standard or brand other than Square One's systems and BC, holds no figures, and doesn't assume its answer: "How does a stamped asphalt driveway hold up to a BC winter?", never "Why does StreetPrint outlast concrete?" or "What makes it the only choice for a strata?". No product, material or contractor is ever the villain: no "why paint fails" or "beyond concrete" ideas. No "A vs B" in a title, a search phrase or a question, ever: a choice between materials is framed as what goes where, by job ("Where a parking lot needs thermoplastic markings, and where a coating does the job"), never as a contest.
 - roundup: three to six documented jobs from JOBS that share one theme a reader would search for (one kind of work, one system, one kind of place or one region). Use only JOBS ids, and each job in one roundup at most.
 
 Rules:
 - Nothing that EXISTING already covers: the same question or search intent counts as covered, whatever the words.
 - Search phrases are what a real person types: plain, two to five words, lower case, no brand names unless people search the brand.
-- Working titles in sentence case and Canadian English, no em dash, no figures, no exclamation mark, no hype, no claim (best, only, longest). Never "case study": a roundup is a project roundup.
+- Working titles in sentence case and Canadian English, no em dash, no figures, no exclamation mark, no hype, no claim (best, only, longest), no "vs". Never "case study": a roundup is a project roundup.
 - The company that makes the systems is never named.
 - About half guides and half roundups, if JOBS allow.`
 

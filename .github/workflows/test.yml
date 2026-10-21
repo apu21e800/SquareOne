@@ -60,8 +60,14 @@ jobs:
       - name: Blog and social automation
         run: npm run test:automation
 
-      - name: The Blog plan keeps itself stocked
+      - name: Blog ideas keep themselves stocked
         run: npm run test:planner
 
       - name: Social drafts into Buffer
         run: npm run test:social
+
+      - name: Job photos become project articles; scheduled posts go live
+        run: npm run test:project-posts
+
+      - name: The drafter's standard
+        run: npm run test:drafter

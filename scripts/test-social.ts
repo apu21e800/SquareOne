@@ -16,12 +16,12 @@
 import "./test-env"
 import assert from "node:assert/strict"
 import { evaluate, parse } from "groq-js"
-import { BufferApiError, CREATE_DRAFT, draftInput, MANY_ORGS, pickOrganization, type Buffer, type BufferChannel, type DraftPostInput } from "../lib/automation/buffer"
+import { BufferApiError, CREATE_DRAFT, draftInput, MANY_ORGS, pickOrganization, socialAutoQueue, type Buffer, type BufferChannel, type DraftPostInput } from "../lib/automation/buffer"
 import { namesTheMaker } from "../lib/automation/style"
 import { daysSince, decideOutcome, failureHint, GIVE_UP_DAYS, isConflict, NO_CHANNELS, unusableReason, type SkipKind } from "../lib/automation/outcome"
 import { assetSize, idFor, libraryDue, libraryQueue, nextLibraryItem, slotStart, socialImageUrl, weekStart } from "../lib/automation/social-library"
 import { googleText } from "../lib/automation/social-drafter"
-import { CHANNEL_LIMIT_MS, draftSocialForNewPosts, fieldItem, NETWORKS, notifyRunFailure, SOCIAL_SINCE, START_LIMIT_MS, utmLink } from "../lib/automation/social"
+import { CHANNEL_LIMIT_MS, draftSocialForNewPosts, fieldItem, hasStory, NETWORKS, notifyRunFailure, SOCIAL_SINCE, START_LIMIT_MS, utmLink } from "../lib/automation/social"
 import { loadSubjects, type Subject } from "../lib/automation/facts"
 import type { Claude, Mail, SanityDoc, Store, ToolRequest } from "../lib/automation/services"
 import { projects as RECORD } from "../lib/projects"
@@ -74,6 +74,13 @@ function sanity(docs: SanityDoc[]) {
       const i = dataset.findIndex((d) => d._id === id)
       if (i >= 0) dataset.splice(i, 1)
       deleted.push(id)
+    },
+    publish: async (live, draftId) => {
+      const i = dataset.findIndex((d) => d._id === live._id)
+      if (i >= 0) dataset[i] = structuredClone(live)
+      else dataset.push(structuredClone(live))
+      const j = dataset.findIndex((d) => d._id === draftId)
+      if (j >= 0) dataset.splice(j, 1)
     },
     uploadImage: async (url) => {
       uploads.push(url)
@@ -165,12 +172,12 @@ const field = (id: string, over: Record<string, unknown> = {}): SanityDoc => ({
 /** A week in which a job post already went out (the library isn't due). */
 const jobPostThisWeek = (at: string): SanityDoc => ({ _id: "socialLog-lib-service-x", _type: "socialLog", slug: "lib:service:x", createdAt: at, drafts: [{ _key: "a", _type: "bufferDraft" }], skipped: [] })
 
-async function run(docs: SanityDoc[], opts: { channels?: BufferChannel[]; refuse?: (i: DraftPostInput) => Error | null; at?: string; step?: number; claude?: ReturnType<typeof fakeClaude> } = {}) {
+async function run(docs: SanityDoc[], opts: { channels?: BufferChannel[]; refuse?: (i: DraftPostInput) => Error | null; at?: string; step?: number; claude?: ReturnType<typeof fakeClaude>; holdBack?: Set<string> } = {}) {
   const s = sanity(docs)
   const b = fakeBuffer(opts.channels ?? FOUR, opts.refuse)
   const m = fakeMail()
   const c = opts.claude ?? fakeClaude()
-  const result = await draftSocialForNewPosts({ claude: c.claude, store: s.store, buffer: b.buffer, mail: m.mail, now: clock(opts.at ?? "2026-10-15T14:00:00Z", opts.step ?? 1000) })
+  const result = await draftSocialForNewPosts({ claude: c.claude, store: s.store, buffer: b.buffer, mail: m.mail, now: clock(opts.at ?? "2026-10-15T14:00:00Z", opts.step ?? 1000) }, { holdBack: opts.holdBack })
   return { result, ...s, sentToBuffer: b.sent, mails: m.sent, claude: c }
 }
 
@@ -271,7 +278,7 @@ async function main() {
   })
 
   console.log("The library queue")
-  const subjects: Subject[] = await loadSubjects({ fetch: async <T,>() => [] as T, create: async () => {}, createOrReplace: async () => {}, patch: async () => {}, createIfNotExists: async () => {}, delete: async () => {}, uploadImage: async () => null })
+  const subjects: Subject[] = await loadSubjects({ fetch: async <T,>() => [] as T, create: async () => {}, createOrReplace: async () => {}, patch: async () => {}, createIfNotExists: async () => {}, delete: async () => {}, publish: async () => {}, uploadImage: async () => null })
   const queue = libraryQueue(subjects, services)
   const kind = (key: string) => key.split(":")[1]
   await check("documented projects and the four service pages, every key once", () => {
@@ -574,6 +581,67 @@ async function main() {
       utmLink({ pageUrl: "https://www.squareonepaving.com/projects/x", campaign: "library", key: "lib:project:x" }, "facebook"),
       "https://www.squareonepaving.com/projects/x?utm_source=facebook&utm_medium=social&utm_campaign=library&utm_content=project%3Ax",
     )
+  })
+
+  console.log("\nSince 20 Oct 2026: approval, job stories, the day after")
+  await check("Square One's posts wait in Buffer for approval: drafts unless SOCIAL_AUTO_QUEUE is on", () => {
+    const was = process.env.SOCIAL_AUTO_QUEUE
+    try {
+      delete process.env.SOCIAL_AUTO_QUEUE
+      assert.equal(socialAutoQueue(), false)
+      assert.equal(draftInput({ channelId: "c", text: "t" }).saveToDraft, true)
+      for (const v of ["off", "no", "0", "", "maybe"]) {
+        process.env.SOCIAL_AUTO_QUEUE = v
+        assert.equal(socialAutoQueue(), false, v)
+      }
+      for (const v of ["on", "ON", "yes", "true", "1"]) {
+        process.env.SOCIAL_AUTO_QUEUE = v
+        assert.equal(socialAutoQueue(), true, v)
+      }
+      assert.equal(draftInput({ channelId: "c", text: "t" }).saveToDraft, false)
+      assert.equal(draftInput({ channelId: "c", text: "t", draft: true }).saveToDraft, true, "a draft asked for stays a draft")
+    } finally {
+      if (was === undefined) delete process.env.SOCIAL_AUTO_QUEUE
+      else process.env.SOCIAL_AUTO_QUEUE = was
+    }
+  })
+  await check("by default every post goes to Buffer as a draft, and the email asks for the final edits", async () => {
+    delete process.env.SOCIAL_AUTO_QUEUE
+    const { result, sentToBuffer, mails, dataset } = await run([post("approve-me", "2026-10-14"), jobPostThisWeek("2026-10-13T14:00:00Z")])
+    assert.equal(result.posts[0].queued, false)
+    assert.ok(sentToBuffer.every((x) => x.draft === true))
+    assert.match(mails[0].subject, /^Social drafts ready in Buffer:/)
+    assert.match(mails[0].text, /waiting in Buffer for your final edits\. Nothing posts until you approve them/)
+    assert.equal(dataset.find((d) => d._id === "socialLog-approve-me")?.queued, false)
+  })
+  await check("with SOCIAL_AUTO_QUEUE on, clean copy is queued; copy the style pass couldn't mend still waits as a draft", async () => {
+    process.env.SOCIAL_AUTO_QUEUE = "on"
+    try {
+      const clean = await run([post("queue-me", "2026-10-14"), jobPostThisWeek("2026-10-13T14:00:00Z")])
+      assert.equal(clean.result.posts[0].queued, true)
+      assert.ok(clean.sentToBuffer.every((x) => x.draft === false))
+      assert.match(clean.mails[0].subject, /^Social posts queued in Buffer:/)
+      const dashed = await run([post("hold-me", "2026-10-14"), jobPostThisWeek("2026-10-13T14:00:00Z")], { claude: fakeClaude({ facebook: "The crew finished this one \u2014 in a day." }) })
+      assert.equal(dashed.result.posts[0].queued, false)
+      assert.ok(dashed.sentToBuffer.every((x) => x.draft === true))
+      assert.match(dashed.mails[0].text, /not queued: the style check below found something to fix first/)
+    } finally {
+      delete process.env.SOCIAL_AUTO_QUEUE
+    }
+  })
+  await check("a Job photos post with its story gets no posts of its own: it goes out once, as its article", async () => {
+    assert.equal(hasStory({ writeUp: "The crossing is by the old station." }), true)
+    assert.equal(hasStory({ writeUp: "   " }), false)
+    const { result, sentToBuffer } = await run([field("fp-story", { writeUp: "The crossing is by the old station." }), jobPostThisWeek("2026-10-13T14:00:00Z")])
+    assert.equal(result.posts.length, 0)
+    assert.equal(sentToBuffer.length, 0)
+  })
+  await check("a post this morning's run just published waits for tomorrow's run", async () => {
+    const docs = [post("just-live", "2026-10-15"), jobPostThisWeek("2026-10-13T14:00:00Z")]
+    const today = await run(docs, { holdBack: new Set(["just-live"]) })
+    assert.equal(today.result.posts.length, 0)
+    const tomorrow = await run(docs, { at: "2026-10-16T14:00:00Z" })
+    assert.deepEqual(tomorrow.result.posts.map((p) => p.key), ["just-live"])
   })
 
   if (failures) {

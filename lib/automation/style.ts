@@ -23,6 +23,8 @@
  * out (lint-claims reads lib/ line by line).
  */
 
+import { DEFAULT_SETTINGS } from "../site-settings"
+
 /** The systems Square One installs, spelled exactly (lib/products.ts). */
 export const PRODUCT_NAMES = [
   "TrafficPatternsXD",
@@ -80,6 +82,7 @@ export type StyleRule =
   | "exclamation"
   | "emoji"
   | "title-case"
+  | "versus"
   | "maker"
   | "installer"
   | "installed-for"
@@ -91,6 +94,7 @@ export type StyleRule =
   | "count"
   | "region"
   | "house-words"
+  | "contact"
 
 export interface StyleIssue {
   rule: StyleRule
@@ -368,11 +372,65 @@ for (const [re, say] of FILLER) {
   })
 }
 
+// ── contact details ─────────────────────────────────────────────────────────
+// Published contacts only (CLAUDE.md, the canon): the site prints Square One's
+// own lines, email and office, and nobody else's. A crew's note or story can
+// carry a customer's number or a house address, and a project article goes
+// live by itself (review, 20 Oct 2026): one of these holds it for a person.
+// Read on the raw text (mask() blanks emails). The patterns are the quote
+// form's (lib/form-screen.ts), narrowed so a numbered street ("152 Street and
+// 72 Avenue", a Surrey crossing) is not an address; a house number with a
+// street name is ("12345 72 Avenue", "1234 Main Street").
+
+const digitsOf = (s: string) => s.replace(/\D/g, "").replace(/^1(?=\d{10}$)/, "")
+const PUBLISHED_PHONES = new Set([DEFAULT_SETTINGS.phoneOffice, DEFAULT_SETTINGS.phoneIsland, DEFAULT_SETTINGS.phoneTollFree].map(digitsOf))
+const PUBLISHED_EMAIL = DEFAULT_SETTINGS.email.toLowerCase()
+const PUBLISHED_POSTCODE = (/[A-Z]\d[A-Z]\s?\d[A-Z]\d/i.exec(DEFAULT_SETTINGS.addressLine2)?.[0] ?? "").replace(/\s/g, "").toUpperCase()
+const PUBLISHED_STREET = DEFAULT_SETTINGS.addressLine1.replace(/^.*?(\d{3,6})\s+(\p{L}+).*$/u, "$1 $2").toLowerCase()
+const PHONE_SEP = "\\s*[\\s.\\-\\u2010-\\u2015/]?\\s*"
+const PHONE_IN_COPY = new RegExp(`(?<![\\d\\-\\u2010-\\u2015])(?:\\+?1${PHONE_SEP})?(?:\\(\\s*\\d{3}\\s*\\)|\\d{3})${PHONE_SEP}\\d{3}${PHONE_SEP}\\d{4}(?!\\d)`, "g")
+const EMAIL_IN_COPY = /[^\s<>()"',;:[\]]+@[^\s<>()"',;:[\]]+\.[a-z]{2,}/gi
+const POSTCODE_IN_COPY = /\b[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ -]?\d[ABCEGHJ-NPRSTV-Z]\d\b/gi
+const STREET_TYPES = "Street|St|Avenue|Ave|Road|Rd|Drive|Dr|Crescent|Cres|Court|Ct|Crt|Place|Pl|Boulevard|Blvd|Way|Lane|Ln|Highway|Hwy|Terrace|Trail|Parkway|Pkwy|Circle|Close|Gate|Row"
+const STREET_IN_COPY = new RegExp(
+  `\\b(?:\\d{1,5}[-\\u2010-\\u2013])?\\d{1,6}[A-Z]?\\s+(?:[A-Z][\\w'\u2019.-]*|\\d{1,3}(?:st|nd|rd|th)?)(?:\\s+[A-Z0-9][\\w'\u2019.-]*){0,2}\\s+(?:${STREET_TYPES})\\b\\.?`,
+  "g",
+)
+
+const PHONE_SAY = `A phone number that isn't one of Square One's published lines (${DEFAULT_SETTINGS.phoneOffice}, ${DEFAULT_SETTINGS.phoneIsland}, ${DEFAULT_SETTINGS.phoneTollFree}): take it out.`
+const EMAIL_SAY = `An email address other than ${DEFAULT_SETTINGS.email}: take it out.`
+const ADDRESS_SAY = "A street address or postal code: take it out, unless it is Square One's office or the customer has agreed to it being on the site."
+
+/** Phone numbers, emails, street addresses and postal codes that aren't Square One's published ones. */
+function contactIssues(text: string): StyleIssue[] {
+  const out: StyleIssue[] = []
+  const add = (m: RegExpExecArray, message: string) =>
+    out.push({ rule: "contact", message, excerpt: excerptAt(text, m.index, m[0].length), index: m.index, length: m[0].length })
+  for (const m of text.matchAll(PHONE_IN_COPY)) if (!PUBLISHED_PHONES.has(digitsOf(m[0]))) add(m as RegExpExecArray, PHONE_SAY)
+  for (const m of text.matchAll(EMAIL_IN_COPY)) if (m[0].replace(/^mailto:/i, "").toLowerCase() !== PUBLISHED_EMAIL) add(m as RegExpExecArray, EMAIL_SAY)
+  for (const m of text.matchAll(POSTCODE_IN_COPY)) if (m[0].replace(/[\s-]/g, "").toUpperCase() !== PUBLISHED_POSTCODE) add(m as RegExpExecArray, ADDRESS_SAY)
+  for (const m of text.matchAll(STREET_IN_COPY)) {
+    if (m[0].toLowerCase().replace(/\s+/g, " ").includes(PUBLISHED_STREET)) continue
+    // "2024 Boundary Road Pump Station", "In 2023 Fraser Highway crews ...":
+    // a year, not a house number; "the 3 Main Street crossings", a count. A
+    // year-like or one-digit number counts only when the words before it say
+    // address ("at 2041 Main Street", "lives at 5 Oak Street").
+    const civic = /^(?:\d{1,5}[-\u2010-\u2013])?(\d+)/.exec(m[0])?.[1] ?? ""
+    const addressWord = /\b(?:at|on|is|address|lives?|home|house|unit|suite)\s*[:#]?\s*$/i.test(text.slice(Math.max(0, (m.index ?? 0) - 16), m.index))
+    if ((civic.length === 1 || /^(?:19|20)\d\d$/.test(civic)) && !addressWord) continue
+    add(m as RegExpExecArray, ADDRESS_SAY)
+  }
+  return out
+}
+
 /**
  * Everything in `text` that breaks the house style or the canon, in reading
- * order. Plain text or markdown; link addresses and emails are ignored.
+ * order. Plain text or markdown; link addresses and emails are left out of
+ * the style rules (the contact rule reads them). `contact: false` leaves the
+ * contact rule out: the Studio runs it only where unreviewed words arrive
+ * (blog posts and Job photos), not on the pages the office writes itself.
  */
-export function lintCopy(text: string): StyleIssue[] {
+export function lintCopy(text: string, opts: { contact?: boolean } = {}): StyleIssue[] {
   if (!text || !text.trim()) return []
   const prose = mask(text)
   const issues: StyleIssue[] = []
@@ -397,6 +455,7 @@ export function lintCopy(text: string): StyleIssue[] {
       issues.push({ rule: check.rule, message: hit.message, excerpt: excerptAt(text, index, length), index, length })
     }
   }
+  if (opts.contact !== false) issues.push(...contactIssues(text))
   // One warning per problem: "isn't just a task. It's ..." is one reversal, not two.
   const out: StyleIssue[] = []
   for (const i of issues.sort((a, b) => a.index - b.index || b.length - a.length)) {
@@ -404,6 +463,15 @@ export function lintCopy(text: string): StyleIssue[] {
     out.push(i)
   }
   return out
+}
+
+/**
+ * Whether a tag may print under "Filed under" on a live post: one that breaks
+ * the canon (the manufacturer, "case study", a phone number) is dropped
+ * rather than shown, since no check reads the tags (review, 20 Oct 2026).
+ */
+export function tagPasses(tag: string): boolean {
+  return Boolean(tag.trim()) && lintCopy(tag).length === 0
 }
 
 // ── headings ────────────────────────────────────────────────────────────────
@@ -453,6 +521,32 @@ function plainHeading(text: string): string {
  */
 export function lintHeading(text: string): StyleIssue[] {
   if (!text || !text.trim()) return []
+  return [...versusIssues(text), ...titleCaseIssues(text)]
+}
+
+/**
+ * "A vs B" in a title or a heading (Vern's standard, 20 Oct 2026, as
+ * hubss.com's): a choice between materials is written as what to specify
+ * where, by job, never as a contest.
+ */
+const VERSUS = /\b(?:vs\.?|versus)(?=\s|$|[,:;!?)])/giu
+
+function versusIssues(text: string): StyleIssue[] {
+  const plain = plainHeading(text)
+  const m = new RegExp(VERSUS.source, "iu").exec(plain)
+  if (!m) return []
+  return [
+    {
+      rule: "versus",
+      message: `“${m[0]}” in a title or heading sets up a contest: say what goes where, by job, like “Where thermoplastic goes, and where a coating does the job”.`,
+      excerpt: excerptAt(text, 0, text.length),
+      index: 0,
+      length: text.length,
+    },
+  ]
+}
+
+function titleCaseIssues(text: string): StyleIssue[] {
   const plain = plainHeading(text)
   const raw = plain.split(/\s+/).filter(Boolean)
   const kinds: Kind[] = []

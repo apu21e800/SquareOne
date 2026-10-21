@@ -27,7 +27,7 @@ export const SOCIAL_KEYS = ["linkedin", "facebook", "instagram", "google"] as co
 /**
  * What the posts are written from. A new blog post is the first case; since
  * 14 Oct 2026 also a field post (photos the crew took of a finished job,
- * Studio → From the field) and a library item (a documented project or a
+ * Studio → Job photos) and a library item (a documented project or a
  * service page). For those two, the rules' word "post" means this source,
  * and `linkTo` says what the link opens, so the ask fits the page.
  */

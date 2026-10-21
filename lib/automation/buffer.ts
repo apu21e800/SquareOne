@@ -3,8 +3,12 @@
  * GraphQL at https://api.buffer.com, `Authorization: Bearer <BUFFER_API_KEY>`),
  * ported from hubss.com's lib/buffer.ts with its hardening (14 Oct 2026).
  *
- * Drafts only: every post is created with saveToDraft, so it waits in Buffer
- * until a person approves and schedules it. Nothing here posts.
+ * Drafts by default: every post is created with saveToDraft, so it waits in
+ * Buffer until a person approves it (Vern, 20 Oct 2026: Square One's posts
+ * wait for the office's final edits). SOCIAL_AUTO_QUEUE=on in Vercel puts
+ * them straight into the queue instead, posted at the next slot unless
+ * deleted (hubss.com's default since 19 Oct 2026; never Square One's without
+ * Vern's word). Nothing here posts by itself.
  *
  * Every field below was checked against Buffer's live API reference on
  * 14 Oct 2026: `account { organizations { id } }`; `channels(input:
@@ -64,6 +68,18 @@ export interface DraftPostInput {
   /** Sent with the photo when given; Google Business Profile takes none. */
   imageAlt?: string
   metadata?: Record<string, unknown>
+  /** A draft for approval (true) or straight into the queue (false). Unset: socialAutoQueue() decides. */
+  draft?: boolean
+}
+
+/**
+ * True when posts go straight into Buffer's queue rather than waiting as
+ * drafts for approval. Off unless SOCIAL_AUTO_QUEUE is on (on, yes, true or
+ * 1): Vern, 20 Oct 2026, "S1 posts should wait for client approval (final
+ * edits)". Only Vern turns it on.
+ */
+export function socialAutoQueue(): boolean {
+  return ["on", "yes", "true", "1"].includes((process.env.SOCIAL_AUTO_QUEUE ?? "").trim().toLowerCase())
 }
 
 /** What the social pipeline needs from Buffer; the real one is `bufferApi`, the tests use a stand-in. */
@@ -106,7 +122,7 @@ export function draftInput(input: DraftPostInput): Record<string, unknown> {
     text: input.text,
     schedulingType: "automatic",
     mode: "addToQueue",
-    saveToDraft: true,
+    saveToDraft: input.draft ?? !socialAutoQueue(),
     aiAssisted: true,
     source: "squareonepaving.com",
     assets: input.imageUrl ? [{ image: { url: input.imageUrl, ...(input.imageAlt ? { metadata: { altText: input.imageAlt } } : {}) } }] : [],

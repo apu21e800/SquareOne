@@ -14,11 +14,12 @@
 
 import { BufferApiError, type BufferChannel } from "@/lib/automation/buffer"
 
-export type Job = "blog" | "social"
+export type Job = "blog" | "social" | "projects"
 
 const LOGS: Record<Job, string> = {
   blog: "Vercel → square-one → Logs, filtered on [blog]",
   social: "Vercel → square-one → Logs, filtered on [social]",
+  projects: "Vercel → square-one → Logs, filtered on [projects]",
 }
 
 export const NO_CHANNELS = "Buffer has no channel this job can draft for"
@@ -174,7 +175,7 @@ export function blogFailureEmail(what: string, hint: string): { subject: string;
       "",
       `What to do: ${hint}`,
       "",
-      "The Blog plan is as it was, so the next run (Tuesday or Thursday morning) tries the same item again.",
+      "Blog ideas are as they were, so the next run (Tuesday or Thursday morning) tries the same item again.",
     ].join("\n"),
   }
 }

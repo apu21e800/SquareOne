@@ -52,6 +52,7 @@ const store = (studio: unknown[]): Store => ({
   patch: async () => {},
   createIfNotExists: async () => {},
   delete: async () => {},
+  publish: async () => {},
   uploadImage: async () => null,
 })
 
@@ -133,6 +134,13 @@ function sanity(docs: SanityDoc[]) {
       const i = dataset.findIndex((d) => d._id === id)
       if (i >= 0) dataset.splice(i, 1)
       deleted.push(id)
+    },
+    publish: async (live, draftId) => {
+      const i = dataset.findIndex((d) => d._id === live._id)
+      if (i >= 0) dataset[i] = structuredClone(live)
+      else dataset.push(structuredClone(live))
+      const j = dataset.findIndex((d) => d._id === draftId)
+      if (j >= 0) dataset.splice(j, 1)
     },
     uploadImage: async (url) => {
       uploads.push(url)
@@ -295,7 +303,7 @@ async function main() {
   })
   await check("a roundup's FACTS hold each job's record, numbered; a guide's hold its pages and the questions apart", () => {
     const r = factsBlock({ kind: "roundup", subjects: [job("nanaimo-rainbow-intersection"), job("langley-railroad-crosswalk"), job("white-rock-custom-crosswalk")], services })
-    assert.match(r, /JOB 1:[\s\S]*Rainbow intersection[\s\S]*JOB 2:[\s\S]*JOB 3:/)
+    assert.match(r, /JOB 1 \(id: [a-z0-9-]+\):[\s\S]*Rainbow intersection[\s\S]*JOB 2 \(id: [a-z0-9-]+\):[\s\S]*JOB 3 \(id: [a-z0-9-]+\):/)
     assert.match(r, /add nothing about any of them/)
     const g = factsBlock({
       kind: "guide",
@@ -400,7 +408,7 @@ async function main() {
     assert.equal(doc.category, "Crosswalks")
     assert.equal((doc.tags as string[])[0], PROJECT_STORIES_TAG)
     assert.equal((doc.mainImage as { asset: { _ref: string } }).asset._ref, `image-${RECORD.findIndex((p) => p.slug === "nanaimo-rainbow-intersection")}-0-jpg`, "the job's own lead photograph, already in Sanity")
-    assert.match(String(doc.editorNotes), /from the Blog plan item "Rainbow intersection, Nanaimo"/)
+    assert.match(String(doc.editorNotes), /from the Blog idea "Rainbow intersection, Nanaimo"/)
     assert.deepEqual(patched[0].set.status, "drafted")
     assert.equal(patched[0].set.draftSlug, "rainbow-intersection-nanaimo")
     assert.ok(created.some((d) => d._id === `${DRAFT_LOG}nanaimo-rainbow-intersection`), "the job is logged")
@@ -436,7 +444,7 @@ async function main() {
     assert.match(String(doc.editorNotes), /PHOTO: a stand-in, the lead photograph of "Rainbow intersection, Nanaimo"/)
     const write = claude.calls.find((c) => c.tool.name === "save_draft")!
     assert.match(write.user, /A PROJECT ROUNDUP/)
-    assert.match(write.user, /JOB 1:[\s\S]*JOB 2:[\s\S]*JOB 3:/)
+    assert.match(write.user, /JOB 1 \(id: [a-z0-9-]+\):[\s\S]*JOB 2 \(id: [a-z0-9-]+\):[\s\S]*JOB 3 \(id: [a-z0-9-]+\):/)
     assert.ok(!created.some((d) => String(d._id).startsWith(DRAFT_LOG)), "a roundup logs no single job")
   })
   await check("a guide: its pages and the questions apart in the FACTS, filed under Guides, the service page's photo as a stand-in", async () => {
@@ -533,8 +541,8 @@ async function main() {
     assert.ok(!created.some((d) => d._type === "post"), "no draft")
     assert.deepEqual(c.tools(), ["propose_ideas"])
     assert.equal(sent.length, 1)
-    assert.match(sent[0].text, /the Blog plan was empty, so this run added 4 new ideas/)
-    assert.match(sent[0].text, /Look them over in Studio → Blog plan/)
+    assert.match(sent[0].text, /there were no Blog ideas left, so this run added 4 new ideas/)
+    assert.match(sent[0].text, /Look them over in Studio → Blog ideas/)
   })
   await check("a low plan is topped up after the email, at the bottom, as Ideas", async () => {
     const c = fakeClaude({ ideas: guideIdeas(4) })
@@ -588,7 +596,7 @@ async function main() {
     const { result, sent } = await run([...base, item("storyIdea-a", { title: "Nothing ticked", type: "guide" })])
     assert.equal(result.drafted, false)
     assert.equal(sent.length, 1)
-    assert.match(sent[0].text, /none of the 1 open item in the Blog plan can be drafted: "Nothing ticked"/)
+    assert.match(sent[0].text, /none of the 1 open item in Blog ideas can be drafted: "Nothing ticked"/)
   })
   await check("a key missing in Vercel: the email names it", async () => {
     const m = fakeMail()

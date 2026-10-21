@@ -106,32 +106,62 @@ Copy .env.local.example → .env.local and fill in:
   have their own: NEXT_PUBLIC_SANITY_PROJECT_ID, NEXT_PUBLIC_SANITY_DATASET,
   SANITY_REVALIDATE_SECRET; CRON_SECRET, ANTHROPIC_API_KEY,
   SANITY_API_WRITE_TOKEN, BLOG_DRAFT_NOTIFY, BUFFER_API_KEY, BUFFER_ORG_ID
-  (only if the Buffer login is in more than one organization), AUTOMATION_PAUSED.
+  (only if the Buffer login is in more than one organization), AUTOMATION_PAUSED,
+  SOCIAL_AUTO_QUEUE (unset: social posts wait in Buffer for approval).
 
 ## Blog and social automation (lib/automation/, docs/AUTOMATION.md)
-Two Vercel crons (vercel.json, production only). Both refuse every call
+Three Vercel crons (vercel.json, production only). All refuse every call
 without `CRON_SECRET` (401, constant-time check, lib/automation/cron.ts).
 Tuesdays and Thursdays at 13:00 UTC, `/api/cron/draft-post` takes the top
-Ready item in Studio's **Blog plan** (else the top Idea): a project story,
+Ready item in Studio's **Blog ideas** (else the top Idea): a project story,
 a project roundup or a guide (lib/automation/plan.ts; never a "case study"),
 written only from Square One's own pages and documented jobs (the Studio's
 version of each, as the site shows it), and saves it as an **unpublished**
 Sanity draft with "Notes for the editor" (fact check, style check); marks the
-item Drafted; emails the next idea; and, when the plan is low, adds new Ideas
+item Drafted; emails the next idea; and, when the list is low, adds new Ideas
 (lib/automation/planner.ts, ported from hubss.com's insights-planner). A run
-that can't draft emails the fix, naming the key (lib/automation/outcome.ts). Daily at 14:00 UTC, `/api/cron/social-drafts`
-(lib/automation/social.ts, ported from hubss.com's social pipeline) drafts
-into Square One's own Buffer from three streams: new blog posts, field posts
-(Studio → From the field: the crew's photos, the place, the service, a line
-of facts; linked to the service page) and, once a week, a library post (a
+that can't draft emails the fix, naming the key (lib/automation/outcome.ts).
+It writes to hubss.com's standard of 20 Oct 2026 (lib/automation/drafter.ts
+SHAPE): 550 to 850 words (350 to 600 for a story or a thin record), a
+documented Square One job with its town and province first (`leadJob`, from
+documentedJobs in lib/automation/facts.ts) and its photograph as the
+article's, proof before explanation, one thing to keep, no product or
+contractor as the villain, no "vs" in a title or heading (the style check's
+`versus` rule and the planner refuse it), a title a person would say.
+Daily at 14:00 UTC, `/api/cron/social-drafts` runs two steps, each failing
+on its own and emailing BLOG_DRAFT_NOTIFY (lib/automation/editor-mail.ts):
+(1) blog drafts with **Goes live by itself** (`scheduled`, `scheduledFor`)
+whose time has come are published in one transaction, dated that day, only
+if the draft is still the revision the run read and has what Publish asks
+for (lib/automation/project-posts.ts publishDueDrafts; Studio's Publish
+switches the schedule off, sanity/actions.ts); (2) social (lib/automation/social.ts,
+ported from hubss.com's pipeline) drafts into Square One's own Buffer from
+three streams: new blog posts (the day after they go live), Job photos
+(Studio → Job photos: the crew's photos, the place, the service, a line of
+facts; linked to the service page) and, once a week, a library post (a
 documented project or a service page). Facebook, Instagram, LinkedIn and
-Google Business Profile (`metadata.google`, a Learn more button). Claim-first
-`socialLog-<key>`, 14-day retries (`socialRetry-<key>`), outcome emails, a
-run failure that names the key, disconnected and locked channels skipped,
-20 s per call and no item after 120 s, crops of 1200 × 630 and 4:5 on the
-focal point. Every Buffer field checked against Buffer's live API reference
-on 14 Oct 2026. Dormant until `BUFFER_API_KEY` is set.
-Nothing publishes itself. The drafter may state only what
+Google Business Profile (`metadata.google`, a Learn more button). Every post
+waits in Buffer as a draft for approval (Vern, 20 Oct 2026: "S1 posts should
+wait for client approval (final edits)"); `SOCIAL_AUTO_QUEUE=on` would queue
+them, only on Vern's word. Claim-first `socialLog-<key>`, 14-day retries
+(`socialRetry-<key>`), outcome emails, a run failure that names the key,
+disconnected and locked channels skipped, 20 s per call and no item after
+120 s of the run, crops of 1200 × 630 and 4:5 on the focal point. Every
+Buffer field checked against Buffer's live API reference on 14 Oct 2026.
+Dormant until `BUFFER_API_KEY` is set. Daily at 15:00 UTC, its own run
+(`/api/cron/project-articles`, so social can't crowd it out): the oldest
+published Job photos post with **The story** (`writeUp`) and no article
+becomes a project story (port of hubss.com's lib/project-posts.ts): written
+from that post's record and its service's pages only, the post's photos in
+it, scheduled two weekdays after the day it is written (counted in
+Vancouver) once the editors are emailed (held if a check isn't clean, the
+fact check's answer can't be read, it shows a phone number, email or address
+that isn't Square One's (the style check's `contact` rule), or it has no
+photo), linked both ways (`fieldPost`, `article`, weak); a post that keeps
+failing is retried for 14 days (`projectRetry-<id>`), then given up with one
+email; such a post gets no social posts of its own (`hasStory`). A new post needs a title, a
+photograph with alt text, a body and a section (the imported library before
+1 Oct 2026 is only warned). The drafter may state only what
 `lib/automation/facts.ts` hands it; `lib/automation/style.ts` is the house style
 and the canon as rules (keep it free of the literal tokens lint-claims bans:
 lint-claims reads lib/). The pipelines take their services as arguments, so
@@ -369,9 +399,11 @@ npm run test:preview  # Edit on the page: preview marks, exit path, clickable ph
 npm run test:studio   # focal points, first-Publish dates, Site Settings, every page's words, the Studio list
 npm run sync:pages -- --dry-run  # what the fill-only sync would put into the Studio's empty fields
 npm run test:automation  # the cron gate, the drafter end to end against stand-ins, fail-loud emails
-npm run test:planner     # the Blog plan's top-up: vetting, no repeats, each job told once
-npm run test:social      # the social job end to end against stand-ins: streams, claims, retries, crops, Buffer's shapes
-npm run plan:seed -- --dry-run  # the Blog plan's first project stories, from documented jobs
+npm run test:planner     # the Blog ideas' top-up: vetting, no repeats, each job told once, no "vs"
+npm run test:social      # the social job end to end against stand-ins: streams, claims, retries, crops, approval, Buffer's shapes
+npm run test:project-posts  # Job photos with a story become scheduled articles; scheduled posts go live on time
+npm run test:drafter     # the drafter's 20 Oct standard: documented jobs, the lead photograph, SHAPE, no "vs"
+npm run plan:seed -- --dry-run  # the first project stories for Blog ideas, from documented jobs
 ```
 
 ## Development Notes

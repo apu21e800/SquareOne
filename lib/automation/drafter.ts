@@ -14,6 +14,14 @@
  * and lists every statement they don't support. The leftovers of both checks
  * go in the draft's "Notes for the editor" and in the email, so the person
  * who presses Publish knows exactly what to look at. Nothing here publishes.
+ *
+ * The SHAPE rules are hubss.com's standard of 20 Oct 2026, which Vern set for
+ * Square One the same day: shorter, a real place first (a documented Square
+ * One job from Projects, lib/automation/facts.ts documentedJobs), proof
+ * before explanation, one thing to keep, no product or contractor cast as the
+ * villain, no "vs", a title a person would say. The draft names the job it
+ * leads with (`leadJob`), and the pipeline makes that job's photograph the
+ * article's (lib/automation/blog.ts).
  */
 import type Anthropic from "@anthropic-ai/sdk"
 import { BLOG_MODEL, type Claude } from "@/lib/automation/services"
@@ -27,6 +35,8 @@ export interface Draft {
   tags: string[]
   body: string
   factsUsed: string[]
+  /** The id (web address) of the documented job the article leads with; empty when it opens at the reader's decision. */
+  leadJob?: string
 }
 
 export interface FactCheck {
@@ -58,33 +68,48 @@ MACHINE TELLS: readers recognise machine-written copy on sight and it costs trus
 - Exclamation marks. "Discover", "Explore", "Learn more"; say what happens instead ("Get a quote", "Read the story").
 The test: read it aloud. If the person who ran the job wouldn't say it on the phone, cut it.`
 
-const VOICE = `You write for the Blog on squareonepaving.com: project stories (one job), project roundups (several jobs) and guides (a question customers ask). Square One Paving installs decorative pavement in British Columbia with its own crews: stamped asphalt, decorative coatings, preformed thermoplastic and vapour blasting. The readers specify, approve and pay for pavement: municipal engineers and planners, landscape architects, developers, contractors, strata councils and property managers, and homeowners.
+export const VOICE = `You write for the Blog on squareonepaving.com: project stories (one job), project roundups (several jobs) and guides (a question customers ask). Square One Paving installs decorative pavement in British Columbia with its own crews: stamped asphalt, decorative coatings, preformed thermoplastic and vapour blasting. The readers specify, approve and pay for pavement: municipal engineers and planners, landscape architects, developers, contractors, strata councils and property managers, and homeowners.
 
 VOICE: plain, local, "we". Write like the person who ran the job telling a client about it: concrete, practical, proud of the work without selling it. Canadian English (colour, centre, metre, curb, neighbourhood). Short paragraphs.
 
 THE FACTS RULE:
 - Every statement about Square One, the project, the systems (what they are, how they go down, how they last), numbers, years, places, sites, clients and artists comes from the FACTS. If the FACTS don't say it, don't write it.
 - Never invent a date, a dimension, a quantity, a duration, a crew size, a client, an artist, a quote from anyone, a price or a lead time. Don't name a person, business, agency or place the FACTS don't name.
-- General context that isn't about Square One or the systems (why a crossing needs to be seen, what freeze-thaw does to paint) is fine in plain words, without numbers.
+- General context that isn't about Square One or the systems (why a crossing needs to be seen, what freeze-thaw does to pavement) is fine in plain words, without numbers.
 - If the story needs a fact you don't have, leave it out. A shorter post is better than a guessed one.
 - QUESTIONS in the FACTS are not facts: they are what to answer, and nothing in them is true because it is asked. Answer each only from the facts above them, and leave out any the facts don't answer.
 
+SHAPE (the standard since 20 Oct 2026, as hubss.com's: a reader should feel that someone who has stood on these jobs wrote it, in an hour, for one colleague):
+- Length: 550 to 850 words of markdown for a guide or a roundup; 350 to 600 for a project story, or for anything whose record is thin. Never pad: the piece ends when the point is made.
+- The first paragraph, two or three plain sentences under no heading, puts the reader somewhere real: at a documented Square One job from the FACTS, named with its town and province (Langley, BC), or at the decision on their desk. When a documented job fits, the article leads with it and its photograph becomes the article's photograph: give its id as leadJob. A job fits when it shows what the article is about, the same service or system at work or the same kind of job; one that only shares the setting doesn't. When none fits, open at the decision and leave leadJob empty.
+- Then two to four sections under "## " headings a reader can scan (a roundup: one short section per job). Proof before explanation in every section: it opens with a documented job, the year it went in, or a line from a service or system page in the FACTS, and only then explains.
+- One thing to keep, not three: a short checklist, or the questions to settle before the work is booked.
+- Never cast a product, a material or another contractor as the villain: no "why X fails", no running down paint, concrete, pavers or anyone's work. Say what goes where, and why, from the FACTS.
+- No "vs" in any title or heading, ever. A choice between materials is written as what to specify where, by job, not as a contest.
+- The title is a sentence a person would say: under 70 characters, in sentence case, with the search phrase in it or in the first paragraph. No question, no praise word, no "X: Y" couplet if it can be avoided. Good: "What a strata decides before its laneway is stamped". Bad: "Stamped asphalt vs concrete pavers: which is better?".
+- The close is two or three lines on the next step, from the FACTS (the free site walk with the sample boards, then a written quote), linking [Get a quote](/contact). No hard sell.
+- Markdown only: no "# " title line, no images, no tables, no HTML. A short list only where it helps.
+
+ATTENTION (articles that earn a reader's time, as hubss.com's):
+- The headline names the thing and the place or the problem in plain words: what went in, where. A year or a figure only when the FACTS give it.
+- After the place, the first paragraph says why it matters to the reader.
+- Community and memorial work (a Nation's design, a school's artwork, a memorial crossing): name the partner only as the FACTS name them, in their spelling, and give the meaning only as they state it.
+- A contested topic (a removal, vandalism, a council vote) gets plain facts with no adjectives, then the reader's practical question: approval, repair or upkeep.
+
 ${HOUSE_RULES}
 
-EVERY ARTICLE: no "# " title line, no images, no tables, no HTML. End with one or two sentences on the next step, from the FACTS (the free site walk with the sample boards, then a written quote), linking [Get a quote](/contact). No hard sell.
-
-SEARCH: if a SEARCH PHRASE is given, use it naturally in the title, the first paragraph and one heading. Don't stuff it.
+SEARCH: the search phrase goes in the title when the title still reads as a sentence a person would say, otherwise in the first paragraph; once in a heading only where it reads naturally. A phrase with "vs" in it never goes in a title or heading. Don't stuff it.
 
 LINKS: link the first mention of each system and service to their pages, with the paths the FACTS give; each project page the FACTS give; one or two RELATED POSTS where they genuinely help. No other links.`
 
-/** The shape of each kind of article (lib/automation/plan.ts). */
-const SHAPES: Record<PlanKind, string> = {
+/** What each kind of article is, within SHAPE (lib/automation/plan.ts). */
+export const SHAPES: Record<PlanKind, string> = {
   project:
-    'A PROJECT STORY: 450 to 750 words of markdown. Open with one or two short paragraphs, no heading, that say what was installed and where. Then two to four sections with "## " headings a reader can scan: what the site needed, how the system goes down, what to know if you\'re planning one, whichever the FACTS support. A short bullet list where it helps.',
+    "A PROJECT STORY of THE PROJECT in the FACTS: 350 to 600 words. The job comes first: its town and province and what went in, in the first paragraph (its photograph is the article's already, so leadJob stays empty). Then two or three sections, whichever the FACTS support: what the site needed, how the system goes down, what to know before planning one. If the record is short, the story is short.",
   roundup:
-    'A PROJECT ROUNDUP: 600 to 1,000 words of markdown about the JOBS in the FACTS. Open with one or two short paragraphs, no heading, on what the jobs have in common, from their records. Then one "## " section per job, in the order given, its heading the place and what was installed; each says only what that job\'s record says. Then one section on what to know before planning the same kind of work, from the service and system pages in the FACTS.',
+    'A PROJECT ROUNDUP of the JOBS in the FACTS: 550 to 850 words. The first paragraph puts the reader at one of the jobs (give its id as leadJob); then one short "## " section per job, in the order given, its heading the place and what was installed, each saying only what that job\'s record says; then what to know before planning the same kind of work, from the service and system pages in the FACTS.',
   guide:
-    'A GUIDE: 600 to 1,000 words of markdown for someone in BC planning this kind of work, answered from the FACTS alone. Open with one or two short paragraphs, no heading, that answer the search phrase (or the working title) plainly. Then three to five sections with "## " headings a reader can scan, each a plain statement, never a question; take the QUESTIONS, if there are any, as the outline and leave out any the FACTS don\'t answer. A short bullet list where it helps. Square One\'s own jobs appear only as the FACTS name them.',
+    "A GUIDE for someone in BC planning this kind of work: 550 to 850 words, answered from the FACTS alone. Open at a documented job that fits (give its id as leadJob) or at the decision on the reader's desk; take the QUESTIONS, if there are any, as the outline and leave out any the FACTS don't answer. Headings are plain statements, never questions. Square One's own jobs appear only as the FACTS give them.",
 }
 
 /** What the drafter is asked to write: the plan item's working title, kind and search phrase. */
@@ -92,6 +117,12 @@ export interface DraftBrief {
   title: string
   kind: PlanKind
   searchPhrase?: string | null
+  /**
+   * Instructions for this piece that beat SHAPE: a project article written
+   * from one job photos post (lib/automation/project-posts.ts) must not pad a
+   * short record out.
+   */
+  instructions?: string | null
 }
 
 /**
@@ -103,18 +134,28 @@ export interface DraftBrief {
  */
 export const LIMITS = { write: 150_000, rewrite: 40_000, check: 60_000 } as const
 
-const SAVE_DRAFT: Anthropic.Tool = {
+export const SAVE_DRAFT: Anthropic.Tool = {
   name: "save_draft",
-  description: "Save the finished blog draft.",
+  description: 'Save the finished blog draft, written to SHAPE. No "vs" in its title or in any heading: a choice between materials is what to specify where, by job.',
   input_schema: {
     type: "object",
     properties: {
-      title: { type: "string", description: "The headline, under 70 characters, sentence case: for a project story or roundup, the place and what was installed; for a guide, what it answers, as a statement, with the search phrase in it." },
+      title: {
+        type: "string",
+        description: 'The headline: a sentence a person would say, under 70 characters, sentence case, with the search phrase in it or in the first paragraph. No "vs", no question, no praise word, no "X: Y" couplet if it can be avoided.',
+      },
       slug: { type: "string", description: "The web address: lowercase words joined by hyphens, under 60 characters." },
-      excerpt: { type: "string", description: "One or two sentences, under 220 characters: what the reader will get." },
+      excerpt: { type: "string", description: "One or two sentences, under 220 characters: what the reader will get. No hype." },
       tags: { type: "array", items: { type: "string" }, description: "Three to six short tags: the systems, the place, the kind of work." },
-      body: { type: "string", description: "The post in markdown, as described. No title line." },
+      body: {
+        type: "string",
+        description: "The post in markdown, to SHAPE: 550 to 850 words for a guide or a roundup, 350 to 600 for a project story or a thin record, unless FOR THIS PIECE says otherwise. No title line.",
+      },
       factsUsed: { type: "array", items: { type: "string" }, description: "Each FACT the body relies on, quoted from the FACTS." },
+      leadJob: {
+        type: "string",
+        description: 'The id of the documented job the article leads with, exactly as the FACTS give it ("id: ..."): its photograph becomes the article\'s photograph. Empty when the article opens at the reader\'s decision instead.',
+      },
     },
     required: ["title", "slug", "excerpt", "tags", "body", "factsUsed"],
   },
@@ -148,6 +189,7 @@ export async function writeDraft(claude: Claude, brief: DraftBrief, facts: strin
     `Write this for the Blog.`,
     ``,
     SHAPES[brief.kind],
+    ...(brief.instructions?.trim() ? [``, `FOR THIS PIECE (these beat the SHAPE rules above):`, brief.instructions.trim()] : []),
     ``,
     `WORKING TITLE: ${brief.title}`,
     ...(brief.searchPhrase?.trim() ? [`SEARCH PHRASE: ${brief.searchPhrase.trim()}`] : []),
@@ -162,15 +204,56 @@ export async function writeDraft(claude: Claude, brief: DraftBrief, facts: strin
   ].join("\n")
   const draft = await claude<Draft>({ model: BLOG_MODEL, system: VOICE, user, tool: SAVE_DRAFT, maxTokens: 6000, timeoutMs: LIMITS.write, maxRetries: 0 })
   if (!draft.body?.trim() || !draft.title?.trim()) throw new Error("The draft came back empty")
-  return { ...draft, tags: Array.isArray(draft.tags) ? draft.tags : [], factsUsed: Array.isArray(draft.factsUsed) ? draft.factsUsed : [] }
+  const leadJob = typeof draft.leadJob === "string" ? draft.leadJob.trim() : ""
+  return {
+    ...draft,
+    tags: Array.isArray(draft.tags) ? draft.tags : [],
+    factsUsed: Array.isArray(draft.factsUsed) ? draft.factsUsed : [],
+    ...(leadJob ? { leadJob } : { leadJob: undefined }),
+  }
 }
 
 export async function checkDraft(claude: Claude, draft: Draft, facts: string): Promise<FactCheck> {
   const system = `You fact-check blog posts for Square One Paving before a person publishes them. You are strict and literal. Compare the DRAFT with the FACTS and list every statement about Square One, the project, the systems, numbers, years, durations, dimensions, places, sites, clients, artists or people that the FACTS do not support: numbers that differ, capabilities the FACTS don't claim, a performance figure not attributed to the manufacturer, any place, business, agency or person the FACTS don't name, and any promise (a guarantee, a lead time, a price). Also list any sentence that names the company that makes the systems, or says Square One makes or developed them. QUESTIONS in the FACTS are not facts: a statement that only a question supports is unsupported. General context with no numbers that isn't about Square One or the systems is fine; don't list it. Links are fine. If everything is supported, the verdict is "clean" and the list is empty.`
   const user = `FACTS:\n${facts}\n\nDRAFT:\n# ${draft.title}\n\n${draft.excerpt}\n\n${draft.body}\n\nReport with the report tool.`
   const result = await claude<FactCheck>({ model: BLOG_MODEL, system, user, tool: REPORT, maxTokens: 3000, timeoutMs: LIMITS.check, maxRetries: 0 })
-  const unsupported = Array.isArray(result.unsupported) ? result.unsupported : []
-  return { verdict: unsupported.length ? "needs edits" : "clean", unsupported }
+  return readFactCheck(result)
+}
+
+/**
+ * The fact check's answer, read so that only a clear "clean" passes (review,
+ * 20 Oct 2026): a project article goes live by itself on a clean check, so an
+ * answer that can't be read, or a "needs edits" with nothing listed, holds
+ * the draft for a person instead of passing it. A list sent as JSON text is
+ * read as the list it is.
+ */
+export function readFactCheck(result: unknown): FactCheck {
+  const r = (result ?? {}) as { verdict?: unknown; unsupported?: unknown }
+  const unread = (reason: string): FactCheck => ({ verdict: "needs edits", unsupported: [{ quote: "(the whole draft)", reason }] })
+  let list: unknown = r.unsupported
+  if (typeof list === "string") {
+    try {
+      list = JSON.parse(list)
+    } catch {
+      return unread("The fact check's answer couldn't be read, so nothing in this draft has been checked: read it against the record before it goes live.")
+    }
+  }
+  if (list && typeof list === "object" && !Array.isArray(list)) list = [list]
+  if (list === undefined || list === null) list = []
+  if (!Array.isArray(list)) return unread("The fact check's answer couldn't be read, so nothing in this draft has been checked: read it against the record before it goes live.")
+  const items: FactCheck["unsupported"] = []
+  for (const item of list) {
+    if (typeof item === "string" && item.trim()) items.push({ quote: item.trim(), reason: "The fact check gave no reason." })
+    else if (item && typeof item === "object") {
+      const { quote, reason } = item as { quote?: unknown; reason?: unknown }
+      const q = typeof quote === "string" ? quote.trim() : ""
+      const why = typeof reason === "string" ? reason.trim() : ""
+      if (q || why) items.push({ quote: q || "(not quoted)", reason: why || "The fact check gave no reason." })
+      else return unread("The fact check listed a problem it didn't describe: read the draft against the record before it goes live.")
+    } else return unread("The fact check's answer couldn't be read, so nothing in this draft has been checked: read it against the record before it goes live.")
+  }
+  if (!items.length && r.verdict !== "clean") return unread("The fact check didn't say the draft was clean, and listed nothing: read it against the record before it goes live.")
+  return { verdict: items.length ? "needs edits" : "clean", unsupported: items }
 }
 
 // ── the style pass ──────────────────────────────────────────────────────────
@@ -222,7 +305,7 @@ const EDITOR = `You are now the copy editor, not the writer. You get sentences f
 - Keep every fact: the same numbers, system names, places, names and links, and the same markdown (bold, italic, links).
 - Change only what the problem needs; keep the rest of the wording. Where the problem is a claim the canon forbids (a guarantee, a price, the manufacturer's name), take the claim out rather than rewording it.
 - One rewrite per number: no new points, and don't merge it with the text around it.
-- A title or heading stays short and in sentence case (capitals on the first word and on names only).
+- A title or heading stays short and in sentence case (capitals on the first word and on names only), and never sets two things against each other with "vs": say what goes where.
 - No dash between clauses, of any kind: use a comma, a colon, a full stop or parentheses.
 - Don't make it longer than it is.`
 
