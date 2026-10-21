@@ -7,6 +7,8 @@ import ResourceLibrary from "@/components/ResourceLibrary"
 import { resourceGroups, resourceCount } from "@/lib/resources"
 import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
+import { getSiteSettings } from "@/lib/cms"
+import { telHref } from "@/lib/site-settings"
 
 export const metadata: Metadata = {
   title: "Specifications & Technical Documents",
@@ -35,6 +37,7 @@ export const metadata: Metadata = {
  * components/ResourceLibrary.tsx.
  */
 export default async function ResourcesPage() {
+  const site = await getSiteSettings()
   // The opener, with whatever the Studio says on top (lib/page-content.ts, 9 Oct 2026).
   const o = await getPageOpener("/resources")
   return (
@@ -68,8 +71,8 @@ export default async function ResourcesPage() {
           <p className="max-w-[56ch] text-ink-body [text-wrap:pretty]">
             Writing a specification and need help matching a system to your traffic loading and
             substrate? Call{" "}
-            <a href="tel:+16046126209" className="link">
-              604-612-6209
+            <a href={telHref(site.phoneOffice)} className="link">
+              {site.phoneOffice}
             </a>{" "}
             or{" "}
             <Link href="/contact" className="link">

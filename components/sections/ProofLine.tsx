@@ -1,3 +1,6 @@
+import { getSiteSettings } from "@/lib/cms"
+import { addressParts } from "@/lib/site-settings"
+
 /**
  * One quiet band under the hero.
  *
@@ -19,14 +22,15 @@
  * Every fact is on the record: since 2000, the Maple Ridge office, the two
  * regions, the free site visit and written quote.
  */
-const ITEMS: { label: string; value: string }[] = [
-  { label: "Since", value: "2000" },
-  { label: "Office", value: "Maple Ridge, BC" },
-  { label: "Working", value: "Lower Mainland and Vancouver Island" },
-  { label: "First step", value: "Free site visit" },
-]
-
-export default function ProofLine() {
+export default async function ProofLine() {
+  // The office's town, from Site Settings' address (lib/site-settings.ts).
+  const office = addressParts(await getSiteSettings())
+  const ITEMS: { label: string; value: string }[] = [
+    { label: "Since", value: "2000" },
+    { label: "Office", value: `${office.locality}, ${office.region}` },
+    { label: "Working", value: "Lower Mainland and Vancouver Island" },
+    { label: "First step", value: "Free site visit" },
+  ]
   return (
     <section aria-label="About Square One, in brief" className="border-b border-hairline bg-surface">
       <dl className="container-1280 grid grid-cols-4 py-7 max-[900px]:grid-cols-2 max-[900px]:gap-y-6 max-[900px]:py-6">

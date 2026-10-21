@@ -9,8 +9,10 @@ import OpenerTitle from "@/components/ui/OpenerTitle"
 import { getPageOpener } from "@/lib/page-content"
 import { Section } from "@/components/ui/Container"
 import HowAJobGoes, { VAPOUR_STEPS } from "@/components/sections/HowAJobGoes"
-import { getServiceBySlug } from "@/lib/services"
+import { getStudioService } from "@/lib/services-cms"
 import { clampDescription } from "@/lib/seo"
+import { getSiteSettings } from "@/lib/cms"
+import { mailtoHref, telHref, withSettings } from "@/lib/site-settings"
 
 // Route and slug keep the US spelling; display prose reads "vapour blasting".
 // This page is the ONLY vapour route — /vapor-blasting redirects here.
@@ -135,13 +137,14 @@ const cities = [
   "Victoria", "Saanich", "Langford", "Duncan", "Nanaimo", "Parksville",
 ]
 
-const YOUTUBE = "https://www.youtube.com/channel/UCBDvB4vgdahH67BmP6FeccQ"
-
 export default async function VaporBlastingServicePage() {
+  // The lines and the email, from Site Settings (lib/site-settings.ts).
+  const site = await getSiteSettings()
   // The opener, with whatever the Studio says on top (lib/page-content.ts, 9 Oct 2026).
   const o = await getPageOpener("/services/vapor-blasting")
-  const service = getServiceBySlug("vapor-blasting")
-  const faqs = service?.faqs ?? []
+  // The questions are the Studio's when it has them (lib/services-cms.ts, 14 Oct 2026).
+  const service = await getStudioService("vapor-blasting")
+  const faqs = (service?.faqs ?? []).map((f) => ({ ...f, a: withSettings(f.a, site) }))
   return (
     // page-vapour: the water's blues on this page's chips, rules and hovers
     // (app/own.css, 7 Oct 2026).
@@ -189,8 +192,8 @@ export default async function VaporBlastingServicePage() {
           <Link href="/contact" className="btn-primary">
             Get a quote
           </Link>
-          <a href="tel:+16046126209" className="btn-on-image">
-            604-612-6209
+          <a href={telHref(site.phoneOffice)} className="btn-on-image">
+            {site.phoneOffice}
           </a>
         </div>
       </IndexImageHero>
@@ -248,7 +251,7 @@ export default async function VaporBlastingServicePage() {
         id="gallery"
         label="On the record"
         title={<>On the job, <em>photographed</em></>}
-        link={{ href: YOUTUBE, label: "Demonstration videos on YouTube" }}
+        link={{ href: site.youtube, label: "Demonstration videos on YouTube" }}
         className="scroll-mt-[72px]"
         wide
       >
@@ -325,23 +328,23 @@ export default async function VaporBlastingServicePage() {
           <Link href="/contact" className="btn-primary">
             Get a quote
           </Link>
-          <a href="tel:+16046126209" className="link">
-            604-612-6209
+          <a href={telHref(site.phoneOffice)} className="link">
+            {site.phoneOffice}
           </a>
         </div>
 
         <p className="mt-8 text-[15px] leading-[1.8] text-ink-muted">
           Vancouver Island{" "}
-          <a href="tel:+12503910270" className="link">
-            250-391-0270
+          <a href={telHref(site.phoneIsland)} className="link">
+            {site.phoneIsland}
           </a>{" "}
           &middot; toll-free{" "}
-          <a href="tel:+18773910270" className="link">
-            1-877-391-0270
+          <a href={telHref(site.phoneTollFree)} className="link">
+            {site.phoneTollFree}
           </a>{" "}
           &middot;{" "}
-          <a href="mailto:office@squareonepaving.com" className="link">
-            office@squareonepaving.com
+          <a href={mailtoHref(site.email)} className="link">
+            {site.email}
           </a>
         </p>
       </Section>

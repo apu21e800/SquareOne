@@ -7,6 +7,9 @@ import { studioWorkFor } from "@/lib/work-cms"
 import { APP_HEROES } from "@/lib/app-heroes"
 import IndexImageHero from "@/components/IndexImageHero"
 import { getProjects } from "@/lib/projects-cms"
+import { photoMetaFor } from "@/lib/projects"
+import { getSiteSettings } from "@/lib/cms"
+import { telHref } from "@/lib/site-settings"
 import OpenerTitle from "@/components/ui/OpenerTitle"
 import { openerFor } from "@/lib/page-content"
 import { products } from "@/lib/products"
@@ -49,8 +52,6 @@ import { plainCase } from "@/lib/text"
 interface Props {
   params: Promise<{ slug: string }>
 }
-
-const PHONE = "604-612-6209"
 
 interface AppCopy {
   /** The <title>, before the root template adds " | Square One Paving". */
@@ -240,6 +241,8 @@ function cityName(city: string): string {
 }
 
 export default async function ApplicationPage({ params }: Props) {
+  // The office line, from Site Settings (lib/site-settings.ts).
+  const site = await getSiteSettings()
   const { slug } = await params
   const meta = workAppMeta(slug)
   if (!meta || slug === "driveways") notFound()
@@ -320,8 +323,8 @@ export default async function ApplicationPage({ params }: Props) {
               <Link href="/contact" className="btn-primary">
                 Get a quote
               </Link>
-              <a href={`tel:${PHONE.replace(/-/g, "")}`} className="link">
-                {PHONE}
+              <a href={telHref(site.phoneOffice)} className="link">
+                {site.phoneOffice}
               </a>
             </div>
           </div>
@@ -418,6 +421,7 @@ export default async function ApplicationPage({ params }: Props) {
                   <Frame
                     src={project.imageUrl}
                     alt={alt}
+                    position={photoMetaFor(project, project.imageUrl)?.position}
                     aspect="aspect-[4/3]"
                     sizes="(max-width: 700px) 100vw, (max-width: 1280px) 33vw, 411px"
                     href={`/projects/${project.slug}`}

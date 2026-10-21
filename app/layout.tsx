@@ -18,6 +18,8 @@ import PreviewTools from "@/components/PreviewTools"
 import GoogleAnalytics from "@/components/GoogleAnalytics"
 import { GA_MEASUREMENT_ID, analyticsOn } from "@/lib/analytics"
 import { inDraftMode } from "@/sanity/lib/client"
+import { getSiteSettings } from "@/lib/cms"
+import { SiteSettingsProvider } from "@/components/SiteSettingsProvider"
 import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
 import { TYPEFACE_IDS, LIVE_TYPEFACE } from "@/lib/typefaces"
@@ -150,7 +152,9 @@ export const viewport: Viewport = { themeColor: "#FFFFFF" }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   // Edit on the page (14 Oct 2026): true only in an editor's own preview.
-  const preview = await inDraftMode()
+  // Site Settings (lib/site-settings.ts): read once here for the client
+  // components below (the menu, the phone bar, the quote form).
+  const [preview, settings] = await Promise.all([inDraftMode(), getSiteSettings()])
   return (
     <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning className={`${poppins.variable} ${futura.variable} ${inter.variable} ${sourceSerif.variable}`}>
       <head>
@@ -167,17 +171,19 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           on <html> could never reach a page; they are on :root now, from the
           <style> above, and <body> inherits them. */}
       <body className="antialiased">
-        <StructuredData />
+        <StructuredData settings={settings} />
         {/* Keyboard users skip the bar and the menus (28 Sept 2026). */}
         <a href="#main" className="skip-link">
           Skip to the content
         </a>
-        <Nav />
-        <div id="main" tabIndex={-1} className="outline-none">
-          {children}
-        </div>
-        <Footer />
-        <MobileStickyCTA />
+        <SiteSettingsProvider settings={settings}>
+          <Nav />
+          <div id="main" tabIndex={-1} className="outline-none">
+            {children}
+          </div>
+          <Footer />
+          <MobileStickyCTA />
+        </SiteSettingsProvider>
         <MotionBreath />
         {TYPE_SWITCH_ENABLED && <TypeToggle />}
         {preview && <PreviewTools />}

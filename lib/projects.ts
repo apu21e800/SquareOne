@@ -56,7 +56,26 @@ export interface Project {
   heroWide: boolean
   featured?: boolean
   flag?: boolean
+  /**
+   * What the Studio says about each photograph, by its address in `images`
+   * (14 Oct 2026, lib/projects-cms.ts): the alt text the office wrote, the
+   * focal point it dragged, and in an editor's preview the mark that opens
+   * the photograph's field. Absent for the record's own projects.
+   */
+  photoMeta?: Record<string, ProjectPhotoMeta>
 }
+
+/** One photograph's Studio details (see Project.photoMeta). */
+export interface ProjectPhotoMeta {
+  alt?: string
+  /** CSS object-position: the frame crops around the office's focal point. */
+  position?: string
+  edit?: string
+}
+
+/** A photograph's Studio details, when it has any. */
+export const photoMetaFor = (project: Pick<Project, "photoMeta">, src: string | undefined): ProjectPhotoMeta | undefined =>
+  src ? project.photoMeta?.[src] : undefined
 
 type ProjectInput = Omit<Project, "imageUrl">
 

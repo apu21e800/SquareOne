@@ -12,7 +12,23 @@ export const socialPost = defineType({
   type: "document",
   fields: [
     defineField({ name: "platform", type: "string", title: "Platform", options: { list: ["Instagram", "TikTok", "Facebook", "LinkedIn", "YouTube"], layout: "radio" }, initialValue: "Instagram", validation: (r) => r.required() }),
-    defineField({ name: "image", type: "image", title: "Photograph", options: { hotspot: true }, fields: [{ name: "alt", type: "string", title: "What the photo shows" }], validation: (r) => r.required() }),
+    defineField({
+      name: "image",
+      type: "image",
+      title: "Photograph",
+      description: "The same photograph as the post. The tile is square: press the crosshair and drag the focal point onto the work.",
+      options: { hotspot: true },
+      fields: [
+        defineField({
+          name: "alt",
+          type: "string",
+          title: "What the photo shows",
+          description: "One plain line, read aloud to people who can't see the photograph.",
+          validation: (r) => r.required().error("Say what the photograph shows: it is read aloud to people who can't see it."),
+        }),
+      ],
+      validation: (r) => r.required(),
+    }),
     defineField({ name: "caption", type: "string", title: "Caption", validation: (r) => [r.required().max(140), r.custom(copyCheck).warning()] }),
     defineField({ name: "url", type: "url", title: "Link to the post", description: "Paste the post's own link (instagram.com/p/… or tiktok.com/@…/video/…).", validation: (r) => r.required().uri({ scheme: ["http", "https"] }) }),
     defineField({ name: "date", type: "date", title: "Posted on", validation: (r) => r.required() }),

@@ -44,6 +44,10 @@ export interface ViewerPhoto {
   alt: string
   primary: string
   secondary?: string
+  /** The Studio's focal point, for the photograph's tile (the viewer shows it whole). */
+  position?: string
+  /** Edit on the page: the tile opens the photograph's field, in an editor's preview only. */
+  edit?: string
 }
 
 const ALL = "All"
@@ -105,6 +109,8 @@ export function GalleryFrame({
   sizes = "(max-width: 700px) 50vw, (max-width: 1023px) 33vw, 300px",
   ariaLabel,
   onOpen,
+  position,
+  edit,
 }: {
   src: string
   alt: string
@@ -114,6 +120,10 @@ export function GalleryFrame({
   sizes?: string
   ariaLabel: string
   onOpen: () => void
+  /** The Studio's focal point (lib/focal.ts): the tile crops around it. */
+  position?: string
+  /** Edit on the page: the photograph's document, in an editor's preview only. */
+  edit?: string
 }) {
   return (
     <figure className="m-0">
@@ -122,8 +132,9 @@ export function GalleryFrame({
         onClick={onOpen}
         aria-label={ariaLabel}
         className={`frame-img relative block w-full overflow-hidden bg-surface-stone text-left ${aspect}`}
+        data-sanity={edit}
       >
-        <Image src={src} alt={alt} fill sizes={sizes} className="object-cover" />
+        <Image src={src} alt={alt} fill sizes={sizes} className="object-cover" style={position ? { objectPosition: position } : undefined} />
       </button>
       {/* Two lines: the place leads in ink, the system and subject follow
           muted. One line: the quiet caption alone. */}
@@ -390,6 +401,8 @@ export default function WorkGallery({
                   secondary={secondary}
                   ariaLabel={`View ${primary} full screen`}
                   onOpen={() => show(i)}
+                  position={p.position}
+                  edit={p.edit}
                 />
               </li>
             )

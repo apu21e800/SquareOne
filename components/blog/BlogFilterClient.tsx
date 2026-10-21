@@ -121,6 +121,7 @@ export default function BlogFilterClient({ posts }: Props) {
                 href={`/blog/${lead.slug}`}
                 src={lead.featured_image || undefined}
                 alt={lead.title}
+                position={lead.featured_position}
                 kicker={lead.category || undefined}
                 title={lead.title}
                 description={lead.description}
@@ -137,6 +138,7 @@ export default function BlogFilterClient({ posts }: Props) {
                     href={`/blog/${post.slug}`}
                     src={post.featured_image || undefined}
                     alt={post.title}
+                    position={post.featured_position}
                     kicker={post.category || undefined}
                     title={post.title}
                     description={post.description}

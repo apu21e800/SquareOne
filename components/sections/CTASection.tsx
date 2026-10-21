@@ -1,11 +1,14 @@
 import Image from "next/image"
 import Link from "next/link"
+import { getSiteSettings } from "@/lib/cms"
+import { telHref } from "@/lib/site-settings"
 
 /**
  * Closing CTA band. v2: no dark surface here — Footer owns the single slate
  * close on every page, so this sits on warm.
  */
-export default function CTASection() {
+export default async function CTASection() {
+  const site = await getSiteSettings()
   return (
     <section className="section border-t border-[color:var(--hairline)] bg-surface-warm">
       <div className="container-1280">
@@ -45,10 +48,10 @@ export default function CTASection() {
             <div className="mt-10 flex flex-wrap items-center justify-between gap-3 border-t border-[color:var(--hairline)] pt-7">
               <span className="label">Or call us directly</span>
               <a
-                href="tel:+16046126209"
+                href={telHref(site.phoneOffice)}
                 className="text-[17px] font-semibold tracking-[-0.01em] text-ink"
               >
-                604-612-6209
+                {site.phoneOffice}
               </a>
             </div>
           </div>

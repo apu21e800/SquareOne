@@ -10,6 +10,8 @@ import SearchOverlay from "@/components/SearchOverlay"
 import { BUYERS } from "@/lib/buyers"
 import { MENU_PREVIEWS, type MenuPreviews } from "@/lib/menu"
 import ColourEdge from "@/components/ui/ColourEdge"
+import { useSiteSettings } from "@/components/SiteSettingsProvider"
+import { telHref } from "@/lib/site-settings"
 
 /* ------------------------------------------------------------------
    Data — derived from lib/, never duplicated.
@@ -347,6 +349,7 @@ function BuyersMenu({ previews, onNavigate }: MenuProps) {
 
 /** The strip that closes every menu: the free site visit, the two lines, the button. */
 function MegaStrip({ onNavigate }: { onNavigate: () => void }) {
+  const site = useSiteSettings()
   return (
     <div className="mega-strip">
       <div className="container-1280 flex items-center gap-x-8 py-[18px]">
@@ -359,13 +362,13 @@ function MegaStrip({ onNavigate }: { onNavigate: () => void }) {
           <div>
             <dt>Lower Mainland</dt>
             <dd>
-              <a href="tel:+16046126209">604-612-6209</a>
+              <a href={telHref(site.phoneOffice)}>{site.phoneOffice}</a>
             </dd>
           </div>
           <div>
             <dt>Vancouver Island</dt>
             <dd>
-              <a href="tel:+12503910270">250-391-0270</a>
+              <a href={telHref(site.phoneIsland)}>{site.phoneIsland}</a>
             </dd>
           </div>
         </dl>
@@ -421,6 +424,7 @@ function MegaSheet({
    ------------------------------------------------------------------ */
 
 function MobileDrawer({ onClose }: { onClose: () => void }) {
+  const site = useSiteSettings()
   const pathname = usePathname()
   const bigRow =
     "block border-b border-hairline py-[15px] text-[21px] leading-tight font-bold tracking-[-0.01em] text-ink"
@@ -508,10 +512,10 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
 
       <div className="flex shrink-0 flex-wrap items-center gap-x-6 gap-y-1 border-t border-hairline px-6 py-4 text-[14px] text-ink-muted">
         <span>
-          <a href="tel:+16046126209" className="font-medium text-ink">604-612-6209</a> Lower Mainland
+          <a href={telHref(site.phoneOffice)} className="font-medium text-ink">{site.phoneOffice}</a> Lower Mainland
         </span>
         <span>
-          <a href="tel:+12503910270" className="font-medium text-ink">250-391-0270</a> Vancouver Island
+          <a href={telHref(site.phoneIsland)} className="font-medium text-ink">{site.phoneIsland}</a> Vancouver Island
         </span>
       </div>
 

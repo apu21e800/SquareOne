@@ -11,7 +11,8 @@ import DrivewaysBand from "@/components/sections/DrivewaysBand"
 import VapourBand from "@/components/sections/VapourBand"
 import FollowTheWork from "@/components/sections/FollowTheWork"
 import { getSiteSettings, getSlots, getSocialPosts, slotImage, slotText } from "@/lib/cms"
-import { getHomeHero } from "@/lib/page-content"
+import { getHomeCopy, getHomeHero } from "@/lib/page-content"
+import Heading from "@/components/ui/Heading"
 import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
 
@@ -83,7 +84,7 @@ export const metadata: Metadata = {
 export default async function Home() {
   // CMS overlays (lib/cms.ts): every reader falls back to the built-in copy
   // and photography, so the page renders the same with no Sanity project.
-  const [settings, tiles, slots, home] = await Promise.all([getSiteSettings(), getSocialPosts(6), getSlots(), getHomeHero(HERO_SLIDES)])
+  const [settings, tiles, slots, home, words] = await Promise.all([getSiteSettings(), getSocialPosts(6), getSlots(), getHomeHero(HERO_SLIDES), getHomeCopy()])
   // 9 Oct 2026: the Studio's Home page first (lib/page-content.ts), then the
   // older slots (home.hero.1 to 5, .title, .eyebrow), then the built-in reel.
   const slides =
@@ -91,7 +92,7 @@ export default async function Home() {
     HERO_SLIDES.map((slide, i) => {
       const key = `home.hero.${i + 1}`
       const img = slotImage(slots, key, { src: slide.src, alt: slide.alt })
-      return img.src === slide.src ? slide : { ...slide, src: img.src, alt: img.alt, caption: img.caption }
+      return img.src === slide.src ? slide : { ...slide, src: img.src, alt: img.alt, caption: img.caption, ...(img.position ? { position: img.position } : {}) }
     })
   const eyebrow = home.line ?? slotText(slots, "home.hero.eyebrow", "")
   const title = home.title ?? slotText(slots, "home.hero.title", "")
@@ -115,29 +116,31 @@ export default async function Home() {
           (the close band in the footer). "Where the work goes" and the
           blog feed came off the home page; both are one click away in the
           menu. */}
-      <ServicesGrid />
+      {/* The words of every band below are the Studio's Home page, the site's
+          own where a field is blank (lib/page-copy.ts, 14 Oct 2026). */}
+      <ServicesGrid words={words.services} cards={words.serviceCards} />
 
-      <ProjectsPreview />
+      <ProjectsPreview words={words.projects} />
 
       {/* 2 Oct 2026, the client: "a bit overkill info wise, trim some fat".
           The crew photographs under the four steps came off. The
           patterns-and-colours band came off too and came back the same day
           (Vern: "the template and colour palette sections are missing"),
           lower on the page. Eight bands. */}
-      <HowAJobGoes tone="paper" crews={false} />
+      <HowAJobGoes tone="paper" crews={false} label={words.process.label} title={<Heading words={words.process} />} />
 
       {/* 2 Oct 2026 (Vern: "a few large grey background sections to break
           things up"): the audience band and the vapour band sit on stone,
           the darker grey; the projects and the close on the lighter one. */}
-      <AudienceBand tone="stone" />
+      <AudienceBand tone="stone" words={words.audiences} cards={words.audienceCards} />
 
-      <DrivewaysBand />
+      <DrivewaysBand words={words.driveways} offer={words.drivewaysOffer} />
 
-      <MaterialsBand />
+      <MaterialsBand words={words.materials} />
 
-      <VapourBand />
+      <VapourBand words={words.vapour} />
 
-      <FollowTheWork settings={settings} tiles={tiles} />
+      <FollowTheWork settings={settings} tiles={tiles} words={words.social} />
     </main>
   )
 }

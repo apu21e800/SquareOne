@@ -166,6 +166,22 @@ clampDescription and scriptJson already do). The exit link is a plain `<a>`,
 never next/link (a prefetch would end the preview). Needs
 `SANITY_API_READ_TOKEN` (Viewer) in Vercel; `npm run test:preview`.
 
+**The Studio at hubss.com's level** (14 Oct 2026, docs/CMS.md): the list is
+Website Pages, Services, Projects, Blog, Site Settings (sanity/structure.ts).
+Every page's words below its opener are the Studio's, the code's where a
+field is blank: `lib/page-copy.ts` holds the code's words verbatim and the
+merge (a heading and its lighter ending travel as a pair); a page reads
+`getHomeCopy()` and friends, never strings typed into its components again.
+Services: `lib/services-cms.ts` over `lib/services.ts`. Site Settings
+(`lib/site-settings.ts`) is read everywhere a phone, the email, the address
+or an account prints: server code `getSiteSettings()`, client components
+`useSiteSettings()`; never type a contact detail into a component again.
+Every photograph's focal point frames it, inside any crop (`lib/focal.ts`);
+alt text is required and is the one the page reads. The first Publish of a
+post dates it (sanity/actions.ts). `npm run sync:pages -- --dry-run`, then
+the real run through `npx sanity exec … --with-user-token`, fills empty
+Studio fields with the site's words and never overwrites one.
+
 **lib/blog.ts** — MDX blog system using gray-matter
 - Reads from `content/blog/*.mdx` (or `.md`)
 - Interface: `BlogPost` with slug, title, description, date, author, category, featured_image, tags, content
@@ -337,6 +353,8 @@ npm run test:forms  # the quote form's spam rules and route decisions (no networ
 npm run test:projects  # projects from the Studio
 npm run test:pages  # the hero, page openers and galleries from the Studio
 npm run test:preview  # Edit on the page: preview marks, exit path, clickable photos, style warnings
+npm run test:studio   # focal points, first-Publish dates, Site Settings, every page's words, the Studio list
+npm run sync:pages -- --dry-run  # what the fill-only sync would put into the Studio's empty fields
 npm run test:automation  # the cron gate and the drafter's subjects
 ```
 
@@ -344,7 +362,7 @@ npm run test:automation  # the cron gate and the drafter's subjects
 - **Disk reads go through `lib/disk.ts`** (7 Oct 2026). With Sanity connected every page also rebuilds itself on Vercel's servers every 60 seconds, and there `public/` is not in the function bundle (excluded in next.config.ts for size) and `content/blog` sits only beside the blog routes. The first production build with Sanity on (7 Oct 2026) served "No photos match this filter" on every gallery and lost the project stories once its pages had rebuilt. `lib/disk.ts` reads the disk first and falls back to `lib/generated/disk.json`, which `scripts/disk-manifest.mjs` writes before every build and dev server (package.json `prebuild`, `predev`; `npm run check` fails if the committed copy is stale, so run the script after adding photos or posts and commit the JSON). Never read `public/` or `content/` with `fs` directly in code that renders a page.
 - TypeScript strict mode enabled — never use `any`
 - All data changes (services, products, projects) require code changes in `lib/` files
-- The office edits in the Studio (/studio): the home hero, page openers, gallery photos, projects, blog posts, the social grid and site settings (docs/CMS.md)
+- The office edits in the Studio (/studio): every page's words and openers, the services' words, gallery photos, projects, blog posts, the social grid and Site Settings (docs/CMS.md)
 - Contact form requires RESEND_API_KEY to actually send emails (dev mode just logs the decision)
 - Every JSON-LD block goes through `components/JsonLd.tsx` (`scriptJson` escapes
   <, > and & so Studio text can't break out of the tag); never

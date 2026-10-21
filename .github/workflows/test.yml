@@ -1,0 +1,61 @@
+# The safety net on every push and pull request (14 Oct 2026, as hubss.com's
+# verify.yml): the type check, the copy claims, the links, and every test
+# that needs no network. None of them sends mail, writes to Sanity, or calls
+# Buffer or Anthropic: the pipelines are tested against stand-ins.
+#
+# Vercel builds every pull request itself, so the build isn't repeated here;
+# this job is the part Vercel doesn't do, and it stays quick so nobody is
+# tempted to skip it.
+name: test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: test-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci --no-audit --no-fund
+
+      # The disk manifest is current, the types check, no banned claim in the
+      # copy, and every internal link lands.
+      - name: Checks
+        run: npm run check
+
+      # The quote form's spam rules and the route's decisions.
+      - name: Form tests
+        run: npm run test:forms
+
+      - name: Projects from the Studio
+        run: npm run test:projects
+
+      - name: Openers, the home hero and the galleries from the Studio
+        run: npm run test:pages
+
+      - name: Edit on the page
+        run: npm run test:preview
+
+      - name: The Studio, Site Settings and every page's words
+        run: npm run test:studio
+
+      - name: Blog and social automation
+        run: npm run test:automation

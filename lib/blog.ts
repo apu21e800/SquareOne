@@ -6,7 +6,8 @@ import { ledeOverride } from "./blog-ledes"
 import { plainCase } from "./text"
 import { groq } from "next-sanity"
 import type { PortableTextBlock } from "@portabletext/types"
-import { sanityFetch, urlFor, type SanityImageSource } from "@/sanity/lib/client"
+import { editAttr, inDraftMode, sanityFetch, urlFor, type SanityImageSource } from "@/sanity/lib/client"
+import { focalPosition, type SanityCrop, type SanityHotspot } from "./focal"
 
 const BLOG_DIR = path.join(process.cwd(), "content/blog")
 
@@ -24,6 +25,12 @@ export interface BlogPost {
   author: string
   category: string
   featured_image: string
+  /** A Studio post's lead photograph: the alt text the office wrote. */
+  featured_alt?: string
+  /** A Studio post's lead photograph: its focal point, as CSS object-position (lib/focal.ts). */
+  featured_position?: string
+  /** Edit on the page: the lead photograph opens its field, in an editor's preview only. */
+  featured_edit?: string
   tags: string[]
   content: string
 }
@@ -102,11 +109,13 @@ export interface CmsPost extends BlogPostMeta {
 export type AnyPost = BlogPost | CmsPost
 
 const POST_FIELDS = groq`{
-  title, "slug": slug.current, date, category, author, excerpt, tags, seoTitle, seoDescription,
+  _id, _type, title, "slug": slug.current, date, category, author, excerpt, tags, seoTitle, seoDescription,
   "alt": mainImage.alt, mainImage, body
 }`
 
 interface CmsPostDoc {
+  _id?: string
+  _type?: string
   title: string
   slug: string
   date: string
@@ -117,7 +126,7 @@ interface CmsPostDoc {
   seoTitle?: string
   seoDescription?: string
   alt?: string
-  mainImage?: SanityImageSource
+  mainImage?: SanityImageSource & { hotspot?: SanityHotspot | null; crop?: SanityCrop | null }
   body?: PortableTextBlock[]
 }
 
@@ -131,6 +140,8 @@ function wordsIn(blocks: PortableTextBlock[] | undefined): number {
 }
 
 function fromDoc(d: CmsPostDoc): CmsPost {
+  const alt = typeof d.alt === "string" && d.alt.trim() ? d.alt.trim() : undefined
+  const position = d.mainImage ? focalPosition(d.mainImage.hotspot, d.mainImage.crop) : undefined
   return {
     source: "cms",
     slug: d.slug,
@@ -140,6 +151,8 @@ function fromDoc(d: CmsPostDoc): CmsPost {
     author: d.author || "Square One Paving",
     category: d.category ? plainCase(d.category) : "",
     featured_image: d.mainImage ? urlFor(d.mainImage, 1600) : "",
+    ...(d.mainImage && alt ? { featured_alt: alt } : {}),
+    ...(position ? { featured_position: position } : {}),
     tags: d.tags ?? [],
     body: d.body ?? [],
     words: wordsIn(d.body),
@@ -171,6 +184,10 @@ export async function getPost(slug: string): Promise<AnyPost | null> {
     { slug },
     ["sanity", "posts"],
   )
-  if (doc && doc.slug && doc.title) return fromDoc(doc)
+  if (doc && doc.slug && doc.title) {
+    const post = fromDoc(doc)
+    const edit = doc.mainImage ? editAttr(await inDraftMode(), doc, "mainImage") : undefined
+    return edit ? { ...post, featured_edit: edit } : post
+  }
   return getPostBySlug(slug)
 }

@@ -71,7 +71,7 @@ function GalleryCover({
   priority = false,
 }: {
   href: string
-  photo?: Pick<WorkPhoto, "src">
+  photo?: Pick<WorkPhoto, "src" | "position">
   title: string
   sizes: string
   priority?: boolean
@@ -80,6 +80,7 @@ function GalleryCover({
     <Frame
       src={photo?.src}
       alt={photo ? `${title}, gallery of Square One installations` : ""}
+      position={photo?.position}
       aspect="aspect-[4/3]"
       sizes={sizes}
       priority={priority}

@@ -1,5 +1,6 @@
 import { defineField, defineType } from "sanity"
 import { bodyCheck, copyCheck } from "./style"
+import { officeDate } from "../lib/publish-date"
 
 /** A blog post — the same fields the file-based posts carry, plus a body. */
 export const post = defineType({
@@ -32,7 +33,15 @@ export const post = defineType({
       validation: (r) => r.required(),
       group: "content",
     }),
-    defineField({ name: "date", type: "date", title: "Date", validation: (r) => r.required(), group: "content" }),
+    defineField({
+      name: "date",
+      type: "date",
+      title: "Date",
+      description: "The date printed on the post. The first Publish sets it to that day, so you can leave it; a date in the future is kept. After that it changes only by hand.",
+      initialValue: () => officeDate(),
+      validation: (r) => r.required(),
+      group: "content",
+    }),
     defineField({
       name: "category",
       type: "string",
@@ -45,9 +54,17 @@ export const post = defineType({
       name: "mainImage",
       type: "image",
       title: "Lead photograph",
-      description: "Shown at the top of the post and on the blog index. Drag the focal point so the crop keeps the pavement in frame.",
+      description: "Shown at the top of the post and on the blog index. Press the crosshair and drag the focal point onto the pavement: every frame of it crops around that point.",
       options: { hotspot: true },
-      fields: [{ name: "alt", type: "string", title: "What the photo shows" }],
+      fields: [
+        defineField({
+          name: "alt",
+          type: "string",
+          title: "What the photo shows",
+          description: "One plain line, read aloud to people who can't see the photograph: what, where, and the system if you know it.",
+          validation: (r) => [r.required().error("Say what the photograph shows: it is read aloud to people who can't see it."), r.custom(copyCheck).warning()],
+        }),
+      ],
       group: "content",
     }),
     defineField({ name: "excerpt", type: "text", title: "One-paragraph summary", rows: 3, validation: (r) => [r.max(300), r.custom(copyCheck).warning()], description: "Shown on the blog index and in link previews.", group: "content" }),

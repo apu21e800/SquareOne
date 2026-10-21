@@ -1,5 +1,7 @@
 import Link from "next/link"
 import LegalContents from "@/components/LegalContents"
+import { getSiteSettings } from "@/lib/cms"
+import { mailtoHref, withSettings } from "@/lib/site-settings"
 
 /**
  * Privacy and terms, set as documents (28 Sept 2026; Vern: "privacy and
@@ -82,8 +84,10 @@ function Blocks({ body }: { body: string }) {
   )
 }
 
-export default function LegalDocument({ title, updated, applies, lede, sections, other }: Props) {
-  const items = sections.map((s) => ({ ...split(s.heading), body: s.body }))
+export default async function LegalDocument({ title, updated, applies, lede, sections, other }: Props) {
+  // The contact lines in the text are Site Settings' (lib/site-settings.ts).
+  const site = await getSiteSettings()
+  const items = sections.map((s) => ({ ...split(s.heading), body: withSettings(s.body, site) }))
   const toc = items.map((it, i) => ({ id: `clause-${it.n || i + 1}`, n: it.n, title: it.title }))
 
   return (
@@ -108,7 +112,7 @@ export default function LegalDocument({ title, updated, applies, lede, sections,
               <div>
                 <dt>Questions</dt>
                 <dd>
-                  <a href="mailto:office@squareonepaving.com">office@squareonepaving.com</a>
+                  <a href={mailtoHref(site.email)}>{site.email}</a>
                 </dd>
               </div>
             </dl>

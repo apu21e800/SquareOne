@@ -21,6 +21,7 @@ export default function Frame({
   aspect = "aspect-[4/3]",
   sizes = "(max-width: 700px) 100vw, 50vw",
   position,
+  edit,
   href,
   priority = false,
   className = "",
@@ -33,6 +34,8 @@ export default function Frame({
   aspect?: string
   sizes?: string
   position?: string
+  /** Edit on the page: makes the photograph open its Studio field, in an editor's preview only. */
+  edit?: string
   href?: string
   priority?: boolean
   className?: string
@@ -41,7 +44,7 @@ export default function Frame({
 }) {
   const figure = (
     <figure className={`m-0 ${className}`}>
-      <span className={`frame-img relative block w-full overflow-hidden bg-surface-stone ${aspect}`}>
+      <span className={`frame-img relative block w-full overflow-hidden bg-surface-stone ${aspect}`} data-sanity={edit}>
         {src ? (
           <Image
             src={src}

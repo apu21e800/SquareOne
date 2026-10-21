@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 
 import { getProjects } from "@/lib/projects-cms"
+import { photoMetaFor } from "@/lib/projects"
 import { WORK_APPS } from "@/lib/work"
 import IndexImageHero from "@/components/IndexImageHero"
 import OpenerTitle from "@/components/ui/OpenerTitle"
@@ -57,17 +58,22 @@ export default async function ProjectsPage() {
   // projects with a published year lead, latest year first; the rest keep
   // the record's own order behind them (Array.prototype.sort is stable).
   const newestFirst = [...projects].sort((a, b) => Number(b.year ?? 0) - Number(a.year ?? 0))
-  const cards: ProjectCard[] = newestFirst.map((project) => ({
-    slug: project.slug,
-    title: project.title,
-    application: project.application,
-    region: project.region,
-    city: project.city,
-    systems: project.systems,
-    year: project.year,
-    excerpt: project.excerpt,
-    src: project.imageUrl,
-  }))
+  const cards: ProjectCard[] = newestFirst.map((project) => {
+    // The Studio's focal point for the lead photograph, when the office set one.
+    const position = photoMetaFor(project, project.imageUrl)?.position
+    return {
+      slug: project.slug,
+      title: project.title,
+      application: project.application,
+      region: project.region,
+      city: project.city,
+      systems: project.systems,
+      year: project.year,
+      excerpt: project.excerpt,
+      src: project.imageUrl,
+      ...(position ? { position } : {}),
+    }
+  })
 
   const byUse = WORK_APPS.map((a) => ({ ...a, href: APP_HREF[a.slug] }))
 

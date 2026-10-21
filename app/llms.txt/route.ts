@@ -1,7 +1,9 @@
-import { services } from "@/lib/services"
+import { getStudioServices } from "@/lib/services-cms"
 import { products } from "@/lib/products"
 import { WORK_APPS } from "@/lib/work"
 import { SITE_URL } from "@/lib/site"
+import { getSiteSettings } from "@/lib/cms"
+import { addressParts } from "@/lib/site-settings"
 
 export const dynamic = "force-static"
 
@@ -11,13 +13,18 @@ export const dynamic = "force-static"
  * pages render from; nothing here is written only for machines. Canon
  * facts only: contact details, service area, installer framing.
  */
-export function GET() {
+export async function GET() {
+  // The contact line, from Site Settings (lib/site-settings.ts).
+  const site = await getSiteSettings()
+  const office = addressParts(site)
+  // The services' taglines as the Studio has them (lib/services-cms.ts).
+  const services = await getStudioServices()
   const lines: string[] = [
     "# Square One Paving",
     "",
     "> BC decorative pavement installer since 2000: stamped asphalt, decorative coatings, preformed thermoplastic and vapour blasting for municipalities, developers, strata and homeowners across the Lower Mainland and Vancouver Island. Square One installs the systems; their manufacturer makes them.",
     "",
-    "Office: 19-11720 Stewart Crescent, Maple Ridge, BC V2X 9E7. Phone 604-612-6209 (Lower Mainland), 250-391-0270 (Vancouver Island), 1-877-391-0270 (toll-free). Email office@squareonepaving.com.",
+    `Office: ${office.street}, ${office.locality}, ${office.region} ${office.postalCode}. Phone ${site.phoneOffice} (Lower Mainland), ${site.phoneIsland} (Vancouver Island), ${site.phoneTollFree} (toll-free). Email ${site.email}.`,
     "Service area: Metro Vancouver, the Fraser Valley and Vancouver Island; elsewhere in BC by arrangement.",
     "Process: free site visit, then a written quote, then installation by Square One's own crews to the published specification.",
     "",

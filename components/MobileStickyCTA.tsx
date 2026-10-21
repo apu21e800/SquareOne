@@ -3,6 +3,8 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
+import { useSiteSettings } from "@/components/SiteSettingsProvider"
+import { telHref } from "@/lib/site-settings"
 
 /**
  * Mobile-only sticky bottom CTA bar.
@@ -32,6 +34,7 @@ import { useEffect, useState } from "react"
 export default function MobileStickyCTA() {
   const pathname = usePathname()
   const [visible, setVisible] = useState(false)
+  const site = useSiteSettings()
 
   const hidden = pathname === "/contact"
 
@@ -73,7 +76,7 @@ export default function MobileStickyCTA() {
       >
         <div className="grid grid-cols-2">
           <a
-            href="tel:+16046126209"
+            href={telHref(site.phoneOffice)}
             tabIndex={visible ? undefined : -1}
             className="flex items-center justify-center gap-2 border-r py-[15px] text-[15px] font-bold leading-[1.2] text-white active:bg-white/[0.06]"
             style={{ borderColor: "var(--hairline-slate)", fontFamily: "var(--font-display)" }}

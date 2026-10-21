@@ -1,7 +1,9 @@
 import { groq } from "next-sanity"
 import { sanityFetch, urlFor, type SanityImageSource } from "@/sanity/lib/client"
+import { focalPosition, type SanityCrop, type SanityHotspot } from "@/lib/focal"
 import { cmsEnabled } from "@/sanity/env"
 import { projects } from "@/lib/projects"
+import { mergeSettings, type SiteSettings } from "@/lib/site-settings"
 
 /**
  * The CMS readers — every one returns something sensible with no CMS at all.
@@ -18,68 +20,18 @@ import { projects } from "@/lib/projects"
    Site settings
    ------------------------------------------------------------------ */
 
-export interface SiteSettings {
-  positioning: string
-  phoneOffice: string
-  phoneIsland: string
-  phoneTollFree: string
-  email: string
-  addressLine1: string
-  addressLine2: string
-  instagram: string
-  tiktok?: string
-  facebook: string
-  linkedin: string
-  youtube: string
-  socialHeading: string
-  socialLede: string
-}
-
-export const DEFAULT_SETTINGS: SiteSettings = {
-  positioning:
-    // 26 Sept 2026: the footer is a letterhead now (components/Footer.tsx),
-    // with one row of links instead of a "What we do" column, so the line
-    // can name the trades again without saying them twice. Plain, local,
-    // "we" — the site's voice (docs/OWN-COMPANY-BRIEF.md §3.10).
-    // 28 Sept 2026 ("cut the fat"): one sentence.
-    "We stamp, coat and mark asphalt and concrete, with our own crews on both sides of the Strait, since 2000.",
-  phoneOffice: "604-612-6209",
-  phoneIsland: "250-391-0270",
-  phoneTollFree: "1-877-391-0270",
-  email: "office@squareonepaving.com",
-  addressLine1: "19–11720 Stewart Crescent",
-  addressLine2: "Maple Ridge, BC V2X 9E7",
-  instagram: "https://www.instagram.com/squareonepaving/",
-  facebook: "https://www.facebook.com/squareonepaving/",
-  linkedin: "https://www.linkedin.com/company/square-one-paving-ltd/",
-  youtube: "https://www.youtube.com/channel/UCBDvB4vgdahH67BmP6FeccQ",
-  // 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.10): "Follow the work" was
-  // hubss.com's heading too. A value saved in the Studio's Site settings
-  // still overrides these two.
-  socialHeading: "Recent, on Instagram",
-  socialLede: "The crews at work, installs as they finish, and the odd before-and-after.",
-}
+// The settings themselves, their defaults and helpers live in
+// lib/site-settings.ts (pure, so client components can use them too).
+export { DEFAULT_SETTINGS, handleFrom, type SiteSettings } from "@/lib/site-settings"
 
 const SETTINGS_QUERY = groq`*[_type == "siteSettings" && _id == "siteSettings"][0]{
   positioning, phoneOffice, phoneIsland, phoneTollFree, email, addressLine1, addressLine2,
   instagram, tiktok, facebook, linkedin, youtube, socialHeading, socialLede
 }`
 
+/** Site Settings, the Studio's over the code's field by field (lib/site-settings.ts). */
 export async function getSiteSettings(): Promise<SiteSettings> {
-  const doc = await sanityFetch<Partial<SiteSettings> | null>(SETTINGS_QUERY, {}, ["sanity", "settings"])
-  if (!doc) return DEFAULT_SETTINGS
-  const merged: SiteSettings = { ...DEFAULT_SETTINGS }
-  for (const [k, v] of Object.entries(doc)) {
-    if (typeof v === "string" && v.trim()) (merged as unknown as Record<string, string>)[k] = v.trim()
-  }
-  return merged
-}
-
-/** "@squareonepaving" from an Instagram or TikTok profile URL; "" when it is not a profile. */
-export function handleFrom(url: string | undefined): string {
-  if (!url) return ""
-  const m = /^https?:\/\/(?:www\.)?(?:instagram\.com|tiktok\.com)\/@?([A-Za-z0-9._]+)\/?$/.exec(url.trim())
-  return m ? `@${m[1]}` : ""
+  return mergeSettings(await sanityFetch<Partial<Record<keyof SiteSettings, unknown>> | null>(SETTINGS_QUERY, {}, ["sanity", "settings"]))
 }
 
 /* ------------------------------------------------------------------
@@ -199,6 +151,8 @@ export interface ImageValue {
   src: string
   alt: string
   caption?: string
+  /** The Studio's focal point, as CSS object-position (lib/focal.ts). */
+  position?: string
 }
 
 export interface Slots {
@@ -215,7 +169,7 @@ const SLOTS_QUERY = groq`{
 
 interface SlotsDoc {
   copy: { key: string; value: string }[]
-  image: { key: string; alt?: string; caption?: string; image: SanityImageSource }[]
+  image: { key: string; alt?: string; caption?: string; image: SanityImageSource & { hotspot?: SanityHotspot | null; crop?: SanityCrop | null } }[]
 }
 
 /** All slots in one read (cached 60s). Pages pass the result down to sections. */
@@ -226,7 +180,8 @@ export async function getSlots(): Promise<Slots> {
   const slots: Slots = { copy: {}, image: {} }
   for (const c of doc.copy ?? []) slots.copy[c.key.trim()] = c.value
   for (const i of doc.image ?? []) {
-    slots.image[i.key.trim()] = { src: urlFor(i.image, 2000), alt: i.alt ?? "", caption: i.caption }
+    const position = focalPosition(i.image.hotspot, i.image.crop)
+    slots.image[i.key.trim()] = { src: urlFor(i.image, 2000), alt: i.alt ?? "", caption: i.caption, ...(position ? { position } : {}) }
   }
   return slots
 }

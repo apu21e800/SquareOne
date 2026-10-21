@@ -3,7 +3,7 @@ import Link from "next/link"
 import Image from "next/image"
 import type { Metadata } from "next"
 
-import type { Project } from "@/lib/projects"
+import { photoMetaFor, type Project } from "@/lib/projects"
 import { getProject, getProjects } from "@/lib/projects-cms"
 import { products } from "@/lib/products"
 import { getPostBySlug } from "@/lib/blog"
@@ -113,6 +113,8 @@ export default async function ProjectPage({ params }: Props) {
   const gallery = [...project.images, ...extras]
   const heroImage = gallery[0]
   const galleryRest = gallery.slice(1)
+  // The Studio's words and framing for each photograph (lib/projects-cms.ts).
+  const heroMeta = photoMetaFor(project, heroImage)
 
   const serviceSlug = serviceSlugMap[project.service] ?? "stamped-asphalt"
   const serviceName = serviceLabel[project.service] ?? project.service
@@ -178,14 +180,15 @@ export default async function ProjectPage({ params }: Props) {
         {project.heroWide ? (
           /* Full-bleed frame; the caption under it, in the column. */
           <figure className="m-0 mt-10">
-            <div className="relative aspect-[21/9] overflow-hidden bg-[color:var(--surface-stone)] max-[700px]:aspect-[3/2]">
+            <div className="relative aspect-[21/9] overflow-hidden bg-[color:var(--surface-stone)] max-[700px]:aspect-[3/2]" data-sanity={heroMeta?.edit}>
               <Image
                 src={heroImage}
-                alt={project.title}
+                alt={heroMeta?.alt ?? project.title}
                 fill
                 priority
                 sizes="100vw"
                 className="object-cover"
+                style={heroMeta?.position ? { objectPosition: heroMeta.position } : undefined}
               />
               {/* The colour card's edge along the frame's foot, as on every
                   full-bleed photograph a page opens on (7 Oct 2026). */}
@@ -201,10 +204,12 @@ export default async function ProjectPage({ params }: Props) {
             <Frame
               className="mt-10 max-w-[960px]"
               src={heroImage}
-              alt={project.title}
+              alt={heroMeta?.alt ?? project.title}
               caption={caption}
               aspect="aspect-[4/3]"
               sizes="(max-width: 1024px) 100vw, 960px"
+              position={heroMeta?.position}
+              edit={heroMeta?.edit}
               priority
             />
           </div>
@@ -322,12 +327,17 @@ export default async function ProjectPage({ params }: Props) {
           <div className="container-1280">
             <ProjectGallery
               caption={caption}
-              photos={gallery.map((src, i) => ({
-                src,
-                alt: i === 0 ? project.title : `${project.title}, photo ${i + 1} of ${gallery.length}`,
-                primary: project.title,
-                secondary: caption,
-              }))}
+              photos={gallery.map((src, i) => {
+                const meta = photoMetaFor(project, src)
+                return {
+                  src,
+                  alt: meta?.alt ?? (i === 0 ? project.title : `${project.title}, photo ${i + 1} of ${gallery.length}`),
+                  primary: project.title,
+                  secondary: caption,
+                  ...(meta?.position ? { position: meta.position } : {}),
+                  ...(meta?.edit ? { edit: meta.edit } : {}),
+                }
+              })}
             />
           </div>
         </section>
@@ -345,6 +355,7 @@ export default async function ProjectPage({ params }: Props) {
                   caption={metaLine(p.city, p.systems, p.year)}
                   aspect="aspect-[4/3]"
                   sizes="(max-width: 700px) 100vw, 520px"
+                  position={photoMetaFor(p, p.imageUrl)?.position}
                   href={`/projects/${p.slug}`}
                 />
                 <div className="min-w-0">

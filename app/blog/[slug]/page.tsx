@@ -267,10 +267,12 @@ export default async function BlogPostPage({ params }: Props) {
             <Frame
               className="mt-12"
               src={post.featured_image}
-              alt={post.title}
+              alt={post.featured_alt ?? post.title}
               caption={heroCaption || undefined}
               aspect="aspect-[16/9]"
               sizes="(max-width: 700px) 100vw, 640px"
+              position={post.featured_position}
+              edit={post.featured_edit}
               priority
             />
           )}
@@ -371,7 +373,7 @@ function RelatedNote({ post }: { post: BlogPostMeta }) {
   return (
     <Row as="li" compact className="relative">
       <Link href={`/blog/${post.slug}`} aria-label={post.title} className="absolute inset-0 z-[2]" />
-      <Frame src={post.featured_image || undefined} alt="" aspect="aspect-[3/2]" sizes="132px" />
+      <Frame src={post.featured_image || undefined} alt="" aspect="aspect-[3/2]" sizes="132px" position={post.featured_position} />
       <div className="min-w-0">
         <h3 className="[text-wrap:pretty]">{post.title}</h3>
         <p className="mt-2 text-[15px] italic text-ink-muted">

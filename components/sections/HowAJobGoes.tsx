@@ -2,6 +2,8 @@ import type { CSSProperties, ReactNode } from "react"
 import Link from "next/link"
 import Frame from "@/components/ui/Frame"
 import { Section } from "@/components/ui/Container"
+import { getSiteSettings } from "@/lib/cms"
+import { telHref } from "@/lib/site-settings"
 
 /**
  * How a job goes: the one process band (26 Sept 2026, docs/OWN-COMPANY-BRIEF.md
@@ -105,7 +107,7 @@ export const VAPOUR_STEPS: Step[] = [
   },
 ]
 
-export default function HowAJobGoes({
+export default async function HowAJobGoes({
   tone = "warm",
   specifiers = false,
   crews = true,
@@ -128,6 +130,7 @@ export default function HowAJobGoes({
   title?: ReactNode
   cta?: boolean
 }) {
+  const site = await getSiteSettings()
   return (
     <Section id="how-a-job-goes" label={label} title={title} tone={tone} wide>
       {/* 6 Oct 2026 (Vern: "add some kind of colour to the Four steps
@@ -179,7 +182,7 @@ export default function HowAJobGoes({
             Get a quote
           </Link>
           <span className="text-[16px] text-ink-muted">
-            or call <a href="tel:+16046126209" className="link">604-612-6209</a>
+            or call <a href={telHref(site.phoneOffice)} className="link">{site.phoneOffice}</a>
           </span>
         </div>
       )}

@@ -1,6 +1,7 @@
 import { defineArrayMember, defineField, defineType, type ValidationContext } from "sanity"
 import { copyCheck, headingCheck } from "./style"
 import { OPENERS, RECORD_OPENER_PAGES } from "../../lib/openers"
+import { homeSectionFields } from "./words"
 
 /**
  * The home page's hero, every page's opener, and the photo galleries
@@ -44,9 +45,15 @@ export const homePage = defineType({
   name: "homePage",
   title: "Home page",
   type: "document",
+  // 14 Oct 2026: the sections below the hero joined the hero here
+  // (sanity/schemaTypes/words.ts, lib/page-copy.ts).
+  groups: [
+    { name: "hero", title: "The hero", default: true },
+    { name: "sections", title: "The sections below" },
+  ],
   fields: [
-    ...headlineFields,
-    defineField({ name: "line", type: "text", rows: 3, title: "Line under the headline", description: "Left empty, the site's own line.", validation: (r) => r.custom(copyCheck).warning() }),
+    ...headlineFields.map((f) => ({ ...f, group: "hero" })),
+    defineField({ name: "line", type: "text", rows: 3, title: "Line under the headline", description: "Left empty, the site's own line.", validation: (r) => r.custom(copyCheck).warning(), group: "hero" }),
     defineField({
       name: "reel",
       type: "array",
@@ -68,7 +75,9 @@ export const homePage = defineType({
         r.custom((value) =>
           Array.isArray(value) && value.length > 0 && value.length < 3 ? "Add at least three photographs, or leave it empty for the site's own reel." : true,
         ),
+      group: "hero",
     }),
+    ...homeSectionFields.map((f) => ({ ...f, group: "sections" })),
   ],
   preview: { prepare: () => ({ title: "Home page" }) },
 })
@@ -125,9 +134,22 @@ export const galleryPhoto = defineType({
   title: "Gallery photo",
   type: "document",
   fields: [
-    defineField({ name: "image", type: "image", title: "Photograph", description: "Square One's own work. At least 1600px wide shows large; smaller stays a gallery tile.", options: { hotspot: true }, validation: (r) => r.required() }),
+    defineField({
+      name: "image",
+      type: "image",
+      title: "Photograph",
+      description: "Square One's own work. At least 1600px wide shows large; smaller stays a gallery tile. Press the crosshair and drag the focal point onto the pavement: the tile crops around it.",
+      options: { hotspot: true },
+      validation: (r) => r.required(),
+    }),
     defineField({ name: "gallery", type: "string", title: "Gallery", options: { list: GALLERIES }, validation: (r) => r.required() }),
-    defineField({ name: "subject", type: "string", title: "What it shows", description: "Short, as the captions read: “Decorative crosswalk”, “School playground labyrinth”.", validation: (r) => [r.required().max(80), r.custom(copyCheck).warning()] }),
+    defineField({
+      name: "subject",
+      type: "string",
+      title: "What it shows",
+      description: "Short, as the captions read: “Decorative crosswalk”, “School playground labyrinth”. With the place and the systems, it is also what is read aloud to people who can't see the photograph.",
+      validation: (r) => [r.required().max(80), r.custom(copyCheck).warning()],
+    }),
     defineField({ name: "place", type: "string", title: "Where", description: "“Bastion Square, Victoria”. Leave empty unless Square One says so publicly; never a guess.", validation: (r) => r.custom(copyCheck).warning() }),
     defineField({ name: "region", type: "string", title: "Region", options: { list: REGIONS }, description: "Driveway photographs show on the Vancouver or Victoria page by this.", validation: (r) => r.required() }),
     defineField({ name: "systems", type: "array", of: [{ type: "string" }], title: "Systems installed", options: { list: SYSTEMS } }),

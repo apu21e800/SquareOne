@@ -54,7 +54,7 @@ export default function BlogFeedGrid({ posts }: { posts: BlogPostMeta[] }) {
         {posts.map((post) => (
           <li key={post.slug} className="row row-compact relative">
             <Link href={`/blog/${post.slug}`} aria-label={post.title} className="absolute inset-0 z-[2]" />
-            <Frame src={post.featured_image || FALLBACK_IMAGE} alt="" aspect="aspect-[3/2]" sizes="132px" />
+            <Frame src={post.featured_image || FALLBACK_IMAGE} alt="" aspect="aspect-[3/2]" sizes="132px" position={post.featured_image ? post.featured_position : undefined} />
             <div className="min-w-0">
               <h3 className="[text-wrap:pretty]">{post.title}</h3>
               <p className="mt-2 text-[15px] italic text-ink-muted">

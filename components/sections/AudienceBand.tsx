@@ -1,6 +1,8 @@
 import Link from "next/link"
 import Frame from "@/components/ui/Frame"
 import { Section } from "@/components/ui/Container"
+import Heading from "@/components/ui/Heading"
+import { HOME_COPY, type HomeCopy } from "@/lib/page-copy"
 
 /**
  * Who we work with — the persona-routing move, ordered by the business
@@ -21,10 +23,11 @@ import { Section } from "@/components/ui/Container"
 // decorative hardscapes for commercial and residential sites, and the
 // specifiers' card is not required. Three buyers: the municipality, the
 // commercial or strata owner, the homeowner.
+// The names and lines are the Home page's words (lib/page-copy.ts); the
+// photographs and links stay here.
 const audiences = [
   {
-    label: "Municipalities",
-    desc: "Crosswalks, intersections, parks and school zones, installed by our own crews.",
+    key: "municipal" as const,
     orders: ["Crosswalks", "Streetscapes", "Parks"],
     href: "/applications/crosswalks",
     cta: "Municipal work",
@@ -34,8 +37,7 @@ const audiences = [
     position: "center 60%",
   },
   {
-    label: "Commercial and strata",
-    desc: "Entries, parking, plazas and laneways, quoted in writing before anything starts.",
+    key: "commercial" as const,
     orders: ["Site walk", "Written quote", "Own crews"],
     href: "/applications/parking-lots",
     cta: "Commercial work",
@@ -48,8 +50,7 @@ const audiences = [
     position: "center 60%",
   },
   {
-    label: "Homeowners",
-    desc: "Brick, cobble or slate, pressed into the driveway you already have.",
+    key: "homeowners" as const,
     orders: ["Driveways", "Walkways", "Laneways"],
     href: "/driveways",
     cta: "Driveways",
@@ -60,15 +61,23 @@ const audiences = [
   },
 ]
 
-export default function AudienceBand({ tone = "paper" }: { tone?: "paper" | "warm" | "stone" }) {
+export default function AudienceBand({
+  tone = "paper",
+  words = HOME_COPY.audiences,
+  cards = HOME_COPY.audienceCards,
+}: {
+  tone?: "paper" | "warm" | "stone"
+  words?: HomeCopy["audiences"]
+  cards?: HomeCopy["audienceCards"]
+}) {
   // 28 Sept 2026 (Vern: "too much text… cut the fat, make the sale"): the
   // three hairline rows became three columns, a photograph, the name, one
   // line and the way in. The "orders" tags stay in the data for later use.
   return (
-    <Section label="Who we work with" title={<>Municipal, commercial, <em>residential</em></>} tone={tone} wide>
+    <Section label={words.label} title={<Heading words={words} />} tone={tone} wide>
       <ul data-reveal-group className="grid grid-cols-3 gap-x-8 gap-y-12 max-[900px]:grid-cols-1" role="list">
         {audiences.map((audience) => (
-          <li key={audience.label} data-reveal>
+          <li key={audience.key} data-reveal>
             <Frame
               src={audience.image}
               alt={audience.alt}
@@ -79,10 +88,10 @@ export default function AudienceBand({ tone = "paper" }: { tone?: "paper" | "war
             />
             <h3 className="mt-5 text-[26px] leading-[1.12]">
               <Link href={audience.href} className="hover:underline hover:decoration-1 hover:underline-offset-[6px]">
-                {audience.label}
+                {cards[audience.key].title}
               </Link>
             </h3>
-            <p className="mt-2 max-w-[36ch] text-ink-body [text-wrap:pretty]">{audience.desc}</p>
+            <p className="mt-2 max-w-[36ch] text-ink-body [text-wrap:pretty]">{cards[audience.key].text}</p>
           </li>
         ))}
       </ul>

@@ -1,6 +1,7 @@
 import { groq } from "next-sanity"
-import { sanityFetch, urlFor, type SanityImageSource } from "@/sanity/lib/client"
-import { projects as RECORD, type Project, type ProjectRegion, type ProjectService } from "@/lib/projects"
+import { editAttr, inDraftMode, sanityFetch, urlFor, type SanityImageSource } from "@/sanity/lib/client"
+import { projects as RECORD, type Project, type ProjectPhotoMeta, type ProjectRegion, type ProjectService } from "@/lib/projects"
+import { focalPosition, isCropped, type SanityCrop, type SanityHotspot } from "@/lib/focal"
 
 /**
  * The projects, as the Studio has them (9 Oct 2026). Server-only.
@@ -24,17 +25,25 @@ import { projects as RECORD, type Project, type ProjectRegion, type ProjectServi
  *
  * Deleting a seeded project in the Studio does not remove it: the record
  * still has it. "Take off the site" does.
+ *
+ * Each photograph's own words and framing (14 Oct 2026): the alt text the
+ * office writes is the one the project's page reads out, and the focal point
+ * it drags is where every frame of that photograph crops (Project.photoMeta).
  */
 
 interface PhotoDoc {
+  _key?: string
   /** The asset's original file name, as uploaded (the seed stored it URL-encoded). */
   file?: string
+  alt?: string
   asset?: { _ref: string }
-  crop?: { top?: number; bottom?: number; left?: number; right?: number }
-  hotspot?: unknown
+  crop?: SanityCrop | null
+  hotspot?: SanityHotspot | null
 }
 
 export interface ProjectDoc {
+  _id?: string
+  _type?: string
   _createdAt?: string
   title?: string
   slug?: string
@@ -56,9 +65,9 @@ export interface ProjectDoc {
 }
 
 const QUERY = groq`*[_type == "project" && defined(slug.current)] | order(_createdAt desc) {
-  _createdAt, title, "slug": slug.current, service, application, city, region, systems,
+  _id, _type, _createdAt, title, "slug": slug.current, service, application, city, region, systems,
   client, artist, year, excerpt, story, "post": post->slug.current, featured, heroWide, hidden,
-  "images": images[defined(asset)]{ "file": asset->originalFilename, asset, crop, hotspot }
+  "images": images[defined(asset)]{ _key, alt, "file": asset->originalFilename, asset, crop, hotspot }
 }`
 
 const SERVICES: ProjectService[] = ["Stamped Asphalt", "Decorative Coatings", "Preformed Thermoplastic", "Vapour Blasting"]
@@ -73,7 +82,7 @@ function decoded(name: string): string {
 }
 
 const baseName = (src: string) => decoded(src.split("/").pop() ?? "")
-const cropped = (c: PhotoDoc["crop"]) => Boolean(c && ((c.top ?? 0) || (c.bottom ?? 0) || (c.left ?? 0) || (c.right ?? 0)))
+const cropped = (c: PhotoDoc["crop"]) => isCropped(c)
 
 /** The site's own copy of a photograph when the Studio's is the same file and uncropped; else Sanity's CDN. */
 function photoSrc(photo: PhotoDoc, record?: Project): string {
@@ -87,12 +96,30 @@ function photoSrc(photo: PhotoDoc, record?: Project): string {
 
 const text = (v: unknown): string | undefined => (typeof v === "string" && v.trim() ? v.trim() : undefined)
 
+/** Each photograph's alt text, focal point and preview mark, by the address the page uses. */
+function photoDetails(d: ProjectDoc, photos: { doc: PhotoDoc; src: string }[], preview: boolean): Record<string, ProjectPhotoMeta> | undefined {
+  const out: Record<string, ProjectPhotoMeta> = {}
+  for (const { doc, src } of photos) {
+    if (out[src]) continue
+    const meta: ProjectPhotoMeta = {}
+    const alt = text(doc.alt)
+    if (alt) meta.alt = alt
+    const position = focalPosition(doc.hotspot, doc.crop)
+    if (position) meta.position = position
+    const edit = doc._key ? editAttr(preview, { _id: d._id, _type: d._type ?? "project" }, `images[_key=="${doc._key}"]`) : undefined
+    if (edit) meta.edit = edit
+    if (Object.keys(meta).length) out[src] = meta
+  }
+  return Object.keys(out).length ? out : undefined
+}
+
 /** One project from the Studio, its gaps filled from the record. Null when there is nothing to show. */
-function fromDoc(d: ProjectDoc, record?: Project): Project | null {
+function fromDoc(d: ProjectDoc, record?: Project, preview = false): Project | null {
   const title = text(d.title) ?? record?.title
   const slug = text(d.slug)
-  const photos = (d.images ?? []).map((p) => photoSrc(p, record)).filter(Boolean)
-  const images = photos.length ? photos : record?.images ?? []
+  const photos = (d.images ?? []).map((doc) => ({ doc, src: photoSrc(doc, record) })).filter((p) => p.src)
+  const images = photos.length ? photos.map((p) => p.src) : record?.images ?? []
+  const photoMeta = photos.length ? photoDetails(d, photos, preview) : undefined
   if (!title || !slug || images.length === 0) return record ?? null
   const story = (d.story ?? []).map(text).filter((p): p is string => Boolean(p))
   const systems = (d.systems ?? []).map(text).filter((s): s is string => Boolean(s))
@@ -115,6 +142,7 @@ function fromDoc(d: ProjectDoc, record?: Project): Project | null {
     heroWide: d.heroWide ?? record?.heroWide ?? false,
     featured: d.featured ?? record?.featured,
     flag: record?.flag,
+    ...(photoMeta ? { photoMeta } : {}),
   }
 }
 
@@ -124,11 +152,11 @@ function fromDoc(d: ProjectDoc, record?: Project): Project | null {
  * alone when there is no CMS or it can't be reached.
  */
 export async function getProjects(): Promise<Project[]> {
-  return mergeProjects(await sanityFetch<ProjectDoc[]>(QUERY, {}, ["sanity", "projects"]), RECORD)
+  return mergeProjects(await sanityFetch<ProjectDoc[]>(QUERY, {}, ["sanity", "projects"]), RECORD, await inDraftMode())
 }
 
 /** The merge itself, kept pure so `npm run test:projects` can test it without Sanity. */
-export function mergeProjects(docs: ProjectDoc[] | null, record: Project[]): Project[] {
+export function mergeProjects(docs: ProjectDoc[] | null, record: Project[], preview = false): Project[] {
   if (!docs) return record
   const bySlug = new Map<string, ProjectDoc>()
   for (const d of docs) if (d.slug && !bySlug.has(d.slug)) bySlug.set(d.slug, d)
@@ -136,11 +164,11 @@ export function mergeProjects(docs: ProjectDoc[] | null, record: Project[]): Pro
   const known = new Set(record.map((r) => r.slug))
   const added = [...bySlug.values()]
     .filter((d) => !known.has(d.slug as string) && !hidden.has(d.slug as string))
-    .map((d) => fromDoc(d))
+    .map((d) => fromDoc(d, undefined, preview))
     .filter((p): p is Project => Boolean(p))
   const kept = record.filter((r) => !hidden.has(r.slug)).map((r) => {
     const d = bySlug.get(r.slug)
-    return d ? fromDoc(d, r) ?? r : r
+    return d ? fromDoc(d, r, preview) ?? r : r
   })
   return [...added, ...kept]
 }

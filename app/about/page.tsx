@@ -11,6 +11,12 @@ import Frame from "@/components/ui/Frame"
 import { Section } from "@/components/ui/Container"
 import OpenerTitle from "@/components/ui/OpenerTitle"
 import { getPageOpener } from "@/lib/page-content"
+import { getSiteSettings } from "@/lib/cms"
+import { addressParts, mailtoHref, telHref } from "@/lib/site-settings"
+import { getAboutCopy } from "@/lib/page-content"
+import { type AboutCopy } from "@/lib/page-copy"
+import Heading from "@/components/ui/Heading"
+import { stegaClean } from "next-sanity"
 
 export const metadata: Metadata = {
   // One separator: the root template adds " | Square One Paving" (58 chars all in).
@@ -59,34 +65,32 @@ export const metadata: Metadata = {
 /* 28 Sept 2026, second image pass (Vern: "more recent images… site wide"):
    three of the four frames are 2025–2026 work from the September delivery
    (Chilliwack, Maple Ridge, South Langford); vapour keeps Granville Island. */
-const trades: { name: string; line: string; href: string; src: string; alt: string; caption: string }[] = [
+// The names and lines are the About page's words (lib/page-copy.ts); the
+// photographs and links stay here.
+const trades: { key: keyof AboutCopy["tradeCards"]; href: string; src: string; alt: string; caption: string }[] = [
   {
-    name: "Stamped asphalt",
-    line: "Brick, cobble and slate, pressed into the asphalt itself.",
+    key: "stampedAsphalt",
     href: "/services/stamped-asphalt",
     src: "/images/applications/roundabouts/chilliwack-circular-turnaround-streetprint-01.jpg",
     alt: "A circular turnaround in charcoal herringbone StreetPrint in front of a new apartment building in Chilliwack",
     caption: "Chilliwack · StreetPrint",
   },
   {
-    name: "Decorative coatings",
-    line: "StreetBond colour on asphalt and concrete.",
+    key: "decorativeCoatings",
     href: "/services/decorative-coatings",
     src: "/images/applications/parks-paths/maple-ridge-spray-park-surface-streetbond-01.jpg",
     alt: "Blue and orange StreetBond around the play features of the spray park in Maple Ridge",
     caption: "Spray park, Maple Ridge · StreetBond",
   },
   {
-    name: "Preformed thermoplastic",
-    line: "Crosswalks, symbols and public art, fused into the road.",
+    key: "preformedThermoplastic",
     href: "/services/preformed-thermoplastic",
     src: "/images/S1_update_v2/photos/Featured%20image%20options/Photo-2025-09-25-3-48-33-PM-scaled.jpg",
     alt: "An alphabet path in rainbow-coloured DecoMark winding along a school walkway at South Langford Elementary, Langford",
     caption: "South Langford Elementary, Langford · DecoMark",
   },
   {
-    name: "Vapour blasting",
-    line: "Cleaning, priming, graffiti and marking removal.",
+    key: "vapourBlasting",
     href: "/services/vapor-blasting",
     src: "/images/services/vapor-blasting/generated/gen-granville-island-vapour-blasting-01-enhanced.jpg",
     alt: "Square One crew vapour blasting at Granville Island",
@@ -94,26 +98,14 @@ const trades: { name: string; line: string; href: string; src: string; alt: stri
   },
 ]
 
-/* Six things a specifier or a homeowner can hold Square One to. Every line
-   restates something on the record — HUB's published product facts
-   (lib/products.ts, attributed), the contact canon, the site walk with the
-   sample boards — and nothing about crews, budgets or timelines that Square
-   One has not published. No warranty wording (6 Oct 2026, the client:
-   "remove anything about warranty"). */
-const principles = [
-  {
-    title: "Built for BC weather",
-    body: "Slip-resistant, snowplow-safe, UV-stable: the manufacturer publishes how every system we install performs.",
-  },
-  {
-    title: "Municipal discipline, residential care",
-    body: "Civic work goes in to the owner's marking standard. A driveway gets the same crews.",
-  },
-  {
-    title: "Chosen against the real site",
-    body: "Patterns are drawn to scale and colours come off the published chart, held up on sample boards where the work will go.",
-  },
-]
+/* Three things a specifier or a homeowner can hold Square One to: the
+   About page's words since 14 Oct 2026 (lib/page-copy.ts, ABOUT_COPY
+   principleCards). Every line restates something on the record, HUB's
+   published product facts (attributed), the contact canon, the site walk
+   with the sample boards, and nothing about crews, budgets or timelines
+   that Square One has not published. No warranty wording (6 Oct 2026, the
+   client: "remove anything about warranty"). */
+const PRINCIPLES = ["weather", "care", "site"] as const
 
 /* On the record — facts about the company, not a tally of its work. The
    client struck the photograph count on 10 Sept 2026 ("we have done 1000s of
@@ -140,6 +132,11 @@ const serviceRegions = [
 export default async function AboutPage() {
   // The opener, with whatever the Studio says on top (lib/page-content.ts, 9 Oct 2026).
   const o = await getPageOpener("/about")
+  // The office's address and lines, from Site Settings (lib/site-settings.ts).
+  const site = await getSiteSettings()
+  const office = addressParts(site)
+  // The words below the opener: the Studio's About page, the site's own where blank (lib/page-copy.ts).
+  const words = await getAboutCopy()
   return (
     <main>
       {/* ── 1 · Header ──────── */}
@@ -188,15 +185,13 @@ export default async function AboutPage() {
       </figure>
 
       {/* ── 3 · Our story ──────── */}
-      <Section label="Our story" title={<>One kind of work, <em>done properly</em></>} tone="warm" wide>
+      <Section label={words.story.label} title={<Heading words={words.story} />} tone="warm" wide>
         <div className="grid grid-cols-12 gap-x-10 gap-y-14 max-[900px]:grid-cols-1">
           <div className="col-span-6 max-[900px]:col-span-1">
             <div className="max-w-[58ch] space-y-5 text-ink-body [text-wrap:pretty]">
-              <p>
-                Square One Paving started in 2000 doing one kind of work: decorative pavement, in
-                BC, through BC weather. More than twenty-five years on, we still do that one kind
-                of work, with our own crews.
-              </p>
+              {words.storyText.map((paragraph, i) => (
+                <p key={i}>{paragraph}</p>
+              ))}
             </div>
 
             <div className="mt-12">
@@ -228,11 +223,11 @@ export default async function AboutPage() {
             />
 
             <div className="mt-10 border-t border-hairline pt-6">
-              <span className="label">Our mission</span>
+              <span className="label">{words.mission.title}</span>
 
               <blockquote className="m-0 mt-4 p-0">
                 <p className="quote-display m-0 text-[24px] leading-[1.4] text-ink [text-wrap:pretty] max-[700px]:text-[21px]">
-                  &ldquo;Build surfaces that perform as well as they look, and last.&rdquo;
+                  {`“${words.mission.text}”`}
                 </p>
               </blockquote>
 
@@ -242,27 +237,30 @@ export default async function AboutPage() {
       </Section>
 
       {/* ── 4 · What we install — four frames, captioned under, the whole tile a link ──────── */}
-      <Section label="What we install" title={<>Four trades, <em>one standard</em></>} link={{ href: "/services", label: "All services" }} wide>
+      <Section label={words.trades.label} title={<Heading words={words.trades} />} link={{ href: "/services", label: "All services" }} wide>
         <ul className="rail-m grid grid-cols-4 gap-x-6 gap-y-10 max-[900px]:grid-cols-2 max-[560px]:grid-cols-1">
-          {trades.map((t) => (
-            <li key={t.href} className="relative">
-              <Link href={t.href} aria-label={`${t.name}, the service`} className="absolute inset-0 z-[2]" />
-              <Frame src={t.src} alt={t.alt} caption={t.caption} aspect="aspect-[4/3]" sizes="(max-width: 900px) 50vw, 25vw" />
-              <h3 className="mt-5">{t.name}</h3>
-              <p className="mt-2 text-[15px] leading-[1.55] text-ink-body [text-wrap:pretty]">{t.line}</p>
-            </li>
-          ))}
+          {trades.map((t) => {
+            const card = words.tradeCards[t.key]
+            return (
+              <li key={t.href} className="relative">
+                <Link href={t.href} aria-label={`${stegaClean(card.title)}, the service`} className="absolute inset-0 z-[2]" />
+                <Frame src={t.src} alt={t.alt} caption={t.caption} aspect="aspect-[4/3]" sizes="(max-width: 900px) 50vw, 25vw" />
+                <h3 className="mt-5">{card.title}</h3>
+                <p className="mt-2 text-[15px] leading-[1.55] text-ink-body [text-wrap:pretty]">{card.text}</p>
+              </li>
+            )
+          })}
         </ul>
       </Section>
 
       {/* ── 5 · How we work ──────── */}
-      <Section label="How we work" title={<>Why <em>Square One</em></>} tone="warm" wide>
+      <Section label={words.principles.label} title={<Heading words={words.principles} />} tone="warm" wide>
         <div className="grid grid-cols-1 gap-x-16 gap-y-10 min-[901px]:grid-cols-3">
-          {principles.map((principle) => (
-            <div key={principle.title} className="border-t border-hairline pt-6">
-              <h3>{principle.title}</h3>
+          {PRINCIPLES.map((key) => (
+            <div key={key} className="border-t border-hairline pt-6">
+              <h3>{words.principleCards[key].title}</h3>
               <p className="mt-2.5 max-w-[46ch] text-[16px] leading-[1.6] text-ink-body [text-wrap:pretty]">
-                {principle.body}
+                {words.principleCards[key].text}
               </p>
             </div>
           ))}
@@ -280,14 +278,11 @@ export default async function AboutPage() {
         <div className="container-1280 relative z-[1]">
           <div className="grid grid-cols-12 gap-x-12 gap-y-12 max-[900px]:grid-cols-1">
             <div className="col-span-5 flex flex-col justify-center max-[900px]:col-span-1">
-              <span className="label">The work</span>
+              <span className="label">{words.work.label}</span>
               <p className="display-statement m-0 mt-5 max-w-[22ch] [text-wrap:balance]">
-                Won in the open, <em>kept through winters</em>
+                <Heading words={words.work} />
               </p>
-              <p className="mt-6 max-w-[42ch] text-[16px] leading-[1.6] text-ink-body [text-wrap:pretty]">
-                Municipal work is won in open tenders and kept by holding up. Ten kinds of it, each
-                with a gallery of Square One&rsquo;s own installations.
-              </p>
+              <p className="mt-6 max-w-[42ch] text-[16px] leading-[1.6] text-ink-body [text-wrap:pretty]">{words.work.line}</p>
             </div>
 
             <div className="col-span-7 self-center max-[900px]:col-span-1">
@@ -309,30 +304,19 @@ export default async function AboutPage() {
       </section>
 
       {/* ── 8 · Where we work ──────── */}
-      <Section
-        label="Regions"
-        title={<>Where <em>we work</em></>}
-        intro={
-          <>
-            One office in Maple Ridge, crews on both sides of the Strait, and the vapour blasting
-            rig goes wherever the surface is.
-          </>
-        }
-      >
+      <Section label={words.regions.label} title={<Heading words={words.regions} />} intro={words.regions.line}>
         <div className="grid grid-cols-1 gap-10 min-[701px]:grid-cols-2 min-[701px]:gap-6">
           <div className="border-t border-hairline pt-6">
             <span className="label">Office</span>
-            <h3 className="mt-2">Maple Ridge, BC</h3>
-            <p className="mt-2 text-[16px] leading-[1.6] text-ink-muted">
-              19&ndash;11720 Stewart Crescent, V2X 9E7
-            </p>
+            <h3 className="mt-2">{`${office.locality}, ${office.region}`}</h3>
+            <p className="mt-2 text-[16px] leading-[1.6] text-ink-muted">{`${site.addressLine1}, ${office.postalCode}`}</p>
             <p className="mt-2 text-[16px] leading-[1.8]">
-              <a href="tel:+16046126209" className="link">604-612-6209</a>
+              <a href={telHref(site.phoneOffice)} className="link">{site.phoneOffice}</a>
               {" · "}
-              <a href="tel:+18773910270" className="link">1-877-391-0270</a>
+              <a href={telHref(site.phoneTollFree)} className="link">{site.phoneTollFree}</a>
             </p>
             <p className="mt-1 text-[16px] leading-[1.8]">
-              <a href="mailto:office@squareonepaving.com" className="link">office@squareonepaving.com</a>
+              <a href={mailtoHref(site.email)} className="link">{site.email}</a>
             </p>
           </div>
 
@@ -343,7 +327,7 @@ export default async function AboutPage() {
               Crews serve Greater Victoria, the Cowichan Valley and Nanaimo
             </p>
             <p className="mt-2 text-[16px] leading-[1.8]">
-              <a href="tel:+12503910270" className="link">250-391-0270</a>
+              <a href={telHref(site.phoneIsland)} className="link">{site.phoneIsland}</a>
             </p>
           </div>
         </div>

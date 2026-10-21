@@ -210,7 +210,7 @@ export function buildDraftDocument(
     "BASED ON:",
     ...draft.factsUsed.map((f) => `- ${f}`),
     "",
-    "Before publishing: check the date, read it through, and clear these notes. They are never shown on the site.",
+    "Before publishing: read it through and clear these notes. They are never shown on the site. The first Publish dates the post that day.",
   ].join("\n")
 
   return {

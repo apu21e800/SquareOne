@@ -26,6 +26,8 @@ export interface ProjectCard {
   year?: string
   excerpt: string
   src: string
+  /** The Studio's focal point for the photograph (lib/focal.ts). */
+  position?: string
 }
 
 interface ProjectsIndexClientProps {
@@ -109,6 +111,7 @@ export default function ProjectsIndexClient({ projects }: ProjectsIndexClientPro
                   href={`/projects/${lead.slug}`}
                   src={lead.src}
                   alt={lead.title}
+                  position={lead.position}
                   caption={[cityName(lead.city), lead.systems.join(" + "), lead.year].filter(Boolean).join(" · ")}
                   kicker={lead.application}
                   title={lead.title}
@@ -126,6 +129,7 @@ export default function ProjectsIndexClient({ projects }: ProjectsIndexClientPro
                       href={`/projects/${project.slug}`}
                       src={project.src}
                       alt={project.title}
+                      position={project.position}
                       caption={[cityName(project.city), project.systems.join(" + "), project.year]
                         .filter(Boolean)
                         .join(" · ")}

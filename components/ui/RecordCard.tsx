@@ -42,6 +42,8 @@ export interface RecordCardProps {
   meta?: ReactNode
   lead?: boolean
   priority?: boolean
+  /** The Studio's focal point, as CSS object-position (lib/focal.ts). */
+  position?: string
 }
 
 export default function RecordCard({
@@ -55,7 +57,9 @@ export default function RecordCard({
   meta,
   lead = false,
   priority = false,
+  position,
 }: RecordCardProps) {
+  const framing = position ? { objectPosition: position } : undefined
   if (lead) {
     return (
       <article className="row">
@@ -70,6 +74,7 @@ export default function RecordCard({
                   priority={priority}
                   sizes="(max-width: 700px) 100vw, 520px"
                   className="object-cover"
+                  style={framing}
                 />
               ) : (
                 <NoPhoto />
@@ -109,6 +114,7 @@ export default function RecordCard({
                 fill
                 sizes="(max-width: 600px) 124px, (max-width: 700px) 100vw, (max-width: 1000px) 50vw, 400px"
                 className="object-cover"
+                style={framing}
               />
             ) : (
               <NoPhoto />

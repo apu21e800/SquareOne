@@ -12,6 +12,8 @@ import { Section } from "@/components/ui/Container"
 import { SITE_URL } from "@/lib/site"
 import { fitVars } from "@/lib/type"
 import { clampDescription } from "@/lib/seo"
+import { getSiteSettings } from "@/lib/cms"
+import { telHref, withSettings } from "@/lib/site-settings"
 
 /**
  * City landing pages for the driveway pillar — /driveways/vancouver and
@@ -206,13 +208,17 @@ export default async function DrivewayCityPage({ params }: Props) {
   const hero = photos.find((p) => p.src === c.heroSrc) ?? photos.find((p) => p.hires && p.w >= 1600)
   const gallery = hero ? photos.filter((p) => p.src !== hero.src) : photos
   const other = CITIES[c.other]
-  const tel = `tel:${c.phone.replace(/-/g, "")}`
+  // The region's line and the answers that name it, as Site Settings has them.
+  const site = await getSiteSettings()
+  const phone = withSettings(c.phone, site)
+  const tel = telHref(phone)
+  const faqs = c.faqs.map((f) => ({ ...f, a: withSettings(f.a, site) }))
 
   return (
     <main className="bg-surface">
       <JsonLd
         data={[
-          faqSchema(c.faqs),
+          faqSchema(faqs),
           breadcrumbSchema(SITE_URL, [
             { name: "Driveways", path: "/driveways" },
             { name: c.name, path: `/driveways/${c.slug}` },
@@ -242,20 +248,22 @@ export default async function DrivewayCityPage({ params }: Props) {
                 Get a quote
               </Link>
               <a href={tel} className="link">
-                {c.phoneLabel} {c.phone}
+                {c.phoneLabel} {phone}
               </a>
             </div>
           </div>
 
           {hero && (
             <div className="col-span-6 max-[900px]:col-span-1">
-              {/* Driveway photographs carry the surface in the lower half, so the crop anchors low. */}
+              {/* Driveway photographs carry the surface in the lower half, so the crop
+                  anchors low, unless the office set the photograph's focal point. */}
               <Frame
                 src={hero.src}
                 alt={heroAlt(hero)}
                 aspect="aspect-[4/3]"
                 sizes="(max-width: 900px) 100vw, 620px"
-                position="center 72%"
+                position={hero.position ?? "center 72%"}
+                edit={hero.edit}
                 priority
                 caption={[hero.place, hero.systems.join(" + "), sentenceCase(hero.subject)].filter(Boolean).join(" · ")}
               />
@@ -343,7 +351,7 @@ export default async function DrivewayCityPage({ params }: Props) {
       {/* ── 06 Questions ──────── */}
       <Section label="Questions" title={<>Questions from <em>{c.name} homeowners</em></>}>
         <div className="border-t border-hairline">
-          {c.faqs.map((faq, i) => (
+          {faqs.map((faq, i) => (
             <details key={faq.q} open={i === 0} className="group border-b border-hairline">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-6 py-[22px] [&::-webkit-details-marker]:hidden">
                 <span className="text-[1.125rem] font-semibold leading-[1.4] text-ink">
@@ -373,7 +381,7 @@ export default async function DrivewayCityPage({ params }: Props) {
             Get a quote
           </Link>
           <a href={tel} className="link">
-            {c.phone}
+            {phone}
           </a>
         </div>
         <p className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-hairline pt-6">

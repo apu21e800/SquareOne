@@ -3,10 +3,10 @@
  * site settings — ready for one command:
  *
  *   npm run cms:seed
- *   npm run cms:import -- -p <project id>
+ *   npm run cms:import
  *
- * (The repo has no sanity.cli.ts, so the import needs the project id on the
- * command line; without it the CLI stops at "No CLI config found".)
+ * (Since 14 Oct 2026 sanity.cli.ts names the project; before it, the import
+ * needed `-- -p <project id>` and stopped at "No CLI config found" without.)
  *
  * Run from the repo root with Node 22+, after the site it describes is live:
  * photographs are referenced by URL on the live site (ASSET_BASE below), so
