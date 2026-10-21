@@ -218,6 +218,18 @@ const nextConfig: NextConfig = {
       { source: "/stamped-asphalt-landing-page", destination: "/services/stamped-asphalt", permanent: true },
       { source: "/decorative-coatings", destination: "/services/decorative-coatings", permanent: true },
       { source: "/preformed-thermoplastic", destination: "/services/preformed-thermoplastic", permanent: true },
+      // 14 Oct 2026: the six old addresses Search Console still finds that
+      // answered 404 (two of them through their trailing-slash 308 first).
+      // Old case studies went to the blog, so a /projects/ address with no
+      // project of its own goes to its post. A project the office later adds
+      // under one of these addresses would be hidden by its line: take the
+      // line out then.
+      { source: "/laneways", destination: "/driveways", permanent: true },
+      { source: "/blog/windsor-gate-townhouse-laneway-2", destination: "/blog/windsor-gate-townhouse-driveway-2", permanent: true },
+      { source: "/projects/west-vancouver-rainbow-crosswalk", destination: "/blog/west-vancouver-rainbow-crosswalk", permanent: true },
+      { source: "/projects/ralphs-farm-market-decorative-parking-lot", destination: "/blog/ralphs-farm-market-decorative-parking-lot", permanent: true },
+      { source: "/streetprint/page/:n", destination: "/products/streetprint", permanent: true },
+      { source: "/products/streetprint/attachment/:name", destination: "/products/streetprint", permanent: true },
       // 28 Sept 2026 QA: two posts off the site until Square One confirms
       // them (the reasons are in each file's front-matter, marked unlisted).
       // Temporary on purpose: either can come back by deleting its line.

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { postForm } from "@/lib/post-form"
+import { gaEvent } from "@/lib/gtag"
 
 /* The quote form — the one thing /contact exists for. Split out of the page
    on 19 Sept 2026 so the page itself can be a server component and read the
@@ -213,6 +214,9 @@ export default function QuoteForm() {
             setError(data.error ?? "We couldn't send that just now.")
           } else {
             setSubmitted(true)
+            // Google Analytics (14 Oct 2026): a quote request sent. Only the
+            // kind of project goes with it, never what was typed.
+            gaEvent("generate_lead", { form: "quote", project_type: form.projectType || undefined })
           }
         } catch {
           setError("We couldn't reach the server. Check your connection and try again.")

@@ -15,6 +15,8 @@ import MotionBreath from "@/components/MotionBreath"
 import { PALETTE_BOOT, PALETTE_CSS } from "@/lib/palettes"
 import TypeToggle from "@/components/TypeToggle"
 import PreviewTools from "@/components/PreviewTools"
+import GoogleAnalytics from "@/components/GoogleAnalytics"
+import { GA_MEASUREMENT_ID, analyticsOn } from "@/lib/analytics"
 import { inDraftMode } from "@/sanity/lib/client"
 import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
@@ -179,6 +181,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <MotionBreath />
         {TYPE_SWITCH_ENABLED && <TypeToggle />}
         {preview && <PreviewTools />}
+        {/* Google Analytics (14 Oct 2026, lib/analytics.ts): production only,
+            and never in an editor's preview, which isn't a visit. */}
+        {analyticsOn && !preview && <GoogleAnalytics id={GA_MEASUREMENT_ID} />}
       </body>
     </html>
   )
