@@ -56,7 +56,7 @@ import { tagPasses } from "@/lib/automation/style"
 import type { Claude, Mailer, SanityDoc, Store } from "@/lib/automation/services"
 
 export const VANCOUVER = "America/Vancouver"
-/** The daily run's hour (vercel.json, social-drafts): the time a scheduled post goes live. 7 a.m. in Vancouver in summer, 6 a.m. in winter. */
+/** The daily run's hour (vercel.json, social-drafts): the time a scheduled post goes live. 7 a.m. in Vancouver all year: BC keeps UTC-7 from 1 November 2026 (tzdata 2026b). */
 export const RUN_HOUR_UTC = 14
 /**
  * A new article goes live this many weekdays after the day it is written

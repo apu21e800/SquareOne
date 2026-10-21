@@ -190,7 +190,7 @@ PR #11 went live on 7 Oct, so the condition above is met.
   that waited a week goes out dated the day it went live. Leave the web
   address alone after publishing.
 - **Going live later**: turn on **Goes live by itself** and set **Goes live
-  at**: the morning run (7 a.m. Vancouver time; 6 a.m. in winter) publishes
+  at**: the morning run (7 a.m. Vancouver time, all year) publishes
   it on that day. Turn it off to hold it; Publish puts it live at once.
 - **Job photos**: Job photos → + → 3 to 10 photos (best first; for each,
   what it shows and the focal point), where (town, BC), the service, and a

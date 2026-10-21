@@ -102,7 +102,7 @@ export const post = defineType({
       type: "datetime",
       title: "Goes live at",
       options: { timeStep: 60 },
-      description: "It goes live with the first morning run on or after this time (7:00 a.m. Vancouver time; 6:00 a.m. in winter). Change it to a later day to move it.",
+      description: "It goes live with the first morning run on or after this time (7:00 a.m. Vancouver time, all year). Change it to a later day to move it.",
       hidden: ({ parent }) => !(parent as { scheduled?: boolean } | undefined)?.scheduled,
       validation: (r) =>
         r.custom((value, ctx) => ((ctx.parent as { scheduled?: boolean } | undefined)?.scheduled && !value ? "Say when it should go live, or turn \"Goes live by itself\" off" : true)),

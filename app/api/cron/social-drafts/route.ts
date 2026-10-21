@@ -1,7 +1,7 @@
 /**
  * GET /api/cron/social-drafts: the daily run, 14:00 UTC (7 a.m. in Vancouver
- * in summer, 6 a.m. in winter): the blog's scheduled posts, then social (20
- * Oct 2026, as hubss.com's daily run). The project articles have their own
+ * all year; BC keeps UTC-7 from 1 November 2026): the blog's scheduled posts,
+ * then social (20 Oct 2026, as hubss.com's daily run). The project articles have their own
  * run an hour later (app/api/cron/project-articles), so a busy social morning
  * can't crowd them out.
  *

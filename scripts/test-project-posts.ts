@@ -209,16 +209,19 @@ async function main() {
   await check("counted from Vancouver's day: a Run pressed on a Friday evening (Saturday in UTC) is Friday's", () => {
     assert.equal(scheduleSlot(new Date("2026-10-24T01:30:00Z")), "2026-10-27T14:00:00.000Z")
   })
-  await check("across the clock change: Thursday 29 October's goes on Monday 2 November, at 6 a.m. Vancouver time", () => {
+  await check("over the weekend of 1 November: Thursday 29 October's goes on Monday 2 November, still at 14:00 UTC", () => {
     assert.equal(scheduleSlot(new Date("2026-10-29T15:05:00Z")), "2026-11-02T14:00:00.000Z")
   })
   await check("never on a day another scheduled article has: two jobs the same day go out on two days", () => {
     assert.equal(scheduleSlot(new Date("2026-10-19T14:05:00Z"), ["2026-10-21T14:00:00.000Z"]), "2026-10-22T14:00:00.000Z")
     assert.equal(scheduleSlot(new Date("2026-10-19T14:05:00Z"), ["2026-10-21T14:00:00.000Z", "2026-10-22T09:00:00.000Z", "2026-10-23T14:00:00.000Z"]), "2026-10-26T14:00:00.000Z")
   })
-  await check("the time in the emails is Vancouver's: 7 a.m. in summer, 6 a.m. once the clocks go back", () => {
+  // BC keeps UTC-7 from 1 November 2026 (tzdata 2026b), so a November date
+  // reads 6 a.m. or 7 a.m. depending on the Node's timezone data. January
+  // 2026 was 6 a.m. under both, which still proves the zone is Vancouver's.
+  await check("the time in the emails is Vancouver's, not a fixed offset: 7 a.m. now, 6 a.m. in January 2026", () => {
     assert.equal(vancouverWhen("2026-10-21T14:00:00.000Z"), "Wednesday 21 October at 7:00 a.m. Vancouver time")
-    assert.equal(vancouverWhen("2026-11-02T14:00:00.000Z"), "Monday 2 November at 6:00 a.m. Vancouver time")
+    assert.equal(vancouverWhen("2026-01-12T14:00:00.000Z"), "Monday 12 January at 6:00 a.m. Vancouver time")
   })
 
   console.log("\nWhat the article is written from")
