@@ -7,12 +7,14 @@ Studio and the page updates within a minute.
 ## What they can edit
 
 The Studio's list, in this order since 14 Oct 2026 (the automation brief),
-in plain words since 20 Oct: Website Pages, Services, Projects, Blog ideas,
-Blog posts, Job photos, Sent to Buffer, Site Settings, then Advanced
-(docs/AUTOMATION.md for the blog and social automation).
+in plain words since 20 Oct, with the office's guide first since 21 Oct:
+Start here, Website Pages, Services, Projects, Blog ideas, Blog posts, Job
+photos, Sent to Buffer, Site Settings, then Advanced (docs/AUTOMATION.md for
+the blog and social automation).
 
 | In the Studio            | What it changes on the site                                                      |
 | ------------------------ | -------------------------------------------------------------------------------- |
+| **Start here: how to post** | The office's one-page guide, first in the list: job photos from a phone, the Tuesday and Thursday drafts, a post of your own, and Buffer. The same page to bookmark: squareonepaving.com/studio/guide (never indexed). Its words are `lib/office-guide.ts`. |
 | **Website Pages → Home page** | The hero (its photographs: add, remove, reorder, caption, focal point; the headline and the line under it) and, under "The sections below", the words of every band on the home page: each label, heading and line, the four service cards and the three "who we work with" cards. |
 | **Website Pages → About, Contact, Driveways page** | The words below each page's opener: About's story, mission, trades, three points, statement and regions; the quote page's headline, steps and "what to send"; the driveways page's sections, four steps and questions. |
 | **Website Pages → Page openers** | The photograph and words each page opens on: About, Services, Vapour blasting, Products, Applications, Projects, Galleries, Driveways, Resources, For specifiers, Blog, and each service and application page (and each product page's photograph). |

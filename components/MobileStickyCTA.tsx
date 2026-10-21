@@ -36,7 +36,8 @@ export default function MobileStickyCTA() {
   const [visible, setVisible] = useState(false)
   const site = useSiteSettings()
 
-  const hidden = pathname === "/contact"
+  // Not on /contact (the page is the form) or under /studio (the Studio and the office's guide).
+  const hidden = pathname === "/contact" || Boolean(pathname?.startsWith("/studio"))
 
   useEffect(() => {
     if (hidden) {
