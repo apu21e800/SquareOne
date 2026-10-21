@@ -6,7 +6,11 @@
  * to the log only, not to whoever asked: security sweep, 9 Oct 2026); a call
  * without the secret gets 401. Past the gate, with Sanity not connected or a
  * key missing, a run answers with what is missing and does nothing.
- * AUTOMATION_PAUSED=1 stops both jobs without removing a key.
+ * AUTOMATION_PAUSED=1 stops both jobs without removing a key. With the
+ * add-ons off (NEXT_PUBLIC_STUDIO_ADDONS, lib/addons.ts; Vern, 21 Oct 2026)
+ * every run does nothing too, keys or not: the Studio hides the add-ons'
+ * lists and "Goes live by itself" then, and nothing should go out that the
+ * office can't see.
  *
  * Two halves since 14 Oct 2026, so the blog route can tell the editor which
  * key is missing (lib/automation/blog.ts notifyNotConfigured) once the caller
@@ -15,6 +19,7 @@
 import { timingSafeEqual } from "node:crypto"
 import { NextResponse, type NextRequest } from "next/server"
 import { cmsEnabled } from "@/sanity/env"
+import { addonsOn } from "@/lib/addons"
 
 /** The header compared in constant time, so its length is all a wrong guess learns. */
 function authorized(header: string | null, secret: string): boolean {
@@ -34,11 +39,12 @@ export function cronAuth(req: NextRequest, tag: string): NextResponse | null {
   return null
 }
 
-/** Why an authorised run can't go ahead (paused, no Sanity, keys missing), or null when it can. */
+/** Why an authorised run can't go ahead (paused, no Sanity, the add-ons off, keys missing), or null when it can. */
 export function cronReady(tag: string, needs: string[]): { reason: string; missing: string[] } | null {
   let off: { reason: string; missing: string[] } | null = null
   if (/^(1|true|yes)$/i.test(process.env.AUTOMATION_PAUSED ?? "")) off = { reason: "paused: AUTOMATION_PAUSED is set", missing: [] }
   else if (!cmsEnabled) off = { reason: "not switched on: Sanity is not connected (NEXT_PUBLIC_SANITY_PROJECT_ID)", missing: [] }
+  else if (!addonsOn(process.env.NEXT_PUBLIC_STUDIO_ADDONS)) off = { reason: "not switched on: the add-ons are off (NEXT_PUBLIC_STUDIO_ADDONS)", missing: [] }
   else {
     const missing = needs.filter((k) => !process.env[k])
     if (missing.length) off = { reason: `not switched on: ${missing.join(", ")} not set`, missing }

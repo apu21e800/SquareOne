@@ -405,7 +405,7 @@ async function main() {
     for (const t of [...allTitles(false), ...allTitles(true), CONTENT_TOOL, EDIT_ON_THE_PAGE]) titles.add(t)
     // The Studio's own buttons and tabs (checked in the live Studio, 21 Oct
     // 2026), and Buffer's words: not field titles.
-    const app = new Set(["+", "Publish", "Generate", "Upload", "Discard changes", "Structure", "Edit", "Drafts", "Add to Queue", "Delete"])
+    const app = new Set(["+", "Publish", "Generate", "Upload", "Crop image", "Discard changes", "Structure", "Edit", "Drafts", "Add to Queue", "Delete"])
     const labels = (g: OfficeGuideContent) => [...new Set(g.steps.flatMap((s) => [...s.steps, ...s.next]).flatMap((l) => labelRuns(l).filter((r) => r.bold).map((r) => r.text)))]
     assert.ok(labels(FREE).length > 15 && labels(ALL).length > labels(FREE).length)
     for (const label of labels(ALL)) {

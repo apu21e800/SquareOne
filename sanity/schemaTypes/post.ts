@@ -143,7 +143,7 @@ export const post = defineType({
       name: "mainImage",
       type: "image",
       title: "Lead photograph",
-      description: "Shown at the top of the post and on the blog index. Press the crosshair and drag the focal point onto the pavement: every frame of it crops around that point.",
+      description: "Shown at the top of the post and on the blog index. Press the crop button on the photo (Crop image) and drag the circle onto the pavement: every frame of it crops around that point.",
       options: { hotspot: true },
       validation: (r) => [r.custom(needed("Add the lead photograph: one of Square One's own")), r.custom(wanted("This post has no photograph of its own")).warning()],
       fields: [

@@ -18,7 +18,8 @@ aggressively, they will see the value". Until it's sold the Studio hides
 **Blog ideas**, **Job photos**, **Sent to Buffer** and a post's **Goes live
 by itself**, "new document" doesn't offer them, and the guide shows only
 what's included. `NEXT_PUBLIC_STUDIO_ADDONS=on` in Vercel, and a redeploy,
-shows them (lib/addons.ts); nothing in them is deleted while they're hidden.
+shows them (lib/addons.ts); nothing in them is deleted while they're hidden,
+and the automation does nothing while they're off.
 
 | In the Studio            | What it changes on the site                                                      |
 | ------------------------ | -------------------------------------------------------------------------------- |

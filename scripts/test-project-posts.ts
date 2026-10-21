@@ -784,9 +784,10 @@ async function main() {
     assert.deepEqual(crons.find((c) => c.path === "/api/cron/social-drafts"), { path: "/api/cron/social-drafts", schedule: "0 14 * * *" })
   })
   await check("refuses a call without the secret, and does nothing without its keys", async () => {
-    const saved = { secret: process.env.CRON_SECRET, anthropic: process.env.ANTHROPIC_API_KEY }
+    const saved = { secret: process.env.CRON_SECRET, anthropic: process.env.ANTHROPIC_API_KEY, addons: process.env.NEXT_PUBLIC_STUDIO_ADDONS }
     const call = (auth?: string) => projectArticlesRun(new NextRequest("https://www.squareonepaving.com/api/cron/project-articles", auth ? { headers: { authorization: auth } } : undefined))
     process.env.CRON_SECRET = "s3cret-for-tests"
+    process.env.NEXT_PUBLIC_STUDIO_ADDONS = "on"
     delete process.env.ANTHROPIC_API_KEY
     try {
       assert.equal((await call()).status, 401)
@@ -798,6 +799,8 @@ async function main() {
       if (saved.secret === undefined) delete process.env.CRON_SECRET
       else process.env.CRON_SECRET = saved.secret
       if (saved.anthropic !== undefined) process.env.ANTHROPIC_API_KEY = saved.anthropic
+      if (saved.addons === undefined) delete process.env.NEXT_PUBLIC_STUDIO_ADDONS
+      else process.env.NEXT_PUBLIC_STUDIO_ADDONS = saved.addons
     }
   })
 

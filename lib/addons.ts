@@ -9,7 +9,9 @@
  *
  * NEXT_PUBLIC_STUDIO_ADDONS=on in Vercel shows them, with the automation's own
  * keys (docs/AUTOMATION.md) and a redeploy: a NEXT_PUBLIC_ value is built into
- * the Studio. Nothing is deleted while they're hidden.
+ * the Studio. The automation's runs wait for it too (lib/automation/cron.ts),
+ * so nothing goes out that the office can't see. Nothing is deleted while
+ * they're hidden.
  *
  * No imports: the Studio's bundle reads it too.
  */

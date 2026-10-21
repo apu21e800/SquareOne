@@ -74,7 +74,7 @@ export const GUIDE_PATH = "/studio/guide"
 export const GUIDE_TITLE = "How to update the site"
 
 const SIGN_IN = "From a phone or a computer. Sign in at squareonepaving.com/studio with your Google work account."
-const FRAMED = "Press the crosshair on the photo, then drag the circle onto the pavement so the photo is framed on it."
+const FRAMED = "Press the crop button on the photo (**Crop image**), then drag the circle onto the pavement so the photo is framed on it."
 
 export const GUIDE_SOURCE: { title: string; lead: { free: string; addons: string }; steps: GuideStepSource[]; foot: string } = {
   title: GUIDE_TITLE,
@@ -96,7 +96,7 @@ export const GUIDE_SOURCE: { title: string; lead: { free: string; addons: string
       next: [
         "It's on the site within a minute.",
         "Changed your mind before publishing? The three dots beside **Publish**, then **Discard changes**.",
-        "Each page's big photo and headline are also in **Website Pages**, then **Page openers**.",
+        "The big photo and headline at the top of a page are also in **Website Pages**: **Home page** for the home page, **Page openers** for the others (the **+** button there adds one for a page that isn't listed).",
       ],
       shot: {
         src: "/images/guide/edit-page.png",
@@ -119,7 +119,7 @@ export const GUIDE_SOURCE: { title: string; lead: { free: string; addons: string
       ],
       next: [
         "It's in the gallery within a minute, near the top: newer photos show first.",
-        "To show it first, turn on **Lead the gallery**. To take it down later, turn on **Take off the site**: nothing is deleted.",
+        "To show it first, turn on **Lead the gallery** and press **Publish**. To take it down later, turn on **Take off the site** and press **Publish**: nothing is deleted.",
       ],
       shot: {
         src: "/images/guide/gallery-photo.png",
