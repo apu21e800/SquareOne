@@ -14,8 +14,10 @@ person approves it in Buffer (Vern, 20 Oct 2026: Square One's posts wait for
 the office's final edits). A blog draft goes on squareonepaving.com when a
 person presses Publish, or, if it is set to go live by itself, at the
 morning run on its day: a project article written from Job photos is saved
-that way two weekdays out, after the editors have been emailed and can read,
-change, move or hold it; anything a check isn't happy with is saved held.
+that way two weekdays later, after the editors have been emailed and can read,
+change, move or hold it; anything a check isn't happy with (a statement the
+job's record doesn't back, the house style, a phone number, email or address
+that isn't Square One's) is saved held.
 
 It needs Sanity connected first (docs/CMS.md). Until the keys below are set,
 every run is refused or answers what is missing, and does nothing. Without
@@ -90,7 +92,7 @@ article of its own (nine on 14 Oct 2026). Nothing is invented: a job has to
 be in Projects, with its photographs, before it can be planned.
 
 **The daily run, 14:00 UTC** (7 am Pacific in summer, 6 am in winter):
-`/api/cron/social-drafts`, three steps since 20 Oct 2026, each on its own (a
+`/api/cron/social-drafts`, two steps since 20 Oct 2026, each on its own (a
 failure in one is emailed and the next still runs):
 
 1. **Scheduled posts go live** (lib/automation/project-posts.ts
@@ -98,29 +100,48 @@ failure in one is emailed and the next still runs):
    **Goes live at** has come (ten minutes' grace) becomes the live post in
    one transaction, dated that day in Vancouver (a scheduled edit to a live
    post keeps the post's date), and the editors get its address. One that
-   can't go (no title or web address, or an address another live post has)
-   is left as it is, and the email says why.
+   can't go is left as it is, still set to go, and the email says why: it is
+   missing something Publish asks for (a title, a web address, a lead photo,
+   words in the body, a Section; for a post from the imported library, only
+   the title, address and words), or another live post has its address. The
+   commit checks the draft is still the one the run read: an editor who
+   edits it at that moment gets the edited version published, and one who
+   holds it, or publishes it by hand, is left alone.
 2. **Social** (lib/automation/social.ts), below. A post step 1 just
    published waits for tomorrow's run, so its posts follow the day after it
    is live.
-3. **The next project article** (lib/automation/project-posts.ts
-   draftProjectArticles), with the time the run has left (about four
-   minutes; on a busy morning it waits for the next run): the oldest
-   published **Job photos** post with **The story** filled in and no article
-   yet is written up as a project story from that post's record (where, when,
-   the service, systems, kind of work, the crew's note, the story and what
-   the photographs show) and the pages of its service, systems and kind of
-   work, nothing else. Style pass and fact check as for every draft. Saved as
-   an unpublished draft: the post's first photo leads, the others close the
-   article under "The job in photographs", and it is set to go live by itself
-   at the morning run on the first weekday at least two days away (never a
-   weekend, never a day another article has). The editors are emailed first
-   (when it goes, the Studio link, how to change, move or hold it), and only
-   then is it switched on; a draft either check isn't happy with, or with no
-   photograph, is saved **held** and the email asks for a read. The Job
-   photos post shows **The article written from this**; a claim stops two
-   runs writing two articles. A Job photos post with a story gets no social
-   posts of its own: the job goes out once, as its article.
+
+**The project article, daily at 15:00 UTC** (8 am Pacific in summer, 7 am in
+winter): `/api/cron/project-articles` (lib/automation/project-posts.ts
+draftProjectArticles), a run of its own since the review of 20 Oct 2026, so
+a morning when social has a lot to draft can't crowd it out. The oldest
+published **Job photos** post with **The story** filled in and no article yet
+is written up as a project story from that post's record (where, when, the
+service, systems, kind of work, the crew's note, the story and what the
+photographs show) and the pages of its service, systems and kind of work,
+nothing else. Style pass and fact check as for every draft; a fact check
+answer that can't be read counts as a problem, never as clean. Saved as an
+unpublished draft: the post's first photo leads, the others close the
+article under "The job in photographs", tags that break the canon are
+dropped, and it is set to go live by itself at the morning run two weekdays
+after the day it was written (Monday's on Wednesday; Thursday's on Monday;
+Friday's, Saturday's and Sunday's on Tuesday; never a day another article
+has). The editors are emailed first (when it goes, the Studio link, how to
+change, move or hold it), and only then is it switched on; a draft either
+check isn't happy with, one showing a phone number, email or street address
+that isn't Square One's, or one with no photograph, is saved **held** and
+the email asks for a read. If that first email can't be confirmed, the
+article stays held and a second email says so. One article a day. The Job
+photos post shows **The article written from this**; a claim stops two runs
+writing two articles; a copy made with Studio's Duplicate gets its own, held
+(it may be the same job twice); an article an editor deletes isn't written
+again. A post whose article can't be
+written is tried again each morning, behind the others, for 14 days, with an
+email on the first failure and one when it gives up (editing the post starts
+it over; Claude taking too long counts against the post); a refused key or
+no credit is emailed every time. A Job photos post
+with a story gets no social posts of its own: the job goes out once, as its
+article.
 
 **Social** drafts into **Square One's own Buffer**; a person approves every
 draft there (`SOCIAL_AUTO_QUEUE=on` in Vercel would queue them instead, posted
@@ -221,16 +242,17 @@ Production**. Paste each key into Vercel yourself; never into a chat.
    exec scripts/seed-blog-plan.ts --with-user-token`.
 7. Redeploy production (variables only reach new builds). The first live
    run of each job only on Vern's yes, with him: Vercel → square-one →
-   Settings → Cron Jobs → draft-post (or social-drafts) → Run, then read the
-   drafts together. Without `BUFFER_API_KEY` the daily run still publishes
-   scheduled posts and writes project articles; it skips social.
+   Settings → Cron Jobs → draft-post (or social-drafts, or project-articles)
+   → Run, then read the drafts together. Without `BUFFER_API_KEY` the daily
+   run still publishes scheduled posts, and the project articles are written;
+   social is skipped.
 
 Optional: `BLOG_DRAFT_MODEL` and `SOCIAL_DRAFT_MODEL` choose the Claude model
 (the default, `claude-opus-4-5`, is the one hubss.com's drafters use; checked
 9 Oct 2026, Anthropic retires it no sooner than 24 Nov 2026, so set one of
 these to a current model when it is deprecated). `SOCIAL_AUTO_QUEUE=on`
 queues social posts instead of drafting them (only on Vern's word).
-`AUTOMATION_PAUSED=1` stops both jobs without removing a key.
+`AUTOMATION_PAUSED=1` stops every job without removing a key.
 
 ## Steering it
 

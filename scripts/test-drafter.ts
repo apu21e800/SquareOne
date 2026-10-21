@@ -9,15 +9,17 @@
  * the jobs a guide is offered are Square One's own, on the site, the closest
  * first; the shape the drafter is held to is the 20 Oct standard (550 to 850
  * words, 350 to 600 for a story, proof before explanation, one thing to keep,
- * no villain, no "vs"); and a "vs" title or heading never gets through the
- * style check or the planner.
+ * no villain, no "vs"); a "vs" title or heading never gets through the
+ * style check or the planner; only a clear "clean" from the fact check
+ * passes; and a phone number, email or address that isn't Square One's, or a
+ * tag against the canon, never reaches a live post unread (review, 20 Oct).
  */
 import "./test-env"
 import assert from "node:assert/strict"
 import { DOCUMENTED_JOBS_HEADING, DOCUMENTED_JOBS_MAX, documentedJobs, factsBlock, jobFacts, jobPlace, loadSubjects, type Subject } from "../lib/automation/facts"
-import { SAVE_DRAFT, SHAPES, VOICE, writeDraft, type Draft } from "../lib/automation/drafter"
+import { readFactCheck, SAVE_DRAFT, SHAPES, VOICE, writeDraft, type Draft } from "../lib/automation/drafter"
 import { buildDraftDocument, leadJobFor } from "../lib/automation/blog"
-import { flagSentences, lintCopy, lintHeading } from "../lib/automation/style"
+import { flagSentences, keepsFacts, lintCopy, lintHeading, tagPasses } from "../lib/automation/style"
 import { goodQuestion, VS, vetIdeas } from "../lib/automation/planner"
 import { services as RECORD_SERVICES } from "../lib/services"
 import type { Claude, Store, ToolRequest } from "../lib/automation/services"
@@ -240,6 +242,87 @@ async function main() {
     )
     assert.equal(docs.length, 0)
     assert.deepEqual(dropped.map((d) => d.why), ['a "vs" title or search phrase (a choice is what to specify where, by job)', 'a "vs" title or search phrase (a choice is what to specify where, by job)'])
+  })
+
+  console.log("\nThe fact check's answer: only a clear clean passes")
+
+  await check("clean with nothing listed is clean; a list is what needs fixing", () => {
+    assert.deepEqual(readFactCheck({ verdict: "clean", unsupported: [] }), { verdict: "clean", unsupported: [] })
+    const r = readFactCheck({ verdict: "needs edits", unsupported: [{ quote: "in 2019", reason: "the record has no year" }] })
+    assert.deepEqual(r, { verdict: "needs edits", unsupported: [{ quote: "in 2019", reason: "the record has no year" }] })
+  })
+  await check("a list sent as JSON text is read as the list it is", () => {
+    const r = readFactCheck({ verdict: "needs edits", unsupported: JSON.stringify([{ quote: "in 2019", reason: "no year" }]) })
+    assert.deepEqual(r.unsupported, [{ quote: "in 2019", reason: "no year" }])
+    assert.equal(readFactCheck({ verdict: "clean", unsupported: "[]" }).verdict, "clean")
+  })
+  await check("an answer that can't be read, or needs edits with nothing listed, holds the draft", () => {
+    for (const answer of [
+      { verdict: "clean", unsupported: "not json" },
+      { verdict: "needs edits", unsupported: [] },
+      { verdict: "clean", unsupported: [42] },
+      { verdict: "clean", unsupported: [{}] },
+      null,
+      { unsupported: [] },
+    ]) {
+      const r = readFactCheck(answer)
+      assert.equal(r.verdict, "needs edits", JSON.stringify(answer))
+      assert.equal(r.unsupported.length, 1)
+      assert.equal(r.unsupported[0].quote, "(the whole draft)")
+      assert.ok(!r.unsupported[0].reason.includes(EM))
+    }
+  })
+  await check("a single object, or a bare sentence, still counts as a problem", () => {
+    assert.deepEqual(readFactCheck({ verdict: "clean", unsupported: { quote: "a 20-year life", reason: "not in the record" } }).unsupported, [{ quote: "a 20-year life", reason: "not in the record" }])
+    assert.deepEqual(readFactCheck({ verdict: "needs edits", unsupported: ["a 20-year life"] }).unsupported, [{ quote: "a 20-year life", reason: "The fact check gave no reason." }])
+  })
+
+  console.log("\nContact details and tags")
+
+  const contact = (t: string) => lintCopy(t).filter((i) => i.rule === "contact").map((i) => i.excerpt)
+  await check("Square One's own lines, email and office pass", () => {
+    assert.deepEqual(contact("Call 604-612-6209, 250-391-0270 or 1-877-391-0270, or email office@squareonepaving.com."), [])
+    assert.deepEqual(contact("(604) 612-6209, or [email us](mailto:office@squareonepaving.com)."), [])
+    assert.deepEqual(contact("The office is at 19\u201311720 Stewart Crescent, Maple Ridge, BC V2X 9E7."), [])
+  })
+  await check("a customer's number, email, house address or postal code is flagged", () => {
+    assert.equal(contact("The owner, at 604-555-0199, asked for brick.").length, 1)
+    assert.equal(contact("Write to jane.doe@example.com for photos.").length, 1)
+    assert.equal(contact("The driveway at 1234 Main Street in Langley.").length, 1)
+    assert.equal(contact("A home at 12345 72 Avenue in Surrey.").length, 1)
+    assert.equal(contact("A lane off 4421 W 10th Ave.").length, 1)
+    assert.equal(contact("The postal code is V3A 4B5.").length, 1)
+  })
+  await check("a crossing named by its streets, a year or a count is not an address or a number", () => {
+    assert.deepEqual(contact("We stamped the crosswalk at 152 Street and 72 Avenue in Surrey."), [])
+    assert.deepEqual(contact("The crossing on 200 Street near 64 Avenue."), [])
+    assert.deepEqual(contact("In 2023 Fraser Highway crews added a crosswalk."), [])
+    assert.deepEqual(contact("Between 300-1200 vehicles a day use it."), [])
+  })
+  await check("a year before a name is a year, unless the words before it say address", () => {
+    assert.deepEqual(contact("Public art \u00b7 2024 Commercial Drive, Vancouver."), [])
+    assert.deepEqual(contact("2019 Windsor Gate is a masterplanned community."), [])
+    assert.equal(contact("The driveway at 2041 Main Street.").length, 1)
+  })
+  await check("a one-digit house number counts when the words before it say address; a count doesn't", () => {
+    assert.equal(contact("The owner lives at 5 Oak Street.").length, 1)
+    assert.deepEqual(contact("We stamped the 3 Main Street crossings in a week."), [])
+  })
+  await check("the Studio leaves the contact rule off the pages the office writes (contact: false)", () => {
+    assert.deepEqual(lintCopy("The plaza at 800 Robson Street, Vancouver.", { contact: false }), [])
+    assert.equal(lintCopy("The plaza at 800 Robson Street, Vancouver.").filter((i) => i.rule === "contact").length, 1)
+  })
+  await check("a rewrite that drops the number keeps the sentence flagged for a person (keepsFacts)", () => {
+    assert.equal(keepsFacts("The owner, at 604-555-0199, asked for brick.", "The owner asked for brick."), false)
+  })
+  await check("a tag against the canon is dropped, never printed", () => {
+    assert.equal(tagPasses("StreetPrint"), true)
+    assert.equal(tagPasses("Project stories"), true)
+    assert.equal(tagPasses("Langley"), true)
+    assert.equal(tagPasses("HUB"), false)
+    assert.equal(tagPasses("Case study"), false)
+    assert.equal(tagPasses("604-555-0199"), false)
+    assert.equal(tagPasses("  "), false)
   })
 
   console.log(failures ? `\n${failures} failed` : "\nall passed")

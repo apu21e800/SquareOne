@@ -1,9 +1,9 @@
 /**
  * One email to the editors (BLOG_DRAFT_NOTIFY, comma-separated), shared by the
- * daily run's three steps (20 Oct 2026, as hubss.com's lib/editor-mail.ts):
- * the scheduled posts (lib/automation/project-posts.ts), the social drafts
- * (lib/automation/social.ts) and the project articles written from job
- * photos. Since 20 Oct 2026 the list is Square One's office and 21e8, so the
+ * daily run and the project article run (20 Oct 2026, as hubss.com's
+ * lib/editor-mail.ts): the scheduled posts (lib/automation/project-posts.ts),
+ * the social drafts (lib/automation/social.ts) and the project articles
+ * written from job photos. Since 20 Oct 2026 the list is Square One's office and 21e8, so the
  * emails are written for the person who publishes.
  *
  * Never throws: a lost email must not stop a run. It gives up after 15 s, so

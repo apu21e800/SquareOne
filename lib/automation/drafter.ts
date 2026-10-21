@@ -217,8 +217,43 @@ export async function checkDraft(claude: Claude, draft: Draft, facts: string): P
   const system = `You fact-check blog posts for Square One Paving before a person publishes them. You are strict and literal. Compare the DRAFT with the FACTS and list every statement about Square One, the project, the systems, numbers, years, durations, dimensions, places, sites, clients, artists or people that the FACTS do not support: numbers that differ, capabilities the FACTS don't claim, a performance figure not attributed to the manufacturer, any place, business, agency or person the FACTS don't name, and any promise (a guarantee, a lead time, a price). Also list any sentence that names the company that makes the systems, or says Square One makes or developed them. QUESTIONS in the FACTS are not facts: a statement that only a question supports is unsupported. General context with no numbers that isn't about Square One or the systems is fine; don't list it. Links are fine. If everything is supported, the verdict is "clean" and the list is empty.`
   const user = `FACTS:\n${facts}\n\nDRAFT:\n# ${draft.title}\n\n${draft.excerpt}\n\n${draft.body}\n\nReport with the report tool.`
   const result = await claude<FactCheck>({ model: BLOG_MODEL, system, user, tool: REPORT, maxTokens: 3000, timeoutMs: LIMITS.check, maxRetries: 0 })
-  const unsupported = Array.isArray(result.unsupported) ? result.unsupported : []
-  return { verdict: unsupported.length ? "needs edits" : "clean", unsupported }
+  return readFactCheck(result)
+}
+
+/**
+ * The fact check's answer, read so that only a clear "clean" passes (review,
+ * 20 Oct 2026): a project article goes live by itself on a clean check, so an
+ * answer that can't be read, or a "needs edits" with nothing listed, holds
+ * the draft for a person instead of passing it. A list sent as JSON text is
+ * read as the list it is.
+ */
+export function readFactCheck(result: unknown): FactCheck {
+  const r = (result ?? {}) as { verdict?: unknown; unsupported?: unknown }
+  const unread = (reason: string): FactCheck => ({ verdict: "needs edits", unsupported: [{ quote: "(the whole draft)", reason }] })
+  let list: unknown = r.unsupported
+  if (typeof list === "string") {
+    try {
+      list = JSON.parse(list)
+    } catch {
+      return unread("The fact check's answer couldn't be read, so nothing in this draft has been checked: read it against the record before it goes live.")
+    }
+  }
+  if (list && typeof list === "object" && !Array.isArray(list)) list = [list]
+  if (list === undefined || list === null) list = []
+  if (!Array.isArray(list)) return unread("The fact check's answer couldn't be read, so nothing in this draft has been checked: read it against the record before it goes live.")
+  const items: FactCheck["unsupported"] = []
+  for (const item of list) {
+    if (typeof item === "string" && item.trim()) items.push({ quote: item.trim(), reason: "The fact check gave no reason." })
+    else if (item && typeof item === "object") {
+      const { quote, reason } = item as { quote?: unknown; reason?: unknown }
+      const q = typeof quote === "string" ? quote.trim() : ""
+      const why = typeof reason === "string" ? reason.trim() : ""
+      if (q || why) items.push({ quote: q || "(not quoted)", reason: why || "The fact check gave no reason." })
+      else return unread("The fact check listed a problem it didn't describe: read the draft against the record before it goes live.")
+    } else return unread("The fact check's answer couldn't be read, so nothing in this draft has been checked: read it against the record before it goes live.")
+  }
+  if (!items.length && r.verdict !== "clean") return unread("The fact check didn't say the draft was clean, and listed nothing: read it against the record before it goes live.")
+  return { verdict: items.length ? "needs edits" : "clean", unsupported: items }
 }
 
 // ── the style pass ──────────────────────────────────────────────────────────

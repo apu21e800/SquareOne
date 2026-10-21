@@ -110,7 +110,7 @@ export const fieldPost = defineType({
       type: "text",
       rows: 8,
       description:
-        "A few sentences or a list, in your own words: the site (name it only if the client is happy to be named), what was needed, what went in and when, anything about the design or the colours, and how it has held up. Fill this in and the job is written up as a project article on the Blog, scheduled to go live in a couple of weekdays; you'll get an email to read it first. Everything the article says about the job comes from here and the line above, so no guesses, no prices and no figures you aren't sure of. Leave it empty and the photos go to social only.",
+        "A few sentences or a list, in your own words: the site (name it only if the client is happy to be named), what was needed, what went in and when, anything about the design or the colours, and how it has held up. Fill this in and the job is written up as a project article on the Blog, scheduled to go live in a couple of weekdays; you'll get an email to read it first. Everything the article says about the job comes from here and the line above, so no guesses, no prices, no phone numbers or home addresses, and no figures you aren't sure of. Leave it empty and the photos go to social only.",
       validation: (r) => [r.max(4000).warning("That is a lot: a few sentences or a short list is enough"), r.custom(copyCheck).warning()],
     }),
     defineField({

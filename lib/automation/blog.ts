@@ -51,6 +51,7 @@ import { notifyList, type Claude, type Mailer, type SanityDoc, type Store } from
 import { topUpPlan } from "@/lib/automation/planner"
 import { blogFailureEmail, failureHint } from "@/lib/automation/outcome"
 import { DRAFT_LOG_PREFIX } from "@/lib/automation/logs"
+import { tagPasses } from "@/lib/automation/style"
 import {
   APPLICATION_OPTIONS,
   isApplication,
@@ -535,7 +536,7 @@ function draftEmail(a: {
 /** Tags, unique whatever their case, first ones first, at most eight. */
 function tagList(first: readonly string[], rest: readonly string[]): string[] {
   const out = new Map<string, string>()
-  for (const t of [...first, ...rest].map((x) => x.trim()).filter(Boolean)) if (!out.has(t.toLowerCase())) out.set(t.toLowerCase(), t)
+  for (const t of [...first, ...rest].map((x) => x.trim()).filter(tagPasses)) if (!out.has(t.toLowerCase())) out.set(t.toLowerCase(), t)
   return [...out.values()].slice(0, 8)
 }
 
