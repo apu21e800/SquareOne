@@ -35,6 +35,7 @@ import {
   type JobPost,
 } from "../lib/automation/project-posts"
 import type { Draft, FactCheck, StylePass } from "../lib/automation/drafter"
+import { pacificDate } from "../lib/automation/blog"
 import type { Claude, Mail, SanityDoc, Store, ToolRequest } from "../lib/automation/services"
 import { NextRequest } from "next/server"
 import { GET as projectArticlesRun } from "../app/api/cron/project-articles/route"
@@ -226,6 +227,10 @@ async function main() {
   await check("from 1 November 2026 the 7 a.m. run reads 7 a.m. on any Node, old timezone data or new", () => {
     assert.equal(vancouverWhen("2026-11-02T14:00:00.000Z"), "Monday 2 November at 7:00 a.m. Vancouver time")
     assert.equal(vancouverWhen("2027-01-11T14:00:00.000Z"), "Monday 11 January at 7:00 a.m. Vancouver time")
+  })
+  await check("BC's day is right on any Node too: half past midnight on 2 November 2026 is the 2nd (it was still the 14th at 11:30 p.m. in January)", () => {
+    assert.equal(pacificDate(new Date("2026-11-02T07:30:00Z")), "2026-11-02")
+    assert.equal(pacificDate(new Date("2026-01-15T07:30:00Z")), "2026-01-14")
   })
 
   console.log("\nWhat the article is written from")

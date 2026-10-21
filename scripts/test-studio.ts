@@ -156,6 +156,11 @@ async function main() {
     assert.equal(officeDate(new Date("2026-01-15T07:59:00Z")), "2026-01-14")
   })
 
+  await check("from 1 November 2026 BC keeps UTC-7, on any timezone data: half past midnight on 2 November is the 2nd", () => {
+    assert.equal(officeDate(new Date("2026-11-02T07:30:00Z")), "2026-11-02")
+    assert.equal(officeDate(new Date("2027-01-15T07:30:00Z")), "2027-01-15")
+  })
+
   console.log("Site Settings, everywhere the details print")
 
   await check("a blank or missing field shows the site's own value", () => {

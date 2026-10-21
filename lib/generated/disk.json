@@ -17,6 +17,7 @@
     "colour-cards",
     "contact",
     "galleries",
+    "guide",
     "hero",
     "logo",
     "lunch-learn",
@@ -2024,6 +2025,13 @@
     "roundabout.jpg",
     "schools-sports.jpg",
     "streetscapes.jpg"
+   ],
+   "dirs": []
+  },
+  "images/guide": {
+   "files": [
+    "job-photos.png",
+    "own-post.png"
    ],
    "dirs": []
   },
@@ -6237,6 +6245,14 @@
   "images/galleries/streetscapes.jpg": [
    1024,
    598
+  ],
+  "images/guide/job-photos.png": [
+   553,
+   695
+  ],
+  "images/guide/own-post.png": [
+   553,
+   695
   ],
   "images/hero/bowen-island-polka-dot-walkway-streetbond.jpg": [
    2400,

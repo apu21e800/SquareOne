@@ -72,6 +72,7 @@ export const OFFICE_GUIDE: OfficeGuideContent = {
       next: [
         "No story: the next morning its posts wait in Buffer for your approval (step 4).",
         "With a story: the next morning an article is written from your words and the service's page, nothing else, and you get an email. It goes live two working days later unless you hold it (step 2).",
+        "Added several jobs at once? They go one a day, oldest first.",
       ],
       shot: {
         src: "/images/guide/job-photos.png",
@@ -88,7 +89,7 @@ export const OFFICE_GUIDE: OfficeGuideContent = {
         'The email says "Blog draft ready in Studio". Tap its link.',
         "Read **Notes for the editor** at the top: it lists anything the fact check couldn't confirm. Lines marked in yellow break the house style.",
         "Change anything by typing. It saves as you go.",
-        "Happy with it? Press **Publish**. To have it go out on a later day instead, turn on **Goes live by itself** and pick the day in **Goes live at**: it goes out that morning.",
+        "Happy with it? Press **Publish**. To have it go out on a later day instead, turn on **Goes live by itself**, then set **Goes live at** to that day at 7:00 a.m.: it goes out that morning.",
       ],
       next: [
         'An article from job photos comes with its own email: "Goes live (that day) unless you hold it". To change a line, edit it: it still goes out on time. To hold it, turn **Goes live by itself** off.',
@@ -102,9 +103,9 @@ export const OFFICE_GUIDE: OfficeGuideContent = {
       steps: [
         "**Blog posts**, then the **+** button.",
         "**Title**: a sentence a person would say. Then press **Generate** under **Web address**.",
-        "**Section**, then the **Lead photograph** and **What the photo shows**. Drag the circle onto the pavement so the photo is framed on it.",
+        "**Section**, then the **Lead photograph** and **What the photo shows**. Press the crosshair on the photo, then drag the circle onto the pavement so the photo is framed on it.",
         "**Body**: write it. A yellow line is worth a second look.",
-        "Press **Publish**, or turn on **Goes live by itself** and pick the day.",
+        "Press **Publish**. Or turn on **Goes live by itself** and set **Goes live at** to the day you want, at 7:00 a.m.",
       ],
       next: ["It shows on the site within a minute of going live, and its social posts wait in Buffer the next morning."],
       shot: {
@@ -120,7 +121,7 @@ export const OFFICE_GUIDE: OfficeGuideContent = {
       when: "The morning after something new goes live.",
       steps: [
         "An email says the social drafts are waiting in Buffer. Nothing is posted until you approve it.",
-        "In the Buffer app: **Publish**, then **Drafts**. Each channel (Facebook, Instagram, LinkedIn) has its own draft.",
+        "In the Buffer app: **Publish**, then **Drafts**. Each channel you've connected (Facebook, Instagram and so on) has its own draft.",
         "To change one: tap **Edit**, change the words, save it.",
         "To approve it: the three dots, then **Add to Queue**. It goes out at that channel's next set time.",
         "Don't want it? Tap **Delete**.",

@@ -12,11 +12,13 @@
  * Tuesday is Tuesday's, not Wednesday's (UTC).
  */
 
-export const OFFICE_TIME_ZONE = "America/Vancouver"
+import { VANCOUVER, vancouverZone } from "../../lib/bc-time"
 
-/** The office's calendar date for an instant, as YYYY-MM-DD. */
+export const OFFICE_TIME_ZONE = VANCOUVER
+
+/** The office's calendar date for an instant, as YYYY-MM-DD, on any browser's timezone data (lib/bc-time.ts). */
 export function officeDate(at: Date = new Date()): string {
-  return new Intl.DateTimeFormat("en-CA", { timeZone: OFFICE_TIME_ZONE, year: "numeric", month: "2-digit", day: "2-digit" }).format(at)
+  return new Intl.DateTimeFormat("en-CA", { timeZone: vancouverZone(at), year: "numeric", month: "2-digit", day: "2-digit" }).format(at)
 }
 
 /**

@@ -54,8 +54,8 @@ import { daysSince, failureHint, GIVE_UP_DAYS, isConflict, isRunLevel } from "@/
 import { APPLICATION_OPTIONS, PROJECT_STORIES_TAG, SERVICE_OPTIONS, SYSTEM_OPTIONS } from "@/lib/automation/plan"
 import { tagPasses } from "@/lib/automation/style"
 import type { Claude, Mailer, SanityDoc, Store } from "@/lib/automation/services"
+import { vancouverZone } from "@/lib/bc-time"
 
-export const VANCOUVER = "America/Vancouver"
 /** The daily run's hour (vercel.json, social-drafts): the time a scheduled post goes live. 7 a.m. in Vancouver all year: BC keeps UTC-7 from 1 November 2026 (tzdata 2026b). */
 export const RUN_HOUR_UTC = 14
 /**
@@ -125,24 +125,14 @@ export function scheduleSlot(now: Date, taken: Iterable<string> = []): string {
 }
 
 /**
- * BC kept UTC-7 from 1 November 2026 (tzdata 2026b): the clocks didn't go
- * back. A runtime with older timezone data would print every time from then
- * on an hour early ("6:00 a.m." for the 7 a.m. run), so on such a runtime the
- * emails use UTC-7 itself from that date. With current data it's Vancouver's
- * zone throughout.
+ * "Thursday 22 October at 7:00 a.m. Vancouver time", for the emails and the
+ * notes. Vancouver's clock on any runtime's timezone data (lib/bc-time.ts):
+ * BC kept UTC-7 from 1 November 2026, and older data would print the 7 a.m.
+ * run as 6:00 a.m. from then on.
  */
-const BC_FIXED_FROM = Date.parse("2026-11-01T09:00:00Z")
-const OLD_ZONE_DATA =
-  new Intl.DateTimeFormat("en-CA", { timeZone: VANCOUVER, hour: "numeric", hourCycle: "h23" })
-    .formatToParts(new Date("2026-11-02T14:00:00Z"))
-    .find((p) => p.type === "hour")
-    ?.value.replace(/^0/, "") !== "7"
-const zoneAt = (t: number) => (OLD_ZONE_DATA && t >= BC_FIXED_FROM ? "Etc/GMT+7" : VANCOUVER)
-
-/** "Thursday 22 October at 7:00 a.m. Vancouver time", for the emails and the notes. */
 export function vancouverWhen(iso: string): string {
   const parts = new Intl.DateTimeFormat("en-CA", {
-    timeZone: zoneAt(Date.parse(iso)),
+    timeZone: vancouverZone(Date.parse(iso)),
     weekday: "long",
     day: "numeric",
     month: "long",
