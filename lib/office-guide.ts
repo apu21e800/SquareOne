@@ -73,6 +73,12 @@ export const OFFICE_GUIDE: OfficeGuideContent = {
         "No story: the next morning its posts wait in Buffer for your approval (step 4).",
         "With a story: the next morning an article is written from your words and the service's page, nothing else, and you get an email. It goes live two working days later unless you hold it (step 2).",
       ],
+      shot: {
+        src: "/images/guide/job-photos.png",
+        alt: "The Studio's new Job photos form: Photos with Add item, then Where, and Publish at the bottom.",
+        width: 553,
+        height: 695,
+      },
     },
     {
       id: "drafts",
@@ -101,6 +107,12 @@ export const OFFICE_GUIDE: OfficeGuideContent = {
         "Press **Publish**, or turn on **Goes live by itself** and pick the day.",
       ],
       next: ["It shows on the site within a minute of going live, and its social posts wait in Buffer the next morning."],
+      shot: {
+        src: "/images/guide/own-post.png",
+        alt: "The Studio's new Blog post form: Title, then Web address, and Publish at the bottom.",
+        width: 553,
+        height: 695,
+      },
     },
     {
       id: "buffer",
