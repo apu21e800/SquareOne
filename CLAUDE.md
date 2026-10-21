@@ -81,6 +81,8 @@ Copy .env.local.example → .env.local and fill in:
   Unset, they go to CONTACT_EMAIL, still marked, so nothing is ever lost.
 - SANITY_REVALIDATE_SECRET — the Sanity webhook's signing secret (docs/CMS.md);
   /api/revalidate refuses anything it didn't sign.
+- SANITY_API_READ_TOKEN — a Sanity Viewer token for Edit on the page (draft
+  mode reads drafts with it). Server only, never NEXT_PUBLIC.
 - NEXT_PUBLIC_SITE_URL — public site URL for canonical/sitemap/robots/schema/OG (defaults to https://www.squareonepaving.com in `lib/site.ts` — www, because Vercel serves production on www and the old site's whole Google index was www; every absolute URL derives from `SITE_URL` there — never hard-code the host)
 - The CMS (docs/CMS.md) and the blog and social automation (docs/AUTOMATION.md)
   have their own: NEXT_PUBLIC_SANITY_PROJECT_ID, NEXT_PUBLIC_SANITY_DATASET,
@@ -136,6 +138,15 @@ own opener is data in `lib/openers.ts`, never hand-written in the page; pages
 read `getPageOpener(path)`. Galleries read `getStudioWork()` and friends, not
 `getWork()`, wherever a page shows them. Fields left empty keep the site's own;
 `npm run test:pages`.
+
+**Edit on the page** (14 Oct 2026, docs/CMS.md): the Studio's Presentation
+tool shows the site in draft mode, the editor's browser only. `sanityFetch`
+(sanity/lib/client.ts) reads drafts there with stega marks on visible words
+only (`sanity/lib/stega.ts`); anything that measures, compares or reuses a
+Studio string must `stegaClean` it first (fitVars, pageTitle,
+clampDescription and scriptJson already do). The exit link is a plain `<a>`,
+never next/link (a prefetch would end the preview). Needs
+`SANITY_API_READ_TOKEN` (Viewer) in Vercel; `npm run test:preview`.
 
 **lib/blog.ts** — MDX blog system using gray-matter
 - Reads from `content/blog/*.mdx` (or `.md`)
@@ -307,6 +318,7 @@ npm run check   # disk manifest, tsc, lint-claims, check-links
 npm run test:forms  # the quote form's spam rules and route decisions (no network, no mail)
 npm run test:projects  # projects from the Studio
 npm run test:pages  # the hero, page openers and galleries from the Studio
+npm run test:preview  # Edit on the page: preview marks, exit path, clickable photos, style warnings
 npm run test:automation  # the cron gate and the drafter's subjects
 ```
 

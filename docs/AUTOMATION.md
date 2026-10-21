@@ -104,7 +104,9 @@ both jobs without removing a key.
   (ask Claude Code on your machine to do it, without pasting the secret
   anywhere).
 - **Draft a project again:** delete its log, `automation.draftlog.<project
-  slug>`, in Studio's Vision tool, or use `?project=` as above.
+  slug>`, from your machine (`npx sanity documents delete
+  automation.draftlog.<project slug> -p g4yp3p0k`; the Studio's Vision tool
+  was taken out on 14 Oct 2026), or use `?project=` as above.
 - **Social drafts again for a post:** delete `automation.sociallog.<post
   slug>`.
 - **Rejecting a draft:** delete it in Studio. Its project stays logged, so it
@@ -115,7 +117,8 @@ both jobs without removing a key.
 - The emails: one per blog draft, one per post drafted to Buffer.
 - Studio → Blog posts: drafts show as drafts, with Notes for the editor.
 - Vercel → square-one → Logs, filter `[blog]` or `[social]`.
-- Vision: `*[_id in path("automation.**")]` lists every log. Sanity keeps
+- From your machine: `npx sanity documents query '*[_id in
+  path("automation.**")]{_id}' -p g4yp3p0k` lists every log. Sanity keeps
   any document with a dot in its id away from unauthenticated reads, so the
   logs (like drafts) are not readable through the public API.
 

@@ -1,5 +1,6 @@
 import type { Metadata }from "next"
 import { SITE_URL } from "@/lib/site"
+import { stegaClean } from "next-sanity"
 
 const BASE_URL = SITE_URL
 const SITE_NAME = "Square One Paving"
@@ -18,7 +19,9 @@ const clampDesc = (str: string, max = 155) => clampDescription(str, max)
  * (19 Sept 2026 — thirty project and post titles ran to 61–72 characters.)
  */
 export function pageTitle(title: string, section?: string, max = 60): string {
-  const base = title.replace(/\s+/g, " ").trim()
+  // An editor's preview marks Studio words invisibly (sanity/lib/stega.ts);
+  // a <title> never carries them (14 Oct 2026).
+  const base = stegaClean(title).replace(/\s+/g, " ").trim()
   const candidates = [base]
   if (base.includes(":")) candidates.push(base.split(":")[0].trim())
   if (base.includes(" — ")) candidates.push(base.split(" — ")[0].trim())
@@ -47,7 +50,7 @@ export function pageTitle(title: string, section?: string, max = 60): string {
  * ships a description that will be truncated mid-thought.
  */
 export function clampDescription(str: string, max = 158): string {
-  const text = str.replace(/\s+/g, " ").trim()
+  const text = stegaClean(str).replace(/\s+/g, " ").trim()
   if (text.length <= max) return text
   const head = text.slice(0, max)
   const sentenceEnd = Math.max(head.lastIndexOf(". "), head.lastIndexOf("! "), head.lastIndexOf("? "))

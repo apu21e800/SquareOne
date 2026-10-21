@@ -1,3 +1,5 @@
+import { stegaClean } from "next-sanity"
+
 /**
  * JSON for inside a <script> tag. Every "<", ">" and "&" is written as its
  * \u escape, which JSON reads as the same character, so no title, caption or
@@ -7,7 +9,10 @@
  * the blog's Article block and the site-wide graph weren't escaped at all.
  */
 export function scriptJson(value: unknown): string {
-  return JSON.stringify(value).replace(/</g, "\\u003c").replace(/>/g, "\\u003e").replace(/&/g, "\\u0026")
+  // stegaClean: an editor's preview marks Studio words with invisible
+  // characters (sanity/lib/stega.ts); structured data never carries them
+  // (14 Oct 2026). On the published site there are none to remove.
+  return JSON.stringify(stegaClean(value)).replace(/</g, "\\u003c").replace(/>/g, "\\u003e").replace(/&/g, "\\u0026")
 }
 
 /**

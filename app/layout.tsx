@@ -14,6 +14,8 @@ import MobileStickyCTA from "@/components/MobileStickyCTA"
 import MotionBreath from "@/components/MotionBreath"
 import { PALETTE_BOOT, PALETTE_CSS } from "@/lib/palettes"
 import TypeToggle from "@/components/TypeToggle"
+import PreviewTools from "@/components/PreviewTools"
+import { inDraftMode } from "@/sanity/lib/client"
 import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
 import { TYPEFACE_IDS, LIVE_TYPEFACE } from "@/lib/typefaces"
@@ -144,7 +146,9 @@ export const metadata: Metadata = {
 // The browser's own chrome (the address bar on a phone) in the site's white.
 export const viewport: Viewport = { themeColor: "#FFFFFF" }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  // Edit on the page (14 Oct 2026): true only in an editor's own preview.
+  const preview = await inDraftMode()
   return (
     <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning className={`${poppins.variable} ${futura.variable} ${inter.variable} ${sourceSerif.variable}`}>
       <head>
@@ -174,6 +178,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <MobileStickyCTA />
         <MotionBreath />
         {TYPE_SWITCH_ENABLED && <TypeToggle />}
+        {preview && <PreviewTools />}
       </body>
     </html>
   )

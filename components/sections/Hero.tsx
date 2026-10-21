@@ -142,6 +142,7 @@ export default function Hero({ slides, eyebrow, title, titleEnd }: HeroProps) {
         return (
           <div
             key={s.src}
+            data-sanity={s.edit}
             role="group"
             aria-roledescription="slide"
             aria-label={`${i + 1} of ${count}: ${s.place}`}

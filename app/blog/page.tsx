@@ -54,6 +54,7 @@ export default async function BlogPage() {
       <IndexImageHero
         src={o.src}
         alt={o.alt}
+        edit={o.edit}
         eyebrow="Blog"
         title={<OpenerTitle head={o.head} tail={o.tail} />}
         fit={o.fit}

@@ -103,6 +103,7 @@ export default async function ServicesPage() {
       <IndexImageHero
         src={o.src}
         alt={o.alt}
+        edit={o.edit}
         eyebrow="What we do"
         title={<OpenerTitle head={o.head} tail={o.tail} />}
         fit={o.fit}

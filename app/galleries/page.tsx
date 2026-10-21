@@ -146,6 +146,7 @@ export default async function GalleriesPage() {
       <IndexImageHero
         src={o.src}
         alt={o.alt}
+        edit={o.edit}
         eyebrow="Galleries"
         title={<OpenerTitle head={o.head} tail={o.tail} />}
         fit={o.fit}

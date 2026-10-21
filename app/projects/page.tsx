@@ -79,6 +79,7 @@ export default async function ProjectsPage() {
       <IndexImageHero
         src={o.src}
         alt={o.alt}
+        edit={o.edit}
         eyebrow="Projects"
         title={<OpenerTitle head={o.head} tail={o.tail} />}
         fit={o.fit}

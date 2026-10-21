@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity"
+import { copyCheck, paragraphsCheck } from "./style"
 
 const SYSTEMS = ["StreetPrint", "StreetBond", "StreetBondSR", "StreetBond150", "TrafficPatterns", "TrafficPatternsXD", "DuraTherm", "DecoMark", "PreMark", "DuraShield"]
 const APPLICATIONS = ["Crosswalks", "Streetscapes", "Roundabouts & traffic calming", "Parking lots", "Parks & paths", "Schools & sports courts", "Bike lanes", "Public art", "Branding & wayfinding", "Driveways"]
@@ -18,7 +19,7 @@ export const project = defineType({
   title: "Project (case study)",
   type: "document",
   fields: [
-    defineField({ name: "title", type: "string", title: "Title", validation: (r) => r.required().max(90) }),
+    defineField({ name: "title", type: "string", title: "Title", validation: (r) => [r.required().max(90), r.custom(copyCheck).warning()] }),
     defineField({ name: "slug", type: "slug", title: "Web address", options: { source: "title", maxLength: 80 }, validation: (r) => r.required() }),
     defineField({ name: "application", type: "string", title: "Application", options: { list: APPLICATIONS }, validation: (r) => r.required() }),
     defineField({ name: "service", type: "string", title: "Service line", options: { list: SERVICES }, validation: (r) => r.required() }),
@@ -28,13 +29,14 @@ export const project = defineType({
     defineField({ name: "year", type: "string", title: "Year (only if published)", description: "Leave blank unless Square One has stated when it was installed." }),
     defineField({ name: "client", type: "string", title: "Client (only if published)" }),
     defineField({ name: "artist", type: "string", title: "Artist / designer (only if published)" }),
-    defineField({ name: "excerpt", type: "text", title: "Summary", rows: 5, validation: (r) => r.required().max(700), description: "Two to four sentences: what was installed, where, and why it matters. It leads the project's page and shows under its photograph on /projects." }),
+    defineField({ name: "excerpt", type: "text", title: "Summary", rows: 5, validation: (r) => [r.required().max(700), r.custom(copyCheck).warning()], description: "Two to four sentences: what was installed, where, and why it matters. It leads the project's page and shows under its photograph on /projects." }),
     defineField({
       name: "story",
       type: "array",
       title: "The project, told",
       of: [{ type: "text", rows: 5 }],
       description: "Optional paragraphs under the summary, one box each. Left empty, the page keeps the paragraphs it has today; anything here replaces them.",
+      validation: (r) => r.custom(paragraphsCheck).warning(),
     }),
     defineField({ name: "post", type: "reference", to: [{ type: "post" }], title: "Blog post", description: "Optional: the post that tells this project in full. Left empty, the page keeps the link it has today." }),
     defineField({

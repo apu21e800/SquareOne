@@ -174,6 +174,7 @@ export default async function VaporBlastingServicePage() {
       <IndexImageHero
         src={o.src}
         alt={o.alt}
+        edit={o.edit}
         eyebrow="Vapour blasting"
         title={<OpenerTitle head={o.head} tail={o.tail} />}
         fit={o.fit}

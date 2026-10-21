@@ -1,4 +1,5 @@
 import { defineArrayMember, defineField, defineType, type ValidationContext } from "sanity"
+import { copyCheck, headingCheck } from "./style"
 import { OPENERS, RECORD_OPENER_PAGES } from "../../lib/openers"
 
 /**
@@ -35,8 +36,8 @@ function neededWithPhoto(value: unknown, context: ValidationContext, photoField:
 }
 
 const headlineFields = [
-  defineField({ name: "headline", type: "string", title: "Headline", description: "Set in the bold face. Left empty with the ending, the page keeps its own headline." }),
-  defineField({ name: "headlineEnd", type: "string", title: "Headline, lighter ending", description: "The words after the headline, in the lighter face (“across BC”)." }),
+  defineField({ name: "headline", type: "string", title: "Headline", description: "Set in the bold face. Left empty with the ending, the page keeps its own headline.", validation: (r) => r.custom(headingCheck).warning() }),
+  defineField({ name: "headlineEnd", type: "string", title: "Headline, lighter ending", description: "The words after the headline, in the lighter face (“across BC”).", validation: (r) => r.custom(headingCheck).warning() }),
 ]
 
 export const homePage = defineType({
@@ -45,7 +46,7 @@ export const homePage = defineType({
   type: "document",
   fields: [
     ...headlineFields,
-    defineField({ name: "line", type: "text", rows: 3, title: "Line under the headline", description: "Left empty, the site's own line." }),
+    defineField({ name: "line", type: "text", rows: 3, title: "Line under the headline", description: "Left empty, the site's own line.", validation: (r) => r.custom(copyCheck).warning() }),
     defineField({
       name: "reel",
       type: "array",
@@ -58,7 +59,7 @@ export const homePage = defineType({
           fields: [
             defineField({ name: "image", type: "image", title: "Photograph", options: { hotspot: true }, validation: (r) => r.required() }),
             defineField({ name: "alt", type: "string", title: "What the photo shows", validation: (r) => r.required() }),
-            defineField({ name: "caption", type: "string", title: "Caption (place · system · year)" }),
+            defineField({ name: "caption", type: "string", title: "Caption (place · system · year)", validation: (r) => r.custom(copyCheck).warning() }),
           ],
           preview: { select: { title: "caption", subtitle: "alt", media: "image" } },
         }),
@@ -105,9 +106,9 @@ export const pageHero = defineType({
       title: "What the photo shows",
       validation: (r) => r.custom((v, ctx) => neededWithPhoto(v, ctx, "image", "Say what the photograph shows.")),
     }),
-    defineField({ name: "caption", type: "string", title: "Caption (place · system · year)", description: "Shown on the photograph's ledger. A new photograph shows only its own caption." }),
+    defineField({ name: "caption", type: "string", title: "Caption (place · system · year)", description: "Shown on the photograph's ledger. A new photograph shows only its own caption.", validation: (r) => r.custom(copyCheck).warning() }),
     ...headlineFields,
-    defineField({ name: "line", type: "text", rows: 3, title: "Line under the headline", description: "Left empty, the page keeps its own line." }),
+    defineField({ name: "line", type: "text", rows: 3, title: "Line under the headline", description: "Left empty, the page keeps its own line.", validation: (r) => r.custom(copyCheck).warning() }),
   ],
   preview: {
     select: { page: "page", media: "image", headline: "headline" },
@@ -126,8 +127,8 @@ export const galleryPhoto = defineType({
   fields: [
     defineField({ name: "image", type: "image", title: "Photograph", description: "Square One's own work. At least 1600px wide shows large; smaller stays a gallery tile.", options: { hotspot: true }, validation: (r) => r.required() }),
     defineField({ name: "gallery", type: "string", title: "Gallery", options: { list: GALLERIES }, validation: (r) => r.required() }),
-    defineField({ name: "subject", type: "string", title: "What it shows", description: "Short, as the captions read: “Decorative crosswalk”, “School playground labyrinth”.", validation: (r) => r.required().max(80) }),
-    defineField({ name: "place", type: "string", title: "Where", description: "“Bastion Square, Victoria”. Leave empty unless Square One says so publicly; never a guess." }),
+    defineField({ name: "subject", type: "string", title: "What it shows", description: "Short, as the captions read: “Decorative crosswalk”, “School playground labyrinth”.", validation: (r) => [r.required().max(80), r.custom(copyCheck).warning()] }),
+    defineField({ name: "place", type: "string", title: "Where", description: "“Bastion Square, Victoria”. Leave empty unless Square One says so publicly; never a guess.", validation: (r) => r.custom(copyCheck).warning() }),
     defineField({ name: "region", type: "string", title: "Region", options: { list: REGIONS }, description: "Driveway photographs show on the Vancouver or Victoria page by this.", validation: (r) => r.required() }),
     defineField({ name: "systems", type: "array", of: [{ type: "string" }], title: "Systems installed", options: { list: SYSTEMS } }),
     defineField({ name: "lead", type: "boolean", title: "Lead the gallery", description: "Shows first in its gallery (and on the home page's tile for it). Otherwise it shows near the top, newest first.", initialValue: false }),

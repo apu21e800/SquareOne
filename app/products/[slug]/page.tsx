@@ -2,7 +2,7 @@ import { notFound } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
 import type { Metadata } from "next"
-import { getOpenerDoc, mergeOpener } from "@/lib/page-content"
+import { openerFor } from "@/lib/page-content"
 
 import { products, getProductBySlug } from "@/lib/products"
 import type { Product } from "@/lib/products"
@@ -192,9 +192,8 @@ export default async function ProductPage({ params }: Props) {
 
   // The opener's photograph as the page has it, or the Studio's ("Page
   // opener", photograph only: the product's name is its name; 9 Oct 2026).
-  const o = mergeOpener(
+  const o = await openerFor(
     { page: `/products/${slug}`, label: product.name, src: product.image, alt: product.imageAlt, position: product.heroPosition ?? "center", head: product.name },
-    await getOpenerDoc(`/products/${slug}`),
   )
 
   const related = products
@@ -276,6 +275,7 @@ export default async function ProductPage({ params }: Props) {
       {/* ── 60vh opener — the product on real ground (Rockstar Part 4) ─ */}
       <section
         data-nav-on-image
+        data-sanity={o.edit}
         className="relative flex h-[60vh] min-h-[440px] items-end overflow-hidden bg-surface-slate"
       >
         <Image

@@ -169,7 +169,7 @@ export default async function AboutPage() {
 
       {/* ── 2 · Photograph — the work is the portrait; the caption under it ──────── */}
       <figure className="m-0 bg-surface">
-        <span className="relative block h-[62vh] min-h-[420px] overflow-hidden bg-surface-stone">
+        <span data-sanity={o.edit} className="relative block h-[62vh] min-h-[420px] overflow-hidden bg-surface-stone">
           <Image
             src={o.src}
             alt={o.alt}

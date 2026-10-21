@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react"
+import { stegaClean } from "next-sanity"
 
 /**
  * Optical display sizing.
@@ -73,7 +74,9 @@ function prefForLength(n: number): string {
 }
 
 export function fitVars(text: string, opts: FitOptions = {}): CSSProperties {
-  const clean = text.replace(/[®™]/g, "").trim()
+  // stegaClean: in an editor's preview, Studio words carry invisible marks
+  // (sanity/lib/stega.ts) that would count as characters here (14 Oct 2026).
+  const clean = stegaClean(text).replace(/[®™]/g, "").trim()
   const longest = clean.split(/\s+/).reduce((n, word) => Math.max(n, word.length), 1)
 
   return {

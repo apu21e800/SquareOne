@@ -64,6 +64,7 @@ export default async function ProductsPage() {
       <IndexImageHero
         src={o.src}
         alt={o.alt}
+        edit={o.edit}
         eyebrow="The systems we install"
         title={<OpenerTitle head={o.head} tail={o.tail} />}
         fit={o.fit}

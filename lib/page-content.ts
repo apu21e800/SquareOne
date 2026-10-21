@@ -1,5 +1,5 @@
 import { groq } from "next-sanity"
-import { sanityFetch, urlFor, type SanityImageSource } from "@/sanity/lib/client"
+import { editAttr, inDraftMode, sanityFetch, urlFor, type SanityImageSource } from "@/sanity/lib/client"
 import { OPENER_BY_PAGE, type OpenerDefault } from "@/lib/openers"
 import type { Slide } from "@/lib/hero-slides"
 
@@ -24,6 +24,8 @@ interface ImageField {
 }
 
 export interface PageHeroDoc {
+  _id?: string
+  _type?: string
   page?: string
   image?: ImageField
   /** The image asset's original file name (the seed stored it URL-encoded). */
@@ -36,10 +38,12 @@ export interface PageHeroDoc {
 }
 
 export interface HomeDoc {
+  _id?: string
+  _type?: string
   headline?: string
   headlineEnd?: string
   line?: string
-  reel?: { image?: ImageField; file?: string; alt?: string; caption?: string }[]
+  reel?: { _key?: string; image?: ImageField; file?: string; alt?: string; caption?: string }[]
 }
 
 /** What a page's opener renders. `fit` is the headline as plain text, for sizing. */
@@ -54,6 +58,8 @@ export interface OpenerView {
   fit: string
   /** True when the Studio wrote the headline; pages whose own headline is not head + ending use it. */
   headlineSet: boolean
+  /** Edit on the page (14 Oct 2026): makes the photograph open its field, in an editor's preview only. */
+  edit?: string
 }
 
 const text = (v: unknown): string | undefined => (typeof v === "string" && v.trim() ? v.trim() : undefined)
@@ -125,9 +131,9 @@ export function mergeHome(builtIn: Slide[], doc: HomeDoc | null | undefined): { 
 
 const IMAGE = `image{ asset, crop, hotspot }, "file": image.asset->originalFilename`
 
-const OPENERS_QUERY = groq`*[_type == "pageHero" && defined(page)] | order(_updatedAt desc) { page, ${IMAGE}, alt, caption, headline, headlineEnd, line }`
+const OPENERS_QUERY = groq`*[_type == "pageHero" && defined(page)] | order(_updatedAt desc) { _id, _type, page, ${IMAGE}, alt, caption, headline, headlineEnd, line }`
 
-const HOME_QUERY = groq`*[_type == "homePage" && _id == "homePage"][0]{ headline, headlineEnd, line, "reel": reel[]{ image{ asset, crop, hotspot }, "file": image.asset->originalFilename, alt, caption } }`
+const HOME_QUERY = groq`*[_type == "homePage" && _id == "homePage"][0]{ _id, _type, headline, headlineEnd, line, "reel": reel[]{ _key, image{ asset, crop, hotspot }, "file": image.asset->originalFilename, alt, caption } }`
 
 /** Every opener the Studio holds, by page (one query, cached 60 s with the rest). */
 async function openerDocs(): Promise<Map<string, PageHeroDoc>> {
@@ -142,14 +148,38 @@ export async function getOpenerDoc(page: string): Promise<PageHeroDoc | null> {
   return (await openerDocs()).get(page) ?? null
 }
 
+/**
+ * An opener as a page has it (its own, from lib/openers.ts or the page's
+ * record), with the Studio's on top; in an editor's preview the photograph
+ * also opens its field (14 Oct 2026).
+ */
+export async function openerFor(d: OpenerDefault): Promise<OpenerView> {
+  const doc = await getOpenerDoc(d.page)
+  const view = mergeOpener(d, doc)
+  const edit = editAttr(await inDraftMode(), doc, "image")
+  return edit ? { ...view, edit } : view
+}
+
 /** A page's opener, its own (lib/openers.ts) with the Studio's on top. */
 export async function getPageOpener(page: string): Promise<OpenerView> {
   const d = OPENER_BY_PAGE[page]
   if (!d) throw new Error(`no built-in opener for ${page} (lib/openers.ts)`)
-  return mergeOpener(d, await getOpenerDoc(page))
+  return openerFor(d)
 }
 
 /** The home hero, the site's own reel and words with the Studio's on top. */
 export async function getHomeHero(builtIn: Slide[]) {
-  return mergeHome(builtIn, await sanityFetch<HomeDoc | null>(HOME_QUERY, {}, ["sanity", "pages"]))
+  const doc = await sanityFetch<HomeDoc | null>(HOME_QUERY, {}, ["sanity", "pages"])
+  const out = mergeHome(builtIn, doc)
+  // Edit on the page (14 Oct 2026): in an editor's preview each photograph
+  // opens its own entry in the reel; the site's own reel opens the reel
+  // field, where photographs are added. Never on the published site.
+  if (await inDraftMode()) {
+    const home = doc?._id ? doc : { _id: "homePage", _type: "homePage" }
+    const keys = (doc?.reel ?? []).filter((s) => s?.image?.asset).map((s) => s._key)
+    const field = (i: number) => (keys[i] ? `reel[_key=="${keys[i]}"].image` : "reel")
+    const fromStudio = Boolean(out.slides)
+    out.slides = (out.slides ?? builtIn).map((s, i) => ({ ...s, edit: editAttr(true, home, fromStudio ? field(i) : "reel") }))
+  }
+  return out
 }
