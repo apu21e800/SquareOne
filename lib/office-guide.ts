@@ -92,7 +92,7 @@ export const OFFICE_GUIDE: OfficeGuideContent = {
         "Happy with it? Press **Publish**. To have it go out on a later day instead, turn on **Goes live by itself**, then set **Goes live at** to that day at 7:00 a.m. or earlier: it goes out that morning.",
       ],
       next: [
-        'An article from job photos comes with its own email, "Ready to read". Read it and press **Publish** the same way.',
+        'An article from job photos comes with its own email, "Ready to read" (or "Needs a read before it goes" when a check found something to fix). Read it and press **Publish** the same way.',
         "The morning after a post goes live, its social posts wait in Buffer for you (step 4).",
       ],
     },
