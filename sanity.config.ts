@@ -4,8 +4,8 @@
  * Sanity Studio: the office's editing desk, served by the site at /studio.
  * Content (sanity/structure.ts): Website Pages (the home, about, contact and
  * driveways pages' words, every page's opener, the photo galleries, the
- * social grid), Services, Projects, the Blog and Site Settings, and (under
- * Advanced) the older text/photo slots. Edit on the page (14 Oct 2026): the
+ * social grid), Services, Projects, the Blog plan, the Blog and Site
+ * Settings, and (under Advanced) the older text/photo slots. Edit on the page (14 Oct 2026): the
  * same, clicked on the page itself.
  */
 import { defineConfig } from "sanity"

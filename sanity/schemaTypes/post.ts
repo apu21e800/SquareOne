@@ -46,7 +46,10 @@ export const post = defineType({
       name: "category",
       type: "string",
       title: "Category",
-      options: { list: ["Municipal", "Commercial", "Residential", "Public Art", "Crosswalks", "Parks & Paths", "Streetscapes", "Transit", "School Zones", "Bike Lanes", "Roundabouts", "Case Studies", "Vapour Blasting", "Guides"] },
+      // "Case Studies" came off the list on 14 Oct 2026: the canon says "project
+      // story", never "case study", and the category prints on the post. The
+      // blog's Project stories topic finds project stories by their tag.
+      options: { list: ["Municipal", "Commercial", "Residential", "Public Art", "Crosswalks", "Parks & Paths", "Streetscapes", "Transit", "School Zones", "Bike Lanes", "Roundabouts", "Vapour Blasting", "Guides"] },
       group: "content",
     }),
     defineField({ name: "author", type: "string", title: "Author", initialValue: "Square One Paving", group: "content" }),

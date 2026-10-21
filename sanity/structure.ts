@@ -2,10 +2,9 @@ import type { StructureResolver } from "sanity/structure"
 
 /**
  * The Studio's list (14 Oct 2026), in the order the office works through it:
- * Website Pages, Services, Projects, Blog, Site Settings. The Blog plan, From
- * the field and Social drafts take their places (Blog plan before Blog; From
- * the field and Social drafts after it) as the blog and social automation
- * are built (docs/AUTOMATION.md).
+ * Website Pages, Services, Projects, Blog plan, Blog, Site Settings. From the
+ * field and Social drafts take their places after Blog when the social
+ * automation is built (docs/AUTOMATION.md).
  *
  * The single documents (the four pages' words, Site Settings, the galleries'
  * list of photos taken off) open straight into their one document: there is
@@ -56,6 +55,21 @@ export const structure: StructureResolver = (S) => {
         .schemaType("service")
         .child(S.documentTypeList("service").title("Services").initialValueTemplates([])),
       S.listItem().title("Projects").id("project").schemaType("project").child(S.documentTypeList("project").title("Projects")),
+      // What to write next (sanity/schemaTypes/storyIdea.ts). The drafter, on
+      // Tuesdays and Thursdays, takes the top Ready item, else the top Idea,
+      // and tops the plan up when it runs low (lib/automation/planner.ts).
+      S.listItem()
+        .title("Blog plan")
+        .id("storyIdea")
+        .schemaType("storyIdea")
+        .child(
+          S.documentTypeList("storyIdea")
+            .title("Blog plan")
+            .defaultOrdering([
+              { field: "priority", direction: "asc" },
+              { field: "_createdAt", direction: "asc" },
+            ]),
+        ),
       S.listItem()
         .title("Blog")
         .id("post")

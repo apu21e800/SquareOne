@@ -8,9 +8,8 @@ import RecordCard from "@/components/ui/RecordCard"
 /**
  * Filter bar + the records for /blog — the same FilterBar and RecordCard as
  * /projects, so the two indexes are one system. `label` is display copy
- * (Canadian English, sentence case); `match` is the original filter token
- * and must not change — it is what post categories and tags are tested
- * against.
+ * (Canadian English, sentence case); `match` is the filter token, what post
+ * categories and tags are tested against, so it changes only with them.
  *
  * 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.7): the lead is a hairline
  * row, the rest a grid of frames with their captions under them.
@@ -20,7 +19,10 @@ const TOPICS: ReadonlyArray<{ label: string; match: string }> = [
   { label: "Driveways", match: "Driveways" },
   { label: "Vapour blasting", match: "Vapour Blasting" },
   { label: "Public art", match: "Public Art" },
-  { label: "Project stories", match: "Case Studies" },
+  // Was "Case Studies" until 14 Oct 2026: no post carries it and the canon
+  // bans the word. The drafter tags every project story and roundup
+  // "Project stories" (lib/automation/plan.ts PROJECT_STORIES_TAG).
+  { label: "Project stories", match: "Project stories" },
 ]
 
 const ALL = "all"
