@@ -344,6 +344,8 @@ async function main() {
       },
       createOrReplace: async () => {},
       patch: async () => {},
+      createIfNotExists: async () => {},
+      delete: async () => {},
       uploadImage: async () => null,
     }
     return { store, created }

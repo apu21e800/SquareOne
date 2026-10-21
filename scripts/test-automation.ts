@@ -50,6 +50,8 @@ const store = (studio: unknown[]): Store => ({
   create: async () => {},
   createOrReplace: async () => {},
   patch: async () => {},
+  createIfNotExists: async () => {},
+  delete: async () => {},
   uploadImage: async () => null,
 })
 
@@ -101,6 +103,7 @@ function sanity(docs: SanityDoc[]) {
   const created: SanityDoc[] = []
   const patched: { id: string; set: Record<string, unknown> }[] = []
   const uploads: string[] = []
+  const deleted: string[] = []
   const s: Store = {
     fetch: async <T,>(query: string, params: Record<string, unknown> = {}) => (await (await evaluate(parse(query, { params }), { dataset, params })).get()) as T,
     create: async (doc) => {
@@ -120,12 +123,23 @@ function sanity(docs: SanityDoc[]) {
       Object.assign(d, structuredClone(set))
       patched.push({ id, set })
     },
+    createIfNotExists: async (doc) => {
+      if (!dataset.some((d) => d._id === doc._id)) {
+        dataset.push(structuredClone(doc))
+        created.push(doc)
+      }
+    },
+    delete: async (id) => {
+      const i = dataset.findIndex((d) => d._id === id)
+      if (i >= 0) dataset.splice(i, 1)
+      deleted.push(id)
+    },
     uploadImage: async (url) => {
       uploads.push(url)
       return "image-uploaded-1200x800-jpg"
     },
   }
-  return { store: s, dataset, created, patched, uploads }
+  return { store: s, dataset, created, patched, uploads, deleted }
 }
 
 /** Claude, answering each tool with what a good run sends back; `fail` throws on that tool. */

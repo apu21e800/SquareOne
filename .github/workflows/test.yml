@@ -62,3 +62,6 @@ jobs:
 
       - name: The Blog plan keeps itself stocked
         run: npm run test:planner
+
+      - name: Social drafts into Buffer
+        run: npm run test:social

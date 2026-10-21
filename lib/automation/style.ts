@@ -139,7 +139,7 @@ function excerptAt(text: string, index: number, length: number): string {
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 
 /** The company that makes the systems, which the site never names (the "maker" rule). */
-const MAKER = /\bHUB\b|\b[Hh][Uu][Bb]\s*[Ss][Uu][Rr][Ff][Aa][Cc][Ee]\b|\b[Hh][Uu][Bb][Ss][Ss]\b|\b[Ee][Nn][Nn][Ii][Ss][\s-]*[Ff][Ll][Ii][Nn][Tt]\b|\b[Ii]ntegrated\s+[Pp]aving\s+[Cc]oncepts\b|\bPPG\b/gu
+const MAKER = /\bHUB\b|\b[Hh][Uu][Bb]\s*[Ss][Uu][Rr][Ff][Aa][Cc][Ee]|\b[Hh][Uu][Bb][Ss][Ss]\b|\b[Ee][Nn][Nn][Ii][Ss][\s-]*[Ff][Ll][Ii][Nn][Tt]\b|\b[Ii]ntegrated\s+[Pp]aving\s+[Cc]oncepts\b|\bPPG\b/gu
 
 /** True when the text names the company that makes the systems (the planner's check, lib/automation/planner.ts). */
 export function namesTheMaker(text: string): boolean {

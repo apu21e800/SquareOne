@@ -12,6 +12,8 @@
  * (lib/automation/buffer.ts) writes "Buffer API 401".
  */
 
+import { BufferApiError, type BufferChannel } from "@/lib/automation/buffer"
+
 export type Job = "blog" | "social"
 
 const LOGS: Record<Job, string> = {
@@ -28,6 +30,76 @@ const statusOf = (err: unknown): number | undefined => {
   return n
 }
 
+// ── the social job (ported from hubss.com's lib/social-outcome.ts) ─────────
+
+/** "lasting": this item will never draft there. "retry": it can clear. */
+export type SkipKind = "lasting" | "retry"
+
+export interface ChannelSkip {
+  service: string
+  channel: string
+  why: string
+  kind: SkipKind
+}
+
+/**
+ * How one item (an article, a field post, a library post) ends a run:
+ *  - "drafted": at least one draft reached Buffer. Done.
+ *  - "nothing-possible": no channel could ever take it (only networks the job
+ *    doesn't write for, or Instagram and no photo). Done, nothing drafted.
+ *  - "retry": every channel failed for a reason that can clear (Buffer
+ *    refused the draft, a channel is disconnected). Not done: the next daily
+ *    run writes it again, and the email says why.
+ *  - "gave-up": as "retry", but its first failed try was more than
+ *    GIVE_UP_DAYS ago. Done, so a stuck item can't send an email every day
+ *    for ever. Counted from the first failure, not the item's date, so an
+ *    item first tried late still gets its full stretch of retries.
+ * A done item keeps its socialLog and is never drafted again.
+ */
+export type Outcome = "drafted" | "nothing-possible" | "retry" | "gave-up"
+
+/** Days after an item's first failed try during which the job keeps retrying it. */
+export const GIVE_UP_DAYS = 14
+
+/** Why a connected channel can't take a draft today, or null when it can. */
+export function unusableReason(ch: Pick<BufferChannel, "isDisconnected" | "isLocked">): string | null {
+  if (ch.isDisconnected) return "disconnected in Buffer: reconnect it there"
+  if (ch.isLocked) return "locked by Buffer: the account has more channels than its plan allows"
+  return null
+}
+
+/**
+ * See Outcome. `failingDays`: days since the item's first failed try, or null
+ * when it has never failed before (so a first failure is always a retry).
+ * `skipped` is never empty with nothing drafted: the pipeline stops first
+ * when Buffer has no usable channel.
+ */
+export function decideOutcome(drafted: number, skipped: readonly Pick<ChannelSkip, "kind">[], failingDays: number | null): Outcome {
+  if (drafted > 0) return "drafted"
+  if (skipped.every((s) => s.kind === "lasting")) return "nothing-possible"
+  return failingDays !== null && failingDays > GIVE_UP_DAYS ? "gave-up" : "retry"
+}
+
+/** Days since a date ("2026-10-07" or a full timestamp); 0 when it can't be read or is in the future. */
+export function daysSince(date: string, now: Date): number {
+  const t = Date.parse(date)
+  return Number.isNaN(t) ? 0 : Math.max(0, (now.getTime() - t) / 86_400_000)
+}
+
+/**
+ * An error that stops the whole run rather than one item: a key refused or
+ * missing, Anthropic out of credit, busy or gone quiet, the model retired.
+ * Anything else (Claude returning nothing usable for one source, Sanity
+ * refusing one record) is that item's problem: it is retried for
+ * GIVE_UP_DAYS while the run carries on with the others.
+ */
+export function isRunLevel(err: unknown): boolean {
+  const message = err instanceof Error ? err.message : String(err)
+  const status = statusOf(err)
+  if (status !== undefined && [401, 403, 429, 529].includes(status)) return true
+  return /authentication_error|x-api-key|permission_error|credit balance|usage limits?|spend(ing)? limit|not_found_error|overloaded_error|rate_limit_error|Request timed out|Session not found|Insufficient permissions|is not set|Not configured/i.test(message)
+}
+
 /** Sanity refused a create because the id is taken: another run, or the same plan item twice. */
 export function isConflict(err: unknown): boolean {
   return statusOf(err) === 409 || /already exists/i.test(err instanceof Error ? err.message : String(err))
@@ -37,14 +109,18 @@ export function isConflict(err: unknown): boolean {
 export function failureHint(err: unknown, job: Job = "blog"): string {
   const message = err instanceof Error ? err.message : String(err)
   const status = statusOf(err)
+  const bufferStatus = err instanceof BufferApiError ? err.status : undefined
   // Buffer first: its client puts "Buffer" in every message it throws.
-  if (/Buffer API 40[13]\b|\((UNAUTHENTICATED|UNAUTHORIZED|FORBIDDEN)\)/.test(message)) {
+  if (bufferStatus === 401 || bufferStatus === 403 || /Buffer API 40[13]\b|\((UNAUTHENTICATED|UNAUTHORIZED|FORBIDDEN)\)/.test(message)) {
     return "Buffer refused the API key: it has expired (a key lasts a year at most) or was deleted. Make a new one in Square One's Buffer at publish.buffer.com/settings/api (choose 1 year), replace BUFFER_API_KEY in Vercel (Production) and redeploy."
+  }
+  if (/The Buffer key reaches more than one organization|BUFFER_ORG_ID names/.test(message)) {
+    return "The Buffer login behind BUFFER_API_KEY belongs to more than one Buffer organization, so the job stopped before drafting anything. Keep Square One's Buffer login in Square One's organization only, or put the id of Square One's organization in Vercel (Production) as BUFFER_ORG_ID, and redeploy."
   }
   if (message.startsWith(NO_CHANNELS)) return "Connect Square One's channels in its Buffer account: the Facebook page and Instagram (and Google Business Profile on Essentials)."
   if (/disconnected in Buffer/.test(message)) return "Reconnect the channel in Square One's Buffer; the next daily run drafts into it."
   if (/locked by Buffer/.test(message)) return "Buffer has more channels connected than the plan allows: remove one in Buffer or move to the plan that covers them."
-  if (/Buffer.*rate limit|Buffer API 429/i.test(message)) return "Buffer's request limit was reached. Nothing to do: the next daily run tries again."
+  if (bufferStatus === 429 || /Buffer.*rate limit|Buffer API 429/i.test(message)) return "Buffer's request limit was reached. Nothing to do: the next daily run tries again."
   if (/Buffer API unreachable/.test(message)) return "Buffer didn't answer in time. Nothing to do: the next daily run tries again."
 
   // Anthropic.
@@ -64,11 +140,11 @@ export function failureHint(err: unknown, job: Job = "blog"): string {
     return "Anthropic was busy. Nothing to change: the next run tries again, or run it now from Vercel → square-one → Settings → Cron Jobs."
   }
 
-  // Sanity.
-  if (status === 401 || /Session not found|Unauthorized/i.test(message)) {
+  // Sanity (a Buffer error carries its own status, so it never lands here).
+  if ((status === 401 && bufferStatus === undefined) || /Session not found|Unauthorized/i.test(message)) {
     return "Sanity refused SANITY_API_WRITE_TOKEN (expired or deleted). Make a new Editor token at sanity.io/manage (project g4yp3p0k, API, Tokens), replace it in Vercel (Production) and redeploy."
   }
-  if (status === 403 || /Insufficient permissions|permission "(create|update)"/i.test(message)) {
+  if ((status === 403 && bufferStatus === undefined) || /Insufficient permissions|permission "(create|update)"/i.test(message)) {
     return "Sanity let SANITY_API_WRITE_TOKEN read but not write: it needs the Editor role. Make an Editor token at sanity.io/manage (project g4yp3p0k, API, Tokens), replace it in Vercel (Production) and redeploy."
   }
 

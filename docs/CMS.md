@@ -7,9 +7,9 @@ Studio and the page updates within a minute.
 ## What they can edit
 
 The Studio's list, in this order since 14 Oct 2026 (the automation brief):
-Website Pages, Services, Projects, Blog plan, Blog, Site Settings, then
-Advanced. From the field and Social drafts join it after Blog as the social
-automation is built (docs/AUTOMATION.md).
+Website Pages, Services, Projects, Blog plan, Blog, From the field, Social
+drafts, Site Settings, then Advanced (docs/AUTOMATION.md for the blog and
+social automation).
 
 | In the Studio            | What it changes on the site                                                      |
 | ------------------------ | -------------------------------------------------------------------------------- |
@@ -23,6 +23,8 @@ automation is built (docs/AUTOMATION.md).
 | **Projects**             | /projects, each project's page, the home page's six, and the application and service pages. Add one, edit its words and photographs (drag to reorder; Add item, then Upload or Select one already in the media library), or "Take off the site". |
 | **Blog plan**            | What the drafter writes next, on Tuesdays and Thursdays: project stories, project roundups and guides. Set one to Ready to have it next; it marks them Drafted and adds new Ideas when the plan runs low (docs/AUTOMATION.md). Nothing here is on the site. |
 | **Blog**                 | Create, edit, publish. Lead photograph, category, body with photos and links. The first Publish dates a post that day (Vancouver). The drafter's posts arrive here unpublished, with Notes for the editor. |
+| **From the field**       | A finished job from a phone: 1 to 10 photos, where, the service, a line of facts. Publish, and the next daily run drafts posts from it into Square One's Buffer. Not shown on the site. |
+| **Social drafts**        | Read only: what the daily social job left in Buffer for each blog post, field post or library post, and the style check on its copy. |
 | **Site Settings**        | Phones, email, address, the footer line, Instagram / TikTok / Facebook / LinkedIn / YouTube links: read everywhere they print (the footer, the menu, the phone bar, the quote form, the contact and about pages, every "or call" line, the legal pages, llms.txt and the search engines' data). |
 | **Advanced → Text and Photo slots** | The first way in (30 Sept): a key per spot (`home.hero.title`, `home.hero.1`…). The Home page above does the same more simply and wins over them. |
 

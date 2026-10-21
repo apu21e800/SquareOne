@@ -2,9 +2,8 @@ import type { StructureResolver } from "sanity/structure"
 
 /**
  * The Studio's list (14 Oct 2026), in the order the office works through it:
- * Website Pages, Services, Projects, Blog plan, Blog, Site Settings. From the
- * field and Social drafts take their places after Blog when the social
- * automation is built (docs/AUTOMATION.md).
+ * Website Pages, Services, Projects, Blog plan, Blog, From the field, Social
+ * drafts, Site Settings (the automation brief; docs/AUTOMATION.md).
  *
  * The single documents (the four pages' words, Site Settings, the galleries'
  * list of photos taken off) open straight into their one document: there is
@@ -17,6 +16,9 @@ export const SINGLETONS = new Set(["siteSettings", "homePage", "aboutPage", "con
 
 /** Fixed sets: edited, never added to, duplicated or deleted. */
 export const FIXED_TYPES = new Set(["service"])
+
+/** Written by the automation, read only in the Studio: never made by hand (lib/automation/social.ts). */
+export const MACHINE_TYPES = new Set(["socialLog"])
 
 export const structure: StructureResolver = (S) => {
   const single = (id: string, title: string) => S.listItem().title(title).id(id).child(S.document().schemaType(id).documentId(id).title(title))
@@ -75,6 +77,21 @@ export const structure: StructureResolver = (S) => {
         .id("post")
         .schemaType("post")
         .child(S.documentTypeList("post").title("Blog").defaultOrdering([{ field: "date", direction: "desc" }])),
+      // Photos of a finished job with a line of facts (sanity/schemaTypes/fieldPost.ts).
+      // Publishing one has the next daily social run draft posts from it in Buffer.
+      S.listItem()
+        .title("From the field")
+        .id("fieldPost")
+        .schemaType("fieldPost")
+        .child(S.documentTypeList("fieldPost").title("From the field").defaultOrdering([{ field: "date", direction: "desc" }])),
+      // What the daily social job left in Buffer for each item, with the style
+      // check on its copy (lib/automation/social.ts). The job writes these;
+      // nothing here is created or edited by hand.
+      S.listItem()
+        .title("Social drafts")
+        .id("socialLog")
+        .schemaType("socialLog")
+        .child(S.documentTypeList("socialLog").title("Social drafts").defaultOrdering([{ field: "createdAt", direction: "desc" }]).initialValueTemplates([])),
       S.divider(),
       single("siteSettings", "Site Settings"),
       S.divider(),
