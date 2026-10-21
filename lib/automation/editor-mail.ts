@@ -8,8 +8,9 @@
  *
  * Never throws: a lost email must not stop a run. It gives up after 15 s, so
  * a slow mail service can't push a run past Vercel's 300 s, and resolves to
- * the addresses it went to (none when it couldn't): the project step switches
- * an article on to go live by itself only once the editors have been told.
+ * the addresses it went to (none when it couldn't): with
+ * PROJECT_ARTICLES_AUTO_PUBLISH on, the project step switches an article on
+ * to go live by itself only once the editors have been told.
  */
 import { notifyList, type Mailer } from "@/lib/automation/services"
 

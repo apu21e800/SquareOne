@@ -107,7 +107,9 @@ Copy .env.local.example → .env.local and fill in:
   SANITY_REVALIDATE_SECRET; CRON_SECRET, ANTHROPIC_API_KEY,
   SANITY_API_WRITE_TOKEN, BLOG_DRAFT_NOTIFY, BUFFER_API_KEY, BUFFER_ORG_ID
   (only if the Buffer login is in more than one organization), AUTOMATION_PAUSED,
-  SOCIAL_AUTO_QUEUE (unset: social posts wait in Buffer for approval).
+  SOCIAL_AUTO_QUEUE (unset: social posts wait in Buffer for approval),
+  PROJECT_ARTICLES_AUTO_PUBLISH (unset: a project article waits for a
+  person's Publish; "on" schedules a clean one two weekdays out).
 
 ## Blog and social automation (lib/automation/, docs/AUTOMATION.md)
 The office's one-page guide (21 Oct 2026; `lib/office-guide.ts`, `components/OfficeGuide.tsx`): the Studio's first item ("Start here: how to post", `sanity/components/GuidePane.tsx`) and the page `/studio/guide` (noindex, never in the sitemap, no phone bar). `npm run test:studio` fails if a Studio label it names is renamed, if a line breaks the house style, or if a screenshot it lists is missing or the wrong size. One screenshot per step goes in `public/images/guide/`.
@@ -154,11 +156,15 @@ Dormant until `BUFFER_API_KEY` is set. Daily at 15:00 UTC, its own run
 published Job photos post with **The story** (`writeUp`) and no article
 becomes a project story (port of hubss.com's lib/project-posts.ts): written
 from that post's record and its service's pages only, the post's photos in
-it, scheduled two weekdays after the day it is written (counted in
-Vancouver) once the editors are emailed (held if a check isn't clean, the
-fact check's answer can't be read, it shows a phone number, email or address
-that isn't Square One's (the style check's `contact` rule), or it has no
-photo), linked both ways (`fieldPost`, `article`, weak); a post that keeps
+it, saved unpublished with no time set, and the editors emailed "Ready to
+read" (or "Needs a read" when a check isn't clean, the fact check's answer
+can't be read, it shows a phone number, email or address that isn't Square
+One's (the style check's `contact` rule), or it has no photo); it waits for
+a person's Publish (Vern, 21 Oct 2026: "wait for Sydney"). Only with
+`PROJECT_ARTICLES_AUTO_PUBLISH=on` (`autoPublishArticles`) is a clean one
+scheduled two weekdays after the day it is written (counted in Vancouver),
+once the editors are emailed, and anything else saved held. Linked both ways
+(`fieldPost`, `article`, weak); a post that keeps
 failing is retried for 14 days (`projectRetry-<id>`), then given up with one
 email; such a post gets no social posts of its own (`hasStory`). A new post needs a title, a
 photograph with alt text, a body and a section (the imported library before

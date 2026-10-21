@@ -86,9 +86,10 @@ export const post = defineType({
     }),
     // Scheduling (20 Oct 2026, as hubss.com's, lib/automation/project-posts.ts):
     // a draft set to go live by itself is published by the daily run (14:00
-    // UTC) on or after its time. A project article written from job photos is
-    // saved this way; any draft can be. A boolean, not a status list: the
-    // posts from before show it plainly off.
+    // UTC) on or after its time. Any draft can be; a project article written
+    // from job photos waits for Publish instead, unless
+    // PROJECT_ARTICLES_AUTO_PUBLISH is on (Vern, 21 Oct 2026). A boolean, not
+    // a status list: the posts from before show it plainly off.
     defineField({
       name: "scheduled",
       type: "boolean",

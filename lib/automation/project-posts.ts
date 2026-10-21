@@ -27,14 +27,18 @@
  *     work, nothing else; the style pass and the fact check run as for every
  *     draft. It is saved as an unpublished draft with the post's photographs
  *     (the first leads, the rest close the article), and the editors are
- *     emailed. A clean one is then set to go live by itself at the daily run
- *     two weekdays later (scheduleSlot), unless they hold it. A draft a check
- *     isn't happy with (an unsupported statement, a sentence against the house
- *     style, a phone number or address that isn't Square One's, no
- *     photograph) is saved held instead: nothing unchecked goes live by
- *     itself. A post whose article can't be written is tried again each
- *     morning, behind the others, for GIVE_UP_DAYS, then given up with one
- *     email (editing the post starts it over).
+ *     emailed. It then waits in Studio for a person's Publish (Vern, 21 Oct
+ *     2026: "wait for Sydney"); the email says "Ready to read", or "Needs a
+ *     read" with what a check found. Only with PROJECT_ARTICLES_AUTO_PUBLISH
+ *     set to "on" in Vercel (autoPublishArticles) is a clean one set to go
+ *     live by itself at the daily run two weekdays later (scheduleSlot),
+ *     unless they hold it; even then a draft a check isn't happy with (an
+ *     unsupported statement, a sentence against the house style, a phone
+ *     number or address that isn't Square One's, no photograph) is saved
+ *     held: nothing unchecked goes live by itself. A post whose article can't
+ *     be written is tried again each morning, behind the others, for
+ *     GIVE_UP_DAYS, then given up with one email (editing the post starts it
+ *     over).
  *
  * A Job photos post with a story makes no social posts of its own
  * (lib/automation/social.ts, hasStory): the job goes out once, as its
@@ -80,6 +84,16 @@ export const NEEDS_MS = 280_000
 const AFTER_WRITING_MS = 25_000
 /** A claim older than this is a run Vercel stopped before it could clear it. */
 const STALE_CLAIM_MS = 10 * 60_000
+
+/**
+ * Whether a clean project article is set to go live by itself, two weekdays
+ * after the email, or waits for a person to press Publish. Vern, 21 Oct 2026:
+ * "wait for Sydney". Off unless PROJECT_ARTICLES_AUTO_PUBLISH is "on" in
+ * Vercel (the article run reads it; a redeploy picks up a change).
+ */
+export function autoPublishArticles(env: Record<string, string | undefined> = process.env): boolean {
+  return env.PROJECT_ARTICLES_AUTO_PUBLISH?.trim().toLowerCase() === "on"
+}
 
 export interface ProjectDeps {
   claude: Claude
@@ -258,19 +272,31 @@ export function readyToGo(check: FactCheck, style: StylePass | undefined, hasPho
 }
 
 /**
- * The scheduled blog draft for a job's article. Pure, so it can be tested
- * without Claude or Sanity. The post's first photograph is the lead
- * photograph; the rest close the article under their own heading, with the
- * post's alt text. `slot` is when it goes live; it is saved held when
- * readyToGo says so, with the time filled in. Tags print on the live post and
- * no check reads them, so one that breaks the canon is dropped.
+ * The blog draft for a job's article. Pure, so it can be tested without
+ * Claude or Sanity. The post's first photograph is the lead photograph; the
+ * rest close the article under their own heading, with the post's alt text.
+ * By default it waits for a person's Publish, with no time set. With
+ * `autoPublish` (autoPublishArticles) and a `slot`, it is set to go live by
+ * itself at that time, or saved held with the time filled in when readyToGo
+ * says so. Tags print on the live post and no check reads them, so one that
+ * breaks the canon is dropped.
  */
-export function buildProjectDocument(doc: JobPost, draft: Draft, check: FactCheck, slug: string, slot: string, style?: StylePass, today = new Date()) {
+export function buildProjectDocument(
+  doc: JobPost,
+  draft: Draft,
+  check: FactCheck,
+  slug: string,
+  slot: string | null,
+  style?: StylePass,
+  today = new Date(),
+  opts: { autoPublish?: boolean } = {},
+) {
   const photos = (doc.photos ?? []).filter((p) => p?.asset)
   const [first, ...rest] = photos
   const ready = readyToGo(check, style, Boolean(first))
+  const auto = opts.autoPublish === true && slot !== null
   const name = jobName(doc)
-  const when = vancouverWhen(slot)
+  const when = slot ? vancouverWhen(slot) : ""
   const body: (PortableBlock | ImageBlock)[] = [
     ...toPortableText(draft.body, "d"),
     ...(rest.length
@@ -293,9 +319,13 @@ export function buildProjectDocument(doc: JobPost, draft: Draft, check: FactChec
   const notes = [
     `Drafted by Claude on ${pacificDate(today)} from the Job photos post "${name}" (Studio → Job photos): its story, the crew's note, and the ${serviceTitle(doc)?.toLowerCase() ?? "service"} page's words. Nothing else.`,
     "",
-    ready
-      ? `SCHEDULED: it goes live by itself ${when}. To change a line, edit it here: it still goes out on time. To move it, change "Goes live at". To hold it, turn "Goes live by itself" off. The day after it is live, its social posts are drafted in Buffer for approval.`
-      : `HELD: a check below found something, so it does not go live by itself. Read it, fix what's listed, then turn "Goes live by itself" on (it is set for ${when}; a time already past goes at the next morning's run) or press Publish.`,
+    auto
+      ? ready
+        ? `SCHEDULED: it goes live by itself ${when}. To change a line, edit it here: it still goes out on time. To move it, change "Goes live at". To hold it, turn "Goes live by itself" off. The day after it is live, its social posts are drafted in Buffer for approval.`
+        : `HELD: a check below found something, so it does not go live by itself. Read it, fix what's listed, then turn "Goes live by itself" on (it is set for ${when}; a time already past goes at the next morning's run) or press Publish.`
+      : ready
+        ? `READY TO READ: nothing goes live until someone presses Publish. Read it, change anything by typing, then press Publish. To have it go out on a later morning instead, turn on "Goes live by itself" and set "Goes live at" to that day at 7:00 a.m. or earlier. The day after it is live, its social posts are drafted in Buffer for approval.`
+        : `CHECK FIRST: a check below found something. Fix what's listed, then press Publish. Nothing goes live until someone does.`,
     "",
     check.unsupported.length
       ? `FACT CHECK: ${check.unsupported.length} statement(s) the job's record and Square One's pages don't back up. Fix or remove them before it goes live:`
@@ -305,7 +335,7 @@ export function buildProjectDocument(doc: JobPost, draft: Draft, check: FactChec
     ...(style ? [...styleReport(style, "before it goes live (Studio marks them in yellow too)"), ""] : []),
     first
       ? `PHOTOS: the post's first photo is the lead photograph${rest.length ? `; the others close the article under "The job in photographs", with the post's descriptions` : ""}.${first.hotspot ? "" : " Drag its focal point onto the pavement."}`
-      : "PHOTOS: the post had none with a file, so this is held. Add a lead photograph before it goes live.",
+      : `PHOTOS: the post had none with a file${auto ? ", so this is held" : ""}. Add a lead photograph before it goes live.`,
     "",
     "BASED ON:",
     ...draft.factsUsed.map((f) => `- ${f}`),
@@ -326,8 +356,10 @@ export function buildProjectDocument(doc: JobPost, draft: Draft, check: FactChec
     body,
     tags,
     editorNotes: notes,
-    scheduled: ready,
-    scheduledFor: slot,
+    scheduled: auto && ready,
+    // Waiting for Publish, no time is set: a person who turns "Goes live by
+    // itself" on picks the day.
+    ...(auto && slot ? { scheduledFor: slot } : {}),
     ...(first ? { mainImage: imageOf(first, null, first.alt?.trim() || name) } : {}),
     fieldPost: { _type: "reference", _ref: doc._id, _weak: true },
   } satisfies SanityDoc & Record<string, unknown>
@@ -536,7 +568,7 @@ export interface Drafted {
   id: string
   slug: string
   title: string
-  /** When it goes live, or "held" when a check wants a read first. */
+  /** "on Publish" (the default: it waits for a person); with autoPublish, when it goes live, or "held" when a check wants a read first. */
   goesLive: string
   factCheck: FactCheck["verdict"]
   toCheck: number
@@ -584,7 +616,7 @@ const editedSince = (doc: JobPost, iso: string | null | undefined) => Boolean(do
  * reference back to the post stops a second one; a copy of a post (Studio's
  * Duplicate) gets an article of its own.
  */
-export async function draftProjectArticles(deps: ProjectDeps, now: Date, opts: { deadline?: number } = {}): Promise<DraftOutcome> {
+export async function draftProjectArticles(deps: ProjectDeps, now: Date, opts: { deadline?: number; autoPublish?: boolean } = {}): Promise<DraftOutcome> {
   const { store } = deps
   const out: DraftOutcome = { drafted: [], waiting: 0, skipped: [], failed: [] }
   const [candidates, articles, retryList] = await Promise.all([
@@ -639,7 +671,7 @@ export async function draftProjectArticles(deps: ProjectDeps, now: Date, opts: {
     // A record from before the post was last edited (or a give-up since) starts over.
     const firstFailedAt = retry && !retry.gaveUpAt && !editedSince(doc, retry.firstFailedAt) ? retry.firstFailedAt : undefined
     try {
-      const result = await draftOne(deps, doc, now, opts.deadline, copies.get(doc._id))
+      const result = await draftOne(deps, doc, now, opts.deadline, copies.get(doc._id), opts.autoPublish === true)
       if (result) {
         out.drafted.push(result)
         if (retry) await store.delete(retryIdFor(doc._id)).catch((err: unknown) => console.error(`[projects] ${doc._id}: couldn't clear its failure record: ${errorText(err)}`))
@@ -744,10 +776,10 @@ async function claim(store: Store, doc: JobPost, now: Date): Promise<boolean> {
   }
 }
 
-async function draftOne(deps: ProjectDeps, doc: JobPost, now: Date, deadline?: number, copyOf?: string): Promise<Drafted | null> {
+async function draftOne(deps: ProjectDeps, doc: JobPost, now: Date, deadline?: number, copyOf?: string, autoPublish = false): Promise<Drafted | null> {
   if (!(await claim(deps.store, doc, now))) return null
   try {
-    return await writeArticle(deps, doc, now, deadline, copyOf)
+    return await writeArticle(deps, doc, now, deadline, copyOf, autoPublish)
   } finally {
     // The article itself (its fieldPost reference) is what stops a second one
     // from now on; a claim left behind would block a retry after a failure.
@@ -755,21 +787,56 @@ async function draftOne(deps: ProjectDeps, doc: JobPost, now: Date, deadline?: n
   }
 }
 
-/** The email about a new article: going live by itself, or waiting for a read. */
-function articleEmail(a: { ready: boolean; name: string; title: string; excerpt: string; slug: string; when: string; check: FactCheck; style: StylePass; photo: boolean; why?: string }): { subject: string; text: string } {
+/**
+ * The email about a new article. By default (`waits`) it waits for a person's
+ * Publish: "Ready to read" when the checks are clean, "Needs a read" when one
+ * found something. With autoPublish: going live by itself, or held for a read.
+ */
+function articleEmail(a: {
+  ready: boolean
+  waits?: boolean
+  clean?: boolean
+  name: string
+  title: string
+  excerpt: string
+  slug: string
+  when: string
+  check: FactCheck
+  style: StylePass
+  photo: boolean
+  why?: string
+}): { subject: string; text: string } {
+  const subject = a.waits
+    ? a.clean
+      ? `Ready to read: ${a.title}`
+      : `Needs a read before it goes: ${a.title}`
+    : a.ready
+      ? `Goes live ${a.when.replace(/ at .*$/, "")} unless you hold it: ${a.title}`
+      : `Needs a read before it goes: ${a.title}`
+  const intro = a.waits
+    ? (a.why ??
+      (a.clean
+        ? `A project article was written from the Job photos post "${a.name}". It waits in Studio → Blog posts until someone presses Publish: nothing is on the site until then. The day after it is live, its social posts are drafted in Buffer for approval.`
+        : `A project article was written from the Job photos post "${a.name}", and a check found something (below). It waits in Studio → Blog posts until someone presses Publish: fix what's listed first.`))
+    : a.ready
+      ? `A project article was written from the Job photos post "${a.name}" and goes live on squareonepaving.com by itself ${a.when}. Nothing is on the site until then. The day after it is live, its social posts are drafted in Buffer for approval.`
+      : (a.why ??
+        `A project article was written from the Job photos post "${a.name}", but a check found something (below), so it waits in Studio → Blog posts and does not go live by itself. Fix it, then turn "Goes live by itself" on or press Publish.`)
+  const tips = a.waits
+    ? ["- Change anything by typing: it saves as you go.", "- Happy with it? Press Publish."]
+    : a.ready
+      ? ["- To change a line, edit it there: it still goes out on time.", '- To hold it, turn "Goes live by itself" off: it then waits for you.', '- To move it, change "Goes live at" to a later day.']
+      : []
   return {
-    subject: a.ready ? `Goes live ${a.when.replace(/ at .*$/, "")} unless you hold it: ${a.title}` : `Needs a read before it goes: ${a.title}`,
+    subject,
     text: [
-      a.ready
-        ? `A project article was written from the Job photos post "${a.name}" and goes live on squareonepaving.com by itself ${a.when}. Nothing is on the site until then. The day after it is live, its social posts are drafted in Buffer for approval.`
-        : a.why ??
-          `A project article was written from the Job photos post "${a.name}", but a check found something (below), so it waits in Studio → Blog posts and does not go live by itself. Fix it, then turn "Goes live by itself" on or press Publish.`,
+      intro,
       "",
       a.title,
       a.excerpt,
       "",
       `Read it: ${studioLink(a.slug)}`,
-      ...(a.ready ? ["- To change a line, edit it there: it still goes out on time.", '- To hold it, turn "Goes live by itself" off: it then waits for you.', '- To move it, change "Goes live at" to a later day.'] : []),
+      ...tips,
       "",
       a.check.unsupported.length
         ? `Fact check: ${a.check.unsupported.length} statement(s) to check before it goes live. They're listed in the draft's "Notes for the editor".`
@@ -785,7 +852,7 @@ function articleEmail(a: { ready: boolean; name: string; title: string; excerpt:
 /** Where an existing article opens in Studio, by its document id. */
 const studioDocLink = (id: string) => `${SITE_URL}/studio/intent/edit/id=${id};type=post`
 
-async function writeArticle(deps: ProjectDeps, doc: JobPost, now: Date, deadline?: number, copyOf?: string): Promise<Drafted | null> {
+async function writeArticle(deps: ProjectDeps, doc: JobPost, now: Date, deadline?: number, copyOf?: string, autoPublish = false): Promise<Drafted | null> {
   const { store, claude, mail } = deps
   const name = jobName(doc)
   const [services, settings, posts] = await Promise.all([loadServices(store), loadSettings(store), store.fetch<PublishedPost[] | null>(PUBLISHED_POSTS)])
@@ -810,8 +877,8 @@ async function writeArticle(deps: ProjectDeps, doc: JobPost, now: Date, deadline
     console.log(`[projects] ${doc._id}: another run wrote its article; skipped`)
     return null
   }
-  const taken = (await store.fetch<string[] | null>(`*[_type == "post" && scheduled == true && defined(scheduledFor)].scheduledFor`)) ?? []
-  const slot = scheduleSlot(now, taken)
+  // A time only when it is to go live by itself; by default it waits for a person's Publish.
+  const slot = autoPublish ? scheduleSlot(now, (await store.fetch<string[] | null>(`*[_type == "post" && scheduled == true && defined(scheduledFor)].scheduledFor`)) ?? []) : null
 
   // A web address nobody uses, drafts included, and an id no post has (as the drafter, lib/automation/blog.ts).
   const base = cleanSlug(draft.slug || draft.title) || cleanSlug(name) || `project-${now.getTime()}`
@@ -819,12 +886,14 @@ async function writeArticle(deps: ProjectDeps, doc: JobPost, now: Date, deadline
   const inUse = (s: string) => store.fetch<number>(`count(*[(_type == "post" && slug.current == $slug) || _id in [$id, $draftId]])`, { slug: s, id: `post-${s}`, draftId: `drafts.post-${s}` })
   for (let n = 2; await inUse(slug); n++) slug = `${base}-${n}`
 
-  const built = buildProjectDocument(doc, draft, check, slug, slot, style, now)
+  const built = buildProjectDocument(doc, draft, check, slug, slot, style, now, { autoPublish })
   // A copy of a post that already has its article may be the same job twice:
   // held, whatever the checks said, for a person to compare the two.
-  const copyNote = copyOf
-    ? `HELD: this Job photos post looks like a copy of another (Studio's Duplicate), whose article is already in Blog posts: ${studioDocLink(copyOf)}. If it's the same job, delete this draft; if not, read it, then turn "Goes live by itself" on or press Publish.`
-    : ""
+  const copyNote = !copyOf
+    ? ""
+    : autoPublish
+      ? `HELD: this Job photos post looks like a copy of another (Studio's Duplicate), whose article is already in Blog posts: ${studioDocLink(copyOf)}. If it's the same job, delete this draft; if not, read it, then turn "Goes live by itself" on or press Publish.`
+      : `CHECK FIRST: this Job photos post looks like a copy of another (Studio's Duplicate), whose article is already in Blog posts: ${studioDocLink(copyOf)}. If it's the same job, delete this draft; if not, read it and press Publish.`
   const document = copyOf ? { ...built, scheduled: false, editorNotes: `${copyNote}\n\n${built.editorNotes}` } : built
   // Saved held, whatever the checks said: it is switched on only once the
   // editors have been told (below). A draft nobody knows about must never go
@@ -839,22 +908,28 @@ async function writeArticle(deps: ProjectDeps, doc: JobPost, now: Date, deadline
     console.error(`[projects] ${doc._id}: couldn't note the article on the post: ${errorText(err)}`)
   }
   console.log(
-    `[projects] wrote "${document.title}" as ${document._id} from ${doc._id}; goes live ${document.scheduled ? slot : "when released (held)"}; fact check: ${check.verdict} (${check.unsupported.length}); style: ${style.left.length} of ${style.flagged} left${style.error ? ` (rewrite failed: ${style.error})` : ""}`,
+    `[projects] wrote "${document.title}" as ${document._id} from ${doc._id}; goes live ${document.scheduled ? slot : autoPublish ? "when released (held)" : "when someone presses Publish"}; fact check: ${check.verdict} (${check.unsupported.length}); style: ${style.left.length} of ${style.flagged} left${style.error ? ` (rewrite failed: ${style.error})` : ""}`,
   )
 
-  const when = vancouverWhen(slot)
+  const when = slot ? vancouverWhen(slot) : ""
   const about = { name, title: document.title, excerpt: document.excerpt, slug, when, check, style, photo: Boolean(document.mainImage) }
   let ready = document.scheduled
   const first = articleEmail({
     ...about,
     ready,
+    waits: !autoPublish,
+    clean: !copyOf && readyToGo(check, style, Boolean(document.mainImage)),
     ...(copyOf
       ? {
-          why: `A project article was written from the Job photos post "${name}", which looks like a copy of another post whose article is already in Blog posts (${studioDocLink(copyOf)}). It waits in Studio → Blog posts and does not go live by itself: if it's the same job, delete it; if not, read it, then turn "Goes live by itself" on or press Publish.`,
+          why: autoPublish
+            ? `A project article was written from the Job photos post "${name}", which looks like a copy of another post whose article is already in Blog posts (${studioDocLink(copyOf)}). It waits in Studio → Blog posts and does not go live by itself: if it's the same job, delete it; if not, read it, then turn "Goes live by itself" on or press Publish.`
+            : `A project article was written from the Job photos post "${name}", which looks like a copy of another post whose article is already in Blog posts (${studioDocLink(copyOf)}). It waits in Studio → Blog posts until someone presses Publish: if it's the same job, delete it; if not, read it and press Publish.`,
         }
       : {}),
   })
   let notified = await emailEditors(mail, first.subject, first.text, "projects")
+  // Waiting for Publish, a lost email can't put anything live: the draft is in Blog posts for whoever looks.
+  if (!autoPublish && !notified.length) console.error(`[projects] ${document._id}: the email about it didn't go; it waits in Studio → Blog posts`)
   if (ready) {
     if (notified.length) {
       try {
@@ -900,7 +975,7 @@ async function writeArticle(deps: ProjectDeps, doc: JobPost, now: Date, deadline
     id: document._id,
     slug,
     title: document.title,
-    goesLive: ready ? slot : "held",
+    goesLive: ready && slot ? slot : autoPublish ? "held" : "on Publish",
     factCheck: check.verdict,
     toCheck: check.unsupported.length,
     style: { flagged: style.flagged, left: style.left.length },

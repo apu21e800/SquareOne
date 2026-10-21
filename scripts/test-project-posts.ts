@@ -19,6 +19,7 @@ import "./test-env"
 import assert from "node:assert/strict"
 import { evaluate, parse } from "groq-js"
 import {
+  autoPublishArticles,
   buildProjectDocument,
   draftProjectArticles,
   jobName,
@@ -281,8 +282,8 @@ async function main() {
     const doc = buildProjectDocument(source(job()), { ...draft, tags: ["StreetPrint", "HUB", "Case study", "604-555-0199", "Langley"] }, clean, "x", slot, tidy, today)
     assert.deepEqual(doc.tags, ["Project stories", "StreetPrint", "Langley"])
   })
-  await check("a clean article: an unpublished draft, scheduled for its slot, dated today, filed by its kind of work", () => {
-    const doc = buildProjectDocument(source(job()), draft, clean, "langley-stamped-crosswalk", slot, tidy, today)
+  await check("with the switch on, a clean article: an unpublished draft, scheduled for its slot, dated today, filed by its kind of work", () => {
+    const doc = buildProjectDocument(source(job()), draft, clean, "langley-stamped-crosswalk", slot, tidy, today, { autoPublish: true })
     assert.equal(doc._id, "drafts.post-langley-stamped-crosswalk")
     assert.equal(doc._type, "post")
     assert.equal(doc.scheduled, true)
@@ -317,23 +318,23 @@ async function main() {
     const imgs = (doc.body as { _type: string; alt?: string }[]).filter((b) => b._type === "image")
     assert.equal(imgs[0].alt, "Stamped asphalt in Langley, BC, photo 2")
   })
-  await check("the notes say when it goes live and how to change, move or hold it; no em dash", () => {
-    const doc = buildProjectDocument(source(job()), draft, clean, "langley-stamped-crosswalk", slot, tidy, today)
+  await check("with the switch on, the notes say when it goes live and how to change, move or hold it; no em dash", () => {
+    const doc = buildProjectDocument(source(job()), draft, clean, "langley-stamped-crosswalk", slot, tidy, today, { autoPublish: true })
     assert.match(doc.editorNotes, /^Drafted by Claude on 2026-10-19 from the Job photos post "Stamped asphalt in Langley, BC"/)
     assert.match(doc.editorNotes, /SCHEDULED: it goes live by itself Wednesday 21 October at 7:00 a\.m\. Vancouver time/)
     assert.match(doc.editorNotes, /To hold it, turn "Goes live by itself" off/)
     assert.match(doc.editorNotes, /FACT CHECK: every statement matches/)
     assert.ok(!doc.editorNotes.includes(EM))
   })
-  await check("a statement the record doesn't back: saved held, the time kept, the statement listed", () => {
-    const doc = buildProjectDocument(source(job()), draft, flagged, "x", slot, tidy, today)
+  await check("with the switch on, a statement the record doesn't back: saved held, the time kept, the statement listed", () => {
+    const doc = buildProjectDocument(source(job()), draft, flagged, "x", slot, tidy, today, { autoPublish: true })
     assert.equal(doc.scheduled, false)
     assert.equal(doc.scheduledFor, slot)
     assert.match(doc.editorNotes, /^HELD: a check below found something/m)
     assert.match(doc.editorNotes, /- "done in a day": the record says so, but not the story/)
   })
-  await check("a post with no photograph: held, and the notes ask for one", () => {
-    const doc = buildProjectDocument(source(job({ photos: [] })), draft, clean, "x", slot, tidy, today)
+  await check("with the switch on, a post with no photograph: held, and the notes ask for one", () => {
+    const doc = buildProjectDocument(source(job({ photos: [] })), draft, clean, "x", slot, tidy, today, { autoPublish: true })
     assert.equal(doc.scheduled, false)
     assert.equal("mainImage" in doc, false)
     assert.match(doc.editorNotes, /PHOTOS: the post had none with a file, so this is held/)
@@ -512,12 +513,14 @@ async function main() {
 
   const run = new Date("2026-10-19T14:05:00Z")
   const deps = (s: ReturnType<typeof sanity>, c: ReturnType<typeof fakeClaude>, m: ReturnType<typeof fakeMail>) => ({ claude: c.claude, store: s.store, mail: m.mail, now: fixed("2026-10-19T14:05:00Z") })
+  // The tests below are the PROJECT_ARTICLES_AUTO_PUBLISH=on path; the default (it waits for Publish) follows them.
+  const draftAuto = (d: Parameters<typeof draftProjectArticles>[0], at: Date, opts: { deadline?: number } = {}) => draftProjectArticles(d, at, { ...opts, autoPublish: true })
 
   await check("a published post with a story: a draft article, set to go live after the email, linked both ways", async () => {
     const s = sanity([job()])
     const c = fakeClaude()
     const m = fakeMail()
-    const out = await draftProjectArticles(deps(s, c, m), run)
+    const out = await draftAuto(deps(s, c, m), run)
     assert.equal(out.drafted.length, 1)
     const d = out.drafted[0]
     assert.equal(d.goesLive, "2026-10-21T14:00:00.000Z")
@@ -542,7 +545,7 @@ async function main() {
   await check("a statement the record doesn't back: held, and the email asks for a read first", async () => {
     const s = sanity([job()])
     const m = fakeMail()
-    const out = await draftProjectArticles(deps(s, fakeClaude({ check: flagged }), m), run)
+    const out = await draftAuto(deps(s, fakeClaude({ check: flagged }), m), run)
     assert.equal(out.drafted[0].goesLive, "held")
     assert.equal(s.get("drafts.post-langley-stamped-crosswalk")?.scheduled, false)
     assert.match(m.sent[0].subject, /^Needs a read before it goes:/)
@@ -551,7 +554,7 @@ async function main() {
   await check("the email didn't go: held, never scheduled, the notes say why, and a second email says it waits", async () => {
     const s = sanity([job()])
     const m = fakeMail(false)
-    const out = await draftProjectArticles(deps(s, fakeClaude(), m), run)
+    const out = await draftAuto(deps(s, fakeClaude(), m), run)
     assert.equal(out.drafted[0].goesLive, "held")
     const doc = s.get("drafts.post-langley-stamped-crosswalk")
     assert.equal(doc?.scheduled, false)
@@ -565,7 +568,7 @@ async function main() {
     const s = sanity([job()])
     s.refusePatch((id, set) => (id.startsWith("drafts.") && set.scheduled === true ? new Error("Request timed out") : null))
     const m = fakeMail()
-    const out = await draftProjectArticles(deps(s, fakeClaude(), m), run)
+    const out = await draftAuto(deps(s, fakeClaude(), m), run)
     assert.equal(out.drafted[0].goesLive, "held")
     assert.equal(s.get("drafts.post-langley-stamped-crosswalk")?.scheduled, false)
     assert.match(m.sent[1].subject, /^Correction, held after all:/)
@@ -578,7 +581,7 @@ async function main() {
       if (id.startsWith("drafts.") && set.scheduled === true) throw new Error("Request timed out")
     }
     const m = fakeMail()
-    const out = await draftProjectArticles(deps(s, fakeClaude(), m), run)
+    const out = await draftAuto(deps(s, fakeClaude(), m), run)
     assert.equal(out.drafted[0].goesLive, "2026-10-21T14:00:00.000Z")
     assert.equal(s.get("drafts.post-langley-stamped-crosswalk")?.scheduled, true)
     assert.equal(m.sent.length, 1)
@@ -587,7 +590,7 @@ async function main() {
     const s = sanity([job()])
     const m = fakeMail()
     const body = "Square One stamped a crosswalk in Langley, BC.\n\nThe owner, at 604-555-0199, asked for brick at 1234 Main Street."
-    const out = await draftProjectArticles(deps(s, fakeClaude({ body }), m), run)
+    const out = await draftAuto(deps(s, fakeClaude({ body }), m), run)
     assert.equal(out.drafted[0].goesLive, "held")
     assert.equal(s.get("drafts.post-langley-stamped-crosswalk")?.scheduled, false)
     assert.match(m.sent[0].subject, /^Needs a read before it goes:/)
@@ -595,7 +598,7 @@ async function main() {
   })
   await check("a fact check answer that can't be read: held, not passed", async () => {
     const s = sanity([job()])
-    const out = await draftProjectArticles(deps(s, fakeClaude({ check: { verdict: "clean", unsupported: "not a list" } }), fakeMail()), run)
+    const out = await draftAuto(deps(s, fakeClaude({ check: { verdict: "clean", unsupported: "not a list" } }), fakeMail()), run)
     assert.equal(out.drafted[0].goesLive, "held")
     assert.equal(out.drafted[0].factCheck, "needs edits")
   })
@@ -605,7 +608,7 @@ async function main() {
       { _id: "post-original", _type: "post", title: "The original's", slug: { _type: "slug", current: "original" }, fieldPost: { _type: "reference", _ref: "fieldPost-langley", _weak: true } },
     ])
     const m = fakeMail()
-    const out = await draftProjectArticles(deps(s, fakeClaude(), m), run)
+    const out = await draftAuto(deps(s, fakeClaude(), m), run)
     assert.equal(out.drafted.length, 1)
     assert.equal(out.drafted[0].fieldPost, "fieldPost-copy")
     assert.equal(out.drafted[0].goesLive, "held")
@@ -618,34 +621,34 @@ async function main() {
   await check("an article an editor deleted isn't written again", async () => {
     const s = sanity([job({ article: { _type: "reference", _ref: "post-deleted", _weak: true } })])
     const c = fakeClaude()
-    const out = await draftProjectArticles(deps(s, c, fakeMail()), run)
+    const out = await draftAuto(deps(s, c, fakeMail()), run)
     assert.equal(out.drafted.length + out.waiting, 0)
     assert.equal(c.calls.length, 0)
   })
   await check("its slot skips a day another scheduled article has", async () => {
     const s = sanity([job(), { _id: "drafts.post-other", _type: "post", title: "Other", slug: { _type: "slug", current: "other" }, scheduled: true, scheduledFor: "2026-10-21T14:00:00.000Z" }])
-    const out = await draftProjectArticles(deps(s, fakeClaude(), fakeMail()), run)
+    const out = await draftAuto(deps(s, fakeClaude(), fakeMail()), run)
     assert.equal(out.drafted[0].goesLive, "2026-10-22T14:00:00.000Z")
   })
   await check("a taken address gets the next free one, drafts included", async () => {
     const s = sanity([job(), { _id: "drafts.post-langley-stamped-crosswalk", _type: "post", title: "Taken", slug: { _type: "slug", current: "langley-stamped-crosswalk" } }])
-    const out = await draftProjectArticles(deps(s, fakeClaude(), fakeMail()), run)
+    const out = await draftAuto(deps(s, fakeClaude(), fakeMail()), run)
     assert.equal(out.drafted[0].slug, "langley-stamped-crosswalk-2")
   })
   await check("never twice: a post an article already refers to, or one with its article noted, is left alone", async () => {
     const s = sanity([job(), { _id: "drafts.post-x", _type: "post", title: "Its article", slug: { _type: "slug", current: "x" }, fieldPost: { _type: "reference", _ref: "fieldPost-langley", _weak: true } }])
     const c = fakeClaude()
-    const out = await draftProjectArticles(deps(s, c, fakeMail()), run)
+    const out = await draftAuto(deps(s, c, fakeMail()), run)
     assert.equal(out.drafted.length, 0)
     assert.equal(c.calls.length, 0)
     const s2 = sanity([job({ article: { _type: "reference", _ref: "post-x", _weak: true } })])
-    const out2 = await draftProjectArticles(deps(s2, c, fakeMail()), run)
+    const out2 = await draftAuto(deps(s2, c, fakeMail()), run)
     assert.equal(out2.drafted.length + out2.waiting, 0)
   })
   await check("only published posts with a story: a draft, an empty story or no service waits", async () => {
     const s = sanity([job({ _id: "drafts.fieldPost-langley" }), job({ _id: "fieldPost-nostory", writeUp: "  " }), job({ _id: "fieldPost-noservice", service: undefined })])
     const c = fakeClaude()
-    const out = await draftProjectArticles(deps(s, c, fakeMail()), run)
+    const out = await draftAuto(deps(s, c, fakeMail()), run)
     assert.equal(out.drafted.length, 0)
     assert.deepEqual([...out.skipped].sort(), ["fieldPost-noservice: no service", "fieldPost-nostory: no story"])
     assert.equal(c.calls.length, 0)
@@ -653,14 +656,14 @@ async function main() {
   await check(`with less than ${NEEDS_MS / 1000} s of the route left it waits for the next run, and writes nothing`, async () => {
     const s = sanity([job()])
     const c = fakeClaude()
-    const out = await draftProjectArticles(deps(s, c, fakeMail()), run, { deadline: Date.parse("2026-10-19T14:05:00Z") + NEEDS_MS - 1 })
+    const out = await draftAuto(deps(s, c, fakeMail()), run, { deadline: Date.parse("2026-10-19T14:05:00Z") + NEEDS_MS - 1 })
     assert.equal(out.drafted.length, 0)
     assert.equal(out.waiting, 1)
     assert.equal(c.calls.length, 0)
   })
   await check("one article a run, oldest first", async () => {
     const s = sanity([job({ _id: "fieldPost-new", date: "2026-10-18" }), job({ _id: "fieldPost-old", date: "2026-10-10" })])
-    const out = await draftProjectArticles(deps(s, fakeClaude(), fakeMail()), run)
+    const out = await draftAuto(deps(s, fakeClaude(), fakeMail()), run)
     assert.equal(out.drafted.length, 1)
     assert.equal(out.drafted[0].fieldPost, "fieldPost-old")
     assert.equal(out.waiting, 1)
@@ -668,19 +671,19 @@ async function main() {
   await check("another run's fresh claim: skipped; a stale one (a run Vercel stopped): taken over", async () => {
     const fresh = sanity([job(), { _id: "projectClaim-fieldPost-langley", _type: "projectClaim", createdAt: "2026-10-19T14:00:00Z" }])
     const c = fakeClaude()
-    const out = await draftProjectArticles(deps(fresh, c, fakeMail()), run)
+    const out = await draftAuto(deps(fresh, c, fakeMail()), run)
     assert.equal(out.drafted.length, 0)
     assert.equal(c.calls.length, 0)
     assert.ok(fresh.get("projectClaim-fieldPost-langley"), "the other run's claim is left alone")
     const stale = sanity([job(), { _id: "projectClaim-fieldPost-langley", _type: "projectClaim", createdAt: "2026-10-19T13:00:00Z" }])
-    const out2 = await draftProjectArticles(deps(stale, fakeClaude(), fakeMail()), run)
+    const out2 = await draftAuto(deps(stale, fakeClaude(), fakeMail()), run)
     assert.equal(out2.drafted.length, 1)
     assert.equal(stale.get("projectClaim-fieldPost-langley"), undefined)
   })
   await check("Claude down: nothing written, the claim cleared, the editors told, tried again next run", async () => {
     const s = sanity([job()])
     const m = fakeMail()
-    const out = await draftProjectArticles(deps(s, fakeClaude({ fail: new Error("Overloaded") }), m), run)
+    const out = await draftAuto(deps(s, fakeClaude({ fail: new Error("Overloaded") }), m), run)
     assert.equal(out.failed.length, 1)
     assert.equal(s.created.filter((x) => x._type === "post").length, 0)
     assert.equal(s.dataset.filter((x) => x._type === "projectClaim").length, 0)
@@ -694,11 +697,83 @@ async function main() {
     const start = Date.parse("2026-10-19T15:00:00Z")
     let calls = 0
     const clock = () => new Date(calls++ === 0 ? start : start + NEEDS_MS - 5_000)
-    const out = await draftProjectArticles({ claude: fakeClaude().claude, store: s.store, mail: m.mail, now: clock }, new Date(start), { deadline: start + NEEDS_MS + 1_000 })
+    const out = await draftAuto({ claude: fakeClaude().claude, store: s.store, mail: m.mail, now: clock }, new Date(start), { deadline: start + NEEDS_MS + 1_000 })
     assert.equal(out.drafted.length, 0)
     assert.match(out.failed[0].error, /ran out of time after writing it/)
     assert.equal(s.created.filter((x) => x._type === "post").length, 0)
     assert.equal(s.get("fieldPost-langley")?.article, undefined)
+  })
+
+  console.log("\nWaiting for Publish (the default; Vern, 21 Oct 2026: \"wait for Sydney\")")
+
+  await check("the switch: only PROJECT_ARTICLES_AUTO_PUBLISH=on sets articles to go live by themselves", () => {
+    assert.equal(autoPublishArticles({}), false)
+    assert.equal(autoPublishArticles({ PROJECT_ARTICLES_AUTO_PUBLISH: "" }), false)
+    assert.equal(autoPublishArticles({ PROJECT_ARTICLES_AUTO_PUBLISH: "off" }), false)
+    assert.equal(autoPublishArticles({ PROJECT_ARTICLES_AUTO_PUBLISH: "yes" }), false)
+    assert.equal(autoPublishArticles({ PROJECT_ARTICLES_AUTO_PUBLISH: "on" }), true)
+    assert.equal(autoPublishArticles({ PROJECT_ARTICLES_AUTO_PUBLISH: " ON " }), true)
+  })
+  await check("a clean article waits for Publish: never scheduled, no time set, the notes say so; no em dash", () => {
+    const doc = buildProjectDocument(source(job()), draft, clean, "langley-stamped-crosswalk", null, tidy, today)
+    assert.equal(doc.scheduled, false)
+    assert.equal("scheduledFor" in doc, false)
+    assert.match(doc.editorNotes, /^READY TO READ: nothing goes live until someone presses Publish/m)
+    assert.ok(!doc.editorNotes.includes(EM))
+    const withSlot = buildProjectDocument(source(job()), draft, clean, "x", slot, tidy, today)
+    assert.equal(withSlot.scheduled, false, "a slot without the switch changes nothing")
+    assert.equal("scheduledFor" in withSlot, false)
+  })
+  await check("one a check flags says what to fix first, and still waits", () => {
+    const doc = buildProjectDocument(source(job()), draft, flagged, "x", null, tidy, today)
+    assert.equal(doc.scheduled, false)
+    assert.match(doc.editorNotes, /^CHECK FIRST: a check below found something/m)
+    assert.match(doc.editorNotes, /- "done in a day": the record says so, but not the story/)
+  })
+  await check("the run, by default: the draft waits unscheduled, linked both ways, and the email says Ready to read", async () => {
+    const s = sanity([job()])
+    const m = fakeMail()
+    const out = await draftProjectArticles(deps(s, fakeClaude(), m), run)
+    assert.equal(out.drafted.length, 1)
+    assert.equal(out.drafted[0].goesLive, "on Publish")
+    const doc = s.get("drafts.post-langley-stamped-crosswalk")
+    assert.equal(doc?.scheduled, false)
+    assert.equal(doc?.scheduledFor, undefined)
+    assert.deepEqual(s.get("fieldPost-langley")?.article, { _type: "reference", _ref: "post-langley-stamped-crosswalk", _weak: true })
+    assert.equal(m.sent.length, 1)
+    assert.equal(m.sent[0].subject, "Ready to read: A stamped crosswalk for Langley's railway district")
+    assert.match(m.sent[0].text, /It waits in Studio → Blog posts until someone presses Publish: nothing is on the site until then/)
+    assert.match(m.sent[0].text, /- Happy with it\? Press Publish\./)
+    assert.ok(!m.sent[0].text.includes("Goes live by itself"), "no talk of going live by itself")
+  })
+  await check("the run, by default: a flagged article says Needs a read, and waits", async () => {
+    const s = sanity([job()])
+    const m = fakeMail()
+    const out = await draftProjectArticles(deps(s, fakeClaude({ check: flagged }), m), run)
+    assert.equal(out.drafted[0].goesLive, "on Publish")
+    assert.equal(s.get("drafts.post-langley-stamped-crosswalk")?.scheduled, false)
+    assert.match(m.sent[0].subject, /^Needs a read before it goes:/)
+    assert.match(m.sent[0].text, /a check found something \(below\)\. It waits in Studio → Blog posts until someone presses Publish: fix what's listed first/)
+  })
+  await check("the run, by default: the email didn't go, and nothing else changes: one try, the draft still waits", async () => {
+    const s = sanity([job()])
+    const m = fakeMail(false)
+    const out = await draftProjectArticles(deps(s, fakeClaude(), m), run)
+    assert.equal(out.drafted[0].goesLive, "on Publish")
+    assert.equal(s.get("drafts.post-langley-stamped-crosswalk")?.scheduled, false)
+    assert.equal(m.sent.length, 1, "no correction to send: nothing was going live")
+  })
+  await check("the run, by default: a Duplicate's article waits, and the notes and the email say to compare the two", async () => {
+    const s = sanity([
+      job({ _id: "fieldPost-copy", article: { _type: "reference", _ref: "post-original", _weak: true } }),
+      { _id: "post-original", _type: "post", title: "The original's", slug: { _type: "slug", current: "original" }, fieldPost: { _type: "reference", _ref: "fieldPost-langley", _weak: true } },
+    ])
+    const m = fakeMail()
+    const out = await draftProjectArticles(deps(s, fakeClaude(), m), run)
+    assert.equal(out.drafted[0].goesLive, "on Publish")
+    assert.match(String(s.get("drafts.post-langley-stamped-crosswalk")?.editorNotes), /^CHECK FIRST: this Job photos post looks like a copy of another/)
+    assert.match(m.sent[0].subject, /^Needs a read before it goes:/)
+    assert.match(m.sent[0].text, /until someone presses Publish: if it's the same job, delete it; if not, read it and press Publish/)
   })
 
   console.log("\nThe article run (app/api/cron/project-articles)")
@@ -735,13 +810,13 @@ async function main() {
   await check("the first failure is emailed and starts the clock; the next mornings retry it quietly", async () => {
     const s = sanity([job()])
     const m = fakeMail()
-    await draftProjectArticles(on(s, fakeClaude({ fail: notUsable() }), m, day(0)), day(0))
+    await draftAuto(on(s, fakeClaude({ fail: notUsable() }), m, day(0)), day(0))
     assert.equal(m.sent.length, 1)
     assert.match(m.sent[0].subject, /^Project article not written yet: Stamped asphalt in Langley, BC/)
     assert.match(m.sent[0].text, /every day for up to 14 days; you'll only hear again if it gives up/)
     assert.equal(s.get("projectRetry-fieldPost-langley")?.firstFailedAt, day(0).toISOString())
     const c = fakeClaude({ fail: notUsable() })
-    const out = await draftProjectArticles(on(s, c, m, day(1)), day(1))
+    const out = await draftAuto(on(s, c, m, day(1)), day(1))
     assert.equal(out.failed.length, 1)
     assert.equal(c.calls.length, 1, "tried again")
     assert.equal(m.sent.length, 1, "no second email")
@@ -749,32 +824,32 @@ async function main() {
   })
   await check("a failing post goes behind a fresh one", async () => {
     const s = sanity([job({ _id: "fieldPost-old", date: "2026-10-01" }), job({ _id: "fieldPost-new", date: "2026-10-18" }), { _id: "projectRetry-fieldPost-old", _type: "projectRetry", fieldPost: "fieldPost-old", firstFailedAt: day(-1).toISOString() }])
-    const out = await draftProjectArticles(on(s, fakeClaude(), fakeMail(), day(0)), day(0))
+    const out = await draftAuto(on(s, fakeClaude(), fakeMail(), day(0)), day(0))
     assert.equal(out.drafted[0].fieldPost, "fieldPost-new")
   })
   await check(`after ${14} days of failures it gives up, with one email, and stops trying`, async () => {
     const s = sanity([job({ _updatedAt: day(-20).toISOString() }), { _id: "projectRetry-fieldPost-langley", _type: "projectRetry", fieldPost: "fieldPost-langley", firstFailedAt: day(-15).toISOString() }])
     const m = fakeMail()
-    const out = await draftProjectArticles(on(s, fakeClaude({ fail: notUsable() }), m, day(0)), day(0))
+    const out = await draftAuto(on(s, fakeClaude({ fail: notUsable() }), m, day(0)), day(0))
     assert.equal(out.failed[0].gaveUp, true)
     assert.match(m.sent[0].subject, /^Project article given up: Stamped asphalt in Langley, BC/)
     assert.match(m.sent[0].text, /edit the Job photos post \(its story, say\) and the next morning's run tries once more/)
     const c = fakeClaude()
-    const next = await draftProjectArticles(on(s, c, m, day(1)), day(1))
+    const next = await draftAuto(on(s, c, m, day(1)), day(1))
     assert.equal(c.calls.length, 0)
     assert.match(next.skipped[0], /given up after 14 days/)
     assert.equal(m.sent.length, 1)
   })
   await check("editing a post that was given up starts it over; a success clears its record", async () => {
     const s = sanity([job({ _updatedAt: day(1).toISOString() }), { _id: "projectRetry-fieldPost-langley", _type: "projectRetry", fieldPost: "fieldPost-langley", firstFailedAt: day(-15).toISOString(), gaveUpAt: day(0).toISOString() }])
-    const out = await draftProjectArticles(on(s, fakeClaude(), fakeMail(), day(2)), day(2))
+    const out = await draftAuto(on(s, fakeClaude(), fakeMail(), day(2)), day(2))
     assert.equal(out.drafted.length, 1)
     assert.equal(s.get("projectRetry-fieldPost-langley"), undefined)
   })
   await check("Claude taking too long counts against the post: its clock starts, so it can give up", async () => {
     const s = sanity([job()])
     const m = fakeMail()
-    const out = await draftProjectArticles(on(s, fakeClaude({ fail: new Error("Request timed out.") }), m, day(0)), day(0))
+    const out = await draftAuto(on(s, fakeClaude({ fail: new Error("Request timed out.") }), m, day(0)), day(0))
     assert.equal(out.runError, undefined)
     assert.equal(s.get("projectRetry-fieldPost-langley")?.firstFailedAt, day(0).toISOString())
     assert.match(m.sent[0].subject, /^Project article not written yet:/)
@@ -783,9 +858,9 @@ async function main() {
     const s = sanity([job()])
     const m = fakeMail()
     const refused = () => Object.assign(new Error("401 authentication_error: invalid x-api-key"), { status: 401 })
-    const out = await draftProjectArticles(on(s, fakeClaude({ fail: refused() }), m, day(0)), day(0))
+    const out = await draftAuto(on(s, fakeClaude({ fail: refused() }), m, day(0)), day(0))
     assert.match(String(out.runError), /authentication_error/)
-    await draftProjectArticles(on(s, fakeClaude({ fail: refused() }), m, day(1)), day(1))
+    await draftAuto(on(s, fakeClaude({ fail: refused() }), m, day(1)), day(1))
     assert.deepEqual(m.sent.map((x) => x.subject), ["Project article didn't run", "Project article didn't run"])
     assert.match(m.sent[0].text, /Anthropic refused ANTHROPIC_API_KEY/)
     assert.equal(s.get("projectRetry-fieldPost-langley"), undefined)
