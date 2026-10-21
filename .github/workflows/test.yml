@@ -57,6 +57,9 @@ jobs:
       - name: The Studio, Site Settings and every page's words
         run: npm run test:studio
 
+      - name: The colour card, and colours from the photograph
+        run: npm run test:colours
+
       - name: Blog and social automation
         run: npm run test:automation
 

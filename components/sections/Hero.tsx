@@ -64,7 +64,8 @@ export default function Hero({ slides, eyebrow, title, titleEnd }: HeroProps) {
      easter egg in the hero somewhere, that will let the user cycle through
      style options… apply changes site wide"). A small copy of the band sits
      in the ledger beside the counter; each press moves the whole site to the
-     next palette (lib/palettes.ts: Spectrum, Greyscale, Earth, Blueprint) and
+     next palette (lib/palettes.ts: Spectrum, Greyscale, Earth, Blueprint,
+     and since 21 Oct 2026 Photo, the photograph's own colours) and
      the reel's clock right under it changes with it, so the press answers
      itself. The name shows for a moment above the switch and is announced to
      screen readers; the choice is remembered on every page after. */
