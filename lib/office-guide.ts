@@ -89,7 +89,7 @@ export const OFFICE_GUIDE: OfficeGuideContent = {
         'The email says "Blog draft ready in Studio". Tap its link.',
         "Read **Notes for the editor** at the top: it lists anything the fact check couldn't confirm. Lines marked in yellow break the house style.",
         "Change anything by typing. It saves as you go.",
-        "Happy with it? Press **Publish**. To have it go out on a later day instead, turn on **Goes live by itself**, then set **Goes live at** to that day at 7:00 a.m.: it goes out that morning.",
+        "Happy with it? Press **Publish**. To have it go out on a later day instead, turn on **Goes live by itself**, then set **Goes live at** to that day at 7:00 a.m. or earlier: it goes out that morning.",
       ],
       next: [
         'An article from job photos comes with its own email: "Goes live (that day) unless you hold it". To change a line, edit it: it still goes out on time. To hold it, turn **Goes live by itself** off.',
@@ -105,7 +105,7 @@ export const OFFICE_GUIDE: OfficeGuideContent = {
         "**Title**: a sentence a person would say. Then press **Generate** under **Web address**.",
         "**Section**, then the **Lead photograph** and **What the photo shows**. Press the crosshair on the photo, then drag the circle onto the pavement so the photo is framed on it.",
         "**Body**: write it. A yellow line is worth a second look.",
-        "Press **Publish**. Or turn on **Goes live by itself** and set **Goes live at** to the day you want, at 7:00 a.m.",
+        "Press **Publish**. Or turn on **Goes live by itself** and set **Goes live at** to the day you want, at 7:00 a.m. or earlier.",
       ],
       next: ["It shows on the site within a minute of going live, and its social posts wait in Buffer the next morning."],
       shot: {
