@@ -26,8 +26,9 @@ With it, a run missing another key emails `BLOG_DRAFT_NOTIFY` which one.
 
 ## What happens
 
-**The blog, Tuesdays and Thursdays at 13:00 UTC** (6 am Pacific in summer,
-5 am in winter), since 14 Oct 2026, as hubss.com's Insights drafter:
+**The blog, Tuesdays and Thursdays at 13:00 UTC** (6 am in Vancouver all
+year: BC keeps UTC-7 from 1 November 2026), since 14 Oct 2026, as hubss.com's
+Insights drafter:
 `/api/cron/draft-post` (lib/automation/blog.ts)
 
 1. Takes the top item in **Studio → Blog ideas** (sanity/schemaTypes/storyIdea.ts)
@@ -91,7 +92,7 @@ project story for each real job Vern names, from Projects (with
 article of its own (nine on 14 Oct 2026). Nothing is invented: a job has to
 be in Projects, with its photographs, before it can be planned.
 
-**The daily run, 14:00 UTC** (7 am Pacific in summer, 6 am in winter):
+**The daily run, 14:00 UTC** (7 am in Vancouver, all year):
 `/api/cron/social-drafts`, two steps since 20 Oct 2026, each on its own (a
 failure in one is emailed and the next still runs):
 
@@ -111,8 +112,7 @@ failure in one is emailed and the next still runs):
    published waits for tomorrow's run, so its posts follow the day after it
    is live.
 
-**The project article, daily at 15:00 UTC** (8 am Pacific in summer, 7 am in
-winter): `/api/cron/project-articles` (lib/automation/project-posts.ts
+**The project article, daily at 15:00 UTC** (8 am in Vancouver, all year): `/api/cron/project-articles` (lib/automation/project-posts.ts
 draftProjectArticles), a run of its own since the review of 20 Oct 2026, so
 a morning when social has a lot to draft can't crowd it out. The oldest
 published **Job photos** post with **The story** filled in and no article yet

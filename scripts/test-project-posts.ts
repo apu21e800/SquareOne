@@ -223,6 +223,10 @@ async function main() {
     assert.equal(vancouverWhen("2026-10-21T14:00:00.000Z"), "Wednesday 21 October at 7:00 a.m. Vancouver time")
     assert.equal(vancouverWhen("2026-01-12T14:00:00.000Z"), "Monday 12 January at 6:00 a.m. Vancouver time")
   })
+  await check("from 1 November 2026 the 7 a.m. run reads 7 a.m. on any Node, old timezone data or new", () => {
+    assert.equal(vancouverWhen("2026-11-02T14:00:00.000Z"), "Monday 2 November at 7:00 a.m. Vancouver time")
+    assert.equal(vancouverWhen("2027-01-11T14:00:00.000Z"), "Monday 11 January at 7:00 a.m. Vancouver time")
+  })
 
   console.log("\nWhat the article is written from")
 

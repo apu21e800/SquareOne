@@ -12,9 +12,10 @@
  * Every name in bold is the label the person taps, as the Studio and Buffer
  * print it (sanity/schemaTypes/fieldPost.ts and post.ts; Buffer's help pages,
  * checked 21 Oct 2026). Change a field's title there and change it here.
- * Times are Vancouver's: the daily run is 14:00 UTC (7 a.m. in summer, 6 in
- * winter), the article run 15:00 UTC, the drafter 13:00 UTC on Tuesdays and
- * Thursdays (vercel.json).
+ * Times are Vancouver's, the same all year since BC kept UTC-7 from 1
+ * November 2026: the daily run 14:00 UTC (7 a.m.), the article run 15:00 UTC
+ * (8 a.m.), the drafter 13:00 UTC (6 a.m.) on Tuesdays and Thursdays
+ * (vercel.json).
  *
  * Pure data: safe in the Studio and on the site. `**bold**` marks a label.
  */

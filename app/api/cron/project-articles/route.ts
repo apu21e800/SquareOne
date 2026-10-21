@@ -1,6 +1,6 @@
 /**
  * GET /api/cron/project-articles: the project article run, daily at 15:00 UTC
- * (8 a.m. in Vancouver in summer, 7 a.m. in winter), an hour after the daily
+ * (8 a.m. in Vancouver, all year), an hour after the daily
  * run (app/api/cron/social-drafts) and on its own, so a morning when social
  * has a lot to draft can't crowd it out (review, 20 Oct 2026).
  *

@@ -124,10 +124,25 @@ export function scheduleSlot(now: Date, taken: Iterable<string> = []): string {
   return day.toISOString()
 }
 
+/**
+ * BC kept UTC-7 from 1 November 2026 (tzdata 2026b): the clocks didn't go
+ * back. A runtime with older timezone data would print every time from then
+ * on an hour early ("6:00 a.m." for the 7 a.m. run), so on such a runtime the
+ * emails use UTC-7 itself from that date. With current data it's Vancouver's
+ * zone throughout.
+ */
+const BC_FIXED_FROM = Date.parse("2026-11-01T09:00:00Z")
+const OLD_ZONE_DATA =
+  new Intl.DateTimeFormat("en-CA", { timeZone: VANCOUVER, hour: "numeric", hourCycle: "h23" })
+    .formatToParts(new Date("2026-11-02T14:00:00Z"))
+    .find((p) => p.type === "hour")
+    ?.value.replace(/^0/, "") !== "7"
+const zoneAt = (t: number) => (OLD_ZONE_DATA && t >= BC_FIXED_FROM ? "Etc/GMT+7" : VANCOUVER)
+
 /** "Thursday 22 October at 7:00 a.m. Vancouver time", for the emails and the notes. */
 export function vancouverWhen(iso: string): string {
   const parts = new Intl.DateTimeFormat("en-CA", {
-    timeZone: VANCOUVER,
+    timeZone: zoneAt(Date.parse(iso)),
     weekday: "long",
     day: "numeric",
     month: "long",
