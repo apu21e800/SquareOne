@@ -113,24 +113,35 @@ export function contrast(x: string, y: string): number {
 const dist = (p: Lab, q: Lab) => Math.hypot(p[0] - q[0], p[1] - q[1], p[2] - q[2])
 const chroma = (p: Lab) => Math.hypot(p[1], p[2])
 
-/** k-means in OKLab, seeded deterministically (farthest point first), so one photograph always gives one palette. */
+/** Hue counts double against lightness when grouping, so a muted red paver doesn't melt into the grey around it. */
+const HUE_WEIGHT = 2
+
+/** k-means in OKLab, seeded deterministically (farthest point first), so one photograph always gives one palette. Squared distances throughout: the same choices, a few times faster. */
 function clusters(points: Lab[], k: number, rounds = 10): { lab: Lab; share: number }[] {
   const n = points.length
-  const mean: Lab = [0, 0, 0]
-  for (const p of points) for (let j = 0; j < 3; j++) mean[j] += p[j] / n
-  const centres: Lab[] = []
-  let seed = points[0]
+  const xs = new Float64Array(n * 3)
+  points.forEach((p, i) => xs.set([p[0], p[1] * HUE_WEIGHT, p[2] * HUE_WEIGHT], i * 3))
+  const d2 = (i: number, c: ArrayLike<number>, at = 0) => {
+    const x = xs[i * 3] - c[at]
+    const y = xs[i * 3 + 1] - c[at + 1]
+    const z = xs[i * 3 + 2] - c[at + 2]
+    return x * x + y * y + z * z
+  }
+  const mean = [0, 0, 0]
+  for (let i = 0; i < n; i++) for (let j = 0; j < 3; j++) mean[j] += xs[i * 3 + j] / n
+  let first = 0
   let best = -1
-  for (const p of points) {
-    const d = dist(p, mean)
+  for (let i = 0; i < n; i++) {
+    const d = d2(i, mean)
     if (d > best) {
       best = d
-      seed = p
+      first = i
     }
   }
-  centres.push([...seed])
-  const nearest = points.map((p) => dist(p, seed))
-  while (centres.length < k) {
+  const centres: number[] = [xs[first * 3], xs[first * 3 + 1], xs[first * 3 + 2]]
+  const nearest = new Float64Array(n)
+  for (let i = 0; i < n; i++) nearest[i] = d2(i, centres)
+  while (centres.length / 3 < k) {
     let at = -1
     let far = 0
     for (let i = 0; i < n; i++)
@@ -138,17 +149,19 @@ function clusters(points: Lab[], k: number, rounds = 10): { lab: Lab; share: num
         far = nearest[i]
         at = i
       }
-    if (at < 0 || far < 1e-4) break
-    centres.push([...points[at]])
-    for (let i = 0; i < n; i++) nearest[i] = Math.min(nearest[i], dist(points[i], points[at]))
+    if (at < 0 || far < 1e-8) break
+    const c = [xs[at * 3], xs[at * 3 + 1], xs[at * 3 + 2]]
+    centres.push(...c)
+    for (let i = 0; i < n; i++) nearest[i] = Math.min(nearest[i], d2(i, c))
   }
-  const owner = new Array<number>(n).fill(0)
+  const m = centres.length / 3
+  const owner = new Int32Array(n)
   for (let round = 0; round < rounds; round++) {
     for (let i = 0; i < n; i++) {
       let bestJ = 0
       let bestD = Infinity
-      for (let j = 0; j < centres.length; j++) {
-        const d = dist(points[i], centres[j])
+      for (let j = 0; j < m; j++) {
+        const d = d2(i, centres, j * 3)
         if (d < bestD) {
           bestD = d
           bestJ = j
@@ -156,21 +169,22 @@ function clusters(points: Lab[], k: number, rounds = 10): { lab: Lab; share: num
       }
       owner[i] = bestJ
     }
-    const sums = centres.map(() => [0, 0, 0, 0])
+    const sums = new Float64Array(m * 4)
     for (let i = 0; i < n; i++) {
-      const s = sums[owner[i]]
-      s[0] += points[i][0]
-      s[1] += points[i][1]
-      s[2] += points[i][2]
-      s[3]++
+      const o = owner[i] * 4
+      sums[o] += xs[i * 3]
+      sums[o + 1] += xs[i * 3 + 1]
+      sums[o + 2] += xs[i * 3 + 2]
+      sums[o + 3]++
     }
-    sums.forEach((s, j) => {
-      if (s[3]) centres[j] = [s[0] / s[3], s[1] / s[3], s[2] / s[3]]
-    })
+    for (let j = 0; j < m; j++) {
+      const c = sums[j * 4 + 3]
+      if (c) for (let t = 0; t < 3; t++) centres[j * 3 + t] = sums[j * 4 + t] / c
+    }
   }
-  const counts = centres.map(() => 0)
-  for (const o of owner) counts[o]++
-  return centres.map((lab, j) => ({ lab, share: counts[j] / n })).filter((c) => c.share > 0)
+  const counts = new Array<number>(m).fill(0)
+  for (let i = 0; i < n; i++) counts[owner[i]]++
+  return counts.map((count, j) => ({ lab: [centres[j * 3], centres[j * 3 + 1] / HUE_WEIGHT, centres[j * 3 + 2] / HUE_WEIGHT] as Lab, share: count / n })).filter((c) => c.share > 0)
 }
 
 /** Warm to cool, as a colour card reads: yellows, oranges, reds; then greys; then greens, blues, violets. */
@@ -184,11 +198,25 @@ function warmth(p: Lab): number {
 function nudge(lab: Lab, ok: (hex: string) => boolean, step: number): string {
   let L = lab[0]
   let hex = labToHex([L, lab[1], lab[2]])
-  for (let i = 0; i < 120 && !ok(hex); i++) {
+  for (let i = 0; i < 60 && !ok(hex); i++) {
     L = Math.min(0.99, Math.max(0.05, L + step))
     hex = labToHex([L, lab[1], lab[2]])
   }
   return hex
+}
+
+/** The lightest take on a colour, hue and chroma kept, that holds `min` on white. Darker only ever adds contrast, so it is found by halving. */
+function onWhite(lab: Lab, min: number): string {
+  const at = (L: number) => labToHex([L, lab[1], lab[2]])
+  if (contrast(at(lab[0]), WHITE) >= min) return at(lab[0])
+  let lo = 0
+  let hi = lab[0]
+  for (let i = 0; i < 16; i++) {
+    const mid = (lo + hi) / 2
+    if (contrast(at(mid), WHITE) >= min) lo = mid
+    else hi = mid
+  }
+  return at(lo)
 }
 
 /** The pixels a photograph's colours are read from: opaque, and neither blown-out white nor black shadow. */
@@ -224,7 +252,10 @@ export function photoChips(rgba: ArrayLike<number>): string[] | null {
   const picked: Lab[] = []
   const fits = (lab: Lab, apart: number) => dist(lab, orange) >= 0.06 && picked.every((p) => dist(p, lab) >= apart)
   for (const c of found) if (picked.length < 9 && fits(c.lab, 0.08)) picked.push(c.lab)
-  const own = [...picked]
+  // The fill starts from the photograph's own colours, and from those left out
+  // only for being the orange's twins (a brick crosswalk's reds): their
+  // lighter and darker takes are its colours too.
+  const own = [...picked, ...found.map((c) => c.lab).filter((lab) => dist(lab, orange) < 0.06)]
   const takes: [number, number][] = [
     [0.16, 1],
     [-0.16, 1],
@@ -256,7 +287,7 @@ export function photoChips(rgba: ArrayLike<number>): string[] | null {
   const labs: (Lab | null)[] = [rest[0], rest[1], null, rest[2], light[0], rest[3], rest[4], light[1], rest[5], dark]
 
   const holds = (chip: number) => (hex: string) => contrast(hex, WHITE) >= MIN_ON_WHITE[chip]
-  const chips = labs.map((lab, i) => (lab ? nudge(lab, holds(i + 1), -0.01) : BRAND_ORANGE))
+  const chips = labs.map((lab, i) => (lab ? onWhite(lab, MIN_ON_WHITE[i + 1]) : BRAND_ORANGE))
 
   // Neighbours must differ, or the band reads as fewer than ten: the later
   // one lightens while it still holds on white, else darkens (which only
@@ -270,8 +301,8 @@ export function photoChips(rgba: ArrayLike<number>): string[] | null {
       const apart = (hex: string) => others.every((o) => dist(hexToLab(o), hexToLab(hex)) >= 0.05)
       if (apart(chips[i])) continue
       const lab = hexToLab(chips[i])
-      const lighter = nudge(lab, (hex) => apart(hex) || !holds(chip)(hex), 0.01)
-      chips[i] = apart(lighter) && holds(chip)(lighter) ? lighter : nudge(lab, (hex) => apart(hex) && holds(chip)(hex), -0.01)
+      const lighter = nudge(lab, (hex) => apart(hex) || !holds(chip)(hex), 0.02)
+      chips[i] = apart(lighter) && holds(chip)(lighter) ? lighter : nudge(lab, (hex) => apart(hex) && holds(chip)(hex), -0.02)
     }
   }
   return chips

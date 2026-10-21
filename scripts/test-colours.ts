@@ -137,6 +137,20 @@ async function main() {
     assert.ok(blues.length >= 6, chips!.join(" "))
   })
 
+  await check("a brick crosswalk keeps its reds, though they sit close to the orange", () => {
+    const chips = photoChips(
+      image([
+        [168, 72, 58],
+        [150, 62, 52],
+        [182, 88, 70],
+        [110, 112, 115],
+      ]),
+    )
+    holds(chips, "brick")
+    const reds = chips!.filter((c) => c !== BRAND_ORANGE && chromaOf(c) > 0.05 && (hue(c) < 60 || hue(c) > 350))
+    assert.ok(reds.length >= 4, chips!.join(" "))
+  })
+
   await check("grey asphalt gives greys that still show, on white and in the band", () => {
     holds(
       photoChips(

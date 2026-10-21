@@ -3,7 +3,6 @@
 import { useEffect } from "react"
 import { usePathname } from "next/navigation"
 import { edgeVars } from "@/lib/palettes"
-import { photoChips } from "@/lib/photo-colours"
 import { usePalette } from "@/lib/use-palette"
 
 /**
@@ -15,14 +14,15 @@ import { usePalette } from "@/lib/use-palette"
  * follows. On the home page it follows the reel: each photograph brings its
  * own colours as it comes on screen.
  *
- * Does nothing at all in any other palette, and takes its variables off
- * again when the visitor moves on from Photo. A page with no photograph
- * keeps the colours it has; a photograph that can't be read (another site's,
- * without permission) leaves them too. Each photograph is read once.
+ * Does nothing in any other palette (the picker isn't even downloaded), and
+ * takes its variables off again when the visitor moves on from Photo. A
+ * page with no photograph keeps the colours it has; a photograph that can't
+ * be read leaves them too. Each photograph is read once, after the page has
+ * painted, while the browser is otherwise idle.
  */
 
 const VARS = Object.keys(edgeVars(new Array<string>(10).fill("#000000")))
-const read = new Map<string, string[] | null>()
+const reads = new Map<string, Promise<string[] | null>>()
 
 /** The photograph the page opens on: the reel's on-screen frame, an opener's, else the first big one in the page. */
 function leadPhoto(): HTMLImageElement | null {
@@ -34,13 +34,21 @@ function leadPhoto(): HTMLImageElement | null {
   )
 }
 
+/** Until the browser has a quiet moment (or half a second), so a new frame paints before it is read. */
+const idle = () =>
+  new Promise<void>((done) => {
+    if ("requestIdleCallback" in window) window.requestIdleCallback(() => done(), { timeout: 500 })
+    else setTimeout(done, 50)
+  })
+
 async function pixels(img: HTMLImageElement): Promise<Uint8ClampedArray | null> {
-  if (!img.complete || !img.naturalWidth) {
+  if (!img.complete) {
     await new Promise<void>((done) => {
       img.addEventListener("load", () => done(), { once: true })
       img.addEventListener("error", () => done(), { once: true })
     })
   }
+  // Loaded and empty, or failed: nothing to read.
   if (!img.naturalWidth) return null
   const sample = (source: HTMLImageElement) => {
     const canvas = document.createElement("canvas")
@@ -68,6 +76,26 @@ async function pixels(img: HTMLImageElement): Promise<Uint8ClampedArray | null> 
   }
 }
 
+/** One read per photograph, shared by everyone who asks while it runs. */
+function coloursOf(img: HTMLImageElement, key: string): Promise<string[] | null> {
+  let read = reads.get(key)
+  if (!read) {
+    read = (async () => {
+      try {
+        await idle()
+        const px = await pixels(img)
+        if (!px) return null
+        const { photoChips } = await import("@/lib/photo-colours")
+        return photoChips(px)
+      } catch {
+        return null
+      }
+    })()
+    reads.set(key, read)
+  }
+  return read
+}
+
 function clear() {
   for (const name of VARS) document.documentElement.style.removeProperty(name)
 }
@@ -85,35 +113,22 @@ export default function PhotoColours() {
     let latest = 0
     let shown = ""
     const follow = async () => {
-      const turn = ++latest
       const img = leadPhoto()
-      if (!img) return false
+      if (!img) return
       const key = img.currentSrc || img.src
-      if (key === shown) return true
-      if (!read.has(key)) {
-        const px = await pixels(img)
-        let chips: string[] | null = null
-        try {
-          chips = px ? photoChips(px) : null
-        } catch {
-          chips = null
-        }
-        read.set(key, chips)
-      }
-      const chips = read.get(key)
+      // Every look counts as the newest, so a read still running for a frame
+      // already gone (back to the one shown) never lands.
+      const turn = ++latest
+      if (key === shown) return
+      const chips = await coloursOf(img, key)
       // Only the newest photograph wins: the reel may have moved on while this one was read.
-      if (!live || turn !== latest || !chips) return true
+      if (!live || turn !== latest || !chips) return
       shown = key
       for (const [name, value] of Object.entries(edgeVars(chips))) document.documentElement.style.setProperty(name, value)
-      return true
     }
     // Once the page's photograph is in the document: a page still arriving
     // gets two more looks before it keeps the colours it has.
-    const timers = [0, 300, 1200].map((ms, i) =>
-      window.setTimeout(() => {
-        if (i === 0 || !shown) void follow()
-      }, ms),
-    )
+    const timers = [0, 300, 1200].map((ms) => window.setTimeout(() => void follow(), ms))
     // The home page's reel: a new frame on screen is a class change on its <img>.
     const reel = document.querySelector("#main .reel")
     const watch = reel ? new MutationObserver(() => void follow()) : null
