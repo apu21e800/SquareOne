@@ -54,8 +54,8 @@ import { daysSince, failureHint, GIVE_UP_DAYS, isConflict, isRunLevel } from "@/
 import { APPLICATION_OPTIONS, PROJECT_STORIES_TAG, SERVICE_OPTIONS, SYSTEM_OPTIONS } from "@/lib/automation/plan"
 import { tagPasses } from "@/lib/automation/style"
 import type { Claude, Mailer, SanityDoc, Store } from "@/lib/automation/services"
+import { vancouverZone } from "@/lib/bc-time"
 
-export const VANCOUVER = "America/Vancouver"
 /** The daily run's hour (vercel.json, social-drafts): the time a scheduled post goes live. 7 a.m. in Vancouver all year: BC keeps UTC-7 from 1 November 2026 (tzdata 2026b). */
 export const RUN_HOUR_UTC = 14
 /**
@@ -124,10 +124,15 @@ export function scheduleSlot(now: Date, taken: Iterable<string> = []): string {
   return day.toISOString()
 }
 
-/** "Thursday 22 October at 7:00 a.m. Vancouver time", for the emails and the notes. */
+/**
+ * "Thursday 22 October at 7:00 a.m. Vancouver time", for the emails and the
+ * notes. Vancouver's clock on any runtime's timezone data (lib/bc-time.ts):
+ * BC kept UTC-7 from 1 November 2026, and older data would print the 7 a.m.
+ * run as 6:00 a.m. from then on.
+ */
 export function vancouverWhen(iso: string): string {
   const parts = new Intl.DateTimeFormat("en-CA", {
-    timeZone: VANCOUVER,
+    timeZone: vancouverZone(Date.parse(iso)),
     weekday: "long",
     day: "numeric",
     month: "long",

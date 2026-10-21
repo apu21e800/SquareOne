@@ -21,6 +21,7 @@ import {
   holdBeforeScreen,
   readPayload,
   replyToFor,
+  stamp,
   subjectLine,
   type ContactPayload,
 } from "../lib/contact"
@@ -232,6 +233,12 @@ check("what a visitor types is text in the office's inbox, never markup", () => 
 })
 check("a subject is one line", () => assert.ok(!/[\r\n]/.test(subjectLine({ ...real, name: "A\r\nBcc: x@y.z" }))))
 check("defang leaves ordinary words alone", () => assert.equal(defang("J. Smith, 3.5 m, e.g. this"), "J. Smith, 3.5 m, e.g. this"))
+check("the office's email says when it was sent on Vancouver's clock, on any timezone data (BC kept UTC-7 from 1 Nov 2026)", () => {
+  assert.match(stamp(new Date("2026-10-21T17:15:00Z")), /^2026-10-21,? 10:15:00/)
+  assert.match(stamp(new Date("2026-11-02T17:15:00Z")), /^2026-11-02,? 10:15:00/)
+  assert.match(stamp(new Date("2027-01-15T17:15:00Z")), /^2027-01-15,? 10:15:00/)
+  assert.match(stamp(new Date("2026-01-15T17:15:00Z")), /^2026-01-15,? 9:15:00/)
+})
 
 if (failures) {
   console.log(`\n${failures} failed`)

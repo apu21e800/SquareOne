@@ -14,6 +14,8 @@
  * worst case is a labelled message in the usual inbox, never a lost one.
  */
 
+import { vancouverZone } from "./bc-time"
+
 export const TO_EMAIL = process.env.CONTACT_EMAIL || "office@squareonepaving.com"
 
 /** Where held-back mail goes. Unset, the office: marked, never lost. */
@@ -127,7 +129,8 @@ export function defang(v: string): string {
   )
 }
 
-const stamp = () => new Date().toLocaleString("en-CA", { timeZone: "America/Vancouver" })
+/** When it was sent, on Vancouver's clock (PT), right on any runtime's timezone data (lib/bc-time.ts). */
+export const stamp = (now: Date = new Date()) => now.toLocaleString("en-CA", { timeZone: vancouverZone(now) })
 
 /** The subject the office's inbox has always shown, "[Screened] " first when held. One line, always. */
 export function subjectLine(data: ContactPayload, hold?: Hold): string {

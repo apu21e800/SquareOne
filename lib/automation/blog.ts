@@ -52,6 +52,7 @@ import { topUpPlan } from "@/lib/automation/planner"
 import { blogFailureEmail, failureHint } from "@/lib/automation/outcome"
 import { DRAFT_LOG_PREFIX } from "@/lib/automation/logs"
 import { tagPasses } from "@/lib/automation/style"
+import { vancouverZone } from "@/lib/bc-time"
 import {
   APPLICATION_OPTIONS,
   isApplication,
@@ -141,9 +142,9 @@ export type BlogResult =
       notified: string[]
     }
 
-/** Today in BC, as the post's date (YYYY-MM-DD). */
+/** Today in BC, as the post's date (YYYY-MM-DD), on any runtime's timezone data (lib/bc-time.ts). */
 export function pacificDate(now: Date): string {
-  return new Intl.DateTimeFormat("en-CA", { timeZone: "America/Vancouver", year: "numeric", month: "2-digit", day: "2-digit" }).format(now)
+  return new Intl.DateTimeFormat("en-CA", { timeZone: vancouverZone(now), year: "numeric", month: "2-digit", day: "2-digit" }).format(now)
 }
 
 export function cleanSlug(s: string): string {

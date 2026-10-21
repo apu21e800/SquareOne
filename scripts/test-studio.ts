@@ -22,6 +22,12 @@ import { vercelStegaCombine } from "@vercel/stega"
 import { ABOUT_COPY, CONTACT_COPY, DRIVEWAYS_COPY, HOME_COPY, mergeAboutCopy, mergeContactCopy, mergeDrivewaysCopy, mergeFaqs, mergeHomeCopy, mergeLines, mergeSection } from "../lib/page-copy"
 import { mergeService } from "../lib/services-cms"
 import { services } from "../lib/services"
+import { existsSync, readFileSync } from "node:fs"
+import path from "node:path"
+import { GUIDE_PATH, OFFICE_GUIDE, guideText, labelRuns } from "../lib/office-guide"
+import { lintCopy } from "../lib/automation/style"
+import { schemaTypes } from "../sanity/schemaTypes"
+import { metadata as guideMetadata } from "../app/studio/guide/page"
 
 let failures = 0
 async function check(name: string, fn: () => void | Promise<void>) {
@@ -148,6 +154,11 @@ async function main() {
     assert.equal(officeDate(new Date("2026-10-15T02:30:00Z")), "2026-10-14")
     assert.equal(officeDate(new Date("2026-10-15T08:00:00Z")), "2026-10-15")
     assert.equal(officeDate(new Date("2026-01-15T07:59:00Z")), "2026-01-14")
+  })
+
+  await check("from 1 November 2026 BC keeps UTC-7, on any timezone data: half past midnight on 2 November is the 2nd", () => {
+    assert.equal(officeDate(new Date("2026-11-02T07:30:00Z")), "2026-11-02")
+    assert.equal(officeDate(new Date("2027-01-15T07:30:00Z")), "2027-01-15")
   })
 
   console.log("Site Settings, everywhere the details print")
@@ -290,13 +301,70 @@ async function main() {
 
   console.log("the Studio's list")
 
-  await check("in the brief's order, in plain words: Website Pages, Services, Projects, Blog ideas, Blog posts, Job photos, Sent to Buffer, Site Settings", () => {
+  await check("the office's guide first (Start here), then the brief's order, in plain words: Website Pages, Services, Projects, Blog ideas, Blog posts, Job photos, Sent to Buffer, Site Settings", () => {
     const titles = topLevelTitles()
+    assert.equal(titles[0], "Start here: how to post")
     const want = ["Website Pages", "Services", "Projects", "Blog ideas", "Blog posts", "Job photos", "Sent to Buffer", "Site Settings"]
     const present = want.filter((t) => titles.includes(t))
     assert.deepEqual(titles.filter((t) => want.includes(t)), present, titles.join(" | "))
     for (const t of want) assert.ok(titles.includes(t), `${t} is in the list`)
     assert.equal(titles[titles.length - 1], "Advanced", "the older slots stay last")
+  })
+
+  console.log("the office's guide")
+
+  await check("four steps in the brief's order: job photos from a phone, the Tuesday and Thursday drafts, your own post, Buffer", () => {
+    assert.deepEqual(
+      OFFICE_GUIDE.steps.map((s) => s.id),
+      ["job-photos", "drafts", "own-post", "buffer"],
+    )
+    for (const s of OFFICE_GUIDE.steps) assert.ok(s.steps.length >= 3 && s.next.length >= 1, s.id)
+    assert.match(OFFICE_GUIDE.steps[3].steps.join(" "), /Add to Queue/)
+    assert.match(OFFICE_GUIDE.steps[3].next.join(" "), /Delete/)
+  })
+  await check("every label it names in the Studio is a label the Studio prints (a renamed field fails here)", () => {
+    const titles = new Set<string>()
+    const walk = (v: unknown) => {
+      if (Array.isArray(v)) return v.forEach(walk)
+      if (v && typeof v === "object") {
+        for (const [k, x] of Object.entries(v)) {
+          if (k === "title" && typeof x === "string") titles.add(x)
+          else walk(x)
+        }
+      }
+    }
+    walk(schemaTypes)
+    for (const t of topLevelTitles()) titles.add(t)
+    // Buttons and Buffer's own words, not field titles.
+    const app = new Set(["+", "Publish", "Generate", "Drafts", "Edit", "Add to Queue", "Delete"])
+    const labels = [...new Set(OFFICE_GUIDE.steps.flatMap((s) => [...s.steps, ...s.next]).flatMap((l) => labelRuns(l).filter((r) => r.bold).map((r) => r.text)))]
+    assert.ok(labels.length > 15)
+    for (const label of labels) {
+      if (app.has(label)) continue
+      assert.ok([...titles].some((t) => t === label || t.startsWith(`${label} `) || t.startsWith(`${label},`)), `"${label}" is a Studio label`)
+    }
+  })
+  await check("in the house style: no em dash, nothing against the canon, no phone number or address", () => {
+    for (const line of guideText()) assert.deepEqual(lintCopy(line).map((i) => i.message), [], line)
+  })
+  await check("a page to bookmark at /studio/guide: never indexed, never in the sitemap", () => {
+    assert.equal(GUIDE_PATH, "/studio/guide")
+    assert.deepEqual((guideMetadata.robots as { index?: boolean }).index, false)
+    const vercel = JSON.parse(readFileSync(path.join(process.cwd(), "vercel.json"), "utf8")) as { headers: { source: string; headers: { key: string; value: string }[] }[] }
+    const studio = vercel.headers.find((h) => h.source === "/studio/(.*)")
+    assert.ok(studio?.headers.some((h) => h.key === "X-Robots-Tag" && /noindex/.test(h.value)), "vercel.json keeps /studio/* out of search")
+    assert.ok(!readFileSync(path.join(process.cwd(), "app/sitemap.ts"), "utf8").includes("/studio"), "the sitemap never lists /studio")
+  })
+  await check("each screenshot it names is on disk, at the size it says", () => {
+    for (const s of OFFICE_GUIDE.steps) {
+      if (!s.shot) continue
+      const file = path.join(process.cwd(), "public", s.shot.src)
+      assert.ok(existsSync(file), s.shot.src)
+      const b = readFileSync(file)
+      assert.equal(b.toString("ascii", 1, 4), "PNG", `${s.shot.src} is a PNG`)
+      assert.deepEqual([b.readUInt32BE(16), b.readUInt32BE(20)], [s.shot.width, s.shot.height], s.shot.src)
+      assert.ok(s.shot.alt.trim().length > 10, `${s.shot.src} has alt text`)
+    }
   })
 
   console.log(failures ? `\n${failures} failed` : "\nall passed")

@@ -1,9 +1,11 @@
 import type { StructureResolver } from "sanity/structure"
+import GuidePane from "./components/GuidePane"
 
 /**
  * The Studio's list (14 Oct 2026), in the order the office works through it:
- * Website Pages, Services, Projects, Blog ideas, Blog posts, Job photos, Sent
- * to Buffer, Site Settings (the automation brief; docs/AUTOMATION.md). In
+ * "Start here" (the office's guide, first since 21 Oct 2026), then Website
+ * Pages, Services, Projects, Blog ideas, Blog posts, Job photos, Sent to
+ * Buffer, Site Settings (the automation brief; docs/AUTOMATION.md). In
  * plain words since 20 Oct 2026, as hubss.com's: each list says what it is
  * for in its own title, so nobody needs a manual to know what happens.
  *
@@ -27,6 +29,10 @@ export const structure: StructureResolver = (S) => {
   return S.list()
     .title("Square One")
     .items([
+      // The office's one-page guide (lib/office-guide.ts), first: how to post
+      // from a phone. The same page to bookmark: /studio/guide.
+      S.listItem().title("Start here: how to post").id("guide").child(S.component(GuidePane).id("guide-page").title("How to post")),
+      S.divider(),
       S.listItem()
         .title("Website Pages")
         .id("website-pages")

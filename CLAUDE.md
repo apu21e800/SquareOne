@@ -110,6 +110,7 @@ Copy .env.local.example → .env.local and fill in:
   SOCIAL_AUTO_QUEUE (unset: social posts wait in Buffer for approval).
 
 ## Blog and social automation (lib/automation/, docs/AUTOMATION.md)
+The office's one-page guide (21 Oct 2026; `lib/office-guide.ts`, `components/OfficeGuide.tsx`): the Studio's first item ("Start here: how to post", `sanity/components/GuidePane.tsx`) and the page `/studio/guide` (noindex, never in the sitemap, no phone bar). `npm run test:studio` fails if a Studio label it names is renamed, if a line breaks the house style, or if a screenshot it lists is missing or the wrong size. One screenshot per step goes in `public/images/guide/`.
 Three Vercel crons (vercel.json, production only). All refuse every call
 without `CRON_SECRET` (401, constant-time check, lib/automation/cron.ts).
 Tuesdays and Thursdays at 13:00 UTC, `/api/cron/draft-post` takes the top
