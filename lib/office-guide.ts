@@ -54,7 +54,7 @@ export interface OfficeGuideContent {
 
 export const OFFICE_GUIDE: OfficeGuideContent = {
   title: "How to post",
-  lead: "Four things, all from your phone. Sign in at squareonepaving.com/studio with your Google work account. Nothing reaches social media until you approve it in Buffer, and anything that goes on the site by itself is emailed to you first.",
+  lead: "Four things, all from your phone. Sign in at squareonepaving.com/studio with your Google work account. Nothing goes on the site until you press Publish (or pick a day for it), and nothing reaches social media until you approve it in Buffer.",
   steps: [
     {
       id: "job-photos",
@@ -71,7 +71,7 @@ export const OFFICE_GUIDE: OfficeGuideContent = {
       ],
       next: [
         "No story: the next morning its posts wait in Buffer for your approval (step 4).",
-        "With a story: the next morning an article is written from your words and the service's page, nothing else, and you get an email. It goes live two working days later unless you hold it (step 2).",
+        "With a story: the next morning an article is written from your words and the service's page, nothing else, and you get an email. It waits in the Studio until you read it and press Publish (step 2).",
         "Added several jobs at once? They go one a day, oldest first.",
       ],
       shot: {
@@ -92,7 +92,7 @@ export const OFFICE_GUIDE: OfficeGuideContent = {
         "Happy with it? Press **Publish**. To have it go out on a later day instead, turn on **Goes live by itself**, then set **Goes live at** to that day at 7:00 a.m. or earlier: it goes out that morning.",
       ],
       next: [
-        'An article from job photos comes with its own email: "Goes live (that day) unless you hold it". To change a line, edit it: it still goes out on time. To hold it, turn **Goes live by itself** off.',
+        'An article from job photos comes with its own email, "Ready to read". Read it and press **Publish** the same way.',
         "The morning after a post goes live, its social posts wait in Buffer for you (step 4).",
       ],
     },

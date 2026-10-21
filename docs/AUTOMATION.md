@@ -6,18 +6,22 @@ since 14 Oct 2026 the blog runs from a list of ideas that keeps itself
 stocked, and social media drafts into Square One's own Buffer, as hubss.com's
 do. Since 20 Oct 2026 (Vern's brief that day): the drafter writes to
 hubss.com's standard of that day, Job photos with a story become a project
-article by themselves, any draft can be set to go live by itself, and one of
-Square One's people can run all of it from a phone.
+article by themselves (written, then waiting for a person's Publish), any
+draft can be set to go live by itself, and one of Square One's people can run
+all of it from a phone.
 
 **It drafts; people approve.** Nothing reaches a social network until a
 person approves it in Buffer (Vern, 20 Oct 2026: Square One's posts wait for
 the office's final edits). A blog draft goes on squareonepaving.com when a
-person presses Publish, or, if it is set to go live by itself, at the
-morning run on its day: a project article written from Job photos is saved
-that way two weekdays later, after the editors have been emailed and can read,
-change, move or hold it; anything a check isn't happy with (a statement the
-job's record doesn't back, the house style, a phone number, email or address
-that isn't Square One's) is saved held.
+person presses Publish, or, if a person set it to go live by itself, at the
+morning run on its day. A project article written from Job photos waits for
+a person's Publish too (Vern, 21 Oct 2026: "wait for Sydney"); the editors
+are emailed "Ready to read", or "Needs a read" with what a check found (a
+statement the job's record doesn't back, the house style, a phone number,
+email or address that isn't Square One's). With `PROJECT_ARTICLES_AUTO_PUBLISH=on`
+in Vercel, a clean one would instead be set to go live by itself two
+weekdays later, after the email, and anything a check isn't happy with
+saved held.
 
 It needs Sanity connected first (docs/CMS.md). Until the keys below are set,
 every run is refused or answers what is missing, and does nothing. Without
@@ -123,15 +127,18 @@ nothing else. Style pass and fact check as for every draft; a fact check
 answer that can't be read counts as a problem, never as clean. Saved as an
 unpublished draft: the post's first photo leads, the others close the
 article under "The job in photographs", tags that break the canon are
-dropped, and it is set to go live by itself at the morning run two weekdays
-after the day it was written (Monday's on Wednesday; Thursday's on Monday;
-Friday's, Saturday's and Sunday's on Tuesday; never a day another article
-has). The editors are emailed first (when it goes, the Studio link, how to
-change, move or hold it), and only then is it switched on; a draft either
-check isn't happy with, one showing a phone number, email or street address
-that isn't Square One's, or one with no photograph, is saved **held** and
-the email asks for a read. If that first email can't be confirmed, the
-article stays held and a second email says so. One article a day. The Job
+dropped, and no time is set: it waits in Blog posts until someone presses
+Publish (Vern, 21 Oct 2026). The editors are emailed "Ready to read" with
+the Studio link, or "Needs a read before it goes" when either check isn't
+happy, the article shows a phone number, email or street address that isn't
+Square One's, or it has no photograph; the notes in the draft list what to
+fix. Only with `PROJECT_ARTICLES_AUTO_PUBLISH=on` is a clean one set to go
+live by itself at the morning run two weekdays after the day it was written
+(Monday's on Wednesday; Thursday's on Monday; Friday's, Saturday's and
+Sunday's on Tuesday; never a day another article has), switched on only
+after the email has gone (if it can't be confirmed, the article stays held
+and a second email says so); anything a check isn't happy with is then saved
+**held**. One article a day. The Job
 photos post shows **The article written from this**; a claim stops two runs
 writing two articles; a copy made with Studio's Duplicate gets its own, held
 (it may be the same job twice); an article an editor deletes isn't written
@@ -213,8 +220,9 @@ Production**. Paste each key into Vercel yourself; never into a chat.
 4. `BLOG_DRAFT_NOTIFY`: who gets the emails, comma-separated. Vern, 20 Oct
    2026: Square One's office (the person who publishes) and Vern, both. The
    emails go out through Resend with the quote form's `RESEND_API_KEY` and
-   `CONTACT_FROM`, which are already set. A project article is switched on
-   to go live by itself only once this email has gone.
+   `CONTACT_FROM`, which are already set. (With
+   `PROJECT_ARTICLES_AUTO_PUBLISH=on`, a project article is switched on to go
+   live by itself only once this email has gone.)
 5. For the social drafts, `BUFFER_API_KEY`, last (it switches the job on):
    - **Square One's own Buffer account** (buffer.com), signed up with a
      Square One address, on the Free plan to start. Square One owns it and
@@ -252,6 +260,9 @@ Optional: `BLOG_DRAFT_MODEL` and `SOCIAL_DRAFT_MODEL` choose the Claude model
 9 Oct 2026, Anthropic retires it no sooner than 24 Nov 2026, so set one of
 these to a current model when it is deprecated). `SOCIAL_AUTO_QUEUE=on`
 queues social posts instead of drafting them (only on Vern's word).
+`PROJECT_ARTICLES_AUTO_PUBLISH=on` sets a clean project article to go live by
+itself two weekdays after its email instead of waiting for Publish (off since
+21 Oct 2026, Vern: "wait for Sydney"; only on his word).
 `AUTOMATION_PAUSED=1` stops every job without removing a key.
 
 ## Steering it

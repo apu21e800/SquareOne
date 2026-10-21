@@ -9,9 +9,11 @@
  *
  * draftProjectArticles (lib/automation/project-posts.ts): the oldest published
  * Job photos post with a story and no article yet becomes a project article,
- * saved as an unpublished draft, and the editors are emailed; a clean one is
- * set to go live by itself at the daily run two weekdays later, unless they
- * hold it. One a day. Nothing here publishes, and nothing posts to social.
+ * saved as an unpublished draft, and the editors are emailed. It waits in
+ * Studio for a person's Publish (Vern, 21 Oct 2026: "wait for Sydney"); only
+ * with PROJECT_ARTICLES_AUTO_PUBLISH=on is a clean one set to go live by
+ * itself at the daily run two weekdays later, unless they hold it. One a
+ * day. Nothing here publishes, and nothing posts to social.
  *
  * Needs, in Vercel (Production): CRON_SECRET, ANTHROPIC_API_KEY,
  * SANITY_API_WRITE_TOKEN; BLOG_DRAFT_NOTIFY and the quote form's
@@ -22,7 +24,7 @@ import { NextResponse, type NextRequest } from "next/server"
 import { cronGate } from "@/lib/automation/cron"
 import { emailEditors } from "@/lib/automation/editor-mail"
 import { failureHint } from "@/lib/automation/outcome"
-import { draftProjectArticles } from "@/lib/automation/project-posts"
+import { autoPublishArticles, draftProjectArticles } from "@/lib/automation/project-posts"
 import { anthropicClaude, resendMailer, sanityStore } from "@/lib/automation/services"
 import { SANITY_TIMEOUT_MS } from "@/lib/automation/social"
 
@@ -42,7 +44,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   const now = new Date(startedAt)
   const deps = { claude: anthropicClaude, store: sanityStore({ timeoutMs: SANITY_TIMEOUT_MS }), mail: resendMailer, now: () => new Date() }
   try {
-    const out = await draftProjectArticles(deps, now, { deadline: startedAt + BUDGET_MS })
+    const out = await draftProjectArticles(deps, now, { deadline: startedAt + BUDGET_MS, autoPublish: autoPublishArticles() })
     return NextResponse.json(out, { status: out.failed.length ? 500 : 200 })
   } catch (err) {
     console.error(`[projects] drafting failed: ${errorText(err)}`)

@@ -222,7 +222,8 @@ export async function checkDraft(claude: Claude, draft: Draft, facts: string): P
 
 /**
  * The fact check's answer, read so that only a clear "clean" passes (review,
- * 20 Oct 2026): a project article goes live by itself on a clean check, so an
+ * 20 Oct 2026): a project article can go live by itself on a clean check
+ * (PROJECT_ARTICLES_AUTO_PUBLISH), and its email says it is ready, so an
  * answer that can't be read, or a "needs edits" with nothing listed, holds
  * the draft for a person instead of passing it. A list sent as JSON text is
  * read as the list it is.

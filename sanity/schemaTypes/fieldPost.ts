@@ -16,10 +16,10 @@ import { APPLICATION_OPTIONS, SERVICE_OPTIONS, SYSTEM_OPTIONS } from "../../lib/
  *
  * With The story filled in (20 Oct 2026, lib/automation/project-posts.ts) the
  * job becomes a project article on the Blog instead: written from this
- * document and the service's page, scheduled to go live by itself two
- * weekdays out (the editors are emailed first and can hold or change it), and
- * its social posts follow the day after it is live. A job with a story gets
- * no social posts of its own: it goes out once, as the article.
+ * document and the service's page, left in Blog posts for a person to read
+ * and Publish (the editors are emailed; Vern, 21 Oct 2026: "wait for
+ * Sydney"), and its social posts follow the day after it is live. A job with
+ * a story gets no social posts of its own: it goes out once, as the article.
  *
  * Not shown on the website by itself: the photos live here, in the posts and
  * in the article.
@@ -110,7 +110,7 @@ export const fieldPost = defineType({
       type: "text",
       rows: 8,
       description:
-        "A few sentences or a list, in your own words: the site (name it only if the client is happy to be named), what was needed, what went in and when, anything about the design or the colours, and how it has held up. Fill this in and the job is written up as a project article on the Blog, scheduled to go live in a couple of weekdays; you'll get an email to read it first. Everything the article says about the job comes from here and the line above, so no guesses, no prices, no phone numbers or home addresses, and no figures you aren't sure of. Leave it empty and the photos go to social only.",
+        "A few sentences or a list, in your own words: the site (name it only if the client is happy to be named), what was needed, what went in and when, anything about the design or the colours, and how it has held up. Fill this in and the job is written up as a project article on the Blog: you'll get an email, and it waits in Blog posts until you read it and press Publish. Everything the article says about the job comes from here and the line above, so no guesses, no prices, no phone numbers or home addresses, and no figures you aren't sure of. Leave it empty and the photos go to social only.",
       validation: (r) => [r.max(4000).warning("That is a lot: a few sentences or a short list is enough"), r.custom(copyCheck).warning()],
     }),
     defineField({
