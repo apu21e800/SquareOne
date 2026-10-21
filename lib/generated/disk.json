@@ -2030,6 +2030,8 @@
   },
   "images/guide": {
    "files": [
+    "edit-page.png",
+    "gallery-photo.png",
     "job-photos.png",
     "own-post.png"
    ],
@@ -6245,6 +6247,14 @@
   "images/galleries/streetscapes.jpg": [
    1024,
    598
+  ],
+  "images/guide/edit-page.png": [
+   553,
+   695
+  ],
+  "images/guide/gallery-photo.png": [
+   553,
+   695
   ],
   "images/guide/job-photos.png": [
    553,

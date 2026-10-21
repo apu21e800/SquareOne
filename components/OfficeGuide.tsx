@@ -1,9 +1,10 @@
-import { OFFICE_GUIDE, labelRuns } from "../lib/office-guide"
+import { OFFICE_GUIDE, labelRuns, type OfficeGuideContent } from "../lib/office-guide"
 
 /**
  * The office's one-page guide (lib/office-guide.ts), set for a phone: one
  * column, each step numbered, its screenshot, what you do, what happens
- * next. The same component is the Studio's first item ("Start here",
+ * next. This build's guide unless it is handed one (with the add-ons off or
+ * on, lib/addons.ts). The same component is the Studio's first item ("Start here",
  * sanity/structure.ts) and the page at /studio/guide, so it carries its own
  * inline styles and plain elements: it renders the same inside the Studio
  * and on the site (whose stylesheet resets list markers; the page clears the
@@ -32,8 +33,8 @@ function Line({ text }: { text: string }) {
   )
 }
 
-export default function OfficeGuide({ compact = false }: { compact?: boolean }) {
-  const g = OFFICE_GUIDE
+export default function OfficeGuide({ compact = false, guide = OFFICE_GUIDE }: { compact?: boolean; guide?: OfficeGuideContent }) {
+  const g = guide
   return (
     <article style={{ maxWidth: 680, margin: "0 auto", padding: compact ? "20px 20px 48px" : "calc(var(--bar-h, 72px) + 40px) 16px 72px", color: INK, fontSize: 17, lineHeight: 1.55 }}>
       <h1 style={{ fontSize: compact ? 24 : 32, lineHeight: 1.2, margin: "0 0 12px", fontWeight: 700 }}>{g.title}</h1>

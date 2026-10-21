@@ -110,9 +110,17 @@ Copy .env.local.example → .env.local and fill in:
   SOCIAL_AUTO_QUEUE (unset: social posts wait in Buffer for approval),
   PROJECT_ARTICLES_AUTO_PUBLISH (unset: a project article waits for a
   person's Publish; "on" schedules a clean one two weekdays out).
+- NEXT_PUBLIC_STUDIO_ADDONS — "on" shows the add-ons in the Studio and the
+  guide (lib/addons.ts): Blog ideas, Job photos, Sent to Buffer, a post's
+  "Goes live by itself", and the guide's job photos, drafts and Buffer steps.
+  Unset, as Square One has it (Vern, 21 Oct 2026: the editor is included,
+  the automation is offered separately, "not aggressively, they will see the
+  value"), the office sees the editor only. Built into the Studio, so a change
+  needs a redeploy. It hides, never deletes, and it doesn't run or stop the
+  automation, whose own keys do that.
 
 ## Blog and social automation (lib/automation/, docs/AUTOMATION.md)
-The office's one-page guide (21 Oct 2026; `lib/office-guide.ts`, `components/OfficeGuide.tsx`): the Studio's first item ("Start here: how to post", `sanity/components/GuidePane.tsx`) and the page `/studio/guide` (noindex, never in the sitemap, no phone bar). `npm run test:studio` fails if a Studio label it names is renamed, if a line breaks the house style, or if a screenshot it lists is missing or the wrong size. One screenshot per step goes in `public/images/guide/`.
+The office's one-page guide (21 Oct 2026; `lib/office-guide.ts`, `components/OfficeGuide.tsx`): the Studio's first item ("Start here: how to update the site", `sanity/components/GuidePane.tsx`) and the page `/studio/guide` (noindex, never in the sitemap, no phone bar). Two guides from one source: without the add-ons (NEXT_PUBLIC_STUDIO_ADDONS), change a page, add gallery photos, write a post; with them, also job photos, the drafts and Buffer. A line or step marked `only` is in one guide, and `{step:id}` prints that step's number. `npm run test:studio` fails if a Studio label it names is renamed, if a line breaks the house style, or if a screenshot it lists is missing or the wrong size. One screenshot per step goes in `public/images/guide/`.
 Three Vercel crons (vercel.json, production only). All refuse every call
 without `CRON_SECRET` (401, constant-time check, lib/automation/cron.ts).
 Tuesdays and Thursdays at 13:00 UTC, `/api/cron/draft-post` takes the top

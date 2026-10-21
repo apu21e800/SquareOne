@@ -17,14 +17,16 @@ import { mergeWork, type GalleryPhotoDoc } from "../lib/work-cms"
 import { mergeProjects, type ProjectDoc } from "../lib/projects-cms"
 import { projects as RECORD } from "../lib/projects"
 import { organization } from "../components/StructuredData"
-import { structure } from "../sanity/structure"
+import { CONTENT_TOOL, EDIT_ON_THE_PAGE, buildStructure, creatable, structure } from "../sanity/structure"
+import { ADDONS, ADDON_TYPES, addonsOn } from "../lib/addons"
 import { vercelStegaCombine } from "@vercel/stega"
 import { ABOUT_COPY, CONTACT_COPY, DRIVEWAYS_COPY, HOME_COPY, mergeAboutCopy, mergeContactCopy, mergeDrivewaysCopy, mergeFaqs, mergeHomeCopy, mergeLines, mergeSection } from "../lib/page-copy"
 import { mergeService } from "../lib/services-cms"
 import { services } from "../lib/services"
 import { existsSync, readFileSync } from "node:fs"
 import path from "node:path"
-import { GUIDE_PATH, OFFICE_GUIDE, guideText, labelRuns } from "../lib/office-guide"
+import { GUIDE_PATH, GUIDE_SOURCE, OFFICE_GUIDE, guideFor, guideText, labelRuns, type OfficeGuideContent } from "../lib/office-guide"
+import { post as postSchema } from "../sanity/schemaTypes/post"
 import { lintCopy } from "../lib/automation/style"
 import { schemaTypes } from "../sanity/schemaTypes"
 import { metadata as guideMetadata } from "../app/studio/guide/page"
@@ -301,27 +303,93 @@ async function main() {
 
   console.log("the Studio's list")
 
-  await check("the office's guide first (Start here), then the brief's order, in plain words: Website Pages, Services, Projects, Blog ideas, Blog posts, Job photos, Sent to Buffer, Site Settings", () => {
-    const titles = topLevelTitles()
-    assert.equal(titles[0], "Start here: how to post")
-    const want = ["Website Pages", "Services", "Projects", "Blog ideas", "Blog posts", "Job photos", "Sent to Buffer", "Site Settings"]
-    const present = want.filter((t) => titles.includes(t))
-    assert.deepEqual(titles.filter((t) => want.includes(t)), present, titles.join(" | "))
-    for (const t of want) assert.ok(titles.includes(t), `${t} is in the list`)
-    assert.equal(titles[titles.length - 1], "Advanced", "the older slots stay last")
+  await check("the add-ons switch: \"on\" only, so a typo leaves them off; off unless Vercel says on", () => {
+    for (const on of ["on", " ON ", "On"]) assert.equal(addonsOn(on), true, on)
+    for (const off of [undefined, "", "off", "true", "1", "yes", "onn"]) assert.equal(addonsOn(off), false, String(off))
+    assert.equal(ADDONS, addonsOn(process.env.NEXT_PUBLIC_STUDIO_ADDONS))
+  })
+
+  await check("without the add-ons, as Square One has it: the guide first, then Website Pages, Services, Projects, Blog posts, Site Settings; no Blog ideas, Job photos or Sent to Buffer", () => {
+    const titles = listTitles(false)
+    assert.equal(titles[0], "Start here: how to update the site")
+    assert.deepEqual(titles.slice(1), ["Website Pages", "Services", "Projects", "Blog posts", "Site Settings", "Advanced"], titles.join(" | "))
+    assert.ok(allTitles(false).includes("Blog posts · drafts wait here until you press Publish"))
+    assert.ok(!allTitles(false).some((t) => /Buffer|go live at their set time|drafter/.test(t)), "nothing in the list names an add-on")
+  })
+
+  await check("with the add-ons: the brief's order, Website Pages, Services, Projects, Blog ideas, Blog posts, Job photos, Sent to Buffer, Site Settings", () => {
+    const titles = listTitles(true)
+    assert.equal(titles[0], "Start here: how to update the site")
+    assert.deepEqual(titles.slice(1), ["Website Pages", "Services", "Projects", "Blog ideas", "Blog posts", "Job photos", "Sent to Buffer", "Site Settings", "Advanced"], titles.join(" | "))
+  })
+
+  await check("this build's list is the one its switch says", () => {
+    assert.deepEqual(listTitles(ADDONS, structure as unknown as Builder), listTitles(ADDONS))
+  })
+
+  await check("\"new document\" offers the add-ons' types only with them on, and never a single document, a fixed set or the automation's records", () => {
+    for (const t of ADDON_TYPES) {
+      assert.equal(creatable(t, false), false, t)
+      assert.equal(creatable(t, true), t !== "socialLog", t)
+    }
+    for (const t of ["post", "project", "galleryPhoto", "pageHero", "socialPost"]) assert.ok(creatable(t, false) && creatable(t, true), t)
+    for (const t of ["homePage", "siteSettings", "gallerySettings", "service", "socialLog"]) assert.ok(!creatable(t, false) && !creatable(t, true), t)
+  })
+
+  await check("a post's \"Goes live by itself\" shows only with the add-ons, and when hidden never stops a Publish", async () => {
+    const field = (name: string) => (postSchema.fields as unknown as { name: string; hidden?: unknown; validation?: unknown }[]).find((f) => f.name === name)!
+    if (!ADDONS) {
+      assert.equal(field("scheduled").hidden, true)
+      const hidden = field("scheduledFor").hidden as (ctx: { parent: unknown }) => boolean
+      assert.equal(hidden({ parent: { scheduled: true } }), true)
+      // The rule itself: a post left scheduled with no time still publishes.
+      let rule: ((value: unknown, ctx: { parent: unknown }) => unknown) | undefined
+      const r = new Proxy({}, { get: (_t, prop) => (prop === "custom" ? (fn: typeof rule) => ((rule = fn), r) : () => r) })
+      ;(field("scheduledFor").validation as (r: unknown) => unknown)(r)
+      assert.equal(await rule!(undefined, { parent: { scheduled: true } }), true)
+    } else {
+      assert.notEqual(field("scheduled").hidden, true)
+    }
   })
 
   console.log("the office's guide")
 
-  await check("four steps in the brief's order: job photos from a phone, the Tuesday and Thursday drafts, your own post, Buffer", () => {
+  const FREE = guideFor(false)
+  const ALL = guideFor(true)
+
+  await check("without the add-ons: three things, change a page, add gallery photos, write a post; nothing about Buffer, job photos or going live by itself", () => {
     assert.deepEqual(
-      OFFICE_GUIDE.steps.map((s) => s.id),
-      ["job-photos", "drafts", "own-post", "buffer"],
+      FREE.steps.map((s) => s.id),
+      ["edit-page", "gallery-photos", "own-post"],
     )
-    for (const s of OFFICE_GUIDE.steps) assert.ok(s.steps.length >= 3 && s.next.length >= 1, s.id)
-    assert.match(OFFICE_GUIDE.steps[3].steps.join(" "), /Add to Queue/)
-    assert.match(OFFICE_GUIDE.steps[3].next.join(" "), /Delete/)
+    assert.equal(FREE.title, "How to update the site")
+    const text = guideText(FREE).join("\n")
+    for (const word of ["Buffer", "Job photos", "Goes live by itself", "Tuesday", "social media", "drafter"]) assert.ok(!text.includes(word), `the free guide never says "${word}"`)
+    assert.match(FREE.lead, /Nothing changes on the site until you press Publish\.$/)
   })
+
+  await check("with the add-ons: the same three, then job photos, the Tuesday and Thursday drafts and Buffer, each pointing to the right step", () => {
+    assert.deepEqual(
+      ALL.steps.map((s) => s.id),
+      ["edit-page", "gallery-photos", "own-post", "job-photos", "drafts", "buffer"],
+    )
+    const buffer = ALL.steps.find((s) => s.id === "buffer")!
+    assert.match(buffer.steps.join(" "), /Add to Queue/)
+    assert.match(buffer.next.join(" "), /Delete/)
+    const jobs = ALL.steps.find((s) => s.id === "job-photos")!.next.join(" ")
+    assert.ok(jobs.includes("(step 6)") && jobs.includes("(step 5)"), jobs)
+    assert.ok(!guideText(ALL).some((l) => l.includes("{step:")), "every pointer is filled in")
+    assert.ok(ALL.steps.find((s) => s.id === "own-post")!.steps.some((l) => l.includes("Goes live by itself")))
+  })
+
+  await check("this build's guide is the one its switch says", () => {
+    assert.deepEqual(OFFICE_GUIDE, guideFor(ADDONS))
+  })
+
+  await check("every step: what you do, then what happens next", () => {
+    for (const g of [FREE, ALL]) for (const s of g.steps) assert.ok(s.steps.length >= 3 && s.next.length >= 1, s.id)
+  })
+
   await check("every label it names in the Studio is a label the Studio prints (a renamed field fails here)", () => {
     const titles = new Set<string>()
     const walk = (v: unknown) => {
@@ -334,29 +402,32 @@ async function main() {
       }
     }
     walk(schemaTypes)
-    for (const t of topLevelTitles()) titles.add(t)
-    // Buttons and Buffer's own words, not field titles.
-    const app = new Set(["+", "Publish", "Generate", "Drafts", "Edit", "Add to Queue", "Delete"])
-    const labels = [...new Set(OFFICE_GUIDE.steps.flatMap((s) => [...s.steps, ...s.next]).flatMap((l) => labelRuns(l).filter((r) => r.bold).map((r) => r.text)))]
-    assert.ok(labels.length > 15)
-    for (const label of labels) {
+    for (const t of [...allTitles(false), ...allTitles(true), CONTENT_TOOL, EDIT_ON_THE_PAGE]) titles.add(t)
+    // The Studio's own buttons and tabs (checked in the live Studio, 21 Oct
+    // 2026), and Buffer's words: not field titles.
+    const app = new Set(["+", "Publish", "Generate", "Upload", "Discard changes", "Structure", "Edit", "Drafts", "Add to Queue", "Delete"])
+    const labels = (g: OfficeGuideContent) => [...new Set(g.steps.flatMap((s) => [...s.steps, ...s.next]).flatMap((l) => labelRuns(l).filter((r) => r.bold).map((r) => r.text)))]
+    assert.ok(labels(FREE).length > 15 && labels(ALL).length > labels(FREE).length)
+    for (const label of labels(ALL)) {
       if (app.has(label)) continue
-      assert.ok([...titles].some((t) => t === label || t.startsWith(`${label} `) || t.startsWith(`${label},`)), `"${label}" is a Studio label`)
+      assert.ok([...titles].some((t) => t === label || t.startsWith(`${label} `) || t.startsWith(`${label},`) || t.startsWith(`${label}:`)), `"${label}" is a Studio label`)
     }
+    for (const label of labels(FREE)) assert.ok(labels(ALL).includes(label) || app.has(label), label)
   })
-  await check("in the house style: no em dash, nothing against the canon, no phone number or address", () => {
-    for (const line of guideText()) assert.deepEqual(lintCopy(line).map((i) => i.message), [], line)
+  await check("in the house style, with the add-ons off and on: no em dash, nothing against the canon, no phone number or address", () => {
+    for (const g of [FREE, ALL]) for (const line of guideText(g)) assert.deepEqual(lintCopy(line).map((i) => i.message), [], line)
   })
   await check("a page to bookmark at /studio/guide: never indexed, never in the sitemap", () => {
     assert.equal(GUIDE_PATH, "/studio/guide")
     assert.deepEqual((guideMetadata.robots as { index?: boolean }).index, false)
+    assert.equal((guideMetadata.title as { absolute?: string }).absolute, `${OFFICE_GUIDE.title} | Square One Paving`)
     const vercel = JSON.parse(readFileSync(path.join(process.cwd(), "vercel.json"), "utf8")) as { headers: { source: string; headers: { key: string; value: string }[] }[] }
     const studio = vercel.headers.find((h) => h.source === "/studio/(.*)")
     assert.ok(studio?.headers.some((h) => h.key === "X-Robots-Tag" && /noindex/.test(h.value)), "vercel.json keeps /studio/* out of search")
     assert.ok(!readFileSync(path.join(process.cwd(), "app/sitemap.ts"), "utf8").includes("/studio"), "the sitemap never lists /studio")
   })
-  await check("each screenshot it names is on disk, at the size it says", () => {
-    for (const s of OFFICE_GUIDE.steps) {
+  await check("each screenshot it names, in either guide, is on disk, at the size it says", () => {
+    for (const s of GUIDE_SOURCE.steps) {
       if (!s.shot) continue
       const file = path.join(process.cwd(), "public", s.shot.src)
       assert.ok(existsSync(file), s.shot.src)
@@ -371,12 +442,14 @@ async function main() {
   process.exit(failures ? 1 : 0)
 }
 
+type Builder = (s: unknown, c: unknown) => unknown
+type Node = { title?: string; items?: Node[]; child?: Node; divider?: boolean }
+
 /**
- * The titles of the Studio list's top-level items, by running the structure
- * against a stand-in builder that records each item's title.
+ * The Studio's list, by running the structure against a stand-in builder
+ * that records each item's title, its child and the items under it.
  */
-function topLevelTitles(): string[] {
-  type Node = { title?: string; items?: Node[]; divider?: boolean }
+function listTree(addons: boolean, resolver?: Builder): Node {
   const chain = (node: Node): unknown =>
     new Proxy(() => undefined, {
       get(_t, prop) {
@@ -384,6 +457,7 @@ function topLevelTitles(): string[] {
         return (...args: unknown[]) => {
           if (prop === "title") node.title = String(args[0])
           if (prop === "items") node.items = (args[0] as { __node: Node }[]).map((i) => i.__node)
+          if (prop === "child") node.child = (args[0] as { __node?: Node })?.__node
           return chain(node)
         }
       },
@@ -396,8 +470,26 @@ function topLevelTitles(): string[] {
       },
     },
   )
-  const root = (structure as unknown as (s: unknown, c: unknown) => { __node: Node })(S, {}).__node
-  return (root.items ?? []).filter((i) => !i.divider).map((i) => i.title ?? "")
+  const built = resolver ? resolver(S, {}) : buildStructure(S as never, addons)
+  return (built as unknown as { __node: Node }).__node
+}
+
+/** The top-level items' titles. */
+function listTitles(addons: boolean, resolver?: Builder): string[] {
+  return (listTree(addons, resolver).items ?? []).filter((i) => !i.divider).map((i) => i.title ?? "")
+}
+
+/** Every title anywhere in the list, nested ones too. */
+function allTitles(addons: boolean): string[] {
+  const out: string[] = []
+  const walk = (n?: Node) => {
+    if (!n) return
+    if (n.title) out.push(n.title)
+    n.items?.forEach(walk)
+    walk(n.child)
+  }
+  walk(listTree(addons))
+  return out
 }
 
 main()

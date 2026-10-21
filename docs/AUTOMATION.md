@@ -10,6 +10,12 @@ article by themselves (written, then waiting for a person's Publish), any
 draft can be set to go live by itself, and one of Square One's people can run
 all of it from a phone.
 
+**An add-on** (Vern, 21 Oct 2026): Square One has the editor free (docs/CMS.md);
+this is offered separately, "not aggressively, they will see the value".
+Until it's sold the Studio hides its lists and "Goes live by itself", and the
+office's guide leaves it out (lib/addons.ts). Switching it on is the keys
+below, then `NEXT_PUBLIC_STUDIO_ADDONS=on` (step 7), then a redeploy.
+
 **It drafts; people approve.** Nothing reaches a social network until a
 person approves it in Buffer (Vern, 20 Oct 2026: Square One's posts wait for
 the office's final edits). A blog draft goes on squareonepaving.com when a
@@ -248,7 +254,11 @@ Production**. Paste each key into Vercel yourself; never into a chat.
 6. Seed the ideas: `npm run plan:seed -- --dry-run`, then (after `npx sanity
    login`) `SEED_JOBS=<the jobs' web addresses, comma-separated> npx sanity
    exec scripts/seed-blog-plan.ts --with-user-token`.
-7. Redeploy production (variables only reach new builds). The first live
+7. `NEXT_PUBLIC_STUDIO_ADDONS=on`: the office sees Blog ideas, Job photos,
+   Sent to Buffer and a post's Goes live by itself in the Studio, and the
+   guide gains its job photos, drafts and Buffer steps. It shows and hides
+   only: the jobs run on the keys above, so set both or neither.
+8. Redeploy production (variables only reach new builds). The first live
    run of each job only on Vern's yes, with him: Vercel → square-one →
    Settings → Cron Jobs → draft-post (or social-drafts, or project-articles)
    → Run, then read the drafts together. Without `BUFFER_API_KEY` the daily
