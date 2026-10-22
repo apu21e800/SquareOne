@@ -236,6 +236,10 @@ Services: `lib/services-cms.ts` over `lib/services.ts`. Site Settings
 (`lib/site-settings.ts`) is read everywhere a phone, the email, the address
 or an account prints: server code `getSiteSettings()`, client components
 `useSiteSettings()`; never type a contact detail into a component again.
+Only what Sanity's free plan includes shows in the Studio (22 Oct 2026):
+`releases`, `scheduledDrafts`, `scheduledPublishing` and `tasks` are off in
+sanity.config.ts, and `document.comments`; turn one on only with the plan
+that includes it.
 Every photograph's focal point frames it, inside any crop (`lib/focal.ts`);
 alt text is required and is the one the page reads. The first Publish of a
 post dates it (sanity/actions.ts). `npm run sync:pages -- --dry-run`, then
