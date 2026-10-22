@@ -235,17 +235,18 @@ async function main() {
     assert.equal(cronAuth(req("Bearer wrong"), "test")?.status, 401)
   })
   const savedAddons = process.env.NEXT_PUBLIC_STUDIO_ADDONS
-  delete process.env.NEXT_PUBLIC_STUDIO_ADDONS
-  await check("the add-ons off, as Square One has them: an authorised run does nothing and names no key, so nobody is emailed", async () => {
+  process.env.NEXT_PUBLIC_STUDIO_ADDONS = "off"
+  await check("the add-ons switched off: an authorised run does nothing and names no key, so nobody is emailed", async () => {
     process.env.AUTOMATION_TEST_KEY = "x"
     const res = cronGate(req("Bearer s3cret-for-tests"), "test", ["AUTOMATION_TEST_KEY"])
     assert.equal(res?.status, 200)
     assert.match(JSON.stringify(await res?.json()), /the add-ons are off/)
     assert.deepEqual(cronReady("test", ["SOME_KEY_THAT_IS_NOT_SET"]), { reason: "not switched on: the add-ons are off (NEXT_PUBLIC_STUDIO_ADDONS)", missing: [] })
-    process.env.NEXT_PUBLIC_STUDIO_ADDONS = "yes"
-    assert.ok(cronReady("test", ["AUTOMATION_TEST_KEY"]), "only \"on\" switches them on")
+    process.env.NEXT_PUBLIC_STUDIO_ADDONS = " OFF "
+    assert.ok(cronReady("test", ["AUTOMATION_TEST_KEY"]), "\"off\" in any case")
   })
-  process.env.NEXT_PUBLIC_STUDIO_ADDONS = "on"
+  // Unset, as Square One has it: the add-ons on, and only the keys decide.
+  delete process.env.NEXT_PUBLIC_STUDIO_ADDONS
   await check("the right secret with a key missing: does nothing and names the key", async () => {
     const res = cronGate(req("Bearer s3cret-for-tests"), "test", ["SOME_KEY_THAT_IS_NOT_SET"])
     assert.equal(res?.status, 200)

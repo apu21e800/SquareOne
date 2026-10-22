@@ -6,12 +6,11 @@ import { ADDONS } from "./addons"
  * manual. Written in the style of hubss.com's docs/DOUG-PROJECT-POSTS.md:
  * what you do, in the order you do it, and what happens next.
  *
- * Two guides from one source (Vern, 21 Oct 2026: the editor is included, the
- * automation is offered separately; lib/addons.ts). Without the add-ons:
- * change words and photos on a page, add photos to a gallery, write a blog
- * post. With them (NEXT_PUBLIC_STUDIO_ADDONS=on), also job photos from a
- * phone, the Tuesday and Thursday drafts and Buffer, and a post can go live
- * by itself. A line marked `only` is in one guide; `{step:buffer}` becomes
+ * Two guides from one source (lib/addons.ts). With the add-ons, as Square
+ * One has the Studio (Vern, 22 Oct 2026): change words and photos on a page,
+ * add photos to a gallery, write a blog post, then job photos from a phone,
+ * the Tuesday and Thursday drafts and Buffer, and a post can go live by
+ * itself. With NEXT_PUBLIC_STUDIO_ADDONS=off, the first three only. A line marked `only` is in one guide; `{step:buffer}` becomes
  * that step's number in the guide it's printed in.
  *
  * Shown twice (components/OfficeGuide.tsx): first in the Studio's list

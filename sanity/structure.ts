@@ -11,10 +11,11 @@ import { GUIDE_TITLE } from "../lib/office-guide"
  * plain words since 20 Oct 2026, as hubss.com's: each list says what it is
  * for in its own title, so nobody needs a manual to know what happens.
  *
- * Blog ideas, Job photos and Sent to Buffer are the add-ons' (lib/addons.ts,
- * Vern, 21 Oct 2026): with NEXT_PUBLIC_STUDIO_ADDONS off, as Square One has
- * the Studio today, they aren't in the list or in "new document", and Blog
- * posts says only what Publish does. Nothing in them is deleted.
+ * Blog ideas, Job photos and Sent to Buffer are the add-ons' (lib/addons.ts):
+ * shown, as Square One has the Studio (Vern, 22 Oct 2026). With
+ * NEXT_PUBLIC_STUDIO_ADDONS=off they aren't in the list or in "new
+ * document", and Blog posts says only what Publish does. Nothing in them is
+ * deleted.
  *
  * The single documents (the four pages' words, Site Settings, the galleries'
  * list of photos taken off) open straight into their one document: there is

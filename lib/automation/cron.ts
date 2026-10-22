@@ -7,10 +7,10 @@
  * without the secret gets 401. Past the gate, with Sanity not connected or a
  * key missing, a run answers with what is missing and does nothing.
  * AUTOMATION_PAUSED=1 stops both jobs without removing a key. With the
- * add-ons off (NEXT_PUBLIC_STUDIO_ADDONS, lib/addons.ts; Vern, 21 Oct 2026)
- * every run does nothing too, keys or not: the Studio hides the add-ons'
- * lists and "Goes live by itself" then, and nothing should go out that the
- * office can't see.
+ * add-ons switched off (NEXT_PUBLIC_STUDIO_ADDONS=off, lib/addons.ts) every
+ * run does nothing too, keys or not: the Studio hides the add-ons' lists and
+ * "Goes live by itself" then, and nothing should go out that the office
+ * can't see.
  *
  * Two halves since 14 Oct 2026, so the blog route can tell the editor which
  * key is missing (lib/automation/blog.ts notifyNotConfigured) once the caller

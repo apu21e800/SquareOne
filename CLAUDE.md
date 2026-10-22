@@ -110,18 +110,19 @@ Copy .env.local.example → .env.local and fill in:
   SOCIAL_AUTO_QUEUE (unset: social posts wait in Buffer for approval),
   PROJECT_ARTICLES_AUTO_PUBLISH (unset: a project article waits for a
   person's Publish; "on" schedules a clean one two weekdays out).
-- NEXT_PUBLIC_STUDIO_ADDONS — "on" shows the add-ons in the Studio and the
-  guide (lib/addons.ts): Blog ideas, Job photos, Sent to Buffer, a post's
+- NEXT_PUBLIC_STUDIO_ADDONS — "off" hides the add-ons from the Studio and
+  the guide (lib/addons.ts): Blog ideas, Job photos, Sent to Buffer, a post's
   "Goes live by itself", and the guide's job photos, drafts and Buffer steps.
-  Unset, as Square One has it (Vern, 21 Oct 2026: the editor is included,
-  the automation is offered separately, "not aggressively, they will see the
-  value"), the office sees the editor only. Built into the Studio, so a change
-  needs a redeploy. It hides, never deletes, and the automation's runs wait
-  for it as well (lib/automation/cron.ts): nothing goes out that the office
-  can't see.
+  Unset, as Square One has it, they show (Vern, 22 Oct 2026, onboarding
+  Sydney: "add back in the Blog ideas, Job photos, Sent to Buffer and 'Goes
+  live by itself'"); the switch is there for the day an add-on isn't in the
+  package (21 Oct 2026: the editor is included, the automation offered
+  separately). Built into the Studio, so a change needs a redeploy. "off"
+  hides, never deletes, and stops the automation's runs too
+  (lib/automation/cron.ts): nothing goes out that the office can't see.
 
 ## Blog and social automation (lib/automation/, docs/AUTOMATION.md)
-The office's one-page guide (21 Oct 2026; `lib/office-guide.ts`, `components/OfficeGuide.tsx`): the Studio's first item ("Start here: how to update the site", `sanity/components/GuidePane.tsx`) and the page `/studio/guide` (noindex, never in the sitemap, no phone bar). Two guides from one source: without the add-ons (NEXT_PUBLIC_STUDIO_ADDONS), change a page, add gallery photos, write a post; with them, also job photos, the drafts and Buffer. A line or step marked `only` is in one guide, and `{step:id}` prints that step's number. `npm run test:studio` fails if a Studio label it names is renamed, if a line breaks the house style, or if a screenshot it lists is missing or the wrong size. One screenshot per step goes in `public/images/guide/`.
+The office's one-page guide (21 Oct 2026; `lib/office-guide.ts`, `components/OfficeGuide.tsx`): the Studio's first item ("Start here: how to update the site", `sanity/components/GuidePane.tsx`) and the page `/studio/guide` (noindex, never in the sitemap, no phone bar). Two guides from one source: with the add-ons, as Square One has it, change a page, add gallery photos, write a post, then job photos, the drafts and Buffer; with NEXT_PUBLIC_STUDIO_ADDONS=off, the first three only. A line or step marked `only` is in one guide, and `{step:id}` prints that step's number. `npm run test:studio` fails if a Studio label it names is renamed, if a line breaks the house style, or if a screenshot it lists is missing or the wrong size. One screenshot per step goes in `public/images/guide/`.
 Three Vercel crons (vercel.json, production only). All refuse every call
 without `CRON_SECRET` (401, constant-time check, lib/automation/cron.ts).
 Tuesdays and Thursdays at 13:00 UTC, `/api/cron/draft-post` takes the top

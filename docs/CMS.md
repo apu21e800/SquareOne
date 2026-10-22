@@ -12,14 +12,13 @@ Start here, Website Pages, Services, Projects, Blog ideas, Blog posts, Job
 photos, Sent to Buffer, Site Settings, then Advanced (docs/AUTOMATION.md for
 the blog and social automation).
 
-**Included, and the add-ons** (Vern, 21 Oct 2026): Square One has the editor
-free, every row below but three; the automation is offered separately, "not
-aggressively, they will see the value". Until it's sold the Studio hides
-**Blog ideas**, **Job photos**, **Sent to Buffer** and a post's **Goes live
-by itself**, "new document" doesn't offer them, and the guide shows only
-what's included. `NEXT_PUBLIC_STUDIO_ADDONS=on` in Vercel, and a redeploy,
-shows them (lib/addons.ts); nothing in them is deleted while they're hidden,
-and the automation does nothing while they're off.
+**The add-ons** (Vern, 21 and 22 Oct 2026): **Blog ideas**, **Job photos**,
+**Sent to Buffer** and a post's **Goes live by itself** show in the Studio,
+as Square One has it; the automation behind them sleeps until its keys go
+in (docs/AUTOMATION.md). `NEXT_PUBLIC_STUDIO_ADDONS=off` in Vercel, and a
+redeploy, hides them (lib/addons.ts): "new document" stops offering them,
+the guide shows only the editor, and the automation does nothing. Nothing in
+them is deleted while they're hidden.
 
 | In the Studio            | What it changes on the site                                                      |
 | ------------------------ | -------------------------------------------------------------------------------- |

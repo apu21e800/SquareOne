@@ -303,13 +303,13 @@ async function main() {
 
   console.log("the Studio's list")
 
-  await check("the add-ons switch: \"on\" only, so a typo leaves them off; off unless Vercel says on", () => {
-    for (const on of ["on", " ON ", "On"]) assert.equal(addonsOn(on), true, on)
-    for (const off of [undefined, "", "off", "true", "1", "yes", "onn"]) assert.equal(addonsOn(off), false, String(off))
+  await check("the add-ons switch: shown unless Vercel says \"off\"", () => {
+    for (const on of [undefined, "", "on", " ON ", "yes", "of"]) assert.equal(addonsOn(on), true, String(on))
+    for (const off of ["off", " OFF ", "Off"]) assert.equal(addonsOn(off), false, off)
     assert.equal(ADDONS, addonsOn(process.env.NEXT_PUBLIC_STUDIO_ADDONS))
   })
 
-  await check("without the add-ons, as Square One has it: the guide first, then Website Pages, Services, Projects, Blog posts, Site Settings; no Blog ideas, Job photos or Sent to Buffer", () => {
+  await check("with the add-ons switched off: the guide first, then Website Pages, Services, Projects, Blog posts, Site Settings; no Blog ideas, Job photos or Sent to Buffer", () => {
     const titles = listTitles(false)
     assert.equal(titles[0], "Start here: how to update the site")
     assert.deepEqual(titles.slice(1), ["Website Pages", "Services", "Projects", "Blog posts", "Site Settings", "Advanced"], titles.join(" | "))
@@ -317,7 +317,7 @@ async function main() {
     assert.ok(!allTitles(false).some((t) => /Buffer|go live at their set time|drafter/.test(t)), "nothing in the list names an add-on")
   })
 
-  await check("with the add-ons: the brief's order, Website Pages, Services, Projects, Blog ideas, Blog posts, Job photos, Sent to Buffer, Site Settings", () => {
+  await check("with the add-ons, as Square One has it: the brief's order, Website Pages, Services, Projects, Blog ideas, Blog posts, Job photos, Sent to Buffer, Site Settings", () => {
     const titles = listTitles(true)
     assert.equal(titles[0], "Start here: how to update the site")
     assert.deepEqual(titles.slice(1), ["Website Pages", "Services", "Projects", "Blog ideas", "Blog posts", "Job photos", "Sent to Buffer", "Site Settings", "Advanced"], titles.join(" | "))
