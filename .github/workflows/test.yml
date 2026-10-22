@@ -45,6 +45,9 @@ jobs:
       - name: Form tests
         run: npm run test:forms
 
+      - name: The old site's PDF addresses land on the same document
+        run: npm run test:redirects
+
       - name: Projects from the Studio
         run: npm run test:projects
 

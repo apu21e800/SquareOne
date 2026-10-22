@@ -1,5 +1,6 @@
 import type { NextConfig } from "next";
 import { withBotId } from "botid/next/config";
+import { oldPdfRedirects } from "./lib/old-pdfs";
 
 const nextConfig: NextConfig = {
   // No "X-Powered-By: Next.js" on every response (security sweep, 9 Oct 2026):
@@ -230,6 +231,10 @@ const nextConfig: NextConfig = {
       { source: "/projects/ralphs-farm-market-decorative-parking-lot", destination: "/blog/ralphs-farm-market-decorative-parking-lot", permanent: true },
       { source: "/streetprint/page/:n", destination: "/products/streetprint", permanent: true },
       { source: "/products/streetprint/attachment/:name", destination: "/products/streetprint", permanent: true },
+      // 22 Oct 2026: the old site's documents. Each /wp-content/uploads/ PDF
+      // address Search Console lists goes to the same document here, and any
+      // other old document to /resources (lib/old-pdfs.ts).
+      ...oldPdfRedirects(),
       // 28 Sept 2026 QA: two posts off the site until Square One confirms
       // them (the reasons are in each file's front-matter, marked unlisted).
       // Temporary on purpose: either can come back by deleting its line.
