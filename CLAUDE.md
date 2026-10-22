@@ -56,9 +56,13 @@ Current as of 7 Oct 2026 (the own-company restyle of 27 Sept, docs/OWN-COMPANY-B
 - Service area: Lower Mainland + Vancouver Island
 
 ## Tech Stack
-- Next.js 16.4.0 (App Router), pinned exactly (`next`, `eslint-config-next`,
-  `@next/mdx`); moved from 16.1.6 in the security sweep of 9 Oct 2026. Take
-  patch releases of the same major as they come; test before a major.
+- Next.js 16.4.2 (App Router), pinned exactly (`next`, `eslint-config-next`,
+  `@next/mdx`); moved from 16.1.6 in the security sweep of 9 Oct 2026, and
+  from 16.4.0 on 22 Oct 2026 for GHSA-2464-fhr4-w9xw and GHSA-673q-mjm6-r5xr
+  (critical) and GHSA-p3m5-59mp-jv5r (high), all fixed in 16.4.2. Take patch
+  releases of the same major as they come; test before a major. `npm audit`
+  is the check: `next build` may stop once with a security notice aimed at
+  coding agents, and the same build run again goes through.
 - Tailwind CSS 4
 - TypeScript (strict)
 - Resend for transactional email (the quote form; spam handling under "Forms and spam")
