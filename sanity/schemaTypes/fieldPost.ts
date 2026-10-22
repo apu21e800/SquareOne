@@ -1,4 +1,5 @@
 import { defineArrayMember, defineField, defineType } from "sanity"
+import { ICONS } from "../icons"
 import { copyCheck } from "./style"
 import { officeDate } from "../lib/publish-date"
 import { APPLICATION_OPTIONS, SERVICE_OPTIONS, SYSTEM_OPTIONS } from "../../lib/automation/plan"
@@ -30,6 +31,7 @@ export const fieldPost = defineType({
   name: "fieldPost",
   title: "Job photos",
   type: "document",
+  icon: ICONS.fieldPost,
   fields: [
     defineField({
       name: "photos",

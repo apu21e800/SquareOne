@@ -1,4 +1,5 @@
 import { defineField, defineType, type CustomValidator } from "sanity"
+import { ICONS } from "../icons"
 import { bodyCheck, copyCheck, headingCheck } from "./style"
 import { officeDate } from "../lib/publish-date"
 import { ADDONS } from "../../lib/addons"
@@ -38,6 +39,7 @@ export const post = defineType({
   name: "post",
   title: "Blog post",
   type: "document",
+  icon: ICONS.post,
   groups: [
     { name: "content", title: "Content", default: true },
     { name: "seo", title: "Search & sharing" },

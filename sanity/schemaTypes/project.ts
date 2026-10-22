@@ -1,4 +1,5 @@
 import { defineArrayMember, defineField, defineType } from "sanity"
+import { ICONS } from "../icons"
 import { copyCheck, paragraphsCheck } from "./style"
 
 const SYSTEMS = ["StreetPrint", "StreetBond", "StreetBondSR", "StreetBond150", "TrafficPatterns", "TrafficPatternsXD", "DuraTherm", "DecoMark", "PreMark", "DuraShield"]
@@ -20,6 +21,7 @@ export const project = defineType({
   name: "project",
   title: "Project",
   type: "document",
+  icon: ICONS.project,
   fields: [
     defineField({
       name: "title",

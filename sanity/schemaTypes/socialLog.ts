@@ -1,4 +1,5 @@
 import { defineArrayMember, defineField, defineType } from "sanity"
+import { ICONS } from "../icons"
 
 /**
  * What the daily run did for one blog post, job photos post or library item
@@ -17,6 +18,7 @@ export const socialLog = defineType({
   name: "socialLog",
   title: "Sent to Buffer",
   type: "document",
+  icon: ICONS.socialLog,
   readOnly: true,
   fields: [
     defineField({ name: "title", title: "Drafted from", type: "string" }),

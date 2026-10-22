@@ -1,4 +1,5 @@
 import { defineArrayMember, defineField, defineType, type ValidationContext } from "sanity"
+import { ICONS } from "../icons"
 import { copyCheck, headingCheck } from "./style"
 import { OPENERS, RECORD_OPENER_PAGES } from "../../lib/openers"
 import { homeSectionFields } from "./words"
@@ -45,6 +46,7 @@ export const homePage = defineType({
   name: "homePage",
   title: "Home page",
   type: "document",
+  icon: ICONS.homePage,
   // 14 Oct 2026: the sections below the hero joined the hero here
   // (sanity/schemaTypes/words.ts, lib/page-copy.ts).
   groups: [
@@ -86,6 +88,7 @@ export const pageHero = defineType({
   name: "pageHero",
   title: "Page opener",
   type: "document",
+  icon: ICONS.pageHero,
   fields: [
     defineField({
       name: "page",
@@ -133,6 +136,7 @@ export const galleryPhoto = defineType({
   name: "galleryPhoto",
   title: "Gallery photo",
   type: "document",
+  icon: ICONS.galleryPhoto,
   fields: [
     defineField({
       name: "image",
@@ -172,6 +176,7 @@ export const gallerySettings = defineType({
   name: "gallerySettings",
   title: "Galleries",
   type: "document",
+  icon: ICONS.gallerySettings,
   fields: [
     defineField({
       name: "removed",

@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity"
+import { ICONS } from "../icons"
 import { copyCheck, headingCheck } from "./style"
 import { DEFAULT_SETTINGS as D, EMAIL_SHAPE, PHONE_SHAPE } from "../../lib/site-settings"
 
@@ -35,6 +36,7 @@ export const siteSettings = defineType({
   name: "siteSettings",
   title: "Site Settings",
   type: "document",
+  icon: ICONS.siteSettings,
   fields: [
     defineField({
       name: "positioning",
