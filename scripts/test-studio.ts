@@ -32,6 +32,8 @@ import { post as postSchema } from "../sanity/schemaTypes/post"
 import { lintCopy } from "../lib/automation/style"
 import { schemaTypes } from "../sanity/schemaTypes"
 import { metadata as guideMetadata } from "../app/studio/guide/page"
+import { EDIT_ON_THE_PAGE_TOOL, TYPES_WITH_A_PAGE, documentPage, editOnThePageIntent } from "../sanity/studio-pages"
+import { resolve as presentationResolve } from "../sanity/presentation"
 
 let failures = 0
 async function check(name: string, fn: () => void | Promise<void>) {
@@ -391,6 +393,42 @@ async function main() {
     const nav = readFileSync(path.join(process.cwd(), "components/Nav.tsx"), "utf8")
     const shortcut = nav.slice(nav.indexOf("Cmd/Ctrl+K"), nav.indexOf("Cmd/Ctrl+K") + 600)
     assert.ok(shortcut.includes("document.getElementById(STUDIO_ROOT_ID)) return"), "the site's Ctrl/⌘K returns early while the Studio is on the page")
+  })
+
+  await check("a document with a page of its own opens that page from its own Edit on the page button: the first page its \"Used on\" list names", () => {
+    const cases: [string, Record<string, unknown>, string | null][] = [
+      ["homePage", { _id: "homePage" }, "/"],
+      ["aboutPage", { _id: "aboutPage" }, "/about"],
+      ["contactPage", { _id: "contactPage" }, "/contact"],
+      ["drivewaysPage", { _id: "drivewaysPage" }, "/driveways"],
+      ["service", { name: "Stamped asphalt", slug: "stamped-asphalt" }, "/services/stamped-asphalt"],
+      ["pageHero", { page: "/about" }, "/about"],
+      ["pageHero", {}, null],
+      ["post", { title: "A post", slug: { current: "a-post" } }, "/blog/a-post"],
+      ["post", { title: "No address yet" }, null],
+      ["project", { title: "A job", slug: { current: "a-job" } }, "/projects/a-job"],
+      // Several pages each: their "Used on" list names them, no button.
+      ["galleryPhoto", { gallery: "driveways" }, null],
+      ["socialPost", {}, null],
+      ["siteSettings", {}, null],
+    ]
+    for (const [type, doc, href] of cases) assert.equal(documentPage(type, doc)?.href ?? null, href, `${type} ${JSON.stringify(doc)}`)
+    // Every type with a button has a "Used on" list to agree with.
+    const locations = presentationResolve?.locations as Record<string, unknown>
+    for (const type of TYPES_WITH_A_PAGE) assert.ok(locations?.[type], type)
+  })
+
+  await check("the button sends the intent the Studio's own \"Used on\" links send, to the tool the Studio names", () => {
+    assert.deepEqual(editOnThePageIntent("drafts.abc", "post", "/blog/a-post"), {
+      intent: "edit",
+      params: { id: "abc", type: "post", mode: "presentation", presentation: EDIT_ON_THE_PAGE_TOOL, preview: "/blog/a-post" },
+    })
+    const sanity = readFileSync(path.join(process.cwd(), "node_modules/sanity/lib/presentation.js"), "utf8")
+    const item = sanity.slice(sanity.indexOf("function LocationItem("), sanity.indexOf("function LocationItem(") + 1200)
+    for (const part of ['intent: "edit"', 'mode: "presentation"', "presentation: toolName", "preview: node.href"]) assert.ok(item.includes(part), `Sanity's LocationItem still sends ${part}`)
+    const config = readFileSync(path.join(process.cwd(), "sanity.config.ts"), "utf8")
+    assert.ok(config.includes("name: EDIT_ON_THE_PAGE_TOOL,"), "the tool is named from sanity/studio-pages.ts")
+    assert.ok(/form:\s*\{\s*components:\s*\{\s*input:\s*EditOnThePageInput\s*\}/.test(config), "the button is the Studio's form input")
   })
 
   await check("\"new document\" offers the add-ons' types only with them on, and never a single document, a fixed set or the automation's records", () => {

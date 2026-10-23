@@ -229,6 +229,11 @@ Studio string must `stegaClean` it first (fitVars, pageTitle,
 clampDescription and scriptJson already do). The exit link is a plain `<a>`,
 never next/link (a prefetch would end the preview). Needs
 `SANITY_API_READ_TOKEN` (Viewer) in Vercel; `npm run test:preview`.
+The tool in the top bar always starts on the home page; a document with a
+page of its own (the four pages, an opener, a service, a post, a project)
+has its own Edit on the page button above its fields, opening the first
+page its "Used on" list names (23 Oct 2026, sanity/components/EditOnThePage.tsx,
+sanity/studio-pages.ts; ported from hubss.com's; `npm run test:studio`).
 
 **The Studio at hubss.com's level** (14 Oct 2026, docs/CMS.md): the list is
 Website Pages, Services, Projects, Blog, Site Settings (sanity/structure.ts).

@@ -25,8 +25,10 @@ import { ADDONS } from "./addons"
  * checked the same day). The blog post's steps and the basics were walked
  * through in the live Studio on 23 Oct 2026 for Sydney's first posts:
  * Upload and Select on an empty photo, the Paragraph menu, Photograph,
- * "Used on" opening an unpublished post in Edit on the page, the Draft and
- * Published chips, and Unpublish, which shows only on the Published one. Change a field's title there and change it here:
+ * an unpublished post open in Edit on the page, the Draft and Published
+ * chips, and Unpublish, which shows only on the Published one. A post's own
+ * Edit on the page button (sanity/components/EditOnThePage.tsx) came the
+ * same day: the one in the top bar always starts on the home page. Change a field's title there and change it here:
  * npm run test:studio fails until they agree. Times are Vancouver's, the same
  * all year since BC kept UTC-7 from 1 November 2026: the daily run 14:00 UTC
  * (7 a.m.), the article run 15:00 UTC (8 a.m.), the drafter 13:00 UTC (6 a.m.)
@@ -102,6 +104,7 @@ export const GUIDE_SOURCE: { title: string; lead: { free: string; addons: string
         "It's on the site within a minute.",
         "Changed your mind before publishing? The three dots beside **Publish**, then **Discard changes**.",
         "The big photo and headline at the top of a page are also in **Website Pages**: **Home page** for the home page, **Page openers** for the others (the **+** button there adds one for a page that isn't listed).",
+        "Already in a post, a project, a service or a page from the list? Its own **Edit on the page** button, above its fields, opens that page. The one at the top always starts on the home page.",
       ],
       shot: {
         src: "/images/guide/edit-page.png",
@@ -144,7 +147,7 @@ export const GUIDE_SOURCE: { title: string; lead: { free: string; addons: string
         `**Lead photograph**: **Upload** a new photo, or **Select** one already in the Studio. ${FRAMED} Then **What the photo shows**: one plain line, as you'd describe it to someone who can't see it.`,
         "**One-paragraph summary**: two or three sentences for the blog's list and for link previews.",
         "**Body**: type or paste the text. For a heading, click in its line, open **Paragraph** above the text and pick **Heading** (or **Subheading** for a smaller one). **Photograph** puts a photo between paragraphs.",
-        'To see it as it will look: click "Used on" at the top of the post, then the post\'s own page. Only you can see it there.',
+        "To see it as it will look: **Edit on the page**, above the post's fields. Only you can see it until it's published.",
         { text: "Press **Publish**.", only: "free" },
         { text: "Press **Publish**. Or turn on **Goes live by itself** and set **Goes live at** to the day you want, at 7:00 a.m. or earlier.", only: "addons" },
       ],
