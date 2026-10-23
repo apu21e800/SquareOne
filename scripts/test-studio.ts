@@ -19,6 +19,7 @@ import { projects as RECORD } from "../lib/projects"
 import { organization } from "../components/StructuredData"
 import { CONTENT_TOOL, EDIT_ON_THE_PAGE, buildStructure, creatable, structure } from "../sanity/structure"
 import { ICONS } from "../sanity/icons"
+import { STUDIO_HEADINGS, STUDIO_ROOT_ID } from "../sanity/studio-headings"
 import { ADDONS, ADDON_TYPES, addonsOn } from "../lib/addons"
 import { vercelStegaCombine } from "@vercel/stega"
 import { ABOUT_COPY, CONTACT_COPY, DRIVEWAYS_COPY, HOME_COPY, mergeAboutCopy, mergeContactCopy, mergeDrivewaysCopy, mergeFaqs, mergeHomeCopy, mergeLines, mergeSection } from "../lib/page-copy"
@@ -348,6 +349,38 @@ async function main() {
       const { name, icon } = t as { name: string; icon?: unknown }
       assert.ok(icon, `${name} has no picture`)
       assert.equal(icon, (ICONS as Record<string, unknown>)[name], `${name}'s picture isn't its list's`)
+    }
+  })
+
+  await check("the Studio's own headings stay the Studio's: its frame carries the id the rules name, no site stylesheet styles a heading by an id, and no site colour for a heading leaves its layer", () => {
+    const frame = readFileSync(path.join(process.cwd(), "app/studio/[[...tool]]/Studio.tsx"), "utf8")
+    assert.ok(frame.includes("id={STUDIO_ROOT_ID}") && frame.includes("{STUDIO_HEADINGS}"), "Studio.tsx puts the id and the rules on the Studio's frame")
+    // No specificity, so Sanity's own muted and accent colours still win.
+    assert.ok(STUDIO_HEADINGS.includes(`:where(#${STUDIO_ROOT_ID} [data-ui="Heading"]) { color: inherit; }`), "every Studio heading takes its pane's colour")
+    assert.ok(/#studio h2\[data-ui="Heading"\] \{[^}]*font-size: 1\.3125rem/.test(STUDIO_HEADINGS), "a title gets Sanity's own size back")
+    assert.ok(/#studio h2\[data-ui="Heading"\]\[data-testid="text-style--h2"\] \{[^}]*font-size: 2\.0625rem/.test(STUDIO_HEADINGS), "a post's Heading gets Sanity's own size back")
+    assert.ok(/#studio h2\[data-ui="Text"\] \{[^}]*font-size: 0\.8125rem/.test(STUDIO_HEADINGS), "a dialog's title gets Sanity's own size back")
+    for (const file of ["globals", "own", "refine", "mobile"]) {
+      const css = readFileSync(path.join(process.cwd(), `app/${file}.css`), "utf8").replace(/\/\*[\s\S]*?\*\//g, "")
+      // Each rule, with the @layer blocks it sits in.
+      const layers: boolean[] = []
+      for (const m of css.matchAll(/([^{};]*)([{};])/g)) {
+        const [, head, brace] = m
+        if (brace === "}") { layers.pop(); continue }
+        if (brace === ";") continue
+        const prelude = head.trim()
+        layers.push(/^@layer\b/.test(prelude) || layers.includes(true))
+        if (prelude.startsWith("@")) continue
+        const end = css.indexOf("}", m.index! + m[0].length)
+        const body = css.slice(m.index! + m[0].length, end)
+        for (const part of prelude.split(",")) {
+          // An id selector on a heading could outrank the Studio's rules (one id, one attribute, one element).
+          if (/#[A-Za-z_-]/.test(part) && /(^|[\s>+~(])h[1-6]\b/.test(part)) assert.fail(`app/${file}.css styles a heading by an id: ${part.trim()}`)
+          // A colour for every heading of a level, outside a layer, would outrank the colour rule above.
+          if (/^h[1-6](:not\([^)]*\))*$/.test(part.trim()) && /(^|;)\s*color\s*:/.test(body) && !layers.includes(true))
+            assert.fail(`app/${file}.css colours ${part.trim()} outside a layer: the Studio's headings would take it`)
+        }
+      }
     }
   })
 

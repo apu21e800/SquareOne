@@ -68,7 +68,7 @@ export const post = defineType({
       name: "slug",
       type: "slug",
       title: "Web address",
-      description: "The part after squareonepaving.com/blog/ — set once, then leave it (links and Google depend on it).",
+      description: "The part after squareonepaving.com/blog/. Press Generate once the title is in, then leave it: links and Google depend on it.",
       options: { source: "title", maxLength: 80 },
       validation: (r) => [
         r.required().error("Press Generate to make the web address from the title"),
