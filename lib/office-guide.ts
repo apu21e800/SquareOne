@@ -10,8 +10,10 @@ import { ADDONS } from "./addons"
  * One has the Studio (Vern, 22 Oct 2026): change words and photos on a page,
  * add photos to a gallery, write a blog post, then job photos from a phone,
  * the Tuesday and Thursday drafts and Buffer, and a post can go live by
- * itself. With NEXT_PUBLIC_STUDIO_ADDONS=off, the first three only. A line marked `only` is in one guide; `{step:buffer}` becomes
- * that step's number in the guide it's printed in.
+ * itself. With NEXT_PUBLIC_STUDIO_ADDONS=off, the first three only. Both
+ * end with the basics: drafts, Publish, and how to undo (23 Oct 2026). A
+ * line marked `only` is in one guide; `{step:buffer}` becomes that step's
+ * number in the guide it's printed in.
  *
  * Shown twice (components/OfficeGuide.tsx): first in the Studio's list
  * ("Start here", sanity/structure.ts) and as a page to bookmark,
@@ -20,7 +22,11 @@ import { ADDONS } from "./addons"
  * Every name in bold is the label the person taps, as the Studio and Buffer
  * print it (sanity/schemaTypes, sanity/structure.ts, the Studio's own
  * buttons, checked in the live Studio 21 Oct 2026; Buffer's help pages,
- * checked the same day). Change a field's title there and change it here:
+ * checked the same day). The blog post's steps and the basics were walked
+ * through in the live Studio on 23 Oct 2026 for Sydney's first posts:
+ * Upload and Select on an empty photo, the Paragraph menu, Photograph,
+ * "Used on" opening an unpublished post in Edit on the page, the Draft and
+ * Published chips, and Unpublish, which shows only on the Published one. Change a field's title there and change it here:
  * npm run test:studio fails until they agree. Times are Vancouver's, the same
  * all year since BC kept UTC-7 from 1 November 2026: the daily run 14:00 UTC
  * (7 a.m.), the article run 15:00 UTC (8 a.m.), the drafter 13:00 UTC (6 a.m.)
@@ -132,16 +138,20 @@ export const GUIDE_SOURCE: { title: string; lead: { free: string; addons: string
       title: "Write a blog post",
       when: "Any time.",
       steps: [
-        "**Blog posts**, then the **+** button.",
+        "Open squareonepaving.com/studio, then **Blog posts**, then the **+** button.",
         "**Title**: a sentence a person would say. Then press **Generate** under **Web address**.",
-        `**Section**, then the **Lead photograph** and **What the photo shows**. ${FRAMED}`,
-        "**Body**: write it. A yellow line is worth a second look.",
+        "**Section**: the part of the Blog it belongs to.",
+        `**Lead photograph**: **Upload** a new photo, or **Select** one already in the Studio. ${FRAMED} Then **What the photo shows**: one plain line, as you'd describe it to someone who can't see it.`,
+        "**One-paragraph summary**: two or three sentences for the blog's list and for link previews.",
+        "**Body**: type or paste the text. For a heading, click in its line, open **Paragraph** above the text and pick **Heading** (or **Subheading** for a smaller one). **Photograph** puts a photo between paragraphs.",
+        'To see it as it will look: click "Used on" at the top of the post, then the post\'s own page. Only you can see it there.',
         { text: "Press **Publish**.", only: "free" },
         { text: "Press **Publish**. Or turn on **Goes live by itself** and set **Goes live at** to the day you want, at 7:00 a.m. or earlier.", only: "addons" },
       ],
       next: [
         { text: "It's on the blog within a minute.", only: "free" },
         { text: "It shows on the site within a minute of going live, and its social posts wait in Buffer the next morning.", only: "addons" },
+        "A yellow mark is worth a second look: it's the house style. A red one is something **Publish** needs first, like the photo or what it shows.",
       ],
       shot: {
         src: "/images/guide/own-post.png",
@@ -205,6 +215,23 @@ export const GUIDE_SOURCE: { title: string; lead: { free: string; addons: string
         "Don't want it? Tap **Delete**.",
       ],
       next: ["A post already in the queue: open it from the queue or the calendar to edit it, or the three dots, then **Delete**. A deleted post can't be brought back."],
+    },
+    {
+      id: "basics",
+      title: "How the Studio keeps the site safe",
+      when: "Worth reading once.",
+      steps: [
+        "Everything you type saves itself as a draft. The site doesn't change until you press **Publish**.",
+        "At the top of a post or a page, **Draft** is the version you're working on and **Published** is the one on the site.",
+        "Changed your mind? The three dots beside **Publish**, then **Discard changes**: it goes back to what's on the site.",
+        "To take a post off the site and keep it: click **Published** at the top, then **Unpublish** at the bottom. Click **Draft** to carry on editing.",
+        "**Delete** (the three dots beside **Publish**) is for a draft nobody needs. For anything on the site, unpublish it instead.",
+        "The magnifying glass at the top left finds any post or page by its words.",
+      ],
+      next: [
+        "**Site Settings** holds the phone numbers, the email and the address every page prints: change it only when one of those changes.",
+        "Not sure about something? Leave it as a draft and ask. Nothing reaches the site until someone presses **Publish**.",
+      ],
     },
   ],
   foot: "Stuck, or something looks wrong? Ask Vern at 21e8. This page is squareonepaving.com/studio/guide, and it is the first item in the Studio's list.",

@@ -384,6 +384,15 @@ async function main() {
     }
   })
 
+  await check("Sanity's own keys work in the Studio (Escape closes, Ctrl/⌘K searches): its frame stops no key press, and the site's search shortcut stands down while the frame is on the page", () => {
+    const frame = readFileSync(path.join(process.cwd(), "app/studio/[[...tool]]/Studio.tsx"), "utf8").replace(/\/\*[\s\S]*?\*\//g, "")
+    // Sanity listens for these on the window: a frame that stops a key press keeps them from it.
+    assert.ok(!/stopPropagation|onKeyDown|onKeyDownCapture/.test(frame), "the Studio's frame lets key presses through")
+    const nav = readFileSync(path.join(process.cwd(), "components/Nav.tsx"), "utf8")
+    const shortcut = nav.slice(nav.indexOf("Cmd/Ctrl+K"), nav.indexOf("Cmd/Ctrl+K") + 600)
+    assert.ok(shortcut.includes("document.getElementById(STUDIO_ROOT_ID)) return"), "the site's Ctrl/⌘K returns early while the Studio is on the page")
+  })
+
   await check("\"new document\" offers the add-ons' types only with them on, and never a single document, a fixed set or the automation's records", () => {
     for (const t of ADDON_TYPES) {
       assert.equal(creatable(t, false), false, t)
@@ -414,10 +423,10 @@ async function main() {
   const FREE = guideFor(false)
   const ALL = guideFor(true)
 
-  await check("without the add-ons: three things, change a page, add gallery photos, write a post; nothing about Buffer, job photos or going live by itself", () => {
+  await check("without the add-ons: three things, change a page, add gallery photos, write a post, then the basics; nothing about Buffer, job photos or going live by itself", () => {
     assert.deepEqual(
       FREE.steps.map((s) => s.id),
-      ["edit-page", "gallery-photos", "own-post"],
+      ["edit-page", "gallery-photos", "own-post", "basics"],
     )
     assert.equal(FREE.title, "How to update the site")
     const text = guideText(FREE).join("\n")
@@ -425,10 +434,10 @@ async function main() {
     assert.match(FREE.lead, /Nothing changes on the site until you press Publish\.$/)
   })
 
-  await check("with the add-ons: the same three, then job photos, the Tuesday and Thursday drafts and Buffer, each pointing to the right step", () => {
+  await check("with the add-ons: the same three, then job photos, the Tuesday and Thursday drafts and Buffer, each pointing to the right step, then the basics", () => {
     assert.deepEqual(
       ALL.steps.map((s) => s.id),
-      ["edit-page", "gallery-photos", "own-post", "job-photos", "drafts", "buffer"],
+      ["edit-page", "gallery-photos", "own-post", "job-photos", "drafts", "buffer", "basics"],
     )
     const buffer = ALL.steps.find((s) => s.id === "buffer")!
     assert.match(buffer.steps.join(" "), /Add to Queue/)
@@ -460,9 +469,9 @@ async function main() {
     }
     walk(schemaTypes)
     for (const t of [...allTitles(false), ...allTitles(true), CONTENT_TOOL, EDIT_ON_THE_PAGE]) titles.add(t)
-    // The Studio's own buttons and tabs (checked in the live Studio, 21 Oct
-    // 2026), and Buffer's words: not field titles.
-    const app = new Set(["+", "Publish", "Generate", "Upload", "Crop image", "Discard changes", "Structure", "Edit", "Drafts", "Add to Queue", "Delete"])
+    // The Studio's own buttons and tabs (checked in the live Studio, 21 and
+    // 23 Oct 2026), and Buffer's words: not field titles.
+    const app = new Set(["+", "Publish", "Generate", "Upload", "Select", "Crop image", "Discard changes", "Draft", "Published", "Unpublish", "Structure", "Edit", "Drafts", "Add to Queue", "Delete"])
     const labels = (g: OfficeGuideContent) => [...new Set(g.steps.flatMap((s) => [...s.steps, ...s.next]).flatMap((l) => labelRuns(l).filter((r) => r.bold).map((r) => r.text)))]
     assert.ok(labels(FREE).length > 15 && labels(ALL).length > labels(FREE).length)
     for (const label of labels(ALL)) {

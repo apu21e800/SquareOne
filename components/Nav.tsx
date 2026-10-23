@@ -12,6 +12,7 @@ import { MENU_PREVIEWS, type MenuPreviews } from "@/lib/menu"
 import ColourEdge from "@/components/ui/ColourEdge"
 import { useSiteSettings } from "@/components/SiteSettingsProvider"
 import { telHref } from "@/lib/site-settings"
+import { STUDIO_ROOT_ID } from "@/sanity/studio-headings"
 
 /* ------------------------------------------------------------------
    Data — derived from lib/, never duplicated.
@@ -628,9 +629,11 @@ export default function Nav({ previews = MENU_PREVIEWS }: { previews?: MenuPrevi
     }
   }, [drawerOpen])
 
-  // Cmd/Ctrl+K opens search from anywhere
+  // Cmd/Ctrl+K opens search from anywhere but the Studio, whose own search
+  // answers the same keys (app/studio/[[...tool]]/Studio.tsx)
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      if (document.getElementById(STUDIO_ROOT_ID)) return
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
         e.preventDefault()
         clearCloseTimer()
