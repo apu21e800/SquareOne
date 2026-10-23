@@ -12,6 +12,7 @@
     "lint:claims": "node scripts/lint-claims.mjs",
     "check:links": "node scripts/check-links.mjs",
     "test:forms": "tsx scripts/test-form-screen.ts",
+    "test:redirects": "tsx scripts/test-old-pdfs.ts",
     "test:projects": "tsx scripts/test-projects-cms.ts",
     "test:automation": "tsx scripts/test-automation.ts",
     "test:planner": "tsx scripts/test-planner.ts",

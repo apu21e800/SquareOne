@@ -304,6 +304,7 @@ Products link to services via `serviceSlug`:
 - Old application pages → `/applications/[slug]` or `/driveways`
 - Old blog posts → `/blog/[slug]`
 - Old case studies → `/blog` (consolidated)
+- Old documents (`/wp-content/uploads/…pdf`) → the same document in `/docs`, from `lib/old-pdfs.ts` (22 Oct 2026): the 40 addresses Search Console lists, by name or matched by hand; any other old document → `/resources`. Vercel's firewall answers 403 to `/wp-` addresses the site has no redirect for, so old images and WordPress paths stay blocked. `npm run test:redirects`.
 
 When adding new content, check `next.config.ts` redirects first to avoid conflicts.
 
