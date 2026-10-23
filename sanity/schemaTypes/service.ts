@@ -1,4 +1,5 @@
 import { defineArrayMember, defineField, defineType, type ConditionalPropertyCallback } from "sanity"
+import { ICONS } from "../icons"
 import { copyCheck } from "./style"
 
 /**
@@ -19,6 +20,7 @@ export const service = defineType({
   name: "service",
   title: "Service",
   type: "document",
+  icon: ICONS.service,
   fields: [
     defineField({ name: "name", type: "string", title: "Service", readOnly: true, description: "Fixed: the name and the web address come with the site." }),
     defineField({ name: "slug", type: "string", title: "Web address", readOnly: true, hidden: true }),

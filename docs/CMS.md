@@ -38,6 +38,12 @@ them is deleted while they're hidden.
 | **Site Settings**        | Phones, email, address, the footer line, Instagram / TikTok / Facebook / LinkedIn / YouTube links: read everywhere they print (the footer, the menu, the phone bar, the quote form, the contact and about pages, every "or call" line, the legal pages, llms.txt and the search engines' data). |
 | **Advanced → Text and Photo slots** | The first way in (30 Sept): a key per spot (`home.hero.title`, `home.hero.1`…). The Home page above does the same more simply and wins over them. |
 
+The Studio shows only what Square One's Sanity plan includes (22 Oct 2026,
+sanity.config.ts): no Releases tool or Drafts picker, no Sanity scheduling (a
+post goes live by itself through its own fields), no Tasks and no comments,
+none of which the free plan has, so nothing in the office's way leads to an
+upgrade screen. Edit on the page is included and stays.
+
 Every field left empty keeps what the site shows today, so nothing can go
 blank. `npm run sync:pages` fills the empty fields with the site's own words
 (fill-only, with a dry run), so the office starts from what is live.

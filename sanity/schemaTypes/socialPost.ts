@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity"
+import { ICONS } from "../icons"
 import { copyCheck } from "./style"
 
 /**
@@ -10,6 +11,7 @@ export const socialPost = defineType({
   name: "socialPost",
   title: "Social post",
   type: "document",
+  icon: ICONS.socialPost,
   fields: [
     defineField({ name: "platform", type: "string", title: "Platform", options: { list: ["Instagram", "TikTok", "Facebook", "LinkedIn", "YouTube"], layout: "radio" }, initialValue: "Instagram", validation: (r) => r.required() }),
     defineField({

@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity"
+import { ICONS } from "../icons"
 
 /**
  * Slots — the way to change a headline or swap a photograph anywhere on the
@@ -11,6 +12,7 @@ export const copySlot = defineType({
   name: "copySlot",
   title: "Text slot",
   type: "document",
+  icon: ICONS.copySlot,
   fields: [
     defineField({ name: "key", type: "string", title: "Where it appears (key)", readOnly: ({ document }) => Boolean(document?.value), validation: (r) => r.required() }),
     defineField({ name: "value", type: "text", title: "Text", rows: 3, validation: (r) => r.required() }),
@@ -23,6 +25,7 @@ export const imageSlot = defineType({
   name: "imageSlot",
   title: "Photo slot",
   type: "document",
+  icon: ICONS.imageSlot,
   fields: [
     defineField({ name: "key", type: "string", title: "Where it appears (key)", validation: (r) => r.required() }),
     defineField({ name: "image", type: "image", title: "Photograph", options: { hotspot: true }, validation: (r) => r.required() }),

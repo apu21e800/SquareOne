@@ -18,6 +18,7 @@ import { mergeProjects, type ProjectDoc } from "../lib/projects-cms"
 import { projects as RECORD } from "../lib/projects"
 import { organization } from "../components/StructuredData"
 import { CONTENT_TOOL, EDIT_ON_THE_PAGE, buildStructure, creatable, structure } from "../sanity/structure"
+import { ICONS } from "../sanity/icons"
 import { ADDONS, ADDON_TYPES, addonsOn } from "../lib/addons"
 import { vercelStegaCombine } from "@vercel/stega"
 import { ABOUT_COPY, CONTACT_COPY, DRIVEWAYS_COPY, HOME_COPY, mergeAboutCopy, mergeContactCopy, mergeDrivewaysCopy, mergeFaqs, mergeHomeCopy, mergeLines, mergeSection } from "../lib/page-copy"
@@ -327,6 +328,29 @@ async function main() {
     assert.deepEqual(listTitles(ADDONS, structure as unknown as Builder), listTitles(ADDONS))
   })
 
+  await check("every list, at every level, has its picture, and every kind of document the same one (sanity/icons.ts)", () => {
+    for (const addons of [false, true]) {
+      const missing: string[] = []
+      const walk = (n?: Node) => {
+        for (const item of n?.items ?? []) {
+          if (item.divider) continue
+          if (!item.icon) missing.push(item.title ?? "?")
+          // A list inside a list: its items too (Website Pages, Advanced).
+          if (item.child?.items) walk(item.child)
+        }
+      }
+      walk(listTree(addons))
+      assert.deepEqual(missing, [], `no picture: ${missing.join(", ")}`)
+    }
+    const documents = schemaTypes.filter((t) => (t as { type?: string }).type === "document")
+    assert.ok(documents.length >= 17, `${documents.length} document types`)
+    for (const t of documents) {
+      const { name, icon } = t as { name: string; icon?: unknown }
+      assert.ok(icon, `${name} has no picture`)
+      assert.equal(icon, (ICONS as Record<string, unknown>)[name], `${name}'s picture isn't its list's`)
+    }
+  })
+
   await check("\"new document\" offers the add-ons' types only with them on, and never a single document, a fixed set or the automation's records", () => {
     for (const t of ADDON_TYPES) {
       assert.equal(creatable(t, false), false, t)
@@ -443,11 +467,12 @@ async function main() {
 }
 
 type Builder = (s: unknown, c: unknown) => unknown
-type Node = { title?: string; items?: Node[]; child?: Node; divider?: boolean }
+type Node = { title?: string; items?: Node[]; child?: Node; divider?: boolean; icon?: unknown }
 
 /**
  * The Studio's list, by running the structure against a stand-in builder
- * that records each item's title, its child and the items under it.
+ * that records each item's title, its picture, its child and the items
+ * under it.
  */
 function listTree(addons: boolean, resolver?: Builder): Node {
   const chain = (node: Node): unknown =>
@@ -456,6 +481,7 @@ function listTree(addons: boolean, resolver?: Builder): Node {
         if (prop === "__node") return node
         return (...args: unknown[]) => {
           if (prop === "title") node.title = String(args[0])
+          if (prop === "icon") node.icon = args[0]
           if (prop === "items") node.items = (args[0] as { __node: Node }[]).map((i) => i.__node)
           if (prop === "child") node.child = (args[0] as { __node?: Node })?.__node
           return chain(node)

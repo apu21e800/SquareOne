@@ -1,4 +1,5 @@
 import { defineArrayMember, defineField, defineType } from "sanity"
+import { ICONS } from "../icons"
 import { copyCheck, headingCheck } from "./style"
 
 /**
@@ -113,6 +114,7 @@ export const aboutPage = defineType({
   name: "aboutPage",
   title: "About page",
   type: "document",
+  icon: ICONS.aboutPage,
   description: "The words below the About page's opener. Its photograph and headline are in Page openers.",
   fields: [
     section("story", "Our story"),
@@ -145,6 +147,7 @@ export const contactPage = defineType({
   name: "contactPage",
   title: "Contact page",
   type: "document",
+  icon: ICONS.contactPage,
   description: "The words of the quote page. The phone lines and the email are in Site Settings; the form itself stays as it is.",
   fields: [
     section("intro", "The top of the page (the headline)", true),
@@ -165,6 +168,7 @@ export const drivewaysPage = defineType({
   name: "drivewaysPage",
   title: "Driveways page",
   type: "document",
+  icon: ICONS.drivewaysPage,
   description: "The words below the Driveways page's opener. Its photograph and headline are in Page openers; its photographs are in Gallery photos.",
   fields: [
     section("patterns", "Patterns", true),

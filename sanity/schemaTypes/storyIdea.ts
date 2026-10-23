@@ -1,4 +1,5 @@
 import { defineArrayMember, defineField, defineType, type ConditionalPropertyCallback } from "sanity"
+import { ICONS } from "../icons"
 import { copyCheck } from "./style"
 import { APPLICATION_OPTIONS, PLAN_KINDS, PLAN_STATUSES, ROUNDUP_MAX, ROUNDUP_MIN, SERVICE_OPTIONS, SYSTEM_OPTIONS, type PlanKind } from "../../lib/automation/plan"
 
@@ -29,6 +30,7 @@ export const storyIdea = defineType({
   name: "storyIdea",
   title: "Blog idea",
   type: "document",
+  icon: ICONS.storyIdea,
   liveEdit: true,
   fields: [
     defineField({

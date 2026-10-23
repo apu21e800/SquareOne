@@ -25,6 +25,17 @@ export default defineConfig({
   basePath: "/studio",
   projectId,
   dataset,
+  // Only what Square One's plan includes, so nothing in the office's way
+  // leads to a paywall (Vern, 22 Oct 2026: "a super awesome pro CMS"; Sanity's
+  // free plan, checked at sanity.io/pricing/compare that day, has no Content
+  // Releases, scheduled drafts, comments or tasks). Off: the Releases tool and
+  // its Drafts picker, Sanity's own scheduling (a post goes live by itself
+  // through its own fields, sanity/schemaTypes/post.ts) and Tasks; comments
+  // are off in `document` below. Edit on the page is included and stays.
+  releases: { enabled: false },
+  scheduledDrafts: { enabled: false },
+  scheduledPublishing: { enabled: false },
+  tasks: { enabled: false },
   schema: {
     types: schemaTypes,
     // A single document is created through its list item, never from "new
@@ -34,6 +45,7 @@ export default defineConfig({
     templates: (templates) => templates.filter((t) => creatable(t.schemaType, ADDONS)),
   },
   document: {
+    comments: { enabled: false },
     actions: (actions, { schemaType }) => {
       // The social job's records too: deleting one would have its item drafted into Buffer again.
       if (SINGLETONS.has(schemaType) || FIXED_TYPES.has(schemaType) || MACHINE_TYPES.has(schemaType)) return actions.filter((a) => !["unpublish", "delete", "duplicate"].includes(a.action ?? ""))
