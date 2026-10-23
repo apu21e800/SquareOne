@@ -16,7 +16,7 @@ export const socialPost = defineType({
       name: "image",
       type: "image",
       title: "Photograph",
-      description: "The same photograph as the post. The tile is square: press the crosshair and drag the focal point onto the work.",
+      description: "The same photograph as the post. The tile is square: press the crop button on the photo (Crop image) and drag the circle onto the work.",
       options: { hotspot: true },
       fields: [
         defineField({

@@ -38,7 +38,7 @@ export const blockContent = defineType({
     defineArrayMember({
       type: "image",
       title: "Photograph",
-      description: "Press the crosshair and drag the focal point onto the pavement: the 3:2 frame crops around it.",
+      description: "Press the crop button on the photo (Crop image) and drag the circle onto the pavement: the 3:2 frame crops around it.",
       options: { hotspot: true },
       fields: [
         defineField({

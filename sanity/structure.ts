@@ -1,5 +1,7 @@
-import type { StructureResolver } from "sanity/structure"
+import type { StructureBuilder, StructureResolver } from "sanity/structure"
 import GuidePane from "./components/GuidePane"
+import { ADDONS, ADDON_TYPES } from "../lib/addons"
+import { GUIDE_TITLE } from "../lib/office-guide"
 
 /**
  * The Studio's list (14 Oct 2026), in the order the office works through it:
@@ -8,6 +10,12 @@ import GuidePane from "./components/GuidePane"
  * Buffer, Site Settings (the automation brief; docs/AUTOMATION.md). In
  * plain words since 20 Oct 2026, as hubss.com's: each list says what it is
  * for in its own title, so nobody needs a manual to know what happens.
+ *
+ * Blog ideas, Job photos and Sent to Buffer are the add-ons' (lib/addons.ts):
+ * shown, as Square One has the Studio (Vern, 22 Oct 2026). With
+ * NEXT_PUBLIC_STUDIO_ADDONS=off they aren't in the list or in "new
+ * document", and Blog posts says only what Publish does. Nothing in them is
+ * deleted.
  *
  * The single documents (the four pages' words, Site Settings, the galleries'
  * list of photos taken off) open straight into their one document: there is
@@ -24,14 +32,27 @@ export const FIXED_TYPES = new Set(["service"])
 /** Written by the automation, read only in the Studio: never made by hand (lib/automation/social.ts). */
 export const MACHINE_TYPES = new Set(["socialLog"])
 
-export const structure: StructureResolver = (S) => {
+/** Whether "new document" offers a type: never a single document, a fixed set or the automation's records, and an add-on's only with the add-ons on. */
+export function creatable(schemaType: string, addons: boolean): boolean {
+  return !SINGLETONS.has(schemaType) && !FIXED_TYPES.has(schemaType) && !MACHINE_TYPES.has(schemaType) && (addons || !ADDON_TYPES.has(schemaType))
+}
+
+/** The Studio's two tools, as its top bar names them (sanity.config.ts); the guide names them too. */
+export const CONTENT_TOOL = "Content"
+export const EDIT_ON_THE_PAGE = "Edit on the page"
+
+/** The list for this build (lib/addons.ts). */
+export const structure: StructureResolver = (S) => buildStructure(S, ADDONS)
+
+/** The list with the add-ons off or on. */
+export function buildStructure(S: StructureBuilder, addons: boolean) {
   const single = (id: string, title: string) => S.listItem().title(title).id(id).child(S.document().schemaType(id).documentId(id).title(title))
   return S.list()
     .title("Square One")
     .items([
-      // The office's one-page guide (lib/office-guide.ts), first: how to post
-      // from a phone. The same page to bookmark: /studio/guide.
-      S.listItem().title("Start here: how to post").id("guide").child(S.component(GuidePane).id("guide-page").title("How to post")),
+      // The office's one-page guide (lib/office-guide.ts), first: how to
+      // update the site. The same page to bookmark: /studio/guide.
+      S.listItem().title(`Start here: ${GUIDE_TITLE.toLowerCase()}`).id("guide").child(S.component(GuidePane).id("guide-page").title(GUIDE_TITLE)),
       S.divider(),
       S.listItem()
         .title("Website Pages")
@@ -68,41 +89,54 @@ export const structure: StructureResolver = (S) => {
       // What to write next (sanity/schemaTypes/storyIdea.ts). The drafter, on
       // Tuesdays and Thursdays, takes the top Ready item, else the top Idea,
       // and tops the plan up when it runs low (lib/automation/planner.ts).
-      S.listItem()
-        .title("Blog ideas")
-        .id("storyIdea")
-        .schemaType("storyIdea")
-        .child(
-          S.documentTypeList("storyIdea")
-            .title("Blog ideas · the drafter writes the top one on Tuesdays and Thursdays")
-            .defaultOrdering([
-              { field: "priority", direction: "asc" },
-              { field: "_createdAt", direction: "asc" },
-            ]),
-        ),
-      // Drafts wait here for Publish; one set to go live by itself goes at the
-      // daily run after its time (lib/automation/project-posts.ts).
+      // An add-on.
+      ...(addons
+        ? [
+            S.listItem()
+              .title("Blog ideas")
+              .id("storyIdea")
+              .schemaType("storyIdea")
+              .child(
+                S.documentTypeList("storyIdea")
+                  .title("Blog ideas · the drafter writes the top one on Tuesdays and Thursdays")
+                  .defaultOrdering([
+                    { field: "priority", direction: "asc" },
+                    { field: "_createdAt", direction: "asc" },
+                  ]),
+              ),
+          ]
+        : []),
+      // Drafts wait here for Publish; with the add-ons, one set to go live by
+      // itself goes at the daily run after its time (lib/automation/project-posts.ts).
       S.listItem()
         .title("Blog posts")
         .id("post")
         .schemaType("post")
-        .child(S.documentTypeList("post").title("Blog posts · drafts wait here for Publish, or go live at their set time").defaultOrdering([{ field: "date", direction: "desc" }])),
-      // Photos of a finished job with a line of facts (sanity/schemaTypes/fieldPost.ts).
-      // Publishing one has the next daily run draft its posts in Buffer; with
-      // the story filled in it becomes a project article instead.
-      S.listItem()
-        .title("Job photos")
-        .id("fieldPost")
-        .schemaType("fieldPost")
-        .child(S.documentTypeList("fieldPost").title("Job photos · publish one and its posts go to Buffer the next morning; add the story and it becomes a project article").defaultOrdering([{ field: "date", direction: "desc" }])),
-      // What the daily run left in Buffer for each item, with the style check
-      // on its copy (lib/automation/social.ts). The run writes these; nothing
-      // here is created or edited by hand.
-      S.listItem()
-        .title("Sent to Buffer")
-        .id("socialLog")
-        .schemaType("socialLog")
-        .child(S.documentTypeList("socialLog").title("Sent to Buffer · read only · approve and edit the posts themselves in Buffer").defaultOrdering([{ field: "createdAt", direction: "desc" }]).initialValueTemplates([])),
+        .child(
+          S.documentTypeList("post")
+            .title(addons ? "Blog posts · drafts wait here for Publish, or go live at their set time" : "Blog posts · drafts wait here until you press Publish")
+            .defaultOrdering([{ field: "date", direction: "desc" }]),
+        ),
+      ...(addons
+        ? [
+            // Photos of a finished job with a line of facts (sanity/schemaTypes/fieldPost.ts).
+            // Publishing one has the next daily run draft its posts in Buffer; with
+            // the story filled in it becomes a project article instead. An add-on.
+            S.listItem()
+              .title("Job photos")
+              .id("fieldPost")
+              .schemaType("fieldPost")
+              .child(S.documentTypeList("fieldPost").title("Job photos · publish one and its posts go to Buffer the next morning; add the story and it becomes a project article").defaultOrdering([{ field: "date", direction: "desc" }])),
+            // What the daily run left in Buffer for each item, with the style check
+            // on its copy (lib/automation/social.ts). The run writes these; nothing
+            // here is created or edited by hand. An add-on.
+            S.listItem()
+              .title("Sent to Buffer")
+              .id("socialLog")
+              .schemaType("socialLog")
+              .child(S.documentTypeList("socialLog").title("Sent to Buffer · read only · approve and edit the posts themselves in Buffer").defaultOrdering([{ field: "createdAt", direction: "desc" }]).initialValueTemplates([])),
+          ]
+        : []),
       S.divider(),
       single("siteSettings", "Site Settings"),
       S.divider(),

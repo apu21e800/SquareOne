@@ -59,7 +59,7 @@ export const project = defineType({
       type: "array",
       title: "Photographs",
       description:
-        "The first photograph is the hero; drag to reorder. Add item, then Upload a photograph or Select one already in the Studio's media library. Each one needs a line saying what it shows, and a focal point: press the crosshair on the photograph and drag it onto the pavement, and every frame of it on the site crops around that point. Only Square One's own photographs of this installation.",
+        "The first photograph is the hero; drag to reorder. Add item, then Upload a photograph or Select one already in the Studio's media library. Each one needs a line saying what it shows, and a focal point: press the crop button on the photograph (Crop image) and drag the circle onto the pavement, and every frame of it on the site crops around that point. Only Square One's own photographs of this installation.",
       of: [
         defineArrayMember({
           type: "image",

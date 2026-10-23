@@ -1,6 +1,7 @@
 import { defineField, defineType, type CustomValidator } from "sanity"
 import { bodyCheck, copyCheck, headingCheck } from "./style"
 import { officeDate } from "../lib/publish-date"
+import { ADDONS } from "../../lib/addons"
 
 /**
  * New writing (dated from 1 Oct 2026) can't be published without a title, a
@@ -79,7 +80,9 @@ export const post = defineType({
       name: "date",
       type: "date",
       title: "Date",
-      description: "The date printed on the post. The first Publish sets it to that day (or the day it goes live by itself), so you can leave it; a date in the future is kept. After that it changes only by hand.",
+      description: ADDONS
+        ? "The date printed on the post. The first Publish sets it to that day (or the day it goes live by itself), so you can leave it; a date in the future is kept. After that it changes only by hand."
+        : "The date printed on the post. The first Publish sets it to that day, so you can leave it; a date in the future is kept. After that it changes only by hand.",
       initialValue: () => officeDate(),
       validation: (r) => r.required(),
       group: "content",
@@ -89,13 +92,16 @@ export const post = defineType({
     // UTC) on or after its time. Any draft can be; a project article written
     // from job photos waits for Publish instead, unless
     // PROJECT_ARTICLES_AUTO_PUBLISH is on (Vern, 21 Oct 2026). A boolean, not
-    // a status list: the posts from before show it plainly off.
+    // a status list: the posts from before show it plainly off. An add-on
+    // (lib/addons.ts): with the add-ons off both fields are hidden and never
+    // stop a Publish, since nothing would take the post live by itself.
     defineField({
       name: "scheduled",
       type: "boolean",
       title: "Goes live by itself",
       initialValue: false,
       description: "On: it goes live at the time below, with the morning run. Off: it goes live when you press Publish, as always.",
+      hidden: !ADDONS,
       group: "content",
     }),
     defineField({
@@ -104,9 +110,9 @@ export const post = defineType({
       title: "Goes live at",
       options: { timeStep: 60 },
       description: "It goes live with the first morning run on or after this time (7:00 a.m. Vancouver time, all year). Change it to a later day to move it.",
-      hidden: ({ parent }) => !(parent as { scheduled?: boolean } | undefined)?.scheduled,
+      hidden: ({ parent }) => !ADDONS || !(parent as { scheduled?: boolean } | undefined)?.scheduled,
       validation: (r) =>
-        r.custom((value, ctx) => ((ctx.parent as { scheduled?: boolean } | undefined)?.scheduled && !value ? "Say when it should go live, or turn \"Goes live by itself\" off" : true)),
+        r.custom((value, ctx) => (ADDONS && (ctx.parent as { scheduled?: boolean } | undefined)?.scheduled && !value ? "Say when it should go live, or turn \"Goes live by itself\" off" : true)),
       group: "content",
     }),
     defineField({
@@ -137,7 +143,7 @@ export const post = defineType({
       name: "mainImage",
       type: "image",
       title: "Lead photograph",
-      description: "Shown at the top of the post and on the blog index. Press the crosshair and drag the focal point onto the pavement: every frame of it crops around that point.",
+      description: "Shown at the top of the post and on the blog index. Press the crop button on the photo (Crop image) and drag the circle onto the pavement: every frame of it crops around that point.",
       options: { hotspot: true },
       validation: (r) => [r.custom(needed("Add the lead photograph: one of Square One's own")), r.custom(wanted("This post has no photograph of its own")).warning()],
       fields: [

@@ -138,7 +138,7 @@ export const galleryPhoto = defineType({
       name: "image",
       type: "image",
       title: "Photograph",
-      description: "Square One's own work. At least 1600px wide shows large; smaller stays a gallery tile. Press the crosshair and drag the focal point onto the pavement: the tile crops around it.",
+      description: "Square One's own work. At least 1600px wide shows large; smaller stays a gallery tile. Press the crop button on the photo (Crop image) and drag the circle onto the pavement: the tile crops around it.",
       options: { hotspot: true },
       validation: (r) => r.required(),
     }),

@@ -36,7 +36,7 @@ export const fieldPost = defineType({
       title: "Photos",
       type: "array",
       description:
-        "3 to 10 photos of the finished job, from your phone or computer. The first one leads the posts and the article, so put the best one first (drag to reorder). Press the crosshair and drag the focal point onto the pavement: the posts crop around it. Only Square One's own photos of this job, and no faces of children.",
+        "3 to 10 photos of the finished job, from your phone or computer. The first one leads the posts and the article, so put the best one first (drag to reorder). Press the crop button on the photo (Crop image) and drag the circle onto the pavement: the posts crop around it. Only Square One's own photos of this job, and no faces of children.",
       of: [
         defineArrayMember({
           type: "image",
