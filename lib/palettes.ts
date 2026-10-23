@@ -1,7 +1,8 @@
 import { colour, type Swatch } from "@/lib/palette"
 
 /**
- * The colour card, four ways (8 Oct 2026).
+ * The colour card, four ways (8 Oct 2026), and a fifth from the photograph
+ * (21 Oct 2026, below).
  *
  * Vern, after the client: "The most recent style we have is multi-colored based
  * on S1 color palettes. We should put an easter egg in the hero somewhere, that
@@ -41,7 +42,7 @@ import { colour, type Swatch } from "@/lib/palette"
  * Light and dark alternate down the run, as the 7 Oct band does.
  */
 
-export type PaletteId = "spectrum" | "grey" | "earth" | "blueprint"
+export type PaletteId = "spectrum" | "grey" | "earth" | "blueprint" | "photo"
 
 export interface Chip {
   hex: string
@@ -68,6 +69,7 @@ const sb = (name: string): Chip => {
   return { hex: s.hex, title: `StreetBond ${s.name}` }
 }
 const own = (hex: string, title: string): Chip => ({ hex, title })
+const FROM_PHOTO = "From the photograph"
 
 export const PALETTES: Palette[] = [
   {
@@ -154,6 +156,32 @@ export const PALETTES: Palette[] = [
     ],
     water: ["#A7C6E1", "#8DB6DA", "#5E93C6", "#3B78B5", "#1E5490", "#0E335D"],
   },
+  {
+    // Vern, 21 Oct 2026: "try to make the colour palette match the colors of
+    // the images, might be a neat idea. like the color gradients, it needs to
+    // work without breaking tho." The ten are each page's own photograph's
+    // (lib/photo-colours.ts, read by components/PhotoColours.tsx: the
+    // opener's photograph, on the home page the one on screen). These ten,
+    // the same reading of the home page's first photograph (the Surrey spray
+    // park), show until a page's photograph is read and where a page has
+    // none. The orange stays chip 3, and the water stays Spectrum's.
+    id: "photo",
+    name: "Photo",
+    line: "Colours from the photograph",
+    chips: [
+      own("#827E6F", FROM_PHOTO),
+      own("#4E6067", FROM_PHOTO),
+      SQUARE_ONE_ORANGE,
+      own("#28B758", FROM_PHOTO),
+      own("#C8C6C6", FROM_PHOTO),
+      own("#66AF80", FROM_PHOTO),
+      own("#8AA1B8", FROM_PHOTO),
+      own("#A6D649", FROM_PHOTO),
+      own("#3168AE", FROM_PHOTO),
+      own("#3D4C24", FROM_PHOTO),
+    ],
+    water: ["#8FBCE6", "#5A9BDB", colour("SR Safety Blue").hex, "#1F6FB2", "#17568C", colour("Patriot Blue").hex],
+  },
 ]
 
 export const DEFAULT_PALETTE: PaletteId = "spectrum"
@@ -172,6 +200,12 @@ function band(list: string[]): string {
   return `linear-gradient(to right, ${list
     .map((hex, i) => `${hex} ${((i * 100) / list.length).toFixed(3)}% ${(((i + 1) * 100) / list.length).toFixed(3)}%`)
     .join(", ")})`
+}
+
+/** The colour card's variables for ten chips, as PALETTE_CSS writes them:
+    components/PhotoColours.tsx sets them on <html> for the Photo palette. */
+export function edgeVars(chips: string[]): Record<string, string> {
+  return Object.fromEntries([["--edge-band", band(chips)], ...chips.map((hex, i) => [`--edge-${i + 1}`, hex])])
 }
 
 function declarations(p: Palette): string {

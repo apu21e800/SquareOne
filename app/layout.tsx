@@ -12,6 +12,7 @@ import Footer from "@/components/Footer"
 import StructuredData from "@/components/StructuredData"
 import MobileStickyCTA from "@/components/MobileStickyCTA"
 import MotionBreath from "@/components/MotionBreath"
+import PhotoColours from "@/components/PhotoColours"
 import { PALETTE_BOOT, PALETTE_CSS } from "@/lib/palettes"
 import TypeToggle from "@/components/TypeToggle"
 import PreviewTools from "@/components/PreviewTools"
@@ -158,7 +159,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning className={`${poppins.variable} ${futura.variable} ${inter.variable} ${sourceSerif.variable}`}>
       <head>
-        {/* The colour card's variables, all four palettes (lib/palettes.ts),
+        {/* The colour card's variables, all five palettes (lib/palettes.ts),
             and the line that picks one before the first paint. Both live in
             production: the palette switch in the home hero is a feature, not
             a preview tool (8 Oct 2026). */}
@@ -185,6 +186,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <MobileStickyCTA />
         </SiteSettingsProvider>
         <MotionBreath />
+        {/* The Photo palette (21 Oct 2026): idle unless a visitor picks it. */}
+        <PhotoColours />
         {TYPE_SWITCH_ENABLED && <TypeToggle />}
         {preview && <PreviewTools />}
         {/* Google Analytics (14 Oct 2026, lib/analytics.ts): production only,
