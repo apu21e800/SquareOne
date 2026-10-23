@@ -126,7 +126,7 @@ Copy .env.local.example → .env.local and fill in:
   (lib/automation/cron.ts): nothing goes out that the office can't see.
 
 ## Blog and social automation (lib/automation/, docs/AUTOMATION.md)
-The office's one-page guide (21 Oct 2026; `lib/office-guide.ts`, `components/OfficeGuide.tsx`): the Studio's first item ("Start here: how to update the site", `sanity/components/GuidePane.tsx`) and the page `/studio/guide` (noindex, never in the sitemap, no phone bar). Two guides from one source: with the add-ons, as Square One has it, change a page, add gallery photos, write a post, then job photos, the drafts and Buffer; with NEXT_PUBLIC_STUDIO_ADDONS=off, the first three only. A line or step marked `only` is in one guide, and `{step:id}` prints that step's number. `npm run test:studio` fails if a Studio label it names is renamed, if a line breaks the house style, or if a screenshot it lists is missing or the wrong size. One screenshot per step goes in `public/images/guide/`.
+The office's one-page guide (21 Oct 2026; `lib/office-guide.ts`, `components/OfficeGuide.tsx`): the Studio's first item ("Start here: how to update the site", `sanity/components/GuidePane.tsx`) and the page `/studio/guide` (noindex, never in the sitemap, no phone bar). Two guides from one source: with the add-ons, as Square One has it, change a page, add gallery photos, write a post, then job photos, the drafts and Buffer; with NEXT_PUBLIC_STUDIO_ADDONS=off, the first three only. Both end with the basics (drafts, Publish, Discard changes, Unpublish rather than Delete; 23 Oct 2026, for Sydney's first posts). A line or step marked `only` is in one guide, and `{step:id}` prints that step's number. `npm run test:studio` fails if a Studio label it names is renamed, if a line breaks the house style, or if a screenshot it lists is missing or the wrong size. One screenshot per step goes in `public/images/guide/`.
 Three Vercel crons (vercel.json, production only). All refuse every call
 without `CRON_SECRET` (401, constant-time check, lib/automation/cron.ts).
 Tuesdays and Thursdays at 13:00 UTC, `/api/cron/draft-post` takes the top
@@ -229,6 +229,11 @@ Studio string must `stegaClean` it first (fitVars, pageTitle,
 clampDescription and scriptJson already do). The exit link is a plain `<a>`,
 never next/link (a prefetch would end the preview). Needs
 `SANITY_API_READ_TOKEN` (Viewer) in Vercel; `npm run test:preview`.
+The tool in the top bar always starts on the home page; a document with a
+page of its own (the four pages, an opener, a service, a post, a project)
+has its own Edit on the page button above its fields, opening the first
+page its "Used on" list names (23 Oct 2026, sanity/components/EditOnThePage.tsx,
+sanity/studio-pages.ts; ported from hubss.com's; `npm run test:studio`).
 
 **The Studio at hubss.com's level** (14 Oct 2026, docs/CMS.md): the list is
 Website Pages, Services, Projects, Blog, Site Settings (sanity/structure.ts).
@@ -433,6 +438,15 @@ npm run plan:seed -- --dry-run  # the first project stories for Blog ideas, from
 ```
 
 ## Development Notes
+- **The Studio renders inside the site's root layout** (app/studio), so the
+  site's CSS and listeners reach it. Its headings: sanity/studio-headings.ts
+  hands them back (23 Oct 2026; the site's ink and Futura made titles
+  near-black on the dark theme). Never colour a heading outside `@layer base`
+  or style one by an id: `npm run test:studio` fails. Its keys: Sanity
+  listens for Escape and Ctrl/⌘K on the window, so the Studio's frame must
+  never stop a key press (it did until 23 Oct, and neither worked); a site
+  shortcut stands down while `#studio` is on the page, as the search's does
+  (components/Nav.tsx).
 - **Disk reads go through `lib/disk.ts`** (7 Oct 2026). With Sanity connected every page also rebuilds itself on Vercel's servers every 60 seconds, and there `public/` is not in the function bundle (excluded in next.config.ts for size) and `content/blog` sits only beside the blog routes. The first production build with Sanity on (7 Oct 2026) served "No photos match this filter" on every gallery and lost the project stories once its pages had rebuilt. `lib/disk.ts` reads the disk first and falls back to `lib/generated/disk.json`, which `scripts/disk-manifest.mjs` writes before every build and dev server (package.json `prebuild`, `predev`; `npm run check` fails if the committed copy is stale, so run the script after adding photos or posts and commit the JSON). Never read `public/` or `content/` with `fs` directly in code that renders a page.
 - TypeScript strict mode enabled — never use `any`
 - All data changes (services, products, projects) require code changes in `lib/` files

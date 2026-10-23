@@ -7,7 +7,8 @@
  * social grid), Services, Projects, Blog posts and Site Settings, with Blog
  * ideas, Job photos and Sent to Buffer when the add-ons are on
  * (lib/addons.ts), and (under Advanced) the older text/photo slots. Edit on
- * the page (14 Oct 2026): the same, clicked on the page itself.
+ * the page (14 Oct 2026): the same, clicked on the page itself; from a
+ * document with a page, its own button opens that page (23 Oct 2026).
  */
 import { defineConfig } from "sanity"
 import { structureTool } from "sanity/structure"
@@ -18,6 +19,8 @@ import { resolve } from "./sanity/presentation"
 import { CONTENT_TOOL, EDIT_ON_THE_PAGE, FIXED_TYPES, MACHINE_TYPES, SINGLETONS, creatable, structure } from "./sanity/structure"
 import { datedPublish } from "./sanity/actions"
 import { ADDONS } from "./lib/addons"
+import { EDIT_ON_THE_PAGE_TOOL } from "./sanity/studio-pages"
+import { EditOnThePageInput } from "./sanity/components/EditOnThePage"
 
 export default defineConfig({
   name: "square-one",
@@ -44,6 +47,12 @@ export default defineConfig({
     // only with the add-ons on (lib/addons.ts).
     templates: (templates) => templates.filter((t) => creatable(t.schemaType, ADDONS)),
   },
+  // Every document with a page of its own gets an Edit on the page button
+  // above its fields, opening that page (23 Oct 2026,
+  // sanity/components/EditOnThePage.tsx); every other input is unchanged.
+  form: {
+    components: { input: EditOnThePageInput },
+  },
   document: {
     comments: { enabled: false },
     actions: (actions, { schemaType }) => {
@@ -62,7 +71,7 @@ export default defineConfig({
     // (Vision) was taken out the same day: it is a developer's tool, and
     // the office's Studio should hold only what they edit.
     presentationTool({
-      name: "edit-on-the-page",
+      name: EDIT_ON_THE_PAGE_TOOL,
       title: EDIT_ON_THE_PAGE,
       previewUrl: { previewMode: { enable: "/api/draft-mode/enable", disable: "/api/draft-mode/disable" } },
       resolve,
