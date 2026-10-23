@@ -17,6 +17,7 @@ import { editAttr } from "../sanity/lib/client"
 import { fitVars } from "../lib/type"
 import { pageTitle, clampDescription } from "../lib/seo"
 import { scriptJson } from "../components/JsonLd"
+import { wordsIn } from "../lib/blog"
 import { bodyCheck, copyCheck, headingCheck, paragraphsCheck } from "../sanity/schemaTypes/style"
 
 let failures = 0
@@ -87,6 +88,13 @@ async function main() {
     assert.equal(clampDescription(marked("A short summary.")), "A short summary.")
     const json = scriptJson({ name: marked("Square One Paving"), nested: [{ text: marked("Crosswalks") }] })
     assert.equal(json, scriptJson({ name: "Square One Paving", nested: [{ text: "Crosswalks" }] }))
+  })
+
+  await check("a marked post reads as long as the plain one: its reading time counts words, not marks", () => {
+    const block = (text: string) => ({ _type: "block", _key: "a", style: "normal", markDefs: [], children: [{ _type: "span", _key: "b", text, marks: [] }] })
+    const words = "BC's climate is not forgiving, and every driveway we install is built for it"
+    assert.equal(wordsIn([block(marked(words))] as never), wordsIn([block(words)] as never))
+    assert.equal(wordsIn([block(words)] as never), 14)
   })
 
   await check("structured data is still escaped", () => {

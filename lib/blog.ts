@@ -4,7 +4,7 @@ import matter from "gray-matter"
 import { heroFor } from "./gallery"
 import { ledeOverride } from "./blog-ledes"
 import { plainCase } from "./text"
-import { groq } from "next-sanity"
+import { groq, stegaClean } from "next-sanity"
 import type { PortableTextBlock } from "@portabletext/types"
 import { editAttr, inDraftMode, sanityFetch, urlFor, type SanityImageSource } from "@/sanity/lib/client"
 import { focalPosition, type SanityCrop, type SanityHotspot } from "./focal"
@@ -130,11 +130,16 @@ interface CmsPostDoc {
   body?: PortableTextBlock[]
 }
 
-function wordsIn(blocks: PortableTextBlock[] | undefined): number {
+/**
+ * A post's words, for its reading time. Cleaned of Edit on the page's
+ * invisible marks first (23 Oct 2026): the marks hold U+FEFF, which counts as
+ * a space, so a five-minute post read "44 min read" in the preview.
+ */
+export function wordsIn(blocks: PortableTextBlock[] | undefined): number {
   let n = 0
   for (const b of blocks ?? []) {
     if (b._type !== "block" || !Array.isArray(b.children)) continue
-    for (const c of b.children as { text?: string }[]) n += (c.text ?? "").split(/\s+/).filter(Boolean).length
+    for (const c of b.children as { text?: string }[]) n += stegaClean(c.text ?? "").split(/\s+/).filter(Boolean).length
   }
   return n
 }
