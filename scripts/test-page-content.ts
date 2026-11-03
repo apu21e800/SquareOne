@@ -14,6 +14,7 @@ import { HERO_HEADLINE, HERO_HEADLINE_END, HERO_LINE, HERO_SLIDES } from "../lib
 import { mergeHome, mergeOpener, type PageHeroDoc } from "../lib/page-content"
 import { mergeWork, photoPath, type GalleryPhotoDoc } from "../lib/work-cms"
 import { getWork } from "../lib/work"
+import { pinnedFirst } from "../lib/pin"
 
 let failures = 0
 function check(name: string, fn: () => void) {
@@ -174,6 +175,40 @@ check("a pasted address in any form reduces to the site's path", () => {
   assert.equal(photoPath("/images/a%20b.jpg"), "/images/a b.jpg")
   assert.equal(photoPath("images/a b.jpg"), "/images/a b.jpg")
   assert.equal(photoPath("https://www.squareonepaving.com/images/a%20b.jpg"), "/images/a b.jpg")
+})
+
+console.log("the pinned post (/blog; the home feed's three, kept for its return)")
+const post = (slug: string, date: string, pin?: { pinnedAt?: string }) => ({ slug, title: slug, date, ...(pin ? { pinned: true, ...pin } : {}) })
+const newestFirst = [post("e", "2026-11-03"), post("d", "2026-10-30"), post("c", "2026-10-22"), post("b", "2026-10-15"), post("a", "2026-09-30")]
+check("no pin: the order is the newest first, as before, and nothing reads as pinned", () => {
+  const listed = pinnedFirst(newestFirst)
+  assert.deepEqual(listed.map((p) => p.slug), ["e", "d", "c", "b", "a"])
+  assert.ok(listed.every((p) => !p.pinned))
+})
+check("one pin: that post first with the label, the rest in their order, never twice", () => {
+  const posts = [newestFirst[0], newestFirst[1], post("c", "2026-10-22", { pinnedAt: "2026-11-01T17:00:00.000Z" }), newestFirst[3], newestFirst[4]]
+  const listed = pinnedFirst(posts)
+  assert.deepEqual(listed.map((p) => p.slug), ["c", "e", "d", "b", "a"])
+  assert.deepEqual(listed.map((p) => Boolean(p.pinned)), [true, false, false, false, false])
+  assert.equal(new Set(listed.map((p) => p.slug)).size, posts.length)
+  // The home page's three: the pin and the two newest others.
+  assert.deepEqual(listed.slice(0, 3).map((p) => p.slug), ["c", "e", "d"])
+})
+check("two pins: the newest pin goes on top, and the older one reads as an ordinary post in its place", () => {
+  const posts = [newestFirst[0], post("d", "2026-10-30", { pinnedAt: "2026-10-31T09:00:00.000Z" }), newestFirst[2], post("b", "2026-10-15", { pinnedAt: "2026-11-02T09:00:00.000Z" }), newestFirst[4]]
+  const listed = pinnedFirst(posts)
+  assert.deepEqual(listed.map((p) => p.slug), ["b", "e", "d", "c", "a"])
+  assert.deepEqual(listed.map((p) => Boolean(p.pinned)), [true, false, false, false, false])
+})
+check("a pin with no stamp counts from its date, so a stamped pin made since wins", () => {
+  const posts = [post("e", "2026-11-03", {}), newestFirst[1], post("a", "2026-09-30", { pinnedAt: "2026-11-03T20:00:00.000Z" })]
+  assert.deepEqual(pinnedFirst(posts).map((p) => p.slug), ["a", "e", "d"])
+})
+check("the list it was given is left as it was", () => {
+  const posts = [newestFirst[0], post("c", "2026-10-22", { pinnedAt: "2026-11-01T17:00:00.000Z" })]
+  pinnedFirst(posts)
+  assert.deepEqual(posts.map((p) => p.slug), ["e", "c"])
+  assert.equal(posts[1].pinned, true)
 })
 
 if (failures) {

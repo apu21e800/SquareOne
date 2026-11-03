@@ -1,5 +1,6 @@
 import Link from "next/link"
 import Frame from "@/components/ui/Frame"
+import PinnedLabel from "@/components/ui/PinnedLabel"
 import { Section } from "@/components/ui/Container"
 import type { BlogPostMeta } from "@/lib/blog"
 
@@ -39,7 +40,8 @@ function formatDate(value: string): string {
  * the same three posts as a hairline list — a small frame, the title, one
  * line of category and date — no cards. Named for what the posts are, not
  * for the route they live on (Vern, 19 Sept: "we say 'from the blog' but
- * it's not the blog"); /blog's own H1 says the same.
+ * it's not the blog"); /blog's own H1 says the same. A pinned post comes
+ * first with a small "Pinned" over its title (3 Nov 2026, lib/pin.ts).
  */
 export default function BlogFeedGrid({ posts }: { posts: BlogPostMeta[] }) {
   return (
@@ -56,6 +58,7 @@ export default function BlogFeedGrid({ posts }: { posts: BlogPostMeta[] }) {
             <Link href={`/blog/${post.slug}`} aria-label={post.title} className="absolute inset-0 z-[2]" />
             <Frame src={post.featured_image || FALLBACK_IMAGE} alt="" aspect="aspect-[3/2]" sizes="132px" position={post.featured_image ? post.featured_position : undefined} />
             <div className="min-w-0">
+              {post.pinned && <PinnedLabel className="mb-2" />}
               <h3 className="[text-wrap:pretty]">{post.title}</h3>
               <p className="mt-2 text-[15px] italic text-ink-muted">
                 {post.category ? `${post.category} · ` : ""}

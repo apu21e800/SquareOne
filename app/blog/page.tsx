@@ -3,6 +3,7 @@ import IndexImageHero from "@/components/IndexImageHero"
 import OpenerTitle from "@/components/ui/OpenerTitle"
 import { getPageOpener } from "@/lib/page-content"
 import { getPosts } from "@/lib/blog"
+import { pinnedFirst } from "@/lib/pin"
 import BlogFilterClient from "@/components/blog/BlogFilterClient"
 import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
@@ -46,7 +47,8 @@ export const metadata: Metadata = {
 export default async function BlogPage() {
   // The opener, with whatever the Studio says on top (lib/page-content.ts, 9 Oct 2026).
   const o = await getPageOpener("/blog")
-  const posts = await getPosts()
+  // The pinned post first, as the lead (lib/pin.ts); then every other post, newest first.
+  const posts = pinnedFirst(await getPosts())
 
   return (
     <main className="bg-[color:var(--surface)]">
