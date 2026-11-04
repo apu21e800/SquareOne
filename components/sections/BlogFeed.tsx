@@ -3,8 +3,8 @@ import { pinnedFirst } from "@/lib/pin"
 import BlogFeedGrid from "./BlogFeedGrid"
 
 /**
- * The home page's three articles. Not on the home page since 28 Sept 2026
- * ("cut the fat"; app/page.tsx); kept, with the pin, for the day it is back.
+ * The home page's three articles: off it from 28 Sept 2026 ("cut the fat")
+ * to 3 Nov 2026 (Vern: "add the blog page section to the homepage").
  */
 export default async function BlogFeed() {
   // The pinned post first (lib/pin.ts), then the newest: three in all.

@@ -10,6 +10,7 @@ import ProjectsPreview from "@/components/sections/ProjectsPreview"
 import DrivewaysBand from "@/components/sections/DrivewaysBand"
 import VapourBand from "@/components/sections/VapourBand"
 import FollowTheWork from "@/components/sections/FollowTheWork"
+import BlogFeed from "@/components/sections/BlogFeed"
 import { getSiteSettings, getSlots, getSocialPosts, slotImage, slotText } from "@/lib/cms"
 import { getHomeCopy, getHomeHero } from "@/lib/page-content"
 import Heading from "@/components/ui/Heading"
@@ -78,8 +79,13 @@ export const metadata: Metadata = {
  * band and on /about (lib/clients.ts) — the trust strip is retired.
  *
  * ServicesGrid and ProjectsPreview carry #services / #work on their own
- * <section>. BlogFeedGrid does not carry #journal, so the anchor lives here;
- * its scroll-margin clears the 72px sticky nav bar.
+ * <section>, BlogFeedGrid #journal on its Section.
+ *
+ * The order as rendered since 3 Nov 2026 (the 28 Sept cut, plus the
+ * articles band back): hero, the proof line, services (white), selected
+ * work, four steps (paper), the audiences (stone), driveways (white),
+ * patterns and colours (warm), vapour (stone), articles (warm), the crews
+ * (white), the close in the footer (warm), the footer (slate).
  */
 export default async function Home() {
   // CMS overlays (lib/cms.ts): every reader falls back to the built-in copy
@@ -114,8 +120,8 @@ export default async function Home() {
           for, the two offers people come for (driveways, vapour), the
           patterns and colours, the crews on Instagram, then the quote
           (the close band in the footer). "Where the work goes" and the
-          blog feed came off the home page; both are one click away in the
-          menu. */}
+          blog feed came off the home page that day; the articles came back
+          on 3 Nov 2026 (below), "Where the work goes" is in the menu. */}
       {/* The words of every band below are the Studio's Home page, the site's
           own where a field is blank (lib/page-copy.ts, 14 Oct 2026). */}
       <ServicesGrid words={words.services} cards={words.serviceCards} />
@@ -139,6 +145,12 @@ export default async function Home() {
       <MaterialsBand words={words.materials} />
 
       <VapourBand words={words.vapour} />
+
+      {/* 3 Nov 2026 (Vern: "add the blog page section to the homepage"):
+          the articles band back, the three newest with a pinned post first
+          (lib/pin.ts), between the vapour band on stone and the crews on
+          white. It carries #journal itself (components/sections/BlogFeedGrid.tsx). */}
+      <BlogFeed />
 
       <FollowTheWork settings={settings} tiles={tiles} words={words.social} />
     </main>

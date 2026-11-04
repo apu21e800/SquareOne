@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   // One separator: the root template adds " | Square One Paving".
   title: "For Specifiers: Drawings & Samples",
   description: clampDescription(
-    "For landscape architects, engineers and municipal specifiers in BC: StreetPrint template sheets, the StreetBond colour chart, specifications, sample boards and installed precedent.",
+    "For architects, landscape architects, engineers and municipal specifiers in BC: StreetPrint template sheets, the StreetBond colour chart, specifications, sample boards and installed precedent.",
   ),
   keywords: [
     "decorative pavement specification BC",

@@ -448,9 +448,9 @@ async function main() {
     assert.equal(pin.type, "boolean")
     assert.equal(pin.title, "Pin to top")
     assert.equal(pin.initialValue, false)
-    // Vern's words named the home page's articles section too. The home page
-    // has had none since 28 Sept 2026, so the switch promises only the blog
-    // page until the section (components/sections/BlogFeed.tsx) is back on it.
+    // Vern's words name the home page's articles section (back since 3 Nov
+    // 2026; it was off from 28 Sept). Should the band come off again, the
+    // switch and the guide must stop promising it: this check reads app/page.tsx.
     const home = readFileSync(path.join(process.cwd(), "app/page.tsx"), "utf8").replace(/\/\*[\s\S]*?\*\//g, "")
     const homeFeed = /<BlogFeed\b/.test(home)
     assert.equal(

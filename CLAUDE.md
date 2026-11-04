@@ -39,6 +39,26 @@ FAQPage / BreadcrumbList / Service JSON-LD via `components/JsonLd.tsx`; `/llms.t
   file is `public/800ef1ca999f919c8042b3de6d86c0cd.txt`; it is public by design.
 - The sitemap gives a lastmod only where the site knows one (blog posts);
   never the build time. robots.txt lets every crawler in, AI search included.
+- The sitemap and the site's own search index (`/api/search-index`,
+  lib/search-index.ts `buildSiteSearchIndex`) rebuild hourly and read the
+  Studio's posts and projects (3 Nov 2026). Until then both were made once
+  at deploy from the file record: a post Sydney published was live within a
+  minute, absent from the sitemap for days, and never in the search box.
+  The index's folder walks go through lib/disk.ts, so the hourly rebuild on
+  a server without public/ comes out the same as the build's.
+- Two internal harnesses, /type-test and /mobile-preview, came off the site
+  the same day (they were public, only hidden from Google).
+
+## For specifiers (3 Nov 2026)
+Vern: "appeal to architects". /specifiers is linked again: the last row of
+the Who-we-work-with menu ("Architects & engineers", components/Nav.tsx
+SPECIFIERS_GROUP), the footer's Company column, and a fourth card on the
+home page's audience band ("Architects and engineers", lib/page-copy.ts
+`audienceCards.specifiers`, a Studio field like the other three). The
+client's 2 Oct 2026 note had taken it off ("for specifiers section is not
+required"; Vern: "hide it for now"). The home page's articles band
+(components/sections/BlogFeed.tsx, three newest, the pinned post first) is
+back the same day, between the vapour band and the crews.
 
 ## Driveway composer
 `components/DrivewayComposer.tsx` — pattern × colour sample board (drawn, not photographed). The file exists but renders nowhere as of 26 Sept 2026: no page imports it (held back from /driveways on 19 Sept; the home materials board links to /patterns and the colour chart instead). Do not build on it; leaving or moving it is the maintainer's call (docs/OWN-COMPANY-BRIEF.md §2).

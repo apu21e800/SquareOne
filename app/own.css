@@ -1618,6 +1618,12 @@ h1 em, .display-xl em { letter-spacing: -0.008em; }
 .foot-lines > div:first-child { border-top: 1px solid rgba(255, 255, 255, 0.12); }
 .foot-lines dt { font-family: var(--font-text); font-size: 14px; color: #9BA1A9; }
 .foot-lines > div.foot-mail { grid-template-columns: minmax(0, 1fr); row-gap: 2px; }
+/* Between 900 and 960px the address column is too narrow for a label beside
+   a number (3 Nov 2026 QA: the toll-free line ran 21px past the edge and the
+   page scrolled sideways), so the label sits over the number there. */
+@media (min-width: 900px) and (max-width: 980px) {
+  .foot-lines > div { grid-template-columns: minmax(0, 1fr); row-gap: 2px; }
+}
 .foot-lines dd { margin: 0; font-size: 15.5px; color: #E6E8EB; }
 .foot-num { color: #FFFFFF; text-decoration-color: transparent; }
 .foot-num:hover { color: #FFFFFF; text-decoration-color: var(--accent); }

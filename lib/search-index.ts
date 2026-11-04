@@ -3,18 +3,24 @@ import path from "path"
 
 import { services } from "@/lib/services"
 import { products } from "@/lib/products"
-import { projects } from "@/lib/projects"
+import { projects, type Project } from "@/lib/projects"
+import { getProjects } from "@/lib/projects-cms"
 import { resourceGroups } from "@/lib/resources"
-import { getAllPosts } from "@/lib/blog"
+import { getAllPosts, getPosts, type BlogPostMeta } from "@/lib/blog"
 import { getWork, WORK_APPS } from "@/lib/work"
 import type { SearchEntry } from "@/lib/search-score"
 
 /**
- * Build-time search index — everything the sitewide search can reach:
- * pages, services, products, applications, projects, blog posts, the
- * 90-document specifications library, and imagery. Served frozen by
- * app/api/search-index (force-static), so the fs walking below runs at
- * build, where public/ exists.
+ * The sitewide search index — everything the search can reach: pages,
+ * services, products, applications, projects, blog posts, the
+ * specifications library, and imagery. app/api/search-index serves it and
+ * rebuilds it hourly (3 Nov 2026): buildSiteSearchIndex reads the projects
+ * and the posts as the site shows them, the Studio's version first
+ * (lib/projects-cms.ts, lib/blog.ts), so a post written in the Studio is
+ * found the same hour. Until then the index was frozen at build from the
+ * file record, and the office's own posts were never in it. The fs walking
+ * below goes through lib/disk.ts, so a rebuild on a server without public/
+ * reads the build's snapshot.
  *
  * Imagery comes from two honest sources: lib/work.ts (Square One's own
  * captioned site photography — every project and application photo) and
@@ -194,7 +200,18 @@ const SERVICE_LABEL: Record<string, string> = {
   "vapor-blasting": "Vapour blasting",
 }
 
+/** The index from the file record alone (the build's view; tests use it). */
 export function buildSearchIndex(): SearchEntry[] {
+  return buildIndexFrom(projects, getAllPosts())
+}
+
+/** The index as the site stands: the Studio's projects and posts, the record behind them. */
+export async function buildSiteSearchIndex(): Promise<SearchEntry[]> {
+  const [cmsProjects, posts] = await Promise.all([getProjects(), getPosts()])
+  return buildIndexFrom(cmsProjects, posts)
+}
+
+function buildIndexFrom(projectList: Project[], posts: BlogPostMeta[]): SearchEntry[] {
   const serviceEntries: SearchEntry[] = services.map((s) => ({
     type: "service",
     title: SERVICE_LABEL[s.slug] ?? s.name,
@@ -213,7 +230,7 @@ export function buildSearchIndex(): SearchEntry[] {
     keywords: `${p.category} ${p.shortDescription} ${p.applications.join(" ")}`,
   }))
 
-  const projectEntries: SearchEntry[] = projects.map((p) => ({
+  const projectEntries: SearchEntry[] = projectList.map((p) => ({
     type: "project",
     title: p.title,
     subtitle: [p.city.split(",")[0].trim(), p.systems.join(" + "), p.year].filter(Boolean).join(" · "),
@@ -222,7 +239,7 @@ export function buildSearchIndex(): SearchEntry[] {
     keywords: `${p.excerpt} ${p.application} ${p.region} ${p.artist ?? ""}`,
   }))
 
-  const postEntries: SearchEntry[] = getAllPosts().map((post) => ({
+  const postEntries: SearchEntry[] = posts.map((post) => ({
     type: "post",
     title: post.title,
     subtitle: [post.category, post.date ? new Date(post.date).getFullYear() : ""]

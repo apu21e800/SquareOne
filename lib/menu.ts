@@ -24,6 +24,13 @@ export interface MenuPreview {
 export type MenuPreviews = Record<string, MenuPreview>
 
 const GALLERY_LEADS: MenuPreviews = {
+  // 3 Nov 2026: the specifiers' row in the Who-we-work-with menu (Nav.tsx
+  // SPECIFIERS_GROUP) shows /specifiers' own opener (lib/openers.ts).
+  "/specifiers": {
+    src: "/images/applications/streetscapes/victoria-town-centre-crossing-streetprint-01.jpg",
+    alt: "Brick-red StreetPrint stamped asphalt crossing at the edge of a town centre plaza in Victoria, with shops and trees beyond",
+    caption: "Victoria · Town centre crossing · StreetPrint",
+  },
   "/applications/crosswalks": {
     src: "/images/S1_update_v2/photos/Featured%20image%20options/UBC-crosswalk-3-300dpi.jpg",
     alt: "UBC & Musqueam crosswalk in TrafficPatterns, University Boulevard, UBC, BC",

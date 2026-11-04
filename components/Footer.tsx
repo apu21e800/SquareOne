@@ -42,7 +42,8 @@ interface FooterLink {
 
 /* Two columns of pages, the way the live site set them (2 Oct 2026).
    "For specifiers" came off the same day (Vern: "just hide the specifiers
-   section for now"); the page still answers at /specifiers. */
+   section for now") and came back on 3 Nov 2026 (Vern: "appeal to
+   architects"), under Documents. */
 const PAGES: { label: string; links: FooterLink[] }[] = [
   {
     label: "What we do",
@@ -63,6 +64,7 @@ const PAGES: { label: string; links: FooterLink[] }[] = [
       { label: "Applications", href: "/applications" },
       { label: "Systems we install", href: "/products" },
       { label: "Documents", href: "/resources" },
+      { label: "For specifiers", href: "/specifiers" },
       { label: "Blog", href: "/blog" },
       { label: "About", href: "/about" },
       { label: "Contact", href: "/contact" },

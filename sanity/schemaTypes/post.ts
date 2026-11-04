@@ -144,17 +144,16 @@ export const post = defineType({
     }),
     // Pin to top (3 Nov 2026, Vern; lib/pin.ts). Publish stamps pinnedAt when
     // the post goes out pinned and clears it when it goes out unpinned
-    // (sanity/actions.ts); the site shows the newest pin first. Vern's words
-    // also named the home page's articles section; the home page has had none
-    // since 28 Sept 2026 ("cut the fat"), so the description names the blog
-    // page only. Put the home page back in it if the section comes back
-    // (components/sections/BlogFeed.tsx is ready for it).
+    // (sanity/actions.ts); the site shows the newest pin first, on the home
+    // page's articles band (back since 3 Nov 2026, app/page.tsx) and on
+    // /blog. npm run test:studio keeps this description in step with
+    // whether the home page shows articles. The words are Vern's.
     defineField({
       name: "pinned",
       type: "boolean",
       title: "Pin to top",
       initialValue: false,
-      description: "Shows this article first at the top of the blog page. One pinned article at a time.",
+      description: "Shows this article first on the home page articles section and at the top of the blog page. One pinned article at a time.",
       validation: (r) => r.custom(pinnedElsewhere).warning(),
       group: "content",
     }),

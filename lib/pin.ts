@@ -9,10 +9,10 @@
  * pin first (pinnedFirst); any older pin reads as an ordinary post, and the
  * Studio warns while another post is pinned. Pure: no Sanity, no disk.
  *
- * Where it shows: /blog (app/blog/page.tsx), as the lead. The home page has
- * had no articles section since 28 Sept 2026 ("cut the fat"); its feed
- * (components/sections/BlogFeed.tsx) puts the pin first too, for the day it
- * is back, and then the switch's description should name it again.
+ * Where it shows: /blog (app/blog/page.tsx), as the lead, and the home
+ * page's articles band (components/sections/BlogFeed.tsx), back since 3 Nov
+ * 2026. npm run test:studio keeps the switch's description and the guide
+ * in step with whether the home page shows articles.
  */
 
 export interface Pinnable {

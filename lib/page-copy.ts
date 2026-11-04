@@ -48,7 +48,7 @@ export interface HomeCopy {
   projects: SectionWords
   process: SectionWords
   audiences: SectionWords
-  audienceCards: Record<"municipal" | "commercial" | "homeowners", CardWords>
+  audienceCards: Record<"municipal" | "commercial" | "homeowners" | "specifiers", CardWords>
   driveways: SectionWords
   drivewaysOffer: SectionWords
   materials: SectionWords
@@ -102,6 +102,10 @@ export const HOME_COPY: HomeCopy = {
     municipal: { title: "Municipalities", text: "Crosswalks, intersections, parks and school zones, installed by our own crews." },
     commercial: { title: "Commercial and strata", text: "Entries, parking, plazas and laneways, quoted in writing before anything starts." },
     homeowners: { title: "Homeowners", text: "Brick, cobble or slate, pressed into the driveway you already have." },
+    // 3 Nov 2026 (Vern: "appeal to architects"): the fourth card, back after
+    // the client's 2 Oct note took the specifiers' card off; its lines are
+    // the record's (lib/openers.ts /specifiers, app/specifiers).
+    specifiers: { title: "Architects and engineers", text: "Dimensioned pattern sheets, the colour chart and the specifications, for the drawing and the tender." },
   },
   driveways: {
     label: "Driveways · Vancouver and Victoria",

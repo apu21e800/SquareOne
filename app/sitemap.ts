@@ -14,7 +14,14 @@ const BASE_URL = SITE_URL
  * 14 Oct), which says nothing, and Google stops trusting a sitemap whose
  * dates are always "now". Blog posts keep their own dates. IndexNow
  * (scripts/indexnow-submit.mjs) tells Bing about every deploy instead.
+ *
+ * 3 Nov 2026: rebuilt every hour. A post Sydney published in the Studio
+ * was live within a minute and absent from the sitemap for days, because
+ * this route was made once at deploy; now a new post or project is listed
+ * within the hour.
  */
+export const revalidate = 3600
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
     {

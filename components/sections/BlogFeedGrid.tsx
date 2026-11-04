@@ -1,6 +1,7 @@
 import Link from "next/link"
 import Frame from "@/components/ui/Frame"
 import PinnedLabel from "@/components/ui/PinnedLabel"
+import Heading from "@/components/ui/Heading"
 import { Section } from "@/components/ui/Container"
 import type { BlogPostMeta } from "@/lib/blog"
 
@@ -42,13 +43,16 @@ function formatDate(value: string): string {
  * for the route they live on (Vern, 19 Sept: "we say 'from the blog' but
  * it's not the blog"); /blog's own H1 says the same. A pinned post comes
  * first with a small "Pinned" over its title (3 Nov 2026, lib/pin.ts).
+ * Off the home page from 28 Sept to 3 Nov 2026; back on Vern's word, in
+ * the heading's house shape (a bold head and its lighter ending, as the
+ * other bands), between the vapour band and the crews.
  */
 export default function BlogFeedGrid({ posts }: { posts: BlogPostMeta[] }) {
   return (
     <Section
       id="journal"
       label="Recently written"
-      title="Project stories and guides"
+      title={<Heading words={{ head: "Project stories", tail: "and guides" }} />}
       link={{ href: "/blog", label: "All stories and guides" }}
       tone="warm"
     >

@@ -96,10 +96,11 @@ export const homeSectionFields = [
   section("projects", "Selected work"),
   section("process", "How a job goes"),
   section("audiences", "Who we work with"),
-  cards("audienceCards", "Who we work with: the three cards", [
+  cards("audienceCards", "Who we work with: the four cards", [
     { name: "municipal", title: "Municipalities" },
     { name: "commercial", title: "Commercial and strata" },
     { name: "homeowners", title: "Homeowners" },
+    { name: "specifiers", title: "Architects and engineers" },
   ]),
   section("driveways", "Driveways", true),
   section("drivewaysOffer", "Driveways: the free site visit offer", true),
