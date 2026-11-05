@@ -2083,7 +2083,7 @@ h2.search-group-name:not(.label):not(.eyebrow) { font-size: 17px; letter-spacing
 /* 3 · A page's own label (the line over a heading that opens a page with no
    photograph) is led by the orange square, as an opener's ledger is. */
 .label.label-page::before { background: var(--accent); }
-/* A pinned blog post's "Pinned" (3 Nov 2026, components/ui/PinnedLabel.tsx):
+/* A pinned project's "Pinned" (3 Nov 2026, components/ui/PinnedLabel.tsx):
    the small voice in ink, led by the same orange square, a size smaller. */
 .label.label-pin { color: var(--ink); gap: 8px; }
 .label.label-pin::before { background: var(--accent); width: 8px; height: 8px; }

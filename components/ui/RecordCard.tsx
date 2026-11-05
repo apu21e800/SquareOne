@@ -45,7 +45,7 @@ export interface RecordCardProps {
   priority?: boolean
   /** The Studio's focal point, as CSS object-position (lib/focal.ts). */
   position?: string
-  /** A blog post pinned in the Studio (lib/pin.ts): a small "Pinned" before the kicker. */
+  /** A project pinned in the Studio (lib/pin.ts): a small "Pinned" before the kicker. */
   pinned?: boolean
 }
 

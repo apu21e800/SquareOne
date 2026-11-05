@@ -12,10 +12,6 @@ import { pinOnPublish } from "../lib/pin"
  * that someone publishes by hand stops being scheduled as it goes out:
  * otherwise its next edit would sit in a draft still marked to go by itself,
  * at a time already past, and the daily run would publish a half-made edit.
- *
- * Pin to top (3 Nov 2026, lib/pin.ts): a post that goes out pinned with no
- * stamp is stamped now, and one that goes out unpinned loses its stamp, so
- * the site's newest pin is the one most recently published pinned.
  */
 export function datedPublish(original: DocumentActionComponent): DocumentActionComponent {
   const Action: DocumentActionComponent = (props: DocumentActionProps) => {
@@ -25,11 +21,33 @@ export function datedPublish(original: DocumentActionComponent): DocumentActionC
     return {
       ...result,
       onHandle: () => {
-        const current = (props.draft ?? props.published) as { date?: unknown; scheduled?: unknown; pinned?: unknown; pinnedAt?: unknown } | null
+        const current = (props.draft ?? props.published) as { date?: unknown; scheduled?: unknown } | null
         const date = firstPublishDate(Boolean(props.published), current?.date)
         if (date) patch.execute([{ set: { date } }])
         if (current?.scheduled === true) patch.execute([{ set: { scheduled: false } }, { unset: ["scheduledFor"] }])
-        const pin = pinOnPublish(current)
+        result.onHandle?.()
+      },
+    }
+  }
+  Action.action = original.action
+  return Action
+}
+
+/**
+ * Publish, for projects (5 Nov 2026, lib/pin.ts): a project that goes out
+ * pinned with no stamp is stamped now, and one that goes out unpinned loses
+ * its stamp, so the site's newest pin is the one most recently published
+ * pinned. The patch lands on the draft, then Sanity's own Publish runs.
+ */
+export function pinnedPublish(original: DocumentActionComponent): DocumentActionComponent {
+  const Action: DocumentActionComponent = (props: DocumentActionProps) => {
+    const result = original(props)
+    const { patch } = useDocumentOperation(props.id, props.type)
+    if (!result) return result
+    return {
+      ...result,
+      onHandle: () => {
+        const pin = pinOnPublish((props.draft ?? props.published) as { pinned?: unknown; pinnedAt?: unknown } | null)
         if (pin) patch.execute([pin])
         result.onHandle?.()
       },

@@ -177,38 +177,39 @@ check("a pasted address in any form reduces to the site's path", () => {
   assert.equal(photoPath("https://www.squareonepaving.com/images/a%20b.jpg"), "/images/a b.jpg")
 })
 
-console.log("the pinned post (/blog; the home feed's three, kept for its return)")
-const post = (slug: string, date: string, pin?: { pinnedAt?: string }) => ({ slug, title: slug, date, ...(pin ? { pinned: true, ...pin } : {}) })
-const newestFirst = [post("e", "2026-11-03"), post("d", "2026-10-30"), post("c", "2026-10-22"), post("b", "2026-10-15"), post("a", "2026-09-30")]
-check("no pin: the order is the newest first, as before, and nothing reads as pinned", () => {
+console.log("the pinned project (Selected work's six, /projects)")
+// A project as the lists see it: a slug and, for a pin, Publish's stamp. A
+// project has no date, so an unstamped pin counts from nothing and any
+// stamped pin beats it.
+const project = (slug: string, pin?: { pinnedAt?: string }) => ({ slug, title: slug, ...(pin ? { pinned: true, ...pin } : {}) })
+const newestFirst = [project("e"), project("d"), project("c"), project("b"), project("a")]
+check("no pin: the order is as it came, and nothing reads as pinned", () => {
   const listed = pinnedFirst(newestFirst)
   assert.deepEqual(listed.map((p) => p.slug), ["e", "d", "c", "b", "a"])
   assert.ok(listed.every((p) => !p.pinned))
 })
-check("one pin: that post first with the label, the rest in their order, never twice", () => {
-  const posts = [newestFirst[0], newestFirst[1], post("c", "2026-10-22", { pinnedAt: "2026-11-01T17:00:00.000Z" }), newestFirst[3], newestFirst[4]]
-  const listed = pinnedFirst(posts)
+check("one pin: that project first with the label, the rest in their order, never twice", () => {
+  const projects = [newestFirst[0], newestFirst[1], project("c", { pinnedAt: "2026-11-01T17:00:00.000Z" }), newestFirst[3], newestFirst[4]]
+  const listed = pinnedFirst(projects)
   assert.deepEqual(listed.map((p) => p.slug), ["c", "e", "d", "b", "a"])
   assert.deepEqual(listed.map((p) => Boolean(p.pinned)), [true, false, false, false, false])
-  assert.equal(new Set(listed.map((p) => p.slug)).size, posts.length)
-  // The home page's three: the pin and the two newest others.
-  assert.deepEqual(listed.slice(0, 3).map((p) => p.slug), ["c", "e", "d"])
+  assert.equal(new Set(listed.map((p) => p.slug)).size, projects.length)
 })
-check("two pins: the newest pin goes on top, and the older one reads as an ordinary post in its place", () => {
-  const posts = [newestFirst[0], post("d", "2026-10-30", { pinnedAt: "2026-10-31T09:00:00.000Z" }), newestFirst[2], post("b", "2026-10-15", { pinnedAt: "2026-11-02T09:00:00.000Z" }), newestFirst[4]]
-  const listed = pinnedFirst(posts)
+check("two pins: the newest pin goes on top, and the older one reads as an ordinary project in its place", () => {
+  const projects = [newestFirst[0], project("d", { pinnedAt: "2026-10-31T09:00:00.000Z" }), newestFirst[2], project("b", { pinnedAt: "2026-11-02T09:00:00.000Z" }), newestFirst[4]]
+  const listed = pinnedFirst(projects)
   assert.deepEqual(listed.map((p) => p.slug), ["b", "e", "d", "c", "a"])
   assert.deepEqual(listed.map((p) => Boolean(p.pinned)), [true, false, false, false, false])
 })
-check("a pin with no stamp counts from its date, so a stamped pin made since wins", () => {
-  const posts = [post("e", "2026-11-03", {}), newestFirst[1], post("a", "2026-09-30", { pinnedAt: "2026-11-03T20:00:00.000Z" })]
-  assert.deepEqual(pinnedFirst(posts).map((p) => p.slug), ["a", "e", "d"])
+check("a pin with no stamp yields to any stamped pin", () => {
+  const projects = [project("e", {}), newestFirst[1], project("a", { pinnedAt: "2026-11-03T20:00:00.000Z" })]
+  assert.deepEqual(pinnedFirst(projects).map((p) => p.slug), ["a", "e", "d"])
 })
 check("the list it was given is left as it was", () => {
-  const posts = [newestFirst[0], post("c", "2026-10-22", { pinnedAt: "2026-11-01T17:00:00.000Z" })]
-  pinnedFirst(posts)
-  assert.deepEqual(posts.map((p) => p.slug), ["e", "c"])
-  assert.equal(posts[1].pinned, true)
+  const projects = [newestFirst[0], project("c", { pinnedAt: "2026-11-01T17:00:00.000Z" })]
+  pinnedFirst(projects)
+  assert.deepEqual(projects.map((p) => p.slug), ["e", "c"])
+  assert.equal(projects[1].pinned, true)
 })
 
 if (failures) {

@@ -1,18 +1,16 @@
 /**
- * Pin to top (3 Nov 2026, Vern: "Shows this article first on the home page
- * articles section and at the top of the blog page. One pinned article at a
- * time."). A post's `pinned` switch is the Studio's (sanity/schemaTypes/post.ts);
- * `pinnedAt` is never typed: Publish stamps it when a post goes out pinned
- * and clears it when one goes out unpinned (sanity/actions.ts), and the
- * morning run does the same for a post that goes live by itself
- * (lib/automation/project-posts.ts toPublished). The site shows the newest
- * pin first (pinnedFirst); any older pin reads as an ordinary post, and the
- * Studio warns while another post is pinned. Pure: no Sanity, no disk.
+ * Pin to top (3 Nov 2026, Vern; moved from blog posts to projects on 5 Nov:
+ * "a pinned project leads Selected work on the home page and leads the
+ * /projects page. One pin at a time, newest wins, small Pinned label, never
+ * shown twice"). A project's `pinned` switch is the Studio's
+ * (sanity/schemaTypes/project.ts); `pinnedAt` is never typed: Publish stamps
+ * it when a project goes out pinned and clears it when one goes out unpinned
+ * (sanity/actions.ts pinnedPublish). The site shows the newest pin first
+ * (pinnedFirst); any older pin reads as an ordinary project, and the Studio
+ * warns while another project is pinned. Pure: no Sanity, no disk.
  *
- * Where it shows: /blog (app/blog/page.tsx), as the lead. The home page has
- * had no articles section since 28 Sept 2026 ("cut the fat"); its feed
- * (components/sections/BlogFeed.tsx) puts the pin first too, for the day it
- * is back, and then the switch's description should name it again.
+ * Where it shows: the home page's Selected work
+ * (components/sections/ProjectsPreview.tsx) and /projects (app/projects).
  */
 
 export interface Pinnable {
@@ -26,7 +24,7 @@ export type PinPatch = { set: { pinnedAt: string } } | { unset: ["pinnedAt"] }
 /**
  * What going live does to the pin: pinned with no stamp → stamped now;
  * unpinned with a stamp → the stamp cleared; otherwise nothing, so an edit to
- * a post that stays pinned keeps its place among the pins.
+ * a project that stays pinned keeps its place among the pins.
  */
 export function pinOnPublish(doc: Pinnable | null | undefined, now: Date = new Date()): PinPatch | null {
   const pinned = doc?.pinned === true
@@ -36,18 +34,9 @@ export function pinOnPublish(doc: Pinnable | null | undefined, now: Date = new D
   return null
 }
 
-/** A document as it goes live, with the pin's patch applied (the morning run's publish). */
-export function withPinStamp<T extends object>(doc: T, now: Date = new Date()): T {
-  const patch = pinOnPublish(doc as Pinnable, now)
-  if (!patch) return doc
-  if ("set" in patch) return { ...doc, pinnedAt: patch.set.pinnedAt }
-  const { pinnedAt: _gone, ...rest } = doc as T & Pinnable
-  void _gone
-  return rest as T
-}
-
 interface Listed {
   slug: string
+  /** A dated item's date, the pin's time when it was never stamped. */
   date?: string
   pinned?: boolean
   pinnedAt?: string
@@ -60,15 +49,15 @@ function pinTime(p: Listed): string {
 
 /**
  * The list a visitor reads: the newest pin first, marked `pinned`, then every
- * other post in the order it came, the pinned one not repeated. Every other
- * post reads as unpinned, an older pin included. No pin: the same order.
+ * other item in the order it came, the pinned one not repeated. Every other
+ * item reads as unpinned, an older pin included. No pin: the same order.
  */
-export function pinnedFirst<T extends Listed>(posts: T[]): T[] {
+export function pinnedFirst<T extends Listed>(items: T[]): T[] {
   let top: T | undefined
-  for (const p of posts) {
+  for (const p of items) {
     if (p.pinned !== true) continue
     if (!top || pinTime(p) > pinTime(top)) top = p
   }
-  const rest = posts.filter((p) => p !== top).map((p) => (p.pinned ? { ...p, pinned: false } : p))
+  const rest = items.filter((p) => p !== top).map((p) => (p.pinned ? { ...p, pinned: false } : p))
   return top ? [{ ...top, pinned: true }, ...rest] : rest
 }

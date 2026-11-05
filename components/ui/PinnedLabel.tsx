@@ -1,5 +1,5 @@
 /**
- * The small "Pinned" over the post a Studio editor pinned (lib/pin.ts): the
+ * The small "Pinned" over the project a Studio editor pinned (lib/pin.ts): the
  * site's small voice in ink, led by the orange square a page's own label
  * carries (app/own.css .label-pin). On the home page's articles and on /blog.
  */

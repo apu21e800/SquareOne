@@ -28,7 +28,9 @@ import { services } from "../lib/services"
 import { existsSync, readFileSync } from "node:fs"
 import path from "node:path"
 import { GUIDE_PATH, GUIDE_SOURCE, OFFICE_GUIDE, guideFor, guideText, labelRuns, type OfficeGuideContent } from "../lib/office-guide"
-import { pinnedElsewhere, pinnedElsewhereMessage, post as postSchema } from "../sanity/schemaTypes/post"
+import { post as postSchema } from "../sanity/schemaTypes/post"
+import { project as projectSchema } from "../sanity/schemaTypes/project"
+import { pinnedElsewhere, pinnedElsewhereMessage } from "../sanity/schemaTypes/pin"
 import { pinOnPublish } from "../lib/pin"
 import { lintCopy } from "../lib/automation/style"
 import { schemaTypes } from "../sanity/schemaTypes"
@@ -441,37 +443,29 @@ async function main() {
     for (const t of ["homePage", "siteSettings", "gallerySettings", "service", "socialLog"]) assert.ok(!creatable(t, false) && !creatable(t, true), t)
   })
 
-  await check("a post's \"Pin to top\": a switch, off to start, in Vern's words; its stamp hidden and never typed", () => {
-    const field = (name: string) => (postSchema.fields as unknown as { name: string; type: string; title?: string; initialValue?: unknown; description?: string; hidden?: unknown; readOnly?: unknown }[]).find((f) => f.name === name)
+  await check("a project's \"Pin to top\": a switch, off to start, in Vern's words; its stamp hidden and never typed; the guide says how", () => {
+    const field = (name: string) => (projectSchema.fields as unknown as { name: string; type: string; title?: string; initialValue?: unknown; description?: string; hidden?: unknown; readOnly?: unknown }[]).find((f) => f.name === name)
     const pin = field("pinned")
-    assert.ok(pin, "the post has a pinned field")
+    assert.ok(pin, "the project has a pinned field")
     assert.equal(pin.type, "boolean")
     assert.equal(pin.title, "Pin to top")
     assert.equal(pin.initialValue, false)
-    // Vern's words named the home page's articles section too. The home page
-    // has had none since 28 Sept 2026, so the switch promises only the blog
-    // page until the section (components/sections/BlogFeed.tsx) is back on it.
-    const home = readFileSync(path.join(process.cwd(), "app/page.tsx"), "utf8").replace(/\/\*[\s\S]*?\*\//g, "")
-    const homeFeed = /<BlogFeed\b/.test(home)
-    assert.equal(
-      pin.description,
-      homeFeed
-        ? "Shows this article first on the home page articles section and at the top of the blog page. One pinned article at a time."
-        : "Shows this article first at the top of the blog page. One pinned article at a time.",
-      homeFeed ? "the home page shows articles again: put it back in the switch's description" : "the home page shows no articles: the switch must not promise it",
-    )
-    const guide = JSON.stringify(GUIDE_SOURCE)
-    assert.ok(guide.includes("**Pin to top**"), "the guide says how to pin")
-    assert.equal(/Pin to top[^"]*home page|home page[^"]*Pin to top/.test(guide), homeFeed, "the guide names the home page only while it shows articles")
+    assert.equal(pin.description, "Shows this project first in Selected work on the home page and at the top of the Projects page. One pinned project at a time.")
     const at = field("pinnedAt")
     assert.ok(at && at.type === "datetime" && at.hidden === true && at.readOnly === true, "pinnedAt is stored, hidden and read only")
+    // 5 Nov 2026: the pin moved from posts to projects; a post has no switch.
+    const postFields = (postSchema.fields as unknown as { name: string }[]).map((f) => f.name)
+    assert.ok(!postFields.includes("pinned") && !postFields.includes("pinnedAt"), "a blog post has no Pin to top")
+    const guide = JSON.stringify(GUIDE_SOURCE)
+    assert.match(guide, /under \*\*Projects\*\*, turn on \*\*Pin to top\*\* and press \*\*Publish\*\*/, "the guide says how to pin a project")
+    assert.ok(!/post first[^"]*Pin to top/.test(guide), "the guide no longer pins a post")
   })
 
-  await check("pinning warns while another live post is pinned, naming it, and never stops a Publish", async () => {
+  await check("pinning warns while another live project is pinned, naming it, and never stops a Publish", async () => {
     const asked: { query: string; params: Record<string, unknown> }[] = []
-    const ctx = (other: { title?: string | null } | null, id = "drafts.post-new") =>
+    const ctx = (other: { title?: string | null } | null, id = "drafts.project-new") =>
       ({
-        document: { _id: id, _type: "post" },
+        document: { _id: id, _type: "project" },
         getClient: () => ({
           fetch: async (query: string, params: Record<string, unknown>) => {
             asked.push({ query, params })
@@ -479,19 +473,21 @@ async function main() {
           },
         }),
       }) as never
-    assert.equal(await pinnedElsewhere(false, ctx({ title: "Old pin" })), true, "unpinned: nothing to say")
-    assert.equal(await pinnedElsewhere(undefined, ctx({ title: "Old pin" })), true)
+    const warn = pinnedElsewhere("project")
+    assert.equal(await warn(false, ctx({ title: "Old pin" })), true, "unpinned: nothing to say")
+    assert.equal(await warn(undefined, ctx({ title: "Old pin" })), true)
     assert.equal(asked.length, 0, "and nothing asked of Sanity")
-    assert.equal(await pinnedElsewhere(true, ctx(null)), true, "the only pin: nothing to say")
-    const said = await pinnedElsewhere(true, ctx({ title: "Old pin" }))
+    assert.equal(await warn(true, ctx(null)), true, "the only pin: nothing to say")
+    const said = await warn(true, ctx({ title: "Old pin" }))
     assert.ok(typeof said === "string" && said.includes('"Old pin" is pinned already'), String(said))
     const last = asked.at(-1)!
-    assert.equal(last.params.id, "post-new", "its own post is left out, by its published id")
-    assert.match(last.query, /pinned == true/)
-    assert.match(last.query, /!\(_id in path\("drafts\.\*\*"\)\)/, "only live posts count")
-    assert.ok(typeof pinnedElsewhereMessage({ title: "" }) === "string" && !String(pinnedElsewhereMessage({ title: "" })).includes('""'), "an untitled post reads as another post")
+    assert.equal(last.params.id, "project-new", "its own project is left out, by its published id")
+    assert.equal(last.params.type, "project", "only projects count")
+    assert.match(last.query, /_type == \$type && pinned == true/)
+    assert.match(last.query, /!\(_id in path\("drafts\.\*\*"\)\)/, "only live projects count")
+    assert.ok(typeof pinnedElsewhereMessage({ title: "" }) === "string" && !String(pinnedElsewhereMessage({ title: "" })).includes('""'), "an untitled project reads as another project")
     // A warning, so Publish still goes ahead.
-    const field = (postSchema.fields as unknown as { name: string; validation?: (r: unknown) => unknown }[]).find((f) => f.name === "pinned")!
+    const field = (projectSchema.fields as unknown as { name: string; validation?: (r: unknown) => unknown }[]).find((f) => f.name === "pinned")!
     let level = ""
     const rule: Record<string, unknown> = {}
     rule.custom = () => rule
@@ -502,17 +498,21 @@ async function main() {
     for (const line of [String(said), String(pinnedElsewhereMessage({ title: "" }))]) assert.deepEqual(lintCopy(line).map((i) => i.message), [], line)
   })
 
-  await check("Publish stamps a pin as it goes out: pinned and unstamped gets now, unpinned loses its stamp, a kept pin keeps its place", () => {
+  await check("Publish stamps a project's pin as it goes out: pinned and unstamped gets now, unpinned loses its stamp, a kept pin keeps its place", () => {
     const now = new Date("2026-11-03T18:00:00.000Z")
     assert.deepEqual(pinOnPublish({ pinned: true }, now), { set: { pinnedAt: "2026-11-03T18:00:00.000Z" } })
     assert.deepEqual(pinOnPublish({ pinned: true, pinnedAt: "" }, now), { set: { pinnedAt: "2026-11-03T18:00:00.000Z" } })
-    assert.equal(pinOnPublish({ pinned: true, pinnedAt: "2026-10-30T10:00:00.000Z" }, now), null, "an edit to a pinned post keeps its stamp")
+    assert.equal(pinOnPublish({ pinned: true, pinnedAt: "2026-10-30T10:00:00.000Z" }, now), null, "an edit to a pinned project keeps its stamp")
     assert.deepEqual(pinOnPublish({ pinned: false, pinnedAt: "2026-10-30T10:00:00.000Z" }, now), { unset: ["pinnedAt"] })
     assert.equal(pinOnPublish({ pinned: false }, now), null)
-    assert.equal(pinOnPublish({}, now), null, "a post from before the switch")
+    assert.equal(pinOnPublish({}, now), null, "a project from before the switch")
     assert.equal(pinOnPublish(null, now), null)
     const actions = readFileSync(path.join(process.cwd(), "sanity/actions.ts"), "utf8")
-    assert.ok(/const pin = pinOnPublish\(current\)\s*\n\s*if \(pin\) patch\.execute\(\[pin\]\)\s*\n\s*result\.onHandle/.test(actions), "the post's Publish stamps the pin before Sanity's own Publish runs")
+    assert.ok(/export function pinnedPublish[\s\S]*const pin = pinOnPublish\(\(props\.draft \?\? props\.published\)[\s\S]*if \(pin\) patch\.execute\(\[pin\]\)\s*\n\s*result\.onHandle/.test(actions), "the project's Publish stamps the pin before Sanity's own Publish runs")
+    const dated = actions.slice(actions.indexOf("export function datedPublish"), actions.indexOf("export function pinnedPublish"))
+    assert.ok(dated.length > 0 && !/pinOnPublish/.test(dated), "a post's Publish no longer stamps a pin")
+    const config = readFileSync(path.join(process.cwd(), "sanity.config.ts"), "utf8")
+    assert.ok(/schemaType === "project"\) return actions\.map\(\(a\) => \(a\.action === "publish" \? pinnedPublish\(a\) : a\)\)/.test(config), "the Studio wires pinnedPublish to a project's Publish")
   })
 
   await check("a post's \"Goes live by itself\" shows only with the add-ons, and when hidden never stops a Publish", async () => {
