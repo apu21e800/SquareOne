@@ -12,9 +12,7 @@ import RecordCard from "@/components/ui/RecordCard"
  * categories and tags are tested against, so it changes only with them.
  *
  * 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.7): the lead is a hairline
- * row, the rest a grid of frames with their captions under them. The posts
- * come pinned first (app/blog/page.tsx, lib/pin.ts), so a pinned post is the
- * lead under any filter it matches, with its "Pinned" label.
+ * row, the rest a grid of frames with their captions under them.
  */
 const TOPICS: ReadonlyArray<{ label: string; match: string }> = [
   { label: "Municipal", match: "Municipal" },
@@ -130,7 +128,6 @@ export default function BlogFilterClient({ posts }: Props) {
                 title={lead.title}
                 description={lead.description}
                 meta={lead.date ? formatDate(lead.date) : undefined}
-                pinned={lead.pinned}
               />
             </div>
           )}
@@ -148,7 +145,6 @@ export default function BlogFilterClient({ posts }: Props) {
                     title={post.title}
                     description={post.description}
                     meta={post.date ? formatDate(post.date) : undefined}
-                    pinned={post.pinned}
                   />
                 </li>
               ))}

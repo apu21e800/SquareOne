@@ -56,9 +56,9 @@ SPECIFIERS_GROUP), the footer's Company column, and a fourth card on the
 home page's audience band ("Architects and engineers", lib/page-copy.ts
 `audienceCards.specifiers`, a Studio field like the other three). The
 client's 2 Oct 2026 note had taken it off ("for specifiers section is not
-required"; Vern: "hide it for now"). The home page's articles band
-(components/sections/BlogFeed.tsx, three newest, the pinned post first) is
-back the same day, between the vapour band and the crews.
+required"; Vern: "hide it for now"). The home page's articles band came
+back the same day and went again on 5 Nov (Vern: "Projects / Selected work
+already covers it"); components/sections/BlogFeed.tsx stays unused.
 
 ## Driveway composer
 `components/DrivewayComposer.tsx` — pattern × colour sample board (drawn, not photographed). The file exists but renders nowhere as of 26 Sept 2026: no page imports it (held back from /driveways on 19 Sept; the home materials board links to /patterns and the colour chart instead). Do not build on it; leaving or moving it is the maintainer's call (docs/OWN-COMPANY-BRIEF.md §2).
@@ -424,6 +424,13 @@ tags: ["stamped asphalt", "crosswalks", "bc"]
   fallback). For a slug the Studio also has, the Studio's fields win, so
   edit there, not in the file. Extra photographs can still go in
   `/public/images/projects/[project-slug]/`.
+- **Pin to top** (5 Nov 2026, Vern; lib/pin.ts): a project's switch in the
+  Studio. Publish stamps `pinnedAt` (sanity/actions.ts `pinnedPublish`);
+  the newest pin leads Selected work on the home page and /projects with a
+  small "Pinned" label (`pinnedFirst`), never twice, and the Studio warns
+  while another live project is pinned. Blog posts have no pin (it was
+  built on posts on 3 Nov and moved the same week). `npm run test:studio`,
+  `test:projects`, `test:pages`.
 
 ### Services
 - Add to `lib/services.ts` → `services[]` array (rarely changes — only 4 core services)

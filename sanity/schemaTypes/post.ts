@@ -3,7 +3,6 @@ import { ICONS } from "../icons"
 import { bodyCheck, copyCheck, headingCheck } from "./style"
 import { officeDate } from "../lib/publish-date"
 import { ADDONS } from "../../lib/addons"
-import { apiVersion } from "../env"
 
 /**
  * New writing (dated from 1 Oct 2026) can't be published without a title, a
@@ -34,30 +33,6 @@ const wanted =
   (message: string): CustomValidator<unknown> =>
   (value, ctx) =>
     empty(value) && imported(ctx.document) ? message : true
-
-/**
- * Pin to top (3 Nov 2026, lib/pin.ts): one pinned post at a time. The site
- * shows the newest pin first, so a second pin is never an error; the Studio
- * warns while another live post is pinned, naming it.
- */
-export function pinnedElsewhereMessage(other: { title?: string | null } | null | undefined): string | true {
-  if (!other) return true
-  const title = other.title?.trim()
-  return title
-    ? `"${title}" is pinned already. Publish this one pinned and it goes on top instead; then turn Pin to top off on "${title}" so only one stays pinned.`
-    : "Another post is pinned already. Publish this one pinned and it goes on top instead; then turn Pin to top off on that one so only one stays pinned."
-}
-export const pinnedElsewhere: CustomValidator<boolean | undefined> = async (value, ctx) => {
-  if (value !== true) return true
-  const id = (ctx.document?._id ?? "").replace(/^drafts\./, "").replace(/^versions\.[^.]+\./, "")
-  const other = await ctx
-    .getClient({ apiVersion })
-    .fetch<{ title?: string | null } | null>(
-      `*[_type == "post" && pinned == true && !(_id in path("drafts.**")) && !(_id in path("versions.**")) && _id != $id] | order(coalesce(pinnedAt, date) desc)[0]{ title }`,
-      { id },
-    )
-  return pinnedElsewhereMessage(other)
-}
 
 /** A blog post — the same fields the file-based posts carry, plus a body. */
 export const post = defineType({
@@ -140,30 +115,6 @@ export const post = defineType({
       hidden: ({ parent }) => !ADDONS || !(parent as { scheduled?: boolean } | undefined)?.scheduled,
       validation: (r) =>
         r.custom((value, ctx) => (ADDONS && (ctx.parent as { scheduled?: boolean } | undefined)?.scheduled && !value ? "Say when it should go live, or turn \"Goes live by itself\" off" : true)),
-      group: "content",
-    }),
-    // Pin to top (3 Nov 2026, Vern; lib/pin.ts). Publish stamps pinnedAt when
-    // the post goes out pinned and clears it when it goes out unpinned
-    // (sanity/actions.ts); the site shows the newest pin first, on the home
-    // page's articles band (back since 3 Nov 2026, app/page.tsx) and on
-    // /blog. npm run test:studio keeps this description in step with
-    // whether the home page shows articles. The words are Vern's.
-    defineField({
-      name: "pinned",
-      type: "boolean",
-      title: "Pin to top",
-      initialValue: false,
-      description: "Shows this article first on the home page articles section and at the top of the blog page. One pinned article at a time.",
-      validation: (r) => r.custom(pinnedElsewhere).warning(),
-      group: "content",
-    }),
-    defineField({
-      name: "pinnedAt",
-      type: "datetime",
-      title: "Pinned at",
-      description: "Set by Publish when the post goes out pinned; the newest pin shows first.",
-      readOnly: true,
-      hidden: true,
       group: "content",
     }),
     defineField({

@@ -59,7 +59,6 @@ import { APPLICATION_OPTIONS, PROJECT_STORIES_TAG, SERVICE_OPTIONS, SYSTEM_OPTIO
 import { tagPasses } from "@/lib/automation/style"
 import type { Claude, Mailer, SanityDoc, Store } from "@/lib/automation/services"
 import { vancouverZone } from "@/lib/bc-time"
-import { withPinStamp } from "@/lib/pin"
 
 /** The daily run's hour (vercel.json, social-drafts): the time a scheduled post goes live. 7 a.m. in Vancouver all year: BC keeps UTC-7 from 1 November 2026 (tzdata 2026b). */
 export const RUN_HOUR_UTC = 14
@@ -382,7 +381,7 @@ export interface ScheduledDraft {
   [key: string]: unknown
 }
 
-/** What toPublished writes: the draft's fields, dated and no longer scheduled, the pin stamped as Publish would (lib/pin.ts). */
+/** What toPublished writes: the draft's fields, dated and no longer scheduled. */
 export type LiveDocument = SanityDoc & { scheduled: false; date: string; editorNotes: string }
 
 /**
@@ -401,8 +400,7 @@ export function toPublished(draft: ScheduledDraft, now: Date, liveDate?: string 
   void scheduled
   void date
   const notes = [`${liveDate ? "Edit published" : "Published"} by the morning run, as scheduled, ${vancouverWhen(now.toISOString())}.`, editorNotes?.trim() ?? ""].filter(Boolean).join("\n\n")
-  const live: LiveDocument = { ...rest, _id: draft._id.replace(/^drafts\./, ""), _type: draft._type, scheduled: false, date: liveDate || pacificDate(now), editorNotes: notes }
-  return withPinStamp(live, now)
+  return { ...rest, _id: draft._id.replace(/^drafts\./, ""), _type: draft._type, scheduled: false, date: liveDate || pacificDate(now), editorNotes: notes }
 }
 
 /** Posts dated before this are the library imported from the old site (sanity/schemaTypes/post.ts NEW_WRITING_FROM): Studio only warns about their photo and Section. */
