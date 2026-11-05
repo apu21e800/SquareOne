@@ -56,9 +56,9 @@ SPECIFIERS_GROUP), the footer's Company column, and a fourth card on the
 home page's audience band ("Architects and engineers", lib/page-copy.ts
 `audienceCards.specifiers`, a Studio field like the other three). The
 client's 2 Oct 2026 note had taken it off ("for specifiers section is not
-required"; Vern: "hide it for now"). The home page's articles band
-(components/sections/BlogFeed.tsx, three newest, the pinned post first) is
-back the same day, between the vapour band and the crews.
+required"; Vern: "hide it for now"). The home page's articles band came
+back the same day and went again on 5 Nov (Vern: "Projects / Selected work
+already covers it"); components/sections/BlogFeed.tsx stays unused.
 
 ## Driveway composer
 `components/DrivewayComposer.tsx` — pattern × colour sample board (drawn, not photographed). The file exists but renders nowhere as of 26 Sept 2026: no page imports it (held back from /driveways on 19 Sept; the home materials board links to /patterns and the colour chart instead). Do not build on it; leaving or moving it is the maintainer's call (docs/OWN-COMPANY-BRIEF.md §2).
