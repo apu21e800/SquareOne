@@ -11,6 +11,7 @@ import "./test-env"
 import assert from "node:assert/strict"
 import { projects as RECORD } from "../lib/projects"
 import { mergeProjects, type ProjectDoc as Doc } from "../lib/projects-cms"
+import { pinnedFirst } from "../lib/pin"
 
 let failures = 0
 function check(name: string, fn: () => void) {
@@ -94,6 +95,22 @@ check("paragraphs typed in the Studio replace the record's", () => {
   const docs = seeded()
   docs[0] = { ...docs[0], story: ["One.", "  ", "Two."] }
   assert.deepEqual(mergeProjects(docs, RECORD).find((p) => p.slug === RECORD[0].slug)!.story, ["One.", "Two."])
+})
+check("Pin to top (lib/pin.ts): the Studio's switch and Publish's stamp come through; the record has none; the pinned one leads", () => {
+  const docs = seeded()
+  docs[2] = { ...docs[2], pinned: true, pinnedAt: "2026-11-05T18:00:00.000Z" }
+  const out = mergeProjects(docs, RECORD)
+  const pinned = out.find((p) => p.slug === RECORD[2].slug)!
+  assert.equal(pinned.pinned, true)
+  assert.equal(pinned.pinnedAt, "2026-11-05T18:00:00.000Z")
+  assert.ok(out.filter((p) => p.slug !== RECORD[2].slug).every((p) => p.pinned === undefined && p.pinnedAt === undefined), "no other project is pinned")
+  assert.ok(RECORD.every((p) => p.pinned === undefined), "the record never carries a pin")
+  const listed = pinnedFirst(out)
+  assert.equal(listed[0].slug, RECORD[2].slug)
+  assert.equal(listed.length, out.length, "never twice")
+  // Off in the Studio (or unstamped) and nothing changes.
+  docs[2] = { ...docs[2], pinned: false, pinnedAt: null }
+  assert.equal(mergeProjects(docs, RECORD).find((p) => p.slug === RECORD[2].slug)!.pinned, undefined)
 })
 check("a blog post picked in the Studio replaces the record's link", () => {
   const docs = seeded()

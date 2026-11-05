@@ -3,6 +3,8 @@ import { Section } from "@/components/ui/Container"
 import { getProjects } from "@/lib/projects-cms"
 import { photoMetaFor } from "@/lib/projects"
 import Heading from "@/components/ui/Heading"
+import PinnedLabel from "@/components/ui/PinnedLabel"
+import { pinnedFirst } from "@/lib/pin"
 import { HOME_COPY, type SectionWords } from "@/lib/page-copy"
 
 /** "Vancouver, BC" → "Vancouver" — the caption carries the city, not the province. */
@@ -42,7 +44,15 @@ export default async function ProjectsPreview({ words = HOME_COPY.projects }: { 
   const curated = FEATURED_ORDER.map((slug) =>
     projects.find((p) => p.slug === slug),
   ).filter((p): p is NonNullable<typeof p> => Boolean(p))
-  const featuredProjects = (curated.length === 6 ? curated : featured).slice(0, 6)
+  const six = (curated.length === 6 ? curated : featured).slice(0, 6)
+  // Pin to top (5 Nov 2026, lib/pin.ts): the newest pinned project, from
+  // the whole list, leads the six with its label; the five behind it keep
+  // their order, and a pinned project among them is not shown twice.
+  const ordered = pinnedFirst(projects)
+  const lead = ordered[0]?.pinned ? ordered[0] : undefined
+  const featuredProjects = lead
+    ? [lead, ...six.filter((p) => p.slug !== lead.slug).map((p) => ({ ...p, pinned: false }))].slice(0, 6)
+    : six.map((p) => ({ ...p, pinned: false }))
 
   // 28 Sept 2026 (Vern: "they are just thumbnails on a page"): an
   // editorial grid, two large frames and then four. 2 Oct 2026 (Vern:
@@ -67,6 +77,7 @@ export default async function ProjectsPreview({ words = HOME_COPY.projects }: { 
           href={`/projects/${project.slug}`}
           caption={
             <>
+              {project.pinned && <PinnedLabel className="mb-1" />}
               <span className="block not-italic font-bold text-ink" style={{ fontFamily: "var(--font-display)" }}>
                 {project.title}
               </span>

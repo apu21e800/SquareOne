@@ -17,7 +17,7 @@ import { dataset, projectId } from "./sanity/env"
 import { schemaTypes } from "./sanity/schemaTypes"
 import { resolve } from "./sanity/presentation"
 import { CONTENT_TOOL, EDIT_ON_THE_PAGE, FIXED_TYPES, MACHINE_TYPES, SINGLETONS, creatable, structure } from "./sanity/structure"
-import { datedPublish } from "./sanity/actions"
+import { datedPublish, pinnedPublish } from "./sanity/actions"
 import { ADDONS } from "./lib/addons"
 import { EDIT_ON_THE_PAGE_TOOL } from "./sanity/studio-pages"
 import { EditOnThePageInput } from "./sanity/components/EditOnThePage"
@@ -60,6 +60,8 @@ export default defineConfig({
       if (SINGLETONS.has(schemaType) || FIXED_TYPES.has(schemaType) || MACHINE_TYPES.has(schemaType)) return actions.filter((a) => !["unpublish", "delete", "duplicate"].includes(a.action ?? ""))
       // A blog post's first Publish dates it today (sanity/actions.ts).
       if (schemaType === "post") return actions.map((a) => (a.action === "publish" ? datedPublish(a) : a))
+      // A project's Publish stamps its Pin to top (sanity/actions.ts, lib/pin.ts).
+      if (schemaType === "project") return actions.map((a) => (a.action === "publish" ? pinnedPublish(a) : a))
       return actions
     },
   },

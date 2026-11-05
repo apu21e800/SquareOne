@@ -375,30 +375,6 @@ async function main() {
     assert.equal(live.date, "2026-10-01")
     assert.match(live.editorNotes, /^Edit published by the morning run/)
   })
-  // Pin to top (3 Nov 2026, lib/pin.ts): a post that goes live by itself is
-  // stamped as Studio's Publish stamps one, so the newest pin is on top.
-  await check("toPublished: Pin to top on, no stamp yet: stamped with the morning's time", () => {
-    const live = toPublished(due({ pinned: true }) as never, morning) as Record<string, unknown>
-    assert.equal(live.pinned, true)
-    assert.equal(live.pinnedAt, morning.toISOString())
-  })
-  await check("toPublished: Pin to top on and stamped already: the stamp is kept (an edit keeps its place)", () => {
-    const live = toPublished(due({ pinned: true, pinnedAt: "2026-10-02T17:00:00.000Z" }) as never, morning, "2026-10-01") as Record<string, unknown>
-    assert.equal(live.pinnedAt, "2026-10-02T17:00:00.000Z")
-  })
-  await check("toPublished: Pin to top turned off: the old stamp goes; never pinned: no stamp", () => {
-    const off = toPublished(due({ pinned: false, pinnedAt: "2026-10-02T17:00:00.000Z" }) as never, morning) as Record<string, unknown>
-    assert.equal("pinnedAt" in off, false)
-    assert.equal(off.pinned, false)
-    const never = toPublished(due() as never, morning) as Record<string, unknown>
-    assert.equal("pinnedAt" in never, false)
-  })
-  await check("a pinned draft whose time has come goes live stamped", async () => {
-    const s = sanity([due({ pinned: true })])
-    const out = await publishDueDrafts({ claude: fakeClaude().claude, store: s.store, mail: fakeMail().mail, now: () => morning }, morning)
-    assert.equal(out.published.length, 1)
-    assert.equal((s.get("post-langley-stamped-crosswalk") as Record<string, unknown> | undefined)?.pinnedAt, morning.toISOString())
-  })
 
   await check("a draft whose time has come goes live in one step, and the editors get its address", async () => {
     const s = sanity([due(), due({ _id: "drafts.post-later", slug: { _type: "slug", current: "later" }, scheduledFor: "2026-10-22T14:00:00.000Z" }), due({ _id: "drafts.post-held", slug: { _type: "slug", current: "held" }, scheduled: false })])

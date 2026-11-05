@@ -31,10 +31,6 @@ export interface BlogPost {
   featured_position?: string
   /** Edit on the page: the lead photograph opens its field, in an editor's preview only. */
   featured_edit?: string
-  /** A Studio post's "Pin to top" (lib/pin.ts): the newest pin shows first on the home page and /blog. */
-  pinned?: boolean
-  /** When Publish pinned it (lib/pin.ts pinOnPublish), as ISO time. */
-  pinnedAt?: string
   tags: string[]
   content: string
 }
@@ -114,7 +110,7 @@ export type AnyPost = BlogPost | CmsPost
 
 const POST_FIELDS = groq`{
   _id, _type, title, "slug": slug.current, date, category, author, excerpt, tags, seoTitle, seoDescription,
-  "alt": mainImage.alt, mainImage, body, pinned, pinnedAt
+  "alt": mainImage.alt, mainImage, body
 }`
 
 interface CmsPostDoc {
@@ -132,8 +128,6 @@ interface CmsPostDoc {
   alt?: string
   mainImage?: SanityImageSource & { hotspot?: SanityHotspot | null; crop?: SanityCrop | null }
   body?: PortableTextBlock[]
-  pinned?: boolean | null
-  pinnedAt?: string | null
 }
 
 /**
@@ -153,8 +147,6 @@ export function wordsIn(blocks: PortableTextBlock[] | undefined): number {
 function fromDoc(d: CmsPostDoc): CmsPost {
   const alt = typeof d.alt === "string" && d.alt.trim() ? d.alt.trim() : undefined
   const position = d.mainImage ? focalPosition(d.mainImage.hotspot, d.mainImage.crop) : undefined
-  // Compared, never shown: cleaned of Edit on the page's marks (CLAUDE.md).
-  const pinnedAt = typeof d.pinnedAt === "string" && d.pinnedAt.trim() ? stegaClean(d.pinnedAt).trim() : undefined
   return {
     source: "cms",
     slug: d.slug,
@@ -166,7 +158,6 @@ function fromDoc(d: CmsPostDoc): CmsPost {
     featured_image: d.mainImage ? urlFor(d.mainImage, 1600) : "",
     ...(d.mainImage && alt ? { featured_alt: alt } : {}),
     ...(position ? { featured_position: position } : {}),
-    ...(d.pinned === true ? { pinned: true, ...(pinnedAt ? { pinnedAt } : {}) } : {}),
     tags: d.tags ?? [],
     body: d.body ?? [],
     words: wordsIn(d.body),
@@ -182,11 +173,7 @@ async function cmsPosts(): Promise<CmsPost[]> {
   return (docs ?? []).filter((d) => d.slug && d.title).map(fromDoc)
 }
 
-/**
- * Every post, newest first — CMS posts first by slug, then the files. The
- * lists a visitor reads (the home page's articles, /blog) put the pinned one
- * on top with pinnedFirst (lib/pin.ts); everything else keeps this order.
- */
+/** Every post, newest first — CMS posts first by slug, then the files. */
 export async function getPosts(): Promise<BlogPostMeta[]> {
   const cms = await cmsPosts()
   const seen = new Set(cms.map((p) => p.slug))

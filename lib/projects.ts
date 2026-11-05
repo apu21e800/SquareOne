@@ -55,6 +55,10 @@ export interface Project {
   imageUrl: string
   heroWide: boolean
   featured?: boolean
+  /** Pin to top in the Studio (lib/pin.ts): the newest pin leads Selected work and /projects. */
+  pinned?: boolean
+  /** When Publish pinned it, as ISO time; the newest wins. Never on the record's own projects. */
+  pinnedAt?: string
   flag?: boolean
   /**
    * What the Studio says about each photograph, by its address in `images`
