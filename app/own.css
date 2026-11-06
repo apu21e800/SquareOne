@@ -2175,3 +2175,36 @@ h2.search-group-name:not(.label):not(.eyebrow) { font-size: 17px; letter-spacing
 @media (max-width: 700px) and (max-height: 480px) {
   .reel .hero-in { padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px)); }
 }
+
+/* ============================================================
+   3 Nov 2026: colour punch (Vern: "might need a bit more colour punch").
+   Three moves, each one rule, each easy to take off:
+   1. The one primary button per view is Square One orange at rest and
+      fills with ink on hover (it was ink at rest, orange on hover, so a
+      page at a glance showed no orange but the chips). White on
+      #B24E2E is 5.2 : 1. The nav's button on a photo opener stays white
+      (the hero's own button under the H1 is already orange: one orange
+      button per view); the vapour band keeps its water blue.
+   2. A section heading's closing phrase (Futura Book after the bold line)
+      is Square One orange: #C85A3A on white is 4.1 : 1, on the greys
+      3.8 : 1, past the 3 : 1 a heading needs. Scoped to the site's
+      sections (.sec), so an opener's H1 on a photograph keeps its white
+      phrase and the Studio's headings are not touched.
+   3. The driveways band's offer sits on the orange tint under an orange
+      rule, the one coloured block on the home page, where the brief had
+      an orange offer card (docs/OWN-COMPANY-BRIEF.md) before the
+      26 Sept rebuild made it a plain paragraph.
+   ============================================================ */
+.btn-primary, .nav-cta { background: var(--brand-orange); border-color: var(--brand-orange); color: #FFFFFF; }
+.btn-primary:hover, .nav-cta:hover { background: var(--ink); border-color: var(--ink); color: #FFFFFF; }
+.nav-light .nav-cta { background: #FFFFFF; border-color: #FFFFFF; color: var(--ink); }
+.nav-light .nav-cta:hover { background: var(--surface-stone); border-color: var(--surface-stone); color: var(--ink); }
+.btn-primary.btn-water, .btn-water { background: var(--vapour); border-color: var(--vapour); color: #FFFFFF; }
+.btn-primary.btn-water:hover, .btn-water:hover { background: var(--vapour-deep); border-color: var(--vapour-deep); color: #FFFFFF; }
+.btn-primary.q-send:hover { background: var(--ink); border-color: var(--ink); color: #FFFFFF; }
+
+.sec h2:not(.card-title) em, .sec .display-statement em { color: var(--accent); }
+
+.offer-block { background: #F7EBE6; border-top: 4px solid var(--brand-orange); padding: 26px 28px 28px; }
+.offer-block .label { color: var(--brand-orange-press); }
+@media (max-width: 900px) { .offer-block { padding: 22px 20px 24px; } }
