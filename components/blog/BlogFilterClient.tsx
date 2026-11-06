@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react"
 import type { BlogPostMeta } from "@/lib/blog"
 import { jobLine } from "@/lib/projects"
+import { postDate, postYear } from "@/lib/dates"
 import FilterBar, { type FilterDef } from "@/components/ui/FilterBar"
 import RecordCard from "@/components/ui/RecordCard"
 
@@ -35,18 +36,11 @@ const TOPICS: ReadonlyArray<{ label: string; match: string }> = [
 
 const ALL = "all"
 
-function formatDate(dateStr: string) {
-  return new Date(dateStr).toLocaleDateString("en-CA", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  })
-}
-
-function yearOf(post: BlogPostMeta): string {
-  const y = post.date ? new Date(post.date).getFullYear() : Number.NaN
-  return Number.isFinite(y) ? String(y) : ""
-}
+// Dates print in UTC, the day the office wrote (lib/dates.ts): this list is
+// drawn in the visitor's browser, where a plain day used to come out a day
+// early in BC (6 Nov 2026).
+const formatDate = postDate
+const yearOf = (post: BlogPostMeta) => postYear(post.date)
 
 /** Under a job's frame: the place, the systems and the year. A guide's frame carries no caption. */
 const captionOf = (post: BlogPostMeta) => (post.job ? jobLine(post.job) : undefined)

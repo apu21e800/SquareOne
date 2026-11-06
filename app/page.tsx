@@ -86,7 +86,8 @@ export const metadata: Metadata = {
  * vapour (stone), the crews (white), the close in the footer (warm), the
  * footer (slate). The articles band was put back on 3 Nov 2026 and taken
  * off again on 5 Nov (Vern: "Projects / Selected work already covers it");
- * a pinned project leads Selected work instead (lib/pin.ts).
+ * since 6 Nov Selected work is set as /blog is: the pinned post, else the
+ * newest, on a row of its own, then a row of three (lib/selected-work.ts).
  */
 export default async function Home() {
   // CMS overlays (lib/cms.ts): every reader falls back to the built-in copy

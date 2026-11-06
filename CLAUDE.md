@@ -57,8 +57,8 @@ carries its facts: the post schema's "The job" tab (application, service,
 systems, city, region, year, client, artist, More photographs, Featured;
 sanity/schemaTypes/post.ts), read as `post.job` (lib/blog.ts, `Job`).
 `lib/projects-cms.ts getProjects()` still answers everything that lists the
-work (Selected work, the application and service pages, search), now from the
-posts that carry a job; `lib/projects.ts` is the record behind them: a record
+work (the application and service pages, search), now from the posts that
+carry a job; `lib/projects.ts` is the record behind them: a record
 project's facts and photographs fill its post's gaps (matched by the post it
 names, `postSlugOf`), and one with no post of its own is a post made from its
 record (`postFromRecord`, dated `RECORD_POST_DATE`, 19 Sept 2026, the launch;
@@ -74,6 +74,18 @@ deletion; a Blog idea pointing at a Project is pointed at its post). The drafter
 (lib/automation/blog.ts `into`); a job is told once its post has paragraphs
 (lib/automation/facts.ts). `npm run test:projects`, `test:studio`,
 `test:automation`.
+
+Selected work on the home page (6 Nov 2026, Vern, with a screenshot of
+/blog: "looking like the Projects parent page, with the most recent or
+pinned post stand-alone at the top") is set with /blog's records
+(components/ui/RecordCard.tsx): the pinned post, else the newest, on a
+hairline row of its own, then one row of three from `FEATURED_ORDER`
+(lib/selected-work.ts; the order, then the Studio's Featured, then the
+newest, so the row is never short and the lead never shows twice). It
+reads the posts themselves, as /blog does, not getProjects(). Post dates
+print through `postDate` (lib/dates.ts), in UTC: /blog printed them in
+the visitor's browser, and a plain day came out a day early in BC.
+`npm run test:pages`.
 
 ## For specifiers (3 Nov 2026)
 Vern: "appeal to architects". /specifiers is linked again: the last row of
@@ -254,7 +266,7 @@ tell the jobs (`Job`, `postSlugOf`, `recordJobFor`, `postFromRecord` in
 lib/blog.ts).
 
 **lib/projects-cms.ts** — `getProjects()` / `getProject(slug)`: what every page
-that shows a job reads (the home six, application and service pages, search),
+that shows a job reads (application and service pages, search),
 from the posts that carry a job (lib/blog.ts). The Studio's post wins field by
 field, the record fills gaps and stands in when Sanity can't be reached; a
 Studio photo that is the site's own file (same original name, uncropped) is
