@@ -259,8 +259,9 @@ PR #11 went live on 7 Oct, so the condition above is met.
   the same file the site serves (by original file name) is served from the
   site; new or cropped ones from Sanity's CDN. `npm run test:projects`. The
   Project documents were moved into their posts by
-  `scripts/merge-projects-into-posts.ts` (facts and photographs onto the 22
-  posts that told a job, nine new posts for the rest); `/projects/<slug>`
+  `scripts/merge-projects-into-posts.ts` on 6 Nov (facts and photographs
+  onto the 22 posts that told a job, nine new posts for the rest; its flags
+  go after `--`: `-- --dry-run`, `-- --remove-projects`); `/projects/<slug>`
   redirects to the post (`lib/project-redirects.ts`).
 - Edit on the page (14 Oct 2026): `presentationTool` in `sanity.config.ts`,
   its page map in `sanity/presentation.ts` (which document each page opens,
