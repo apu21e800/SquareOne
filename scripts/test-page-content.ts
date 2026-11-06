@@ -15,6 +15,8 @@ import { mergeHome, mergeOpener, type PageHeroDoc } from "../lib/page-content"
 import { mergeWork, photoPath, type GalleryPhotoDoc } from "../lib/work-cms"
 import { getWork } from "../lib/work"
 import { pinnedFirst } from "../lib/pin"
+import { FEATURED_ORDER, UNDER_THE_LEAD, selectedWork } from "../lib/selected-work"
+import { postDate, postYear } from "../lib/dates"
 
 let failures = 0
 function check(name: string, fn: () => void) {
@@ -177,7 +179,7 @@ check("a pasted address in any form reduces to the site's path", () => {
   assert.equal(photoPath("https://www.squareonepaving.com/images/a%20b.jpg"), "/images/a b.jpg")
 })
 
-console.log("the pinned post (Selected work's six, /blog)")
+console.log("the pinned post (Selected work, /blog)")
 // A post as the lists see it: a slug and, for a pin, Publish's stamp. A
 // post made from the record has no stamp, so an unstamped pin counts from its date and any
 // stamped pin beats it.
@@ -210,6 +212,78 @@ check("the list it was given is left as it was", () => {
   pinnedFirst(projects)
   assert.deepEqual(projects.map((p) => p.slug), ["e", "c"])
   assert.equal(projects[1].pinned, true)
+})
+
+console.log("Selected work on the home page (lib/selected-work.ts): the pin, else the newest, then three")
+// Posts as getPosts hands them over, newest first, each with a photograph unless it says otherwise.
+type Card = { slug: string; title: string; date: string; featured_image: string; pinned?: boolean; pinnedAt?: string; job?: { featured?: boolean } }
+const card = (slug: string, more: Partial<Card> = {}): Card => ({ slug, title: slug, date: "2026-10-01", featured_image: `/images/${slug}.jpg`, ...more })
+const order = ["a", "b", "c", "d"]
+const latest = [card("new", { date: "2026-11-03" }), card("x"), card("a"), card("b"), card("c"), card("d")]
+check("no pin: the newest leads, unlabelled; under it the first three of the order", () => {
+  const { lead, rest } = selectedWork(latest, order)
+  assert.equal(lead?.slug, "new")
+  assert.ok(!lead?.pinned)
+  assert.deepEqual(rest.map((p) => p.slug), ["a", "b", "c"])
+  assert.ok(rest.every((p) => !p.pinned))
+})
+check("a pin leads with its label, however old it is", () => {
+  const { lead, rest } = selectedWork([...latest, card("old", { date: "2025-01-01", pinned: true })], order)
+  assert.equal(lead?.slug, "old")
+  assert.equal(lead?.pinned, true)
+  assert.deepEqual(rest.map((p) => p.slug), ["a", "b", "c"])
+})
+check("a pinned job from the order leads and is not shown twice; the next in the order takes its place", () => {
+  const posts = latest.map((p) => (p.slug === "b" ? { ...p, pinned: true, pinnedAt: "2026-11-05T17:00:00.000Z" } : p))
+  const { lead, rest } = selectedWork(posts, order)
+  assert.equal(lead?.slug, "b")
+  assert.deepEqual(rest.map((p) => p.slug), ["a", "c", "d"])
+})
+check("an older pin among the three reads as an ordinary post", () => {
+  const posts = latest.map((p) =>
+    p.slug === "a" ? { ...p, pinned: true, pinnedAt: "2026-10-01T09:00:00.000Z" } : p.slug === "x" ? { ...p, pinned: true, pinnedAt: "2026-11-02T09:00:00.000Z" } : p,
+  )
+  const { lead, rest } = selectedWork(posts, order)
+  assert.equal(lead?.slug, "x")
+  assert.deepEqual(rest.map((p) => [p.slug, Boolean(p.pinned)]), [["a", false], ["b", false], ["c", false]])
+})
+check("no photograph, no place: never the lead, never in the row", () => {
+  const posts = [card("bare", { date: "2026-11-05", featured_image: "" }), ...latest.map((p) => (p.slug === "a" ? { ...p, featured_image: "" } : p))]
+  const { lead, rest } = selectedWork(posts, order)
+  assert.equal(lead?.slug, "new")
+  assert.deepEqual(rest.map((p) => p.slug), ["b", "c", "d"])
+})
+check("slugs gone from the order: the ones left, then the Studio's Featured, then the newest; the row is never short", () => {
+  const posts = [card("new", { date: "2026-11-03" }), card("x"), card("f", { job: { featured: true } }), card("a")]
+  assert.deepEqual(selectedWork(posts, order).rest.map((p) => p.slug), ["a", "f", "x"])
+})
+check("nothing with a photograph: nothing to show", () => {
+  assert.deepEqual(selectedWork([card("bare", { featured_image: "" })], order), { lead: undefined, rest: [] })
+})
+check("the live order: six different jobs, three show under the lead", () => {
+  assert.equal(new Set(FEATURED_ORDER).size, FEATURED_ORDER.length)
+  assert.ok(FEATURED_ORDER.length > UNDER_THE_LEAD, "spares for when one leads")
+  assert.equal(UNDER_THE_LEAD, 3)
+})
+
+console.log("a post's date prints the day the office wrote, in any time zone (lib/dates.ts)")
+check("in Vancouver, 2026-11-05 is November 5, 2026 (the browser's own way said November 4)", () => {
+  const was = process.env.TZ
+  process.env.TZ = "America/Vancouver"
+  try {
+    assert.equal(new Date("2026-11-05").toLocaleDateString("en-CA", { year: "numeric", month: "long", day: "numeric" }), "November 4, 2026", "the bug this guards against")
+    assert.equal(postDate("2026-11-05"), "November 5, 2026")
+    assert.equal(postYear("2026-01-01"), "2026")
+  } finally {
+    if (was === undefined) delete process.env.TZ
+    else process.env.TZ = was
+  }
+})
+check("the same in UTC; no date or a bad one prints nothing", () => {
+  assert.equal(postDate("2026-11-05"), "November 5, 2026")
+  assert.equal(postDate("not a date"), "")
+  assert.equal(postYear(undefined), "")
+  assert.equal(postYear(""), "")
 })
 
 if (failures) {

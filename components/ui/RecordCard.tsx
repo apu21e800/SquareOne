@@ -6,7 +6,8 @@ import type { ReactNode } from "react"
 
 /**
  * The one record — a project or a blog post reads the same way. Used by
- * /projects and /blog so the two indexes are one system.
+ * /blog and, since 6 Nov 2026, the home page's Selected work, so the two
+ * read as one system (/projects, which used it too, is now /blog).
  *
  * 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.7): the photo card — image
  * with a caption over a gradient, a chip, a title, an arrow — was HUB's
@@ -47,6 +48,11 @@ export interface RecordCardProps {
   position?: string
   /** A project pinned in the Studio (lib/pin.ts): a small "Pinned" before the kicker. */
   pinned?: boolean
+  /**
+   * The lead's title tag: its index's h2 on /blog; h3 where a section's own
+   * h2 is above it (the home page's Selected work, 6 Nov 2026). Same look.
+   */
+  titleAs?: "h2" | "h3"
 }
 
 /** The kicker's line: the kicker alone, or "Pinned" and the kicker side by side. */
@@ -73,6 +79,7 @@ export default function RecordCard({
   priority = false,
   position,
   pinned = false,
+  titleAs: LeadTitle = "h2",
 }: RecordCardProps) {
   const kickerLine = Boolean(kicker || pinned)
   const framing = position ? { objectPosition: position } : undefined
@@ -102,11 +109,11 @@ export default function RecordCard({
 
         <div className="min-w-0">
           <Kicker kicker={kicker} pinned={pinned} />
-          <h2 className={`card-title rc-title-lead [text-wrap:balance] ${kickerLine ? "mt-2" : ""}`}>
+          <LeadTitle className={`card-title rc-title-lead [text-wrap:balance] ${kickerLine ? "mt-2" : ""}`}>
             <Link href={href} className="text-ink hover:underline hover:underline-offset-[5px] hover:decoration-1">
               {title}
             </Link>
-          </h2>
+          </LeadTitle>
           {description && (
             <p className="mt-3 max-w-[52ch] text-[16px] leading-[1.6] text-ink-body [text-wrap:pretty] max-[600px]:line-clamp-3 max-[600px]:text-[15px]">
               {description}

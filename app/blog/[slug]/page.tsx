@@ -6,6 +6,7 @@ import { MDXRemote } from "next-mdx-remote/rsc"
 import { getPost, getPosts } from "@/lib/blog"
 import type { AnyPost, BlogPostMeta } from "@/lib/blog"
 import { jobLine, photoMetaFor, type Job } from "@/lib/projects"
+import { postDate } from "@/lib/dates"
 import { products } from "@/lib/products"
 import { WORK_APPS } from "@/lib/work"
 import PortableBody from "@/components/blog/PortableBody"
@@ -79,16 +80,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-function formatDate(dateStr: string) {
-  // Front-matter dates are plain "YYYY-MM-DD" strings, which parse as UTC
-  // midnight; formatting in UTC keeps the day the author wrote.
-  return new Date(dateStr).toLocaleDateString("en-CA", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    timeZone: "UTC",
-  })
-}
+// Front-matter and Studio dates are plain "YYYY-MM-DD" days, which parse as
+// UTC midnight; lib/dates.ts prints them in UTC, the day the author wrote.
+const formatDate = postDate
 
 function estimateReadTime(words: number) {
   return Math.max(2, Math.ceil(words / 200))
