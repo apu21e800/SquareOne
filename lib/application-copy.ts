@@ -44,7 +44,7 @@ export const APP_COPY: Record<Exclude<WorkApp, "driveways">, AppCopy> = {
     links: [
       { label: "Preformed thermoplastic", href: "/services/preformed-thermoplastic" },
       { label: "Stamped asphalt", href: "/services/stamped-asphalt" },
-      { label: "Crosswalk projects", href: "/projects" },
+      { label: "Crosswalk projects", href: "/blog" },
     ],
   },
   streetscapes: {
@@ -60,7 +60,7 @@ export const APP_COPY: Record<Exclude<WorkApp, "driveways">, AppCopy> = {
     links: [
       { label: "Stamped asphalt", href: "/services/stamped-asphalt" },
       { label: "Decorative coatings", href: "/services/decorative-coatings" },
-      { label: "Streetscape projects", href: "/projects" },
+      { label: "Streetscape projects", href: "/blog" },
     ],
   },
   roundabouts: {
@@ -76,7 +76,7 @@ export const APP_COPY: Record<Exclude<WorkApp, "driveways">, AppCopy> = {
     links: [
       { label: "Stamped asphalt", href: "/services/stamped-asphalt" },
       { label: "StreetPrint", href: "/products/streetprint" },
-      { label: "All projects", href: "/projects" },
+      { label: "All projects", href: "/blog" },
     ],
   },
   "parking-lots": {
@@ -92,7 +92,7 @@ export const APP_COPY: Record<Exclude<WorkApp, "driveways">, AppCopy> = {
     links: [
       { label: "Stamped asphalt", href: "/services/stamped-asphalt" },
       { label: "Decorative coatings", href: "/services/decorative-coatings" },
-      { label: "Parking lot projects", href: "/projects" },
+      { label: "Parking lot projects", href: "/blog" },
     ],
   },
   "parks-paths": {
@@ -108,7 +108,7 @@ export const APP_COPY: Record<Exclude<WorkApp, "driveways">, AppCopy> = {
     links: [
       { label: "Decorative coatings", href: "/services/decorative-coatings" },
       { label: "StreetBond", href: "/products/streetbond" },
-      { label: "Park projects", href: "/projects" },
+      { label: "Park projects", href: "/blog" },
     ],
   },
   "schools-sports-courts": {
@@ -124,7 +124,7 @@ export const APP_COPY: Record<Exclude<WorkApp, "driveways">, AppCopy> = {
     links: [
       { label: "Decorative coatings", href: "/services/decorative-coatings" },
       { label: "Preformed thermoplastic", href: "/services/preformed-thermoplastic" },
-      { label: "School projects", href: "/projects" },
+      { label: "School projects", href: "/blog" },
     ],
   },
   "bike-lanes": {
@@ -156,7 +156,7 @@ export const APP_COPY: Record<Exclude<WorkApp, "driveways">, AppCopy> = {
     links: [
       { label: "Preformed thermoplastic", href: "/services/preformed-thermoplastic" },
       { label: "Decorative coatings", href: "/services/decorative-coatings" },
-      { label: "Public art projects", href: "/projects" },
+      { label: "Public art projects", href: "/blog" },
     ],
   },
   "branding-wayfinding": {
@@ -172,7 +172,7 @@ export const APP_COPY: Record<Exclude<WorkApp, "driveways">, AppCopy> = {
     links: [
       { label: "Preformed thermoplastic", href: "/services/preformed-thermoplastic" },
       { label: "DecoMark", href: "/products/decomark" },
-      { label: "Branding projects", href: "/projects" },
+      { label: "Branding projects", href: "/blog" },
     ],
   },
 }

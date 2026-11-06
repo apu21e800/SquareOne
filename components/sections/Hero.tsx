@@ -217,7 +217,7 @@ export default function Hero({ slides, eyebrow, title, titleEnd }: HeroProps) {
             <Link href="/contact" className="btn-primary">
               Get a quote
             </Link>
-            <Link href="/projects" className="btn-on-image">
+            <Link href="/blog" className="btn-on-image">
               See the work
             </Link>
           </div>

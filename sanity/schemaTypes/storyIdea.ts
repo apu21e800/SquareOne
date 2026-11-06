@@ -72,7 +72,7 @@ export const storyIdea = defineType({
       initialValue: "project",
       options: { list: optionList(PLAN_KINDS), layout: "radio" },
       description:
-        "A project story tells one job and a roundup three to six, each from its record in Projects; they file under the job's kind of work and the blog's Project stories. A guide answers what customers ask, from Square One's own service, system and application pages, and files under Guides.",
+        "A project story tells one job and a roundup three to six, each from its record (a blog post with its job filled in); they file under the job's kind of work and the blog's Project stories. A guide answers what customers ask, from Square One's own service, system and application pages, and files under Guides.",
       validation: (r) => r.required(),
     }),
     defineField({
@@ -85,18 +85,19 @@ export const storyIdea = defineType({
       name: "projects",
       title: "Projects",
       type: "array",
-      // Weak: a project in the plan can still be deleted from Projects (the
-      // drafter then passes the item over and says so).
-      of: [defineArrayMember({ type: "reference", to: [{ type: "project" }], weak: true })],
+      // Weak: a job in the plan can still be deleted from Blog posts (the
+      // drafter then passes the item over and says so). Since 6 Nov 2026 a
+      // job is a blog post with its job filled in (sanity/schemaTypes/post.ts).
+      of: [defineArrayMember({ type: "reference", to: [{ type: "post" }], weak: true })],
       description:
-        "The documented jobs the article tells, from Projects: one for a project story, three to six for a roundup. The drafter writes only what their records say, and the first one's lead photograph opens the draft.",
+        "The documented jobs the article tells, from Blog posts (a post with its job filled in): one for a project story, three to six for a roundup. The drafter writes only what their records say, and the first one's lead photograph opens the draft.",
       hidden: ({ document }) => kindOf(document) === "guide",
       validation: (r) =>
         r.custom((refs, context) => {
           const n = Array.isArray(refs) ? refs.length : 0
           const kind = kindOf(context.document)
-          if (kind === "project" && n !== 1) return "A project story tells one job: pick it from Projects."
-          if (kind === "roundup" && (n < ROUNDUP_MIN || n > ROUNDUP_MAX)) return `A roundup tells ${ROUNDUP_MIN} to ${ROUNDUP_MAX} jobs: pick them from Projects.`
+          if (kind === "project" && n !== 1) return "A project story tells one job: pick it from Blog posts."
+          if (kind === "roundup" && (n < ROUNDUP_MIN || n > ROUNDUP_MAX)) return `A roundup tells ${ROUNDUP_MIN} to ${ROUNDUP_MAX} jobs: pick them from Blog posts.`
           return true
         }),
     }),

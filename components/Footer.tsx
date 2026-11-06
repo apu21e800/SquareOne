@@ -59,13 +59,12 @@ const PAGES: { label: string; links: FooterLink[] }[] = [
   {
     label: "Company",
     links: [
-      { label: "Projects", href: "/projects" },
+      { label: "Projects", href: "/blog" },
       { label: "Galleries", href: "/galleries" },
       { label: "Applications", href: "/applications" },
       { label: "Systems we install", href: "/products" },
       { label: "Documents", href: "/resources" },
       { label: "For specifiers", href: "/specifiers" },
-      { label: "Blog", href: "/blog" },
       { label: "About", href: "/about" },
       { label: "Contact", href: "/contact" },
     ],

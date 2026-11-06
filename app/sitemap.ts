@@ -1,6 +1,5 @@
 import type { MetadataRoute } from "next"
 import { services } from "@/lib/services"
-import { getProjects } from "@/lib/projects-cms"
 import { products } from "@/lib/products"
 import { getPosts } from "@/lib/blog"
 import { WORK_APPS } from "@/lib/work"
@@ -48,11 +47,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${BASE_URL}/applications`,
       changeFrequency: "weekly",
       priority: 0.9,
-    },
-    {
-      url: `${BASE_URL}/projects`,
-      changeFrequency: "weekly",
-      priority: 0.8,
     },
     {
       url: `${BASE_URL}/blog`,
@@ -123,12 +117,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }))
 
-  const projectRoutes: MetadataRoute.Sitemap = (await getProjects()).map((p) => ({
-    url: `${BASE_URL}/projects/${p.slug}`,
-    changeFrequency: "monthly",
-    priority: 0.7,
-  }))
-
   const blogRoutes: MetadataRoute.Sitemap = (await getPosts()).map((post) => ({
     url: `${BASE_URL}/blog/${post.slug}`,
     lastModified: post.date ? new Date(post.date) : undefined,
@@ -142,5 +130,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }))
 
-  return [...staticRoutes, ...serviceRoutes, ...productRoutes, ...applicationRoutes, ...projectRoutes, ...blogRoutes]
+  // 6 Nov 2026: the jobs are blog posts; /projects/<slug> redirects to them (next.config.ts).
+  return [...staticRoutes, ...serviceRoutes, ...productRoutes, ...applicationRoutes, ...blogRoutes]
 }

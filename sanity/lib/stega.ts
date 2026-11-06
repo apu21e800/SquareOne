@@ -12,8 +12,7 @@ import type { FilterDefault } from "next-sanity"
  * carries them.
  *
  * Keyed by document type, then by the last named field on the value's path
- * (a project's story paragraph is ["story", 0], a blog body's words are
- * [..., "children", {_key}, "text"]).
+ * (a blog body's words are [..., "children", {_key}, "text"]).
  */
 export const STEGA_FIELDS: Record<string, ReadonlySet<string>> = {
   // The hero, and since 14 Oct 2026 the sections below it (lib/page-copy.ts).
@@ -24,8 +23,8 @@ export const STEGA_FIELDS: Record<string, ReadonlySet<string>> = {
   service: new Set(["tagline", "shortDescription", "idealClients", "benefits", "q", "a"]),
   pageHero: new Set(["headline", "headlineEnd", "line", "caption"]),
   galleryPhoto: new Set(["subject", "place"]),
-  project: new Set(["title", "excerpt", "story", "client", "artist"]),
-  post: new Set(["title", "excerpt", "text", "caption"]),
+  // A post's job (6 Nov 2026): its city and designer print with the facts.
+  post: new Set(["title", "excerpt", "text", "caption", "city", "artist"]),
   siteSettings: new Set(["positioning", "socialHeading", "socialLede"]),
   socialPost: new Set(["caption"]),
 }

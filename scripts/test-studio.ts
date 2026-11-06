@@ -14,8 +14,9 @@ import { croppedSize, focalPosition, isCropped } from "../lib/focal"
 import { firstPublishDate, officeDate } from "../sanity/lib/publish-date"
 import { DEFAULT_SETTINGS, PHONE_SHAPE, addressParts, mailtoHref, mergeSettings, schemaPhone, telHref, withSettings } from "../lib/site-settings"
 import { mergeWork, type GalleryPhotoDoc } from "../lib/work-cms"
-import { mergeProjects, type ProjectDoc } from "../lib/projects-cms"
-import { projects as RECORD } from "../lib/projects"
+import { mergePosts, getAllPosts, type CmsPostDoc } from "../lib/blog"
+import { projectOf } from "../lib/projects-cms"
+import { postSlugOf, projects as RECORD } from "../lib/projects"
 import { organization } from "../components/StructuredData"
 import { CONTENT_TOOL, EDIT_ON_THE_PAGE, buildStructure, creatable, structure } from "../sanity/structure"
 import { ICONS } from "../sanity/icons"
@@ -29,7 +30,6 @@ import { existsSync, readFileSync } from "node:fs"
 import path from "node:path"
 import { GUIDE_PATH, GUIDE_SOURCE, OFFICE_GUIDE, guideFor, guideText, labelRuns, type OfficeGuideContent } from "../lib/office-guide"
 import { post as postSchema } from "../sanity/schemaTypes/post"
-import { project as projectSchema } from "../sanity/schemaTypes/project"
 import { pinnedElsewhere, pinnedElsewhereMessage } from "../sanity/schemaTypes/pin"
 import { pinOnPublish } from "../lib/pin"
 import { lintCopy } from "../lib/automation/style"
@@ -104,44 +104,53 @@ async function main() {
     assert.ok(p.edit && p.edit.includes("galleryPhoto-a") && p.edit.includes("image"), String(p.edit))
   })
 
-  const seededDoc = (): ProjectDoc => {
-    const r = RECORD[0]
+  // A record job's post as the Studio holds it (6 Nov 2026: the projects are posts).
+  const files = getAllPosts()
+  const seededDoc = (): CmsPostDoc => {
+    const r = RECORD.find((p) => !p.post)!
+    const name = (src: string) => encodeURI(decodeURIComponent(src.split("/").pop() ?? ""))
     return {
-      _id: `project-${r.slug}`,
-      _type: "project",
+      _id: `post-${postSlugOf(r)}`,
+      _type: "post",
       title: r.title,
-      slug: r.slug,
+      slug: postSlugOf(r),
+      date: "2026-09-19",
       service: r.service,
       application: r.application,
       city: r.city,
       region: r.region,
       systems: r.systems,
       excerpt: r.excerpt,
-      images: r.images.map((src, j) => ({
+      mainImage: { asset: { _ref: "image-lead0abc-2048x1536-jpg" } },
+      mainFile: name(r.images[0]),
+      alt: r.title,
+      gallery: r.images.slice(1).map((src, j) => ({
         _key: `k${j}`,
-        alt: j === 0 ? r.title : `${r.title}, photo ${j + 1}`,
-        file: encodeURI(decodeURIComponent(src.split("/").pop() ?? "")),
-        asset: { _ref: `image-${j}abc-2048x1536-jpg` },
+        alt: `${r.title}, photo ${j + 2}`,
+        file: name(src),
+        asset: { _ref: `image-g${j}abc-2048x1536-jpg` },
       })),
     }
   }
 
-  await check("a project's photographs carry the alt text the office wrote", () => {
-    const p = mergeProjects([seededDoc()], RECORD).find((x) => x.slug === RECORD[0].slug)!
-    assert.equal(p.images[0], RECORD[0].images[0], "the site's own file still serves")
-    assert.equal(p.photoMeta?.[p.images[0]]?.alt, RECORD[0].title)
+  await check("a job post's photographs carry the alt text the office wrote", () => {
+    const d = seededDoc()
+    const p = projectOf(mergePosts([d], files).find((x) => x.slug === d.slug)!)!
+    assert.equal(p.images[0], RECORD.find((r) => !r.post)!.images[0], "the site's own file still serves")
+    assert.equal(p.photoMeta?.[p.images[0]]?.alt, d.title)
     assert.equal(p.photoMeta?.[p.images[0]]?.position, undefined)
+    assert.equal(p.photoMeta?.[p.images[1]]?.alt, `${d.title}, photo 2`)
   })
 
-  await check("a project photograph's focal point and, in the preview, its field", () => {
+  await check("a job photograph's focal point and, in the preview, its field", () => {
     const d = seededDoc()
-    d.images![0] = { ...d.images![0], hotspot: { x: 0.4, y: 0.25 } }
-    const plain = mergeProjects([d], RECORD).find((x) => x.slug === RECORD[0].slug)!
-    assert.equal(plain.photoMeta?.[plain.images[0]]?.position, "40% 25%")
-    assert.equal(plain.photoMeta?.[plain.images[0]]?.edit, undefined)
-    const preview = mergeProjects([d], RECORD, true).find((x) => x.slug === RECORD[0].slug)!
-    const edit = preview.photoMeta?.[preview.images[0]]?.edit ?? ""
-    assert.ok(edit.includes(`project-${RECORD[0].slug}`) && edit.includes("k0"), edit)
+    d.gallery![0] = { ...d.gallery![0], hotspot: { x: 0.4, y: 0.25 } }
+    const plain = projectOf(mergePosts([d], files).find((x) => x.slug === d.slug)!)!
+    assert.equal(plain.photoMeta?.[plain.images[1]]?.position, "40% 25%")
+    assert.equal(plain.photoMeta?.[plain.images[1]]?.edit, undefined)
+    const preview = projectOf(mergePosts([d], files, true).find((x) => x.slug === d.slug)!)!
+    const edit = preview.photoMeta?.[preview.images[1]]?.edit ?? ""
+    assert.ok(edit.includes(d._id!) && edit.includes("k0"), edit)
   })
 
   console.log("a blog post's first Publish dates it")
@@ -316,18 +325,18 @@ async function main() {
     assert.equal(ADDONS, addonsOn(process.env.NEXT_PUBLIC_STUDIO_ADDONS))
   })
 
-  await check("with the add-ons switched off: the guide first, then Website Pages, Services, Projects, Blog posts, Site Settings; no Blog ideas, Job photos or Sent to Buffer", () => {
+  await check("with the add-ons switched off: the guide first, then Website Pages, Services, Blog posts, Site Settings; no Projects list (6 Nov 2026), no Blog ideas, Job photos or Sent to Buffer", () => {
     const titles = listTitles(false)
     assert.equal(titles[0], "Start here: how to update the site")
-    assert.deepEqual(titles.slice(1), ["Website Pages", "Services", "Projects", "Blog posts", "Site Settings", "Advanced"], titles.join(" | "))
-    assert.ok(allTitles(false).includes("Blog posts · drafts wait here until you press Publish"))
+    assert.deepEqual(titles.slice(1), ["Website Pages", "Services", "Blog posts", "Site Settings", "Advanced"], titles.join(" | "))
+    assert.ok(allTitles(false).includes("Blog posts · on the site as Projects · drafts wait here until you press Publish"))
     assert.ok(!allTitles(false).some((t) => /Buffer|go live at their set time|drafter/.test(t)), "nothing in the list names an add-on")
   })
 
-  await check("with the add-ons, as Square One has it: the brief's order, Website Pages, Services, Projects, Blog ideas, Blog posts, Job photos, Sent to Buffer, Site Settings", () => {
+  await check("with the add-ons, as Square One has it: the brief's order, Website Pages, Services, Blog ideas, Blog posts, Job photos, Sent to Buffer, Site Settings", () => {
     const titles = listTitles(true)
     assert.equal(titles[0], "Start here: how to update the site")
-    assert.deepEqual(titles.slice(1), ["Website Pages", "Services", "Projects", "Blog ideas", "Blog posts", "Job photos", "Sent to Buffer", "Site Settings", "Advanced"], titles.join(" | "))
+    assert.deepEqual(titles.slice(1), ["Website Pages", "Services", "Blog ideas", "Blog posts", "Job photos", "Sent to Buffer", "Site Settings", "Advanced"], titles.join(" | "))
   })
 
   await check("this build's list is the one its switch says", () => {
@@ -349,7 +358,7 @@ async function main() {
       assert.deepEqual(missing, [], `no picture: ${missing.join(", ")}`)
     }
     const documents = schemaTypes.filter((t) => (t as { type?: string }).type === "document")
-    assert.ok(documents.length >= 17, `${documents.length} document types`)
+    assert.ok(documents.length >= 16, `${documents.length} document types`)
     for (const t of documents) {
       const { name, icon } = t as { name: string; icon?: unknown }
       assert.ok(icon, `${name} has no picture`)
@@ -409,7 +418,6 @@ async function main() {
       ["pageHero", {}, null],
       ["post", { title: "A post", slug: { current: "a-post" } }, "/blog/a-post"],
       ["post", { title: "No address yet" }, null],
-      ["project", { title: "A job", slug: { current: "a-job" } }, "/projects/a-job"],
       // Several pages each: their "Used on" list names them, no button.
       ["galleryPhoto", { gallery: "driveways" }, null],
       ["socialPost", {}, null],
@@ -439,33 +447,59 @@ async function main() {
       assert.equal(creatable(t, false), false, t)
       assert.equal(creatable(t, true), t !== "socialLog", t)
     }
-    for (const t of ["post", "project", "galleryPhoto", "pageHero", "socialPost"]) assert.ok(creatable(t, false) && creatable(t, true), t)
+    for (const t of ["post", "galleryPhoto", "pageHero", "socialPost"]) assert.ok(creatable(t, false) && creatable(t, true), t)
     for (const t of ["homePage", "siteSettings", "gallerySettings", "service", "socialLog"]) assert.ok(!creatable(t, false) && !creatable(t, true), t)
   })
 
-  await check("a project's \"Pin to top\": a switch, off to start, in Vern's words; its stamp hidden and never typed; the guide says how", () => {
-    const field = (name: string) => (projectSchema.fields as unknown as { name: string; type: string; title?: string; initialValue?: unknown; description?: string; hidden?: unknown; readOnly?: unknown }[]).find((f) => f.name === name)
+  await check("a post's \"Pin to top\": a switch, off to start, in Vern's words; its stamp hidden and never typed; the guide says how", () => {
+    const field = (name: string) => (postSchema.fields as unknown as { name: string; type: string; title?: string; initialValue?: unknown; description?: string; hidden?: unknown; readOnly?: unknown; group?: string }[]).find((f) => f.name === name)
     const pin = field("pinned")
-    assert.ok(pin, "the project has a pinned field")
+    assert.ok(pin, "the post has a pinned field")
     assert.equal(pin.type, "boolean")
     assert.equal(pin.title, "Pin to top")
     assert.equal(pin.initialValue, false)
-    assert.equal(pin.description, "Shows this project first in Selected work on the home page and at the top of the Projects page. One pinned project at a time.")
+    assert.equal(pin.group, "content")
+    assert.equal(pin.description, "Shows this post first in Selected work on the home page and at the top of the Projects page. One pinned post at a time.")
     const at = field("pinnedAt")
     assert.ok(at && at.type === "datetime" && at.hidden === true && at.readOnly === true, "pinnedAt is stored, hidden and read only")
-    // 5 Nov 2026: the pin moved from posts to projects; a post has no switch.
-    const postFields = (postSchema.fields as unknown as { name: string }[]).map((f) => f.name)
-    assert.ok(!postFields.includes("pinned") && !postFields.includes("pinnedAt"), "a blog post has no Pin to top")
     const guide = JSON.stringify(GUIDE_SOURCE)
-    assert.match(guide, /under \*\*Projects\*\*, turn on \*\*Pin to top\*\* and press \*\*Publish\*\*/, "the guide says how to pin a project")
-    assert.ok(!/post first[^"]*Pin to top/.test(guide), "the guide no longer pins a post")
+    assert.match(guide, /under \*\*Blog posts\*\*, turn on \*\*Pin to top\*\* and press \*\*Publish\*\*/, "the guide says how to pin a post")
+    assert.ok(!/under \*\*Projects\*\*/.test(guide), "the guide no longer names a Projects list")
   })
 
-  await check("pinning warns while another live project is pinned, naming it, and never stops a Publish", async () => {
+  await check("a post's job (6 Nov 2026): its own tab; the three fields the page needs are required once any of the job is filled in", () => {
+    const fields = postSchema.fields as unknown as { name: string; type: string; group?: string; validation?: (r: unknown) => unknown }[]
+    for (const name of ["jobTitle", "application", "service", "systems", "city", "region", "year", "client", "artist", "gallery", "featured"]) assert.equal(fields.find((f) => f.name === name)?.group, "job", name)
+    assert.deepEqual((postSchema.groups as { name: string }[]).map((g) => g.name), ["content", "job", "seo"])
+    const rules = (name: string) => {
+      const rule: Record<string, unknown> & { outcomes: string[] } = { outcomes: [] }
+      let fn: ((v: unknown, ctx: unknown) => unknown) | undefined
+      rule.custom = (f: (v: unknown, ctx: unknown) => unknown) => ((fn = f), rule)
+      rule.required = () => rule
+      rule.min = () => rule
+      rule.max = () => rule
+      rule.error = () => (rule.outcomes.push("error"), rule)
+      rule.warning = () => (rule.outcomes.push("warning"), rule)
+      fields.find((f) => f.name === name)!.validation?.(rule)
+      return { fn: fn!, outcomes: rule.outcomes }
+    }
+    for (const name of ["application", "service", "city"]) {
+      const { fn, outcomes } = rules(name)
+      assert.deepEqual(outcomes, [], `${name}: a plain custom rule, so it stops a Publish`)
+      assert.equal(fn(undefined, { document: { title: "A guide" } }), true, `${name}: a guide needs no job`)
+      assert.equal(typeof fn(undefined, { document: { title: "A job", city: "Surrey, BC" } }), "string", `${name}: half a job is asked to be filled in`)
+      assert.equal(fn("x", { document: { title: "A job", city: "Surrey, BC" } }), true)
+    }
+    const structure = readFileSync(path.join(process.cwd(), "sanity/structure.ts"), "utf8")
+    assert.ok(!/schemaType\("project"\)/.test(structure), "no Projects list in the Studio")
+    assert.ok(/Blog posts · on the site as Projects/.test(structure), "the posts list says where they show")
+  })
+
+  await check("pinning warns while another live post is pinned, naming it, and never stops a Publish", async () => {
     const asked: { query: string; params: Record<string, unknown> }[] = []
-    const ctx = (other: { title?: string | null } | null, id = "drafts.project-new") =>
+    const ctx = (other: { title?: string | null } | null, id = "drafts.post-new") =>
       ({
-        document: { _id: id, _type: "project" },
+        document: { _id: id, _type: "post" },
         getClient: () => ({
           fetch: async (query: string, params: Record<string, unknown>) => {
             asked.push({ query, params })
@@ -473,7 +507,7 @@ async function main() {
           },
         }),
       }) as never
-    const warn = pinnedElsewhere("project")
+    const warn = pinnedElsewhere("post", "post")
     assert.equal(await warn(false, ctx({ title: "Old pin" })), true, "unpinned: nothing to say")
     assert.equal(await warn(undefined, ctx({ title: "Old pin" })), true)
     assert.equal(asked.length, 0, "and nothing asked of Sanity")
@@ -481,13 +515,14 @@ async function main() {
     const said = await warn(true, ctx({ title: "Old pin" }))
     assert.ok(typeof said === "string" && said.includes('"Old pin" is pinned already'), String(said))
     const last = asked.at(-1)!
-    assert.equal(last.params.id, "project-new", "its own project is left out, by its published id")
-    assert.equal(last.params.type, "project", "only projects count")
+    assert.equal(last.params.id, "post-new", "its own post is left out, by its published id")
+    assert.equal(last.params.type, "post", "only posts count")
     assert.match(last.query, /_type == \$type && pinned == true/)
-    assert.match(last.query, /!\(_id in path\("drafts\.\*\*"\)\)/, "only live projects count")
-    assert.ok(typeof pinnedElsewhereMessage({ title: "" }) === "string" && !String(pinnedElsewhereMessage({ title: "" })).includes('""'), "an untitled project reads as another project")
+    assert.match(last.query, /!\(_id in path\("drafts\.\*\*"\)\)/, "only live posts count")
+    assert.match(last.query, /coalesce\(pinnedAt, date, _createdAt\)/, "a pin never stamped counts from the post's date")
+    assert.ok(typeof pinnedElsewhereMessage({ title: "" }, "post") === "string" && !String(pinnedElsewhereMessage({ title: "" }, "post")).includes('""'), "an untitled post reads as another post")
     // A warning, so Publish still goes ahead.
-    const field = (projectSchema.fields as unknown as { name: string; validation?: (r: unknown) => unknown }[]).find((f) => f.name === "pinned")!
+    const field = (postSchema.fields as unknown as { name: string; validation?: (r: unknown) => unknown }[]).find((f) => f.name === "pinned")!
     let level = ""
     const rule: Record<string, unknown> = {}
     rule.custom = () => rule
@@ -495,24 +530,26 @@ async function main() {
     rule.error = () => ((level = "error"), rule)
     field.validation?.(rule)
     assert.equal(level, "warning")
-    for (const line of [String(said), String(pinnedElsewhereMessage({ title: "" }))]) assert.deepEqual(lintCopy(line).map((i) => i.message), [], line)
+    for (const line of [String(said), String(pinnedElsewhereMessage({ title: "" }, "post"))]) assert.deepEqual(lintCopy(line).map((i) => i.message), [], line)
   })
 
-  await check("Publish stamps a project's pin as it goes out: pinned and unstamped gets now, unpinned loses its stamp, a kept pin keeps its place", () => {
+  await check("Publish stamps a post's pin as it goes out: pinned and unstamped gets now, unpinned loses its stamp, a kept pin keeps its place", () => {
     const now = new Date("2026-11-03T18:00:00.000Z")
     assert.deepEqual(pinOnPublish({ pinned: true }, now), { set: { pinnedAt: "2026-11-03T18:00:00.000Z" } })
     assert.deepEqual(pinOnPublish({ pinned: true, pinnedAt: "" }, now), { set: { pinnedAt: "2026-11-03T18:00:00.000Z" } })
-    assert.equal(pinOnPublish({ pinned: true, pinnedAt: "2026-10-30T10:00:00.000Z" }, now), null, "an edit to a pinned project keeps its stamp")
+    assert.equal(pinOnPublish({ pinned: true, pinnedAt: "2026-10-30T10:00:00.000Z" }, now), null, "an edit to a pinned post keeps its stamp")
     assert.deepEqual(pinOnPublish({ pinned: false, pinnedAt: "2026-10-30T10:00:00.000Z" }, now), { unset: ["pinnedAt"] })
     assert.equal(pinOnPublish({ pinned: false }, now), null)
-    assert.equal(pinOnPublish({}, now), null, "a project from before the switch")
+    assert.equal(pinOnPublish({}, now), null, "a post from before the switch")
     assert.equal(pinOnPublish(null, now), null)
     const actions = readFileSync(path.join(process.cwd(), "sanity/actions.ts"), "utf8")
-    assert.ok(/export function pinnedPublish[\s\S]*const pin = pinOnPublish\(\(props\.draft \?\? props\.published\)[\s\S]*if \(pin\) patch\.execute\(\[pin\]\)\s*\n\s*result\.onHandle/.test(actions), "the project's Publish stamps the pin before Sanity's own Publish runs")
-    const dated = actions.slice(actions.indexOf("export function datedPublish"), actions.indexOf("export function pinnedPublish"))
-    assert.ok(dated.length > 0 && !/pinOnPublish/.test(dated), "a post's Publish no longer stamps a pin")
+    assert.ok(/export function pinnedPublish[\s\S]*const pin = pinOnPublish\(\(props\.draft \?\? props\.published\)[\s\S]*if \(pin\) patch\.execute\(\[pin\]\)\s*\n\s*result\.onHandle/.test(actions), "Publish stamps the pin before the next step runs")
     const config = readFileSync(path.join(process.cwd(), "sanity.config.ts"), "utf8")
-    assert.ok(/schemaType === "project"\) return actions\.map\(\(a\) => \(a\.action === "publish" \? pinnedPublish\(a\) : a\)\)/.test(config), "the Studio wires pinnedPublish to a project's Publish")
+    assert.ok(/schemaType === "post"\) return actions\.map\(\(a\) => \(a\.action === "publish" \? pinnedPublish\(datedPublish\(a\)\) : a\)\)/.test(config), "the Studio wires a post's Publish through the pin stamp and the first-Publish date")
+    assert.ok(!/"project"/.test(config), "no project type in the Studio")
+    // The morning run stamps a post it publishes the same way (lib/automation/project-posts.ts).
+    const posts = readFileSync(path.join(process.cwd(), "lib/automation/project-posts.ts"), "utf8")
+    assert.ok(/return withPinStamp\(live, now\)/.test(posts), "a post that goes live by itself is stamped as Publish would stamp it")
   })
 
   await check("a post's \"Goes live by itself\" shows only with the add-ons, and when hidden never stops a Publish", async () => {

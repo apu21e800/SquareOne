@@ -20,7 +20,7 @@
  * Pure data and dates: `npm run test:social` checks it without the network.
  */
 import { SITE_URL } from "@/lib/site"
-import { projects as RECORD } from "@/lib/projects"
+import { postSlugOf, projects as RECORD } from "@/lib/projects"
 import type { Service } from "@/lib/services"
 import { captionFor, type Subject, type SubjectPhoto } from "@/lib/automation/facts"
 import { croppedImageUrl } from "@/lib/automation/services"
@@ -99,7 +99,8 @@ function projectItem(s: Subject): LibraryItem | null {
     ]
       .filter(Boolean)
       .join("\n"),
-    path: `/projects/${s.slug}`,
+    // 6 Nov 2026: a job's page is its post (lib/projects-cms.ts).
+    path: `/blog/${s.slug}`,
     linkTo: "this project's page on squareonepaving.com",
     photo,
     ...(s.post ? { post: s.post } : {}),
@@ -154,7 +155,7 @@ function serviceItem(s: Service): LibraryItem {
  * kind runs out the other carries on.
  */
 export function libraryQueue(subjects: readonly Subject[], services: readonly Service[]): LibraryItem[] {
-  const featured = new Set(RECORD.filter((p) => p.featured).map((p) => p.slug))
+  const featured = new Set(RECORD.filter((p) => p.featured).map((p) => postSlugOf(p)))
   const jobs = subjects
     .map((s, i) => ({ s, i }))
     .sort((a, b) => Number(featured.has(b.s.slug)) - Number(featured.has(a.s.slug)) || a.i - b.i)

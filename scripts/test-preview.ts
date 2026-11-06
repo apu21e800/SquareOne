@@ -50,7 +50,7 @@ async function main() {
     assert.equal(filterSays("pageHero", ["headline"]), true)
     assert.equal(filterSays("homePage", ["reel", { _key: "a" }, "caption"]), true)
     assert.equal(filterSays("post", ["body", { _key: "b" }, "children", { _key: "c" }, "text"]), true)
-    assert.equal(filterSays("project", ["story", 2]), true)
+    assert.equal(filterSays("post", ["city"]), true)
     assert.equal(filterSays("siteSettings", ["positioning"]), true)
   })
 
@@ -64,7 +64,7 @@ async function main() {
     assert.equal(filterSays("post", ["slug", "current"]), false)
     assert.equal(filterSays("post", ["category"]), false)
     assert.equal(filterSays("post", ["seoTitle"]), false)
-    assert.equal(filterSays("project", ["city"]), false)
+    assert.equal(filterSays("post", ["year"]), false)
     assert.equal(filterSays("galleryPhoto", ["gallery"]), false)
     assert.equal(filterSays("sanity.imageAsset", ["originalFilename"]), false)
     assert.equal(filterSays("copySlot", ["value"]), false)

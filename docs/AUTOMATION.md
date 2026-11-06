@@ -49,10 +49,14 @@ Insights drafter:
    ticked) is passed over and named in the email.
 2. Three kinds of article (lib/automation/plan.ts), each written only from
    Square One's own pages and documented jobs (lib/automation/facts.ts):
-   - **Project story**: one job from Projects, as its record tells it, with
-     the service and system pages it used. Files under the job's kind of work
-     (Crosswalks, Parks & Paths...) and is tagged "Project stories", which the
-     blog's Project stories topic finds.
+   - **Project story**: one job, as its record tells it (since 6 Nov 2026 a
+     blog post with its job filled in; a job is told once its post has its
+     story, so the subject is a post the office added with the job filled in
+     and no story yet), with the service and system pages it used. The story
+     is written into that post's draft, which keeps its web address,
+     photograph and job; Publish fills it in. Files under the job's kind of
+     work (Crosswalks, Parks & Paths...) and is tagged "Project stories",
+     which the blog's Project stories topic finds.
    - **Project roundup**: three to six jobs, each told only from its record.
      Filed the same way. Never a "case study" (the canon).
    - **Guide**: a question customers search for (driveways, parking lots,
@@ -167,7 +171,7 @@ draft either way).
 |---|---|---|---|---|
 | Articles | a blog post published in Studio, dated 1 Oct 2026 or later | up to 2 a day, the day after it goes live | the post | `blog` |
 | From the field | a published **Job photos** post with no story (Studio → Job photos): 3 to 10 phone photos of a finished job, where, the service, a line of facts | 1 a day, the morning after it is published | the service's page | `field` |
-| From the library | a documented project (Studio → Projects, the featured ones first) or a service page, taking turns (lib/automation/social-library.ts) | once a week, Mondays (the very first at once); a new Job photos post takes the week's turn | the project's or the service's page | `library` |
+| From the library | a documented project (a blog post with its job, the featured ones first) or a service page, taking turns (lib/automation/social-library.ts) | once a week, Mondays (the very first at once); a new Job photos post takes the week's turn | the project's or the service's page | `library` |
 
 With two articles a week (Tuesdays and Thursdays) and one job post, that is
 three posts a week on each channel. With one article a week, set
@@ -284,14 +288,17 @@ itself two weekdays after its email instead of waiting for Publish (off since
   **Not doing** to skip it. An idea has no Publish button: a change counts
   the moment it's made.
 - **Add an idea:** Blog ideas → + → a working title, the kind of article,
-  and for a project story or roundup the jobs from Projects; for a guide, the
-  services, systems or kinds of work it is written from. A brief is optional:
-  what you write there is treated as true, so only real facts.
-- **Add a job to write up:** Studio → Projects → + (title, web address, kind
-  of work, service, systems, city, region, the story in two to four
-  sentences, only what's on record, and the photographs). It is on /projects
-  at once; then plan a project story about it, or let the planner put it in a
-  roundup. A project marked "Take off the site" is never written up.
+  and for a project story or roundup the jobs (blog posts with their job
+  filled in); for a guide, the services, systems or kinds of work it is
+  written from. A brief is optional: what you write there is treated as
+  true, so only real facts.
+- **Add a job to write up:** Studio → Blog posts → + (title, web address,
+  the lead photograph, a one-paragraph summary, and The job tab: kind of
+  work, service, systems, city, region, the other photographs; only what's
+  on record), published with an empty body. It is on the site's Projects
+  page at once with the summary; then plan a project story about it (the
+  drafter writes the story into the post), or let the planner put it in a
+  roundup. Every job that came with the site is told already.
 - **Job photos from a phone:** Studio → Job photos → + : 3 to 10 photos
   (best first, each with a line saying what it shows, and its focal point),
   where, the service, and a sentence or two of facts. Publish, and the next

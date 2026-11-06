@@ -300,7 +300,7 @@ export default async function SpecifiersPage() {
         id="specifiers-precedent"
         label="Precedent"
         title={<>Ten kinds of work, <em>photographed on site</em></>}
-        link={{ href: "/projects", label: "All projects" }}
+        link={{ href: "/blog", label: "All projects" }}
         wide
       >
         <ul data-reveal-group className="grid grid-cols-5 gap-x-6 gap-y-9 max-[1100px]:grid-cols-3 max-[700px]:grid-cols-2">
@@ -327,7 +327,7 @@ export default async function SpecifiersPage() {
           })}
         </ul>
         <p className="mt-10 flex flex-wrap gap-x-8 gap-y-3">
-          <Link href="/projects" className="link">Every project, told in full</Link>
+          <Link href="/blog" className="link">Every project, told in full</Link>
           <Link href="/galleries" className="link">The galleries, by system and by region</Link>
         </p>
       </Section>

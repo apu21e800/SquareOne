@@ -834,3 +834,98 @@ export const getFeaturedProjects = (): Project[] => projects.filter((p) => p.fea
 /** Projects whose application matches a WORK_APPS label (see lib/work.ts). */
 export const getProjectsByApplication = (label: string): Project[] =>
   projects.filter((p) => p.application === label)
+
+/* ------------------------------------------------------------------
+   One section (6 Nov 2026, Vern: "Projects and blog should be combined
+   into the same thing, not two separate sections"). A job is told once, as
+   a blog post at /blog/<slug>: the record above is the site's memory of
+   each job's facts and photographs, the post that tells the job (`post`,
+   else a post of the job's own slug) carries them (lib/blog.ts), and the
+   Studio's version of that post wins field by field. /projects redirects
+   there (next.config.ts). lib/projects-cms.ts still answers getProjects(),
+   now from the posts that tell a job.
+   ------------------------------------------------------------------ */
+
+/** The facts a post carries when it tells a job: what the project page showed with the photograph. */
+export interface Job {
+  /** The job's name in lists and under its photograph ("Rainbow intersection, Nanaimo"); the post's title when none. */
+  name?: string
+  service: ProjectService
+  /** Matches a WORK_APPS label in lib/work.ts, so the application page lists it. */
+  application: string
+  city: string
+  region: ProjectRegion
+  systems: string[]
+  client?: string
+  artist?: string
+  year?: string
+  /** One of the strongest jobs (the home page's six are picked in code; see components/sections/ProjectsPreview.tsx). */
+  featured?: boolean
+  heroWide?: boolean
+  /** Location awaiting a yes from Square One (the record only). */
+  flag?: boolean
+  /** The job's photographs after the lead, as the page serves them. */
+  photos: string[]
+  /** What the Studio says about each photograph, by its address (Project.photoMeta). */
+  photoMeta?: Record<string, ProjectPhotoMeta>
+}
+
+/** The web address of the post that tells a record project: its own post, else a post of its own slug. */
+export const postSlugOf = (p: Pick<Project, "slug" | "post">): string => p.post ?? p.slug
+
+/** The record project told at a post's web address, if any. */
+export const recordJobFor = (postSlug: string): Project | undefined => projects.find((p) => postSlugOf(p) === postSlug)
+
+/** The record projects with no post of their own: each is a post made from its record (lib/blog.ts). */
+export const recordOnlyProjects = (): Project[] => projects.filter((p) => !p.post)
+
+/**
+ * The date on a post made from a record project: the day the record's jobs
+ * went live on this site as pages of their own (the launch, 19 Sept 2026).
+ * A record carries a year at most, never a day, so no other date is honest.
+ */
+export const RECORD_POST_DATE = "2026-09-19"
+
+/** A job's facts as a record project holds them. */
+export function jobOf(p: Project, photos: string[] = p.images.slice(1)): Job {
+  return {
+    name: p.title,
+    service: p.service,
+    application: p.application,
+    city: p.city,
+    region: p.region,
+    systems: p.systems,
+    ...(p.client ? { client: p.client } : {}),
+    ...(p.artist ? { artist: p.artist } : {}),
+    ...(p.year ? { year: p.year } : {}),
+    ...(p.featured ? { featured: true } : {}),
+    ...(p.heroWide ? { heroWide: true } : {}),
+    ...(p.flag ? { flag: true } : {}),
+    ...(p.photoMeta ? { photoMeta: p.photoMeta } : {}),
+    photos,
+  }
+}
+
+/** The post section (sanity/schemaTypes/post.ts) for a job's kind of work; the drafter files its stories the same way. */
+export function categoryForJob(s: { service: string; application: string }): string {
+  if (/vapou?r/i.test(s.service)) return "Vapour Blasting"
+  const a = s.application.toLowerCase()
+  if (a.startsWith("crosswalk")) return "Crosswalks"
+  if (a.startsWith("roundabout")) return "Roundabouts"
+  if (a.startsWith("parks")) return "Parks & Paths"
+  if (a.startsWith("school")) return "School Zones"
+  if (a.startsWith("bike")) return "Bike Lanes"
+  if (a.startsWith("public art")) return "Public Art"
+  if (a.startsWith("streetscape")) return "Streetscapes"
+  if (a.startsWith("driveway")) return "Residential"
+  if (a.startsWith("parking") || a.startsWith("branding")) return "Commercial"
+  return "Municipal"
+}
+
+/** "Vancouver, BC" → "Vancouver": a caption carries the city, not the province. */
+export const cityName = (city: string): string => city.split(",")[0].trim()
+
+/** City · Systems · Year, skipping anything the job does not carry: the line under a job's photograph. */
+export function jobLine(job: Pick<Job, "city" | "systems" | "year">): string {
+  return [cityName(job.city), job.systems.join(" + "), job.year].filter((part): part is string => Boolean(part)).join(" · ")
+}

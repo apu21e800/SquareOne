@@ -237,7 +237,7 @@ export default async function ApplicationPage({ params }: Props) {
       {/* ── 04 Projects — frames with the title and the record's
              place · system · year UNDER them ─────────────────────────────── */}
       {caseStudies.length > 0 && (
-        <Section id="projects" label="Projects" title={<>Projects <em>on record</em></>} link={{ href: "/projects", label: "All projects" }} wide>
+        <Section id="projects" label="Projects" title={<>Projects <em>on record</em></>} link={{ href: "/blog", label: "All projects" }} wide>
           <ul className="grid grid-cols-1 gap-x-7 gap-y-10 min-[701px]:grid-cols-3" role="list">
             {caseStudies.map((project) => {
               const city = cityName(project.city)
@@ -260,7 +260,7 @@ export default async function ApplicationPage({ params }: Props) {
                     position={photoMetaFor(project, project.imageUrl)?.position}
                     aspect="aspect-[4/3]"
                     sizes="(max-width: 700px) 100vw, (max-width: 1280px) 33vw, 411px"
-                    href={`/projects/${project.slug}`}
+                    href={`/blog/${project.slug}`}
                     caption={
                       <>
                         <span className="block not-italic font-bold text-ink" style={{ fontFamily: "var(--font-display)" }}>

@@ -217,7 +217,7 @@ export default async function ApplicationsPage() {
                 <h2 id="applications-heading">
                   Eleven kinds of work, <em>on the record</em>
                 </h2>
-                <Link href="/projects" className="link whitespace-nowrap">
+                <Link href="/blog" className="link whitespace-nowrap">
                   See the projects
                 </Link>
               </div>

@@ -87,7 +87,7 @@ export default async function ResourcesPage() {
               Patterns
             </Link>
             , and the installed work under{" "}
-            <Link href="/projects" className="link">
+            <Link href="/blog" className="link">
               Projects
             </Link>
             .

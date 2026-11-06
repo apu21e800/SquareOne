@@ -294,7 +294,8 @@ async function main() {
   })
   await check("every item links to its page and has a photo; the facts name the place and the service", () => {
     for (const i of queue) {
-      assert.match(i.path, /^\/(projects|services)\/[a-z0-9-]+$/, i.key)
+      // 6 Nov 2026: a job's page is its post, under /blog/.
+      assert.match(i.path, /^\/(blog|services)\/[a-z0-9-]+$/, i.key)
       assert.ok(i.photo && (i.photo.asset || i.photo.src), `${i.key} has a photo`)
     }
     const job = queue.find((i) => kind(i.key) === "project")!

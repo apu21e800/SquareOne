@@ -1,12 +1,17 @@
 /**
  * What the blog drafter may say, and about which jobs.
  *
- * SUBJECTS: Square One's documented jobs. Two sources, merged by slug: the
- * record in lib/projects.ts (vetted, with a page at /projects/<slug>) and the
- * Projects list in Studio, where the office can add a job (photos, place,
- * systems, a few sentences). Since 14 Oct 2026 the Blog plan says which jobs
- * an article tells (sanity/schemaTypes/storyIdea.ts); a job taken off the
- * site is never one.
+ * SUBJECTS: Square One's documented jobs. Two sources, merged by the slug of
+ * the post that tells the job: the record in lib/projects.ts (vetted) and
+ * the Studio's blog posts with their job filled in (6 Nov 2026, when the
+ * projects became posts: sanity/schemaTypes/post.ts, "The job"), where the
+ * office can add a job (photos, place, systems, a few sentences). Since
+ * 14 Oct 2026 the Blog plan says which jobs an article tells
+ * (sanity/schemaTypes/storyIdea.ts). A job is told once its post has its
+ * story (paragraphs in the body): every job on record is, so a project
+ * story's subject is a post the office added with its job filled in and no
+ * story yet, and the drafter writes the story into that post (lib/automation/blog.ts).
+ * A new job's article also comes from Job photos (lib/automation/project-posts.ts).
  *
  * FACTS (factsBlock): Square One's own lines (the footer line, the contact
  * details as Site Settings has them, the site walk and quote), the jobs as
@@ -23,7 +28,7 @@
  * No filesystem reads: this runs inside a cron function, where public/ and
  * content/ are not guaranteed to be on disk.
  */
-import { projects as RECORD } from "@/lib/projects"
+import { categoryForJob, postSlugOf, projects as RECORD } from "@/lib/projects"
 import { services as RECORD_SERVICES, type Service } from "@/lib/services"
 import { products, type Product } from "@/lib/products"
 import { WORK_CAPTIONS } from "@/lib/work-captions"
@@ -46,8 +51,9 @@ export interface SubjectPhoto {
 }
 
 export interface Subject {
+  /** The web address of the post that tells the job, under /blog/. */
   slug: string
-  /** The Studio project's document id, when the job is in Studio (what a plan item refers to). */
+  /** The Studio post's document id, when the job is in Studio (what a plan item refers to). */
   docId?: string
   title: string
   city: string
@@ -63,14 +69,14 @@ export interface Subject {
   photos: SubjectPhoto[]
   /** "record": lib/projects.ts, with a page on the site; "studio": added in Studio only. */
   source: "record" | "studio"
-  /** Slug of the post that already tells it (the Studio's "Blog post", else the record's). */
+  /** Slug of the post that already tells it: the record's named post, or the job's own post once it has its story. */
   post?: string
   /** Location awaiting a yes from Square One (record only). */
   flag?: boolean
   createdAt?: string
 }
 
-interface StudioProject {
+interface StudioJob {
   _id: string
   slug: string
   title?: string
@@ -83,18 +89,17 @@ interface StudioProject {
   client?: string
   artist?: string
   excerpt?: string
-  story?: string[] | null
-  /** The slug of the post picked in Studio's "Blog post" field. */
-  post?: string | null
-  hidden?: boolean | null
+  /** The post's paragraphs, as plain text. */
+  story?: { style?: string; text?: string }[] | null
   images?: { asset?: string; alt?: string; file?: string | null; hotspot?: SubjectPhoto["hotspot"]; crop?: SubjectPhoto["crop"] }[] | null
   _createdAt?: string
 }
 
-const STUDIO_PROJECTS = `*[_type == "project" && !(_id in path("drafts.**")) && !(_id in path("versions.**")) && defined(slug.current)]{
-  _id, "slug": slug.current, title, application, service, systems, city, region, year, client, artist, excerpt,
-  story, "post": post->slug.current, hidden,
-  "images": images[]{ "asset": asset._ref, alt, "file": asset->originalFilename, hotspot, crop }, _createdAt
+/** The Studio's jobs: the live posts with their job filled in (the three fields the page needs), lead photograph first. */
+const STUDIO_JOBS = `*[_type == "post" && !(_id in path("drafts.**")) && !(_id in path("versions.**")) && defined(slug.current) && defined(application) && defined(service) && defined(city)]{
+  _id, "slug": slug.current, "title": coalesce(jobTitle, title), application, service, systems, city, region, year, client, artist, excerpt,
+  "story": body[_type == "block"]{ style, "text": array::join(children[].text, "") },
+  "images": [mainImage, ...coalesce(gallery, [])][defined(asset)]{ "asset": asset._ref, alt, "file": asset->originalFilename, hotspot, crop }, _createdAt
 }`
 
 const filled = (v?: string | null) => (typeof v === "string" && v.trim() ? v.trim() : undefined)
@@ -107,20 +112,29 @@ const named = (src: string) => {
   }
 }
 
+/** A post body's paragraphs (the normal blocks, headings left out), trimmed. */
+const paragraphsOf = (blocks: StudioJob["story"]): string[] =>
+  (blocks ?? []).filter((b) => (b.style ?? "normal") === "normal").map((b) => filled(b.text)).filter((x): x is string => Boolean(x))
+
 /**
- * Every project on record and in Studio, merged by slug, newest work first.
- * Since 9 Oct 2026 the site shows the Studio's version of a project
- * (lib/projects-cms.ts), so the drafter writes from the same: the Studio's
- * words and photographs field by field, the record filling the gaps, and a
- * project marked "Take off the site" is never a subject.
+ * Every job on record and in Studio, merged by the slug of its post, newest
+ * work first. Since 6 Nov 2026 the site shows a job as the Studio's post
+ * (lib/blog.ts, lib/projects-cms.ts), so the drafter writes from the same:
+ * the Studio's words and photographs field by field, the record filling the
+ * gaps. A record project whose post is gone from the Studio keeps its
+ * record, told by the post the site makes from it.
+ *
+ * Told (`post`): the record's named post; else the job's own post once it
+ * has paragraphs; else, with no Studio post at all, the record's own (the
+ * site shows the record's paragraphs). A Studio post with its job filled in
+ * and an empty body is a job waiting for its story.
  */
 export async function loadSubjects(store: Store): Promise<Subject[]> {
-  const studio = (await store.fetch<StudioProject[] | null>(STUDIO_PROJECTS)) ?? []
+  const studio = (await store.fetch<StudioJob[] | null>(STUDIO_JOBS)) ?? []
   const bySlug = new Map(studio.map((p) => [p.slug, p]))
-  const hidden = new Set(studio.filter((p) => p.hidden).map((p) => p.slug))
 
-  const record: Subject[] = RECORD.filter((p) => !hidden.has(p.slug)).map((p) => {
-    const s = bySlug.get(p.slug)
+  const record: Subject[] = RECORD.map((p) => {
+    const s = bySlug.get(postSlugOf(p))
     // The Studio's photographs, in its order; one that is the site's own file
     // (the seed uploaded them) keeps its web path, for its caption.
     const inStudio: SubjectPhoto[] = (s?.images ?? [])
@@ -132,9 +146,9 @@ export async function loadSubjects(store: Store): Promise<Subject[]> {
         ...(i.hotspot ? { hotspot: i.hotspot } : {}),
         ...(i.crop ? { crop: i.crop } : {}),
       }))
-    const story = (s?.story ?? []).map((x) => filled(x)).filter((x): x is string => Boolean(x))
+    const story = paragraphsOf(s?.story)
     return {
-      slug: p.slug,
+      slug: postSlugOf(p),
       ...(s?._id ? { docId: s._id } : {}),
       title: filled(s?.title) ?? p.title,
       city: filled(s?.city) ?? p.city,
@@ -149,14 +163,14 @@ export async function loadSubjects(store: Store): Promise<Subject[]> {
       story: story.length ? story : p.story ?? [],
       photos: inStudio.length ? inStudio : p.images.map((src) => ({ src })),
       source: "record" as const,
-      post: filled(s?.post) ?? p.post,
+      post: p.post ?? (!s || story.length ? postSlugOf(p) : undefined),
       flag: p.flag,
     }
   })
-  const recordSlugs = new Set(RECORD.map((r) => r.slug))
+  const recordSlugs = new Set(RECORD.map((r) => postSlugOf(r)))
 
   const added: Subject[] = studio
-    .filter((p) => !recordSlugs.has(p.slug) && !p.hidden && p.title && p.city && p.excerpt)
+    .filter((p) => !recordSlugs.has(p.slug) && p.title && p.city && p.excerpt)
     .map((p) => ({
       slug: p.slug,
       docId: p._id,
@@ -170,10 +184,10 @@ export async function loadSubjects(store: Store): Promise<Subject[]> {
       client: p.client || undefined,
       artist: p.artist || undefined,
       excerpt: p.excerpt ?? "",
-      story: (p.story ?? []).map((x) => filled(x)).filter((x): x is string => Boolean(x)),
+      story: paragraphsOf(p.story),
       photos: (p.images ?? []).filter((i) => i?.asset).map((i) => ({ asset: i.asset, alt: i.alt, ...(i.hotspot ? { hotspot: i.hotspot } : {}), ...(i.crop ? { crop: i.crop } : {}) })),
       source: "studio" as const,
-      post: filled(p.post),
+      ...(paragraphsOf(p.story).length ? { post: p.slug } : {}),
       createdAt: p._createdAt,
     }))
     .sort((a, b) => (b.createdAt ?? "").localeCompare(a.createdAt ?? ""))
@@ -337,7 +351,7 @@ function applicationLines(slug: string, driveways: DrivewaysCopy, settings: Site
 // ── documented jobs (20 Oct 2026, as hubss.com's documentedJobs) ────────────
 
 /** The featured projects (lib/projects.ts): the strongest photographs, after jobs already told in a post. */
-const FEATURED: ReadonlySet<string> = new Set(RECORD.filter((p) => p.featured).map((p) => p.slug))
+const FEATURED: ReadonlySet<string> = new Set(RECORD.filter((p) => p.featured).map((p) => postSlugOf(p)))
 
 /** At most this many jobs go into one guide's facts. */
 export const DOCUMENTED_JOBS_MAX = 8
@@ -547,21 +561,8 @@ export function relatedLines(s: Subject, posts: PublishedPost[]): string[] {
   return relatedFor({ subjects: [s], categories: [categoryFor(s)] }, posts)
 }
 
-/** The post category (sanity/schemaTypes/post.ts) for a project's kind of work. */
-export function categoryFor(s: Pick<Subject, "service" | "application">): string {
-  if (/vapou?r/i.test(s.service)) return "Vapour Blasting"
-  const a = s.application.toLowerCase()
-  if (a.startsWith("crosswalk")) return "Crosswalks"
-  if (a.startsWith("roundabout")) return "Roundabouts"
-  if (a.startsWith("parks")) return "Parks & Paths"
-  if (a.startsWith("school")) return "School Zones"
-  if (a.startsWith("bike")) return "Bike Lanes"
-  if (a.startsWith("public art")) return "Public Art"
-  if (a.startsWith("streetscape")) return "Streetscapes"
-  if (a.startsWith("driveway")) return "Residential"
-  if (a.startsWith("parking") || a.startsWith("branding")) return "Commercial"
-  return "Municipal"
-}
+/** The post category (sanity/schemaTypes/post.ts) for a project's kind of work (lib/projects.ts categoryForJob, shared with the posts made from the record). */
+export const categoryFor = (s: Pick<Subject, "service" | "application">): string => categoryForJob(s)
 
 /** The blog section an article files under: Guides for a guide; the jobs' kind of work (the most common, the first on a tie) for a story or roundup. */
 export function categoryForArticle(kind: PlanKind, subjects: readonly Subject[]): string {

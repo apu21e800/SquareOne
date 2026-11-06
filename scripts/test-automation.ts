@@ -6,8 +6,9 @@
  * installs), so the order the plan is read in is tested as written.
  *
  *  - The cron gate: nobody in without CRON_SECRET; a key missing is named.
- *  - What the drafter writes from: the Studio's version of a project, as the
- *    site shows it; never one taken off the site; the FACTS for each kind of
+ *  - What the drafter writes from: the Studio's version of a job, as the
+ *    site shows it (since 6 Nov 2026 a blog post with its job filled in);
+ *    a job is told once its post has its story; the FACTS for each kind of
  *    article, never naming the manufacturer.
  *  - The drafter (14 Oct 2026): the top Ready item, else the top Idea; an
  *    unpublished draft only; the plan item marked Drafted; the email naming
@@ -27,7 +28,7 @@ import { PROJECT_STORIES_TAG, QUESTIONS_BRIEF, ROUNDUP_BRIEF } from "../lib/auto
 import { LIMITS } from "../lib/automation/drafter"
 import { lintCopy } from "../lib/automation/style"
 import type { Claude, Mail, SanityDoc, Store, ToolRequest } from "../lib/automation/services"
-import { projects as RECORD } from "../lib/projects"
+import { postSlugOf, projects as RECORD } from "../lib/projects"
 import { services } from "../lib/services"
 
 let failures = 0
@@ -44,7 +45,7 @@ async function check(name: string, fn: () => void | Promise<void>) {
 const req = (auth?: string) =>
   new NextRequest("https://www.squareonepaving.com/api/cron/draft-post", auth ? { headers: { authorization: auth } } : undefined)
 
-/** A store that answers the drafter's one query with these Studio projects. */
+/** A store that answers the drafter's one query with these Studio job posts. */
 const store = (studio: unknown[]): Store => ({
   fetch: async <T,>() => studio as T,
   create: async () => {},
@@ -56,10 +57,10 @@ const store = (studio: unknown[]): Store => ({
   uploadImage: async () => null,
 })
 
+/** A record job as the Studio's post of it answers the drafter's query (lib/automation/facts.ts STUDIO_JOBS), its story the record's paragraphs. */
 const seeded = (p: (typeof RECORD)[number], i: number) => ({
-  _id: `project-${p.slug}`,
-  _type: "project",
-  slug: p.slug,
+  _id: `post-${postSlugOf(p)}`,
+  slug: postSlugOf(p),
   title: p.title,
   application: p.application,
   service: p.service,
@@ -68,20 +69,25 @@ const seeded = (p: (typeof RECORD)[number], i: number) => ({
   region: p.region,
   ...(p.year ? { year: p.year } : {}),
   excerpt: p.excerpt,
+  story: (p.story ?? []).map((text) => ({ style: "normal", text })),
   images: p.images.map((src, j) => ({ asset: `image-${i}-${j}`, alt: p.title, file: encodeURI(decodeURIComponent(src.split("/").pop() ?? "")) })),
   _createdAt: "2026-10-07T02:55:30Z",
 })
 
 // ── the stand-ins ────────────────────────────────────────────────────────────
 
-/** The dataset as Sanity holds it: the record's projects, as seeded on 9 Oct 2026. */
+/**
+ * The dataset as Sanity holds it: the record's jobs as posts with their job
+ * filled in and no story yet (as the office adds a job: the title, the
+ * photographs, the place and the systems), so each waits for the drafter.
+ */
 function projectDocs(): SanityDoc[] {
   return RECORD.map((p, i) => ({
-    _id: `project-${p.slug}`,
-    _type: "project",
+    _id: `post-${postSlugOf(p)}`,
+    _type: "post",
     _createdAt: "2026-10-09T05:40:00Z",
     title: p.title,
-    slug: { _type: "slug", current: p.slug },
+    slug: { _type: "slug", current: postSlugOf(p) },
     application: p.application,
     service: p.service,
     systems: p.systems,
@@ -89,11 +95,12 @@ function projectDocs(): SanityDoc[] {
     region: p.region,
     ...(p.year ? { year: p.year } : {}),
     excerpt: p.excerpt,
-    images: p.images.map((src, j) => ({ _key: `i${j}`, _type: "image", asset: { _type: "reference", _ref: `image-${i}-${j}-jpg` }, alt: `${p.title} photo ${j + 1}` })),
+    mainImage: { _type: "image", asset: { _type: "reference", _ref: `image-${i}-0-jpg` }, alt: `${p.title} photo 1` },
+    gallery: p.images.slice(1).map((src, j) => ({ _key: `i${j + 1}`, _type: "image", asset: { _type: "reference", _ref: `image-${i}-${j + 1}-jpg` }, alt: `${p.title} photo ${j + 2}` })),
   }))
 }
 
-const ref = (slug: string, key = slug) => ({ _type: "reference", _ref: `project-${slug}`, _key: key })
+const ref = (slug: string, key = slug) => ({ _type: "reference", _ref: `post-${slug}`, _key: key })
 
 /** A plan item, edited live (no "drafts." id). */
 const item = (id: string, over: Record<string, unknown>): SanityDoc => ({ _id: id, _type: "storyIdea", _createdAt: "2026-10-14T12:00:00Z", status: "idea", priority: 2, ...over })
@@ -270,36 +277,41 @@ async function main() {
   else process.env.NEXT_PUBLIC_STUDIO_ADDONS = savedAddons
 
   console.log("what the drafter writes from")
-  await check("the Studio as seeded: the record's words, the Studio's photos with their web paths", async () => {
+  await check("the Studio as seeded: the record's words, the Studio's photos with their web paths, each job at its post's address", async () => {
     const subjects = await loadSubjects(store(RECORD.map(seeded)))
     const first = subjects.find((s) => s.slug === RECORD[0].slug)!
     assert.equal(first.title, RECORD[0].title)
     assert.deepEqual(first.story, RECORD[0].story ?? [])
     assert.deepEqual(first.photos.map((p) => p.src), RECORD[0].images)
     assert.ok(first.photos.every((p) => p.asset))
-    assert.equal(first.docId, `project-${RECORD[0].slug}`)
+    assert.equal(first.docId, `post-${RECORD[0].slug}`)
     assert.equal(subjects.length, RECORD.length)
+    const withPost = RECORD.find((p) => p.post)!
+    assert.ok(subjects.some((s) => s.slug === withPost.post && s.post === withPost.post), "a job told by a post of another slug lives at that post's address")
   })
   await check("a summary edited in the Studio is what the drafter reads", async () => {
     const docs = RECORD.map(seeded)
     docs[0] = { ...docs[0], excerpt: "Edited in the Studio." }
     assert.equal((await loadSubjects(store(docs))).find((s) => s.slug === RECORD[0].slug)!.excerpt, "Edited in the Studio.")
   })
-  await check("a project taken off the site is never a subject", async () => {
+  await check("a job is told once its post has its story; a post with its job filled in and no story waits for one", async () => {
     const docs: Record<string, unknown>[] = RECORD.map(seeded)
-    docs[2] = { ...docs[2], hidden: true }
-    docs.push({ _id: "p-new", slug: "studio-only", title: "New job", city: "Surrey, BC", excerpt: "A new job.", hidden: true, images: [{ asset: "image-x" }] })
+    const own = RECORD.findIndex((p) => !p.post)
+    docs[own] = { ...docs[own], story: [] }
+    docs.push({ _id: "p-new", slug: "studio-only", title: "New job", city: "Surrey, BC", excerpt: "A new job.", story: [], images: [{ asset: "image-x" }] })
+    docs.push({ _id: "p-told", slug: "studio-told", title: "Told job", city: "Surrey, BC", excerpt: "A told job.", story: [{ style: "normal", text: "The crew laid it in a day." }], images: [{ asset: "image-y" }] })
     const subjects = await loadSubjects(store(docs))
-    assert.ok(!subjects.some((s) => s.slug === RECORD[2].slug || s.slug === "studio-only"))
+    assert.equal(subjects.find((s) => s.slug === RECORD[own].slug)?.post, undefined, "the record's own job, its post emptied: waits")
+    assert.equal(subjects.find((s) => s.slug === "studio-only")?.post, undefined, "a new job with no story: waits")
+    assert.equal(subjects.find((s) => s.slug === "studio-told")?.post, "studio-told", "a new job with its story: told")
+    const named = RECORD.find((p) => p.post)!
+    assert.equal(subjects.find((s) => s.slug === named.post)?.post, named.post, "the record's named post tells it whatever the Studio holds")
   })
-  await check("a blog post picked in the Studio counts as 'already has a post'", async () => {
-    const docs: Record<string, unknown>[] = [{ _id: "p-new", slug: "studio-only", title: "New job", city: "Surrey, BC", excerpt: "A new job.", post: "the-story", images: [{ asset: "image-x" }] }]
-    assert.equal((await loadSubjects(store(docs))).find((s) => s.slug === "studio-only")?.post, "the-story")
-  })
-  await check("no Studio at all: the record", async () => {
+  await check("no Studio at all: the record, every job told by the post the site makes from it", async () => {
     const subjects = await loadSubjects(store([]))
     assert.equal(subjects.length, RECORD.length)
     assert.deepEqual(subjects.find((s) => s.slug === RECORD[0].slug)!.photos.map((p) => p.src), RECORD[0].images)
+    assert.ok(subjects.every((s) => s.post), "told")
   })
   const subjects: Subject[] = await loadSubjects(store(RECORD.map(seeded)))
   const job = (slug: string) => subjects.find((s) => s.slug === slug)!
@@ -385,7 +397,7 @@ async function main() {
     const withPost = RECORD.find((p) => p.post)!
     const { result, sent, patched } = await run([
       ...base,
-      item("storyIdea-a", { title: "A job that has its post", type: "project", status: "ready", projects: [ref(withPost.slug)] }),
+      item("storyIdea-a", { title: "A job that has its post", type: "project", status: "ready", projects: [ref(postSlugOf(withPost))] }),
       item("storyIdea-b", { title: "A roundup of two", type: "roundup", status: "ready", projects: [ref("nanaimo-rainbow-intersection"), ref("langley-railroad-crosswalk")] }),
       item("storyIdea-c", { title: "A guide with nothing ticked", type: "guide", status: "ready" }),
       item("storyIdea-d", { title: "The one that can", type: "project", projects: [ref("white-rock-custom-crosswalk")] }),
@@ -395,8 +407,12 @@ async function main() {
     assert.deepEqual(patched.map((p) => p.id), ["storyIdea-d"])
     assert.match(sent[0].text, /Passed over: "A job that has its post" \("[^"]+" already has a post\); "A roundup of two" \(a roundup needs 3 projects on the site; it has 2\); "A guide with nothing ticked"/)
   })
-  await check("planProblem: a story needs one job on the site with a photo and no post; a roundup three; a guide a page", () => {
-    const bySlug = new Map(subjects.map((s) => [s.slug, s]))
+  await check("planProblem: a story needs one job on the site with a photo and no story yet; a roundup three; a guide a page", async () => {
+    // The jobs as the office adds them: their posts with no story yet.
+    const waiting = await loadSubjects(store(RECORD.map(seeded).map((d) => ({ ...d, story: [] }))))
+    const bySlug = new Map(waiting.map((s) => [s.slug, s]))
+    const told = RECORD.find((p) => p.post)!
+    assert.match(planProblem({ _id: "x", title: "t", type: "project", projects: [postSlugOf(told)] }, bySlug) ?? "", /already has a post/)
     assert.equal(planProblem({ _id: "x", title: "t", type: "project", projects: ["nanaimo-rainbow-intersection"] }, bySlug), null)
     assert.match(planProblem({ _id: "x", title: "t", type: "project", projects: [] }, bySlug) ?? "", /exactly one/)
     assert.match(planProblem({ _id: "x", title: "t", type: "project", projects: [null] }, bySlug) ?? "", /off the site/)
@@ -409,23 +425,27 @@ async function main() {
   })
 
   console.log("the draft")
-  await check("a project story: unpublished, dated, filed under its kind of work and Project stories, its photo, the plan item marked Drafted", async () => {
+  await check("a project story: the job's own post's draft, unpublished, dated, filed under its kind of work and Project stories, its photo and job kept, the plan item marked Drafted", async () => {
     const { result, created, patched, dataset, claude } = await run([
       ...base,
       item("storyIdea-a", { title: "Rainbow intersection, Nanaimo", type: "project", status: "ready", searchPhrase: "rainbow crosswalk", projects: [ref("nanaimo-rainbow-intersection")] }),
       item("storyIdea-b", { title: "Next one", type: "project", projects: [ref("langley-railroad-crosswalk")] }),
     ])
-    assert.ok(result.drafted)
+    assert.ok(result.drafted, JSON.stringify(result))
     const doc = created.find((d) => d._type === "post")!
-    assert.equal(doc._id, "drafts.post-rainbow-intersection-nanaimo", "a draft id: the site never reads it")
-    assert.ok(!dataset.some((d) => d._id === "post-rainbow-intersection-nanaimo"), "nothing published")
+    assert.equal(doc._id, "drafts.post-nanaimo-rainbow-intersection", "the draft of the job's own post: the site never reads it")
+    assert.equal((doc.slug as { current: string }).current, "nanaimo-rainbow-intersection", "the post keeps its web address")
+    assert.ok(dataset.find((d) => d._id === "post-nanaimo-rainbow-intersection")?.body === undefined, "the live post is untouched until Publish")
     assert.equal(doc.date, "2026-10-15")
     assert.equal(doc.category, "Crosswalks")
+    assert.equal(doc.city, "Nanaimo, BC", "the job stays on the post")
+    assert.equal(doc.title, "Rainbow intersection in Nanaimo", "the drafter's headline")
     assert.equal((doc.tags as string[])[0], PROJECT_STORIES_TAG)
-    assert.equal((doc.mainImage as { asset: { _ref: string } }).asset._ref, `image-${RECORD.findIndex((p) => p.slug === "nanaimo-rainbow-intersection")}-0-jpg`, "the job's own lead photograph, already in Sanity")
+    assert.equal((doc.mainImage as { asset: { _ref: string } }).asset._ref, `image-${RECORD.findIndex((p) => p.slug === "nanaimo-rainbow-intersection")}-0-jpg`, "the post's own lead photograph, kept")
     assert.match(String(doc.editorNotes), /from the Blog idea "Rainbow intersection, Nanaimo"/)
+    assert.match(String(doc.editorNotes), /THIS FILLS IN THE STORY/)
     assert.deepEqual(patched[0].set.status, "drafted")
-    assert.equal(patched[0].set.draftSlug, "rainbow-intersection-nanaimo")
+    assert.equal(patched[0].set.draftSlug, "nanaimo-rainbow-intersection")
     assert.ok(created.some((d) => d._id === `${DRAFT_LOG}nanaimo-rainbow-intersection`), "the job is logged")
     const write = claude.calls.find((c) => c.tool.name === "save_draft")!
     assert.match(write.user, /A PROJECT STORY/)
@@ -445,7 +465,7 @@ async function main() {
     assert.match(sent[0].text, /From the plan: "Rainbow intersection, Nanaimo" \(the next Idea; nothing was marked Ready\)\./)
     assert.match(sent[0].text, /The plan is running low: 1 item left\./)
     assert.match(sent[0].text, /Next up: "Railroad crosswalk, Langley"\./)
-    assert.match(sent[0].text, /Open it: https:\/\/www\.squareonepaving\.com\/studio\/intent\/edit\/id=post-rainbow-intersection-nanaimo;type=post/)
+    assert.match(sent[0].text, /Open it: https:\/\/www\.squareonepaving\.com\/studio\/intent\/edit\/id=post-nanaimo-rainbow-intersection;type=post/)
   })
   await check("a roundup: every job's record in the FACTS, the first job's photo as a stand-in, Project stories", async () => {
     const { result, created, claude } = await run([
@@ -496,11 +516,20 @@ async function main() {
     assert.ok(claude.calls.every((c) => c.maxRetries === 0))
     assert.ok(LIMITS.write + LIMITS.rewrite + LIMITS.check <= 260_000)
   })
-  await check("a web address a post had, or its id, is never drafted over", async () => {
+  await check("a web address a post had, or its id, is never drafted over (a guide picks the next free one)", async () => {
     const moved: SanityDoc = { _id: "post-rainbow-intersection-nanaimo", _type: "post", title: "An old post whose web address changed", slug: { _type: "slug", current: "another-address" } }
-    const { result, created } = await run([...base, moved, item("storyIdea-a", { title: "Rainbow intersection, Nanaimo", type: "project", projects: [ref("nanaimo-rainbow-intersection")] })])
+    const { result, created } = await run([...base, moved, item("storyIdea-g", { title: "Rainbow crossings", type: "guide", applications: ["crosswalks"] })])
     assert.equal(result.drafted && result.slug, "rainbow-intersection-nanaimo-2")
     assert.ok(created.some((d) => d._id === "drafts.post-rainbow-intersection-nanaimo-2"))
+  })
+  await check("a job with no post in the Studio yet (the record's), asked for by name: the story becomes the post of its own slug", async () => {
+    const without = base.filter((d) => d._id !== "post-nanaimo-rainbow-intersection")
+    const { result, created } = await run(without, { project: "nanaimo-rainbow-intersection" })
+    assert.equal(result.drafted && result.slug, "nanaimo-rainbow-intersection", JSON.stringify(result))
+    const doc = created.find((d) => d._type === "post")!
+    assert.equal(doc._id, "drafts.post-nanaimo-rainbow-intersection")
+    assert.ok(doc.mainImage, "the record's lead photograph, uploaded or found")
+    assert.equal(doc.date, "2026-10-15", "dated the day it was written; the first Publish dates it again")
   })
   await check("once the draft exists, a later failure never turns into a 'no draft' email", async () => {
     const docs = [...base, item("storyIdea-a", { title: "Rainbow intersection, Nanaimo", type: "project", projects: [ref("nanaimo-rainbow-intersection")] })]

@@ -58,9 +58,9 @@ check("the Studio as seeded: every opener exactly as the page has it", () => {
 })
 
 console.log("page openers: what the office does")
-const projects = OPENERS.find((o) => o.page === "/projects")!
+const projects = OPENERS.find((o) => o.page === "/blog")!
 check("a new photograph comes from the CDN, with its own words and never the old caption", () => {
-  const v = mergeOpener(projects, { page: "/projects", image: { asset: { _ref: "image-new-3000x2000-jpg" } }, file: "IMG_1234.jpg", alt: "A new crosswalk" })
+  const v = mergeOpener(projects, { page: "/blog", image: { asset: { _ref: "image-new-3000x2000-jpg" } }, file: "IMG_1234.jpg", alt: "A new crosswalk" })
   assert.match(v.src, /^https:\/\/cdn\.sanity\.io\/images\/test1234\//)
   assert.equal(v.alt, "A new crosswalk")
   assert.equal(v.caption, undefined)
@@ -76,7 +76,7 @@ check("cropping the page's own photograph serves the cropped one from the CDN", 
   assert.match(v.src, /cdn\.sanity\.io.*rect=/)
 })
 check("a new headline, ending and line show; the photograph stays", () => {
-  const v = mergeOpener(projects, { page: "/projects", headline: "Our work", headlineEnd: "across BC", line: "New line." })
+  const v = mergeOpener(projects, { page: "/blog", headline: "Our work", headlineEnd: "across BC", line: "New line." })
   assert.equal(v.head, "Our work")
   assert.equal(v.tail, "across BC")
   assert.equal(v.lede, "New line.")
@@ -177,9 +177,9 @@ check("a pasted address in any form reduces to the site's path", () => {
   assert.equal(photoPath("https://www.squareonepaving.com/images/a%20b.jpg"), "/images/a b.jpg")
 })
 
-console.log("the pinned project (Selected work's six, /projects)")
-// A project as the lists see it: a slug and, for a pin, Publish's stamp. A
-// project has no date, so an unstamped pin counts from nothing and any
+console.log("the pinned post (Selected work's six, /blog)")
+// A post as the lists see it: a slug and, for a pin, Publish's stamp. A
+// post made from the record has no stamp, so an unstamped pin counts from its date and any
 // stamped pin beats it.
 const project = (slug: string, pin?: { pinnedAt?: string }) => ({ slug, title: slug, ...(pin ? { pinned: true, ...pin } : {}) })
 const newestFirst = [project("e"), project("d"), project("c"), project("b"), project("a")]

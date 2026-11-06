@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 import { withBotId } from "botid/next/config";
 import { oldPdfRedirects } from "./lib/old-pdfs";
+import { projectRedirects } from "./lib/project-redirects";
 
 const nextConfig: NextConfig = {
   // No "X-Powered-By: Next.js" on every response (security sweep, 9 Oct 2026):
@@ -147,8 +148,8 @@ const nextConfig: NextConfig = {
       { source: "/traffic-patterns", destination: "/products/trafficpatterns", permanent: true },
       // Other pages
       { source: "/vapor-blasting", destination: "/services/vapor-blasting", permanent: true },
-      { source: "/case-studies", destination: "/projects", permanent: true },
-      { source: "/featured-projects", destination: "/projects", permanent: true },
+      { source: "/case-studies", destination: "/blog", permanent: true },
+      { source: "/featured-projects", destination: "/blog", permanent: true },
       { source: "/documentation", destination: "/resources", permanent: true },
       { source: "/about-us", destination: "/about", permanent: true },
       { source: "/contact-us", destination: "/contact", permanent: true },
@@ -167,13 +168,13 @@ const nextConfig: NextConfig = {
       { source: "/public-art/agnus-greenway-traffic-patterns-decorative-crosswalks", destination: "/blog/agnes-greenway-new-westminster", permanent: true },
       { source: "/streetscapes/streetprint-with-streetbond-coating-mission-bc", destination: "/blog/mission-bc-streetscape", permanent: true },
       { source: "/public-art/trafficpatterns-crosswalk-and-decomark-sensory-play-designs-for-south-langford-elementary", destination: "/blog/south-langford-elementary", permanent: true },
-      { source: "/parks-paths/osoyoos-bc-streetbondsr-park-pathway", destination: "/projects/osoyoos-park-pathway", permanent: true },
-      { source: "/parks-paths/streetbond-maple-ridge-spray-park", destination: "/projects/maple-ridge-spray-park", permanent: true },
-      { source: "/parks-paths/streetbond-maple-ridge-spray-park-2", destination: "/projects/maple-ridge-spray-park", permanent: true },
-      { source: "/public-art/sports-themed-crosswalk-nanaimo-bc", destination: "/projects/beban-park-sports-crosswalk", permanent: true },
-      { source: "/crosswalks/railroad-inspired-crosswalk-langley-bc", destination: "/projects/langley-railroad-crosswalk", permanent: true },
-      { source: "/public-art/seaside-stroll-custom-trafficpatterns-crosswalk", destination: "/projects/white-rock-custom-crosswalk", permanent: true },
-      { source: "/crosswalks/trafficpatterns-xd-rainbow-intersection-nanaimo-bc", destination: "/projects/nanaimo-rainbow-intersection", permanent: true },
+      { source: "/parks-paths/osoyoos-bc-streetbondsr-park-pathway", destination: "/blog/osoyoos-park-pathway", permanent: true },
+      { source: "/parks-paths/streetbond-maple-ridge-spray-park", destination: "/blog/maple-ridge-spray-park", permanent: true },
+      { source: "/parks-paths/streetbond-maple-ridge-spray-park-2", destination: "/blog/maple-ridge-spray-park", permanent: true },
+      { source: "/public-art/sports-themed-crosswalk-nanaimo-bc", destination: "/blog/beban-park-sports-crosswalk", permanent: true },
+      { source: "/crosswalks/railroad-inspired-crosswalk-langley-bc", destination: "/blog/langley-railroad-crosswalk", permanent: true },
+      { source: "/public-art/seaside-stroll-custom-trafficpatterns-crosswalk", destination: "/blog/white-rock-custom-crosswalk", permanent: true },
+      { source: "/crosswalks/trafficpatterns-xd-rainbow-intersection-nanaimo-bc", destination: "/blog/nanaimo-rainbow-intersection", permanent: true },
       { source: "/public-art/victoria-high-school-decomark-first-nations-whorl-canoes", destination: "/applications/public-art", permanent: true },
       { source: "/public-art/kelowna-green-square-vert-streetbond-installation", destination: "/applications/public-art", permanent: true },
       { source: "/public-art/decomark-sequoia-ridge-park", destination: "/applications/parks-paths", permanent: true },
@@ -221,14 +222,14 @@ const nextConfig: NextConfig = {
       { source: "/preformed-thermoplastic", destination: "/services/preformed-thermoplastic", permanent: true },
       // 14 Oct 2026: the six old addresses Search Console still finds that
       // answered 404 (two of them through their trailing-slash 308 first).
-      // Old case studies went to the blog, so a /projects/ address with no
-      // project of its own goes to its post. A project the office later adds
-      // under one of these addresses would be hidden by its line: take the
-      // line out then.
+      // The two /projects/ ones among them are covered by projectRedirects
+      // below since 6 Nov 2026.
       { source: "/laneways", destination: "/driveways", permanent: true },
       { source: "/blog/windsor-gate-townhouse-laneway-2", destination: "/blog/windsor-gate-townhouse-driveway-2", permanent: true },
-      { source: "/projects/west-vancouver-rainbow-crosswalk", destination: "/blog/west-vancouver-rainbow-crosswalk", permanent: true },
-      { source: "/projects/ralphs-farm-market-decorative-parking-lot", destination: "/blog/ralphs-farm-market-decorative-parking-lot", permanent: true },
+      // 6 Nov 2026 (Vern: "Projects and blog should be combined into the same
+      // thing"): the projects are blog posts. Every /projects address goes to
+      // the post that tells the job (lib/project-redirects.ts).
+      ...projectRedirects(),
       { source: "/streetprint/page/:n", destination: "/products/streetprint", permanent: true },
       { source: "/products/streetprint/attachment/:name", destination: "/products/streetprint", permanent: true },
       // 22 Oct 2026: the old site's documents. Each /wp-content/uploads/ PDF

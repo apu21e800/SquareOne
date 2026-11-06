@@ -58,10 +58,9 @@ export default defineConfig({
     actions: (actions, { schemaType }) => {
       // The social job's records too: deleting one would have its item drafted into Buffer again.
       if (SINGLETONS.has(schemaType) || FIXED_TYPES.has(schemaType) || MACHINE_TYPES.has(schemaType)) return actions.filter((a) => !["unpublish", "delete", "duplicate"].includes(a.action ?? ""))
-      // A blog post's first Publish dates it today (sanity/actions.ts).
-      if (schemaType === "post") return actions.map((a) => (a.action === "publish" ? datedPublish(a) : a))
-      // A project's Publish stamps its Pin to top (sanity/actions.ts, lib/pin.ts).
-      if (schemaType === "project") return actions.map((a) => (a.action === "publish" ? pinnedPublish(a) : a))
+      // A blog post's first Publish dates it today, and every Publish stamps
+      // its Pin to top (sanity/actions.ts, lib/pin.ts).
+      if (schemaType === "post") return actions.map((a) => (a.action === "publish" ? pinnedPublish(datedPublish(a)) : a))
       return actions
     },
   },

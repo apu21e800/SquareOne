@@ -240,7 +240,7 @@ export default async function ServicePage({ params }: Props) {
                 <Link href="/contact" className="btn-primary">
                   Get a quote
                 </Link>
-                <Link href="/projects" className="link">
+                <Link href="/blog" className="link">
                   See the projects
                 </Link>
               </div>
@@ -372,7 +372,7 @@ export default async function ServicePage({ params }: Props) {
         <Section
           label="On the record"
           title={<>{name}, <em>on the record</em></>}
-          link={{ href: "/projects", label: "All projects" }}
+          link={{ href: "/blog", label: "All projects" }}
           tone="warm"
           wide
         >
@@ -389,7 +389,7 @@ export default async function ServicePage({ params }: Props) {
                     position={photoMetaFor(project, project.imageUrl)?.position}
                     aspect="aspect-[4/3]"
                     sizes="(max-width: 700px) 100vw, (max-width: 1280px) 33vw, 411px"
-                    href={`/projects/${project.slug}`}
+                    href={`/blog/${project.slug}`}
                     caption={
                       <>
                         <span className="block not-italic font-bold text-ink" style={{ fontFamily: "var(--font-display)" }}>

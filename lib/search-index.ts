@@ -3,8 +3,8 @@ import path from "path"
 
 import { services } from "@/lib/services"
 import { products } from "@/lib/products"
-import { projects, type Project } from "@/lib/projects"
-import { getProjects } from "@/lib/projects-cms"
+import { postSlugOf, projects, type Project } from "@/lib/projects"
+import { projectsFrom } from "@/lib/projects-cms"
 import { resourceGroups } from "@/lib/resources"
 import { getAllPosts, getPosts, type BlogPostMeta } from "@/lib/blog"
 import { getWork, WORK_APPS } from "@/lib/work"
@@ -92,14 +92,14 @@ function imageEntries(): SearchEntry[] {
   const entries: SearchEntry[] = []
   const productName = new Map(products.map((p) => [p.slug, p.name]))
 
-  // Projects — every curated case-study photograph, labelled by its project
+  // Projects — every curated case-study photograph, labelled by its project (its post, since 6 Nov 2026)
   for (const project of projects) {
     project.images.forEach((image, i) => {
       entries.push({
         type: "image",
         title: i === 0 ? project.title : `${project.title}, photo ${i + 1}`,
         subtitle: `Project: ${project.city.split(",")[0].trim()}`,
-        href: `/projects/${project.slug}`,
+        href: `/blog/${postSlugOf(project)}`,
         image,
         keywords: `${project.systems.join(" ")} ${project.application} ${project.city}`,
       })
@@ -172,8 +172,7 @@ const STATIC_PAGES: SearchEntry[] = [
   { type: "page", title: "Driveways in Vancouver", subtitle: "Stamped asphalt driveways across Metro Vancouver", href: "/driveways/vancouver", image: "/images/S1_update_v2/photos/Driveways/Number%202.jpg", keywords: "vancouver driveway lower mainland north shore burnaby richmond langley homeowner" },
   { type: "page", title: "Driveways in Victoria", subtitle: "Stamped asphalt driveways across Greater Victoria and the Island", href: "/driveways/victoria", image: "/images/S1_update_v2/photos/Driveways/Ten%20Mile%20Point%20Driveway%20I.jpg", keywords: "victoria driveway saanich oak bay sooke langford island homeowner" },
   { type: "page", title: "Vapour blasting", subtitle: "Cleaning, priming, graffiti and mould removal", href: "/services/vapor-blasting", image: "/images/services/vapor-blasting/generated/gen-granville-island-vapour-blasting-01-enhanced.jpg", keywords: "vapor blasting dustless restoration surface prep graffiti mould" },
-  { type: "page", title: "Projects", subtitle: "Selected work across BC", href: "/projects", image: "/images/applications/public-art/oak-bay-village-intersection-wide-streetbond-01.jpg", keywords: "projects portfolio work" },
-  { type: "page", title: "Blog", subtitle: "Project stories and guides from BC ground", href: "/blog", image: "/images/hero/bowen-island-polka-dot-walkway-streetbond.jpg", keywords: "blog articles guides news stories journal" },
+  { type: "page", title: "Projects", subtitle: "Every project and guide, across BC", href: "/blog", image: "/images/hero/bowen-island-polka-dot-walkway-streetbond.jpg", keywords: "projects portfolio work blog articles guides news stories journal" },
   { type: "page", title: "Patterns", subtitle: "StreetPrint template sheets, dimensioned", href: "/patterns", image: "/images/patterns/herringbone.webp", keywords: "patterns templates herringbone offset brick ashlar slate tiles border streetprint stamped" },
   { type: "page", title: "Documents", subtitle: "Specifications, colour cards, SDS and guides", href: "/resources", image: "/images/S1_update_v2/photos/Featured%20image%20options/Photo-2025-03-07-2-54-05-PM-scaled.jpg", keywords: "documents resources specs specifications library downloads sds colour cards" },
   // /specifiers is hidden for now (2 Oct 2026, Vern): linked from nowhere, not in search.
@@ -202,16 +201,18 @@ const SERVICE_LABEL: Record<string, string> = {
 
 /** The index from the file record alone (the build's view; tests use it). */
 export function buildSearchIndex(): SearchEntry[] {
-  return buildIndexFrom(projects, getAllPosts())
+  return buildIndexFrom(getAllPosts())
 }
 
-/** The index as the site stands: the Studio's projects and posts, the record behind them. */
+/** The index as the site stands: the Studio's posts, the record behind them (6 Nov 2026: the jobs are posts, lib/projects-cms.ts). */
 export async function buildSiteSearchIndex(): Promise<SearchEntry[]> {
-  const [cmsProjects, posts] = await Promise.all([getProjects(), getPosts()])
-  return buildIndexFrom(cmsProjects, posts)
+  return buildIndexFrom(await getPosts())
 }
 
-function buildIndexFrom(projectList: Project[], posts: BlogPostMeta[]): SearchEntry[] {
+function buildIndexFrom(posts: BlogPostMeta[]): SearchEntry[] {
+  // A post that tells a job is listed as a project; every other post as a post.
+  const projectList: Project[] = projectsFrom(posts)
+  const jobs = new Set(projectList.map((p) => p.slug))
   const serviceEntries: SearchEntry[] = services.map((s) => ({
     type: "service",
     title: SERVICE_LABEL[s.slug] ?? s.name,
@@ -234,12 +235,12 @@ function buildIndexFrom(projectList: Project[], posts: BlogPostMeta[]): SearchEn
     type: "project",
     title: p.title,
     subtitle: [p.city.split(",")[0].trim(), p.systems.join(" + "), p.year].filter(Boolean).join(" · "),
-    href: `/projects/${p.slug}`,
+    href: `/blog/${p.slug}`,
     image: p.imageUrl,
     keywords: `${p.excerpt} ${p.application} ${p.region} ${p.artist ?? ""}`,
   }))
 
-  const postEntries: SearchEntry[] = posts.map((post) => ({
+  const postEntries: SearchEntry[] = posts.filter((post) => !jobs.has(post.slug)).map((post) => ({
     type: "post",
     title: post.title,
     subtitle: [post.category, post.date ? new Date(post.date).getFullYear() : ""]
