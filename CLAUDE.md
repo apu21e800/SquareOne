@@ -67,9 +67,10 @@ Projects; its address stays /blog, and every /projects address redirects to
 the post (lib/project-redirects.ts, next.config.ts). A post that tells a job
 shows the facts row, the designer and the job's photographs in the viewer
 (app/blog/[slug]). The Studio's Projects list is gone;
-`scripts/merge-projects-into-posts.ts` moved each Project into its post (run
-with `--dry-run` first; `--remove-projects` is the separate, explicit
-deletion). The drafter's project story is written into the job's own post
+`scripts/merge-projects-into-posts.ts` moved each Project into its post (ran
+6 Nov; `npx sanity exec <it> --with-user-token -- --dry-run` first, the
+script's flags after `--`; `-- --remove-projects` is the separate, explicit
+deletion; a Blog idea pointing at a Project is pointed at its post). The drafter's project story is written into the job's own post
 (lib/automation/blog.ts `into`); a job is told once its post has paragraphs
 (lib/automation/facts.ts). `npm run test:projects`, `test:studio`,
 `test:automation`.

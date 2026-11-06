@@ -21,12 +21,17 @@
  *    these (lib/blog.ts postFromRecord), so nothing new appears.
  *  - A project that exists only as a draft: the same, into the post's draft.
  *
- * Run from the site's folder, signed in to Sanity:
- *   npx sanity exec scripts/merge-projects-into-posts.ts --with-user-token --dry-run
+ * Run from the site's folder, signed in to Sanity. The script's own flags go
+ * after "--" (sanity exec takes anything before it as its own and prints
+ * its help for one it doesn't know):
+ *   npx sanity exec scripts/merge-projects-into-posts.ts --with-user-token -- --dry-run
  *   npx sanity exec scripts/merge-projects-into-posts.ts --with-user-token
  *
+ * A Blog idea that points at a Project is pointed at the Project's post
+ * instead (the same job), so the drafter still finds it.
+ *
  * It never deletes: the Project documents stay until the separate, explicit
- *   npx sanity exec scripts/merge-projects-into-posts.ts --with-user-token --remove-projects
+ *   npx sanity exec scripts/merge-projects-into-posts.ts --with-user-token -- --remove-projects
  * which deletes each Project only once its post carries the job, and the
  * /projects page opener with them. A second run of either changes nothing.
  */
@@ -67,6 +72,11 @@ interface ProjectDoc {
   pinnedAt?: string
   images?: Img[]
 }
+interface IdeaDoc {
+  _id: string
+  title?: string
+  projects?: { _key?: string; _type?: string; _ref: string; _weak?: boolean }[] | null
+}
 interface PostDoc {
   _id: string
   slug?: string
@@ -88,6 +98,7 @@ interface PostDoc {
 
 const PROJECTS = `*[_type == "project"]{ _id, _createdAt, title, "slug": slug.current, application, service, systems, city, region, year, client, artist, excerpt, story, "post": post->slug.current, featured, hidden, pinned, pinnedAt, images }`
 const POSTS = `*[_type == "post"]{ _id, "slug": slug.current, title, jobTitle, mainImage, gallery, application, service, city, region, systems, year, client, artist, featured, pinned }`
+const IDEAS = `*[_type == "storyIdea" && count(projects) > 0]{ _id, title, projects }`
 
 let k = 0
 const key = () => `m${(++k).toString(36).padStart(4, "0")}`
@@ -129,7 +140,8 @@ async function main() {
     process.exit(1)
   }
   const client: SanityClient = createClient({ projectId: "g4yp3p0k", dataset: "production", apiVersion: "2025-06-01", useCdn: false, perspective: "raw", token })
-  const [projects, posts] = await Promise.all([client.fetch<ProjectDoc[]>(PROJECTS), client.fetch<PostDoc[]>(POSTS)])
+  const [projects, posts, ideas] = await Promise.all([client.fetch<ProjectDoc[]>(PROJECTS), client.fetch<PostDoc[]>(POSTS), client.fetch<IdeaDoc[]>(IDEAS)])
+  const projectIds = new Set(projects.map((p) => published(p._id)))
   const assetIds = [...new Set([...projects.flatMap((p) => (p.images ?? []).map((i) => i.asset?._ref)), ...posts.map((p) => p.mainImage?.asset?._ref)].filter((x): x is string => Boolean(x)))]
   const names = new Map<string, string>()
   for (let i = 0; i < assetIds.length; i += 100) {
@@ -143,10 +155,44 @@ async function main() {
   const liveProjects = projects.filter((p) => !isDraft(p._id))
   const liveProjectIds = new Set(liveProjects.map((p) => p._id))
 
+  /** The post a project's id now stands for: the post of the slug the project named, else of its own. */
+  const postIdFor = (projectId: string): string | undefined => {
+    const p = projects.find((x) => published(x._id) === published(projectId))
+    if (!p?.slug) return undefined
+    const record = RECORD.find((r) => r.slug === p.slug)
+    const target = text(p.post) ?? (record ? postSlugOf(record) : p.slug)
+    return livePostBySlug.get(target)?._id ?? draftPostBySlug.get(target)?._id?.replace(/^drafts\./, "")
+  }
+
+  /** Blog ideas still pointing at a Project: each reference moved to the Project's post. Returns the patches made (or that would be). */
+  function repointIdeas(tx: ReturnType<SanityClient["transaction"]>, lines: string[]): number {
+    let n = 0
+    for (const idea of ideas) {
+      const refs = (idea.projects ?? []).filter((r) => r?._ref)
+      if (!refs.some((r) => projectIds.has(published(r._ref)))) continue
+      const moved = refs.map((r) => {
+        if (!projectIds.has(published(r._ref))) return r
+        const id = postIdFor(r._ref)
+        return id ? { ...r, _ref: id } : r
+      })
+      const left = moved.filter((r) => projectIds.has(published(r._ref)))
+      if (left.length) {
+        lines.push(`Blog idea "${idea.title ?? idea._id}" points at a Project with no post yet (${left.map((r) => r._ref).join(", ")}): run the merge first, then pick its post under Blog posts.`)
+        continue
+      }
+      tx.patch(idea._id, (patch) => patch.set({ projects: moved }))
+      n++
+      lines.push(`${DRY_RUN ? "Would point" : "Pointing"} the Blog idea "${idea.title ?? idea._id}" at the posts: ${moved.map((r) => r._ref).join(", ")}.`)
+    }
+    return n
+  }
+
   if (REMOVE) {
     const tx = client.transaction()
     const gone: string[] = []
     const kept: string[] = []
+    // No Blog idea may be left pointing at a deleted Project.
+    const pointed = repointIdeas(tx, gone)
     for (const p of projects) {
       const record = RECORD.find((r) => r.slug === p.slug)
       const target = text(p.post) ?? (record ? postSlugOf(record) : p.slug)
@@ -161,11 +207,11 @@ async function main() {
       tx.delete(o._id)
       gone.push(`${o._id} (the /projects page opener; the page is gone)`)
     }
-    for (const g of gone) console.log(`${DRY_RUN ? "Would delete" : "Deleting"}: ${g}`)
+    for (const g of gone) console.log(g.startsWith("Would point") || g.startsWith("Pointing") ? g : `${DRY_RUN ? "Would delete" : "Deleting"}: ${g}`)
     for (const m of kept) console.log(`Kept: ${m}`)
     if (!gone.length) return console.log("Nothing to delete.")
     if (!DRY_RUN) await tx.commit()
-    console.log(`${gone.length} document(s) ${DRY_RUN ? "would be" : ""} deleted; ${kept.length} kept.`)
+    console.log(`${gone.length - pointed} document(s) ${DRY_RUN ? "would be" : ""} deleted; ${kept.length} kept.`)
     return
   }
 
@@ -198,7 +244,11 @@ async function main() {
     const post = (live ? undefined : draftPostBySlug.get(target)) ?? livePostBySlug.get(target)
     if (post) {
       const missing: Record<string, unknown> = {}
-      for (const [name, value] of Object.entries(fields)) if ((post as Record<string, unknown>)[name] == null || (Array.isArray((post as Record<string, unknown>)[name]) && !((post as Record<string, unknown>)[name] as unknown[]).length)) missing[name] = value
+      for (const [name, value] of Object.entries(fields)) {
+        // A post named as its job already (the posts this script made) needs no second name.
+        if (name === "jobTitle" && (post.jobTitle || value === post.title)) continue
+        if ((post as Record<string, unknown>)[name] == null || (Array.isArray((post as Record<string, unknown>)[name]) && !((post as Record<string, unknown>)[name] as unknown[]).length)) missing[name] = value
+      }
       if (!post.gallery?.length) {
         const gallery = images.filter((i) => !sameFile(i.asset?._ref, post.mainImage?.asset?._ref)).map(image)
         if (gallery.length) missing.gallery = gallery
@@ -250,8 +300,7 @@ async function main() {
     lines.push(`${DRY_RUN ? "Would make" : "Making"} ${doc._id} (/blog/${target}): "${doc.title}", ${paragraphs.length} paragraph(s), ${images.length} photograph(s), dated ${doc.date}${p.pinned ? ", pinned" : ""}${live ? "" : " (a draft, unpublished)"}.`)
   }
 
-  const refs = await client.fetch<{ _id: string; title?: string }[]>(`*[_type == "storyIdea" && count(projects[_ref in $ids]) > 0]{ _id, title }`, { ids: projects.map((p) => published(p._id)) })
-  for (const r of refs) lines.push(`Blog idea "${r.title ?? r._id}" still points at a Project: pick its post under Blog posts instead.`)
+  changes += repointIdeas(tx, lines)
 
   for (const l of lines) console.log(l)
   if (!changes) return console.log("Nothing to change.")
