@@ -13,6 +13,7 @@ import assert from "node:assert/strict"
 import fs from "node:fs"
 import path from "node:path"
 import { getPathMatch } from "next/dist/shared/lib/router/utils/path-match"
+import { matchHas } from "next/dist/shared/lib/router/utils/prepare-destination"
 import { LIBRARY, RENAMED, SAME_FILE, literal, oldPdfRedirects, type Redirect } from "../lib/old-pdfs"
 import { resourceGroups } from "../lib/resources"
 
@@ -29,10 +30,19 @@ async function check(name: string, fn: () => void | Promise<void>) {
 
 const ROOT = process.cwd()
 
-/** Where Next sends a path: the first rule whose source matches, as Next matches it. */
+type Conditions = Parameters<typeof matchHas>[2]
+
+/**
+ * Where Next sends a path on the site's own host: the first rule whose source
+ * and conditions match, as Next matches them (since 6 Nov 2026 the list opens
+ * with the driveway domains' host rules, which must not catch the site's own).
+ */
 function landsOn(rules: Redirect[], pathname: string): string | null {
-  for (const rule of rules) {
-    if (getPathMatch(rule.source)(pathname)) return rule.destination
+  const req = { headers: { host: "www.squareonepaving.com" } } as unknown as Parameters<typeof matchHas>[0]
+  for (const rule of rules as (Redirect & { has?: Conditions; missing?: Conditions })[]) {
+    if (!getPathMatch(rule.source)(pathname)) continue
+    if ((rule.has || rule.missing) && !matchHas(req, {}, rule.has ?? [], rule.missing ?? [])) continue
+    return rule.destination
   }
   return null
 }

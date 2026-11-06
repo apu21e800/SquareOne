@@ -2,6 +2,8 @@ import type { NextConfig } from "next";
 import { withBotId } from "botid/next/config";
 import { oldPdfRedirects } from "./lib/old-pdfs";
 import { projectRedirects } from "./lib/project-redirects";
+import { drivewayDomainRedirects } from "./lib/driveway-domains";
+import { SITE_URL } from "./lib/site";
 
 const nextConfig: NextConfig = {
   // No "X-Powered-By: Next.js" on every response (security sweep, 9 Oct 2026):
@@ -24,6 +26,10 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      // 6 Nov 2026: the eight driveway domains, off GoDaddy's forwarding.
+      // Every address on them goes to its city's page (lib/driveway-domains.ts).
+      // First, so no rule below sends one of them anywhere else first.
+      ...drivewayDomainRedirects(SITE_URL),
       // Products
       { source: "/trafficpatternsxd", destination: "/products/trafficpatterns-xd", permanent: true },
       { source: "/trafficpatterns", destination: "/products/trafficpatterns", permanent: true },
