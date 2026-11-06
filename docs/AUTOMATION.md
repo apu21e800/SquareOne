@@ -42,6 +42,14 @@ year: BC keeps UTC-7 from 1 November 2026), since 14 Oct 2026, as hubss.com's
 Insights drafter:
 `/api/cron/draft-post` (lib/automation/blog.ts)
 
+**Off since 6 Nov 2026** unless `NEXT_PUBLIC_BLOG_DRAFTER` is `on` in Vercel
+(lib/addons.ts; Vern: "just let them write the blogs unless they enlist our
+services later"). Off, Vercel still calls it and it answers "skipped": no
+draft, no new idea, no email; the Studio hides **Blog ideas** from its list
+and from "new document" (nothing is deleted). To switch it on when Square One
+takes the service: `on` in Vercel (Production), then redeploy. What follows
+is what it does when on.
+
 1. Takes the top item in **Studio → Blog ideas** (sanity/schemaTypes/storyIdea.ts)
    marked **Ready**; when none is, the top **Idea** (priority, then age). An
    item that can't be written (a project story whose job already has a post,
@@ -107,13 +115,18 @@ project story for each real job Vern names, from Projects (with
 article of its own (nine on 14 Oct 2026). Nothing is invented: a job has to
 be in Projects, with its photographs, before it can be planned.
 
-**The daily run, 14:00 UTC** (7 am in Vancouver, all year):
-`/api/cron/social-drafts`, two steps since 20 Oct 2026, each on its own (a
-failure in one is emailed and the next still runs):
+**The run every 15 minutes** (since 6 Nov 2026; it was daily at 14:00 UTC,
+7 am in Vancouver; Vern: "let's get the social drafts to arrive right away
+after a published blog post"): `/api/cron/social-drafts`, two steps since
+20 Oct 2026, each on its own (a failure in one is emailed and the next still
+runs). A failure that keeps happening is emailed at once, then at most once a
+day, and no key sends more than three a day however its failures vary
+(`mailCap-<key>`, lib/automation/mail-cap.ts; Anthropic's request ids and
+Sanity's trace ids don't make a failure new), never every 15 minutes:
 
 1. **Scheduled posts go live** (lib/automation/project-posts.ts
    publishDueDrafts): every blog draft with **Goes live by itself** on whose
-   **Goes live at** has come (ten minutes' grace) becomes the live post in
+   **Goes live at** has come (a minute's grace, never early) becomes the live post in
    one transaction, dated that day in Vancouver (a scheduled edit to a live
    post keeps the post's date), and the editors get its address. One that
    can't go is left as it is, still set to go, and the email says why: it is
@@ -124,8 +137,8 @@ failure in one is emailed and the next still runs):
    edits it at that moment gets the edited version published, and one who
    holds it, or publishes it by hand, is left alone.
 2. **Social** (lib/automation/social.ts), below. A post step 1 just
-   published waits for tomorrow's run, so its posts follow the day after it
-   is live.
+   published waits for the next run, 15 minutes on, so its page is live
+   before its posts link to it.
 
 **The project article, daily at 15:00 UTC** (8 am in Vancouver, all year): `/api/cron/project-articles` (lib/automation/project-posts.ts
 draftProjectArticles), a run of its own since the review of 20 Oct 2026, so
@@ -169,9 +182,9 @@ draft either way).
 
 | Stream | What it drafts from | How often | Links to | `utm_campaign` |
 |---|---|---|---|---|
-| Articles | a blog post published in Studio, dated 1 Oct 2026 or later | up to 2 a day, the day after it goes live | the post | `blog` |
-| From the field | a published **Job photos** post with no story (Studio → Job photos): 3 to 10 phone photos of a finished job, where, the service, a line of facts | 1 a day, the morning after it is published | the service's page | `field` |
-| From the library | a documented project (a blog post with its job, the featured ones first) or a service page, taking turns (lib/automation/social-library.ts) | once a week, Mondays (the very first at once); a new Job photos post takes the week's turn | the project's or the service's page | `library` |
+| Articles | a blog post published in Studio, dated 1 Oct 2026 or later | up to 2 a run, within 15 minutes of going live | the post | `blog` |
+| From the field | a published **Job photos** post with no story (Studio → Job photos): 3 to 10 phone photos of a finished job, where, the service, a line of facts | 1 a run, within 15 minutes of being published | the service's page | `field` |
+| From the library | a documented project (a blog post with its job, the featured ones first) or a service page, taking turns (lib/automation/social-library.ts) | once a week, Mondays with the morning run (14:00 to 14:14 UTC, 7 am Vancouver; the very first at once); a new Job photos post takes the week's turn | the project's or the service's page | `library` |
 
 With two articles a week (Tuesdays and Thursdays) and one job post, that is
 three posts a week on each channel. With one article a week, set
@@ -203,8 +216,10 @@ library goes Mondays and Thursdays.
 ported from hubss.com's social-outcome): each item is claimed
 (`socialLog-<key>`) before anything goes to Buffer; an item no channel took
 for a reason that can clear (a refusal, a disconnected channel) has its claim
-dropped and is retried daily for 14 days from its first failure
-(`socialRetry-<key>`), then given up with an email; disconnected and locked
+dropped and is retried with the morning run (the first quarter hour of
+14:00 UTC), once a day, for 14 days from its first failure
+(`socialRetry-<key>`): a new item goes at once, but a retry costs Claude
+calls, so it never runs every 15 minutes; then given up with an email; disconnected and locked
 channels are skipped with the reason; every Buffer and Sanity call gives up
 after 20 seconds and no item starts after two minutes of the run, so a run
 always finishes and reports inside Vercel's five minutes (a draft call Buffer
@@ -213,7 +228,7 @@ look in Buffer first); an item Claude can't write up is retried behind the
 others for 14 days rather than holding the queue; a run that stops (Buffer
 refused the key, the key reaches more than one Buffer organization, no
 channel it can write for, a key missing in Vercel) emails what to do, naming
-the key, every day until it's fixed. A retouched or generated photo is never
+the key, at once and then at most once a day until it's fixed. A retouched or generated photo is never
 posted as a job (vapour blasting posts its real Granville Island photo).
 
 ## Setup (Vern, once, after Sanity is connected)

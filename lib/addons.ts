@@ -25,3 +25,24 @@ export const ADDONS = addonsOn(process.env.NEXT_PUBLIC_STUDIO_ADDONS)
 
 /** The add-ons' own document types: their lists and "new document" go with the add-ons. */
 export const ADDON_TYPES: ReadonlySet<string> = new Set(["storyIdea", "fieldPost", "socialLog"])
+
+/**
+ * The blog drafter (6 Nov 2026): off unless NEXT_PUBLIC_BLOG_DRAFTER is "on".
+ * Vern, the day social went live: "just let them write the blogs unless they
+ * enlist our services later". Off, the Tuesday and Thursday run
+ * (app/api/cron/draft-post) does nothing, its planner adds no ideas, and the
+ * Studio drops Blog ideas from its list and from "new document"; nothing is
+ * deleted. To switch it on when Square One takes the service: "on" in Vercel
+ * (Production) and a redeploy (a NEXT_PUBLIC_ value is built into the
+ * Studio). Job photos with a story still become an article: Sydney asks for
+ * that one by writing the story.
+ */
+export function drafterOn(value: string | undefined): boolean {
+  return value?.trim().toLowerCase() === "on"
+}
+
+/** This build's setting. The literal process.env read is what Next builds into the Studio. */
+export const DRAFTER = drafterOn(process.env.NEXT_PUBLIC_BLOG_DRAFTER)
+
+/** The drafter's own document type: Blog ideas, listed and creatable only with the drafter on. */
+export const DRAFTER_TYPES: ReadonlySet<string> = new Set(["storyIdea"])

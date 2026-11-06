@@ -21,7 +21,7 @@ import { organization } from "../components/StructuredData"
 import { CONTENT_TOOL, EDIT_ON_THE_PAGE, buildStructure, creatable, structure } from "../sanity/structure"
 import { ICONS } from "../sanity/icons"
 import { STUDIO_HEADINGS, STUDIO_ROOT_ID } from "../sanity/studio-headings"
-import { ADDONS, ADDON_TYPES, addonsOn } from "../lib/addons"
+import { ADDONS, ADDON_TYPES, DRAFTER, addonsOn, drafterOn } from "../lib/addons"
 import { vercelStegaCombine } from "@vercel/stega"
 import { ABOUT_COPY, CONTACT_COPY, DRIVEWAYS_COPY, HOME_COPY, mergeAboutCopy, mergeContactCopy, mergeDrivewaysCopy, mergeFaqs, mergeHomeCopy, mergeLines, mergeSection } from "../lib/page-copy"
 import { mergeService } from "../lib/services-cms"
@@ -333,10 +333,23 @@ async function main() {
     assert.ok(!allTitles(false).some((t) => /Buffer|go live at their set time|drafter/.test(t)), "nothing in the list names an add-on")
   })
 
-  await check("with the add-ons, as Square One has it: the brief's order, Website Pages, Services, Blog ideas, Blog posts, Job photos, Sent to Buffer, Site Settings", () => {
-    const titles = listTitles(true)
+  await check("with the add-ons, as Square One has it (the blog drafter off since 6 Nov 2026): Website Pages, Services, Blog posts, Job photos, Sent to Buffer, Site Settings; no Blog ideas", () => {
+    const titles = listTitles(true, undefined, false)
     assert.equal(titles[0], "Start here: how to update the site")
+    assert.deepEqual(titles.slice(1), ["Website Pages", "Services", "Blog posts", "Job photos", "Sent to Buffer", "Site Settings", "Advanced"], titles.join(" | "))
+    assert.ok(allTitles(true).includes("Job photos · publish one and its posts go to Buffer within 15 minutes; add the story and it becomes a project article"))
+  })
+
+  await check("with the blog drafter switched on: Blog ideas back in the brief's place, before Blog posts", () => {
+    const titles = listTitles(true, undefined, true)
     assert.deepEqual(titles.slice(1), ["Website Pages", "Services", "Blog ideas", "Blog posts", "Job photos", "Sent to Buffer", "Site Settings", "Advanced"], titles.join(" | "))
+    assert.deepEqual(listTitles(false, undefined, true).slice(1), ["Website Pages", "Services", "Blog posts", "Site Settings", "Advanced"], "an add-on: never without the add-ons")
+  })
+
+  await check("the blog drafter switch: off unless Vercel says \"on\" (6 Nov 2026)", () => {
+    for (const off of [undefined, "", "off", "yes", "true", "1"]) assert.equal(drafterOn(off), false, String(off))
+    for (const on of ["on", " ON ", "On"]) assert.equal(drafterOn(on), true, on)
+    assert.equal(DRAFTER, drafterOn(process.env.NEXT_PUBLIC_BLOG_DRAFTER))
   })
 
   await check("this build's list is the one its switch says", () => {
@@ -444,9 +457,11 @@ async function main() {
 
   await check("\"new document\" offers the add-ons' types only with them on, and never a single document, a fixed set or the automation's records", () => {
     for (const t of ADDON_TYPES) {
-      assert.equal(creatable(t, false), false, t)
-      assert.equal(creatable(t, true), t !== "socialLog", t)
+      assert.equal(creatable(t, false, true), false, t)
+      assert.equal(creatable(t, true, true), t !== "socialLog", t)
     }
+    assert.equal(creatable("storyIdea", true, false), false, "a Blog idea only with the drafter on")
+    assert.equal(creatable("fieldPost", true, false), true, "Job photos don't need the drafter")
     for (const t of ["post", "galleryPhoto", "pageHero", "socialPost"]) assert.ok(creatable(t, false) && creatable(t, true), t)
     for (const t of ["homePage", "siteSettings", "gallerySettings", "service", "socialLog"]) assert.ok(!creatable(t, false) && !creatable(t, true), t)
   })
@@ -469,8 +484,15 @@ async function main() {
 
   await check("a post's job (6 Nov 2026): its own tab; the three fields the page needs are required once any of the job is filled in", () => {
     const fields = postSchema.fields as unknown as { name: string; type: string; group?: string; validation?: (r: unknown) => unknown }[]
-    for (const name of ["jobTitle", "application", "service", "systems", "city", "region", "year", "client", "artist", "gallery", "featured"]) assert.equal(fields.find((f) => f.name === name)?.group, "job", name)
+    for (const name of ["jobTitle", "application", "service", "systems", "city", "region", "year", "client", "artist", "featured"]) assert.equal(fields.find((f) => f.name === name)?.group, "job", name)
     assert.deepEqual((postSchema.groups as { name: string }[]).map((g) => g.name), ["content", "job", "seo"])
+    // 6 Nov 2026: "More photographs" sits right under the lead photograph and
+    // shows in both tabs, and no tab is the default, so a post opens on "All
+    // fields" with its text and every photograph on one page.
+    assert.deepEqual(fields.find((f) => f.name === "gallery")?.group, ["content", "job"])
+    const names = fields.map((f) => f.name)
+    assert.equal(names.indexOf("gallery"), names.indexOf("mainImage") + 1, "More photographs right after the lead photograph")
+    assert.ok(!(postSchema.groups as { default?: boolean }[]).some((g) => g.default), "no default tab: All fields opens")
     const rules = (name: string) => {
       const rule: Record<string, unknown> & { outcomes: string[] } = { outcomes: [] }
       let fn: ((v: unknown, ctx: unknown) => unknown) | undefined
@@ -584,7 +606,7 @@ async function main() {
     assert.match(FREE.lead, /Nothing changes on the site until you press Publish\.$/)
   })
 
-  await check("with the add-ons: the same three, then job photos, the Tuesday and Thursday drafts and Buffer, each pointing to the right step, then the basics", () => {
+  await check("with the add-ons: the same three, then job photos, the drafts to read and Buffer, each pointing to the right step, then the basics; no Tuesday and Thursday promise (the drafter is off)", () => {
     assert.deepEqual(
       ALL.steps.map((s) => s.id),
       ["edit-page", "gallery-photos", "own-post", "job-photos", "drafts", "buffer", "basics"],
@@ -596,6 +618,9 @@ async function main() {
     assert.ok(jobs.includes("(step 6)") && jobs.includes("(step 5)"), jobs)
     assert.ok(!guideText(ALL).some((l) => l.includes("{step:")), "every pointer is filled in")
     assert.ok(ALL.steps.find((s) => s.id === "own-post")!.steps.some((l) => l.includes("Goes live by itself")))
+    const text = guideText(ALL).join("\n")
+    for (const word of ["Tuesday", "Thursday", "the next morning its posts", "7:00 a.m."]) assert.ok(!text.includes(word), `the guide no longer says "${word}"`)
+    assert.match(text, /within 15 minutes/)
   })
 
   await check("this build's guide is the one its switch says", () => {
@@ -666,7 +691,7 @@ type Node = { title?: string; items?: Node[]; child?: Node; divider?: boolean; i
  * that records each item's title, its picture, its child and the items
  * under it.
  */
-function listTree(addons: boolean, resolver?: Builder): Node {
+function listTree(addons: boolean, resolver?: Builder, drafter: boolean = DRAFTER): Node {
   const chain = (node: Node): unknown =>
     new Proxy(() => undefined, {
       get(_t, prop) {
@@ -688,13 +713,13 @@ function listTree(addons: boolean, resolver?: Builder): Node {
       },
     },
   )
-  const built = resolver ? resolver(S, {}) : buildStructure(S as never, addons)
+  const built = resolver ? resolver(S, {}) : buildStructure(S as never, addons, drafter)
   return (built as unknown as { __node: Node }).__node
 }
 
 /** The top-level items' titles. */
-function listTitles(addons: boolean, resolver?: Builder): string[] {
-  return (listTree(addons, resolver).items ?? []).filter((i) => !i.divider).map((i) => i.title ?? "")
+function listTitles(addons: boolean, resolver?: Builder, drafter: boolean = DRAFTER): string[] {
+  return (listTree(addons, resolver, drafter).items ?? []).filter((i) => !i.divider).map((i) => i.title ?? "")
 }
 
 /** Every title anywhere in the list, nested ones too. */

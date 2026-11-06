@@ -66,7 +66,10 @@ a record carries a year at most, never a day). The site calls the section
 Projects; its address stays /blog, and every /projects address redirects to
 the post (lib/project-redirects.ts, next.config.ts). A post that tells a job
 shows the facts row, the designer and the job's photographs in the viewer
-(app/blog/[slug]). The Studio's Projects list is gone;
+(app/blog/[slug]). The post editor opens on "All fields" (no default tab)
+with **More photographs** right under the lead photograph, in both the
+Content and The job tabs (6 Nov 2026, Vern couldn't find the job's photos,
+then the body, after switching tabs). The Studio's Projects list is gone;
 `scripts/merge-projects-into-posts.ts` moved each Project into its post (ran
 6 Nov; `npx sanity exec <it> --with-user-token -- --dry-run` first, the
 script's flags after `--`; `-- --remove-projects` is the separate, explicit
@@ -169,6 +172,9 @@ Copy .env.local.example → .env.local and fill in:
   SANITY_REVALIDATE_SECRET; CRON_SECRET, ANTHROPIC_API_KEY,
   SANITY_API_WRITE_TOKEN, BLOG_DRAFT_NOTIFY, BUFFER_API_KEY, BUFFER_ORG_ID
   (only if the Buffer login is in more than one organization), AUTOMATION_PAUSED,
+  NEXT_PUBLIC_BLOG_DRAFTER (unset: the Tuesday and Thursday blog drafter is
+  off and the Studio hides Blog ideas, since 6 Nov 2026; "on", then a
+  redeploy, when Square One takes that service),
   SOCIAL_AUTO_QUEUE (unset: social posts wait in Buffer for approval),
   PROJECT_ARTICLES_AUTO_PUBLISH (unset: a project article waits for a
   person's Publish; "on" schedules a clean one two weekdays out).
@@ -187,6 +193,11 @@ Copy .env.local.example → .env.local and fill in:
 The office's one-page guide (21 Oct 2026; `lib/office-guide.ts`, `components/OfficeGuide.tsx`): the Studio's first item ("Start here: how to update the site", `sanity/components/GuidePane.tsx`) and the page `/studio/guide` (noindex, never in the sitemap, no phone bar). Two guides from one source: with the add-ons, as Square One has it, change a page, add gallery photos, write a post, then job photos, the drafts and Buffer; with NEXT_PUBLIC_STUDIO_ADDONS=off, the first three only. Both end with the basics (drafts, Publish, Discard changes, Unpublish rather than Delete; 23 Oct 2026, for Sydney's first posts). A line or step marked `only` is in one guide, and `{step:id}` prints that step's number. `npm run test:studio` fails if a Studio label it names is renamed, if a line breaks the house style, or if a screenshot it lists is missing or the wrong size. One screenshot per step goes in `public/images/guide/`.
 Three Vercel crons (vercel.json, production only). All refuse every call
 without `CRON_SECRET` (401, constant-time check, lib/automation/cron.ts).
+The blog drafter is off since 6 Nov 2026 (Vern: "just let them write the
+blogs unless they enlist our services later"): unless
+`NEXT_PUBLIC_BLOG_DRAFTER=on` (lib/addons.ts `DRAFTER`), its run answers
+"skipped" with no draft, idea or email, and the Studio drops Blog ideas from
+its list and "new document" (nothing deleted). When on:
 Tuesdays and Thursdays at 13:00 UTC, `/api/cron/draft-post` takes the top
 Ready item in Studio's **Blog ideas** (else the top Idea): a project story,
 a project roundup or a guide (lib/automation/plan.ts; never a "case study"),
@@ -203,7 +214,9 @@ documentedJobs in lib/automation/facts.ts) and its photograph as the
 article's, proof before explanation, one thing to keep, no product or
 contractor as the villain, no "vs" in a title or heading (the style check's
 `versus` rule and the planner refuse it), a title a person would say.
-Daily at 14:00 UTC, `/api/cron/social-drafts` runs two steps, each failing
+Every 15 minutes since 6 Nov 2026 (it was daily at 14:00 UTC; Vern: "let's
+get the social drafts to arrive right away after a published blog post"),
+`/api/cron/social-drafts` runs two steps, each failing
 on its own and emailing BLOG_DRAFT_NOTIFY (lib/automation/editor-mail.ts):
 (1) blog drafts with **Goes live by itself** (`scheduled`, `scheduledFor`)
 whose time has come are published in one transaction, dated that day, only
@@ -211,15 +224,21 @@ if the draft is still the revision the run read and has what Publish asks
 for (lib/automation/project-posts.ts publishDueDrafts; Studio's Publish
 switches the schedule off, sanity/actions.ts); (2) social (lib/automation/social.ts,
 ported from hubss.com's pipeline) drafts into Square One's own Buffer from
-three streams: new blog posts (the day after they go live), Job photos
+three streams: new blog posts (within 15 minutes of going live), Job photos
 (Studio → Job photos: the crew's photos, the place, the service, a line of
 facts; linked to the service page) and, once a week, a library post (a
-documented project or a service page). Facebook, Instagram, LinkedIn and
+documented project or a service page; with the morning run, 14:00 to 14:14 UTC, on its day). Facebook, Instagram, LinkedIn and
 Google Business Profile (`metadata.google`, a Learn more button). Every post
 waits in Buffer as a draft for approval (Vern, 20 Oct 2026: "S1 posts should
 wait for client approval (final edits)"); `SOCIAL_AUTO_QUEUE=on` would queue
 them, only on Vern's word. Claim-first `socialLog-<key>`, 14-day retries
-(`socialRetry-<key>`), outcome emails, a run failure that names the key,
+(`socialRetry-<key>`), outcome emails, a run failure that names the key, a
+failure that keeps happening emailed at once and then at most once a day,
+three a day per key at most (`mailCap-<key>`, lib/automation/mail-cap.ts;
+request and trace ids stripped before comparing; with no usable record only
+the first run of 14:00 UTC sends), an item that failed retried only with
+that morning run (each try costs Claude calls), a scheduled post never
+published early (a minute's grace),
 disconnected and locked channels skipped, 20 s per call and no item after
 120 s of the run, crops of 1200 × 630 and 4:5 on the focal point. Every
 Buffer field checked against Buffer's live API reference on 14 Oct 2026.

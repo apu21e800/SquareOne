@@ -368,12 +368,12 @@ async function main() {
     assert.equal(live.date, "2026-10-21")
     assert.equal("scheduledFor" in live, false)
     assert.equal("_rev" in live || "_createdAt" in live || "_updatedAt" in live, false)
-    assert.match(live.editorNotes, /^Published by the morning run, as scheduled, Wednesday 21 October at 7:00 a\.m\. Vancouver time\.\n\nSCHEDULED/)
+    assert.match(live.editorNotes, /^Published by the scheduled run, as set, Wednesday 21 October at 7:00 a\.m\. Vancouver time\.\n\nSCHEDULED/)
   })
   await check("toPublished: a scheduled edit keeps the live post's date", () => {
     const live = toPublished(due() as never, morning, "2026-10-01")
     assert.equal(live.date, "2026-10-01")
-    assert.match(live.editorNotes, /^Edit published by the morning run/)
+    assert.match(live.editorNotes, /^Edit published by the scheduled run/)
   })
 
   await check("a draft whose time has come goes live in one step, and the editors get its address", async () => {
@@ -389,12 +389,17 @@ async function main() {
     assert.equal(m.sent[0].subject, "On squareonepaving.com now: A stamped crosswalk for Langley's railway district")
     assert.deepEqual(m.sent[0].to, ["office@example.com", "agency@example.com"])
     assert.match(m.sent[0].text, /https:\/\/www\.squareonepaving\.com\/blog\/langley-stamped-crosswalk/)
-    assert.match(m.sent[0].text, /Tomorrow morning's run drafts its social posts in Buffer, for approval/)
+    assert.match(m.sent[0].text, /Its social posts are drafted in Buffer within 15 minutes, for approval/)
   })
-  await check("a draft ten minutes early is due: the run that starts at 14:00 doesn't miss a 14:05 one", async () => {
+  await check("never early: a 14:08 draft waits for the 14:15 run; a run a few seconds early still takes a 14:00 one", async () => {
     const s = sanity([due({ scheduledFor: "2026-10-21T14:08:00.000Z" })])
     const out = await publishDueDrafts({ claude: fakeClaude().claude, store: s.store, mail: fakeMail().mail, now: () => morning }, morning)
-    assert.equal(out.published.length, 1)
+    assert.equal(out.published.length, 0, "not at 14:00")
+    const quarter = new Date("2026-10-21T14:15:02Z")
+    assert.equal((await publishDueDrafts({ claude: fakeClaude().claude, store: s.store, mail: fakeMail().mail, now: () => quarter }, quarter)).published.length, 1)
+    const s2 = sanity([due({ scheduledFor: "2026-10-21T14:00:00.000Z" })])
+    const early = new Date("2026-10-21T13:59:40Z")
+    assert.equal((await publishDueDrafts({ claude: fakeClaude().claude, store: s2.store, mail: fakeMail().mail, now: () => early }, early)).published.length, 1)
   })
   await check("a scheduled edit to a live post keeps its date and says so", async () => {
     const s = sanity([due(), { _id: "post-langley-stamped-crosswalk", _type: "post", title: "Old", slug: { _type: "slug", current: "langley-stamped-crosswalk" }, date: "2026-10-02" }])
@@ -413,6 +418,14 @@ async function main() {
     assert.ok(s.get("drafts.post-langley-stamped-crosswalk"), "still there, still scheduled")
     assert.match(m.sent[0].subject, /^Scheduled post not published/)
     assert.match(m.sent[0].text, /turn "Goes live by itself" off and press Publish yourself/)
+    // The run comes back every 15 minutes (6 Nov 2026): the same failure is
+    // not emailed again until a day has passed.
+    const later = new Date(morning.getTime() + 15 * 60_000)
+    await publishDueDrafts({ claude: fakeClaude().claude, store: s.store, mail: m.mail, now: () => later }, later)
+    assert.equal(m.sent.length, 1, "15 minutes on: tried again, not emailed again")
+    const nextDay = new Date(morning.getTime() + 24 * 3_600_000)
+    await publishDueDrafts({ claude: fakeClaude().claude, store: s.store, mail: m.mail, now: () => nextDay }, nextDay)
+    assert.equal(m.sent.length, 2, "a day on: one more")
   })
   await check("a draft with no address is left and reported", async () => {
     const s = sanity([due({ slug: undefined })])
@@ -778,10 +791,10 @@ async function main() {
 
   console.log("\nThe article run (app/api/cron/project-articles)")
 
-  await check("its own cron, daily at 15:00 UTC, an hour after the daily run", () => {
+  await check("its own cron, daily at 15:00 UTC; the social and scheduled-post run every 15 minutes (6 Nov 2026)", () => {
     const crons = (vercel as { crons: { path: string; schedule: string }[] }).crons
     assert.deepEqual(crons.find((c) => c.path === "/api/cron/project-articles"), { path: "/api/cron/project-articles", schedule: "0 15 * * *" })
-    assert.deepEqual(crons.find((c) => c.path === "/api/cron/social-drafts"), { path: "/api/cron/social-drafts", schedule: "0 14 * * *" })
+    assert.deepEqual(crons.find((c) => c.path === "/api/cron/social-drafts"), { path: "/api/cron/social-drafts", schedule: "*/15 * * * *" })
   })
   await check("refuses a call without the secret, and does nothing without its keys", async () => {
     const saved = { secret: process.env.CRON_SECRET, anthropic: process.env.ANTHROPIC_API_KEY, addons: process.env.NEXT_PUBLIC_STUDIO_ADDONS }
