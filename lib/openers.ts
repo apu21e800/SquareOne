@@ -143,7 +143,7 @@ export const OPENERS: OpenerDefault[] = [
     position: "center 60%",
     head: "Drawings, specifications",
     tail: "and samples",
-    lede: "What a landscape architect, an engineer or a municipal specifier needs to put decorative pavement on a drawing and out to tender, and a site walk with the samples when you are ready.",
+    lede: "What an architect, a landscape architect, an engineer or a municipal specifier needs to put decorative pavement on a drawing and out to tender, and a site walk with the samples when you are ready.",
   },
   {
     page: "/blog",

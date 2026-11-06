@@ -38,14 +38,16 @@ interface PrimaryLink {
 // 2 Oct 2026, the client's notes: "add Driveways to the top nav", "for
 // specifiers section is not required", "remove phone number from main nav".
 // Vern, later the same day: "just hide the specifiers section for now", so
-// /specifiers is linked from nowhere (the route still answers); the office
-// number stays in the menu strip and the drawer.
+// /specifiers was linked from nowhere (the route still answered); the office
+// number stays in the menu strip and the drawer. 3 Nov 2026 (Vern: "appeal
+// to architects"): /specifiers is back, as the last row of Who we work with
+// (SPECIFIERS_GROUP below) and in the footer.
 const PRIMARY_LINKS: PrimaryLink[] = [
   { label: "What we do", href: "/services", match: ["/services", "/products", "/patterns"], menu: "services" },
-  { label: "Who we work with", href: "/applications", match: ["/applications", "/galleries"], menu: "buyers" },
+  { label: "Who we work with", href: "/applications", match: ["/applications", "/galleries", "/specifiers"], menu: "buyers" },
   { label: "Driveways", href: "/driveways", match: ["/driveways"] },
   { label: "Projects", href: "/projects", match: ["/projects"] },
-  { label: "About", href: "/about", match: ["/about", "/blog", "/specifiers", "/resources"] },
+  { label: "About", href: "/about", match: ["/about", "/blog", "/resources"] },
 ]
 
 
@@ -75,6 +77,14 @@ const BUYER_GROUPS = BUYERS.map((b) => ({
   note: b.note,
   items: b.slugs.map(byslug).filter((a): a is NonNullable<typeof a> => Boolean(a)),
 }))
+
+/** The fifth row of the menu (3 Nov 2026): the people who draw the work, and what /specifiers gives them. */
+const SPECIFIERS_GROUP: (typeof BUYER_GROUPS)[number] = {
+  label: "Architects & engineers",
+  note: "Landscape architects, engineers and municipal specifiers: drawings, specifications and samples.",
+  items: [{ label: "Drawings, specifications and samples", href: "/specifiers", slug: "specifiers" }],
+}
+const MENU_GROUPS = [...BUYER_GROUPS, SPECIFIERS_GROUP]
 
 const HAIRLINE = "#E1E4E7"
 
@@ -304,9 +314,9 @@ function ServicesMenu({ previews, onNavigate }: MenuProps) {
 }
 
 function BuyersMenu({ previews, onNavigate }: MenuProps) {
-  const first = BUYER_GROUPS[0]?.items[0]?.href ?? "/applications/crosswalks"
+  const first = MENU_GROUPS[0]?.items[0]?.href ?? "/applications/crosswalks"
   const [pv, show] = usePreview(first)
-  const keys = BUYER_GROUPS.flatMap((g) => g.items.map((a) => a.href))
+  const keys = MENU_GROUPS.flatMap((g) => g.items.map((a) => a.href))
   return (
     <>
       <div className="col-span-7">
@@ -317,7 +327,7 @@ function BuyersMenu({ previews, onNavigate }: MenuProps) {
           </Link>
         </div>
         <div className="mega-ledger">
-          {BUYER_GROUPS.map((g) => (
+          {MENU_GROUPS.map((g) => (
             <div key={g.label}>
               <div>
                 <span className="mega-name">{g.label}</span>
@@ -479,7 +489,7 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
           </Link>
         </div>
         <div className="mt-2 border-t border-hairline">
-          {BUYER_GROUPS.map((g) => (
+          {MENU_GROUPS.map((g) => (
             <div key={g.label} className="border-b border-hairline py-4">
               <span className="drawer-name text-[17px]">{g.label}</span>
               <ul className="mega-run mt-1 text-[16px]">

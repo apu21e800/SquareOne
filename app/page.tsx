@@ -78,8 +78,15 @@ export const metadata: Metadata = {
  * band and on /about (lib/clients.ts) — the trust strip is retired.
  *
  * ServicesGrid and ProjectsPreview carry #services / #work on their own
- * <section>. BlogFeedGrid does not carry #journal, so the anchor lives here;
- * its scroll-margin clears the 72px sticky nav bar.
+ * <section>.
+ *
+ * The order as rendered since the 28 Sept 2026 cut: hero, the proof line,
+ * services (white), selected work (warm), four steps (paper), the
+ * audiences (stone), driveways (white), patterns and colours (warm),
+ * vapour (stone), the crews (white), the close in the footer (warm), the
+ * footer (slate). The articles band was put back on 3 Nov 2026 and taken
+ * off again on 5 Nov (Vern: "Projects / Selected work already covers it");
+ * a pinned project leads Selected work instead (lib/pin.ts).
  */
 export default async function Home() {
   // CMS overlays (lib/cms.ts): every reader falls back to the built-in copy

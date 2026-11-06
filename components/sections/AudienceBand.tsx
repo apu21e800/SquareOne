@@ -22,7 +22,9 @@ import { HOME_COPY, type HomeCopy } from "@/lib/page-copy"
 // 2 Oct 2026, the client's notes: the audience is the people who buy
 // decorative hardscapes for commercial and residential sites, and the
 // specifiers' card is not required. Three buyers: the municipality, the
-// commercial or strata owner, the homeowner.
+// commercial or strata owner, the homeowner. 3 Nov 2026 (Vern: "appeal to
+// architects"): the fourth card is back, last, for the people who draw the
+// work, with /specifiers' own opener as its photograph.
 // The names and lines are the Home page's words (lib/page-copy.ts); the
 // photographs and links stay here.
 const audiences = [
@@ -59,6 +61,16 @@ const audiences = [
     caption: "Ashlar garden walkway · StreetPrint",
     position: "center 60%",
   },
+  {
+    key: "specifiers" as const,
+    orders: ["Template sheets", "Colour chart", "Specifications"],
+    href: "/specifiers",
+    cta: "For specifiers",
+    image: "/images/applications/streetscapes/victoria-town-centre-crossing-streetprint-01.jpg",
+    alt: "Brick-red StreetPrint stamped asphalt crossing at the edge of a town centre plaza in Victoria, with shops and trees beyond",
+    caption: "Victoria · Town centre crossing · StreetPrint",
+    position: "center 60%",
+  },
 ]
 
 export default function AudienceBand({
@@ -71,11 +83,12 @@ export default function AudienceBand({
   cards?: HomeCopy["audienceCards"]
 }) {
   // 28 Sept 2026 (Vern: "too much text… cut the fat, make the sale"): the
-  // three hairline rows became three columns, a photograph, the name, one
-  // line and the way in. The "orders" tags stay in the data for later use.
+  // hairline rows became columns, a photograph, the name, one line and the
+  // way in. The "orders" tags stay in the data for later use. Four columns
+  // since 3 Nov 2026, two by two on a tablet, one on a phone.
   return (
     <Section label={words.label} title={<Heading words={words} />} tone={tone} wide>
-      <ul data-reveal-group className="grid grid-cols-3 gap-x-8 gap-y-12 max-[900px]:grid-cols-1" role="list">
+      <ul data-reveal-group className="grid grid-cols-4 gap-x-7 gap-y-12 max-[1100px]:grid-cols-2 max-[1100px]:gap-x-8 max-[600px]:grid-cols-1" role="list">
         {audiences.map((audience) => (
           <li key={audience.key} data-reveal>
             <Frame
@@ -86,7 +99,7 @@ export default function AudienceBand({
               position={audience.position}
               href={audience.href}
             />
-            <h3 className="mt-5 text-[26px] leading-[1.12]">
+            <h3 className="mt-5 text-[24px] leading-[1.12]">
               <Link href={audience.href} className="hover:underline hover:decoration-1 hover:underline-offset-[6px]">
                 {cards[audience.key].title}
               </Link>
