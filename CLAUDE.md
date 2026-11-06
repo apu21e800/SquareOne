@@ -153,7 +153,7 @@ Copy .env.local.example → .env.local and fill in:
   `send.squareonepaving.com`, which is Resend's return path, not a sending
   domain; never set this to an address @send.). The root also carries Google
   Workspace MX and `v=spf1 include:_spf.google.com ~all`; **never edit those**
-  or the client loses their email. No DMARC record yet (Vern's call, at GoDaddy).
+  or the client loses their email. DMARC is `p=none` (since 22 Oct 2026). Since 6 Nov 2026 these records live in Vercel DNS (see Deployment).
 - CONTACT_EMAIL — receiving address (defaults to office@squareonepaving.com)
 - ANTHROPIC_API_KEY — the quote form's spam screen (lib/form-screen.ts). Unset,
   narrow backup rules decide. Production only, with a monthly spend limit.
@@ -366,6 +366,7 @@ Products link to services via `serviceSlug`:
 - Old blog posts → `/blog/[slug]`
 - Old case studies → `/blog` (consolidated)
 - Old documents (`/wp-content/uploads/…pdf`) → the same document in `/docs`, from `lib/old-pdfs.ts` (22 Oct 2026): the 40 addresses Search Console lists, by name or matched by hand; any other old document → `/resources`. Vercel's firewall answers 403 to `/wp-` addresses the site has no redirect for, so old images and WordPress paths stay blocked. `npm run test:redirects`.
+- The eight driveway domains (lib/driveway-domains.ts, 6 Nov 2026): every address on drivewaysvancouver.ca/.com and vancouverdriveways.ca/.com → `/driveways/vancouver`, on drivewaysvictoria.ca/.com and victoriadriveways.ca/.com → `/driveways/victoria`, with or without www. Host rules, first in the list. GoDaddy's forwarding did this before (home pages only). `npm run test:redirects`.
 
 When adding new content, check `next.config.ts` redirects first to avoid conflicts.
 
@@ -526,6 +527,7 @@ npm run plan:seed -- --dry-run  # the first project stories for Blog ideas, from
 - **Repo**: Connected to GitHub
 - **Auto-deploy**: Push to `main` branch triggers production deployment
 - **Environment variables**: Set in Vercel dashboard (RESEND_API_KEY, CONTACT_EMAIL, NEXT_PUBLIC_SITE_URL)
+- **DNS** (6 Nov 2026, Vern: "100% off of all GoDaddy dependancies except for their owned domain names"): squareonepaving.com and the eight driveway domains use Vercel DNS in the based-agency team (ns1.vercel-dns.com, ns2.vercel-dns.com); the names stay registered in Square One's own GoDaddy account, and a nameserver change there needs a code from Square One. Every record is in Vercel → Domains, with a comment saying what it is for: Google Workspace mail (MX, SPF, DKIM), DMARC, Resend's `send` and DKIM for the quote form, and the verifications. Never remove the mail records. Vercel manages the apex and wildcard records itself.
 - **Domain**: www.squareonepaving.com is the canonical host in code (`lib/site.ts`); the bare domain 308s to it on Vercel. Live since 19 Sept 2026. If production ever moves to the bare domain, set NEXT_PUBLIC_SITE_URL in Vercel and redeploy.
 
 ## Working copy and handoff
