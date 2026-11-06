@@ -1,5 +1,6 @@
 import { useDocumentOperation, type DocumentActionComponent, type DocumentActionProps } from "sanity"
 import { firstPublishDate } from "./lib/publish-date"
+import { pinOnPublish } from "../lib/pin"
 
 /**
  * Publish, for blog posts: the first Publish dates the post today (Vancouver),
@@ -24,6 +25,30 @@ export function datedPublish(original: DocumentActionComponent): DocumentActionC
         const date = firstPublishDate(Boolean(props.published), current?.date)
         if (date) patch.execute([{ set: { date } }])
         if (current?.scheduled === true) patch.execute([{ set: { scheduled: false } }, { unset: ["scheduledFor"] }])
+        result.onHandle?.()
+      },
+    }
+  }
+  Action.action = original.action
+  return Action
+}
+
+/**
+ * Publish, for projects (5 Nov 2026, lib/pin.ts): a project that goes out
+ * pinned with no stamp is stamped now, and one that goes out unpinned loses
+ * its stamp, so the site's newest pin is the one most recently published
+ * pinned. The patch lands on the draft, then Sanity's own Publish runs.
+ */
+export function pinnedPublish(original: DocumentActionComponent): DocumentActionComponent {
+  const Action: DocumentActionComponent = (props: DocumentActionProps) => {
+    const result = original(props)
+    const { patch } = useDocumentOperation(props.id, props.type)
+    if (!result) return result
+    return {
+      ...result,
+      onHandle: () => {
+        const pin = pinOnPublish((props.draft ?? props.published) as { pinned?: unknown; pinnedAt?: unknown } | null)
+        if (pin) patch.execute([pin])
         result.onHandle?.()
       },
     }

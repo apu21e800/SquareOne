@@ -1,6 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import NoPhoto from "@/components/ui/NoPhoto"
+import PinnedLabel from "@/components/ui/PinnedLabel"
 import type { ReactNode } from "react"
 
 /**
@@ -44,6 +45,19 @@ export interface RecordCardProps {
   priority?: boolean
   /** The Studio's focal point, as CSS object-position (lib/focal.ts). */
   position?: string
+  /** A project pinned in the Studio (lib/pin.ts): a small "Pinned" before the kicker. */
+  pinned?: boolean
+}
+
+/** The kicker's line: the kicker alone, or "Pinned" and the kicker side by side. */
+function Kicker({ kicker, pinned }: { kicker?: string; pinned?: boolean }) {
+  if (!pinned) return kicker ? <span className="label">{kicker}</span> : null
+  return (
+    <span className="flex flex-wrap items-center gap-x-4 gap-y-1">
+      <PinnedLabel />
+      {kicker && <span className="label">{kicker}</span>}
+    </span>
+  )
 }
 
 export default function RecordCard({
@@ -58,7 +72,9 @@ export default function RecordCard({
   lead = false,
   priority = false,
   position,
+  pinned = false,
 }: RecordCardProps) {
+  const kickerLine = Boolean(kicker || pinned)
   const framing = position ? { objectPosition: position } : undefined
   if (lead) {
     return (
@@ -85,8 +101,8 @@ export default function RecordCard({
         </Link>
 
         <div className="min-w-0">
-          {kicker && <span className="label">{kicker}</span>}
-          <h2 className={`card-title rc-title-lead [text-wrap:balance] ${kicker ? "mt-2" : ""}`}>
+          <Kicker kicker={kicker} pinned={pinned} />
+          <h2 className={`card-title rc-title-lead [text-wrap:balance] ${kickerLine ? "mt-2" : ""}`}>
             <Link href={href} className="text-ink hover:underline hover:underline-offset-[5px] hover:decoration-1">
               {title}
             </Link>
@@ -125,9 +141,9 @@ export default function RecordCard({
       </Link>
 
       <div className="min-w-0 mt-4 max-[600px]:mt-0">
-        {kicker && <span className="label">{kicker}</span>}
+        <Kicker kicker={kicker} pinned={pinned} />
 
-        <h3 className={`rc-title [text-wrap:pretty] ${kicker ? "mt-1" : ""}`}>
+        <h3 className={`rc-title [text-wrap:pretty] ${kickerLine ? "mt-1" : ""}`}>
           <Link href={href} className="text-ink hover:underline hover:underline-offset-[5px] hover:decoration-1">
             {title}
           </Link>

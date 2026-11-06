@@ -13,7 +13,9 @@ import RecordCard from "@/components/ui/RecordCard"
  * RecordCard, so this index and /blog read as one system.
  *
  * 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.7): the lead is a hairline
- * row, the rest a grid of frames with their captions under them.
+ * row, the rest a grid of frames with their captions under them. The
+ * projects come pinned first (app/projects/page.tsx, lib/pin.ts), so a
+ * pinned project is the lead under any filter it matches, with its label.
  */
 
 export interface ProjectCard {
@@ -28,6 +30,8 @@ export interface ProjectCard {
   src: string
   /** The Studio's focal point for the photograph (lib/focal.ts). */
   position?: string
+  /** Pinned in the Studio (lib/pin.ts): first in the list, with its label. */
+  pinned?: boolean
 }
 
 interface ProjectsIndexClientProps {
@@ -117,6 +121,7 @@ export default function ProjectsIndexClient({ projects }: ProjectsIndexClientPro
                   title={lead.title}
                   description={lead.excerpt}
                   meta={lead.region}
+                  pinned={lead.pinned}
                 />
               </div>
             )}
@@ -136,6 +141,7 @@ export default function ProjectsIndexClient({ projects }: ProjectsIndexClientPro
                       kicker={project.application}
                       title={project.title}
                       description={project.excerpt}
+                      pinned={project.pinned}
                       meta={
                         <>
                           {/* The caption under the frame carries the city on wide

@@ -233,6 +233,7 @@ export const GUIDE_SOURCE: { title: string; lead: { free: string; addons: string
       ],
       next: [
         "**Site Settings** holds the phone numbers, the email and the address every page prints: change it only when one of those changes.",
+        "To keep a project first in Selected work on the home page and on the Projects page, open it under **Projects**, turn on **Pin to top** and press **Publish**. One project is pinned at a time: the newest pin goes on top.",
         "Not sure about something? Leave it as a draft and ask. Nothing reaches the site until someone presses **Publish**.",
       ],
     },

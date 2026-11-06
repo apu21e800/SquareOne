@@ -14,6 +14,7 @@ import { HERO_HEADLINE, HERO_HEADLINE_END, HERO_LINE, HERO_SLIDES } from "../lib
 import { mergeHome, mergeOpener, type PageHeroDoc } from "../lib/page-content"
 import { mergeWork, photoPath, type GalleryPhotoDoc } from "../lib/work-cms"
 import { getWork } from "../lib/work"
+import { pinnedFirst } from "../lib/pin"
 
 let failures = 0
 function check(name: string, fn: () => void) {
@@ -174,6 +175,41 @@ check("a pasted address in any form reduces to the site's path", () => {
   assert.equal(photoPath("/images/a%20b.jpg"), "/images/a b.jpg")
   assert.equal(photoPath("images/a b.jpg"), "/images/a b.jpg")
   assert.equal(photoPath("https://www.squareonepaving.com/images/a%20b.jpg"), "/images/a b.jpg")
+})
+
+console.log("the pinned project (Selected work's six, /projects)")
+// A project as the lists see it: a slug and, for a pin, Publish's stamp. A
+// project has no date, so an unstamped pin counts from nothing and any
+// stamped pin beats it.
+const project = (slug: string, pin?: { pinnedAt?: string }) => ({ slug, title: slug, ...(pin ? { pinned: true, ...pin } : {}) })
+const newestFirst = [project("e"), project("d"), project("c"), project("b"), project("a")]
+check("no pin: the order is as it came, and nothing reads as pinned", () => {
+  const listed = pinnedFirst(newestFirst)
+  assert.deepEqual(listed.map((p) => p.slug), ["e", "d", "c", "b", "a"])
+  assert.ok(listed.every((p) => !p.pinned))
+})
+check("one pin: that project first with the label, the rest in their order, never twice", () => {
+  const projects = [newestFirst[0], newestFirst[1], project("c", { pinnedAt: "2026-11-01T17:00:00.000Z" }), newestFirst[3], newestFirst[4]]
+  const listed = pinnedFirst(projects)
+  assert.deepEqual(listed.map((p) => p.slug), ["c", "e", "d", "b", "a"])
+  assert.deepEqual(listed.map((p) => Boolean(p.pinned)), [true, false, false, false, false])
+  assert.equal(new Set(listed.map((p) => p.slug)).size, projects.length)
+})
+check("two pins: the newest pin goes on top, and the older one reads as an ordinary project in its place", () => {
+  const projects = [newestFirst[0], project("d", { pinnedAt: "2026-10-31T09:00:00.000Z" }), newestFirst[2], project("b", { pinnedAt: "2026-11-02T09:00:00.000Z" }), newestFirst[4]]
+  const listed = pinnedFirst(projects)
+  assert.deepEqual(listed.map((p) => p.slug), ["b", "e", "d", "c", "a"])
+  assert.deepEqual(listed.map((p) => Boolean(p.pinned)), [true, false, false, false, false])
+})
+check("a pin with no stamp yields to any stamped pin", () => {
+  const projects = [project("e", {}), newestFirst[1], project("a", { pinnedAt: "2026-11-03T20:00:00.000Z" })]
+  assert.deepEqual(pinnedFirst(projects).map((p) => p.slug), ["a", "e", "d"])
+})
+check("the list it was given is left as it was", () => {
+  const projects = [newestFirst[0], project("c", { pinnedAt: "2026-11-01T17:00:00.000Z" })]
+  pinnedFirst(projects)
+  assert.deepEqual(projects.map((p) => p.slug), ["e", "c"])
+  assert.equal(projects[1].pinned, true)
 })
 
 if (failures) {

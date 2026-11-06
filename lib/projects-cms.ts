@@ -1,4 +1,4 @@
-import { groq } from "next-sanity"
+import { groq, stegaClean } from "next-sanity"
 import { editAttr, inDraftMode, sanityFetch, urlFor, type SanityImageSource } from "@/sanity/lib/client"
 import { projects as RECORD, type Project, type ProjectPhotoMeta, type ProjectRegion, type ProjectService } from "@/lib/projects"
 import { focalPosition, isCropped, type SanityCrop, type SanityHotspot } from "@/lib/focal"
@@ -61,12 +61,14 @@ export interface ProjectDoc {
   featured?: boolean
   heroWide?: boolean
   hidden?: boolean
+  pinned?: boolean | null
+  pinnedAt?: string | null
   images?: PhotoDoc[]
 }
 
 const QUERY = groq`*[_type == "project" && defined(slug.current)] | order(_createdAt desc) {
   _id, _type, _createdAt, title, "slug": slug.current, service, application, city, region, systems,
-  client, artist, year, excerpt, story, "post": post->slug.current, featured, heroWide, hidden,
+  client, artist, year, excerpt, story, "post": post->slug.current, featured, heroWide, hidden, pinned, pinnedAt,
   "images": images[defined(asset)]{ _key, alt, "file": asset->originalFilename, asset, crop, hotspot }
 }`
 
@@ -141,6 +143,10 @@ function fromDoc(d: ProjectDoc, record?: Project, preview = false): Project | nu
     imageUrl: images[0],
     heroWide: d.heroWide ?? record?.heroWide ?? false,
     featured: d.featured ?? record?.featured,
+    // Pin to top (lib/pin.ts): the switch and Publish's stamp, the Studio's
+    // only. The stamp is compared, never shown, so it is cleaned of Edit on
+    // the page's marks first (CLAUDE.md).
+    ...(d.pinned === true ? { pinned: true, ...(text(d.pinnedAt) ? { pinnedAt: stegaClean(text(d.pinnedAt) as string) } : {}) } : {}),
     flag: record?.flag,
     ...(photoMeta ? { photoMeta } : {}),
   }

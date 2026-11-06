@@ -1,6 +1,7 @@
 import { defineArrayMember, defineField, defineType } from "sanity"
 import { ICONS } from "../icons"
 import { copyCheck, paragraphsCheck } from "./style"
+import { PROJECT_PIN_DESCRIPTION, pinFields } from "./pin"
 
 const SYSTEMS = ["StreetPrint", "StreetBond", "StreetBondSR", "StreetBond150", "TrafficPatterns", "TrafficPatternsXD", "DuraTherm", "DecoMark", "PreMark", "DuraShield"]
 const APPLICATIONS = ["Crosswalks", "Streetscapes", "Roundabouts & traffic calming", "Parking lots", "Parks & paths", "Schools & sports courts", "Bike lanes", "Public art", "Branding & wayfinding", "Driveways"]
@@ -80,6 +81,10 @@ export const project = defineType({
       validation: (r) => r.required().min(1),
     }),
     defineField({ name: "featured", type: "boolean", title: "Featured", description: "Marks one of the strongest projects. The home page's six are chosen by the web team; ask them to change which show there.", initialValue: false }),
+    // Pin to top (5 Nov 2026, Vern; lib/pin.ts): the pinned project leads
+    // Selected work on the home page and the Projects page. Publish stamps
+    // pinnedAt (sanity/actions.ts pinnedPublish); the newest pin shows first.
+    ...pinFields("project", PROJECT_PIN_DESCRIPTION),
     defineField({ name: "heroWide", type: "boolean", title: "Hero can run full width", description: "Only for a photograph at least 1600px wide.", initialValue: false }),
     defineField({ name: "hidden", type: "boolean", title: "Take off the site", description: "Hides this project everywhere on the site without deleting it. Untick to bring it back.", initialValue: false }),
   ],
