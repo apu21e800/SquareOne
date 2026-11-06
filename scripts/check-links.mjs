@@ -46,7 +46,8 @@ for (const page of walk(path.join(ROOT, "app"), new Set([".tsx"]))) {
 }
 for (const s of slugsFrom("lib/products.ts")) routes.add(`/products/${s}`)
 for (const s of slugsFrom("lib/services.ts")) routes.add(`/services/${s}`)
-for (const s of slugsFrom("lib/projects.ts")) routes.add(`/projects/${s}`)
+// 6 Nov 2026: the record's jobs are posts (lib/blog.ts); one with no post of its own is a post of its own slug.
+for (const s of slugsFrom("lib/projects.ts")) routes.add(`/blog/${s}`)
 for (const s of slugsFrom("lib/work.ts")) if (s !== "driveways") routes.add(`/applications/${s}`)
 for (const f of walk(path.join(ROOT, "content/blog"), new Set([".mdx", ".md"]))) routes.add(`/blog/${path.basename(f).replace(/\.(mdx|md)$/, "")}`)
 for (const city of ["vancouver", "victoria"]) routes.add(`/driveways/${city}`)

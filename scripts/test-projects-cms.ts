@@ -1,17 +1,22 @@
 /**
- * Tests for the Studio-backed projects (lib/projects-cms.ts): `npm run test:projects`.
+ * Tests for the jobs as posts (lib/blog.ts, lib/projects-cms.ts): `npm run test:projects`.
  *
- * The cases are what the office will do in the Studio, and the one promise
- * that matters most: with the Studio holding exactly what the seed of
- * 7 Oct 2026 put there, every project comes out byte-for-byte as the record
- * has it, so switching the site to the Studio changes nothing anyone sees.
- * No network: the documents are built here from lib/projects.ts.
+ * 6 Nov 2026 (Vern: "Projects and blog should be combined into the same
+ * thing, not two separate sections"): a job is a blog post that carries its
+ * facts. The cases are what the office will do in the Studio, and the two
+ * promises that matter most: with no Studio at all, every record project
+ * comes out as a post at its post's address with the record's facts and
+ * photographs; and a Studio post that says nothing of a job yet still
+ * carries the record's. No network: the documents are built here from
+ * lib/projects.ts and content/blog.
  */
 import "./test-env"
 import assert from "node:assert/strict"
-import { projects as RECORD } from "../lib/projects"
-import { mergeProjects, type ProjectDoc as Doc } from "../lib/projects-cms"
+import { RECORD_POST_DATE, postSlugOf, projects as RECORD, recordOnlyProjects } from "../lib/projects"
+import { getAllPosts, getPostBySlug, mergePosts, postFromRecord, type BlogPostMeta, type CmsPostDoc } from "../lib/blog"
+import { projectOf, projectsFrom } from "../lib/projects-cms"
 import { pinnedFirst } from "../lib/pin"
+import { vercelStegaCombine } from "@vercel/stega"
 
 let failures = 0
 function check(name: string, fn: () => void) {
@@ -24,12 +29,27 @@ function check(name: string, fn: () => void) {
   }
 }
 
-/** What the seed wrote for a record, photos named as the import stored them (URL-encoded). */
-const seeded = (): Doc[] =>
-  RECORD.map((p, i) => ({
-    _createdAt: "2026-10-07T02:55:30Z",
-    title: p.title,
-    slug: p.slug,
+const files = getAllPosts()
+const own = recordOnlyProjects()
+const named = RECORD.filter((p) => p.post)
+const file = (slug: string) => files.find((p) => p.slug === slug)!
+const encodedName = (src: string) => encodeURI(decodeURIComponent(src.split("/").pop() ?? ""))
+
+/** The Studio's post of a record project as the migration writes it (scripts/merge-projects-into-posts.ts): the post's own words, the job's fields and photographs. */
+const migrated = (p: (typeof RECORD)[number], i: number): CmsPostDoc => {
+  const post = file(postSlugOf(p))
+  return {
+    _id: `post-${postSlugOf(p)}`,
+    _type: "post",
+    title: post.title,
+    slug: post.slug,
+    date: post.date,
+    category: post.category,
+    excerpt: post.description,
+    tags: post.tags,
+    mainImage: { asset: { _ref: `image-lead${i}abc-2048x1536-jpg` } },
+    mainFile: encodedName(post.featured_image),
+    body: [],
     service: p.service,
     application: p.application,
     city: p.city,
@@ -38,132 +58,198 @@ const seeded = (): Doc[] =>
     ...(p.year ? { year: p.year } : {}),
     ...(p.client ? { client: p.client } : {}),
     ...(p.artist ? { artist: p.artist } : {}),
-    excerpt: p.excerpt,
     featured: Boolean(p.featured),
-    heroWide: Boolean(p.heroWide),
-    images: p.images.map((src, j) => ({
-      file: encodeURI(decodeURIComponent(src.split("/").pop() ?? "")),
-      asset: { _ref: `image-${i}${j}abc-2048x1536-jpg` },
-    })),
-  }))
+    gallery: p.images.filter((src) => encodedName(src) !== encodedName(post.featured_image)).map((src, j) => ({ _key: `g${j}`, file: encodedName(src), asset: { _ref: `image-g${i}x${j}abc-2048x1536-jpg` } })),
+  }
+}
 
-const NEW: Doc = {
-  _createdAt: "2026-10-20T10:00:00Z",
+const GUIDE: CmsPostDoc = { _id: "post-a-guide", _type: "post", title: "How a crossing goes down", slug: "how-a-crossing-goes-down", date: "2026-11-02", category: "Guides", excerpt: "A guide.", body: [], mainImage: { asset: { _ref: "image-guide-1600x900-jpg" } } }
+
+const NEW: CmsPostDoc = {
+  _id: "abc123",
+  _type: "post",
   title: "Plaza recoat, Port Moody",
   slug: "port-moody-plaza-recoat",
+  date: "2026-11-04",
+  category: "Streetscapes",
+  excerpt: "A plaza recoated in StreetBond.",
+  body: [],
+  mainImage: { asset: { _ref: "image-0042def-4032x3024-jpg" }, hotspot: { x: 0.3, y: 0.7, width: 0.2, height: 0.2 } },
+  mainFile: "IMG_0042.jpg",
   service: "Decorative Coatings",
   application: "Streetscapes",
   city: "Port Moody, BC",
   region: "Lower Mainland",
   systems: ["StreetBond"],
   year: "2026",
-  excerpt: "A plaza recoated in StreetBond.",
-  images: [{ file: "IMG_0042.jpg", asset: { _ref: "image-0042def-4032x3024-jpg" } }],
+  gallery: [{ _key: "g0", file: "IMG_0043.jpg", asset: { _ref: "image-0043def-4032x3024-jpg" }, alt: "The plaza from the steps" }],
 }
+
+console.log("the record, told as posts")
+check("every record project is a post at its post's address, with the record's facts", () => {
+  const jobs = projectsFrom(files)
+  assert.equal(jobs.length, RECORD.length)
+  for (const p of RECORD) {
+    const job = jobs.find((j) => j.slug === postSlugOf(p))!
+    assert.ok(job, p.slug)
+    assert.equal(job.city, p.city)
+    assert.equal(job.service, p.service)
+    assert.equal(job.application, p.application)
+    assert.deepEqual(job.systems, p.systems)
+    assert.equal(job.year, p.year)
+    assert.equal(job.artist, p.artist)
+    assert.equal(job.featured, p.featured)
+    assert.equal(job.title, p.title, "the job's short name in lists is the record's, whatever its post's headline")
+  }
+})
+check("a project with no post of its own is a post made from its record: its title, summary, paragraphs, photographs and the launch day's date", () => {
+  assert.ok(own.length > 0)
+  for (const p of own) {
+    const post = file(p.slug)
+    assert.equal(post.title, p.title)
+    assert.equal(post.description, p.excerpt)
+    assert.equal(post.date, RECORD_POST_DATE)
+    assert.equal(post.featured_image, p.images[0])
+    assert.deepEqual(post.job?.photos.slice(0, p.images.length - 1), p.images.slice(1))
+    assert.ok(post.tags.includes("Project stories"))
+    const full = getPostBySlug(p.slug)!
+    assert.ok(full.content.startsWith(p.excerpt))
+    for (const paragraph of p.story ?? []) assert.ok(full.content.includes(paragraph))
+  }
+  assert.deepEqual(postFromRecord(own[0]).job?.systems, own[0].systems)
+})
+check("a post that tells a record project keeps its own lead photograph; the project's other photographs follow, its hero among them when the post leads with another", () => {
+  for (const p of named) {
+    const post = file(p.post!)
+    assert.ok(post.job, p.post)
+    const lead = encodedName(post.featured_image)
+    for (const src of p.images) {
+      if (encodedName(src) === lead) assert.ok(!post.job!.photos.includes(src), "the lead is not repeated")
+      else assert.ok(post.job!.photos.includes(src), `${p.slug}: ${src} kept`)
+    }
+  }
+})
+check("a post that tells no job has none", () => {
+  const guides = files.filter((p) => !p.job)
+  assert.ok(guides.length > 0)
+  assert.equal(projectsFrom(guides).length, 0)
+})
+check("every job lists under its post's address, lead photograph first", () => {
+  for (const job of projectsFrom(files)) {
+    assert.equal(job.post, job.slug)
+    assert.equal(job.images[0], job.imageUrl)
+    assert.ok(job.imageUrl)
+  }
+})
 
 console.log("nothing changes until someone edits")
-check("no CMS (or Sanity unreachable): the record, exactly", () => assert.equal(mergeProjects(null, RECORD), RECORD))
-/** What a page can see of a project: an absent field and an undefined one read the same, as do false and absent flags. */
-const seen = (p: object) => {
-  const o = JSON.parse(JSON.stringify(p)) as Record<string, unknown>
-  for (const k of ["featured", "heroWide", "flag"]) o[k] = Boolean(o[k])
-  return o
-}
-check("the Studio as seeded: every project exactly as the record has it", () => {
-  const out = mergeProjects(seeded(), RECORD)
-  assert.equal(out.length, RECORD.length)
-  for (let i = 0; i < RECORD.length; i++) assert.deepEqual(seen(out[i]), seen(RECORD[i]), RECORD[i].slug)
+check("no CMS (or Sanity unreachable): the files and the record, exactly", () => assert.deepEqual(mergePosts(null, files), [...files].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())))
+check("an empty Studio: the same", () => assert.deepEqual(mergePosts([], files), mergePosts(null, files)))
+check("the Studio as the migration leaves it: every job as before, photographs served from the site", () => {
+  const out = projectsFrom(mergePosts(RECORD.map(migrated), files))
+  const before = projectsFrom(files)
+  assert.equal(out.length, before.length)
+  for (const b of before) {
+    const a = out.find((x) => x.slug === b.slug)!
+    assert.ok(a, b.slug)
+    assert.equal(a.imageUrl, b.imageUrl, `${b.slug}: the lead photograph, the site's own file`)
+    assert.deepEqual([...a.images].sort(), [...b.images].sort(), `${b.slug}: the same photographs`)
+    assert.equal(a.city, b.city)
+    assert.deepEqual(a.systems, b.systems)
+    assert.equal(a.year, b.year)
+  }
 })
-check("an empty Studio: the record", () => assert.deepEqual(mergeProjects([], RECORD), RECORD))
+check("a Studio post that says nothing of a job yet carries the record's facts for its address", () => {
+  const p = named[0]
+  const doc: CmsPostDoc = { ...migrated(p, 0), service: null, application: null, city: null, region: null, systems: null, year: null, artist: null, client: null, featured: null, gallery: null }
+  const post = mergePosts([doc], files).find((x) => x.slug === p.post)!
+  assert.equal(post.job?.city, p.city)
+  assert.deepEqual(post.job?.systems, p.systems)
+  assert.equal(post.job?.year, p.year)
+  assert.ok(post.job?.photos.length)
+})
 
 console.log("what the office does in the Studio")
-check("a new project leads the list, its photo from Sanity's CDN", () => {
-  const out = mergeProjects([NEW, ...seeded()], RECORD)
-  assert.equal(out[0].slug, NEW.slug)
-  assert.match(out[0].imageUrl, /^https:\/\/cdn\.sanity\.io\/images\/test1234\//)
-  assert.equal(out.length, RECORD.length + 1)
+check("a fact edited in the Studio is what the site shows; the record fills the rest", () => {
+  const p = named[0]
+  const doc: CmsPostDoc = { ...migrated(p, 0), city: "Elsewhere, BC", year: "2031", systems: null, artist: "A. Designer", jobTitle: "A shorter name" }
+  const job = projectOf(mergePosts([doc], files).find((x) => x.slug === p.post)!)!
+  assert.equal(job.title, "A shorter name")
+  assert.equal(job.city, "Elsewhere, BC")
+  assert.equal(job.year, "2031")
+  assert.equal(job.artist, "A. Designer")
+  assert.deepEqual(job.systems, p.systems, "untouched: the record's")
 })
-check("an edited title and summary show; the record's paragraphs stay", () => {
-  const docs = seeded()
-  docs[0] = { ...docs[0], title: "Rainbow intersection, Nanaimo (2025)", excerpt: "New summary." }
-  const out = mergeProjects(docs, RECORD).find((p) => p.slug === RECORD[0].slug)!
-  assert.equal(out.title, "Rainbow intersection, Nanaimo (2025)")
-  assert.equal(out.excerpt, "New summary.")
-  assert.deepEqual(out.story, RECORD[0].story)
+check("half a job: with a record behind it, the record fills what is missing; with none, a guide until the job is whole", () => {
+  const p = named[0]
+  const half: CmsPostDoc = { ...migrated(p, 0), service: null, application: null, city: "Elsewhere, BC", systems: ["DuraTherm"], gallery: null }
+  const job = mergePosts([half], files).find((x) => x.slug === p.post)!.job!
+  assert.equal(job.city, "Elsewhere, BC", "the Studio's")
+  assert.equal(job.service, p.service, "the record's")
+  assert.deepEqual(job.systems, ["DuraTherm"])
+  const fresh: CmsPostDoc = { ...GUIDE, city: "Elsewhere, BC" }
+  assert.equal(mergePosts([fresh], files).find((x) => x.slug === GUIDE.slug)!.job, undefined, "no record behind it: a guide until the job is whole")
 })
-check("paragraphs typed in the Studio replace the record's", () => {
-  const docs = seeded()
-  docs[0] = { ...docs[0], story: ["One.", "  ", "Two."] }
-  assert.deepEqual(mergeProjects(docs, RECORD).find((p) => p.slug === RECORD[0].slug)!.story, ["One.", "Two."])
+check("a new job added in the Studio: a post with its job, listed first, its photographs from the CDN with the office's focal point and words", () => {
+  const posts = mergePosts([NEW], files)
+  assert.equal(posts[0].slug, NEW.slug, "newest first")
+  const job = projectOf(posts[0])!
+  assert.equal(job.city, "Port Moody, BC")
+  assert.match(job.imageUrl, /cdn\.sanity\.io/)
+  assert.equal(job.images.length, 2)
+  assert.match(job.images[1], /cdn\.sanity\.io/)
+  assert.equal(job.photoMeta?.[job.images[1]]?.alt, "The plaza from the steps")
+  assert.ok(job.photoMeta?.[job.imageUrl]?.position, "the lead's focal point")
 })
-check("Pin to top (lib/pin.ts): the Studio's switch and Publish's stamp come through; the record has none; the pinned one leads", () => {
-  const docs = seeded()
-  docs[2] = { ...docs[2], pinned: true, pinnedAt: "2026-11-05T18:00:00.000Z" }
-  const out = mergeProjects(docs, RECORD)
-  const pinned = out.find((p) => p.slug === RECORD[2].slug)!
-  assert.equal(pinned.pinned, true)
-  assert.equal(pinned.pinnedAt, "2026-11-05T18:00:00.000Z")
-  assert.ok(out.filter((p) => p.slug !== RECORD[2].slug).every((p) => p.pinned === undefined && p.pinnedAt === undefined), "no other project is pinned")
-  assert.ok(RECORD.every((p) => p.pinned === undefined), "the record never carries a pin")
-  const listed = pinnedFirst(out)
-  assert.equal(listed[0].slug, RECORD[2].slug)
-  assert.equal(listed.length, out.length, "never twice")
-  // Off in the Studio (or unstamped) and nothing changes.
-  docs[2] = { ...docs[2], pinned: false, pinnedAt: null }
-  assert.equal(mergeProjects(docs, RECORD).find((p) => p.slug === RECORD[2].slug)!.pinned, undefined)
+check("a Studio photograph that is the site's own file is served from the site; cropped, from the CDN", () => {
+  const p = named[0]
+  const same = projectOf(mergePosts([migrated(p, 0)], files).find((x) => x.slug === p.post)!)!
+  assert.ok(same.images.every((src) => !/cdn\.sanity\.io/.test(src)), same.images.join(" "))
+  const doc = migrated(p, 0)
+  doc.gallery = doc.gallery!.map((g, i) => (i === 0 ? { ...g, crop: { top: 0.1, bottom: 0, left: 0, right: 0 } } : g))
+  const cropped = projectOf(mergePosts([doc], files).find((x) => x.slug === p.post)!)!
+  assert.match(cropped.images[1], /cdn\.sanity\.io.*rect=/)
 })
-check("a blog post picked in the Studio replaces the record's link", () => {
-  const docs = seeded()
-  docs[0] = { ...docs[0], post: "some-other-post" }
-  assert.equal(mergeProjects(docs, RECORD).find((p) => p.slug === RECORD[0].slug)!.post, "some-other-post")
+check("a Studio post without a lead photograph has its page but no place in the lists that show the work", () => {
+  const doc: CmsPostDoc = { ...NEW, mainImage: undefined, mainFile: null }
+  const posts = mergePosts([doc], files)
+  assert.ok(posts.some((x) => x.slug === NEW.slug))
+  assert.ok(!projectsFrom(posts).some((x) => x.slug === NEW.slug))
 })
-check("a photo added in the Studio comes from the CDN; the site's own stay on the site", () => {
-  const docs = seeded()
-  docs[0] = { ...docs[0], images: [...(docs[0].images ?? []), { file: "new-angle.jpg", asset: { _ref: "image-new-2000x1500-jpg" } }] }
-  const out = mergeProjects(docs, RECORD).find((p) => p.slug === RECORD[0].slug)!
-  assert.deepEqual(out.images.slice(0, -1), RECORD[0].images)
-  assert.match(out.images.at(-1)!, /cdn\.sanity\.io/)
-})
-check("a photo cropped in the Studio comes from the CDN, crop and all", () => {
-  const docs = seeded()
-  const [first, ...rest] = docs[0].images ?? []
-  docs[0] = { ...docs[0], images: [{ ...first, crop: { top: 0.1, bottom: 0, left: 0, right: 0 } }, ...rest] }
-  assert.match(mergeProjects(docs, RECORD).find((p) => p.slug === RECORD[0].slug)!.imageUrl, /cdn\.sanity\.io.*rect=/)
-})
-check("reordered photos: the new first photo leads", () => {
-  const docs = seeded()
-  const i = RECORD.findIndex((p) => p.images.length > 1)
-  docs[i] = { ...docs[i], images: [...(docs[i].images ?? [])].reverse() }
-  assert.equal(mergeProjects(docs, RECORD).find((p) => p.slug === RECORD[i].slug)!.imageUrl, RECORD[i].images.at(-1))
-})
-check("'Take off the site' hides a seeded project and a new one", () => {
-  const docs = seeded()
-  docs[1] = { ...docs[1], hidden: true }
-  const out = mergeProjects([{ ...NEW, hidden: true }, ...docs], RECORD)
-  assert.ok(!out.some((p) => p.slug === RECORD[1].slug || p.slug === NEW.slug))
-  assert.equal(out.length, RECORD.length - 1)
-})
-check("a deleted seeded project stays (the record still has it)", () => {
-  assert.equal(mergeProjects(seeded().slice(1), RECORD).length, RECORD.length)
+check("the Studio's post wins over the file of the same address; a guide stays a guide", () => {
+  const p = named[0]
+  const posts = mergePosts([{ ...migrated(p, 0), title: "Retitled in the Studio" }, GUIDE], files)
+  assert.equal(posts.filter((x) => x.slug === p.post).length, 1)
+  assert.equal(posts.find((x) => x.slug === p.post)!.title, "Retitled in the Studio")
+  assert.equal(posts.find((x) => x.slug === GUIDE.slug)!.job, undefined)
 })
 
-console.log("nothing breaks on odd data")
-check("a new project with no usable photo is left out, not shown broken", () =>
-  assert.ok(!mergeProjects([{ ...NEW, images: [] }], RECORD).some((p) => p.slug === NEW.slug)))
-check("a seeded project with its photos removed keeps the record's", () => {
-  const docs = seeded()
-  docs[0] = { ...docs[0], images: [] }
-  assert.deepEqual(mergeProjects(docs, RECORD).find((p) => p.slug === RECORD[0].slug)!.images, RECORD[0].images)
+console.log("Pin to top (lib/pin.ts): the newest pin leads Selected work and /blog, once")
+check("the pin is the Studio's alone, its stamp cleaned of the preview's marks; the record never has one", () => {
+  const p = named[0]
+  // As Edit on the page marks a Studio value (sanity/lib/stega.ts).
+  const docs: CmsPostDoc[] = [{ ...migrated(p, 0), pinned: true, pinnedAt: vercelStegaCombine("2026-11-05T18:00:00.000Z", { origin: "sanity.io", href: "/studio" }) }, GUIDE]
+  const posts = mergePosts(docs, files)
+  assert.equal(posts.find((x) => x.slug === p.post)!.pinned, true)
+  assert.equal(posts.find((x) => x.slug === p.post)!.pinnedAt, "2026-11-05T18:00:00.000Z")
+  assert.ok(files.every((x) => !x.pinned))
 })
-check("an unknown service or region falls back, never breaks a page", () => {
-  const out = mergeProjects([{ ...NEW, service: "Paving", region: "Mars" }], RECORD)[0]
-  assert.equal(out.service, "Stamped Asphalt")
-  assert.equal(out.region, "Lower Mainland")
-})
-check("a duplicate web address: the newest document wins, once", () => {
-  const out = mergeProjects([NEW, { ...NEW, title: "Older copy", _createdAt: "2026-10-01T00:00:00Z" }], RECORD)
-  assert.equal(out.filter((p) => p.slug === NEW.slug).length, 1)
-  assert.equal(out[0].title, NEW.title)
+check("the newest pin leads, marked once; an older pin reads as an ordinary post", () => {
+  const [a, b] = named
+  const docs: CmsPostDoc[] = [
+    { ...migrated(a, 0), pinned: true, pinnedAt: "2026-11-01T17:00:00.000Z" },
+    { ...migrated(b, 1), pinned: true, pinnedAt: "2026-11-05T17:00:00.000Z" },
+  ]
+  const listed: BlogPostMeta[] = pinnedFirst(mergePosts(docs, files))
+  assert.equal(listed[0].slug, b.post)
+  assert.equal(listed[0].pinned, true)
+  assert.equal(listed.filter((x) => x.pinned).length, 1)
+  assert.equal(listed.filter((x) => x.slug === b.post).length, 1, "never twice")
+  // The lists that show the work keep the record's order and put the pin first themselves (components/sections/ProjectsPreview.tsx).
+  const jobs = pinnedFirst(projectsFrom(listed))
+  assert.equal(jobs[0].slug, b.post)
+  assert.equal(jobs[0].pinned, true)
+  assert.equal(jobs.filter((x) => x.pinned).length, 1)
 })
 
 if (failures) {

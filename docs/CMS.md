@@ -8,9 +8,12 @@ Studio and the page updates within a minute.
 
 The Studio's list, in this order since 14 Oct 2026 (the automation brief),
 in plain words since 20 Oct, with the office's guide first since 21 Oct:
-Start here, Website Pages, Services, Projects, Blog ideas, Blog posts, Job
-photos, Sent to Buffer, Site Settings, then Advanced (docs/AUTOMATION.md for
-the blog and social automation).
+Start here, Website Pages, Services, Blog ideas, Blog posts, Job photos,
+Sent to Buffer, Site Settings, then Advanced (docs/AUTOMATION.md for the
+blog and social automation). The Projects list went on 6 Nov 2026 (Vern:
+"Projects and blog should be combined into the same thing"): a job is a blog
+post with "The job" tab filled in, and the site's Projects section is the
+blog at /blog, with /projects redirecting there.
 
 **The add-ons** (Vern, 21 and 22 Oct 2026): **Blog ideas**, **Job photos**,
 **Sent to Buffer** and a post's **Goes live by itself** show in the Studio,
@@ -30,9 +33,8 @@ them is deleted while they're hidden.
 | **Website Pages → Galleries: photos taken off** | Take off a photograph that came with the site (paste its address). |
 | **Website Pages → Social grid** | The Instagram strip on the home page: photo + caption + link to the post. |
 | **Services**             | The four services' words: the tagline, the intro, who we work with, what you get, the questions. The four are fixed: they can't be added to or deleted. |
-| **Projects**             | /projects, each project's page, the home page's six, and the application and service pages. Add one, edit its words and photographs (drag to reorder; Add item, then Upload or Select one already in the media library), or "Take off the site". |
 | **Blog ideas** (add-on)  | What the drafter writes next, on Tuesdays and Thursdays: project stories, project roundups and guides. Set one to Ready to have it next; it marks them Drafted and adds new Ideas when the list runs low (docs/AUTOMATION.md). Nothing here is on the site. |
-| **Blog posts**           | Create, edit, publish. A new post needs its title, a lead photograph (with what it shows), the body and its section; everything else is optional. The first Publish dates a post that day (Vancouver). With the add-ons, **Goes live by itself** (with **Goes live at**) publishes a draft at the morning run on its day, if it has what Publish asks for (an edit made at that moment wins). The drafter's posts arrive here unpublished, with Notes for the editor; so does a project article written from Job photos, after an email ("Ready to read", or "Needs a read" when a check found something, a customer's phone number or address among them), and it goes live when someone presses Publish (Vern, 21 Oct 2026; with `PROJECT_ARTICLES_AUTO_PUBLISH=on` in Vercel a clean one would go live by itself two weekdays later). |
+| **Blog posts**           | Create, edit, publish; on the site as Projects. A new post needs its title, a lead photograph (with what it shows), the body and its section; everything else is optional. **The job** tab (6 Nov 2026) makes a post one of the projects: application, service line, city, region, year, systems, designer, More photographs and Featured; filled in, it shows with its place and system on the Projects page, in Selected work on the home page and on its application and service pages. **Pin to top** puts one post first in Selected work and on the Projects page. The first Publish dates a post that day (Vancouver). With the add-ons, **Goes live by itself** (with **Goes live at**) publishes a draft at the morning run on its day, if it has what Publish asks for (an edit made at that moment wins). The drafter's posts arrive here unpublished, with Notes for the editor; so does a project article written from Job photos, after an email ("Ready to read", or "Needs a read" when a check found something, a customer's phone number or address among them), and it goes live when someone presses Publish (Vern, 21 Oct 2026; with `PROJECT_ARTICLES_AUTO_PUBLISH=on` in Vercel a clean one would go live by itself two weekdays later). |
 | **Job photos** (add-on)  | A finished job from a phone: 3 to 10 photos, where, the service, a line of facts. Publish, and the next morning's run drafts posts from it in Square One's Buffer, for approval. Fill in **The story** too and it becomes a project article on the Blog instead (the 15:00 UTC run, one a day). Not shown on the site by itself. A phone number, email or street address that isn't Square One's gets a yellow warning: it stays off the site. |
 | **Sent to Buffer** (add-on) | Read only: what the daily run left in Buffer for each blog post, Job photos post or library post, and the style check on its copy. |
 | **Site Settings**        | Phones, email, address, the footer line, Instagram / TikTok / Facebook / LinkedIn / YouTube links: read everywhere they print (the footer, the menu, the phone bar, the quote form, the contact and about pages, every "or call" line, the legal pages, llms.txt and the search engines' data). |
@@ -191,13 +193,12 @@ PR #11 went live on 7 Oct, so the condition above is met.
   it → Copy image address; Galleries: photos taken off → + → paste. Delete
   the line to bring it back.
 
-- **Project**: Projects → + → title, application, service line, systems,
-  city and region, the summary, then the photographs (the first one leads;
-  drag the focal point onto the pavement). Year, client and designer only
-  when Square One has said so publicly. "The project, told" adds paragraphs
-  under the summary; "Blog post" links the post that tells it in full.
-  Publish. To take one off the site, tick "Take off the site" (deleting a
-  project that came with the site doesn't remove it).
+- **A job** (6 Nov 2026): Blog posts → + → the post as above, then **The
+  job** tab: application, service line, systems, city and region, then the
+  other photographs (drag the focal point onto the pavement). Year, client
+  and designer only when Square One has said so publicly. Publish. To take
+  one off the site, Unpublish it (a job that came with the site keeps the
+  record's version then).
 
 - **Blog post**: Blog posts → + → title, then Generate for the web address,
   the section, the lead photo (drag the focal point onto the pavement, say
@@ -248,20 +249,19 @@ PR #11 went live on 7 Oct, so the condition above is met.
   with "Lead the gallery"), so a gallery's face only changes when the office
   says so. Search (lib/search-index.ts) and the contact page's cities still
   read the record.
-- Projects (9 Oct 2026): every page that shows a project reads
-  `getProjects()` / `getProject()` in `lib/projects-cms.ts`. The Studio's
-  version wins field by field; `lib/projects.ts` fills the gaps (the seed
-  left out a page's paragraphs and blog link, so those stay the record's
-  until typed into "The project, told" and "Blog post"), and is the whole
-  answer when Sanity can't be reached. A photograph the Studio holds that
-  is the same file the site serves (by original file name) is served from
-  the site; new or cropped ones from Sanity's CDN. With the Studio as seeded,
-  all 31 projects come out exactly as the record (`npm run test:projects`,
-  and checked against the live dataset on 9 Oct). Deleting a seeded project
-  in the Studio doesn't remove it ("Take off the site" does). /projects/[slug]
-  builds the known ones ahead and a new one on its first request. The site
-  search reads the record, so a new project shows there after the next
-  deploy (as new posts do).
+- Projects (9 Oct 2026; posts since 6 Nov 2026): every page that shows a
+  job reads `getProjects()` / `getProject()` in `lib/projects-cms.ts`, now
+  the posts that carry a job (`lib/blog.ts`, `Job`). The Studio's post wins
+  field by field; `lib/projects.ts` fills the gaps and is the whole answer
+  when Sanity can't be reached, and a record project with no post of its own
+  is a post made from its record (`postFromRecord`, dated 19 Sept 2026, the
+  day the project pages went live). A photograph the Studio holds that is
+  the same file the site serves (by original file name) is served from the
+  site; new or cropped ones from Sanity's CDN. `npm run test:projects`. The
+  Project documents were moved into their posts by
+  `scripts/merge-projects-into-posts.ts` (facts and photographs onto the 22
+  posts that told a job, nine new posts for the rest); `/projects/<slug>`
+  redirects to the post (`lib/project-redirects.ts`).
 - Edit on the page (14 Oct 2026): `presentationTool` in `sanity.config.ts`,
   its page map in `sanity/presentation.ts` (which document each page opens,
   and which pages show a document). The Studio turns on Next's draft mode

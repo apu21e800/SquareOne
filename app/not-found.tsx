@@ -56,7 +56,7 @@ export default async function NotFound() {
             </ul>
 
             <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
-              <Link href="/projects" className="link">
+              <Link href="/blog" className="link">
                 Projects
               </Link>
               <Link href="/search" className="link">

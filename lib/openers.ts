@@ -89,18 +89,6 @@ export const OPENERS: OpenerDefault[] = [
     fit: true,
   },
   {
-    page: "/projects",
-    label: "Projects",
-    src: "/images/applications/public-art/oak-bay-village-intersection-wide-streetbond-01.jpg",
-    alt: "An octopus and fish on a blue sea, painted in StreetBond on the Cadboro Bay Village traffic circle in Saanich, the village shops behind",
-    caption: "Cadboro Bay, Saanich · Village traffic circle · StreetBond",
-    position: "center 55%",
-    head: "Decorative pavement projects",
-    tail: "across BC",
-    lede: "Municipal, commercial and residential work, each with the system and the place on record.",
-    fit: true,
-  },
-  {
     page: "/galleries",
     label: "Galleries",
     src: "/images/hero/white-rock-pier-crosswalk-trafficpatternsxd.jpg",
@@ -145,9 +133,11 @@ export const OPENERS: OpenerDefault[] = [
     tail: "and samples",
     lede: "What an architect, a landscape architect, an engineer or a municipal specifier needs to put decorative pavement on a drawing and out to tender, and a site walk with the samples when you are ready.",
   },
+  // 6 Nov 2026: the one section, Projects, at the blog's address; the
+  // /projects opener (the Cadboro Bay traffic circle) went with its page.
   {
     page: "/blog",
-    label: "Blog",
+    label: "Projects (the blog)",
     src: "/images/hero/bowen-island-polka-dot-walkway-streetbond.jpg",
     alt: "Blue, green, yellow and grey StreetBond dots along the Snug Cove walkway on Bowen Island, with an eagle asking 'Will you see me before I see you?'",
     caption: "Bowen Island · StreetBond",

@@ -2,10 +2,11 @@ import { defineField, type CustomValidator } from "sanity"
 import { apiVersion } from "../env"
 
 /**
- * Pin to top (3 Nov 2026, lib/pin.ts; on projects since 5 Nov): one pinned
- * document of a type at a time. The site shows the newest pin first, so a
- * second pin is never an error; the Studio warns while another live
- * document of the type is pinned, naming it.
+ * Pin to top (3 Nov 2026, lib/pin.ts; on projects 5 Nov, back on posts 6 Nov
+ * when the projects became posts): one pinned document of a type at a time.
+ * The site shows the newest pin first, so a second pin is never an error;
+ * the Studio warns while another live document of the type is pinned,
+ * naming it.
  */
 export function pinnedElsewhereMessage(other: { title?: string | null } | null | undefined, noun = "project"): string | true {
   if (!other) return true
@@ -24,7 +25,7 @@ export const pinnedElsewhere =
     const other = await ctx
       .getClient({ apiVersion })
       .fetch<{ title?: string | null } | null>(
-        `*[_type == $type && pinned == true && !(_id in path("drafts.**")) && !(_id in path("versions.**")) && _id != $id] | order(coalesce(pinnedAt, _createdAt) desc)[0]{ title }`,
+        `*[_type == $type && pinned == true && !(_id in path("drafts.**")) && !(_id in path("versions.**")) && _id != $id] | order(coalesce(pinnedAt, date, _createdAt) desc)[0]{ title }`,
         { type, id },
       )
     return pinnedElsewhereMessage(other, noun)
@@ -55,5 +56,5 @@ export const pinFields = (type: string, description: string, noun = "project", g
   }),
 ]
 
-/** The project switch's words (Vern, 5 Nov 2026). */
-export const PROJECT_PIN_DESCRIPTION = "Shows this project first in Selected work on the home page and at the top of the Projects page. One pinned project at a time."
+/** The switch's words (Vern, 5 and 6 Nov 2026: the pinned post leads the home page's section and the Projects page). */
+export const POST_PIN_DESCRIPTION = "Shows this post first in Selected work on the home page and at the top of the Projects page. One pinned post at a time."

@@ -20,7 +20,6 @@ export const resolve: PresentationPluginOptions["resolve"] = {
   mainDocuments: defineDocuments([
     { route: "/", filter: `_type == "homePage" && _id == "homePage"` },
     { route: "/blog/:slug", filter: `_type == "post" && slug.current == $slug` },
-    { route: "/projects/:slug", filter: `_type == "project" && slug.current == $slug` },
     // A service's words come before its opener's photograph (14 Oct 2026).
     { route: "/services/:slug", filter: `_type == "service" && slug == $slug` },
     { route: "/contact", filter: `_type == "contactPage" && _id == "contactPage"` },
@@ -58,22 +57,10 @@ export const resolve: PresentationPluginOptions["resolve"] = {
           ? {
               locations: [
                 { title: doc.title || "Untitled post", href: `/blog/${doc.slug}` },
-                { title: "Blog", href: "/blog" },
+                { title: "Projects (the blog)", href: "/blog" },
               ],
             }
           : { message: "Give the post a web address to preview it.", tone: "caution" },
-    }),
-    project: defineLocations({
-      select: { title: "title", slug: "slug.current" },
-      resolve: (doc) =>
-        doc?.slug
-          ? {
-              locations: [
-                { title: doc.title || "Untitled project", href: `/projects/${doc.slug}` },
-                { title: "Projects", href: "/projects" },
-              ],
-            }
-          : { message: "Give the project a web address to preview it.", tone: "caution" },
     }),
     galleryPhoto: defineLocations({
       select: { gallery: "gallery" },

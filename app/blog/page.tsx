@@ -3,11 +3,18 @@ import IndexImageHero from "@/components/IndexImageHero"
 import OpenerTitle from "@/components/ui/OpenerTitle"
 import { getPageOpener } from "@/lib/page-content"
 import { getPosts } from "@/lib/blog"
+import { pinnedFirst } from "@/lib/pin"
 import BlogFilterClient from "@/components/blog/BlogFilterClient"
 import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
 
 /**
+ * The one section (6 Nov 2026, Vern: "Projects and blog should be combined
+ * into the same thing, not two separate sections"): every job Square One has
+ * published and every guide, newest first, the pinned post on top. The
+ * site calls it Projects; its address stays /blog, where the posts have
+ * always lived, and /projects redirects here (next.config.ts).
+ *
  * ISR: the blog is the one CMS-backed surface (lib/blog merges content/blog
  * MDX with Sanity posts when the CMS is enabled). Revalidate hourly at most;
  * a Sanity webhook to /api/revalidate refreshes on publish, and sanityFetch
@@ -19,11 +26,15 @@ import { clampDescription } from "@/lib/seo"
 export const revalidate = 3600
 
 export const metadata: Metadata = {
-  // One separator: the root template adds " | Square One Paving" (59 chars all in).
-  title: "Blog: Guides & Project Stories from BC",
+  // One separator: the root template adds " | Square One Paving" (56 chars all in).
+  title: "Projects: Stories & Guides from BC",
   description:
-    clampDescription("Project stories and practical guides from Square One Paving: stamped asphalt, StreetBond coatings, thermoplastic and vapour blasting across BC since 2000."),
+    clampDescription("Square One Paving's projects across BC and practical guides: crosswalks, public art, parks, parking lots and driveways, each with the system installed and the place."),
   keywords: [
+    "decorative pavement projects BC",
+    "stamped asphalt projects BC",
+    "decorative paving portfolio BC",
+    "crosswalk installation project BC",
     "decorative pavement blog BC",
     "StreetPrint project BC",
     "stamped asphalt guide Vancouver",
@@ -36,9 +47,9 @@ export const metadata: Metadata = {
     canonical: `${SITE_URL}/blog`,
   },
   openGraph: {
-    title: "Blog: Guides & Project Stories from BC | Square One Paving",
+    title: "Projects: Stories & Guides from BC | Square One Paving",
     description:
-      clampDescription("Project stories and practical guides from Square One Paving: decorative pavement across BC since 2000."),
+      clampDescription("Square One Paving's projects across BC and practical guides: decorative pavement, each with the system installed and the place."),
     images: [{ url: "/images/og-image.png", width: 1200, height: 600, alt: "Square One Paving" }],
   },
 }
@@ -46,7 +57,8 @@ export const metadata: Metadata = {
 export default async function BlogPage() {
   // The opener, with whatever the Studio says on top (lib/page-content.ts, 9 Oct 2026).
   const o = await getPageOpener("/blog")
-  const posts = await getPosts()
+  // Pin to top (lib/pin.ts): the newest pinned post leads, with its label, once.
+  const posts = pinnedFirst(await getPosts())
 
   return (
     <main className="bg-[color:var(--surface)]">
@@ -55,7 +67,7 @@ export default async function BlogPage() {
         src={o.src}
         alt={o.alt}
         edit={o.edit}
-        eyebrow="Blog"
+        eyebrow="Projects"
         title={<OpenerTitle head={o.head} tail={o.tail} />}
         fit={o.fit}
         lede={o.lede}

@@ -57,7 +57,7 @@ const QUICK_LINKS = [
   { label: "Driveways", note: "Vancouver and Victoria", href: "/driveways" },
   { label: "Pattern sheets", note: "Every template, to scale", href: "/patterns" },
   { label: "Documents", note: "Specifications, colour cards, SDS", href: "/resources" },
-  { label: "Projects", note: "Selected work across BC", href: "/projects" },
+  { label: "Projects", note: "Selected work across BC", href: "/blog" },
   { label: "Get a quote", note: "Free site visit", href: "/contact" },
 ]
 

@@ -208,7 +208,7 @@ export default async function GalleriesPage() {
               story behind the crossing, the plaza or the driveway.
             </p>
             <p className="mt-5">
-              <Link href="/projects" className="link">
+              <Link href="/blog" className="link">
                 All projects
               </Link>
             </p>

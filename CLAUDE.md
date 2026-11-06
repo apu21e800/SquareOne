@@ -49,6 +49,31 @@ FAQPage / BreadcrumbList / Service JSON-LD via `components/JsonLd.tsx`; `/llms.t
 - Two internal harnesses, /type-test and /mobile-preview, came off the site
   the same day (they were public, only hidden from Google).
 
+## One section: the projects are blog posts (6 Nov 2026)
+Vern: "Projects and blog should be combined into the same thing, not two
+separate sections." Until then a job was a Project document with a page under
+/projects, and most jobs were on the site twice. Now a job is a blog post that
+carries its facts: the post schema's "The job" tab (application, service,
+systems, city, region, year, client, artist, More photographs, Featured;
+sanity/schemaTypes/post.ts), read as `post.job` (lib/blog.ts, `Job`).
+`lib/projects-cms.ts getProjects()` still answers everything that lists the
+work (Selected work, the application and service pages, search), now from the
+posts that carry a job; `lib/projects.ts` is the record behind them: a record
+project's facts and photographs fill its post's gaps (matched by the post it
+names, `postSlugOf`), and one with no post of its own is a post made from its
+record (`postFromRecord`, dated `RECORD_POST_DATE`, 19 Sept 2026, the launch;
+a record carries a year at most, never a day). The site calls the section
+Projects; its address stays /blog, and every /projects address redirects to
+the post (lib/project-redirects.ts, next.config.ts). A post that tells a job
+shows the facts row, the designer and the job's photographs in the viewer
+(app/blog/[slug]). The Studio's Projects list is gone;
+`scripts/merge-projects-into-posts.ts` moved each Project into its post (run
+with `--dry-run` first; `--remove-projects` is the separate, explicit
+deletion). The drafter's project story is written into the job's own post
+(lib/automation/blog.ts `into`); a job is told once its post has paragraphs
+(lib/automation/facts.ts). `npm run test:projects`, `test:studio`,
+`test:automation`.
+
 ## For specifiers (3 Nov 2026)
 Vern: "appeal to architects". /specifiers is linked again: the last row of
 the Who-we-work-with menu ("Architects & engineers", components/Nav.tsx
@@ -222,16 +247,17 @@ All content is managed via TypeScript interfaces in `lib/`:
 - Categories: "Stamped Asphalt" | "Decorative Coatings" | "Thermoplastic" | "Surface Protection"
 - Export: `products[]` array + `getProductBySlug(slug)` helper
 
-**lib/projects.ts** — Project portfolio data (interface defined here); since
-9 Oct 2026 the fallback behind the Studio.
+**lib/projects.ts** — the job record (interface defined here); since 9 Oct
+2026 the fallback behind the Studio, since 6 Nov 2026 behind the posts that
+tell the jobs (`Job`, `postSlugOf`, `recordJobFor`, `postFromRecord` in
+lib/blog.ts).
 
 **lib/projects-cms.ts** — `getProjects()` / `getProject(slug)`: what every page
-that shows a project reads (/projects, project pages, the home six, application
-and service pages, the sitemap). The Studio's version wins field by field, the
-record fills gaps and stands in when Sanity can't be reached; a Studio photo
-that is the site's own file (same original name, uncropped) is served from the
-site. With the Studio as seeded, all 31 come out exactly as the record
-(`npm run test:projects`). Search (lib/search-index.ts) still reads the record.
+that shows a job reads (the home six, application and service pages, search),
+from the posts that carry a job (lib/blog.ts). The Studio's post wins field by
+field, the record fills gaps and stands in when Sanity can't be reached; a
+Studio photo that is the site's own file (same original name, uncropped) is
+served from the site. `npm run test:projects`.
 
 **lib/page-content.ts**, **lib/openers.ts**, **lib/work-cms.ts** — the Studio's
 Home page (hero reel, headline, line), Page openers (every page's opening
@@ -285,7 +311,7 @@ Studio fields with the site's words and never overwrites one.
 
 ### Routing Structure
 ```
-app/
+app/                            # (/projects and /projects/[slug] redirect to /blog since 6 Nov 2026)
 ├── page.tsx                    # Landing page
 ├── layout.tsx                  # Root layout (Nav + Footer)
 ├── services/
@@ -298,12 +324,9 @@ app/
 ├── applications/
 │   ├── page.tsx                # Applications listing
 │   └── private-driveways/page.tsx  # Example application detail
-├── projects/
-│   ├── page.tsx                # Projects listing (filterable)
-│   └── [slug]/page.tsx         # Project detail (gallery + related)
 ├── blog/
-│   ├── page.tsx                # Blog listing
-│   └── [slug]/page.tsx         # Blog post (MDX rendered)
+│   ├── page.tsx                # The one section, Projects: every job and guide, pinned first
+│   └── [slug]/page.tsx         # A post (MDX or the Studio's), with a job's facts and photographs when it tells one
 ├── driveways/page.tsx          # Dedicated driveways page
 ├── vapor-blasting/page.tsx     # Vapor blasting standalone page
 ├── about/page.tsx
@@ -417,20 +440,21 @@ tags: ["stamped asphalt", "crosswalks", "bc"]
 - Link to parent service via `serviceSlug` field
 - Product auto-appears on `/products` and linked service page
 
-### Projects
-- The office adds and edits projects in the Studio (docs/CMS.md); a new one
-  is listed at once and gets its page on first request.
+### Projects (jobs)
+- The office adds a job as a blog post with "The job" tab filled in
+  (docs/CMS.md); it is listed with the work at once and gets its page on
+  first request.
 - A developer can still add to `lib/projects.ts` → `projects[]` (the
-  fallback). For a slug the Studio also has, the Studio's fields win, so
-  edit there, not in the file. Extra photographs can still go in
-  `/public/images/projects/[project-slug]/`.
-- **Pin to top** (5 Nov 2026, Vern; lib/pin.ts): a project's switch in the
-  Studio. Publish stamps `pinnedAt` (sanity/actions.ts `pinnedPublish`);
-  the newest pin leads Selected work on the home page and /projects with a
-  small "Pinned" label (`pinnedFirst`), never twice, and the Studio warns
-  while another live project is pinned. Blog posts have no pin (it was
-  built on posts on 3 Nov and moved the same week). `npm run test:studio`,
-  `test:projects`, `test:pages`.
+  record). For a post the Studio also has, the Studio's fields win, so edit
+  there, not in the file. Extra photographs can still go in
+  `/public/images/projects/[record-slug]/`.
+- **Pin to top** (3 Nov 2026, Vern; on projects 5 Nov; on posts since 6 Nov;
+  lib/pin.ts): a post's switch in the Studio. Publish stamps `pinnedAt`
+  (sanity/actions.ts `pinnedPublish`, composed with `datedPublish`; the
+  morning run stamps the same way, `withPinStamp`); the newest pin leads
+  Selected work on the home page and /blog with a small "Pinned" label
+  (`pinnedFirst`), never twice, and the Studio warns while another live post
+  is pinned. `npm run test:studio`, `test:projects`, `test:pages`.
 
 ### Services
 - Add to `lib/services.ts` → `services[]` array (rarely changes — only 4 core services)

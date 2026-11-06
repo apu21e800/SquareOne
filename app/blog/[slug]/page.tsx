@@ -5,7 +5,11 @@ import type { CSSProperties } from "react"
 import { MDXRemote } from "next-mdx-remote/rsc"
 import { getPost, getPosts } from "@/lib/blog"
 import type { AnyPost, BlogPostMeta } from "@/lib/blog"
+import { jobLine, photoMetaFor, type Job } from "@/lib/projects"
+import { products } from "@/lib/products"
+import { WORK_APPS } from "@/lib/work"
 import PortableBody from "@/components/blog/PortableBody"
+import ProjectGallery from "@/components/ProjectGallery"
 import Frame from "@/components/ui/Frame"
 import { Row } from "@/components/ui/Container"
 import { SITE_URL } from "@/lib/site"
@@ -20,6 +24,13 @@ import { clampDescription, pageTitle } from "@/lib/seo"
  * the byline in the serif), the lede photograph carries its caption UNDER
  * it, the tags are words, the two related posts are hairline rows, and
  * every link is an underlined word — no arrows, no orange on hover.
+ *
+ * 6 Nov 2026 (Vern: "Projects and blog should be combined into the same
+ * thing"): a post that tells a job (post.job, lib/blog.ts) carries what its
+ * project page showed: the place, the year, the systems installed and the
+ * application as a row of facts under the photograph, the designer when one
+ * is named, and the job's other photographs in the viewer after the body.
+ * /projects/<slug> redirects here (next.config.ts).
  */
 
 interface Props {
@@ -47,10 +58,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!post) return {}
 
   // The H1 keeps the post's full title; the <title> fits the 60 characters
-  // a result shows (lib/seo.ts pageTitle), and "| Blog" keeps a post's tag
-  // distinct from the project page of the same job.
+  // a result shows (lib/seo.ts pageTitle). It carried "| Blog" while the
+  // same job also had a project page; since 6 Nov 2026 a job has one page.
   return {
-    title: { absolute: pageTitle(post.title, "Blog") },
+    title: { absolute: pageTitle(post.title) },
     description: clampDescription(post.description),
     alternates: {
       canonical: `${SITE_URL}/blog/${slug}`,
@@ -89,15 +100,47 @@ function wordCount(post: AnyPost): number {
 
 /**
  * Photo caption — the reference reads "Richmond · TrafficPatternsXD · 2019".
- * Frontmatter carries category and date, so the caption is category + year.
- * Returns "" when there is nothing honest to say, and then no caption line
- * renders under the frame.
+ * A job's post carries the place, the systems and the year (lib/projects.ts
+ * jobLine); any other post's frontmatter carries category and date, so its
+ * caption is category + year. Returns "" when there is nothing honest to
+ * say, and then no caption line renders under the frame.
  */
-function captionFor(post: Pick<BlogPostMeta, "category" | "date">): string {
+function captionFor(post: Pick<BlogPostMeta, "category" | "date" | "job">): string {
+  if (post.job) return jobLine(post.job)
   const year = post.date ? new Date(post.date).getFullYear() : Number.NaN
   return [post.category, Number.isFinite(year) ? String(year) : ""]
     .filter(Boolean)
     .join(" · ")
+}
+
+/** Where this application's gallery lives (lib/work.ts). */
+function applicationHref(label: string): string | undefined {
+  const app = WORK_APPS.find((a) => a.label === label)
+  if (!app) return undefined
+  return app.slug === "driveways" ? "/driveways" : `/applications/${app.slug}`
+}
+
+/** A system's product page, when the catalogue has it ("StreetBond150" and the like resolve to StreetBond). */
+function productHref(name: string): string | undefined {
+  const p = products.find((x) => x.name === name || (name.startsWith("StreetBond") && x.name === "StreetBond"))
+  return p ? `/products/${p.slug}` : undefined
+}
+
+/**
+ * The job's facts, as its project page listed them: the place, the year when
+ * Square One has published one, the systems (each a link to its product
+ * page), the application (a link to its page), the designer when named. No
+ * "Client" row: the site says "installed at", never "for" (the client, 18 to
+ * 19 Sept 2026).
+ */
+function factsFor(job: Job): { label: string; values: { text: string; href?: string }[] }[] {
+  return [
+    { label: "Location", values: [{ text: job.city }] },
+    ...(job.year ? [{ label: "Year", values: [{ text: job.year }] }] : []),
+    ...(job.systems.length ? [{ label: job.systems.length > 1 ? "Systems" : "System", values: job.systems.map((s) => ({ text: s, href: productHref(s) })) }] : []),
+    { label: "Application", values: [{ text: job.application, href: applicationHref(job.application) }] },
+    ...(job.artist ? [{ label: "Design", values: [{ text: job.artist }] }] : []),
+  ]
 }
 
 /** Same category scores highest, then shared tags, then recency. */
@@ -190,6 +233,12 @@ export default async function BlogPostPage({ params }: Props) {
   const related = relatedPosts(post, await getPosts())
   const heroCaption = captionFor(post)
   const shareUrl = `${SITE_URL}/blog/${slug}`
+  const job = post.job
+  const facts = job ? factsFor(job) : []
+  // The job's photographs for the viewer: the lead first, then the rest,
+  // none twice (a Studio gallery may hold the lead photograph again).
+  const photos = job ? [post.featured_image, ...job.photos.filter((src) => src !== post.featured_image)].filter(Boolean) : []
+  const photoMeta = (src: string) => (job ? photoMetaFor({ photoMeta: job.photoMeta }, src) : undefined)
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -238,7 +287,7 @@ export default async function BlogPostPage({ params }: Props) {
             </Link>
             <span aria-hidden="true">/</span>
             <Link href="/blog" className="link">
-              Blog
+              Projects
             </Link>
             <span aria-hidden="true">/</span>
             <span className="text-ink">{post.title}</span>
@@ -277,10 +326,59 @@ export default async function BlogPostPage({ params }: Props) {
             />
           )}
 
+          {/* ── The job's facts — the row its project page carried (6 Nov 2026) ──────── */}
+          {facts.length > 0 && (
+            <dl className="mt-10 grid grid-cols-2 gap-x-6 gap-y-7 min-[560px]:grid-cols-4">
+              {facts.map((fact) => (
+                <div key={fact.label} className="border-t border-hairline pt-4">
+                  <dt className="label">{fact.label}</dt>
+                  <dd className="mt-2 text-[17px] leading-[1.4] text-ink [text-wrap:pretty]">
+                    {fact.values.map((v, i) => (
+                      <span key={v.text}>
+                        {i > 0 && ", "}
+                        {v.href ? (
+                          <Link href={v.href} className="link">
+                            {v.text}
+                          </Link>
+                        ) : (
+                          v.text
+                        )}
+                      </span>
+                    ))}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          )}
+
           {/* ── Article body ──────── */}
           <div className={`mt-12 ${proseClass}`} style={proseTokens}>
             {"body" in post ? <PortableBody value={post.body} /> : <MDXRemote source={post.content} />}
           </div>
+
+          {/* ── The job's other photographs — every one opens the full-screen viewer ──────── */}
+          {photos.length > 1 && (
+            <section className="mt-14">
+              <h2>The photographs</h2>
+              <div className="mt-6">
+                <ProjectGallery
+                  caption={heroCaption}
+                  photos={photos.map((src, i) => {
+                    const m = photoMeta(src)
+                    const alt = i === 0 ? post.featured_alt ?? m?.alt : m?.alt
+                    return {
+                      src,
+                      alt: alt ?? (i === 0 ? post.title : `${post.title}, photo ${i + 1} of ${photos.length}`),
+                      primary: post.title,
+                      secondary: heroCaption,
+                      ...(i === 0 && post.featured_position ? { position: post.featured_position } : m?.position ? { position: m.position } : {}),
+                      ...(m?.edit ? { edit: m.edit } : {}),
+                    }
+                  })}
+                />
+              </div>
+            </section>
+          )}
 
           {/* ── Quiet conversion panel — a hairline block, the one button ──────── */}
           <aside className="mt-16 border-t border-hairline pt-6">
@@ -288,7 +386,7 @@ export default async function BlogPostPage({ params }: Props) {
             <p className="mt-3 max-w-[60ch] text-ink-body [text-wrap:pretty]">
               Square One installs across the Lower Mainland and Vancouver Island. Free site
               visit, written quote. More of the work is in the{" "}
-              <Link href="/projects" className="link">
+              <Link href="/blog" className="link">
                 projects
               </Link>{" "}
               and the{" "}
@@ -338,7 +436,7 @@ export default async function BlogPostPage({ params }: Props) {
           {/* ── Foot of article ──────── */}
           <div className="mt-14 flex flex-wrap items-baseline justify-between gap-5 border-t border-hairline pt-7">
             <Link href="/blog" className="link">
-              Back to the blog
+              All projects
             </Link>
 
             <div className="flex items-baseline gap-5">

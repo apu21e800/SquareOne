@@ -24,7 +24,7 @@ export const EDIT_ON_THE_PAGE_TOOL = "edit-on-the-page"
  * grid or Site Settings: each shows on several pages, and its "Used on" list
  * names them.
  */
-export const TYPES_WITH_A_PAGE: ReadonlySet<string> = new Set(["homePage", "aboutPage", "contactPage", "drivewaysPage", "service", "pageHero", "post", "project"])
+export const TYPES_WITH_A_PAGE: ReadonlySet<string> = new Set(["homePage", "aboutPage", "contactPage", "drivewaysPage", "service", "pageHero", "post"])
 
 export interface StudioPage {
   title: string
@@ -44,8 +44,8 @@ function at(doc: Record<string, unknown>, path: string): unknown {
 
 /**
  * The page a document is edited on, or null when it has none (yet): a post
- * or project before its web address, an opener before its page is picked,
- * or a type without a page of its own. Pure.
+ * before its web address, an opener before its page is picked, or a type
+ * without a page of its own. Pure.
  */
 export function documentPage(type: string, doc: Record<string, unknown> | null | undefined): StudioPage | null {
   if (!TYPES_WITH_A_PAGE.has(type) || !doc) return null

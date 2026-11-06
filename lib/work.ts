@@ -148,6 +148,9 @@ function regionFor(place: string): WorkRegion | undefined {
   return undefined
 }
 
+/** The region a place is in, by the municipality named in it ("Langford, BC" → Vancouver Island); undefined for a town not on record. */
+export const regionOf = (place: string): WorkRegion | undefined => regionFor(place)
+
 const SYSTEM_ALT = SYSTEMS.join("|")
 const HEAD_RE = new RegExp(`^((?:${SYSTEM_ALT})(?:\\s*(?:—|-|&|with|and|,)?\\s*(?:${SYSTEM_ALT}|Stamped Asphalt|Coatings))*)\\s*[—,-]?\\s*(.*)$`)
 

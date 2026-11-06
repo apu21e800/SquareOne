@@ -46,8 +46,11 @@ const PRIMARY_LINKS: PrimaryLink[] = [
   { label: "What we do", href: "/services", match: ["/services", "/products", "/patterns"], menu: "services" },
   { label: "Who we work with", href: "/applications", match: ["/applications", "/galleries", "/specifiers"], menu: "buyers" },
   { label: "Driveways", href: "/driveways", match: ["/driveways"] },
-  { label: "Projects", href: "/projects", match: ["/projects"] },
-  { label: "About", href: "/about", match: ["/about", "/blog", "/resources"] },
+  // 6 Nov 2026 (Vern: "Projects and blog should be combined into the same
+  // thing"): the one section, Projects, lives at /blog (next.config.ts
+  // redirects /projects there); there is no separate Blog link.
+  { label: "Projects", href: "/blog", match: ["/blog"] },
+  { label: "About", href: "/about", match: ["/about", "/resources"] },
 ]
 
 
@@ -509,9 +512,8 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
           {/* Driveways and Documents are in the first list (7 Oct 2026 QA:
               the drawer named them twice). */}
           {[
-            { label: "Projects", href: "/projects" },
+            { label: "Projects", href: "/blog" },
             { label: "About", href: "/about" },
-            { label: "Blog", href: "/blog" },
             { label: "Contact", href: "/contact" },
           ].map((link) => (
             <Link key={link.href} href={link.href} onClick={onClose} className={bigRow} style={{ fontFamily: "var(--font-display)" }}>

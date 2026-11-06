@@ -316,21 +316,29 @@ export async function draftNextPost(opts: { idea?: string; project?: string }, d
   const { draft, style } = await polishDraft(deps.claude, written)
   const check = await checkDraft(deps.claude, draft, facts)
 
-  // A web address nobody uses, drafts included, and an id no post has: a
-  // draft whose id is "drafts.post-<slug>" belongs to the post "post-<slug>",
-  // so a post whose web address was changed must not be drafted over.
+  // A project story (6 Nov 2026) is written into the job's own post: since
+  // the projects became posts, its subject is a post with its job filled in
+  // and no story yet (lib/automation/facts.ts), so the draft is that post's
+  // draft, keeping its web address, photograph and job; Publish fills the
+  // story in. A job with no post in the Studio yet (the record's) gets the
+  // post of its own slug, the one the site already shows for it.
+  const into = kind === "project" ? await postFor(store, jobs[0]) : null
+  // Otherwise a web address nobody uses, drafts included, and an id no post
+  // has: a draft whose id is "drafts.post-<slug>" belongs to the post
+  // "post-<slug>", so a post whose web address was changed must not be
+  // drafted over.
   const base = cleanSlug(draft.slug || draft.title) || cleanSlug(title) || `blog-draft-${Date.now()}`
-  let slug = base
+  let slug = into ? into.slug : base
   const taken = (s: string) =>
     store.fetch<number>(`count(*[(_type == "post" && slug.current == $slug) || _id in [$id, $draftId]])`, { slug: s, id: `post-${s}`, draftId: `drafts.post-${s}` })
-  for (let n = 2; await taken(slug); n++) slug = `${base}-${n}`
+  if (!into) for (let n = 2; await taken(slug); n++) slug = `${base}-${n}`
 
   // ── the lead photograph ───────────────────────────────────────────────────
   const photo = await leadPhoto({ kind, jobs, documented, leadJob: draft.leadJob, serviceSlugs: guide?.services ?? [] }, store)
 
   const date = pacificDate(deps.now())
   const from = item ? `the Blog idea "${title}"` : `the project "${jobs[0].title}"`
-  const doc = buildDraftDocument({ kind, from, subjects: jobs, draft, check, style, slug, photo, date, category, systems: guideSystems })
+  const doc = buildDraftDocument({ kind, from, subjects: jobs, draft, check, style, slug, photo, date, category, systems: guideSystems, ...(into ? { into } : {}) })
   await store.create(doc)
 
   // ── the records ───────────────────────────────────────────────────────────
@@ -541,10 +549,28 @@ function tagList(first: readonly string[], rest: readonly string[]): string[] {
   return [...out.values()].slice(0, 8)
 }
 
+/** The post a project story is written into: the job's own, by its Studio id, else the post of its slug (the site shows the record's). */
+export interface IntoPost {
+  /** The published id ("post-…"); the draft is "drafts.<id>". */
+  id: string
+  slug: string
+  /** The post as it is on the site, or null when the Studio has none yet. */
+  live: (SanityDoc & { slug?: { current?: string | null } | null }) | null
+}
+
+async function postFor(store: Store, job: Subject | undefined): Promise<IntoPost | null> {
+  if (!job) return null
+  const id = (job.docId ?? `post-${job.slug}`).replace(/^drafts\./, "")
+  const live = await store.fetch<IntoPost["live"]>(`*[_id == $id][0]`, { id })
+  return { id, slug: live?.slug?.current || job.slug, live: live ?? null }
+}
+
 /**
  * The unpublished post for a draft. Pure, so it can be checked without
  * Claude or Sanity. Its id is "drafts.post-<slug>", the draft of the same
- * "post-<slug>" id the seed gives every imported post.
+ * "post-<slug>" id the seed gives every imported post; a project story's is
+ * the draft of the job's own post (`into`), which keeps everything the post
+ * has (its photograph, its job, its date) under the new story.
  */
 export function buildDraftDocument(a: {
   kind: PlanKind
@@ -560,14 +586,23 @@ export function buildDraftDocument(a: {
   category: string
   /** A guide's systems, by name, for its tags. */
   systems?: readonly string[]
+  /** A project story: the post it fills in. */
+  into?: IntoPost
 }): SanityDoc & { title: string; excerpt: string; body: PortableBlock[] } {
   const body = toPortableText(a.draft.body, "d")
+  const { _rev: _r, _createdAt: _c, _updatedAt: _u, ...live } = (a.into?.live ?? {}) as Record<string, unknown>
+  void _r
+  void _c
+  void _u
   const tags =
     a.kind === "guide"
       ? tagList(a.draft.tags ?? [], a.systems ?? [])
       : tagList([PROJECT_STORIES_TAG], [...(a.draft.tags ?? []), ...a.subjects.flatMap(recordTags)])
   const notes = [
     `Drafted by Claude on ${a.date} from ${a.from}. Not on the site until someone presses Publish.`,
+    ...(a.into?.live
+      ? ["", "THIS FILLS IN THE STORY of the post as it is on the site: its web address, photograph and job stay as they were, and Publish puts the story on the page. Discard changes leaves the post as it was."]
+      : []),
     "",
     a.check.unsupported.length
       ? `FACT CHECK: ${a.check.unsupported.length} statement(s) Square One's pages and records don't back up. Fix or remove them before publishing:`
@@ -585,18 +620,19 @@ export function buildDraftDocument(a: {
   ].join("\n")
 
   return {
-    _id: `drafts.post-${a.slug}`,
+    ...live,
+    _id: `drafts.${a.into?.id ?? `post-${a.slug}`}`,
     _type: "post",
     title: a.draft.title.trim(),
     slug: { _type: "slug", current: a.slug },
-    date: a.date,
-    category: a.category,
-    author: "Square One Paving",
+    date: typeof live.date === "string" && live.date ? live.date : a.date,
+    category: typeof live.category === "string" && live.category ? live.category : a.category,
+    author: typeof live.author === "string" && live.author ? live.author : "Square One Paving",
     excerpt: a.draft.excerpt.trim().slice(0, 300),
     body,
     tags,
     editorNotes: notes,
-    ...(a.photo
+    ...(a.photo && !live.mainImage
       ? {
           mainImage: {
             _type: "image",

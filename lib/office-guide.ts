@@ -147,12 +147,13 @@ export const GUIDE_SOURCE: { title: string; lead: { free: string; addons: string
         `**Lead photograph**: **Upload** a new photo, or **Select** one already in the Studio. ${FRAMED} Then **What the photo shows**: one plain line, as you'd describe it to someone who can't see it.`,
         "**One-paragraph summary**: two or three sentences for the blog's list and for link previews.",
         "**Body**: type or paste the text. For a heading, click in its line, open **Paragraph** above the text and pick **Heading** (or **Subheading** for a smaller one). **Photograph** puts a photo between paragraphs.",
+        "Is it a job? Open **The job** tab: **Application**, **Service line**, **City**, the **Systems installed**, and the job's **More photographs**. Filled in, the post is one of the projects: it shows with its place and system on the site's Projects page and the application page. Leave the tab empty for a guide.",
         "To see it as it will look: **Edit on the page**, above the post's fields. Only you can see it until it's published.",
         { text: "Press **Publish**.", only: "free" },
         { text: "Press **Publish**. Or turn on **Goes live by itself** and set **Goes live at** to the day you want, at 7:00 a.m. or earlier.", only: "addons" },
       ],
       next: [
-        { text: "It's on the blog within a minute.", only: "free" },
+        { text: "It's on the site's Projects page within a minute.", only: "free" },
         { text: "It shows on the site within a minute of going live, and its social posts wait in Buffer the next morning.", only: "addons" },
         "A yellow mark is worth a second look: it's the house style. A red one is something **Publish** needs first, like the photo or what it shows.",
       ],
@@ -233,7 +234,7 @@ export const GUIDE_SOURCE: { title: string; lead: { free: string; addons: string
       ],
       next: [
         "**Site Settings** holds the phone numbers, the email and the address every page prints: change it only when one of those changes.",
-        "To keep a project first in Selected work on the home page and on the Projects page, open it under **Projects**, turn on **Pin to top** and press **Publish**. One project is pinned at a time: the newest pin goes on top.",
+        "To keep a post first in Selected work on the home page and at the top of the Projects page, open it under **Blog posts**, turn on **Pin to top** and press **Publish**. One post is pinned at a time: the newest pin goes on top.",
         "Not sure about something? Leave it as a draft and ask. Nothing reaches the site until someone presses **Publish**.",
       ],
     },

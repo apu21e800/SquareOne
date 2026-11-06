@@ -2,27 +2,35 @@
 
 import { useMemo, useState } from "react"
 import type { BlogPostMeta } from "@/lib/blog"
+import { jobLine } from "@/lib/projects"
 import FilterBar, { type FilterDef } from "@/components/ui/FilterBar"
 import RecordCard from "@/components/ui/RecordCard"
 
 /**
- * Filter bar + the records for /blog — the same FilterBar and RecordCard as
- * /projects, so the two indexes are one system. `label` is display copy
- * (Canadian English, sentence case); `match` is the filter token, what post
- * categories and tags are tested against, so it changes only with them.
+ * Filter bar + the records for /blog, the one section (6 Nov 2026): the jobs
+ * and the guides together. `label` is display copy (Canadian English,
+ * sentence case); `match` is the filter token, what post categories and tags
+ * are tested against, so it changes only with them.
  *
  * 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.7): the lead is a hairline
- * row, the rest a grid of frames with their captions under them.
+ * row, the rest a grid of frames with their captions under them. A job's
+ * frame carries its place, systems and year under it, as the project index
+ * did; the posts come pinned first (app/blog/page.tsx, lib/pin.ts), so a
+ * pinned post is the lead under any filter it matches, with its label.
  */
 const TOPICS: ReadonlyArray<{ label: string; match: string }> = [
+  { label: "Crosswalks", match: "Crosswalks" },
   { label: "Municipal", match: "Municipal" },
+  { label: "Parks & paths", match: "Parks & Paths" },
   { label: "Driveways", match: "Driveways" },
   { label: "Vapour blasting", match: "Vapour Blasting" },
   { label: "Public art", match: "Public Art" },
   // Was "Case Studies" until 14 Oct 2026: no post carries it and the canon
   // bans the word. The drafter tags every project story and roundup
-  // "Project stories" (lib/automation/plan.ts PROJECT_STORIES_TAG).
+  // "Project stories" (lib/automation/plan.ts PROJECT_STORIES_TAG), and so
+  // does a post made from the record (lib/blog.ts).
   { label: "Project stories", match: "Project stories" },
+  { label: "Guides", match: "Guides" },
 ]
 
 const ALL = "all"
@@ -40,7 +48,8 @@ function yearOf(post: BlogPostMeta): string {
   return Number.isFinite(y) ? String(y) : ""
 }
 
-/** Photo caption — category and year, the only location data frontmatter carries. */
+/** Under a job's frame: the place, the systems and the year. A guide's frame carries no caption. */
+const captionOf = (post: BlogPostMeta) => (post.job ? jobLine(post.job) : undefined)
 
 function matchesTopic(post: BlogPostMeta, match: string) {
   const haystack = [post.category, ...(post.tags ?? [])].join(" ").toLowerCase()
@@ -55,14 +64,10 @@ export default function BlogFilterClient({ posts }: Props) {
   const [topic, setTopic] = useState(ALL)
   const [year, setYear] = useState(ALL)
 
-  const years = useMemo(() => {
-    const counts = new Map<string, number>()
-    for (const p of posts) {
-      const y = yearOf(p)
-      if (y) counts.set(y, (counts.get(y) ?? 0) + 1)
-    }
-    return [...counts.entries()].sort((a, b) => b[0].localeCompare(a[0]))
-  }, [posts])
+  // No counts on the options or the summary (the client, 10 Sept 2026, on
+  // the projects: "it comes across this is all of our jobs but we have
+  // 1000s"); since the jobs joined this list, the same rule holds here.
+  const years = useMemo(() => [...new Set(posts.map(yearOf).filter(Boolean))].sort((a, b) => b.localeCompare(a)), [posts])
 
   const filters: FilterDef[] = [
     {
@@ -72,7 +77,7 @@ export default function BlogFilterClient({ posts }: Props) {
       onChange: setTopic,
       options: [
         { value: ALL, label: "All topics" },
-        ...TOPICS.map((t) => ({ value: t.match, label: t.label, count: posts.filter((p) => matchesTopic(p, t.match)).length })),
+        ...TOPICS.filter((t) => posts.some((p) => matchesTopic(p, t.match))).map((t) => ({ value: t.match, label: t.label })),
       ],
     },
     {
@@ -80,7 +85,7 @@ export default function BlogFilterClient({ posts }: Props) {
       label: "Year",
       value: year,
       onChange: setYear,
-      options: [{ value: ALL, label: "All years" }, ...years.map(([y, n]) => ({ value: y, label: y, count: n }))],
+      options: [{ value: ALL, label: "All years" }, ...years.map((y) => ({ value: y, label: y }))],
     },
   ]
 
@@ -104,7 +109,7 @@ export default function BlogFilterClient({ posts }: Props) {
     <div>
       <FilterBar
         filters={filters}
-        summary={`${filtered.length} post${filtered.length !== 1 ? "s" : ""}`}
+        summary={active ? [TOPICS.find((t) => t.match === topic)?.label ?? "", year !== ALL ? year : ""].filter(Boolean).join(" · ") : "Projects and guides"}
         onClear={clear}
         active={active}
       />
@@ -124,10 +129,12 @@ export default function BlogFilterClient({ posts }: Props) {
                 src={lead.featured_image || undefined}
                 alt={lead.title}
                 position={lead.featured_position}
+                caption={captionOf(lead)}
                 kicker={lead.category || undefined}
                 title={lead.title}
                 description={lead.description}
                 meta={lead.date ? formatDate(lead.date) : undefined}
+                pinned={lead.pinned}
               />
             </div>
           )}
@@ -141,10 +148,12 @@ export default function BlogFilterClient({ posts }: Props) {
                     src={post.featured_image || undefined}
                     alt={post.title}
                     position={post.featured_position}
+                    caption={captionOf(post)}
                     kicker={post.category || undefined}
                     title={post.title}
                     description={post.description}
                     meta={post.date ? formatDate(post.date) : undefined}
+                    pinned={post.pinned}
                   />
                 </li>
               ))}

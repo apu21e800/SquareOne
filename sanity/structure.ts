@@ -92,7 +92,6 @@ export function buildStructure(S: StructureBuilder, addons: boolean) {
         .schemaType("service")
         .icon(ICONS.service)
         .child(S.documentTypeList("service").title("Services").initialValueTemplates([])),
-      S.listItem().title("Projects").id("project").schemaType("project").icon(ICONS.project).child(S.documentTypeList("project").title("Projects")),
       // What to write next (sanity/schemaTypes/storyIdea.ts). The drafter, on
       // Tuesdays and Thursdays, takes the top Ready item, else the top Idea,
       // and tops the plan up when it runs low (lib/automation/planner.ts).
@@ -116,6 +115,9 @@ export function buildStructure(S: StructureBuilder, addons: boolean) {
         : []),
       // Drafts wait here for Publish; with the add-ons, one set to go live by
       // itself goes at the daily run after its time (lib/automation/project-posts.ts).
+      // 6 Nov 2026 (Vern: "Projects and blog should be combined into the same
+      // thing"): the projects are posts, so the Projects list is gone; a post
+      // with its job filled in ("The job" tab) is one of the projects.
       S.listItem()
         .title("Blog posts")
         .id("post")
@@ -123,7 +125,7 @@ export function buildStructure(S: StructureBuilder, addons: boolean) {
         .icon(ICONS.post)
         .child(
           S.documentTypeList("post")
-            .title(addons ? "Blog posts · drafts wait here for Publish, or go live at their set time" : "Blog posts · drafts wait here until you press Publish")
+            .title(addons ? "Blog posts · on the site as Projects · drafts wait here for Publish, or go live at their set time" : "Blog posts · on the site as Projects · drafts wait here until you press Publish")
             .defaultOrdering([{ field: "date", direction: "desc" }]),
         ),
       ...(addons

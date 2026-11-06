@@ -225,7 +225,7 @@ export default async function ContactPage() {
       <Section
         label={words.regions.label}
         title={<Heading words={words.regions} />}
-        link={{ href: "/projects", label: "All projects" }}
+        link={{ href: "/blog", label: "All projects" }}
         intro={words.regions.line}
         tone="warm"
         wide
