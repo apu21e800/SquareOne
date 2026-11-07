@@ -187,7 +187,7 @@ export default function SearchOverlay({
   const openEntry = useCallback(
     (entry: SearchEntry) => {
       if (isDocument(entry)) {
-        window.open(entry.href, "_blank", "noopener,noreferrer")
+        window.open(entry.open ?? entry.href, "_blank", "noopener,noreferrer")
         return
       }
       onClose()
@@ -417,7 +417,7 @@ export default function SearchOverlay({
                           </Link>
                           {isDocument(entry) ? (
                             <span className="flex shrink-0 items-center gap-5 max-[700px]:hidden">
-                              <a href={entry.href} target="_blank" rel="noopener noreferrer" className="link">
+                              <a href={entry.open ?? entry.href} target="_blank" rel="noopener noreferrer" className="link">
                                 Preview
                               </a>
                               <a href={entry.href} download className="link">

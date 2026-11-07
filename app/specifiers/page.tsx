@@ -13,7 +13,8 @@ import { services } from "@/lib/services"
 import { products } from "@/lib/products"
 import { WORK_APPS } from "@/lib/work"
 import { APP_LEADS } from "@/lib/app-leads"
-import { resourceGroups, resourceCount, type ResourceType } from "@/lib/resources"
+import type { ResourceType } from "@/lib/resources"
+import { countResources, getResourceGroups } from "@/lib/resources-cms"
 import { OFFERED_SHEETS } from "@/lib/pattern-sheets"
 import { STREETBOND_COLOURS } from "@/lib/palette"
 import { SITE_URL } from "@/lib/site"
@@ -103,6 +104,8 @@ export default async function SpecifiersPage() {
   const site = await getSiteSettings()
   // The opener, with whatever the Studio says on top (lib/page-content.ts, 9 Oct 2026).
   const o = await getPageOpener("/specifiers")
+  const resourceGroups = await getResourceGroups()
+  const resourceCount = countResources(resourceGroups)
   const typesHeld = TYPE_ORDER.filter((t) => resourceGroups.some((g) => g.docs.some((d) => d.type === t)))
   const systemsFor = (slug: string) => products.filter((p) => p.serviceSlug === slug)
 

@@ -72,6 +72,11 @@ export const resolve: PresentationPluginOptions["resolve"] = {
       },
     }),
     gallerySettings: defineLocations({ locations: [{ title: "Galleries", href: "/galleries" }] }),
+    // A document shows in the library under its system (lib/resources-cms.ts).
+    resource: defineLocations({
+      select: { product: "product" },
+      resolve: (doc) => ({ locations: [{ title: "Resources (the document library)", href: doc?.product ? `/resources#${doc.product}` : "/resources" }] }),
+    }),
     socialPost: defineLocations({ locations: [{ title: "Home page (the social grid)", href: "/" }] }),
     siteSettings: defineLocations({
       message: "On every page: the phone lines, the email, the address and the accounts, wherever they print.",

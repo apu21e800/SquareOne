@@ -24,7 +24,7 @@ export const EDIT_ON_THE_PAGE_TOOL = "edit-on-the-page"
  * grid or Site Settings: each shows on several pages, and its "Used on" list
  * names them.
  */
-export const TYPES_WITH_A_PAGE: ReadonlySet<string> = new Set(["homePage", "aboutPage", "contactPage", "drivewaysPage", "service", "pageHero", "post"])
+export const TYPES_WITH_A_PAGE: ReadonlySet<string> = new Set(["homePage", "aboutPage", "contactPage", "drivewaysPage", "service", "pageHero", "post", "resource"])
 
 export interface StudioPage {
   title: string

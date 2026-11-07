@@ -333,25 +333,25 @@ async function main() {
     assert.equal(ADDONS, addonsOn(process.env.NEXT_PUBLIC_STUDIO_ADDONS))
   })
 
-  await check("with the add-ons switched off: the guide first, then Website Pages, Services, Blog posts, Site Settings; no Projects list (6 Nov 2026), no Blog ideas, Job photos or Sent to Buffer", () => {
+  await check("with the add-ons switched off: the guide first, then Website Pages, Services, Documents, Blog posts, Site Settings; no Projects list (6 Nov 2026), no Blog ideas, Job photos or Sent to Buffer", () => {
     const titles = listTitles(false)
     assert.equal(titles[0], "Start here: how to update the site")
-    assert.deepEqual(titles.slice(1), ["Website Pages", "Services", "Blog posts", "Site Settings", "Advanced"], titles.join(" | "))
+    assert.deepEqual(titles.slice(1), ["Website Pages", "Services", "Documents", "Blog posts", "Site Settings", "Advanced"], titles.join(" | "))
     assert.ok(allTitles(false).includes("Blog posts · on the site as Projects · drafts wait here until you press Publish"))
     assert.ok(!allTitles(false).some((t) => /Buffer|go live at their set time|drafter/.test(t)), "nothing in the list names an add-on")
   })
 
-  await check("with the add-ons, as Square One has it (the blog drafter off since 6 Nov 2026): Website Pages, Services, Blog posts, Job photos, Sent to Buffer, Site Settings; no Blog ideas", () => {
+  await check("with the add-ons, as Square One has it (the blog drafter off since 6 Nov 2026): Website Pages, Services, Documents, Blog posts, Job photos, Sent to Buffer, Site Settings; no Blog ideas", () => {
     const titles = listTitles(true, undefined, false)
     assert.equal(titles[0], "Start here: how to update the site")
-    assert.deepEqual(titles.slice(1), ["Website Pages", "Services", "Blog posts", "Job photos", "Sent to Buffer", "Site Settings", "Advanced"], titles.join(" | "))
+    assert.deepEqual(titles.slice(1), ["Website Pages", "Services", "Documents", "Blog posts", "Job photos", "Sent to Buffer", "Site Settings", "Advanced"], titles.join(" | "))
     assert.ok(allTitles(true).includes("Job photos · publish one and its posts go to Buffer right away; add the story and it becomes a project article"))
   })
 
   await check("with the blog drafter switched on: Blog ideas back in the brief's place, before Blog posts", () => {
     const titles = listTitles(true, undefined, true)
-    assert.deepEqual(titles.slice(1), ["Website Pages", "Services", "Blog ideas", "Blog posts", "Job photos", "Sent to Buffer", "Site Settings", "Advanced"], titles.join(" | "))
-    assert.deepEqual(listTitles(false, undefined, true).slice(1), ["Website Pages", "Services", "Blog posts", "Site Settings", "Advanced"], "an add-on: never without the add-ons")
+    assert.deepEqual(titles.slice(1), ["Website Pages", "Services", "Documents", "Blog ideas", "Blog posts", "Job photos", "Sent to Buffer", "Site Settings", "Advanced"], titles.join(" | "))
+    assert.deepEqual(listTitles(false, undefined, true).slice(1), ["Website Pages", "Services", "Documents", "Blog posts", "Site Settings", "Advanced"], "an add-on: never without the add-ons")
   })
 
   await check("the blog drafter switch: off unless Vercel says \"on\" (6 Nov 2026)", () => {
@@ -603,10 +603,10 @@ async function main() {
   const FREE = guideFor(false)
   const ALL = guideFor(true)
 
-  await check("without the add-ons: three things, change a page, add gallery photos, write a post, then the basics; nothing about Buffer, job photos or going live by itself", () => {
+  await check("without the add-ons: four things, change a page, add gallery photos, add a document, write a post, then the basics; nothing about Buffer, job photos or going live by itself", () => {
     assert.deepEqual(
       FREE.steps.map((s) => s.id),
-      ["edit-page", "gallery-photos", "own-post", "basics"],
+      ["edit-page", "gallery-photos", "documents", "own-post", "basics"],
     )
     assert.equal(FREE.title, "How to update the site")
     const text = guideText(FREE).join("\n")
@@ -614,16 +614,17 @@ async function main() {
     assert.match(FREE.lead, /Nothing changes on the site until you press Publish\.$/)
   })
 
-  await check("with the add-ons: the same three, then job photos, the drafts to read and Buffer, each pointing to the right step, then the basics; no Tuesday and Thursday promise (the drafter is off)", () => {
+  await check("with the add-ons: the same four, then job photos, the drafts to read and Buffer, each pointing to the right step, then the basics; no Tuesday and Thursday promise (the drafter is off)", () => {
     assert.deepEqual(
       ALL.steps.map((s) => s.id),
-      ["edit-page", "gallery-photos", "own-post", "job-photos", "drafts", "buffer", "basics"],
+      ["edit-page", "gallery-photos", "documents", "own-post", "job-photos", "drafts", "buffer", "basics"],
     )
     const buffer = ALL.steps.find((s) => s.id === "buffer")!
     assert.match(buffer.steps.join(" "), /Add to Queue/)
     assert.match(buffer.next.join(" "), /Delete/)
     const jobs = ALL.steps.find((s) => s.id === "job-photos")!.next.join(" ")
-    assert.ok(jobs.includes("(step 6)") && jobs.includes("(step 5)"), jobs)
+    // The step numbers moved one down with the documents step (7 Nov 2026): Buffer is 7, the drafts 6.
+    assert.ok(jobs.includes("(step 7)") && jobs.includes("(step 6)"), jobs)
     assert.ok(!guideText(ALL).some((l) => l.includes("{step:")), "every pointer is filled in")
     assert.ok(ALL.steps.find((s) => s.id === "own-post")!.steps.some((l) => l.includes("Goes live by itself")))
     const text = guideText(ALL).join("\n")

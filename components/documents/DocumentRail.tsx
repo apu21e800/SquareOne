@@ -98,8 +98,8 @@ export default function DocumentRail({ docs, product }: { docs: ResourceDoc[]; p
               <p className="mt-2 max-w-[28ch] text-[14.5px] italic leading-[1.6] text-ink-muted">{TYPE_NOTE[g.type]}</p>
             </div>
             <ul className="col-span-9 divide-y divide-hairline border-t border-hairline max-[900px]:col-span-1" role="list">
-              {g.docs.map((doc) => (
-                <DocRow key={doc.href} doc={doc} product={product} onPreview={setTarget} />
+              {g.docs.map((doc, i) => (
+                <DocRow key={`${doc.href}-${i}`} doc={doc} product={product} onPreview={setTarget} />
               ))}
             </ul>
           </section>

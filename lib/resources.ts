@@ -19,9 +19,15 @@ export type ResourceType =
   | "Brochure"
   | "Technical info";
 
+/** The kinds of document, in the order the library's rail lists them (components/documents/DocumentRail TYPE_ORDER). Pure data: the Studio's schema reads it. */
+export const RESOURCE_TYPES: readonly ResourceType[] = ["Specification", "Technical info", "SDS", "Guide", "Colour card", "Brochure"];
+
 export interface ResourceDoc {
   name: string;
+  /** The file to download: the site's own copy under /docs, or (a document the office uploaded, lib/resources-cms.ts) Sanity's CDN with its download name. */
   href: string;
+  /** The file to open in the browser when it differs from `href` (a Studio upload: the CDN address without the download name). */
+  open?: string;
   type: ResourceType;
   /** Human file size, baked at authoring time from public/docs (real bytes). */
   size: string;
@@ -199,3 +205,36 @@ export const resourceGroups: ResourceGroup[] = [
 ];
 
 export const resourceCount = resourceGroups.reduce((n, g) => n + g.docs.length, 0);
+
+/**
+ * The systems a document can belong to, as the Studio offers them (7 Nov
+ * 2026, lib/resources-cms.ts): the record's groups in their order, then
+ * Square One's own papers (insurance, WCB, capabilities), which the office
+ * adds in the Studio when it has them. Pure data: the Studio's schema reads it.
+ */
+export const RESOURCE_PRODUCTS: readonly { product: string; slug: string }[] = [
+  ...resourceGroups.map(({ product, slug }) => ({ product, slug })),
+  { product: "Square One", slug: "square-one" },
+];
+
+/**
+ * The id of a document's Studio copy, from the site's file: "resource-" and
+ * the file's name the way the page-one previews are keyed
+ * (scripts/doc-previews.mjs), so scripts/seed-resources.ts makes each one
+ * once. Pure.
+ */
+export function resourceId(href: string): string {
+  let decoded = href
+  try {
+    decoded = decodeURIComponent(href)
+  } catch {
+    /* the path as it stands */
+  }
+  const key = decoded
+    .replace(/^\/docs\//, "")
+    .replace(/\.pdf$/i, "")
+    .replace(/[^A-Za-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")
+    .toLowerCase()
+  return `resource-${key}`
+}

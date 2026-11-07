@@ -8,9 +8,9 @@ Studio and the page updates within a minute.
 
 The Studio's list, in this order since 14 Oct 2026 (the automation brief),
 in plain words since 20 Oct, with the office's guide first since 21 Oct:
-Start here, Website Pages, Services, Blog ideas, Blog posts, Job photos,
-Sent to Buffer, Site Settings, then Advanced (docs/AUTOMATION.md for the
-blog and social automation). The Projects list went on 6 Nov 2026 (Vern:
+Start here, Website Pages, Services, Documents (7 Nov 2026), Blog ideas,
+Blog posts, Job photos, Sent to Buffer, Site Settings, then Advanced
+(docs/AUTOMATION.md for the blog and social automation). The Projects list went on 6 Nov 2026 (Vern:
 "Projects and blog should be combined into the same thing"): a job is a blog
 post with "The job" tab filled in, and the site's Projects section is the
 blog at /blog, with /projects redirecting there.
@@ -33,6 +33,7 @@ them is deleted while they're hidden.
 | **Website Pages → Galleries: photos taken off** | Take off a photograph that came with the site (paste its address). |
 | **Website Pages → Social grid** | The Instagram strip on the home page: photo + caption + link to the post. |
 | **Services**             | The four services' words: the tagline, the intro, who we work with, what you get, the questions. The four are fixed: they can't be added to or deleted. |
+| **Documents** (7 Nov 2026) | The specification library on /resources: one document per PDF (name, system, kind, the PDF, "Take off the site"). The 106 the site shipped with are there with "The site's own copy" filled in (`npx sanity exec scripts/seed-resources.ts --with-user-token -- --dry-run`, then without the flag, makes them once); rename one, upload a PDF over it, add one (Square One's own papers go under the system "Square One"), or take one off. Served the Studio's over the record's, document by document (lib/resources-cms.ts); an upload is served from Sanity's CDN with its download name, the site's own copies as before, with their page-one previews. A new upload has no page-one preview until a developer renders one. |
 | **Blog ideas** (add-on)  | What the drafter writes next, on Tuesdays and Thursdays: project stories, project roundups and guides. Set one to Ready to have it next; it marks them Drafted and adds new Ideas when the list runs low (docs/AUTOMATION.md). Nothing here is on the site. |
 | **Blog posts**           | Create, edit, publish; on the site as Projects. A new post needs its title, a lead photograph (with what it shows), the body and its section; everything else is optional. **The job** tab (6 Nov 2026) makes a post one of the projects: application, service line, city, region, year, systems, designer, More photographs and Featured; filled in, it shows with its place and system on the Projects page, in Selected work on the home page and on its application and service pages. **Pin to top** puts one post first in Selected work and on the Projects page. The first Publish dates a post that day (Vancouver). With the add-ons, **Goes live by itself** (with **Goes live at**) publishes a draft at the morning run on its day, if it has what Publish asks for (an edit made at that moment wins). The drafter's posts arrive here unpublished, with Notes for the editor; so does a project article written from Job photos, after an email ("Ready to read", or "Needs a read" when a check found something, a customer's phone number or address among them), and it goes live when someone presses Publish (Vern, 21 Oct 2026; with `PROJECT_ARTICLES_AUTO_PUBLISH=on` in Vercel a clean one would go live by itself two weekdays later). |
 | **Job photos** (add-on)  | A finished job from a phone: 3 to 10 photos, where, the service, a line of facts. Publish, and a minute or two later its posts wait in Square One's Buffer as drafts, for approval. Fill in **The story** too and it becomes a project article on the Blog instead (the 15:00 UTC run, one a day). Not shown on the site by itself. A phone number, email or street address that isn't Square One's gets a yellow warning: it stays off the site. |
@@ -255,6 +256,18 @@ PR #11 went live on 7 Oct, so the condition above is met.
   with "Lead the gallery"), so a gallery's face only changes when the office
   says so. Search (lib/search-index.ts) and the contact page's cities still
   read the record.
+- Documents (7 Nov 2026): /resources, the product pages (the colour card),
+  /specifiers (the count and the kinds held) and the search index read
+  `getResourceGroups()` in `lib/resources-cms.ts`: the record
+  (`lib/resources.ts`, which also holds `RESOURCE_PRODUCTS` and
+  `RESOURCE_TYPES` for the schema, and `resourceId`) with the Studio's
+  documents placed in it by `mergeResources` (pure; `npm run
+  test:resources`): a Studio document with `path` is the site's own file,
+  renamed, re-kinded, moved or hidden; one with an upload serves the CDN
+  file (`?dl=` for the download, the plain address to open); one the record
+  doesn't know joins its system's group at the end; Square One's own
+  papers are a group after the record's. With nothing in the Studio it is
+  exactly `resourceGroups`.
 - Projects (9 Oct 2026; posts since 6 Nov 2026): every page that shows a
   job reads `getProjects()` / `getProject()` in `lib/projects-cms.ts`, now
   the posts that carry a job (`lib/blog.ts`, `Job`). The Studio's post wins

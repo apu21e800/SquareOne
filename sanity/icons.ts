@@ -3,6 +3,7 @@ import { BookIcon } from "@sanity/icons/Book"
 import { BulbOutlineIcon } from "@sanity/icons/BulbOutline"
 import { ClipboardImageIcon } from "@sanity/icons/ClipboardImage"
 import { CogIcon } from "@sanity/icons/Cog"
+import { DocumentPdfIcon } from "@sanity/icons/DocumentPdf"
 import { ControlsIcon } from "@sanity/icons/Controls"
 import { EditIcon } from "@sanity/icons/Edit"
 import { EnvelopeIcon } from "@sanity/icons/Envelope"
@@ -44,6 +45,7 @@ export const ICONS = {
   socialPost: ThLargeIcon,
   // The rest of the list, in its order.
   service: WrenchIcon,
+  resource: DocumentPdfIcon,
   project: ProjectsIcon,
   storyIdea: BulbOutlineIcon,
   post: EditIcon,

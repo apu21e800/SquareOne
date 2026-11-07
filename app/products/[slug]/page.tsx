@@ -8,7 +8,7 @@ import { products, getProductBySlug } from "@/lib/products"
 import type { Product } from "@/lib/products"
 import { STREETBOND_COLOURS, COLOUR_RANGES } from "@/lib/palette"
 import { galleryWithFallback } from "@/lib/gallery"
-import { resourceGroups } from "@/lib/resources"
+import { getResourceGroups } from "@/lib/resources-cms"
 import { WORK_APPS } from "@/lib/work"
 import { getStudioWork } from "@/lib/work-cms"
 import type { WorkApp, WorkAppMeta } from "@/lib/work"
@@ -226,7 +226,7 @@ export default async function ProductPage({ params }: Props) {
     .filter((photo) => photo.src !== product.image)
   // The library groups documents by product name; its anchor slug is its own
   // ("traffic-patterns" for TrafficPatterns), so the link reads it from the group.
-  const docGroup = resourceGroups.find((group) => group.product === product.name)
+  const docGroup = (await getResourceGroups()).find((group) => group.product === product.name)
   const docs = docGroup?.docs ?? []
   const docsHref = `/resources#${docGroup?.slug ?? product.slug}`
 
@@ -243,7 +243,10 @@ export default async function ProductPage({ params }: Props) {
     : undefined
   // The chart itself, cropped to the swatches (public/images/colour-cards):
   // the manufacturer's block on the card is not shown on the site.
-  const colourPreview = colourCard ? COLOUR_CARD_IMAGE[product.slug] : undefined
+  // An upload from the Studio (lib/resources-cms.ts, `open` set) is a card the crop
+  // wasn't made from, so the page links to it without the picture (7 Nov 2026).
+  const colourPreview = colourCard && !colourCard.open ? COLOUR_CARD_IMAGE[product.slug] : undefined
+  const colourHref = colourCard?.open ?? colourCard?.href
 
   const bands: BandKey[] = ["overview", "applications"]
   if (work.length > 0) bands.push("work")
@@ -486,7 +489,7 @@ export default async function ProductPage({ params }: Props) {
                 because a screen is not the material.
               </p>
               <p className="mt-7 flex flex-wrap items-center gap-x-8 gap-y-3">
-                <a href={colourCard.href} target="_blank" rel="noopener" className="link">
+                <a href={colourHref} target="_blank" rel="noopener" className="link">
                   Open the colour card
                 </a>
                 <Link href={docsHref} className="link">
@@ -498,7 +501,7 @@ export default async function ProductPage({ params }: Props) {
               {colourPreview ? (
                 <figure className="m-0">
                   <a
-                    href={colourCard.href}
+                    href={colourHref}
                     target="_blank"
                     rel="noopener"
                     className="block border border-hairline bg-white"
@@ -519,7 +522,7 @@ export default async function ProductPage({ params }: Props) {
                   </figcaption>
                 </figure>
               ) : (
-                <a href={colourCard.href} target="_blank" rel="noopener" className="block border-t border-hairline pt-5">
+                <a href={colourHref} target="_blank" rel="noopener" className="block border-t border-hairline pt-5">
                   <span className="label">Colour card</span>
                   <span className="mt-2 block text-[18px] font-bold" style={{ fontFamily: "var(--font-display)" }}>
                     {colourCard.name}
