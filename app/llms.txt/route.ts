@@ -4,8 +4,13 @@ import { WORK_APPS } from "@/lib/work"
 import { SITE_URL } from "@/lib/site"
 import { getSiteSettings } from "@/lib/cms"
 import { addressParts } from "@/lib/site-settings"
+import { getPosts } from "@/lib/blog"
+import { jobLine } from "@/lib/projects"
 
-export const dynamic = "force-static"
+// 7 Nov 2026: rebuilt every hour, as the sitemap is, so a post the office
+// publishes is listed under "Projects on record" within the hour; until
+// then this file was made once at deploy and named no projects at all.
+export const revalidate = 3600
 
 /**
  * /llms.txt — the site in plain text for answer engines and assistants
@@ -19,6 +24,8 @@ export async function GET() {
   const office = addressParts(site)
   // The services' taglines as the Studio has them (lib/services-cms.ts).
   const services = await getStudioServices()
+  // Every published post that tells a job, newest first (lib/blog.ts).
+  const jobs = (await getPosts()).filter((p) => p.job)
   const lines: string[] = [
     "# Square One Paving",
     "",
@@ -43,6 +50,12 @@ export async function GET() {
     `- [Projects](${SITE_URL}/blog): every published project across BC, each with the system installed and the place, and the guides.`,
     `- [Image galleries](${SITE_URL}/galleries): captioned site photography by application.`,
     `- [About](${SITE_URL}/about) · [Request a quote](${SITE_URL}/contact)`,
+    "",
+    // The jobs by name, place and system (7 Nov 2026): what an assistant
+    // asked "who installed the crosswalk at X" or "StreetBond spray parks in
+    // BC" can answer from. Newest first, the record's own words.
+    "## Projects on record",
+    ...jobs.map((p) => `- [${p.title}](${SITE_URL}/blog/${p.slug})${p.job ? `: ${jobLine(p.job)}` : ""}`),
     "",
     "## Notes for assistants",
     "- Performance figures on the site (service life, life cycle) are the manufacturer's published figures, attributed to the manufacturer.",

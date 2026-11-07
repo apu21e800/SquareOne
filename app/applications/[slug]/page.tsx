@@ -7,15 +7,15 @@ import { studioWorkFor } from "@/lib/work-cms"
 import { APP_HEROES } from "@/lib/app-heroes"
 import IndexImageHero from "@/components/IndexImageHero"
 import { getProjects } from "@/lib/projects-cms"
-import { photoMetaFor } from "@/lib/projects"
+import { jobLine, photoMetaFor, type Project } from "@/lib/projects"
+import RecordCard, { type RecordCardProps } from "@/components/ui/RecordCard"
 import { getSiteSettings } from "@/lib/cms"
-import { telHref } from "@/lib/site-settings"
 import OpenerTitle from "@/components/ui/OpenerTitle"
 import { openerFor } from "@/lib/page-content"
 import { products } from "@/lib/products"
 import WorkGallery from "@/components/WorkGallery"
-import Frame from "@/components/ui/Frame"
 import { Section } from "@/components/ui/Container"
+import IntroLedger from "@/components/ui/IntroLedger"
 import { SITE_URL } from "@/lib/site"
 import JsonLd, { breadcrumbSchema } from "@/components/JsonLd"
 import { clampDescription } from "@/lib/seo"
@@ -74,6 +74,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 /** "Vancouver, BC" → "Vancouver" — the caption carries the city, not the province. */
 function cityName(city: string): string {
   return city.split(",")[0].trim()
+}
+
+/** A project as one record (components/ui/RecordCard.tsx): the photograph with place · system · year under it, the service as the kicker, the title, its line. No meta line: the caption carries the year. */
+function projectRecord(project: Project): RecordCardProps {
+  const city = cityName(project.city)
+  // What the photograph shows: the project, the system, the city when the title does not already carry it.
+  const alt =
+    [project.title, `in ${project.systems.join(" and ")}`, project.title.includes(city) ? "" : `, ${city}, BC`].filter(Boolean).join(" ") +
+    ". Installed by Square One Paving."
+  return {
+    href: `/blog/${project.slug}`,
+    src: project.imageUrl,
+    alt,
+    position: photoMetaFor(project, project.imageUrl)?.position,
+    caption: jobLine(project),
+    kicker: plainCase(project.service),
+    title: project.title,
+    description: project.excerpt,
+  }
 }
 
 export default async function ApplicationPage({ params }: Props) {
@@ -136,7 +155,7 @@ export default async function ApplicationPage({ params }: Props) {
              ledger on the right (28 Sept 2026 QA: 30 lines of copy with the
              right half of the page empty; the later paragraphs listed the
              places the gallery captions already name) ─────────────────────── */}
-      <section className="bg-surface pt-16 pb-16 max-[700px]:pt-10 max-[700px]:pb-12">
+      <section className="bg-surface pt-14 pb-14 max-[700px]:pt-10 max-[700px]:pb-10">
         <div className="container-1280 grid grid-cols-12 items-start gap-x-12 gap-y-10 max-[900px]:grid-cols-1">
           <div className="col-span-7 max-[900px]:col-span-1">
             <Link href="/applications" className="link">
@@ -147,22 +166,9 @@ export default async function ApplicationPage({ params }: Props) {
               {(copy.intro[0] ?? "").split(/(?<=[.!?])\s+(?=[A-Z])/).slice(0, 2).join(" ")}
             </p>
 
-            <p className="mt-8 flex flex-wrap gap-x-7 gap-y-2">
-              {copy.links.map((l) => (
-                <Link key={l.href} href={l.href} className="link">
-                  {l.label}
-                </Link>
-              ))}
-            </p>
-
-            <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4">
-              <Link href="/contact" className="btn-primary">
-                Get a quote
-              </Link>
-              <a href={telHref(site.phoneOffice)} className="link">
-                {site.phoneOffice}
-              </a>
-            </div>
+            {/* 7 Nov 2026: the button, the office line and the related links
+                on one hairline ledger (components/ui/IntroLedger.tsx). */}
+            <IntroLedger phone={site.phoneOffice} links={copy.links} />
           </div>
 
           {/* The record line, as a ledger beside the lede. */}
@@ -234,46 +240,29 @@ export default async function ApplicationPage({ params }: Props) {
         </ul>
       </Section>
 
-      {/* ── 04 Projects — frames with the title and the record's
-             place · system · year UNDER them ─────────────────────────────── */}
+      {/* ── 04 Projects — the records, set as /blog and the home page set
+             them (components/ui/RecordCard.tsx). 7 Nov 2026: one project on
+             record leads on a row of its own instead of standing alone in a
+             grid of three (it read as floating); two share a row; three or
+             more run three across. ─────────────────────────────────────── */}
       {caseStudies.length > 0 && (
         <Section id="projects" label="Projects" title={<>Projects <em>on record</em></>} link={{ href: "/blog", label: "All projects" }} wide>
-          <ul className="grid grid-cols-1 gap-x-7 gap-y-10 min-[701px]:grid-cols-3" role="list">
-            {caseStudies.map((project) => {
-              const city = cityName(project.city)
-              const metaLine = [city, project.systems.join(" + "), project.year]
-                .filter((part): part is string => Boolean(part))
-                .join(" · ")
-              // What the photograph shows: the project, the system, the city when the title does not already carry it.
-              const alt = [
-                project.title,
-                `in ${project.systems.join(" and ")}`,
-                project.title.includes(city) ? "" : `, ${city}, BC`,
-              ]
-                .filter(Boolean)
-                .join(" ") + ". Installed by Square One Paving."
-              return (
+          {caseStudies.length === 1 ? (
+            <div>
+              <RecordCard lead titleAs="h3" {...projectRecord(caseStudies[0])} />
+            </div>
+          ) : (
+            <ul
+              className={`grid grid-cols-1 gap-x-7 gap-y-10 ${caseStudies.length === 2 ? "min-[701px]:grid-cols-2" : "min-[701px]:grid-cols-3"}`}
+              role="list"
+            >
+              {caseStudies.map((project) => (
                 <li key={project.slug}>
-                  <Frame
-                    src={project.imageUrl}
-                    alt={alt}
-                    position={photoMetaFor(project, project.imageUrl)?.position}
-                    aspect="aspect-[4/3]"
-                    sizes="(max-width: 700px) 100vw, (max-width: 1280px) 33vw, 411px"
-                    href={`/blog/${project.slug}`}
-                    caption={
-                      <>
-                        <span className="block not-italic font-bold text-ink" style={{ fontFamily: "var(--font-display)" }}>
-                          {project.title}
-                        </span>
-                        <span className="block">{metaLine}</span>
-                      </>
-                    }
-                  />
+                  <RecordCard {...projectRecord(project)} />
                 </li>
-              )
-            })}
-          </ul>
+              ))}
+            </ul>
+          )}
         </Section>
       )}
 

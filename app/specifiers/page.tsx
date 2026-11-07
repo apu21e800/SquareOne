@@ -227,6 +227,7 @@ export default async function SpecifiersPage() {
               <Image
                 src="/images/textures/stamped-asphalt-texture.webp"
                 alt=""
+                aria-hidden="true"
                 fill
                 sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 300px"
                 className="object-cover"

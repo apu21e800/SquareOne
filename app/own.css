@@ -2156,3 +2156,151 @@ h2.search-group-name:not(.label):not(.eyebrow) { font-size: 17px; letter-spacing
 .offer-block { background: var(--surface-warm); border-top: 4px solid var(--brand-orange); padding: 26px 28px 28px; }
 .offer-block .label { color: var(--brand-orange-press); }
 @media (max-width: 900px) { .offer-block { padding: 22px 20px 24px; } }
+
+/* ============================================================
+   7 Nov 2026: the final polish (Vern: "a final DDB AAAA creative agency
+   cleanup. don't re-design, just polish"). Each move is one rule here,
+   so any of them comes off alone.
+   1. The first body copy a step smaller (Vern: "the first body copy on
+      most pages is a bit too big", an application page's intro as the
+      baseline): the lede 18px (was 20), the standfirst 20px (was 23).
+      Reading text stays 17px; the ledes over a photograph (the hero,
+      the openers) stay as they are, white on a picture needs the size.
+   2. Bands a step tighter: 6rem (7.5rem on a wide screen) of air above
+      and below every section left a band's small things floating (Vern,
+      with a screenshot of an application page's intro and the gallery
+      header under it). 5.5rem now, 6.5rem wide.
+   3. The intro ledger (components/ui/IntroLedger.tsx): under an opener's
+      intro, the one button and the office line on the left and the page's
+      related links on the right, on a hairline, the way the hero's ledger
+      sets its caption and controls. The button used to sit alone under
+      the links with the right half of the row empty.
+   4. The menu spans the screen, down to the fold (Vern: "the mega menu
+      should span the whole vertical area of the screen, down to the fold
+      line maybe, must still be easy to exit out of tho"): the sheet is as
+      tall as the viewport under the bar, the index takes the height, the
+      photograph fills what's left of it, the strip sits at the foot. A
+      Close button at the top right joins Escape, a click outside the bar
+      and the pointer leaving the sheet. On a short screen (a laptop at a
+      low resolution, under 720px tall) the sheet keeps its own height and
+      scrolls, so nothing is cut off.
+   5. The bar steps off on the way down and comes back on the first
+      scroll up (Vern: "hide the main nav on scroll down, the bonus is
+      that the user sees more page content"); components/Nav.tsx. It
+      never hides near the top of a page, while a menu, the drawer or
+      the search is open, or when a key press lands in it.
+   ============================================================ */
+.lede { font-size: 18px; line-height: 1.6; }
+.standfirst { font-size: 20px; line-height: 1.5; letter-spacing: -0.005em; }
+@media (max-width: 700px) {
+  .lede { font-size: 17px; }
+  .standfirst { font-size: 18px; }
+}
+
+:root { --section-y: 5.5rem; }
+@media (min-width: 1536px) { :root { --section-y: 6.5rem; } }
+
+/* 3. The intro ledger. */
+.intro-ledger {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px 32px;
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px solid var(--hairline);
+}
+.intro-ledger-act { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; }
+.intro-ledger-call { font-size: 16px; color: var(--ink-muted); }
+.intro-ledger-links { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 24px; }
+@media (max-width: 700px) {
+  .intro-ledger { margin-top: 26px; padding-top: 16px; gap: 12px 20px; }
+}
+
+/* 4. The menu, to the fold. */
+@media (min-width: 1024px) and (min-height: 720px) {
+  .mega-panel {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - var(--bar-h));
+    height: calc(100svh - var(--bar-h));
+    /* Never shorter than its own rows: at the breakpoint's floor (1024 by
+       720) the buyers' last row ran under the strip. The sheet scrolls
+       instead (review, 7 Nov 2026). */
+    overflow-y: auto;
+  }
+  .mega-swap {
+    flex: 1 0 auto;
+    min-height: 0;
+    width: 100%;
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+  .mega-swap > .col-span-5 { display: flex; flex-direction: column; min-height: 0; }
+  .mega-preview { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
+  .mega-frame { flex: 1 1 auto; min-height: 0; aspect-ratio: auto; }
+  .mega-row { padding: 18px 0; column-gap: 22px; grid-template-columns: 34px 64px minmax(0, 1fr); }
+  .mega-row .mega-name { font-size: 22px; }
+  /* The index's column is as tall as the photograph's; the Also row sits
+     at its foot, on the photograph's caption line. */
+  .mega-swap > .col-span-7 { display: flex; flex-direction: column; min-height: 0; }
+  .mega-also { margin-top: auto; padding-top: 22px; }
+  .mega-ledger > div { padding: 22px 0 23px; }
+  .mega-ledger .mega-name { font-size: 20px; }
+  .mega-list { row-gap: 8px; }
+}
+@media (min-width: 1024px) and (max-height: 719px) {
+  .mega-panel { max-height: calc(100vh - var(--bar-h)); overflow-y: auto; }
+}
+/* The sheet's own way out: a Close at the top right of the photograph's
+   column, on the same baseline row as the index's head. */
+.mega-tools {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-height: 25px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--hairline);
+  margin-bottom: 18px;
+}
+.mega-close {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 25px;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-text);
+  font-size: 14px;
+  line-height: 1;
+  color: var(--ink-muted);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 5px;
+  text-decoration-color: transparent;
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
+}
+.mega-close:hover { color: var(--ink); text-decoration-color: var(--accent); }
+.mega-close svg { display: block; }
+
+/* 6. The closing band ("Send a few photos"): the heading left, the line and
+   the button right, on one baseline. Stacked, the band's right half was
+   empty (components/Footer.tsx). */
+.close-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  column-gap: 40px;
+  align-items: end;
+}
+.close-grid h2 { margin: 0; }
+@media (max-width: 900px) {
+  .close-grid { grid-template-columns: minmax(0, 1fr); row-gap: 22px; }
+}
+/* The Also row's own hairline doubled the last index row's (two lines
+   18px apart, in both the tall and the compact sheet); the row above
+   draws the one line. */
+.mega-also { border-top: 0; }

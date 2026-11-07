@@ -53,13 +53,14 @@ export const metadata: Metadata = {
     covering crosswalks, TrafficPatternsXD and a third tile at once). */
 function coverPicker() {
   const used = new Set<string>()
-  return (photos: WorkPhoto[]): WorkPhoto | undefined => {
+  const pick = (photos: WorkPhoto[]): WorkPhoto | undefined => {
     const fresh = photos.filter((p) => !used.has(p.src))
-    const pick =
+    const choice =
       fresh.find((p) => p.hires && p.w >= 1600) ?? fresh.find((p) => p.hires) ?? fresh[0] ?? photos[0]
-    if (pick) used.add(pick.src)
-    return pick
+    if (choice) used.add(choice.src)
+    return choice
   }
+  return { pick, used }
 }
 
 /** One gallery: the frame, its name under it in Futura, the whole thing the link. */
@@ -99,7 +100,7 @@ export default async function GalleriesPage() {
   const o = await getPageOpener("/galleries")
   // The galleries with the Studio's photographs in them (lib/work-cms.ts, 9 Oct 2026).
   const all = await getStudioWork()
-  const cover = coverPicker()
+  const { pick: cover, used: covers } = coverPicker()
 
   const byApplication = WORK_APPS.map((a) => {
     const photos = all.filter((p) => p.app === a.slug)
@@ -137,7 +138,14 @@ export default async function GalleriesPage() {
   const driveways = [
     { label: "Vancouver & the Lower Mainland", href: "/driveways/vancouver", photos: all.filter((p) => p.app === "driveways" && p.region === "Lower Mainland") },
     { label: "Victoria & Vancouver Island", href: "/driveways/victoria", photos: all.filter((p) => p.app === "driveways" && p.region === "Vancouver Island") },
-  ].filter((g) => g.photos.length > 0)
+  ]
+    .filter((g) => g.photos.length > 0)
+    .map((g) => ({ ...g, photo: cover(g.photos) }))
+
+  // 7 Nov 2026: the sample at the foot of the page leaves out the frames
+  // already covering a gallery above it, so no photograph is on the page
+  // twice (three were).
+  const rest = all.filter((p) => !covers.has(p.src))
 
   const threeUp = "(max-width: 700px) 100vw, (max-width: 1280px) 33vw, 411px"
   const fourUp = "(max-width: 700px) 100vw, (max-width: 1280px) 25vw, 300px"
@@ -198,7 +206,7 @@ export default async function GalleriesPage() {
       <Section id="galleries-more" label="Driveways and projects" title={<>For homeowners, <em>and the full story</em></>} wide>
         <div className="grid grid-cols-3 gap-x-7 gap-y-10 max-[1000px]:grid-cols-2 max-[600px]:grid-cols-1">
           {driveways.map((g) => (
-            <GalleryCover key={g.href} href={g.href} photo={cover(g.photos)} title={g.label} sizes={threeUp} />
+            <GalleryCover key={g.href} href={g.href} photo={g.photo} title={g.label} sizes={threeUp} />
           ))}
           <div className="border-t border-hairline pt-6">
             <span className="label">Projects</span>
@@ -225,7 +233,7 @@ export default async function GalleriesPage() {
         tone="warm"
         wide
       >
-        <WorkGallery photos={all} initial={12} ariaLabel="Every installation photograph on record" />
+        <WorkGallery photos={rest} initial={12} ariaLabel="Every installation photograph on record" />
       </Section>
     </main>
   )
