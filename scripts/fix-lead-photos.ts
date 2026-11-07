@@ -50,22 +50,32 @@ const token = process.env.SANITY_AUTH_TOKEN || process.env.SANITY_API_WRITE_TOKE
 
 const OLD = "public/images/S1_update_v2/Old Square One Web Assets"
 
-/** The change each post takes: a photograph of its own (uploaded under `name`, else its own file name), or none. */
-const CHANGES: Record<string, { file: string; alt: string; name?: string } | { file: null; why: string }> = {
+/**
+ * The change each post takes: a photograph of its own (uploaded under `name`,
+ * else its own file name), or none. `was` is the photograph it wears today
+ * (the Studio's original file name): only a post or draft still wearing that
+ * one is changed, so a photograph an editor has chosen since is left alone
+ * (review, 7 Nov 2026).
+ */
+const CHANGES: Record<string, { was: string } & ({ file: string; alt: string; name?: string } | { file: null; why: string })> = {
   "commercial-parking-lot-coatings-bc": {
+    was: "mission-parking-bays-and-lot-streetprint-01.jpg",
     file: `${OLD}/Galleries/Parking Lots/Gallery/StreetBond Parking Lot, Kingsway, Vancouver BC.jpg`,
     alt: "Red StreetBond coated parking stalls at a commercial lot on Kingsway, Vancouver, the stall lines and a small-car legend in white",
   },
   "school-zone-thermoplastic-bc": {
+    was: "Photo-2025-09-25-3-48-33-PM-scaled.jpg",
     file: `${OLD}/Galleries/Branding & Wayfinding/Gallery/DecoMark Katzie Elementary School.jpg`,
     alt: "The school crest in DecoMark on the asphalt at Katzie Elementary School, a bird in a circle of colour, seen from above",
   },
   "traffic-pattern-crosswalk-upgrade-for-tsain-ko-centre": {
+    was: "TrafficPatterns Decorative Crosswalk, Sechelt BC.jpg",
     file: "public/images/blog/tsain-ko-crosswalk-sechelt/featured.jpg",
     name: "tsain-ko-centre-crossing-sechelt.jpg",
     alt: "The Tsain-Ko Centre crossing in Sechelt, an orange design of curved shapes in TrafficPatterns running from the parking lot to the storefronts, artwork panels on the facade above",
   },
   "decorative-asphalt-for-mckenzie-park-in-comox-bc": {
+    was: "DecoMark-Rutland-Park-Kelowna.jpg",
     file: null,
     why: "the only photograph on file is Rutland Centennial Park, Kelowna; none of the Comox path",
   },
@@ -154,21 +164,28 @@ async function main() {
     }
     for (const doc of docs) {
       const what = doc._id.startsWith("drafts.") ? "the draft" : "the post"
+      const now = doc.mainFile ? decoded(doc.mainFile) : null
+      if (change.file === null && !now) {
+        console.log(`${slug} (${what}): already without a photograph`)
+        continue
+      }
+      const newName = change.file === null ? null : change.name ?? path.basename(change.file)
+      if (now && now === newName) {
+        console.log(`${slug} (${what}): already ${now}`)
+        continue
+      }
+      // Only the old photograph is replaced: one an editor chose since (or a post given none) stays as it is.
+      if (now !== change.was) {
+        console.log(`${slug} (${what}): left alone, it wears ${now ?? "no photograph"}, not ${change.was}`)
+        continue
+      }
       if (change.file === null) {
-        if (!doc.mainFile) {
-          console.log(`${slug} (${what}): already without a photograph`)
-          continue
-        }
         console.log(`${slug} (${what}): lead photograph removed (${change.why}); was ${decoded(doc.mainFile)}`)
         tx.patch(doc._id, (p) => p.unset(["mainImage"]))
         n++
         continue
       }
-      const name = change.name ?? path.basename(change.file)
-      if (doc.mainFile && decoded(doc.mainFile) === name) {
-        console.log(`${slug} (${what}): already ${name}`)
-        continue
-      }
+      const name = newName as string
       let ref = uploaded.get(change.file)
       if (!ref) {
         if (DRY_RUN) {
