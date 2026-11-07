@@ -740,6 +740,18 @@ async function main() {
     assert.equal(b.sent.length, 0)
     assert.ok(out.waiting >= 1)
   })
+  await check("a webhook in the morning quarter hour retries nothing that failed before: that stays with the scheduled run (review, 6 Nov 2026)", async () => {
+    const s = sanity([
+      post("failed-before", "2026-11-03"),
+      { _id: "socialRetry-failed-before", _type: "socialRetry", slug: "failed-before", firstFailedAt: "2026-11-05T14:00:00Z" },
+      post("just-published", "2026-11-06"),
+      jobPostThisWeek("2026-11-02T14:00:00Z"),
+    ])
+    const c = fakeClaude()
+    const deps = { claude: c.claude, store: s.store, buffer: fakeBuffer(FOUR).buffer, mail: fakeMail().mail, now: clock("2026-11-06T14:05:00Z", 1000) }
+    const out = (await draftSocialNow("test", deps)) as { posts: { key: string }[] }
+    assert.deepEqual(out.posts.map((p) => p.key), ["just-published"], "only the new post; the failed one waits for the cron")
+  })
   await check("a run that fails tells the editors once, and never throws", async () => {
     const s = sanity([post("just-published", "2026-11-06"), jobPostThisWeek("2026-11-02T14:00:00Z")])
     const m = fakeMail()

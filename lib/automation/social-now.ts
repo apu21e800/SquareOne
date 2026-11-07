@@ -12,7 +12,8 @@
  * whatever is new and not yet in Buffer, so a post published at 9:02 has its
  * drafts in Buffer a minute or two later. The 15-minute run stays as the
  * safety net (a webhook Sanity didn't deliver, a run that failed) and for
- * posts set to go live at a time, retries and the weekly library post.
+ * posts set to go live at a time, retries and the weekly library post,
+ * which a webhook never takes, even inside the morning quarter hour.
  *
  * Two runs at once (the webhook and the 15-minute run, or two Publishes in a
  * row) can't draft an item twice: each item is claimed (its socialLog
@@ -64,7 +65,9 @@ export async function draftSocialNow(why: string, deps?: Omit<SocialDeps, "now">
     ? { ...deps, now: deps.now ?? (() => new Date()) }
     : { claude: anthropicClaude, store: sanityStore({ timeoutMs: SANITY_TIMEOUT_MS }), buffer: bufferApi, mail: resendMailer, now: () => new Date() }
   try {
-    const out = await draftSocialForNewPosts(d, { startedAt })
+    // Never the morning run, whatever the hour: retries of items that failed
+    // and the weekly library post stay with the scheduled run (review, 6 Nov 2026).
+    const out = await draftSocialForNewPosts(d, { startedAt, morning: false })
     console.log(`[social] ${why}: ${out.posts.length} item(s) drafted or settled, ${out.waiting} waiting`)
     return out
   } catch (err) {

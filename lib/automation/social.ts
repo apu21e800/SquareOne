@@ -279,7 +279,7 @@ export const hasStory = (d: Pick<FieldDoc, "writeUp">) => !!d.writeUp?.trim()
  * live. `startedAt`: when the route started, so the time limits count the
  * steps before this one too (app/api/cron/social-drafts).
  */
-export async function draftSocialForNewPosts(deps: SocialDeps, opts: { holdBack?: ReadonlySet<string>; startedAt?: number } = {}): Promise<{ posts: SocialResult[]; waiting: number }> {
+export async function draftSocialForNewPosts(deps: SocialDeps, opts: { holdBack?: ReadonlySet<string>; startedAt?: number; morning?: boolean } = {}): Promise<{ posts: SocialResult[]; waiting: number }> {
   const { store } = deps
   // The run's date, for its records; the clock is read again only for the time limits.
   const now = deps.now()
@@ -306,7 +306,10 @@ export async function draftSocialForNewPosts(deps: SocialDeps, opts: { holdBack?
   // quarter hour of 14:00 UTC), once a day as when the run was daily: each try
   // costs Claude calls before Buffer is asked, and a channel waiting to be
   // reconnected would otherwise cost them 96 times a day (review, 6 Nov 2026).
-  const retryNow = morningSlot(now)
+  // Only the scheduled run is the morning run: a Publish webhook that lands in
+  // that quarter hour passes `morning: false`, so each Publish doesn't try the
+  // failing items again or take the library's turn (review, 6 Nov 2026).
+  const retryNow = opts.morning ?? morningSlot(now)
   const tryNow = (key: string) => retryNow || !failing.has(key)
 
   // Oldest first, so a backlog goes out in the order it was published; one
