@@ -82,9 +82,11 @@ export default async function DrivewaysBand({
           </article>
         ))}
 
-        {/* The offer, as a paragraph: the page's one orange button here. On
-            the orange tint under an orange rule since 3 Nov 2026 (app/own.css
-            .offer-block, "colour punch"). */}
+        {/* The offer, as a paragraph: the page's one orange button here,
+            under an orange rule (3 Nov 2026, app/own.css .offer-block,
+            "colour punch"), on the site's light grey since 6 Nov 2026 (it
+            was an orange tint; Vern: "make the BG of that card grey, keep
+            the orange line on top"). */}
         <div className="offer-block col-span-4 max-[900px]:col-span-1">
           <span className="label">{offer.label}</span>
           <h3 className="mt-1">

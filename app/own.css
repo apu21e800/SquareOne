@@ -2137,10 +2137,11 @@ h2.search-group-name:not(.label):not(.eyebrow) { font-size: 17px; letter-spacing
       3.8 : 1, past the 3 : 1 a heading needs. Scoped to the site's
       sections (.sec), so an opener's H1 on a photograph keeps its white
       phrase and the Studio's headings are not touched.
-   3. The driveways band's offer sits on the orange tint under an orange
-      rule, the one coloured block on the home page, where the brief had
-      an orange offer card (docs/OWN-COMPANY-BRIEF.md) before the
-      26 Sept rebuild made it a plain paragraph.
+   3. The driveways band's offer sits in a block under an orange rule,
+      where the brief had an orange offer card (docs/OWN-COMPANY-BRIEF.md)
+      before the 26 Sept rebuild made it a plain paragraph. On the orange
+      tint (#F7EBE6) until 6 Nov 2026; on the site's light grey since
+      (Vern: "make the BG of that card grey, keep the orange line on top").
    ============================================================ */
 .btn-primary, .nav-cta { background: var(--brand-orange); border-color: var(--brand-orange); color: #FFFFFF; }
 .btn-primary:hover, .nav-cta:hover { background: var(--ink); border-color: var(--ink); color: #FFFFFF; }
@@ -2152,6 +2153,6 @@ h2.search-group-name:not(.label):not(.eyebrow) { font-size: 17px; letter-spacing
 
 .sec h2:not(.card-title) em, .sec .display-statement em { color: var(--accent); }
 
-.offer-block { background: #F7EBE6; border-top: 4px solid var(--brand-orange); padding: 26px 28px 28px; }
+.offer-block { background: var(--surface-warm); border-top: 4px solid var(--brand-orange); padding: 26px 28px 28px; }
 .offer-block .label { color: var(--brand-orange-press); }
 @media (max-width: 900px) { .offer-block { padding: 22px 20px 24px; } }
