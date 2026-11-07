@@ -218,10 +218,12 @@ export default async function VaporBlastingServicePage() {
       </section>
 
       {/* ── Before / after: the one demonstration, captioned as one ── */}
+      {/* 7 Nov 2026 (Vern, on the headers: "what does that even mean"): the
+          heading says what the picture shows; the instruction is the caption. */}
       <Section
         label="Before and after"
-        title={<>Drag <em>the line</em></>}
-        intro="Aerosol graffiti on face brick, before and after."
+        title={<>Graffiti off face brick, <em>before and after</em></>}
+        intro="A demonstration. Drag the line across the wall."
         tone="warm"
         wide
       >
@@ -250,7 +252,7 @@ export default async function VaporBlastingServicePage() {
       <Section
         id="gallery"
         label="On the record"
-        title={<>On the job, <em>photographed</em></>}
+        title={<>Vapour blasting, <em>on the record</em></>}
         link={{ href: site.youtube, label: "Demonstration videos on YouTube" }}
         className="scroll-mt-[72px]"
         wide
@@ -300,7 +302,7 @@ export default async function VaporBlastingServicePage() {
       </section>
 
       {/* ── Questions ────────────────────────────────────────────── */}
-      <Section label="Questions" title={<>What people ask <em>about vapour blasting</em></>}>
+      <Section label="Questions" title={<>Questions <em>about vapour blasting</em></>}>
         <div className="border-t border-hairline">
           {faqs.map((faq) => (
             <details key={faq.q} className="group border-b border-hairline">
