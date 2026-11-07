@@ -2304,3 +2304,27 @@ h2.search-group-name:not(.label):not(.eyebrow) { font-size: 17px; letter-spacing
    18px apart, in both the tall and the compact sheet); the row above
    draws the one line. */
 .mega-also { border-top: 0; }
+
+/* 7 Nov 2026, later. Vern, with a screenshot of the Who-we-work-with sheet
+   at 1386 by 775: "content looks too stretched vertically in mega menu now
+   that it's full page, improve, find balance, move content up I guess."
+   The sheet still runs to the fold, but its content no longer stretches to
+   fill it: the index and the photograph sit at the top at their own height
+   (the rows a notch tighter than the first tall sheet, a notch looser than
+   the compact one), the photograph as tall as the index beside it and never
+   shorter than 4:3, the strip at the foot and the sheet's ground between. */
+@media (min-width: 1024px) and (min-height: 720px) {
+  /* To the fold on a laptop (up to 770 tall: the strip on the fold line);
+     on a taller screen the sheet stops at 700px and the page shows through
+     under it, so the ground under the content stays a band, never a field. */
+  .mega-panel { height: min(calc(100vh - var(--bar-h)), 700px); height: min(calc(100svh - var(--bar-h)), 700px); }
+  .mega-swap { flex: 0 0 auto; align-content: start; padding-top: 28px; padding-bottom: 36px; }
+  .mega-strip { margin-top: auto; }
+  .mega-frame { aspect-ratio: 4 / 3; }
+  .mega-row { padding: 14px 0; column-gap: 20px; grid-template-columns: 32px 56px minmax(0, 1fr); }
+  .mega-row .mega-name { font-size: 21px; }
+  .mega-ledger > div { padding: 17px 0 18px; }
+  .mega-ledger .mega-name { font-size: 18px; }
+  .mega-list { row-gap: 6px; }
+  .mega-also { padding-top: 18px; }
+}
