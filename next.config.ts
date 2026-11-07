@@ -186,8 +186,10 @@ const nextConfig: NextConfig = {
       { source: "/public-art/decomark-sequoia-ridge-park", destination: "/applications/parks-paths", permanent: true },
       { source: "/parks-paths/rutledge-water-park-saanich-bc", destination: "/applications/parks-paths", permanent: true },
       { source: "/streetscapes/victoria-bc-roundabout-truck-apron", destination: "/applications/roundabouts", permanent: true },
+      // 7 Nov 2026: Windsor Gate phase two is folded into the Windsor Gate post (its /blog rule is below, with the reason).
+      { source: "/crosswalks/windsor-gate-townhouse-driveway-2", destination: "/blog/windsor-gate-townhouse-driveway", permanent: true },
       // Same slug on both sites — the 33 posts whose WP slug is the mdx slug
-      { source: "/crosswalks/:slug(rainbow-crosswalk-squamish|richmond-brighouse-translink|white-rock-crosswalk|first-nations-crosswalk-design-granville-street|checkerboard-crosswalks-coquitlam|windsor-gate-townhouse-driveway|windsor-gate-townhouse-driveway-2|decorative-paving-stamped-asphalt|west-vancouver-rainbow-crosswalk|school-crosswalk-for-high-visibility|decorative-asphalt-plaza|townhouse-driveway-natures-walk|new-westminster-oxford-townhomes)", destination: "/blog/:slug", permanent: true },
+      { source: "/crosswalks/:slug(rainbow-crosswalk-squamish|richmond-brighouse-translink|white-rock-crosswalk|first-nations-crosswalk-design-granville-street|checkerboard-crosswalks-coquitlam|windsor-gate-townhouse-driveway|decorative-paving-stamped-asphalt|west-vancouver-rainbow-crosswalk|school-crosswalk-for-high-visibility|decorative-asphalt-plaza|townhouse-driveway-natures-walk|new-westminster-oxford-townhomes)", destination: "/blog/:slug", permanent: true },
       { source: "/parks-paths/:slug(victoria-harbour-walkway|sport-court-asphalt-paving|ralphs-farm-market-decorative-parking-lot|connaught-park-spray-park-renewal|confederation-water-park-burnaby|wesburn-water-park-burnaby|tsuyuki-park-maple-ridge)", destination: "/blog/:slug", permanent: true },
       { source: "/public-art/:slug(bowen-island-stamped-asphalt-walkway|decorative-asphalt-sidewalk-for-langley-housing-development|brewers-park-streetbond-installation|parc-riviera-mews-streetbond-asphalt-walkway|decorative-asphalt-for-rutland-centennial-park-kelowna|alexandra-greenway-public-art|pictograph-crosswalk-sechelt|traffic-pattern-crosswalk-upgrade-for-tsain-ko-centre|boundary-road-pump-station)", destination: "/blog/:slug", permanent: true },
       { source: "/streetscapes/:slug(lickman-interchange|north-vancouver-maplewoods-decorative-fire-lane)", destination: "/blog/:slug", permanent: true },
@@ -231,7 +233,10 @@ const nextConfig: NextConfig = {
       // The two /projects/ ones among them are covered by projectRedirects
       // below since 6 Nov 2026.
       { source: "/laneways", destination: "/driveways", permanent: true },
-      { source: "/blog/windsor-gate-townhouse-laneway-2", destination: "/blog/windsor-gate-townhouse-driveway-2", permanent: true },
+      // 7 Nov 2026: Windsor Gate phase two, the same job told twice, is folded
+      // into the Windsor Gate post (content/blog/windsor-gate-townhouse-driveway-2.mdx).
+      { source: "/blog/windsor-gate-townhouse-laneway-2", destination: "/blog/windsor-gate-townhouse-driveway", permanent: true },
+      { source: "/blog/windsor-gate-townhouse-driveway-2", destination: "/blog/windsor-gate-townhouse-driveway", permanent: true },
       // 6 Nov 2026 (Vern: "Projects and blog should be combined into the same
       // thing"): the projects are blog posts. Every /projects address goes to
       // the post that tells the job (lib/project-redirects.ts).

@@ -145,6 +145,15 @@ check("every job lists under its post's address, lead photograph first", () => {
 console.log("nothing changes until someone edits")
 check("no CMS (or Sanity unreachable): the files and the record, exactly", () => assert.deepEqual(mergePosts(null, files), [...files].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())))
 check("an empty Studio: the same", () => assert.deepEqual(mergePosts([], files), mergePosts(null, files)))
+check("a file marked unlisted hides the Studio's copy of the same slug too (7 Nov 2026, Windsor Gate phase two)", () => {
+  const p = named[0]
+  const doc: CmsPostDoc = { ...migrated(p, 0), slug: "windsor-gate-townhouse-driveway-2", title: "Windsor Gate, phase two" }
+  assert.ok(mergePosts([doc], files).some((x) => x.slug === doc.slug), "listed when nothing says otherwise")
+  const out = mergePosts([doc], files, false, new Set([doc.slug]))
+  assert.ok(!out.some((x) => x.slug === doc.slug), "left out when its file is unlisted")
+  assert.equal(out.length, files.length, "nothing else changes")
+  assert.ok(!files.some((x) => x.slug === doc.slug), "the file itself is already off the list")
+})
 check("the Studio as the migration leaves it: every job as before, photographs served from the site", () => {
   const out = projectsFrom(mergePosts(RECORD.map(migrated), files))
   const before = projectsFrom(files)

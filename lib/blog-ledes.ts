@@ -2,18 +2,30 @@
 
 /**
  * Lede photographs for the grandfathered posts, keyed by slug. The post
- * bodies and front-matter are never edited (they are the record as Square One
- * published it), so the honest photograph for each is fixed here instead:
+ * bodies and front-matter are not rewritten (they are the record as Square One
+ * published it; an `unlisted` line with its reason, and a link to a post since
+ * folded away, are the only edits), so the honest photograph for each is fixed here instead:
  * every path below is a Square One photograph of the project the post is
  * about, from the S1 archive. A slug mapped to "" runs without a lede — the
  * only picture on file was of a different site. Posts not listed keep their
  * front-matter image.
  */
 const FIO = "/images/S1_update_v2/photos/Featured%20image%20options"
-const CROSSWALKS = "/images/S1_update_v2/Old%20Square%20One%20Web%20Assets/Galleries/Crosswalks/Gallery"
-const TP_GALLERY = "/images/S1_update_v2/Old%20Square%20One%20Web%20Assets/Product%20Pages/TrafficPatterns/Gallery"
+const OLD = "/images/S1_update_v2/Old%20Square%20One%20Web%20Assets"
+const CROSSWALKS = `${OLD}/Galleries/Crosswalks/Gallery`
 
+/*
+ * 7 Nov 2026 (Vern: "eliminate the duplicate projects and images on the
+ * 'Projects' page"): no photograph twice on /blog. Four posts wore another
+ * post's photograph, or another site's; each now has one of its own or
+ * none. The Studio's lead photograph wins over this map (lib/blog.ts
+ * fromDoc), so scripts/fix-lead-photos.ts makes the same change there.
+ */
 export const LEDE: Record<string, string> = {
+  // Wore the Mission parking bays, the lead of "Parking lot marking prep" (6 Nov 2026). Square One's own gallery: a StreetBond parking lot on Kingsway.
+  "commercial-parking-lot-coatings-bc": `${OLD}/Galleries/Parking%20Lots/Gallery/StreetBond%20Parking%20Lot%2C%20Kingsway%2C%20Vancouver%20BC.jpg`,
+  // Wore Rutland Centennial Park, Kelowna (the Rutland post's own job photograph); no photograph of the Comox path is on file.
+  "decorative-asphalt-for-mckenzie-park-in-comox-bc": "",
   "boundary-road-pump-station": `${FIO}/Photo-2023-07-05-11-22-34-AM.jpg`,
   "bowen-island-stamped-asphalt-walkway": `${FIO}/Bowen-Island-asphalt-walkway-with-StreetBond150-scaled-1.jpg`,
   "brewers-park-streetbond-installation": "",
@@ -36,19 +48,22 @@ export const LEDE: Record<string, string> = {
   "ralphs-farm-market-decorative-parking-lot": `${FIO}/Ralphs-Farm-Market-Parking-Lot-with-StreetPrint-Decorative-Stamped-Asphalt-in-Langley-BC-Canada.jpg`,
   "richmond-brighouse-translink": `${FIO}/IMG_3178-scaled-e1590114559108.jpeg`,
   "school-crosswalk-for-high-visibility": `${FIO}/visible-school-crosswalk-for-safety-6.jpg`,
-  // The front-matter frame is one the client marked "not ours" (19 Sept); the post is about South Langford Elementary.
-  "school-zone-thermoplastic-bc": `${FIO}/Photo-2025-09-25-3-48-33-PM-scaled.jpg`,
+  // The front-matter frame is one the client marked "not ours" (19 Sept). The post tells South Langford Elementary, whose one photograph leads the South Langford post; the guide takes the school crest in DecoMark at Katzie Elementary School (7 Nov 2026).
+  "school-zone-thermoplastic-bc": `${OLD}/Galleries/Branding%20%26%20Wayfinding/Gallery/DecoMark%20Katzie%20Elementary%20School.jpg`,
   "south-langford-elementary": `${FIO}/Photo-2025-09-25-3-48-33-PM-scaled.jpg`,
   "sport-court-asphalt-paving": `${FIO}/StreetBond-Sports-Court-Brookmere-Park-Coquitlam-BC.jpg`,
   "ubc-musqueam-crosswalk": `${FIO}/UBC-crosswalk-3-300dpi.jpg`,
   "victoria-harbour-walkway": `${FIO}/StreetBond-Harbour-Walkway-Victoria-BC.jpg`,
   "white-rock-crosswalk": `${FIO}/Whiterock-Pier-Crosswalk-TrafficPatternsXD-1-scaled.jpg`,
+  // The same frame as the Windsor Gate post's; the post is unlisted since 7 Nov 2026 (the same job told twice).
   "windsor-gate-townhouse-driveway-2": `${FIO}/StreetPrint-%E2%80%94-Stamped-Asphalt-Decorative-Crosswalk-Windsor-Gate.jpg`,
   "windsor-gate-townhouse-driveway": "/images/projects/windsor-gate-coquitlam/windsor-gate-crosswalk-streetprint-03.jpg",
   // Front-matter pointed at wp-content URLs that 404 on the live WordPress site —
-  // the archive holds one honest match; the rest run without a lede until Gord
-  // sends the photograph.
-  "traffic-pattern-crosswalk-upgrade-for-tsain-ko-centre": `${TP_GALLERY}/TrafficPatterns%20Decorative%20Crosswalk%2C%20Sechelt%20BC.jpg`,
+  // the rest run without a lede until Gord sends the photograph. Tsain-Ko: the
+  // old site's own photograph of the crossing, the one the post describes (7 Nov
+  // 2026; the archive's "Decorative Crosswalk, Sechelt" it wore until then is the
+  // Cowrie Street and Trail Avenue crossing, the pictograph post's lead).
+  "traffic-pattern-crosswalk-upgrade-for-tsain-ko-centre": "/images/blog/tsain-ko-crosswalk-sechelt/featured.jpg",
   "lickman-interchange": "",
   // 19 Sept 2026: four of those now have honest frames — the captioned 2026
   // library (Oxford, Wesburn) and the old site's own post images.
