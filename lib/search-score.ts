@@ -28,6 +28,8 @@ export interface SearchEntry {
   keywords?: string
   /** Document rows render Preview + Download instead of a plain link */
   download?: boolean
+  /** A document's address to open in the browser when it differs from `href` (an upload served as a download, lib/resources-cms.ts). */
+  open?: string
 }
 
 export const GROUP_ORDER: SearchEntryType[] = [

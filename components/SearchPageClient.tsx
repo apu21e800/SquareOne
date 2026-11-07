@@ -145,7 +145,7 @@ export default function SearchPageClient() {
                             )}
                           </span>
                           <span className="flex shrink-0 items-center gap-5">
-                            <a href={entry.href} target="_blank" rel="noopener noreferrer" className="link">
+                            <a href={entry.open ?? entry.href} target="_blank" rel="noopener noreferrer" className="link">
                               Preview
                             </a>
                             <a href={entry.href} download className="link">

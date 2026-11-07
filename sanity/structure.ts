@@ -7,8 +7,8 @@ import { ICONS } from "./icons"
 /**
  * The Studio's list (14 Oct 2026), in the order the office works through it:
  * "Start here" (the office's guide, first since 21 Oct 2026), then Website
- * Pages, Services, Projects, Blog ideas, Blog posts, Job photos, Sent to
- * Buffer, Site Settings (the automation brief; docs/AUTOMATION.md). In
+ * Pages, Services, Documents (7 Nov 2026), Blog ideas, Blog posts, Job
+ * photos, Sent to Buffer, Site Settings (the automation brief; docs/AUTOMATION.md). In
  * plain words since 20 Oct 2026, as hubss.com's: each list says what it is
  * for in its own title, so nobody needs a manual to know what happens. Since
  * 22 Oct 2026 each has its picture too, the same one its documents show
@@ -102,6 +102,22 @@ export function buildStructure(S: StructureBuilder, addons: boolean, drafter: bo
         .schemaType("service")
         .icon(ICONS.service)
         .child(S.documentTypeList("service").title("Services").initialValueTemplates([])),
+      // The specification library (7 Nov 2026, sanity/schemaTypes/resource.ts):
+      // one document per PDF, the site's 106 seeded with their own copies, the
+      // office adding, replacing and hiding (lib/resources-cms.ts).
+      S.listItem()
+        .title("Documents")
+        .id("resource")
+        .schemaType("resource")
+        .icon(ICONS.resource)
+        .child(
+          S.documentTypeList("resource")
+            .title("Documents · the specification library on /resources · upload a PDF, pick its system and kind, press Publish")
+            .defaultOrdering([
+              { field: "product", direction: "asc" },
+              { field: "title", direction: "asc" },
+            ]),
+        ),
       // What to write next (sanity/schemaTypes/storyIdea.ts). The drafter, on
       // Tuesdays and Thursdays, takes the top Ready item, else the top Idea,
       // and tops the plan up when it runs low (lib/automation/planner.ts).

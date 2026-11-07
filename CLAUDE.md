@@ -108,8 +108,9 @@ already covers it"); components/sections/BlogFeed.tsx stays unused.
 ## Driveway composer
 `components/DrivewayComposer.tsx` — pattern × colour sample board (drawn, not photographed). The file exists but renders nowhere as of 26 Sept 2026: no page imports it (held back from /driveways on 19 Sept; the home materials board links to /patterns and the colour chart instead). Do not build on it; leaving or moving it is the maintainer's call (docs/OWN-COMPANY-BRIEF.md §2).
 
-## Documents (lib/resources.ts)
-107 hosted PDFs in /public/docs, page-one previews pre-rendered to /public/docs-previews by `node scripts/doc-previews.mjs` (run it after adding or replacing a PDF; needs poppler + Pillow locally). 36 documents carry `hub:` — the identical file on hubss.com, verified against HUB's own registry. Product pages render a typed rail (components/documents/DocumentRail); /resources and the search overlay share the preview modal.
+## Documents (lib/resources.ts, lib/resources-cms.ts)
+106 hosted PDFs in /public/docs (108 files; two MMA ones are unlisted), page-one previews pre-rendered to /public/docs-previews by `node scripts/doc-previews.mjs` (run it after adding or replacing a PDF; needs poppler + Pillow locally). 35 documents carry `hub:` — the identical file on hubss.com, verified against HUB's own registry. Product pages render a typed rail (components/documents/DocumentRail); /resources and the search overlay share the preview modal.
+**In the Studio since 7 Nov 2026** (Vern: "put the PDF documents / resources in sanity too … same as hubss"): the Documents list (sanity/schemaTypes/resource.ts; one document per PDF: name, system, kind, the PDF, the site's own copy, the manufacturer's copy, Take off the site). `scripts/seed-resources.ts` makes the record's 106 once (`npx sanity exec scripts/seed-resources.ts --with-user-token -- --dry-run`, then without the flag; fixed ids from `resourceId`, nothing uploaded: the files stay on the site until the office uploads a replacement, as hubss.com's library did). Every reader (/resources, the product page's colour card, /specifiers, the search index) goes through `getResourceGroups()`: the record with the Studio's documents placed in it (`mergeResources`, pure, `npm run test:resources`); an upload is served from Sanity's CDN with `?dl=` for the download and the plain address to open (`ResourceDoc.open`); a Studio document the record doesn't know joins its system's group at the end; Square One's own papers (insurance, WCB, capabilities) are the group "Square One" after the record's. An upload has no page-one preview until a developer renders one (the type tile stands in, as it always did). The office's guide has the step (lib/office-guide.ts "documents").
 
 ## Brand
 Current as of 7 Oct 2026 (the own-company restyle of 27 Sept, docs/OWN-COMPANY-BRIEF.md, and the client's rounds since). The surface lives in `app/own.css`, which loads last and wins; `app/globals.css` and `app/refine.css` hold the history under it.
@@ -332,7 +333,7 @@ page its "Used on" list names (23 Oct 2026, sanity/components/EditOnThePage.tsx,
 sanity/studio-pages.ts; ported from hubss.com's; `npm run test:studio`).
 
 **The Studio at hubss.com's level** (14 Oct 2026, docs/CMS.md): the list is
-Website Pages, Services, Projects, Blog, Site Settings (sanity/structure.ts).
+Website Pages, Services, Documents (7 Nov 2026), Blog, Site Settings (sanity/structure.ts).
 Every page's words below its opener are the Studio's, the code's where a
 field is blank: `lib/page-copy.ts` holds the code's words verbatim and the
 merge (a heading and its lighter ending travel as a pair); a page reads
@@ -531,6 +532,7 @@ npm run start   # Run production build locally
 npm run check   # disk manifest, tsc, lint-claims, check-links
 npm run test:forms  # the quote form's spam rules and route decisions (no network, no mail)
 npm run test:projects  # projects from the Studio
+npm run test:resources  # the document library from the Studio: the record exactly until someone edits, renames, uploads, adds, hides
 npm run test:pages  # the hero, page openers and galleries from the Studio
 npm run test:preview  # Edit on the page: preview marks, exit path, clickable photos, style warnings
 npm run test:studio   # focal points, first-Publish dates, Site Settings, every page's words, the Studio list

@@ -6,6 +6,7 @@ import { socialPost } from "./socialPost"
 import { siteSettings } from "./siteSettings"
 import { copySlot, imageSlot } from "./slots"
 import { service } from "./service"
+import { resource } from "./resource"
 import { storyIdea } from "./storyIdea"
 import { fieldPost } from "./fieldPost"
 import { socialLog } from "./socialLog"
@@ -25,6 +26,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   gallerySettings,
   socialPost,
   service,
+  resource,
   siteSettings,
   copySlot,
   imageSlot,

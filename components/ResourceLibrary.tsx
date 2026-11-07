@@ -237,8 +237,8 @@ export default function ResourceLibrary({ groups }: { groups: ResourceGroup[] })
           </div>
         ) : flat ? (
           <ul className="mt-2 divide-y divide-hairline" role="list">
-            {flatRows.map(({ doc, product: p }) => (
-              <DocRow key={doc.href} doc={doc} product={p} showProduct onPreview={setTarget} />
+            {flatRows.map(({ doc, product: p }, i) => (
+              <DocRow key={`${doc.href}-${i}`} doc={doc} product={p} showProduct onPreview={setTarget} />
             ))}
           </ul>
         ) : (
@@ -254,8 +254,8 @@ export default function ResourceLibrary({ groups }: { groups: ResourceGroup[] })
                   </span>
                 </div>
                 <ul className="mt-1 divide-y divide-hairline" role="list">
-                  {group.docs.map((doc) => (
-                    <DocRow key={doc.href} doc={doc} product={group.product} onPreview={setTarget} />
+                  {group.docs.map((doc, i) => (
+                    <DocRow key={`${doc.href}-${i}`} doc={doc} product={group.product} onPreview={setTarget} />
                   ))}
                 </ul>
               </section>

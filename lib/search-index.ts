@@ -5,7 +5,8 @@ import { services } from "@/lib/services"
 import { products } from "@/lib/products"
 import { postSlugOf, projects, type Project } from "@/lib/projects"
 import { projectsFrom } from "@/lib/projects-cms"
-import { resourceGroups } from "@/lib/resources"
+import { resourceGroups, type ResourceGroup } from "@/lib/resources"
+import { getResourceGroups } from "@/lib/resources-cms"
 import { getAllPosts, getPosts, type BlogPostMeta } from "@/lib/blog"
 import { getWork, WORK_APPS } from "@/lib/work"
 import type { SearchEntry } from "@/lib/search-score"
@@ -201,15 +202,15 @@ const SERVICE_LABEL: Record<string, string> = {
 
 /** The index from the file record alone (the build's view; tests use it). */
 export function buildSearchIndex(): SearchEntry[] {
-  return buildIndexFrom(getAllPosts())
+  return buildIndexFrom(getAllPosts(), resourceGroups)
 }
 
-/** The index as the site stands: the Studio's posts, the record behind them (6 Nov 2026: the jobs are posts, lib/projects-cms.ts). */
+/** The index as the site stands: the Studio's posts and documents, the record behind them (6 Nov 2026: the jobs are posts, lib/projects-cms.ts; 7 Nov: the documents, lib/resources-cms.ts). */
 export async function buildSiteSearchIndex(): Promise<SearchEntry[]> {
-  return buildIndexFrom(await getPosts())
+  return buildIndexFrom(await getPosts(), await getResourceGroups())
 }
 
-function buildIndexFrom(posts: BlogPostMeta[]): SearchEntry[] {
+function buildIndexFrom(posts: BlogPostMeta[], documents: ResourceGroup[]): SearchEntry[] {
   // A post that tells a job is listed as a project; every other post as a post.
   const projectList: Project[] = projectsFrom(posts)
   const jobs = new Set(projectList.map((p) => p.slug))
@@ -251,12 +252,13 @@ function buildIndexFrom(posts: BlogPostMeta[]): SearchEntry[] {
     keywords: `${post.description} ${post.tags.join(" ")}`,
   }))
 
-  const documentEntries: SearchEntry[] = resourceGroups.flatMap((group) =>
+  const documentEntries: SearchEntry[] = documents.flatMap((group) =>
     group.docs.map((doc) => ({
       type: "document" as const,
       title: doc.name,
       subtitle: `${group.product} · ${doc.type} · ${doc.size}`,
       href: doc.href,
+      ...(doc.open ? { open: doc.open } : {}),
       download: true,
       keywords: `${group.product} ${doc.type} pdf specification document`,
     })),

@@ -139,6 +139,21 @@ export const GUIDE_SOURCE: { title: string; lead: { free: string; addons: string
       },
     },
     {
+      id: "documents",
+      title: "Add or replace a document",
+      when: "When the manufacturer sends a new spec sheet, data sheet or colour card, or one of Square One's own papers should be on the site.",
+      steps: [
+        "Open squareonepaving.com/studio, then **Documents**. Every document on the site's Resources page is there, one line each.",
+        "To replace one: open it, press **Upload** under **The PDF** and pick the file. The site keeps its own copy until you do.",
+        "To add one: the **+** button, then **Name** (as the library should list it), **System**, **Kind of document**, and **Upload** under **The PDF**.",
+        "Press **Publish**.",
+      ],
+      next: [
+        "It's on the Resources page under its system within a minute, with a search that finds it by name.",
+        "To take one down, turn on **Take off the site** and press **Publish**: nothing is deleted, and the site's own copy stays where it was.",
+      ],
+    },
+    {
       id: "own-post",
       title: "Write a blog post",
       when: "Any time.",

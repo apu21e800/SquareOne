@@ -79,7 +79,7 @@ export default function DocPreviewModal({ target, onClose }: { target: PreviewTa
               <p className="max-w-[36ch] text-[16px] leading-[1.6] text-ink-body">
                 No preview for this document yet: open the PDF itself.
               </p>
-              <a href={doc.href} target="_blank" rel="noopener noreferrer" className="link">
+              <a href={doc.open ?? doc.href} target="_blank" rel="noopener noreferrer" className="link">
                 Open the PDF
               </a>
             </div>
@@ -115,7 +115,7 @@ export default function DocPreviewModal({ target, onClose }: { target: PreviewTa
             <a href={doc.href} download className="btn-ink text-center no-underline">
               Download PDF
             </a>
-            <a href={doc.href} target="_blank" rel="noopener noreferrer" className="link">
+            <a href={doc.open ?? doc.href} target="_blank" rel="noopener noreferrer" className="link">
               Open in the browser
             </a>
           </div>

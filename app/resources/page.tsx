@@ -4,7 +4,7 @@ import IndexImageHero from "@/components/IndexImageHero"
 import OpenerTitle from "@/components/ui/OpenerTitle"
 import { getPageOpener } from "@/lib/page-content"
 import ResourceLibrary from "@/components/ResourceLibrary"
-import { resourceGroups, resourceCount } from "@/lib/resources"
+import { countResources, getResourceGroups } from "@/lib/resources-cms"
 import { SITE_URL } from "@/lib/site"
 import { clampDescription } from "@/lib/seo"
 import { getSiteSettings } from "@/lib/cms"
@@ -34,10 +34,14 @@ export const metadata: Metadata = {
  * full-bleed photograph — so the library reads as part of the site, not a
  * filing cabinet. 26 Sept 2026 (docs/OWN-COMPANY-BRIEF.md §3.7): the closing
  * line's links are underlined words; the library itself is restyled in
- * components/ResourceLibrary.tsx.
+ * components/ResourceLibrary.tsx. Since 7 Nov 2026 the documents are the
+ * Studio's over the record's (lib/resources-cms.ts): the office adds,
+ * replaces and hides them in the Studio's Documents list.
  */
 export default async function ResourcesPage() {
   const site = await getSiteSettings()
+  const groups = await getResourceGroups()
+  const resourceCount = countResources(groups)
   // The opener, with whatever the Studio says on top (lib/page-content.ts, 9 Oct 2026).
   const o = await getPageOpener("/resources")
   return (
@@ -60,7 +64,7 @@ export default async function ResourcesPage() {
           {/* The `hub` field (the manufacturer's own copy of a document) stays in
               the data for the record but never reaches the browser — not in
               copy, not in the client payload (Vern, 19 Sept 2026). */}
-          <ResourceLibrary groups={resourceGroups.map((g) => ({ ...g, docs: g.docs.map(({ hub: _hub, ...doc }) => doc) }))} />
+          <ResourceLibrary groups={groups.map((g) => ({ ...g, docs: g.docs.map(({ hub: _hub, ...doc }) => doc) }))} />
         </div>
       </section>
 
