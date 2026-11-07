@@ -34,6 +34,9 @@ import { usePalette } from "@/lib/use-palette"
  * and writes them as CSS variables keyed by html[data-palette]. The chips
  * here draw from --edge-1 … --edge-10, so they follow the palette without
  * waiting for React; only their hover names come from the palette in state.
+ *
+ * 6 Nov 2026: one palette, Earth (the client's pick; the hero switch came
+ * out), so the band and its hover names are Earth's everywhere.
  */
 
 export default function ColourEdge({ className = "" }: { className?: string }) {

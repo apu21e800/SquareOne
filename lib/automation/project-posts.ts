@@ -17,8 +17,8 @@
  *     lead photo, words in the body, a Section) is left and reported, and one
  *     an editor changed or held while the run was publishing it is never
  *     overwritten (the commit checks the draft's revision). Its social drafts
- *     follow at the next run, 15 minutes on (lib/automation/social.ts),
- *     waiting in Buffer for approval. A draft that can't be published is
+ *     follow in a minute or two (the publish webhook starts the social job,
+ *     lib/automation/social-now.ts), waiting in Buffer for approval. A draft that can't be published is
  *     emailed at once, then at most once a day (lib/automation/mail-cap.ts).
  *  2. draftProjectArticles, its own run (app/api/cron/project-articles, 15:00
  *     UTC, so a busy social morning can't crowd it out): the oldest published
@@ -333,7 +333,7 @@ export function buildProjectDocument(
         ? `SCHEDULED: it goes live by itself ${when}. To change a line, edit it here: it still goes out on time. To move it, change "Goes live at". To hold it, turn "Goes live by itself" off. The day after it is live, its social posts are drafted in Buffer for approval.`
         : `HELD: a check below found something, so it does not go live by itself. Read it, fix what's listed, then turn "Goes live by itself" on (it is set for ${when}; a time already past goes within 15 minutes) or press Publish.`
       : ready
-        ? `READY TO READ: nothing goes live until someone presses Publish. Read it, change anything by typing, then press Publish. To have it go out later instead, turn on "Goes live by itself" and set "Goes live at" to the day and time. Within 15 minutes of it going live, its social posts are drafted in Buffer for approval.`
+        ? `READY TO READ: nothing goes live until someone presses Publish. Read it, change anything by typing, then press Publish. To have it go out later instead, turn on "Goes live by itself" and set "Goes live at" to the day and time. Once it is live, its social posts are drafted in Buffer in a minute or two, for approval.`
         : `CHECK FIRST: a check below found something. Fix what's listed, then press Publish. Nothing goes live until someone does.`,
     "",
     check.unsupported.length
@@ -565,7 +565,7 @@ export async function publishDueDrafts(deps: ProjectDeps, now: Date, opts: { soc
           edit
             ? "To change it again, edit it in Studio → Blog posts and press Publish."
             : opts.social
-              ? "Its social posts are drafted in Buffer within 15 minutes, for approval. To change the article, edit it in Studio → Blog posts and press Publish."
+              ? "Its social posts are drafted in Buffer in a minute or two, for approval. To change the article, edit it in Studio → Blog posts and press Publish."
               : "To change it, edit it in Studio → Blog posts and press Publish.",
         ].join("\n"),
         "projects",

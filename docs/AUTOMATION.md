@@ -115,9 +115,24 @@ project story for each real job Vern names, from Projects (with
 article of its own (nine on 14 Oct 2026). Nothing is invented: a job has to
 be in Projects, with its photographs, before it can be planned.
 
+**At Publish** (6 Nov 2026, later; Vern: "make it go to buffer right away if
+possible, not sure why we need the 15min post window"): the Sanity webhook
+that refreshes the site on every Publish (`/api/revalidate`, docs/CMS.md
+step 5) also starts the social job when what was published is a blog post or
+a Job photos post (lib/automation/social-now.ts; `post` or `fieldPost`,
+never a draft or a version). It runs after the webhook has had its answer
+(`after()`), so its drafts are in Buffer a minute or two after Publish. It is
+the same job as step 2 below, claim-first, so it and the run can't draft an
+item twice, and it never throws: a failure is logged and emailed under the
+same once-a-day cap. Switched off, paused or missing a key, it does nothing
+and the run below does the telling. A scheduled post the run publishes sets
+the webhook off too.
+
 **The run every 15 minutes** (since 6 Nov 2026; it was daily at 14:00 UTC,
 7 am in Vancouver; Vern: "let's get the social drafts to arrive right away
-after a published blog post"): `/api/cron/social-drafts`, two steps since
+after a published blog post"), the safety net for a webhook Sanity didn't
+deliver, and the one that publishes posts set to go live at a time:
+`/api/cron/social-drafts`, two steps since
 20 Oct 2026, each on its own (a failure in one is emailed and the next still
 runs). A failure that keeps happening is emailed at once, then at most once a
 day, and no key sends more than three a day however its failures vary
@@ -137,8 +152,9 @@ Sanity's trace ids don't make a failure new), never every 15 minutes:
    edits it at that moment gets the edited version published, and one who
    holds it, or publishes it by hand, is left alone.
 2. **Social** (lib/automation/social.ts), below. A post step 1 just
-   published waits for the next run, 15 minutes on, so its page is live
-   before its posts link to it.
+   published is left to the webhook its publishing sets off (a minute or two
+   later), or else the next run, so its page is live before its posts link
+   to it.
 
 **The project article, daily at 15:00 UTC** (8 am in Vancouver, all year): `/api/cron/project-articles` (lib/automation/project-posts.ts
 draftProjectArticles), a run of its own since the review of 20 Oct 2026, so
@@ -182,8 +198,8 @@ draft either way).
 
 | Stream | What it drafts from | How often | Links to | `utm_campaign` |
 |---|---|---|---|---|
-| Articles | a blog post published in Studio, dated 1 Oct 2026 or later | up to 2 a run, within 15 minutes of going live | the post | `blog` |
-| From the field | a published **Job photos** post with no story (Studio → Job photos): 3 to 10 phone photos of a finished job, where, the service, a line of facts | 1 a run, within 15 minutes of being published | the service's page | `field` |
+| Articles | a blog post published in Studio, dated 1 Oct 2026 or later | at Publish (the webhook), else within 15 minutes; up to 2 a run | the post | `blog` |
+| From the field | a published **Job photos** post with no story (Studio → Job photos): 3 to 10 phone photos of a finished job, where, the service, a line of facts | at Publish (the webhook), else within 15 minutes; 1 a run | the service's page | `field` |
 | From the library | a documented project (a blog post with its job, the featured ones first) or a service page, taking turns (lib/automation/social-library.ts) | once a week, Mondays with the morning run (14:00 to 14:14 UTC, 7 am Vancouver; the very first at once); a new Job photos post takes the week's turn | the project's or the service's page | `library` |
 
 With two articles a week (Tuesdays and Thursdays) and one job post, that is

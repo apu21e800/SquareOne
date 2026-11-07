@@ -337,7 +337,7 @@ async function main() {
     const titles = listTitles(true, undefined, false)
     assert.equal(titles[0], "Start here: how to update the site")
     assert.deepEqual(titles.slice(1), ["Website Pages", "Services", "Blog posts", "Job photos", "Sent to Buffer", "Site Settings", "Advanced"], titles.join(" | "))
-    assert.ok(allTitles(true).includes("Job photos · publish one and its posts go to Buffer within 15 minutes; add the story and it becomes a project article"))
+    assert.ok(allTitles(true).includes("Job photos · publish one and its posts go to Buffer right away; add the story and it becomes a project article"))
   })
 
   await check("with the blog drafter switched on: Blog ideas back in the brief's place, before Blog posts", () => {

@@ -84,7 +84,10 @@ pinned post stand-alone at the top") is set with /blog's records
 (components/ui/RecordCard.tsx): the pinned post, else the newest, on a
 hairline row of its own, then one row of three from `FEATURED_ORDER`
 (lib/selected-work.ts; the order, then the Studio's Featured, then the
-newest, so the row is never short and the lead never shows twice). It
+newest, so the row is never short and the lead never shows twice). When a
+pin leads, the newest post opens that row, so a new post always shows on
+the home page (6 Nov 2026, later: the client's new post didn't show while
+the veterans crosswalk was pinned). It
 reads the posts themselves, as /blog does, not getProjects(). Post dates
 print through `postDate` (lib/dates.ts), in UTC: /blog printed them in
 the visitor's browser, and a plain day came out a day early in BC.
@@ -110,7 +113,7 @@ already covers it"); components/sections/BlogFeed.tsx stays unused.
 ## Brand
 Current as of 7 Oct 2026 (the own-company restyle of 27 Sept, docs/OWN-COMPANY-BRIEF.md, and the client's rounds since). The surface lives in `app/own.css`, which loads last and wins; `app/globals.css` and `app/refine.css` hold the history under it.
 - Type: Futura LT Bold for display (an opener's H1 in capitals, section headings in sentence case), Futura Book for a heading's closing phrase; Inter for everything read, including the small voice (labels, captions, notes), with no italics in the design's voice (2 Oct 2026, the client). No tracked capitals.
-- Colour: white ground (#FFFFFF) with two light neutral greys (#F1F2F4, #E6E8EB) and hairlines (#E1E4E7); ink #14161A; charcoal (#2D3033) for the footer and the phone quote bar. Buttons are ink at rest and fill with Square One orange on hover; the orange (#C85A3A accent, #B24E2E fill, white on it 5.2 : 1, #963F24 pressed) is the button under a photo opener's H1, the quote form's send, link and menu hovers. The colour card's edge (components/ui/ColourEdge.tsx, 7 Oct 2026): the chart's ten strongest colours with Square One orange among them, warm to cool (Marigold, Nutmeg, the orange, Paprika, Terra Cotta, the three cycle-lane greens, SR Safety Blue, Patriot Blue; Vern, 7 Oct: "make the colours a bit more punchy, they don't really show up"), since 8 Oct 2026 its colours live in `lib/palettes.ts`, the only source of the band, which writes them as CSS variables (--edge-band, --edge-1 to --edge-10, --water-band) on :root through a <style> in <head> (app/layout.tsx); never set them inline on <body> again, an inline style beats the palette rules. **Four palettes** (8 Oct 2026, Vern after the client: "an easter egg in the hero… cycle through style options… apply site wide"): Spectrum (the default, byte-identical to the 7 Oct band), Greyscale (the chart's greys and one Square One orange), Earth (the Drawn to scale strip), Blueprint (cyanotype blues, marked up in Square One orange). html[data-palette] picks one; `PALETTE_BOOT` in <head> sets it before the first paint from `?palette=` or localStorage `s1-palette`; the home hero's ledger has the switch (a small copy of the band beside the frame counter; components/sections/Hero.tsx, lib/use-palette.ts). Every palette keeps the same layout: chip 3 is Square One orange in every palette, chips 5 and 8 the two lightest (section labels never take them), chip 10 the one dark anchor. A palette changes only the card's edge and what reads it; buttons, links, the quote form, focus rings and product colours shown as colours never change. It runs 8px along the foot of every photo opener, the home reel's clock (a 15% white veil on the track, a white playhead) and the footer, 6px under the menu and across the search's top, 4px over the process steps and the quote form's sections, and every section label is led by a square chip from it (the orange first). No greys or sands in Spectrum: they vanished on photographs and on white (Greyscale and Earth carry them on purpose, kept to chips 5 and 8 and between darker neighbours). Vapour blasting keeps its water blue (#1F6FB2, --vapour; --water-band) on its own page and bands. The copper in the logo is the logo's own. Never HUB's cream (#F6F4EF), near-black (#101010) or bright orange (#F97316).
+- Colour: white ground (#FFFFFF) with two light neutral greys (#F1F2F4, #E6E8EB) and hairlines (#E1E4E7); ink #14161A; charcoal (#2D3033) for the footer and the phone quote bar. Buttons are ink at rest and fill with Square One orange on hover; the orange (#C85A3A accent, #B24E2E fill, white on it 5.2 : 1, #963F24 pressed) is the button under a photo opener's H1, the quote form's send, link and menu hovers. The colour card's edge (components/ui/ColourEdge.tsx, 7 Oct 2026): the chart's ten strongest colours with Square One orange among them, warm to cool (Marigold, Nutmeg, the orange, Paprika, Terra Cotta, the three cycle-lane greens, SR Safety Blue, Patriot Blue; Vern, 7 Oct: "make the colours a bit more punchy, they don't really show up"), since 8 Oct 2026 its colours live in `lib/palettes.ts`, the only source of the band, which writes them as CSS variables (--edge-band, --edge-1 to --edge-10, --water-band) on :root through a <style> in <head> (app/layout.tsx); never set them inline on <body> again, an inline style beats the palette rules. **Earth, the one palette** (6 Nov 2026: the client picked it from the hero switch; Vern: "go with that and remove the colour toggle"): the Drawn to scale strip's colours with Mustard and Avocado and the orange (Mustard, Brick, the orange, Terra Cotta, Driftwood, Sandy Beige, Bike Path Green, Pewter, Avocado, Slate), its water sea-foam to Patriot Blue. `DEFAULT_PALETTE` in lib/palettes.ts is the one line that sets the site's palette; `PALETTE_CSS` writes only that one, on :root. From 8 Oct to 6 Nov 2026 there were four (8 Oct, Vern after the client: "an easter egg in the hero… cycle through style options… apply site wide"): Spectrum (the default then, the 7 Oct band), Greyscale, Earth and Blueprint, picked by a switch in the home hero's ledger through html[data-palette] and a script in <head> (`PALETTE_BOOT`, `?palette=`, localStorage `s1-palette`). The switch, its styles, the script and the per-palette rules came out; the four stay in lib/palettes.ts as the record, and lib/use-palette.ts (still read by ColourEdge for the hover names) now always reads Earth. Every palette keeps the same layout: chip 3 is Square One orange in every palette, chips 5 and 8 the two lightest (section labels never take them), chip 10 the one dark anchor. A palette changes only the card's edge and what reads it; buttons, links, the quote form, focus rings and product colours shown as colours never change. It runs 8px along the foot of every photo opener, the home reel's clock (a 15% white veil on the track, a white playhead) and the footer, 6px under the menu and across the search's top, 4px over the process steps and the quote form's sections, and every section label is led by a square chip from it (the orange first). No greys or sands in Spectrum: they vanished on photographs and on white (Greyscale and Earth carry them on purpose, kept to chips 5 and 8 and between darker neighbours). Vapour blasting keeps its own blue (#1F6FB2, --vapour) on its page; its water bands (--water-band) are the palette's water. The copper in the logo is the logo's own. Never HUB's cream (#F6F4EF), near-black (#101010) or bright orange (#F97316).
 - Shape: square corners for the interface (buttons, fields, chips, swatches); photographs and search's panels round all four corners 10px (--img-r in app/own.css, 7 Oct 2026: "a bit too much right angles"; a square top-left corner was tried and read as a mistake); full-bleed openers stay square; rows divided by hairlines instead of cards; captions under photographs, never over them (the hero reel and the page openers excepted); one primary button per view ("Get a quote"); links are underlined ink; no arrow glyphs in copy; no em dashes in copy.
 - Tone: professional, practical, BC-focused; plain, local, "we". Supplier words (specify, submittal, spec package) only on /specifiers.
 - Positioning: "BC's Trusted Decorative Pavement Applicators": quality work that lasts
@@ -214,9 +217,20 @@ documentedJobs in lib/automation/facts.ts) and its photograph as the
 article's, proof before explanation, one thing to keep, no product or
 contractor as the villain, no "vs" in a title or heading (the style check's
 `versus` rule and the planner refuse it), a title a person would say.
+**Social drafts start at Publish** (6 Nov 2026, later; Vern: "make it go to
+buffer right away if possible"): the Sanity webhook that refreshes the site
+(`/api/revalidate`) also starts the social job, after it has answered
+(`after()`, lib/automation/social-now.ts), when the document published is a
+blog post or a Job photos post (`socialFromWebhook`: `post` or `fieldPost`,
+never a draft or a version), so its drafts are in Buffer a minute or two
+after Publish. The same job as the run below; claim-first, so the two can't
+draft an item twice. It never throws: a failure is logged and emailed under
+the same once-a-day cap ("social-run"). With the switches off or a key
+missing it does nothing and leaves the telling to the run below.
 Every 15 minutes since 6 Nov 2026 (it was daily at 14:00 UTC; Vern: "let's
 get the social drafts to arrive right away after a published blog post"),
-`/api/cron/social-drafts` runs two steps, each failing
+now the safety net for a webhook Sanity didn't deliver and for posts set to
+go live at a time, `/api/cron/social-drafts` runs two steps, each failing
 on its own and emailing BLOG_DRAFT_NOTIFY (lib/automation/editor-mail.ts):
 (1) blog drafts with **Goes live by itself** (`scheduled`, `scheduledFor`)
 whose time has come are published in one transaction, dated that day, only
@@ -224,7 +238,8 @@ if the draft is still the revision the run read and has what Publish asks
 for (lib/automation/project-posts.ts publishDueDrafts; Studio's Publish
 switches the schedule off, sanity/actions.ts); (2) social (lib/automation/social.ts,
 ported from hubss.com's pipeline) drafts into Square One's own Buffer from
-three streams: new blog posts (within 15 minutes of going live), Job photos
+three streams: new blog posts (at Publish, by the webhook above; else
+within 15 minutes of going live), Job photos
 (Studio → Job photos: the crew's photos, the place, the service, a line of
 facts; linked to the service page) and, once a week, a library post (a
 documented project or a service page; with the morning run, 14:00 to 14:14 UTC, on its day). Facebook, Instagram, LinkedIn and
@@ -404,6 +419,10 @@ When adding new content, check `next.config.ts` redirects first to avoid conflic
 
 **POST /api/revalidate** — Sanity's webhook; signed (`parseBody` from
 `next-sanity/webhook`), fails closed with no secret or a bad signature.
+A signed call for a published `post` or `fieldPost` also starts the social
+job once the answer has gone (`after()`, lib/automation/social-now.ts;
+`maxDuration` 300). Never probe it in production: a signed call can draft
+into Buffer.
 
 ## Forms and spam (9 Oct 2026)
 The quote form posts to /api/contact through lib/post-form.ts. The same fix

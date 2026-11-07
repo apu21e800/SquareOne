@@ -29,9 +29,10 @@ import { ADDONS } from "./addons"
  * Edit on the page button (sanity/components/EditOnThePage.tsx) came the
  * same day: the one in the top bar always starts on the home page. Change a field's title there and change it here:
  * npm run test:studio fails until they agree. Times are Vancouver's, the same
- * all year since BC kept UTC-7 from 1 November 2026. Since 6 Nov 2026 the
- * social and scheduled-post run goes every 15 minutes (it was 14:00 UTC,
- * 7 a.m.), the article run stays at 15:00 UTC (8 a.m.), and the Tuesday and
+ * all year since BC kept UTC-7 from 1 November 2026. Since 6 Nov 2026 social
+ * drafts start the moment something is published (the publish webhook,
+ * lib/automation/social-now.ts) and the scheduled-post run goes every 15
+ * minutes (it was 14:00 UTC, 7 a.m.), the article run stays at 15:00 UTC (8 a.m.), and the Tuesday and
  * Thursday drafter is off unless NEXT_PUBLIC_BLOG_DRAFTER is "on"
  * (lib/addons.ts), so the guide doesn't promise its drafts (vercel.json).
  *
@@ -155,7 +156,7 @@ export const GUIDE_SOURCE: { title: string; lead: { free: string; addons: string
       ],
       next: [
         { text: "It's on the site's Projects page within a minute.", only: "free" },
-        { text: "It shows on the site within a minute of going live, and its social posts wait in Buffer within 15 minutes.", only: "addons" },
+        { text: "It shows on the site within a minute of going live, and a minute or two later its social posts wait in Buffer.", only: "addons" },
         "A yellow mark is worth a second look: it's the house style. A red one is something **Publish** needs first, like the photo or what it shows.",
       ],
       shot: {
@@ -180,9 +181,9 @@ export const GUIDE_SOURCE: { title: string; lead: { free: string; addons: string
         "Press **Publish**.",
       ],
       next: [
-        "No story: within 15 minutes its posts wait in Buffer for your approval ({step:buffer}).",
+        "No story: a minute or two later its posts wait in Buffer for your approval ({step:buffer}).",
         "With a story: the next morning an article is written from your words and the service's page, nothing else, and you get an email. It waits in the Studio until you read it and press Publish ({step:drafts}).",
-        "Added several jobs at once? They go one at a time, oldest first, 15 minutes apart.",
+        "Added several jobs at once? They go one at a time, oldest first.",
       ],
       shot: {
         src: "/images/guide/job-photos.png",
@@ -203,14 +204,14 @@ export const GUIDE_SOURCE: { title: string; lead: { free: string; addons: string
         "Happy with it? Press **Publish**. To have it go out later instead, turn on **Goes live by itself**, then set **Goes live at** to the day and time: it goes out within 15 minutes of it.",
       ],
       next: [
-        "Within 15 minutes of a post going live, its social posts wait in Buffer for you ({step:buffer}).",
+        "A minute or two after a post goes live, its social posts wait in Buffer for you ({step:buffer}).",
       ],
     },
     {
       id: "buffer",
       only: "addons",
       title: "What you'll see in Buffer",
-      when: "Within 15 minutes of something new going live.",
+      when: "A minute or two after something new goes live.",
       steps: [
         "An email says the social drafts are waiting in Buffer. Nothing is posted until you approve it.",
         "In the Buffer app: **Publish**, then **Drafts**. Each channel you've connected (Facebook, Instagram and so on) has its own draft.",

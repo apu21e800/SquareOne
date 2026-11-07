@@ -4,8 +4,6 @@ import Image from "next/image"
 import Link from "next/link"
 import { useCallback, useEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type TouchEvent } from "react"
 import { HERO_HEADLINE, HERO_HEADLINE_END, HERO_LINE, HERO_SLIDES, type Slide } from "@/lib/hero-slides"
-import { paletteById } from "@/lib/palettes"
-import { nextPalette, setPalette, usePalette } from "@/lib/use-palette"
 
 /* Home hero — an image reel (Vern, 4 Sept 2026: "some sort of image slider
    experience on a reel like the current S1 website"). Five of Square One's
@@ -60,36 +58,9 @@ export default function Hero({ slides, eyebrow, title, titleEnd }: HeroProps) {
     return () => mq.removeEventListener("change", sync)
   }, [])
 
-  /* The colour card switch (8 Oct 2026; Vern, after the client: "put an
-     easter egg in the hero somewhere, that will let the user cycle through
-     style options… apply changes site wide"). A small copy of the band sits
-     in the ledger beside the counter; each press moves the whole site to the
-     next palette (lib/palettes.ts: Spectrum, Greyscale, Earth, Blueprint) and
-     the reel's clock right under it changes with it, so the press answers
-     itself. The name shows for a moment above the switch and is announced to
-     screen readers; the choice is remembered on every page after. */
-  const palette = usePalette()
-  const [paletteShown, setPaletteShown] = useState<string | null>(null)
-  // Nothing about the switch is in the page until it is first pressed, so the
-  // hero's server-rendered words are the headline and the caption, as before.
-  const [paletteTouched, setPaletteTouched] = useState(false)
-  const paletteTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const cyclePalette = () => {
-    const next = nextPalette(palette)
-    setPalette(next)
-    setPaletteTouched(true)
-    setPaletteShown(next)
-    if (paletteTimer.current) clearTimeout(paletteTimer.current)
-    paletteTimer.current = setTimeout(() => setPaletteShown(null), 2600)
-  }
-  useEffect(
-    () => () => {
-      if (paletteTimer.current) clearTimeout(paletteTimer.current)
-    },
-    [],
-  )
-  // While the name fades out it keeps the words it was showing.
-  const toastPalette = paletteById(paletteShown ?? palette)
+  /* The colour card switch that sat in the ledger beside the counter (8 Oct
+     2026, the client's "easter egg") came out on 6 Nov 2026: the client
+     chose Earth, and it is the site's one palette now (lib/palettes.ts). */
 
   const onKeyDown = (e: KeyboardEvent<HTMLElement>) => {
     if (e.key === "ArrowRight") {
@@ -223,38 +194,10 @@ export default function Hero({ slides, eyebrow, title, titleEnd }: HeroProps) {
           </div>
 
           <div className="hero-ledger">
-            {/* On a phone there is no room above the switch without covering the
-                buttons, so the palette's name takes the caption's place for the
-                moment it shows, then the caption comes back (app/own.css). */}
-            <span className="cap-on-image truncate" data-palette-shown={paletteShown ? "" : undefined}>
+            <span className="cap-on-image truncate">
               <span className="cap-text">{caption}</span>
-              {paletteShown && (
-                <span className="cap-palette" aria-hidden="true">
-                  <strong>{toastPalette.name}</strong> {toastPalette.line}
-                </span>
-              )}
             </span>
             <div className="flex shrink-0 items-center gap-4">
-              <div className="palette-switch">
-                <button
-                  type="button"
-                  onClick={cyclePalette}
-                  className="palette-chip"
-                  aria-label={`Colour card: ${paletteById(palette).name}. Show the next one`}
-                  title="Another colour card"
-                >
-                  <span aria-hidden="true" />
-                </button>
-                {paletteTouched && (
-                  <span className="palette-toast" data-shown={paletteShown ? "" : undefined} aria-hidden="true">
-                    <strong>{toastPalette.name}</strong>
-                    {toastPalette.line}
-                  </span>
-                )}
-              </div>
-              <span className="sr-only" aria-live="polite">
-                {paletteShown ? `${toastPalette.name}. ${toastPalette.line}.` : ""}
-              </span>
               <span className="reel-counter">
                 {pad(index + 1)} / {pad(count)}
               </span>

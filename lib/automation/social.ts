@@ -14,8 +14,10 @@
  *  1. Articles: a blog post qualifies once it is published in the Studio, is
  *     dated on or after SOCIAL_SINCE, and has no socialLog yet. The imported
  *     library is dated earlier, so it never floods Buffer; a draft that sat in
- *     Studio for weeks still gets its social drafts within 15 minutes of going
- *     live. A post the same run published waits for the next run, so its
+ *     Studio for weeks still gets its social drafts a minute or two after it goes
+ *     live: Publish fires the webhook, which starts this job at once
+ *     (lib/automation/social-now.ts); the 15-minute run is the safety net. A
+ *     post the 15-minute run itself published is left to that webhook, so its
  *     page is live first. Up to MAX_POSTS_PER_RUN a run, oldest first.
  *  2. From the field: a published Job photos post (Studio → Job photos: the
  *     crew's photos of a finished job, the place, the service, a line of

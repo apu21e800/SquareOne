@@ -10,6 +10,12 @@ import { pinnedFirst } from "./pin"
  * under it, one row of three from the order below. The lead is never shown
  * twice, and an older pin among the three reads as an ordinary post
  * (lib/pin.ts). Pure, so `npm run test:pages` can test it.
+ *
+ * 6 Nov 2026, later (the client, via Vern: the new blog post "does not show
+ * up on the homepage projects section"): with another post pinned, the
+ * newest post had no place on the home page, since the three under the lead
+ * come from the order below. Now the newest post always shows: it leads when
+ * nothing is pinned, and opens the row of three when something is.
  */
 
 /**
@@ -41,20 +47,26 @@ interface Listable {
 
 /**
  * The lead and the frames under it, from the posts newest first (getPosts).
- * Only posts with a photograph show. Under the lead: the order above, then
- * the jobs the Studio marks Featured, then the newest, so a slug that goes
- * missing never leaves the row short.
+ * Only posts with a photograph show. Under the lead: the newest post when
+ * a pin leads in its place, then the order above, then the jobs the Studio
+ * marks Featured, then the newest, so a slug that goes missing never leaves
+ * the row short.
  */
 export function selectedWork<T extends Listable>(
   posts: readonly T[],
   order: readonly string[] = FEATURED_ORDER,
   count: number = UNDER_THE_LEAD,
 ): { lead: T | undefined; rest: T[] } {
-  const listed = pinnedFirst(posts.filter((p) => Boolean(p.featured_image)))
+  const withPhoto = posts.filter((p) => Boolean(p.featured_image))
+  const listed = pinnedFirst(withPhoto)
   const lead = listed[0]
   if (!lead) return { lead: undefined, rest: [] }
+  // The newest post with a photograph, as listed (an older pin among the
+  // rest reads as ordinary); it opens the row only when it isn't leading.
+  const newest = listed.find((p) => p.slug === withPhoto[0]?.slug)
   const bySlug = new Map(listed.map((p) => [p.slug, p]))
   const pool = [
+    ...(newest && newest.slug !== lead.slug ? [newest] : []),
     ...order.map((slug) => bySlug.get(slug)).filter((p): p is T => p !== undefined),
     ...listed.filter((p) => p.job?.featured),
     ...listed,

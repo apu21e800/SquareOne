@@ -389,7 +389,7 @@ async function main() {
     assert.equal(m.sent[0].subject, "On squareonepaving.com now: A stamped crosswalk for Langley's railway district")
     assert.deepEqual(m.sent[0].to, ["office@example.com", "agency@example.com"])
     assert.match(m.sent[0].text, /https:\/\/www\.squareonepaving\.com\/blog\/langley-stamped-crosswalk/)
-    assert.match(m.sent[0].text, /Its social posts are drafted in Buffer within 15 minutes, for approval/)
+    assert.match(m.sent[0].text, /Its social posts are drafted in Buffer in a minute or two, for approval/)
   })
   await check("never early: a 14:08 draft waits for the 14:15 run; a run a few seconds early still takes a 14:00 one", async () => {
     const s = sanity([due({ scheduledFor: "2026-10-21T14:08:00.000Z" })])

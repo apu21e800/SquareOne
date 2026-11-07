@@ -21,6 +21,7 @@ import { namesTheMaker } from "../lib/automation/style"
 import { daysSince, decideOutcome, failureHint, GIVE_UP_DAYS, isConflict, NO_CHANNELS, unusableReason, type SkipKind } from "../lib/automation/outcome"
 import { assetSize, idFor, libraryDue, libraryQueue, nextLibraryItem, slotStart, socialImageUrl, weekStart } from "../lib/automation/social-library"
 import { failureText, mayEmailFailure, morningSlot } from "../lib/automation/mail-cap"
+import { draftSocialNow, socialFromWebhook } from "../lib/automation/social-now"
 import { googleText } from "../lib/automation/social-drafter"
 import { CHANNEL_LIMIT_MS, draftSocialForNewPosts, fieldItem, hasStory, NETWORKS, notifyRunFailure, SOCIAL_SINCE, START_LIMIT_MS, utmLink } from "../lib/automation/social"
 import { loadSubjects, type Subject } from "../lib/automation/facts"
@@ -706,6 +707,48 @@ async function main() {
     assert.equal(await next("Buffer API unreachable"), true)
     assert.equal(await next("something else entirely"), false, "three a day at most")
     assert.equal(await next(anthropic401("a6")), false)
+  })
+
+  console.log("Right away: Publish fires the webhook, which starts the job (lib/automation/social-now.ts)")
+  await check("only a published blog post or Job photos post starts it; drafts, versions and the job's own records never do", () => {
+    assert.equal(socialFromWebhook({ _type: "post", _id: "2d89accd-6cf0" }), true)
+    assert.equal(socialFromWebhook({ _type: "fieldPost", _id: "abc" }), true)
+    for (const body of [{ _type: "post", _id: "drafts.x" }, { _type: "post", _id: "versions.r1.x" }, { _type: "socialLog", _id: "socialLog-x" }, { _type: "mailCap", _id: "mailCap-x" }, { _type: "siteSettings" }, null, {}, "post"]) {
+      assert.equal(socialFromWebhook(body), false, JSON.stringify(body))
+    }
+  })
+  await check("a post published in the evening is drafted at once; a second webhook drafts nothing twice", async () => {
+    const s = sanity([post("just-published", "2026-11-06"), jobPostThisWeek("2026-11-02T14:00:00Z")])
+    const b = fakeBuffer(FOUR)
+    const m = fakeMail()
+    const deps = { claude: fakeClaude().claude, store: s.store, buffer: b.buffer, mail: m.mail, now: clock("2026-11-06T21:04:30Z", 1000) }
+    const first = (await draftSocialNow("test", deps)) as { posts: { key: string; outcome: string }[] }
+    assert.deepEqual(first.posts.map((p) => [p.key, p.outcome]), [["just-published", "drafted"]])
+    const drafted = b.sent.length
+    assert.ok(drafted > 0)
+    const second = (await draftSocialNow("test", deps)) as { posts: unknown[] }
+    assert.equal(second.posts.length, 0)
+    assert.equal(b.sent.length, drafted, "nothing sent to Buffer twice")
+    assert.match(m.sent[0].subject, /^Social drafts ready in Buffer/)
+  })
+  await check("the time limits count from the webhook's arrival: one that came in long before starts nothing, and the item waits", async () => {
+    const s = sanity([post("just-published", "2026-11-06"), jobPostThisWeek("2026-11-02T14:00:00Z")])
+    const b = fakeBuffer(FOUR)
+    const deps = { claude: fakeClaude().claude, store: s.store, buffer: b.buffer, mail: fakeMail().mail, now: clock("2026-11-06T21:04:30Z", 1000) }
+    const out = (await draftSocialNow("test", deps, Date.parse("2026-11-06T21:01:00Z"))) as { posts: unknown[]; waiting: number }
+    assert.equal(out.posts.length, 0)
+    assert.equal(b.sent.length, 0)
+    assert.ok(out.waiting >= 1)
+  })
+  await check("a run that fails tells the editors once, and never throws", async () => {
+    const s = sanity([post("just-published", "2026-11-06"), jobPostThisWeek("2026-11-02T14:00:00Z")])
+    const m = fakeMail()
+    const broken: Buffer = { ...fakeBuffer(FOUR).buffer, channels: async () => { throw new Error("Buffer API unreachable after 20 s") } }
+    const deps = { claude: fakeClaude().claude, store: s.store, buffer: broken, mail: m.mail, now: clock("2026-11-06T21:04:30Z", 1000) }
+    const out = (await draftSocialNow("test", deps)) as { error?: string }
+    assert.match(out.error ?? "", /Buffer API unreachable/)
+    await draftSocialNow("test", { ...deps, now: clock("2026-11-06T21:20:00Z", 1000) })
+    assert.equal(m.sent.filter((x) => /^Social drafts didn't run/.test(x.subject)).length, 1)
   })
 
   if (failures) {

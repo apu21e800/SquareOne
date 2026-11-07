@@ -214,7 +214,7 @@ check("the list it was given is left as it was", () => {
   assert.equal(projects[1].pinned, true)
 })
 
-console.log("Selected work on the home page (lib/selected-work.ts): the pin, else the newest, then three")
+console.log("Selected work on the home page (lib/selected-work.ts): the pin, else the newest; under it the newest when a pin leads, then the order")
 // Posts as getPosts hands them over, newest first, each with a photograph unless it says otherwise.
 type Card = { slug: string; title: string; date: string; featured_image: string; pinned?: boolean; pinnedAt?: string; job?: { featured?: boolean } }
 const card = (slug: string, more: Partial<Card> = {}): Card => ({ slug, title: slug, date: "2026-10-01", featured_image: `/images/${slug}.jpg`, ...more })
@@ -227,17 +227,35 @@ check("no pin: the newest leads, unlabelled; under it the first three of the ord
   assert.deepEqual(rest.map((p) => p.slug), ["a", "b", "c"])
   assert.ok(rest.every((p) => !p.pinned))
 })
-check("a pin leads with its label, however old it is", () => {
+check("a pin leads with its label, however old it is; the newest opens the row", () => {
   const { lead, rest } = selectedWork([...latest, card("old", { date: "2025-01-01", pinned: true })], order)
   assert.equal(lead?.slug, "old")
   assert.equal(lead?.pinned, true)
+  assert.deepEqual(rest.map((p) => p.slug), ["new", "a", "b"])
+})
+check("6 Nov: a new post while another is pinned shows first under the pin (the school post under the veterans crosswalk)", () => {
+  const posts = [
+    card("immaculate-conception-school-vancouver", { date: "2026-11-06" }),
+    card("new-westminster-veterans-crosswalk", { date: "2026-11-05", pinned: true }),
+    card("parking-lot-marking-prep", { date: "2026-11-03" }),
+    ...["a", "b", "c", "d"].map((slug) => card(slug, { date: "2026-09-19" })),
+  ]
+  const { lead, rest } = selectedWork(posts, order)
+  assert.equal(lead?.slug, "new-westminster-veterans-crosswalk")
+  assert.deepEqual(rest.map((p) => p.slug), ["immaculate-conception-school-vancouver", "a", "b"])
+  assert.ok(rest.every((p) => !p.pinned))
+})
+check("the pin is the newest post: it leads, and the row is the order, as before", () => {
+  const posts = latest.map((p) => (p.slug === "new" ? { ...p, pinned: true, pinnedAt: "2026-11-03T17:00:00.000Z" } : p))
+  const { lead, rest } = selectedWork(posts, order)
+  assert.equal(lead?.slug, "new")
   assert.deepEqual(rest.map((p) => p.slug), ["a", "b", "c"])
 })
-check("a pinned job from the order leads and is not shown twice; the next in the order takes its place", () => {
+check("a pinned job from the order leads and is not shown twice; the newest, then the order, under it", () => {
   const posts = latest.map((p) => (p.slug === "b" ? { ...p, pinned: true, pinnedAt: "2026-11-05T17:00:00.000Z" } : p))
   const { lead, rest } = selectedWork(posts, order)
   assert.equal(lead?.slug, "b")
-  assert.deepEqual(rest.map((p) => p.slug), ["a", "c", "d"])
+  assert.deepEqual(rest.map((p) => p.slug), ["new", "a", "c"])
 })
 check("an older pin among the three reads as an ordinary post", () => {
   const posts = latest.map((p) =>
@@ -245,7 +263,15 @@ check("an older pin among the three reads as an ordinary post", () => {
   )
   const { lead, rest } = selectedWork(posts, order)
   assert.equal(lead?.slug, "x")
-  assert.deepEqual(rest.map((p) => [p.slug, Boolean(p.pinned)]), [["a", false], ["b", false], ["c", false]])
+  assert.deepEqual(rest.map((p) => [p.slug, Boolean(p.pinned)]), [["new", false], ["a", false], ["b", false]])
+})
+check("the newest post, itself an older pin, opens the row unlabelled", () => {
+  const posts = latest.map((p) =>
+    p.slug === "new" ? { ...p, pinned: true, pinnedAt: "2026-10-01T09:00:00.000Z" } : p.slug === "x" ? { ...p, pinned: true, pinnedAt: "2026-11-02T09:00:00.000Z" } : p,
+  )
+  const { lead, rest } = selectedWork(posts, order)
+  assert.equal(lead?.slug, "x")
+  assert.deepEqual(rest.map((p) => [p.slug, Boolean(p.pinned)]), [["new", false], ["a", false], ["b", false]])
 })
 check("no photograph, no place: never the lead, never in the row", () => {
   const posts = [card("bare", { date: "2026-11-05", featured_image: "" }), ...latest.map((p) => (p.slug === "a" ? { ...p, featured_image: "" } : p))]

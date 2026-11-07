@@ -142,14 +142,14 @@ export function buildStructure(S: StructureBuilder, addons: boolean, drafter: bo
       ...(addons
         ? [
             // Photos of a finished job with a line of facts (sanity/schemaTypes/fieldPost.ts).
-            // Publishing one has the next run (15 minutes) draft its posts in Buffer; with
+            // Publishing one has its posts drafted in Buffer at once (the publish webhook); with
             // the story filled in it becomes a project article instead. An add-on.
             S.listItem()
               .title("Job photos")
               .id("fieldPost")
               .schemaType("fieldPost")
               .icon(ICONS.fieldPost)
-              .child(S.documentTypeList("fieldPost").title("Job photos · publish one and its posts go to Buffer within 15 minutes; add the story and it becomes a project article").defaultOrdering([{ field: "date", direction: "desc" }])),
+              .child(S.documentTypeList("fieldPost").title("Job photos · publish one and its posts go to Buffer right away; add the story and it becomes a project article").defaultOrdering([{ field: "date", direction: "desc" }])),
             // What the social run left in Buffer for each item, with the style check
             // on its copy (lib/automation/social.ts). The run writes these; nothing
             // here is created or edited by hand. An add-on.
