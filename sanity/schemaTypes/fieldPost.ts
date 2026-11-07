@@ -9,8 +9,8 @@ import { APPLICATION_OPTIONS, SERVICE_OPTIONS, SYSTEM_OPTIONS } from "../../lib/
  * photos of a finished job, straight from a phone, with the place, the
  * service and a line of facts. Studio → Job photos.
  *
- * Publishing one is all it takes: the next daily run (14:00 UTC,
- * lib/automation/social.ts) writes a post per channel from it and leaves them
+ * Publishing one is all it takes: the next run (every 15 minutes since 6 Nov
+ * 2026, lib/automation/social.ts) writes a post per channel from it and leaves them
  * as drafts in Square One's Buffer, linked to the service's page. Nothing
  * posts until someone approves it in Buffer. The posts say only what this
  * document says, so the note is the only writing anyone does.

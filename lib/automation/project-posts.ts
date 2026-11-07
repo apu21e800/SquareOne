@@ -8,8 +8,8 @@
  * it becomes a project article, scheduled, its social the day after." Two
  * steps, each failing on its own and emailing the editors (BLOG_DRAFT_NOTIFY):
  *
- *  1. publishDueDrafts, first in the daily run (app/api/cron/social-drafts,
- *     14:00 UTC): every blog draft set to go live by itself ("Goes live by
+ *  1. publishDueDrafts, first in the run every 15 minutes (app/api/cron/social-drafts;
+ *     once a day at 14:00 UTC until 6 Nov 2026): every blog draft set to go live by itself ("Goes live by
  *     itself", sanity/schemaTypes/post.ts) whose time has come becomes the
  *     live post in one transaction, dated that day (a scheduled edit to a
  *     live post keeps the post's date), and the editors get its address. A
@@ -17,8 +17,9 @@
  *     lead photo, words in the body, a Section) is left and reported, and one
  *     an editor changed or held while the run was publishing it is never
  *     overwritten (the commit checks the draft's revision). Its social drafts
- *     follow at the next day's run (lib/automation/social.ts), waiting in
- *     Buffer for approval.
+ *     follow in a minute or two (the publish webhook starts the social job,
+ *     lib/automation/social-now.ts), waiting in Buffer for approval. A draft that can't be published is
+ *     emailed at once, then at most once a day (lib/automation/mail-cap.ts).
  *  2. draftProjectArticles, its own run (app/api/cron/project-articles, 15:00
  *     UTC, so a busy social morning can't crowd it out): the oldest published
  *     Job photos post with a story (fieldPost.writeUp) and no article yet gets
@@ -54,6 +55,7 @@ import { checkDraft, polishDraft, styleReport, writeDraft, type Draft, type Fact
 import { categoryFor, jobPostFacts, loadDriveways, loadServices, loadSettings, PUBLISHED_POSTS, relatedFor, type PublishedPost } from "@/lib/automation/facts"
 import { cleanSlug, pacificDate } from "@/lib/automation/blog"
 import { emailEditors } from "@/lib/automation/editor-mail"
+import { mayEmailFailure } from "@/lib/automation/mail-cap"
 import { daysSince, failureHint, GIVE_UP_DAYS, isConflict, isRunLevel } from "@/lib/automation/outcome"
 import { APPLICATION_OPTIONS, PROJECT_STORIES_TAG, SERVICE_OPTIONS, SYSTEM_OPTIONS } from "@/lib/automation/plan"
 import { tagPasses } from "@/lib/automation/style"
@@ -71,8 +73,13 @@ export const RUN_HOUR_UTC = 14
  * Tuesday (review, 20 Oct 2026).
  */
 export const LEAD_DAYS = 2
-/** A draft is due this long before its time, so the run that starts at 14:00:00 publishes a 14:00 draft. */
-const DUE_GRACE_MS = 10 * 60_000
+/**
+ * A draft is due this long before its time, so a run that starts a few
+ * seconds early still takes it. A minute since 6 Nov 2026: with a run every
+ * 15 minutes, ten minutes' grace put a 9:10 post on the site at 9:00, and the
+ * Studio says "within 15 minutes of this time" (review, 6 Nov 2026).
+ */
+const DUE_GRACE_MS = 60_000
 /** Articles written per run: a job a day, like the job photos stream. */
 const MAX_ARTICLES_PER_RUN = 1
 /**
@@ -324,9 +331,9 @@ export function buildProjectDocument(
     auto
       ? ready
         ? `SCHEDULED: it goes live by itself ${when}. To change a line, edit it here: it still goes out on time. To move it, change "Goes live at". To hold it, turn "Goes live by itself" off. The day after it is live, its social posts are drafted in Buffer for approval.`
-        : `HELD: a check below found something, so it does not go live by itself. Read it, fix what's listed, then turn "Goes live by itself" on (it is set for ${when}; a time already past goes at the next morning's run) or press Publish.`
+        : `HELD: a check below found something, so it does not go live by itself. Read it, fix what's listed, then turn "Goes live by itself" on (it is set for ${when}; a time already past goes within 15 minutes) or press Publish.`
       : ready
-        ? `READY TO READ: nothing goes live until someone presses Publish. Read it, change anything by typing, then press Publish. To have it go out on a later morning instead, turn on "Goes live by itself" and set "Goes live at" to that day at 7:00 a.m. or earlier. The day after it is live, its social posts are drafted in Buffer for approval.`
+        ? `READY TO READ: nothing goes live until someone presses Publish. Read it, change anything by typing, then press Publish. To have it go out later instead, turn on "Goes live by itself" and set "Goes live at" to the day and time. Once it is live, its social posts are drafted in Buffer in a minute or two, for approval.`
         : `CHECK FIRST: a check below found something. Fix what's listed, then press Publish. Nothing goes live until someone does.`,
     "",
     check.unsupported.length
@@ -425,7 +432,7 @@ export function toPublished(draft: ScheduledDraft, now: Date, liveDate?: string 
   void scheduledFor
   void scheduled
   void date
-  const notes = [`${liveDate ? "Edit published" : "Published"} by the morning run, as scheduled, ${vancouverWhen(now.toISOString())}.`, editorNotes?.trim() ?? ""].filter(Boolean).join("\n\n")
+  const notes = [`${liveDate ? "Edit published" : "Published"} by the scheduled run, as set, ${vancouverWhen(now.toISOString())}.`, editorNotes?.trim() ?? ""].filter(Boolean).join("\n\n")
   const live: LiveDocument = { ...rest, _id: draft._id.replace(/^drafts\./, ""), _type: draft._type, scheduled: false, date: liveDate || pacificDate(now), editorNotes: notes }
   return withPinStamp(live, now)
 }
@@ -558,7 +565,7 @@ export async function publishDueDrafts(deps: ProjectDeps, now: Date, opts: { soc
           edit
             ? "To change it again, edit it in Studio → Blog posts and press Publish."
             : opts.social
-              ? "Tomorrow morning's run drafts its social posts in Buffer, for approval. To change the article, edit it in Studio → Blog posts and press Publish."
+              ? "Its social posts are drafted in Buffer in a minute or two, for approval. To change the article, edit it in Studio → Blog posts and press Publish."
               : "To change it, edit it in Studio → Blog posts and press Publish.",
         ].join("\n"),
         "projects",
@@ -569,18 +576,21 @@ export async function publishDueDrafts(deps: ProjectDeps, now: Date, opts: { soc
       const title = named()
       const slug = draft.slug?.current?.trim() ?? ""
       console.error(`[projects] couldn't publish ${draft._id}: ${error}`)
-      await emailEditors(
-        mail,
-        `Scheduled post not published: ${title || draft._id}`,
-        [
-          `The morning run couldn't publish "${title || draft._id}" at its time, because ${error}.`,
-          "",
-          'Nothing changed on the site. It stays in Studio → Blog posts set to go live by itself: fix it there and it goes at the next morning\'s run, or turn "Goes live by itself" off and press Publish yourself.',
-          "",
-          `Open it: ${slug ? studioLink(slug) : `${SITE_URL}/studio`}`,
-        ].join("\n"),
-        "projects",
-      )
+      // Tried again every 15 minutes: told at once, then at most once a day.
+      if (await mayEmailFailure(store, `publish:${draft._id}`, now, error)) {
+        await emailEditors(
+          mail,
+          `Scheduled post not published: ${title || draft._id}`,
+          [
+            `The run couldn't publish "${title || draft._id}" at its time, because ${error}.`,
+            "",
+            'Nothing changed on the site. It stays in Studio → Blog posts set to go live by itself: fix it there and it goes within 15 minutes, or turn "Goes live by itself" off and press Publish yourself. While it keeps failing you hear at most once a day.',
+            "",
+            `Open it: ${slug ? studioLink(slug) : `${SITE_URL}/studio`}`,
+          ].join("\n"),
+          "projects",
+        )
+      }
       out.failed.push({ id: draft._id, title, error })
     }
   }

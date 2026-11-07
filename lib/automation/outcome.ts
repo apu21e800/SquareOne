@@ -49,8 +49,9 @@ export interface ChannelSkip {
  *  - "nothing-possible": no channel could ever take it (only networks the job
  *    doesn't write for, or Instagram and no photo). Done, nothing drafted.
  *  - "retry": every channel failed for a reason that can clear (Buffer
- *    refused the draft, a channel is disconnected). Not done: the next daily
- *    run writes it again, and the email says why.
+ *    refused the draft, a channel is disconnected). Not done: the next morning's
+ *    run writes it again (a new item goes at once; a retry once a day), and
+ *    the email says why.
  *  - "gave-up": as "retry", but its first failed try was more than
  *    GIVE_UP_DAYS ago. Done, so a stuck item can't send an email every day
  *    for ever. Counted from the first failure, not the item's date, so an
@@ -119,10 +120,10 @@ export function failureHint(err: unknown, job: Job = "blog"): string {
     return "The Buffer login behind BUFFER_API_KEY belongs to more than one Buffer organization, so the job stopped before drafting anything. Keep Square One's Buffer login in Square One's organization only, or put the id of Square One's organization in Vercel (Production) as BUFFER_ORG_ID, and redeploy."
   }
   if (message.startsWith(NO_CHANNELS)) return "Connect Square One's channels in its Buffer account: the Facebook page and Instagram (and Google Business Profile on Essentials)."
-  if (/disconnected in Buffer/.test(message)) return "Reconnect the channel in Square One's Buffer; the next daily run drafts into it."
+  if (/disconnected in Buffer/.test(message)) return "Reconnect the channel in Square One's Buffer; the next run (every 15 minutes) drafts into it."
   if (/locked by Buffer/.test(message)) return "Buffer has more channels connected than the plan allows: remove one in Buffer or move to the plan that covers them."
-  if (bufferStatus === 429 || /Buffer.*rate limit|Buffer API 429/i.test(message)) return "Buffer's request limit was reached. Nothing to do: the next daily run tries again."
-  if (/Buffer API unreachable/.test(message)) return "Buffer didn't answer in time. Nothing to do: the next daily run tries again."
+  if (bufferStatus === 429 || /Buffer.*rate limit|Buffer API 429/i.test(message)) return "Buffer's request limit was reached. Nothing to do: the next run tries again (every 15 minutes)."
+  if (/Buffer API unreachable/.test(message)) return "Buffer didn't answer in time. Nothing to do: the next run tries again (every 15 minutes)."
 
   // Anthropic.
   if (/authentication_error|x-api-key/i.test(message)) {

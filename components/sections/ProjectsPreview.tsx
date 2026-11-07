@@ -41,8 +41,10 @@ function record(post: BlogPostMeta) {
  * hairline row of its own, the photograph left with its caption under it
  * and the words beside it; under it one row of three of the strongest jobs
  * (lib/selected-work.ts), each with its caption, kicker, title, a line or
- * two and the date. No project count anywhere: a published count reads as
- * a ceiling on the work (the client, 10 Sept 2026).
+ * two and the date. When a pin leads, the newest post opens that row, so a
+ * new post always shows here (6 Nov 2026, later). No project count
+ * anywhere: a published count reads as a ceiling on the work (the client,
+ * 10 Sept 2026).
  *
  * Before this it was six equal 3:2 frames with only a name and a line
  * under each (2 Oct 2026). The section sits far below the fold, so the

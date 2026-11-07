@@ -12,7 +12,7 @@ import Footer from "@/components/Footer"
 import StructuredData from "@/components/StructuredData"
 import MobileStickyCTA from "@/components/MobileStickyCTA"
 import MotionBreath from "@/components/MotionBreath"
-import { PALETTE_BOOT, PALETTE_CSS } from "@/lib/palettes"
+import { PALETTE_CSS } from "@/lib/palettes"
 import TypeToggle from "@/components/TypeToggle"
 import PreviewTools from "@/components/PreviewTools"
 import GoogleAnalytics from "@/components/GoogleAnalytics"
@@ -158,12 +158,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning className={`${poppins.variable} ${futura.variable} ${inter.variable} ${sourceSerif.variable}`}>
       <head>
-        {/* The colour card's variables, all four palettes (lib/palettes.ts),
-            and the line that picks one before the first paint. Both live in
-            production: the palette switch in the home hero is a feature, not
-            a preview tool (8 Oct 2026). */}
+        {/* The colour card's variables (lib/palettes.ts): Earth, the site's
+            one palette since 6 Nov 2026, when the hero's palette switch and
+            the script that picked a palette before the first paint came out. */}
         <style dangerouslySetInnerHTML={{ __html: PALETTE_CSS }} />
-        <script dangerouslySetInnerHTML={{ __html: PALETTE_BOOT }} />
         {TYPE_SWITCH_ENABLED && <script dangerouslySetInnerHTML={{ __html: TYPE_BOOT }} />}
       </head>
       {/* The band's variables used to sit here as an inline style on <body>

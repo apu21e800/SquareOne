@@ -68,8 +68,12 @@ export const post = defineType({
   title: "Blog post",
   type: "document",
   icon: ICONS.post,
+  // No default group (6 Nov 2026): the Studio opens a post on "All fields",
+  // so the text and every photograph are on one page. Vern, looking for the
+  // job's photos and then the body after switching tabs: "where is this
+  // toggle or tab you speak of?" The tabs stay for those who want them.
   groups: [
-    { name: "content", title: "Content", default: true },
+    { name: "content", title: "Content" },
     { name: "job", title: "The job" },
     { name: "seo", title: "Search & sharing" },
   ],
@@ -119,8 +123,8 @@ export const post = defineType({
       group: "content",
     }),
     // Scheduling (20 Oct 2026, as hubss.com's, lib/automation/project-posts.ts):
-    // a draft set to go live by itself is published by the daily run (14:00
-    // UTC) on or after its time. Any draft can be; a project article written
+    // a draft set to go live by itself is published by the run on or after its
+    // time (every 15 minutes since 6 Nov 2026; once a day at 14:00 UTC before). Any draft can be; a project article written
     // from job photos waits for Publish instead, unless
     // PROJECT_ARTICLES_AUTO_PUBLISH is on (Vern, 21 Oct 2026). A boolean, not
     // a status list: the posts from before show it plainly off. An add-on
@@ -131,7 +135,7 @@ export const post = defineType({
       type: "boolean",
       title: "Goes live by itself",
       initialValue: false,
-      description: "On: it goes live at the time below, with the morning run. Off: it goes live when you press Publish, as always.",
+      description: "On: it goes live at the time below, within 15 minutes of it. Off: it goes live when you press Publish, as always.",
       hidden: !ADDONS,
       group: "content",
     }),
@@ -140,7 +144,7 @@ export const post = defineType({
       type: "datetime",
       title: "Goes live at",
       options: { timeStep: 60 },
-      description: "It goes live with the first morning run on or after this time (7:00 a.m. Vancouver time, all year). Change it to a later day to move it.",
+      description: "It goes live within 15 minutes of this time (Vancouver time). Change it to move it.",
       hidden: ({ parent }) => !ADDONS || !(parent as { scheduled?: boolean } | undefined)?.scheduled,
       validation: (r) =>
         r.custom((value, ctx) => (ADDONS && (ctx.parent as { scheduled?: boolean } | undefined)?.scheduled && !value ? "Say when it should go live, or turn \"Goes live by itself\" off" : true)),
@@ -193,6 +197,31 @@ export const post = defineType({
       ],
       group: "content",
     }),
+    defineField({
+      name: "gallery",
+      type: "array",
+      title: "More photographs",
+      description:
+        "For a job: its other photographs, shown after the lead photograph; drag to reorder. Add item, then Upload a photograph or Select one already in the Studio's media library. Each one needs a line saying what it shows, and a focal point: press the crop button on the photograph (Crop image) and drag the circle onto the pavement. Only Square One's own photographs of this installation.",
+      of: [
+        defineArrayMember({
+          type: "image",
+          options: { hotspot: true },
+          fields: [
+            defineField({
+              name: "alt",
+              type: "string",
+              title: "What the photo shows",
+              description: "One plain line, read aloud to people who can't see the photograph: what, where, and the system if you know it.",
+              validation: (r) => [r.required().error("Say what the photograph shows: it is read aloud to people who can't see it."), r.custom(copyCheck).warning()],
+            }),
+          ],
+        }),
+      ],
+      // Under the lead photograph (6 Nov 2026): on "All fields" and the
+      // Content tab with the lead photo, and on The job tab with the facts.
+      group: ["content", "job"],
+    }),
     defineField({ name: "excerpt", type: "text", title: "One-paragraph summary", rows: 3, validation: (r) => [r.max(300), r.custom(copyCheck).warning()], description: "Shown on the blog index and in link previews.", group: "content" }),
     defineField({
       name: "body",
@@ -226,29 +255,6 @@ export const post = defineType({
     defineField({ name: "year", type: "string", title: "Year (only if published)", description: "Leave blank unless Square One has stated when it was installed.", group: "job" }),
     defineField({ name: "client", type: "string", title: "Client (only if published)", description: "Leave blank unless the client has agreed to be named. The site says “installed at”, never “for”; the name is kept here and never printed.", group: "job" }),
     defineField({ name: "artist", type: "string", title: "Artist / designer (only if published)", description: "Prints as “Design” with the job's facts.", group: "job" }),
-    defineField({
-      name: "gallery",
-      type: "array",
-      title: "More photographs",
-      description:
-        "The job's other photographs, after the lead photograph; drag to reorder. Add item, then Upload a photograph or Select one already in the Studio's media library. Each one needs a line saying what it shows, and a focal point: press the crop button on the photograph (Crop image) and drag the circle onto the pavement. Only Square One's own photographs of this installation.",
-      of: [
-        defineArrayMember({
-          type: "image",
-          options: { hotspot: true },
-          fields: [
-            defineField({
-              name: "alt",
-              type: "string",
-              title: "What the photo shows",
-              description: "One plain line, read aloud to people who can't see the photograph: what, where, and the system if you know it.",
-              validation: (r) => [r.required().error("Say what the photograph shows: it is read aloud to people who can't see it."), r.custom(copyCheck).warning()],
-            }),
-          ],
-        }),
-      ],
-      group: "job",
-    }),
     defineField({ name: "featured", type: "boolean", title: "Featured", description: "Marks one of the strongest jobs. On the home page, the three under the pinned or newest post are chosen by the web team; ask them to change which show there.", initialValue: false, group: "job" }),
     defineField({ name: "tags", type: "array", of: [{ type: "string" }], title: "Tags", options: { layout: "tags" }, group: "seo" }),
     defineField({ name: "seoTitle", type: "string", title: "Search title (optional)", description: "Overrides the title in Google and link previews. Leave blank to use the title.", validation: (r) => r.custom(copyCheck).warning(), group: "seo" }),

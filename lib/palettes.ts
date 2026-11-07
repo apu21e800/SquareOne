@@ -16,11 +16,16 @@ import { colour, type Swatch } from "@/lib/palette"
  * square that leads every section label, the fact strip and search's group
  * squares, and on vapour blasting the water. Every one of those reads a CSS
  * variable (--edge-band, --edge-1 … --edge-10, --water-band). This file is the
- * only source of those variables: PALETTE_CSS sets them on :root for the
- * default and under :root[data-palette="…"] for the other three, so switching
- * palette is one attribute on <html>, and PALETTE_BOOT sets that attribute
- * before the first paint so a visitor who chose Earth never sees a flash of
- * Spectrum.
+ * only source of those variables: PALETTE_CSS sets them on :root, from the
+ * default palette.
+ *
+ * 6 Nov 2026: one palette, Earth, for everyone. The client picked it from the
+ * hero switch; Vern: "go with that and remove the colour toggle". The switch
+ * is gone from the hero, PALETTE_CSS writes Earth and nothing else, and
+ * nothing sets data-palette any more, so a visitor who once chose another
+ * card (it was remembered in their browser) sees Earth too. The other three
+ * stay below as the record of what was shown; DEFAULT_PALETTE is the one
+ * line that changes the site's colours.
  *
  * What a palette never changes: buttons, links, the quote form, focus rings,
  * the logo's copper, the vapour page's own blue accents, and the product
@@ -53,7 +58,7 @@ export interface Chip {
 export interface Palette {
   id: PaletteId
   name: string
-  /** One short line, shown under the name when a visitor switches to it. */
+  /** One short line, shown under the name when a visitor switched to it (the hero switch, 8 Oct to 6 Nov 2026). */
   line: string
   /** Exactly ten, in band order. */
   chips: Chip[]
@@ -72,7 +77,7 @@ const own = (hex: string, title: string): Chip => ({ hex, title })
 export const PALETTES: Palette[] = [
   {
     // Exactly the band that went live on 7 Oct 2026, chip for chip, and
-    // exactly its water: the default must not move by a pixel.
+    // exactly its water. The site's palette until 6 Nov 2026.
     id: "spectrum",
     name: "Spectrum",
     line: "The chart's strongest colours",
@@ -113,7 +118,8 @@ export const PALETTES: Palette[] = [
   {
     // The home page's "Drawn to scale, matched from a card" strip (Brick,
     // Terra Cotta, Sandy Beige, Driftwood, Pewter, Slate, Bike Path Green)
-    // with Mustard and Avocado from the same chart, and the orange.
+    // with Mustard and Avocado from the same chart, and the orange. The
+    // site's palette since 6 Nov 2026 (the client's pick).
     id: "earth",
     name: "Earth",
     line: "Matched from the card",
@@ -156,18 +162,19 @@ export const PALETTES: Palette[] = [
   },
 ]
 
-export const DEFAULT_PALETTE: PaletteId = "spectrum"
+/** The site's palette: Earth since 6 Nov 2026 (it was Spectrum). */
+export const DEFAULT_PALETTE: PaletteId = "earth"
 export const PALETTE_IDS: PaletteId[] = PALETTES.map((p) => p.id)
-/** localStorage key and URL parameter (?palette=earth). */
+/** Where the hero switch remembered a choice (8 Oct to 6 Nov 2026); nothing writes it now. */
 export const PALETTE_KEY = "s1-palette"
-export const PALETTE_PARAM = "palette"
 
+/** A palette by id; anything else is the site's palette. */
 export function paletteById(id: string | null | undefined): Palette {
-  return PALETTES.find((p) => p.id === id) ?? PALETTES[0]
+  return PALETTES.find((p) => p.id === id) ?? PALETTES.find((p) => p.id === DEFAULT_PALETTE) ?? PALETTES[0]
 }
 
 /** The band as hard-stopped stops, for a CSS gradient. Byte-for-byte the
-    7 Oct function, so Spectrum's --edge-band is the string that is live. */
+    7 Oct function. */
 function band(list: string[]): string {
   return `linear-gradient(to right, ${list
     .map((hex, i) => `${hex} ${((i * 100) / list.length).toFixed(3)}% ${(((i + 1) * 100) / list.length).toFixed(3)}%`)
@@ -182,18 +189,11 @@ function declarations(p: Palette): string {
   ].join(";")
 }
 
-/** The variables, once for the default on :root and once per other palette.
-    Rendered into <head> by app/layout.tsx. */
-export const PALETTE_CSS = [
-  `:root{${declarations(PALETTES[0])}}`,
-  ...PALETTES.slice(1).map((p) => `:root[data-palette="${p.id}"]{${declarations(p)}}`),
-].join("\n")
-
-/** Runs in <head> before the body paints. A ?palette= link wins and is
-    remembered; otherwise the remembered choice; otherwise the default. Each
-    step is guarded on its own, so a browser that refuses storage still
-    honours a link. Spectrum is the absence of the attribute. */
-export const PALETTE_BOOT = `(function(){var ids=${JSON.stringify(PALETTE_IDS)},d=document.documentElement,p=null;try{var q=new URLSearchParams(location.search).get(${JSON.stringify(PALETTE_PARAM)});if(q&&ids.indexOf(q)>-1)p=q}catch(e){}try{if(p)localStorage.setItem(${JSON.stringify(PALETTE_KEY)},p);else p=localStorage.getItem(${JSON.stringify(PALETTE_KEY)})}catch(e){}if(p&&p!==${JSON.stringify(DEFAULT_PALETTE)}&&ids.indexOf(p)>-1)d.setAttribute("data-palette",p)})();`
+/** The site's palette as variables on :root. Rendered into <head> by
+    app/layout.tsx. Until 6 Nov 2026 it also wrote the other three under
+    :root[data-palette="…"], and a script in <head> (PALETTE_BOOT) set that
+    attribute from ?palette= or the visitor's remembered choice. */
+export const PALETTE_CSS = `:root{${declarations(paletteById(DEFAULT_PALETTE))}}`
 
 /* The 7 Oct exports, kept so nothing that imported them breaks: Spectrum's
    values, exactly as they were. */

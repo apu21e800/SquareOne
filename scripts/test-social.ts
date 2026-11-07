@@ -20,6 +20,8 @@ import { BufferApiError, CREATE_DRAFT, draftInput, MANY_ORGS, pickOrganization, 
 import { namesTheMaker } from "../lib/automation/style"
 import { daysSince, decideOutcome, failureHint, GIVE_UP_DAYS, isConflict, NO_CHANNELS, unusableReason, type SkipKind } from "../lib/automation/outcome"
 import { assetSize, idFor, libraryDue, libraryQueue, nextLibraryItem, slotStart, socialImageUrl, weekStart } from "../lib/automation/social-library"
+import { failureText, mayEmailFailure, morningSlot } from "../lib/automation/mail-cap"
+import { draftSocialNow, socialFromWebhook } from "../lib/automation/social-now"
 import { googleText } from "../lib/automation/social-drafter"
 import { CHANNEL_LIMIT_MS, draftSocialForNewPosts, fieldItem, hasStory, NETWORKS, notifyRunFailure, SOCIAL_SINCE, START_LIMIT_MS, utmLink } from "../lib/automation/social"
 import { loadSubjects, type Subject } from "../lib/automation/facts"
@@ -186,7 +188,7 @@ async function main() {
   await check("one draft made, the others refused", () => assert.equal(decideOutcome(1, skips("retry", "retry"), null), "drafted"))
   await check("nothing could ever be drafted (YouTube, Instagram with no photo)", () => assert.equal(decideOutcome(0, skips("lasting", "lasting"), null), "nothing-possible"))
   await check(`failing for more than ${GIVE_UP_DAYS} days since the first try: gave up`, () => assert.equal(decideOutcome(0, skips("retry"), GIVE_UP_DAYS + 1), "gave-up"))
-  console.log("Not done: the claim is dropped, the next daily run tries again")
+  console.log("Not done: the claim is dropped, the next run tries again")
   await check("every channel refused", () => assert.equal(decideOutcome(0, skips("retry", "retry"), null), "retry"))
   await check("YouTube skipped and the rest refused", () => assert.equal(decideOutcome(0, skips("lasting", "retry"), null), "retry"))
   await check(`on day ${GIVE_UP_DAYS} of failing it still retries; a first failure always does`, () => {
@@ -223,7 +225,7 @@ async function main() {
     assert.match(failureHint(new Error(`${NO_CHANNELS} (connected: youtube).`), "social"), /Connect Square One's channels/)
     assert.match(failureHint(new Error("disconnected in Buffer: reconnect it there"), "social"), /Reconnect/)
     assert.match(failureHint(new Error("locked by Buffer: the account has more channels than its plan allows"), "social"), /plan/)
-    assert.match(failureHint(new BufferApiError("Buffer rate limit; retry after 60 s", 429), "social"), /next daily run/)
+    assert.match(failureHint(new BufferApiError("Buffer rate limit; retry after 60 s", 429), "social"), /next run/)
     assert.match(failureHint(new BufferApiError("Buffer API unreachable: The operation was aborted due to timeout", 0), "social"), /didn't answer/)
   })
   await check("missing settings are named; anything else points at the logs", () => {
@@ -414,6 +416,10 @@ async function main() {
     assert.equal(fieldItem({ _id: "x", place: "Langley, BC", note: "n", service: "asphalt-repair", photo: { asset: "image-a-1x1-jpg" } }), null)
   })
   await check("the library, once a week: a featured project first, campaign library, its own photo", async () => {
+    for (const at of ["2026-10-19T13:45:00Z", "2026-10-19T14:30:00Z"]) {
+      const off = await run([], { at })
+      assert.equal(off.result.posts.length, 0, `${at}: the weekly post goes with the morning run only`)
+    }
     const { result, sentToBuffer, claude } = await run([], { at: "2026-10-19T14:00:00Z" })
     assert.equal(result.posts.length, 1)
     assert.equal(result.posts[0].stream, "From the library")
@@ -441,6 +447,25 @@ async function main() {
     assert.equal(dataset.find((d) => d._id === "socialRetry-refused")?.firstFailedAt, "2026-10-15T14:00:00.000Z")
     assert.match(mails[0].subject, /^Social drafts not made yet/)
     assert.match(mails[0].text, /tries again, for up to 14 days/)
+  })
+  await check("with a run every 15 minutes, a new item goes at once but a failed one is tried again only with the morning run: one try, one email a day (review, 6 Nov 2026)", async () => {
+    const refuse = () => new Error("Buffer refused the draft: something")
+    const s = sanity([post("refused", "2026-10-14"), jobPostThisWeek("2026-10-13T14:00:00Z")])
+    const b = fakeBuffer(FOUR, refuse)
+    const m = fakeMail()
+    const c = fakeClaude()
+    const go = (at: string) => draftSocialForNewPosts({ claude: c.claude, store: s.store, buffer: b.buffer, mail: m.mail, now: clock(at, 1000) })
+    const told = () => m.sent.filter((x) => /^Social drafts not made yet/.test(x.subject)).length
+    assert.equal((await go("2026-10-15T20:00:00Z")).posts[0].outcome, "retry", "a new item at once, whatever the hour")
+    assert.equal(told(), 1)
+    const calls = c.calls.length
+    for (const at of ["2026-10-15T20:15:00Z", "2026-10-16T09:00:00Z", "2026-10-16T13:45:00Z"]) assert.equal((await go(at)).posts.length, 0, `${at}: not tried again`)
+    assert.equal(c.calls.length, calls, "no Claude calls between mornings")
+    assert.equal((await go("2026-10-16T14:00:00Z")).posts[0].outcome, "retry", "tried again with the morning run")
+    assert.equal(told(), 1, "18 hours after the first email: not again yet")
+    assert.equal((await go("2026-10-17T14:00:00Z")).posts[0].outcome, "retry")
+    assert.equal(told(), 2, "a day on: one more")
+    assert.match(m.sent.at(-1)!.text, /the next morning's run \(7 a\.m\. Vancouver\) tries again/)
   })
   await check(`after ${GIVE_UP_DAYS} days of failing: given up, its log kept, the clock kept honest`, async () => {
     const refuse = () => new Error("Buffer refused the draft: something")
@@ -637,12 +662,105 @@ async function main() {
     assert.equal(result.posts.length, 0)
     assert.equal(sentToBuffer.length, 0)
   })
-  await check("a post this morning's run just published waits for tomorrow's run", async () => {
+  await check("a post the run just published waits for the next run, 15 minutes on", async () => {
     const docs = [post("just-live", "2026-10-15"), jobPostThisWeek("2026-10-13T14:00:00Z")]
     const today = await run(docs, { holdBack: new Set(["just-live"]) })
     assert.equal(today.result.posts.length, 0)
     const tomorrow = await run(docs, { at: "2026-10-16T14:00:00Z" })
     assert.deepEqual(tomorrow.result.posts.map((p) => p.key), ["just-live"])
+  })
+
+  console.log("Failure emails with a run every 15 minutes (lib/automation/mail-cap.ts)")
+  await check("the first goes at once, the same one again only after a day, a different one at once", async () => {
+    const s = sanity([])
+    const at = (iso: string) => new Date(iso)
+    const key = "Not configured: ANTHROPIC_API_KEY"
+    assert.equal(await mayEmailFailure(s.store, "social-run", at("2026-11-06T21:00:00Z"), key), true)
+    assert.equal(await mayEmailFailure(s.store, "social-run", at("2026-11-06T21:15:00Z"), key), false)
+    assert.equal(await mayEmailFailure(s.store, "social-run", at("2026-11-07T19:59:00Z"), key), false)
+    assert.equal(await mayEmailFailure(s.store, "social-run", at("2026-11-07T20:00:00Z"), key), true, "23 hours on")
+    assert.equal(await mayEmailFailure(s.store, "social-run", at("2026-11-07T20:15:00Z"), "BUFFER_API_KEY is not set"), true, "a different failure is news")
+    assert.equal(await mayEmailFailure(s.store, "publish:drafts.post-x", at("2026-11-07T20:15:00Z"), "boom"), true, "another key")
+  })
+  await check("when its record can't be read or written, only the first run of the morning hour sends", async () => {
+    const down = { fetch: async <T,>(): Promise<T> => { throw new Error("Sanity didn't answer") }, createOrReplace: async () => {} }
+    assert.equal(await mayEmailFailure(down, "social-run", new Date("2026-11-07T14:05:00Z")), true)
+    assert.equal(await mayEmailFailure(down, "social-run", new Date("2026-11-07T14:20:00Z")), false)
+    assert.equal(await mayEmailFailure(down, "social-run", new Date("2026-11-07T21:00:00Z")), false)
+    const noToken = { fetch: async <T,>() => null as T, createOrReplace: async () => { throw new Error("no write token") } }
+    assert.equal(await mayEmailFailure(noToken, "social-run", new Date("2026-11-07T21:00:00Z")), false)
+    assert.equal(await mayEmailFailure(noToken, "social-run", new Date("2026-11-07T14:00:00Z")), true)
+    assert.equal(morningSlot(new Date("2026-11-07T14:14:59Z")), true)
+    assert.equal(morningSlot(new Date("2026-11-07T14:15:00Z")), false)
+  })
+  await check("the same failure with a new request id each try is the same failure; three a day at most however they vary (review, 6 Nov 2026)", async () => {
+    const s = sanity([])
+    const anthropic401 = (id: string) => `401 {"type":"error","error":{"type":"authentication_error","message":"invalid x-api-key"},"request_id":"req_${id}"}`
+    assert.equal(failureText(anthropic401("011CUa1")), failureText(anthropic401("011CUz9")))
+    assert.equal(failureText("Sanity didn't answer (traceId: 4bf92f3577b34da6a3ce929d0e0e4736)"), failureText("Sanity didn't answer (traceId: 00f067aa0ba902b7)"))
+    assert.equal(failureText("Buffer rate limit; retry after 60 s"), failureText("Buffer rate limit; retry after 12 s"))
+    let t = Date.parse("2026-11-07T15:00:00Z")
+    const next = (about: string) => mayEmailFailure(s.store, "social-run", new Date((t += 15 * 60_000)), about)
+    assert.equal(await next(anthropic401("a1")), true)
+    for (const id of ["a2", "a3", "a4", "a5"]) assert.equal(await next(anthropic401(id)), false, id)
+    assert.equal(await next("Not configured: BUFFER_API_KEY"), true, "a different failure is news")
+    assert.equal(await next("Buffer API unreachable"), true)
+    assert.equal(await next("something else entirely"), false, "three a day at most")
+    assert.equal(await next(anthropic401("a6")), false)
+  })
+
+  console.log("Right away: Publish fires the webhook, which starts the job (lib/automation/social-now.ts)")
+  await check("only a published blog post or Job photos post starts it; drafts, versions and the job's own records never do", () => {
+    assert.equal(socialFromWebhook({ _type: "post", _id: "2d89accd-6cf0" }), true)
+    assert.equal(socialFromWebhook({ _type: "fieldPost", _id: "abc" }), true)
+    for (const body of [{ _type: "post", _id: "drafts.x" }, { _type: "post", _id: "versions.r1.x" }, { _type: "socialLog", _id: "socialLog-x" }, { _type: "mailCap", _id: "mailCap-x" }, { _type: "siteSettings" }, null, {}, "post"]) {
+      assert.equal(socialFromWebhook(body), false, JSON.stringify(body))
+    }
+  })
+  await check("a post published in the evening is drafted at once; a second webhook drafts nothing twice", async () => {
+    const s = sanity([post("just-published", "2026-11-06"), jobPostThisWeek("2026-11-02T14:00:00Z")])
+    const b = fakeBuffer(FOUR)
+    const m = fakeMail()
+    const deps = { claude: fakeClaude().claude, store: s.store, buffer: b.buffer, mail: m.mail, now: clock("2026-11-06T21:04:30Z", 1000) }
+    const first = (await draftSocialNow("test", deps)) as { posts: { key: string; outcome: string }[] }
+    assert.deepEqual(first.posts.map((p) => [p.key, p.outcome]), [["just-published", "drafted"]])
+    const drafted = b.sent.length
+    assert.ok(drafted > 0)
+    const second = (await draftSocialNow("test", deps)) as { posts: unknown[] }
+    assert.equal(second.posts.length, 0)
+    assert.equal(b.sent.length, drafted, "nothing sent to Buffer twice")
+    assert.match(m.sent[0].subject, /^Social drafts ready in Buffer/)
+  })
+  await check("the time limits count from the webhook's arrival: one that came in long before starts nothing, and the item waits", async () => {
+    const s = sanity([post("just-published", "2026-11-06"), jobPostThisWeek("2026-11-02T14:00:00Z")])
+    const b = fakeBuffer(FOUR)
+    const deps = { claude: fakeClaude().claude, store: s.store, buffer: b.buffer, mail: fakeMail().mail, now: clock("2026-11-06T21:04:30Z", 1000) }
+    const out = (await draftSocialNow("test", deps, Date.parse("2026-11-06T21:01:00Z"))) as { posts: unknown[]; waiting: number }
+    assert.equal(out.posts.length, 0)
+    assert.equal(b.sent.length, 0)
+    assert.ok(out.waiting >= 1)
+  })
+  await check("a webhook in the morning quarter hour retries nothing that failed before: that stays with the scheduled run (review, 6 Nov 2026)", async () => {
+    const s = sanity([
+      post("failed-before", "2026-11-03"),
+      { _id: "socialRetry-failed-before", _type: "socialRetry", slug: "failed-before", firstFailedAt: "2026-11-05T14:00:00Z" },
+      post("just-published", "2026-11-06"),
+      jobPostThisWeek("2026-11-02T14:00:00Z"),
+    ])
+    const c = fakeClaude()
+    const deps = { claude: c.claude, store: s.store, buffer: fakeBuffer(FOUR).buffer, mail: fakeMail().mail, now: clock("2026-11-06T14:05:00Z", 1000) }
+    const out = (await draftSocialNow("test", deps)) as { posts: { key: string }[] }
+    assert.deepEqual(out.posts.map((p) => p.key), ["just-published"], "only the new post; the failed one waits for the cron")
+  })
+  await check("a run that fails tells the editors once, and never throws", async () => {
+    const s = sanity([post("just-published", "2026-11-06"), jobPostThisWeek("2026-11-02T14:00:00Z")])
+    const m = fakeMail()
+    const broken: Buffer = { ...fakeBuffer(FOUR).buffer, channels: async () => { throw new Error("Buffer API unreachable after 20 s") } }
+    const deps = { claude: fakeClaude().claude, store: s.store, buffer: broken, mail: m.mail, now: clock("2026-11-06T21:04:30Z", 1000) }
+    const out = (await draftSocialNow("test", deps)) as { error?: string }
+    assert.match(out.error ?? "", /Buffer API unreachable/)
+    await draftSocialNow("test", { ...deps, now: clock("2026-11-06T21:20:00Z", 1000) })
+    assert.equal(m.sent.filter((x) => /^Social drafts didn't run/.test(x.subject)).length, 1)
   })
 
   if (failures) {

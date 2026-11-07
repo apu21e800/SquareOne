@@ -1,6 +1,6 @@
 import type { StructureBuilder, StructureResolver } from "sanity/structure"
 import GuidePane from "./components/GuidePane"
-import { ADDONS, ADDON_TYPES } from "../lib/addons"
+import { ADDONS, ADDON_TYPES, DRAFTER, DRAFTER_TYPES } from "../lib/addons"
 import { GUIDE_TITLE } from "../lib/office-guide"
 import { ICONS } from "./icons"
 
@@ -35,9 +35,19 @@ export const FIXED_TYPES = new Set(["service"])
 /** Written by the automation, read only in the Studio: never made by hand (lib/automation/social.ts). */
 export const MACHINE_TYPES = new Set(["socialLog"])
 
-/** Whether "new document" offers a type: never a single document, a fixed set or the automation's records, and an add-on's only with the add-ons on. */
-export function creatable(schemaType: string, addons: boolean): boolean {
-  return !SINGLETONS.has(schemaType) && !FIXED_TYPES.has(schemaType) && !MACHINE_TYPES.has(schemaType) && (addons || !ADDON_TYPES.has(schemaType))
+/**
+ * Whether "new document" offers a type: never a single document, a fixed set
+ * or the automation's records, an add-on's only with the add-ons on, and a
+ * Blog idea only with the blog drafter on too (lib/addons.ts, 6 Nov 2026).
+ */
+export function creatable(schemaType: string, addons: boolean, drafter: boolean = DRAFTER): boolean {
+  return (
+    !SINGLETONS.has(schemaType) &&
+    !FIXED_TYPES.has(schemaType) &&
+    !MACHINE_TYPES.has(schemaType) &&
+    (addons || !ADDON_TYPES.has(schemaType)) &&
+    (drafter || !DRAFTER_TYPES.has(schemaType))
+  )
 }
 
 /** The Studio's two tools, as its top bar names them (sanity.config.ts); the guide names them too. */
@@ -45,10 +55,10 @@ export const CONTENT_TOOL = "Content"
 export const EDIT_ON_THE_PAGE = "Edit on the page"
 
 /** The list for this build (lib/addons.ts). */
-export const structure: StructureResolver = (S) => buildStructure(S, ADDONS)
+export const structure: StructureResolver = (S) => buildStructure(S, ADDONS, DRAFTER)
 
-/** The list with the add-ons off or on. */
-export function buildStructure(S: StructureBuilder, addons: boolean) {
+/** The list with the add-ons off or on, and the blog drafter off or on. */
+export function buildStructure(S: StructureBuilder, addons: boolean, drafter: boolean = DRAFTER) {
   const single = (id: keyof typeof ICONS, title: string) => S.listItem().title(title).id(id).icon(ICONS[id]).child(S.document().schemaType(id).documentId(id).title(title))
   return S.list()
     .title("Square One")
@@ -95,8 +105,9 @@ export function buildStructure(S: StructureBuilder, addons: boolean) {
       // What to write next (sanity/schemaTypes/storyIdea.ts). The drafter, on
       // Tuesdays and Thursdays, takes the top Ready item, else the top Idea,
       // and tops the plan up when it runs low (lib/automation/planner.ts).
-      // An add-on.
-      ...(addons
+      // An add-on, and listed only with the drafter on (off since 6 Nov 2026:
+      // Square One writes its own blog; lib/addons.ts).
+      ...(addons && drafter
         ? [
             S.listItem()
               .title("Blog ideas")
@@ -114,7 +125,7 @@ export function buildStructure(S: StructureBuilder, addons: boolean) {
           ]
         : []),
       // Drafts wait here for Publish; with the add-ons, one set to go live by
-      // itself goes at the daily run after its time (lib/automation/project-posts.ts).
+      // itself goes within 15 minutes of its time (lib/automation/project-posts.ts).
       // 6 Nov 2026 (Vern: "Projects and blog should be combined into the same
       // thing"): the projects are posts, so the Projects list is gone; a post
       // with its job filled in ("The job" tab) is one of the projects.
@@ -131,15 +142,15 @@ export function buildStructure(S: StructureBuilder, addons: boolean) {
       ...(addons
         ? [
             // Photos of a finished job with a line of facts (sanity/schemaTypes/fieldPost.ts).
-            // Publishing one has the next daily run draft its posts in Buffer; with
+            // Publishing one has its posts drafted in Buffer at once (the publish webhook); with
             // the story filled in it becomes a project article instead. An add-on.
             S.listItem()
               .title("Job photos")
               .id("fieldPost")
               .schemaType("fieldPost")
               .icon(ICONS.fieldPost)
-              .child(S.documentTypeList("fieldPost").title("Job photos · publish one and its posts go to Buffer the next morning; add the story and it becomes a project article").defaultOrdering([{ field: "date", direction: "desc" }])),
-            // What the daily run left in Buffer for each item, with the style check
+              .child(S.documentTypeList("fieldPost").title("Job photos · publish one and its posts go to Buffer right away; add the story and it becomes a project article").defaultOrdering([{ field: "date", direction: "desc" }])),
+            // What the social run left in Buffer for each item, with the style check
             // on its copy (lib/automation/social.ts). The run writes these; nothing
             // here is created or edited by hand. An add-on.
             S.listItem()

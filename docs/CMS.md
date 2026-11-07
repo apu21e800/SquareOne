@@ -35,8 +35,8 @@ them is deleted while they're hidden.
 | **Services**             | The four services' words: the tagline, the intro, who we work with, what you get, the questions. The four are fixed: they can't be added to or deleted. |
 | **Blog ideas** (add-on)  | What the drafter writes next, on Tuesdays and Thursdays: project stories, project roundups and guides. Set one to Ready to have it next; it marks them Drafted and adds new Ideas when the list runs low (docs/AUTOMATION.md). Nothing here is on the site. |
 | **Blog posts**           | Create, edit, publish; on the site as Projects. A new post needs its title, a lead photograph (with what it shows), the body and its section; everything else is optional. **The job** tab (6 Nov 2026) makes a post one of the projects: application, service line, city, region, year, systems, designer, More photographs and Featured; filled in, it shows with its place and system on the Projects page, in Selected work on the home page and on its application and service pages. **Pin to top** puts one post first in Selected work and on the Projects page. The first Publish dates a post that day (Vancouver). With the add-ons, **Goes live by itself** (with **Goes live at**) publishes a draft at the morning run on its day, if it has what Publish asks for (an edit made at that moment wins). The drafter's posts arrive here unpublished, with Notes for the editor; so does a project article written from Job photos, after an email ("Ready to read", or "Needs a read" when a check found something, a customer's phone number or address among them), and it goes live when someone presses Publish (Vern, 21 Oct 2026; with `PROJECT_ARTICLES_AUTO_PUBLISH=on` in Vercel a clean one would go live by itself two weekdays later). |
-| **Job photos** (add-on)  | A finished job from a phone: 3 to 10 photos, where, the service, a line of facts. Publish, and the next morning's run drafts posts from it in Square One's Buffer, for approval. Fill in **The story** too and it becomes a project article on the Blog instead (the 15:00 UTC run, one a day). Not shown on the site by itself. A phone number, email or street address that isn't Square One's gets a yellow warning: it stays off the site. |
-| **Sent to Buffer** (add-on) | Read only: what the daily run left in Buffer for each blog post, Job photos post or library post, and the style check on its copy. |
+| **Job photos** (add-on)  | A finished job from a phone: 3 to 10 photos, where, the service, a line of facts. Publish, and a minute or two later its posts wait in Square One's Buffer as drafts, for approval. Fill in **The story** too and it becomes a project article on the Blog instead (the 15:00 UTC run, one a day). Not shown on the site by itself. A phone number, email or street address that isn't Square One's gets a yellow warning: it stays off the site. |
+| **Sent to Buffer** (add-on) | Read only: what the social job left in Buffer for each blog post, Job photos post or library post, and the style check on its copy. |
 | **Site Settings**        | Phones, email, address, the footer line, Instagram / TikTok / Facebook / LinkedIn / YouTube links: read everywhere they print (the footer, the menu, the phone bar, the quote form, the contact and about pages, every "or call" line, the legal pages, llms.txt and the search engines' data). |
 | **Advanced → Text and Photo slots** | The first way in (30 Sept): a key per spot (`home.hero.title`, `home.hero.1`…). The Home page above does the same more simply and wins over them. |
 
@@ -130,7 +130,10 @@ PR #11 went live on 7 Oct, so the condition above is met.
    2026 a signed call makes the next page load wait for the fresh page
    (`{ expire: 0 }`), so an editor who publishes and reloads sees the change.
    Leave "Trigger on drafts" off: every save while someone types would
-   expire the pages.
+   expire the pages. Since 6 Nov 2026 the same call starts the social drafts
+   when a blog post or a Job photos post is published
+   (lib/automation/social-now.ts), so they are in Buffer a minute or two
+   after Publish; without the webhook they wait for the 15-minute run.
    New posts also appear in search and the sitemap after the next deploy (a
    Vercel Deploy Hook can be added to the same webhook for that).
 6. **Bring in the pages** (9 Oct 2026, once): so the Studio opens on what
@@ -207,12 +210,13 @@ PR #11 went live on 7 Oct, so the condition above is met.
   that waited a week goes out dated the day it went live. Leave the web
   address alone after publishing.
 - **Going live later**: turn on **Goes live by itself** and set **Goes live
-  at**: the morning run (7 a.m. Vancouver time, all year) publishes
-  it on that day. Turn it off to hold it; Publish puts it live at once.
+  at** (Vancouver time): it goes live within 15 minutes of that time, and
+  its social drafts follow a minute or two later. Turn it off to hold it;
+  Publish puts it live at once.
 - **Job photos**: Job photos → + → 3 to 10 photos (best first; for each,
   what it shows and the focal point), where (town, BC), the service, and a
-  line or two of facts. Publish: its posts are drafted in Buffer the next
-  morning. Add **The story** (a few sentences in your own words: the site,
+  line or two of facts. Publish: a minute or two later its posts wait in
+  Buffer as drafts. Add **The story** (a few sentences in your own words: the site,
   what was needed, what went in, how it has held up) and it becomes a
   project article instead; you'll get an email to read it before it goes.
 - **Photos**: JPG, at least 1600px wide for lead photographs; 1200px for
@@ -232,7 +236,9 @@ PR #11 went live on 7 Oct, so the condition above is met.
   `lib/cms.ts`, `lib/blog.ts` (`getPosts`, `getPost`).
 - Reads are cached 60 s (`next: { revalidate: 60, tags: ["sanity"] }`) and
   purged by `POST /api/revalidate`, signed by Sanity's webhook secret
-  (`parseBody` from `next-sanity/webhook`; unsigned calls get 401).
+  (`parseBody` from `next-sanity/webhook`; unsigned calls get 401). A signed
+  call for a published `post` or `fieldPost` also starts the social job
+  after the answer (`after()`, lib/automation/social-now.ts).
 - Add an editable spot: read `getSlots()` in the page, pass
   `slotText(slots, "page.key", fallback)` / `slotImage(...)` into the
   section, and list the key in this file.

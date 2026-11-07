@@ -2,7 +2,7 @@ import { defineArrayMember, defineField, defineType } from "sanity"
 import { ICONS } from "../icons"
 
 /**
- * What the daily run did for one blog post, job photos post or library item
+ * What the social run (every 15 minutes) did for one blog post, job photos post or library item
  * (lib/automation/social.ts, run by app/api/cron/social-drafts): the posts it
  * left in Buffer, the channels it skipped, and the style check on the copy.
  * Studio → Sent to Buffer, read only (14 Oct 2026, as hubss.com's; named in

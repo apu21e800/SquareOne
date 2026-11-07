@@ -18,9 +18,15 @@
  * SANITY_API_WRITE_TOKEN (an Editor token), BLOG_DRAFT_NOTIFY, and the
  * RESEND_API_KEY and CONTACT_FROM the quote form already uses. Until they're
  * set it does nothing.
+ *
+ * Off since 6 Nov 2026 unless NEXT_PUBLIC_BLOG_DRAFTER is "on" (lib/addons.ts;
+ * Vern: "just let them write the blogs unless they enlist our services
+ * later"): Vercel still calls it on Tuesdays and Thursdays, and it answers
+ * "skipped" without a draft, a new idea or an email.
  */
 import { NextResponse, type NextRequest } from "next/server"
 import { notifyNotConfigured, runDrafter } from "@/lib/automation/blog"
+import { drafterOn } from "@/lib/addons"
 import { cronAuth, cronReady } from "@/lib/automation/cron"
 import { anthropicClaude, resendMailer, sanityStore } from "@/lib/automation/services"
 
@@ -35,6 +41,10 @@ const NEEDS = ["ANTHROPIC_API_KEY", "SANITY_API_WRITE_TOKEN"]
 export async function GET(req: NextRequest): Promise<NextResponse> {
   const denied = cronAuth(req, "blog")
   if (denied) return denied
+  if (!drafterOn(process.env.NEXT_PUBLIC_BLOG_DRAFTER)) {
+    console.log("[blog] off: NEXT_PUBLIC_BLOG_DRAFTER is not \"on\"")
+    return NextResponse.json({ skipped: "the blog drafter is off (NEXT_PUBLIC_BLOG_DRAFTER)" })
+  }
   const off = cronReady("blog", NEEDS)
   if (off) {
     // Vercel's own call with a key missing: the editor hears which one.

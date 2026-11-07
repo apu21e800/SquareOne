@@ -5,26 +5,30 @@
  * Buffer posts it on its schedule (Vern, 20 Oct 2026: Square One's posts wait
  * for the office's final edits). SOCIAL_AUTO_QUEUE=on would queue them
  * instead (lib/automation/buffer.ts); copy the style pass couldn't fix waits
- * as a draft either way, and the emails say which. Run daily at 14:00 UTC by
- * app/api/cron/social-drafts (vercel.json), after the run has published the
- * day's scheduled posts (lib/automation/project-posts.ts).
+ * as a draft either way, and the emails say which. Run every 15 minutes since
+ * 6 Nov 2026 (it was once a day, 14:00 UTC; Vern: "let's get the social
+ * drafts to arrive right away after a published blog post") by
+ * app/api/cron/social-drafts (vercel.json), after the run has published any
+ * scheduled posts whose time has come (lib/automation/project-posts.ts).
  *
  *  1. Articles: a blog post qualifies once it is published in the Studio, is
  *     dated on or after SOCIAL_SINCE, and has no socialLog yet. The imported
  *     library is dated earlier, so it never floods Buffer; a draft that sat in
- *     Studio for weeks still gets its social drafts the day after it goes
- *     live. A post the same run published waits for the next day's run.
- *     Up to MAX_POSTS_PER_RUN a day, oldest first.
+ *     Studio for weeks still gets its social drafts a minute or two after it goes
+ *     live: Publish fires the webhook, which starts this job at once
+ *     (lib/automation/social-now.ts); the 15-minute run is the safety net. A
+ *     post the 15-minute run itself published is left to that webhook, so its
+ *     page is live first. Up to MAX_POSTS_PER_RUN a run, oldest first.
  *  2. From the field: a published Job photos post (Studio → Job photos: the
  *     crew's photos of a finished job, the place, the service, a line of
- *     facts) gets posts linked to the service's page. One a day. A post with
+ *     facts) gets posts linked to the service's page. One a run. A post with
  *     its story filled in gets none of its own: it becomes a project article
  *     (lib/automation/project-posts.ts), and the article's posts carry the
  *     job, once.
  *  3. From the library: once a week, a documented project or a service page
- *     (lib/automation/social-library.ts). A new field post takes the week's
- *     turn, so the crew's photos go first; with two articles a week that is
- *     three posts a week on each channel.
+ *     (lib/automation/social-library.ts), with the morning run (the first
+ *     quarter hour of 14:00 UTC, 7 a.m. Vancouver) on its day, as when the
+ *     run was daily. A new field post takes the week's turn.
  *
  * Channels: Facebook and Instagram (Buffer Free), LinkedIn (Square One has a
  * company page), and Google Business Profile, which needs Buffer Essentials
@@ -47,10 +51,15 @@
  *    list). One that has failed before waits behind the ones not tried yet.
  *  - A run that stops (an expired key, no usable channel, a missing setting)
  *    emails the editor what to do (notifyRunFailure, from the cron route).
+ *  - With a run every 15 minutes, a new item goes at once, but an item that
+ *    failed is retried only with the morning run, once a day as before, and a
+ *    run failure that keeps happening is emailed at once, then at most once a
+ *    day (lib/automation/mail-cap.ts). A drafted, given-up or closed item is
+ *    one email, as before.
  *  - Nothing between a claim and its settling can outlast the function
  *    (Vercel stops it at 300 s): each Buffer and Sanity call gives up after
  *    20 s, and no item is started after 120 s or claimed after 150 s; what's
- *    left waits for the next day.
+ *    left waits for the next run.
  */
 import { portableToText } from "@/lib/automation/markdown"
 import { styleReport } from "@/lib/automation/drafter"
@@ -61,6 +70,7 @@ import { absolute, idFor, libraryDue, libraryQueue, nextLibraryItem, socialImage
 import { daysSince, decideOutcome, failureHint, GIVE_UP_DAYS, isConflict, isRunLevel, NO_CHANNELS, unusableReason, type ChannelSkip, type Outcome } from "@/lib/automation/outcome"
 import { APPLICATION_OPTIONS, SERVICE_OPTIONS, SYSTEM_OPTIONS } from "@/lib/automation/plan"
 import { emailEditors as sendToEditors } from "@/lib/automation/editor-mail"
+import { mayEmailFailure, morningSlot } from "@/lib/automation/mail-cap"
 import type { Claude, Mailer, Store } from "@/lib/automation/services"
 
 /** Posts dated before this never get social drafts (the imported library runs to April 2026). */
@@ -269,7 +279,7 @@ export const hasStory = (d: Pick<FieldDoc, "writeUp">) => !!d.writeUp?.trim()
  * live. `startedAt`: when the route started, so the time limits count the
  * steps before this one too (app/api/cron/social-drafts).
  */
-export async function draftSocialForNewPosts(deps: SocialDeps, opts: { holdBack?: ReadonlySet<string>; startedAt?: number } = {}): Promise<{ posts: SocialResult[]; waiting: number }> {
+export async function draftSocialForNewPosts(deps: SocialDeps, opts: { holdBack?: ReadonlySet<string>; startedAt?: number; morning?: boolean } = {}): Promise<{ posts: SocialResult[]; waiting: number }> {
   const { store } = deps
   // The run's date, for its records; the clock is read again only for the time limits.
   const now = deps.now()
@@ -291,17 +301,28 @@ export async function draftSocialForNewPosts(deps: SocialDeps, opts: { holdBack?
   const failing = new Map<string, string>((retries ?? []).map((r) => [r.slug, r.firstFailedAt]))
   const failedLast = <T,>(xs: T[], key: (x: T) => string) => xs.sort((a, b) => Number(failing.has(key(a))) - Number(failing.has(key(b))))
 
+  // A run every 15 minutes (6 Nov 2026) takes a new item at once, but one
+  // that failed before is tried again only with the morning run (the first
+  // quarter hour of 14:00 UTC), once a day as when the run was daily: each try
+  // costs Claude calls before Buffer is asked, and a channel waiting to be
+  // reconnected would otherwise cost them 96 times a day (review, 6 Nov 2026).
+  // Only the scheduled run is the morning run: a Publish webhook that lands in
+  // that quarter hour passes `morning: false`, so each Publish doesn't try the
+  // failing items again or take the library's turn (review, 6 Nov 2026).
+  const retryNow = opts.morning ?? morningSlot(now)
+  const tryNow = (key: string) => retryNow || !failing.has(key)
+
   // Oldest first, so a backlog goes out in the order it was published; one
   // that has failed before goes behind the ones not tried yet (a stable sort).
   const articles = failedLast(
-    (duePosts ?? []).filter((p) => p.slug && !logged.has(p.slug) && !opts.holdBack?.has(p.slug)),
+    (duePosts ?? []).filter((p) => p.slug && !logged.has(p.slug) && !opts.holdBack?.has(p.slug) && tryNow(p.slug)),
     (p) => p.slug,
   )
   // Built now, so a published field post missing its note, photo or service
   // is skipped instead of holding the day's field slot for ever.
   const fields = failedLast(
     (fieldDocs ?? [])
-      .filter((d) => !logged.has(`field:${d._id}`) && !hasStory(d))
+      .filter((d) => !logged.has(`field:${d._id}`) && !hasStory(d) && tryNow(`field:${d._id}`))
       .flatMap((d) => {
         const item = fieldItem(d)
         if (!item) console.warn(`[social] field:${d._id}: no note, photo, place or service; skipped until it has them`)
@@ -315,7 +336,10 @@ export async function draftSocialForNewPosts(deps: SocialDeps, opts: { holdBack?
   // failing doesn't, so it can't hold the library up for its 14 days of retries.
   const fieldPostToday = fields.some((f) => !failing.has(f.key))
   let library: LibraryItem | undefined
-  if (libraryDue(now, lastJobPostAt ?? undefined, fieldPostToday)) {
+  // The weekly library post goes with the morning run only, as when the run
+  // was daily: one that ends with no drafts doesn't count as the week's turn,
+  // so trying every 15 minutes could close a library item a run (review).
+  if (retryNow && libraryDue(now, lastJobPostAt ?? undefined, fieldPostToday)) {
     const [subjects, services] = await Promise.all([loadSubjects(store), loadServices(store)])
     library = nextLibraryItem(libraryQueue(subjects, services), posted)
   }
@@ -490,7 +514,7 @@ async function draftItem(
   const retryId = idFor("socialRetry", item.key)
   if (result.outcome === "retry") {
     // Nothing reached Buffer and it may next time: drop the claim, so the
-    // next daily run writes this item again. The email says why.
+    // next morning's run writes this item again. The email says why.
     try {
       await store.delete(logId)
       console.warn(`[social] ${item.key}: nothing drafted, the next run tries again. ${reasons}`)
@@ -525,7 +549,7 @@ async function draftItem(
       `[social] ${item.key}: ${result.outcome}, ${result.drafted.length} Buffer draft(s), ${result.skipped.length} skipped${reasons ? ` (${reasons})` : ""}; style: ${style.left.length} of ${style.flagged} left${style.error ? ` (rewrite failed: ${style.error})` : ""}`,
     )
   }
-  await notify(deps.mail, result)
+  await tell(deps, result, now)
   return result
 }
 
@@ -583,8 +607,18 @@ async function itemFailed(deps: SocialDeps, item: SocialItem, err: unknown, firs
       .createIfNotExists({ _id: idFor("socialRetry", item.key), _type: "socialRetry", slug: item.key, firstFailedAt: now.toISOString() })
       .catch((e: unknown) => console.error(`[social] ${item.key}: couldn't note the first failure: ${errorText(e)}`))
   }
-  await notify(deps.mail, result)
+  await tell(deps, result, now)
   return result
+}
+
+/**
+ * Emails what happened to one item. A retry is emailed at most once a day
+ * (lib/automation/mail-cap.ts): the run goes every 15 minutes, and an item
+ * Buffer keeps refusing would otherwise write 96 emails a day.
+ */
+async function tell(deps: SocialDeps, r: SocialResult, now: Date): Promise<void> {
+  if (r.outcome === "retry" && !(await mayEmailFailure(deps.store, `social-item:${r.key}`, now))) return
+  await notify(deps.mail, r)
 }
 
 /** How an email names what the drafts are for. */
@@ -644,7 +678,7 @@ async function notify(mail: Mailer, r: SocialResult) {
     [
       r.recordProblem
         ? `Nothing could be drafted in Buffer for ${what}, and nothing was posted.`
-        : `Nothing could be drafted in Buffer for ${what}. Nothing was posted, and the next daily run (14:00 UTC) tries again, for up to ${GIVE_UP_DAYS} days from the first failure.`,
+        : `Nothing could be drafted in Buffer for ${what}. Nothing was posted, and the next morning's run (7 a.m. Vancouver) tries again, for up to ${GIVE_UP_DAYS} days from the first failure.`,
       "",
       "Why:",
       ...skippedLines,
@@ -667,7 +701,7 @@ export async function notifyRunFailure(mail: Mailer, err: unknown): Promise<void
     mail,
     `Social drafts didn't run: ${message.length > 80 ? `${message.slice(0, 77)}...` : message}`,
     [
-      "Today's social drafts job stopped. Nothing was posted and nothing is lost: any new blog post, Job photos post or library post it didn't finish gets its Buffer drafts on the first daily run after this is fixed.",
+      "The social drafts job stopped. Nothing was posted and nothing is lost: any new blog post, Job photos post or library post it didn't finish gets its Buffer drafts at the first run after this is fixed (they run every 15 minutes). While it keeps failing you hear at most once a day.",
       "",
       `What happened: ${message}`,
       "",

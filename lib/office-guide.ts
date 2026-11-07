@@ -9,8 +9,7 @@ import { ADDONS } from "./addons"
  * Two guides from one source (lib/addons.ts). With the add-ons, as Square
  * One has the Studio (Vern, 22 Oct 2026): change words and photos on a page,
  * add photos to a gallery, write a blog post, then job photos from a phone,
- * the Tuesday and Thursday drafts and Buffer, and a post can go live by
- * itself. With NEXT_PUBLIC_STUDIO_ADDONS=off, the first three only. Both
+ * the drafts to read and Buffer, and a post can go live by itself. With NEXT_PUBLIC_STUDIO_ADDONS=off, the first three only. Both
  * end with the basics: drafts, Publish, and how to undo (23 Oct 2026). A
  * line marked `only` is in one guide; `{step:buffer}` becomes that step's
  * number in the guide it's printed in.
@@ -30,9 +29,12 @@ import { ADDONS } from "./addons"
  * Edit on the page button (sanity/components/EditOnThePage.tsx) came the
  * same day: the one in the top bar always starts on the home page. Change a field's title there and change it here:
  * npm run test:studio fails until they agree. Times are Vancouver's, the same
- * all year since BC kept UTC-7 from 1 November 2026: the daily run 14:00 UTC
- * (7 a.m.), the article run 15:00 UTC (8 a.m.), the drafter 13:00 UTC (6 a.m.)
- * on Tuesdays and Thursdays (vercel.json).
+ * all year since BC kept UTC-7 from 1 November 2026. Since 6 Nov 2026 social
+ * drafts start the moment something is published (the publish webhook,
+ * lib/automation/social-now.ts) and the scheduled-post run goes every 15
+ * minutes (it was 14:00 UTC, 7 a.m.), the article run stays at 15:00 UTC (8 a.m.), and the Tuesday and
+ * Thursday drafter is off unless NEXT_PUBLIC_BLOG_DRAFTER is "on"
+ * (lib/addons.ts), so the guide doesn't promise its drafts (vercel.json).
  *
  * Pure data: safe in the Studio and on the site. `**bold**` marks a label.
  */
@@ -147,14 +149,14 @@ export const GUIDE_SOURCE: { title: string; lead: { free: string; addons: string
         `**Lead photograph**: **Upload** a new photo, or **Select** one already in the Studio. ${FRAMED} Then **What the photo shows**: one plain line, as you'd describe it to someone who can't see it.`,
         "**One-paragraph summary**: two or three sentences for the blog's list and for link previews.",
         "**Body**: type or paste the text. For a heading, click in its line, open **Paragraph** above the text and pick **Heading** (or **Subheading** for a smaller one). **Photograph** puts a photo between paragraphs.",
-        "Is it a job? Open **The job** tab: **Application**, **Service line**, **City**, the **Systems installed**, and the job's **More photographs**. Filled in, the post is one of the projects: it shows with its place and system on the site's Projects page and the application page. Leave the tab empty for a guide.",
+        "Is it a job? Add its other photos under **More photographs**, just below the lead photo. Then, further down, **Application**, **Service line**, **City** and the **Systems installed** (**The job** at the top shows only those). Filled in, the post is one of the projects: it shows with its place and system on the site's Projects page and the application page. Leave them empty for a guide.",
         "To see it as it will look: **Edit on the page**, above the post's fields. Only you can see it until it's published.",
         { text: "Press **Publish**.", only: "free" },
-        { text: "Press **Publish**. Or turn on **Goes live by itself** and set **Goes live at** to the day you want, at 7:00 a.m. or earlier.", only: "addons" },
+        { text: "Press **Publish**. Or turn on **Goes live by itself** and set **Goes live at** to the day and time you want.", only: "addons" },
       ],
       next: [
         { text: "It's on the site's Projects page within a minute.", only: "free" },
-        { text: "It shows on the site within a minute of going live, and its social posts wait in Buffer the next morning.", only: "addons" },
+        { text: "It shows on the site within a minute of going live, and a minute or two later its social posts wait in Buffer.", only: "addons" },
         "A yellow mark is worth a second look: it's the house style. A red one is something **Publish** needs first, like the photo or what it shows.",
       ],
       shot: {
@@ -179,9 +181,9 @@ export const GUIDE_SOURCE: { title: string; lead: { free: string; addons: string
         "Press **Publish**.",
       ],
       next: [
-        "No story: the next morning its posts wait in Buffer for your approval ({step:buffer}).",
+        "No story: a minute or two later its posts wait in Buffer for your approval ({step:buffer}).",
         "With a story: the next morning an article is written from your words and the service's page, nothing else, and you get an email. It waits in the Studio until you read it and press Publish ({step:drafts}).",
-        "Added several jobs at once? They go one a day, oldest first.",
+        "Added several jobs at once? They go one at a time, oldest first.",
       ],
       shot: {
         src: "/images/guide/job-photos.png",
@@ -193,24 +195,23 @@ export const GUIDE_SOURCE: { title: string; lead: { free: string; addons: string
     {
       id: "drafts",
       only: "addons",
-      title: "Read and publish the Tuesday and Thursday drafts",
-      when: "Tuesday and Thursday mornings, when the email comes.",
+      title: "Read and publish a draft",
+      when: "When an email says a draft is ready to read.",
       steps: [
-        'The email says "Blog draft ready in Studio". Tap its link.',
+        'The email ("Ready to read", or "Needs a read before it goes") links to the draft. Tap it.',
         "Read **Notes for the editor** at the top: it lists anything the fact check couldn't confirm. Lines marked in yellow break the house style.",
         "Change anything by typing. It saves as you go.",
-        "Happy with it? Press **Publish**. To have it go out on a later day instead, turn on **Goes live by itself**, then set **Goes live at** to that day at 7:00 a.m. or earlier: it goes out that morning.",
+        "Happy with it? Press **Publish**. To have it go out later instead, turn on **Goes live by itself**, then set **Goes live at** to the day and time: it goes out within 15 minutes of it.",
       ],
       next: [
-        'An article from job photos comes with its own email, "Ready to read" (or "Needs a read before it goes" when a check found something to fix). Read it and press **Publish** the same way.',
-        "The morning after a post goes live, its social posts wait in Buffer for you ({step:buffer}).",
+        "A minute or two after a post goes live, its social posts wait in Buffer for you ({step:buffer}).",
       ],
     },
     {
       id: "buffer",
       only: "addons",
       title: "What you'll see in Buffer",
-      when: "The morning after something new goes live.",
+      when: "A minute or two after something new goes live.",
       steps: [
         "An email says the social drafts are waiting in Buffer. Nothing is posted until you approve it.",
         "In the Buffer app: **Publish**, then **Drafts**. Each channel you've connected (Facebook, Instagram and so on) has its own draft.",

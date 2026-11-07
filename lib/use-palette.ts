@@ -6,12 +6,17 @@ import { DEFAULT_PALETTE, PALETTE_IDS, PALETTE_KEY, type PaletteId } from "@/lib
 /**
  * The palette a visitor is looking at, as React state (8 Oct 2026).
  *
- * The truth is the data-palette attribute on <html>, which PALETTE_BOOT sets
+ * The truth is the data-palette attribute on <html>, which PALETTE_BOOT set
  * in <head> before the first paint, so the colours themselves never wait for
  * React. Components only need the palette for words — the band's hover
  * titles, the hero switch's label — and read it here. On the server and
  * during hydration it is the default, then the client's own; a change made
  * anywhere is announced with one window event so every reader follows.
+ *
+ * 6 Nov 2026: the hero switch and PALETTE_BOOT came out (Earth for everyone,
+ * lib/palettes.ts), so nothing sets the attribute and this reads the default,
+ * Earth. ColourEdge still asks here for its hover names; setPalette and
+ * nextPalette wait unused for a switch to come back.
  */
 const EVENT = "s1:palette"
 
