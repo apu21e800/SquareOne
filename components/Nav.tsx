@@ -216,14 +216,29 @@ function MegaPreview({
   previews,
   active,
   prev,
+  onClose,
 }: {
   keys: string[]
   previews: MenuPreviews
   active: string
   prev: string
+  onClose: () => void
 }) {
   const current = previews[active]
   return (
+    <>
+      {/* 7 Nov 2026: the sheet runs to the fold, so its own way out sits
+          here, on the index head's row (Vern: "must still be easy to exit
+          out of tho"). Escape, a click outside and the pointer leaving the
+          sheet still close it. */}
+      <div className="mega-tools">
+        <button type="button" onClick={onClose} className="mega-close" aria-label="Close the menu">
+          Close
+          <svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12">
+            <path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+          </svg>
+        </button>
+      </div>
     <figure className="mega-preview">
       <div className="mega-frame">
         {keys.map((k) => {
@@ -247,15 +262,17 @@ function MegaPreview({
       </div>
       <figcaption className="cap">{current?.caption ?? " "}</figcaption>
     </figure>
+    </>
   )
 }
 
 interface MenuProps {
   previews: MenuPreviews
   onNavigate: () => void
+  onClose: () => void
 }
 
-function ServicesMenu({ previews, onNavigate }: MenuProps) {
+function ServicesMenu({ previews, onNavigate, onClose }: MenuProps) {
   const [pv, show] = usePreview(SERVICE_ROWS[0].href)
   const keys = [...SERVICE_ROWS, ...SERVICE_MORE].map((r) => r.href)
   return (
@@ -310,13 +327,13 @@ function ServicesMenu({ previews, onNavigate }: MenuProps) {
         </p>
       </div>
       <div className="col-span-5">
-        <MegaPreview keys={keys} previews={previews} active={pv.active} prev={pv.prev} />
+        <MegaPreview keys={keys} previews={previews} active={pv.active} prev={pv.prev} onClose={onClose} />
       </div>
     </>
   )
 }
 
-function BuyersMenu({ previews, onNavigate }: MenuProps) {
+function BuyersMenu({ previews, onNavigate, onClose }: MenuProps) {
   const first = MENU_GROUPS[0]?.items[0]?.href ?? "/applications/crosswalks"
   const [pv, show] = usePreview(first)
   const keys = MENU_GROUPS.flatMap((g) => g.items.map((a) => a.href))
@@ -355,7 +372,7 @@ function BuyersMenu({ previews, onNavigate }: MenuProps) {
         </div>
       </div>
       <div className="col-span-5">
-        <MegaPreview keys={keys} previews={previews} active={pv.active} prev={pv.prev} />
+        <MegaPreview keys={keys} previews={previews} active={pv.active} prev={pv.prev} onClose={onClose} />
       </div>
     </>
   )
@@ -398,12 +415,14 @@ function MegaSheet({
   menu,
   previews,
   onNavigate,
+  onClose,
   onMouseEnter,
   onMouseLeave,
 }: {
   menu: MenuKey
   previews: MenuPreviews
   onNavigate: () => void
+  onClose: () => void
   onMouseEnter: () => void
   onMouseLeave: () => void
 }) {
@@ -421,9 +440,9 @@ function MegaSheet({
     >
       <div key={menu} className="mega-swap container-1280 grid grid-cols-12 gap-x-12 pt-8 pb-9">
         {menu === "services" ? (
-          <ServicesMenu previews={previews} onNavigate={onNavigate} />
+          <ServicesMenu previews={previews} onNavigate={onNavigate} onClose={onClose} />
         ) : (
-          <BuyersMenu previews={previews} onNavigate={onNavigate} />
+          <BuyersMenu previews={previews} onNavigate={onNavigate} onClose={onClose} />
         )}
       </div>
       <MegaStrip onNavigate={onNavigate} />
@@ -555,6 +574,23 @@ export default function Nav({ previews = MENU_PREVIEWS }: { previews?: MenuPrevi
   const [onImage, setOnImage] = useState(false)
   const [atFooter, setAtFooter] = useState(false)
   const [deep, setDeep] = useState(false)
+  // 7 Nov 2026 (Vern: "hide the main nav on scroll down, the bonus is that
+  // the user sees more page content"): off on the way down, back on the
+  // first scroll up. Never near the top of a page, never while something
+  // the bar owns is open, and a key press landing in it brings it back.
+  const [away, setAway] = useState(false)
+  const lastY = useRef(0)
+  // While a menu, the drawer or the search is open the page can still
+  // scroll behind it; that scroll must not count, or the bar would snap
+  // away the moment the sheet closed (review, 7 Nov 2026).
+  const bareRef = useRef(true)
+  // Only the visitor's own scrolling (a wheel, a finger, the keys) steps
+  // the bar off: the browser's jump to an anchor, a restored position and
+  // the page's own smooth scrolls fire scroll events too, and a visitor
+  // arriving at /contact#quote found no bar (review, 7 Nov 2026).
+  // Starts long ago: performance.now() counts from the page's own start, so
+  // a zero here would make the browser's first scrolls look like the visitor's.
+  const userScrollAt = useRef(-1e9)
   const [menu, setMenu] = useState<MenuKey | null>(null)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
@@ -602,12 +638,43 @@ export default function Nav({ previews = MENU_PREVIEWS }: { previews?: MenuPrevi
   // Bar goes opaque past 24px; "deep" once the visitor has really scrolled
   useEffect(() => {
     const onScroll = () => {
-      setScrolled(window.scrollY > 24)
-      setDeep(window.scrollY > 320)
+      const y = window.scrollY
+      setScrolled(y > 24)
+      setDeep(y > 320)
+      if (!bareRef.current) {
+        lastY.current = y
+        return
+      }
+      // Down past the bar's own height and a bit: away. Up by more than a
+      // nudge, or back near the top: here. Small moves (a trackpad settling)
+      // change nothing.
+      const dy = y - lastY.current
+      const byUser = performance.now() - userScrollAt.current < 500
+      if (y < 120) setAway(false)
+      else if (dy > 6 && byUser) setAway(true)
+      else if (dy < -6) setAway(false)
+      if (Math.abs(dy) > 6 || y < 120) lastY.current = y
     }
+    const touched = () => {
+      userScrollAt.current = performance.now()
+    }
+    const keyed = (e: KeyboardEvent) => {
+      if (["ArrowDown", "PageDown", "Space", " ", "End"].includes(e.key)) touched()
+    }
+    // A page that opens already scrolled (an anchor link, a restored
+    // position, Back) starts here, not away: nothing has moved yet.
+    lastY.current = window.scrollY
     onScroll()
     window.addEventListener("scroll", onScroll, { passive: true })
-    return () => window.removeEventListener("scroll", onScroll)
+    window.addEventListener("wheel", touched, { passive: true })
+    window.addEventListener("touchmove", touched, { passive: true })
+    window.addEventListener("keydown", keyed)
+    return () => {
+      window.removeEventListener("scroll", onScroll)
+      window.removeEventListener("wheel", touched)
+      window.removeEventListener("touchmove", touched)
+      window.removeEventListener("keydown", keyed)
+    }
   }, [])
 
   // The bar steps off the page once the footer is in view — the footer
@@ -691,7 +758,17 @@ export default function Nav({ previews = MENU_PREVIEWS }: { previews?: MenuPrevi
   // 28 Sept 2026 QA: on a short page (search, the 404) the footer is in view
   // on arrival, and the bar vanished before anyone scrolled. It steps off
   // only once the visitor has scrolled into the page.
-  const hidden = atFooter && deep && menu === null && !drawerOpen && !searchOpen
+  const bare = menu === null && !drawerOpen && !searchOpen
+  useEffect(() => {
+    bareRef.current = bare
+    lastY.current = window.scrollY
+    if (!bare) setAway(false)
+  }, [bare])
+  // Off the page at the footer (a landmark gone from the page, so it says
+  // so), or stepped off on the way down (still the page's landmark, only
+  // out of view: a key press brings it back).
+  const atFoot = atFooter && deep && bare
+  const hidden = atFoot || (away && bare)
 
   return (
     // reducedMotion="user": the CSS kill switch cannot stop framer's JS
@@ -700,7 +777,8 @@ export default function Nav({ previews = MENU_PREVIEWS }: { previews?: MenuPrevi
     <div ref={rootRef}>
       <header
         className={`site-bar fixed top-0 right-0 left-0 z-50${light ? " nav-light" : ""}${scrolled && !light ? " is-scrolled" : ""}`}
-        aria-hidden={hidden || undefined}
+        aria-hidden={atFoot || undefined}
+        onFocusCapture={() => setAway(false)}
         style={{
           background: solid ? "#FFFFFF" : "rgba(255,255,255,0)",
           backdropFilter: solid ? "blur(8px)" : "none",
@@ -851,6 +929,7 @@ export default function Nav({ previews = MENU_PREVIEWS }: { previews?: MenuPrevi
             menu={menu}
             previews={previews}
             onNavigate={closeAll}
+            onClose={closeMenu}
             onMouseEnter={() => openMenu(menu)}
             onMouseLeave={scheduleClose}
           />

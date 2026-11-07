@@ -256,7 +256,15 @@ async function main() {
       "https://www.linkedin.com/company/square-one-paving-ltd/",
       "https://www.youtube.com/channel/UCBDvB4vgdahH67BmP6FeccQ",
     ])
-    assert.deepEqual(Object.keys(org), ["@type", "@id", "name", "alternateName", "url", "logo", "image", "description", "telephone", "email", "foundingDate", "contactPoint", "areaServed", "address", "sameAs", "hasOfferCatalog"])
+    // 7 Nov 2026: knowsAbout (the systems by name) joins the head, and the
+    // logo is the 1024px mark, the one file on the site over the 112px a
+    // logo needs for search.
+    assert.deepEqual(Object.keys(org), ["@type", "@id", "name", "alternateName", "url", "logo", "image", "description", "knowsAbout", "telephone", "email", "foundingDate", "contactPoint", "areaServed", "address", "sameAs", "hasOfferCatalog"])
+    assert.equal(org.logo, "https://www.squareonepaving.com/icon1.png")
+    const known = org.knowsAbout as string[]
+    assert.ok(known.length >= 8 && known.every((k) => typeof k === "string" && k.length > 0))
+    assert.ok(known.some((k) => k.startsWith("StreetPrint")) && known.some((k) => k.startsWith("StreetBond")))
+    assert.ok(!JSON.stringify(org).includes("HUB"), "the manufacturer is never named")
   })
 
   console.log("every page's words: the Studio's, the site's own where blank")

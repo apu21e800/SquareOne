@@ -13,7 +13,7 @@ import PortableBody from "@/components/blog/PortableBody"
 import ProjectGallery from "@/components/ProjectGallery"
 import Frame from "@/components/ui/Frame"
 import { Row } from "@/components/ui/Container"
-import { SITE_URL } from "@/lib/site"
+import { SITE_URL, abs } from "@/lib/site"
 import JsonLd from "@/components/JsonLd"
 import { fitVars } from "@/lib/type"
 import { clampDescription, pageTitle } from "@/lib/seo"
@@ -137,13 +137,26 @@ function factsFor(job: Job): { label: string; values: { text: string; href?: str
   ]
 }
 
-/** Same category scores highest, then shared tags, then recency. */
+/** A photograph's identity for comparing two posts' leads: the Studio's asset or the site's file, crop and size aside. */
+function photoKey(src: string | undefined): string {
+  if (!src) return ""
+  return src.replace(/[?#].*$/, "").replace(/-\d+x\d+(?=\.\w+$)/, "")
+}
+
+/**
+ * Same category scores highest, then shared tags, then recency. 7 Nov 2026:
+ * never a post whose lead photograph is this post's (two guides share the
+ * Mission parking bays, and the rail put the page's own photograph on it
+ * twice).
+ */
 function relatedPosts(current: AnyPost, all: BlogPostMeta[], limit = 2): BlogPostMeta[] {
   const currentTags = new Set((current.tags ?? []).map((tag) => tag.toLowerCase()))
   const currentCategory = current.category?.toLowerCase() ?? ""
+  const lead = photoKey(current.featured_image)
 
   return all
     .filter((post) => post.slug !== current.slug)
+    .filter((post) => !lead || photoKey(post.featured_image) !== lead)
     .map((post) => {
       let score = 0
       if (currentCategory && post.category?.toLowerCase() === currentCategory) score += 3
@@ -239,7 +252,11 @@ export default async function BlogPostPage({ params }: Props) {
     "@type": "Article",
     headline: post.title,
     description: post.description,
-    image: post.featured_image ?? "",
+    // Absolute, and every photograph of the job when the post tells one
+    // (7 Nov 2026): Google reads a relative image URL against the page, but
+    // its documentation asks for absolute ones, and a job's photographs are
+    // the post's images too.
+    image: (photos.length > 0 ? photos : [post.featured_image].filter(Boolean)).map((src) => (src.startsWith("http") ? src : abs(src))),
     datePublished: post.date,
     dateModified: post.date,
     // A named author is a Person; the company byline is the Organization.
@@ -465,7 +482,9 @@ function RelatedNote({ post }: { post: BlogPostMeta }) {
   return (
     <Row as="li" compact className="relative">
       <Link href={`/blog/${post.slug}`} aria-label={post.title} className="absolute inset-0 z-[2]" />
-      <Frame src={post.featured_image || undefined} alt="" aspect="aspect-[3/2]" sizes="132px" position={post.featured_position} />
+      {/* 7 Nov 2026: the thumbnail carries the post's own alt text (the
+          office's, or its title), so an image search can place it too. */}
+      <Frame src={post.featured_image || undefined} alt={post.featured_alt || post.title} aspect="aspect-[3/2]" sizes="132px" position={post.featured_position} />
       <div className="min-w-0">
         <h3 className="[text-wrap:pretty]">{post.title}</h3>
         <p className="mt-2 text-[15px] italic text-ink-muted">

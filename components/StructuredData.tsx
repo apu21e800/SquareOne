@@ -13,9 +13,28 @@ const ORG_HEAD = {
   name: "Square One Paving",
   alternateName: "Square One Paving Ltd.",
   url: SITE_URL,
-  logo: `${SITE_URL}/images/logo/SquareOne-wordmark-dark.svg`,
+  // 7 Nov 2026: the mark at 1024px (app/icon1.png, served at /icon1.png); the
+  // wordmark PNG is 94px tall, under the 112px a logo needs for search.
+  logo: `${SITE_URL}/icon1.png`,
   image: `${SITE_URL}/images/og-image.png`,
   description: "BC's decorative pavement studio since 2000. Stamped asphalt, decorative coatings, preformed thermoplastic, and vapour blasting for municipalities, developers, and residential clients across British Columbia.",
+  // 7 Nov 2026: what the company is known for, in the systems' own names
+  // (a searcher's and an answer engine's words for the work), so the
+  // entity reads as the installer of these systems in BC. The manufacturer
+  // is not named (CLAUDE.md).
+  knowsAbout: [
+    "StreetPrint stamped asphalt",
+    "TrafficPatternsXD stamped asphalt",
+    "StreetBond pavement coatings",
+    "DuraShield pavement coating",
+    "TrafficPatterns preformed thermoplastic",
+    "DecoMark preformed thermoplastic graphics",
+    "DuraTherm thermoplastic road markings",
+    "PreMark thermoplastic markings",
+    "Decorative crosswalks",
+    "Stamped asphalt driveways",
+    "Vapour blasting surface preparation",
+  ],
 }
 
 // No priceRange (would be invented), no founder (not stated anywhere on

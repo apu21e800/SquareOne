@@ -110,23 +110,31 @@ export default async function Footer() {
                 <span className="label">Start a project</span>
               </div>
               <div className="sec-body">
-                {/* Named, so the band is a landmark of its own between the
-                    page and the footer (30 Sept 2026 QA, axe: region). */}
-                <h2 id="close-heading" className="max-w-[20ch] [text-wrap:balance]">Send a few photos <em>and a site address</em></h2>
-                <p className="mt-5 max-w-[52ch] text-ink-body [text-wrap:pretty]">
-                  A free site visit and a written quote, anywhere in the Lower Mainland and on
-                  Vancouver Island.
-                </p>
-                <div className="mt-8 flex flex-wrap items-center gap-x-7 gap-y-4">
-                  <Link href="/contact" className="btn-primary">
-                    Get a quote
-                  </Link>
-                  <span className="text-[16px] text-ink-muted">
-                    or call{" "}
-                    <a href={tel(site.phoneOffice)} className="link">
-                      {site.phoneOffice}
-                    </a>
-                  </span>
+                {/* 7 Nov 2026: the heading on the left, the line and the
+                    button on the right, on one baseline (app/own.css
+                    .close-grid). Stacked on the left, the band's right
+                    half was empty and the button read as floating. */}
+                <div className="close-grid">
+                  {/* Named, so the band is a landmark of its own between the
+                      page and the footer (30 Sept 2026 QA, axe: region). */}
+                  <h2 id="close-heading" className="max-w-[20ch] [text-wrap:balance]">Send a few photos <em>and a site address</em></h2>
+                  <div className="close-act">
+                    <p className="max-w-[40ch] text-ink-body [text-wrap:pretty]">
+                      A free site visit and a written quote, anywhere in the Lower Mainland and on
+                      Vancouver Island.
+                    </p>
+                    <div className="mt-6 flex flex-wrap items-center gap-x-7 gap-y-4">
+                      <Link href="/contact" className="btn-primary">
+                        Get a quote
+                      </Link>
+                      <span className="text-[16px] text-ink-muted">
+                        or call{" "}
+                        <a href={tel(site.phoneOffice)} className="link">
+                          {site.phoneOffice}
+                        </a>
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

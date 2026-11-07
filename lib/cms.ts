@@ -88,10 +88,15 @@ function fallbackTiles(profileUrl: string): SocialTile[] {
       alt: "A street mural crossing in Oak Bay, a First Nations design in black, red, yellow and teal StreetBond across the road",
       caption: "Street mural crossing, Oak Bay · StreetBond",
     },
+    // 7 Nov 2026: the Maplewoods fire lane came off this grid, since the
+    // services band above shows it as the decorative coatings frame (the
+    // home page showed it twice). The Langley Events Centre artwork from the
+    // record takes its tile (lib/work.ts; the About page's story photograph,
+    // not on the home page anywhere else).
     {
-      src: "/images/S1_update_v2/photos/Featured%20image%20options/maplewoods-fire-lane-north-vancouver-streetbond-01.jpg",
-      alt: "The decorative fire lane at Maplewoods Townhomes in North Vancouver, white waves across blue StreetBond",
-      caption: "Decorative fire lane, Maplewoods, North Vancouver · StreetBond",
+      src: "/images/S1_update_v2/photos/Featured%20image%20options/Langley-event-3-2048x1536.jpg",
+      alt: "'Circle of Life' by Drew and Elinor Atkins, a circular StreetBond artwork on the pavement at the Langley Events Centre, seen from above",
+      caption: "'Circle of Life', Langley Events Centre, Langley · StreetBond",
     },
     {
       src: "/images/applications/schools-sports-courts/abbotsford-eagle-mountain-labyrinth-decomark-01.jpg",

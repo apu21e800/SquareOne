@@ -19,6 +19,7 @@ import HowAJobGoes from "@/components/sections/HowAJobGoes"
 import MaterialsBand from "@/components/sections/MaterialsBand"
 import Frame from "@/components/ui/Frame"
 import { Section } from "@/components/ui/Container"
+import IntroLedger from "@/components/ui/IntroLedger"
 import { sentenceCase } from "@/lib/text"
 import { clampDescription } from "@/lib/seo"
 import { getSiteSettings } from "@/lib/cms"
@@ -223,7 +224,7 @@ export default async function ServicePage({ params }: Props) {
         imagePosition={o.position}
       />
 
-      <section className="bg-surface pt-14 pb-16 max-[700px]:pt-10 max-[700px]:pb-12">
+      <section className="bg-surface pt-14 pb-14 max-[700px]:pt-10 max-[700px]:pb-10">
         <div className="container-1280">
           {/* The intro carries the systems and the region — the same sentence
               search engines and the Service schema read as the description.
@@ -235,15 +236,10 @@ export default async function ServicePage({ params }: Props) {
               <span className="label">In short</span>
             </div>
             <div className="sec-body">
-              <p className="standfirst max-w-[46ch] [text-wrap:pretty]">{service.shortDescription}</p>
-              <div className="mt-9 flex flex-wrap items-center gap-x-8 gap-y-4">
-                <Link href="/contact" className="btn-primary">
-                  Get a quote
-                </Link>
-                <Link href="/blog" className="link">
-                  See the projects
-                </Link>
-              </div>
+              <p className="standfirst max-w-[50ch] [text-wrap:pretty]">{service.shortDescription}</p>
+              {/* 7 Nov 2026: the button, the office line and the way to the
+                  projects on one hairline ledger (components/ui/IntroLedger.tsx). */}
+              <IntroLedger phone={site.phoneOffice} links={[{ href: "/blog", label: "See the projects" }]} />
             </div>
           </div>
         </div>

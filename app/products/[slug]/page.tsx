@@ -16,6 +16,8 @@ import WorkGallery from "@/components/WorkGallery"
 import MaterialsBand from "@/components/sections/MaterialsBand"
 import Frame from "@/components/ui/Frame"
 import { Section } from "@/components/ui/Container"
+import IntroLedger from "@/components/ui/IntroLedger"
+import { getSiteSettings } from "@/lib/cms"
 import { SITE_URL } from "@/lib/site"
 import { fitVars } from "@/lib/type"
 import JsonLd, { breadcrumbSchema } from "@/components/JsonLd"
@@ -45,15 +47,19 @@ export async function generateStaticParams() {
  * the whole tag survives a search result. A product without an entry falls
  * back to "<Name> | Pavement Systems BC".
  */
+/* 7 Nov 2026 (Vern: "top notch SEO", S1 the systems' installer in the
+   West): each title says what Square One is to the system, the installer,
+   in the words a searcher types ("streetprint installer"), and where. The
+   manufacturer is still never named (CLAUDE.md). */
 const pageTitle: Record<string, string> = {
-  streetprint: "StreetPrint® Stamped Asphalt | BC",
-  streetbond: "StreetBond® Pavement Coating | BC",
-  trafficpatterns: "TrafficPatterns™ Thermoplastic | BC",
-  "trafficpatterns-xd": "TrafficPatternsXD™ Stamped Asphalt | BC",
-  decomark: "DecoMark® Thermoplastic Graphics | BC",
-  durashield: "DuraShield Pavement Coating | BC",
-  duratherm: "DuraTherm® Thermoplastic Markings | BC",
-  premark: "PreMark® Thermoplastic Markings | BC",
+  streetprint: "StreetPrint® Stamped Asphalt Installer, BC",
+  streetbond: "StreetBond® Coatings Installer, BC",
+  trafficpatterns: "TrafficPatterns™ Thermoplastic Installer, BC",
+  "trafficpatterns-xd": "TrafficPatternsXD™ Installer, BC",
+  decomark: "DecoMark® Graphics Installer, BC",
+  durashield: "DuraShield Coating Installer, BC",
+  duratherm: "DuraTherm® Markings Installer, BC",
+  premark: "PreMark® Markings Installer, BC",
 }
 
 /** The overview heading, in searcher language; the H1 above it already carries the mark. */
@@ -211,6 +217,7 @@ export default async function ProductPage({ params }: Props) {
   // subject. StreetBond also owns its SR variant. Empty for systems with no
   // installs on record (DuraShield) — the band simply does not render.
   // The Studio's gallery photographs of this system included (lib/work-cms.ts, 9 Oct 2026).
+  const site = await getSiteSettings()
   const work = (await getStudioWork())
     .filter((photo) =>
       photo.systems.some((system) => system === product.name || (product.name === "StreetBond" && system.startsWith("StreetBond"))),
@@ -313,7 +320,7 @@ export default async function ProductPage({ params }: Props) {
       </section>
 
       {/* ── Header ──────── */}
-      <section className="section bg-surface pt-16 pb-14 max-[700px]:pt-10 max-[700px]:pb-10">
+      <section className="section bg-surface pt-14 pb-14 max-[700px]:pt-10 max-[700px]:pb-10">
         <div className="container-1280">
           {/* 28 Sept 2026 (Vern: "S1 is an installer, services over
               products"): the page opens on the service the system belongs
@@ -340,15 +347,13 @@ export default async function ProductPage({ params }: Props) {
           </p>
 
           {/* One button and one link (2 Oct 2026: the row carried four; the
-              menu reaches the catalogue and the pattern band sits below). */}
-          <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-3">
-            <Link href="/contact" className="btn-primary">
-              Get a quote
-            </Link>
-            <Link href={`/services/${product.serviceSlug}`} className="link">
-              {SERVICE_NAME[product.serviceSlug] ?? "The service"}, the service
-            </Link>
-          </div>
+              menu reaches the catalogue and the pattern band sits below).
+              7 Nov 2026: on the intro ledger, with the office line
+              (components/ui/IntroLedger.tsx). */}
+          <IntroLedger
+            phone={site.phoneOffice}
+            links={[{ href: `/services/${product.serviceSlug}`, label: `${SERVICE_NAME[product.serviceSlug] ?? "The service"}, the service` }]}
+          />
         </div>
       </section>
 
@@ -609,7 +614,7 @@ export default async function ProductPage({ params }: Props) {
       {/* ── Related systems — hairline rows: the category as the small voice,
              the name, one line; the whole row is the link. ──────── */}
       {related.length > 0 && (
-        <Section title={<>Related <em>systems</em></>} tone={toneOf("related")} wide>
+        <Section label="Same service" title={<>Related <em>systems</em></>} tone={toneOf("related")} wide>
           <ul role="list">
             {related.map((p) => (
               <li
