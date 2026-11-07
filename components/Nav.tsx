@@ -650,8 +650,12 @@ export default function Nav({ previews = MENU_PREVIEWS }: { previews?: MenuPrevi
       // change nothing.
       const dy = y - lastY.current
       const byUser = performance.now() - userScrollAt.current < 500
+      // Never while the keyboard is in the bar: PageDown or Space on a
+      // focused link scrolls the page, and the link would go off with the
+      // bar while it still holds focus (review, 7 Nov 2026).
+      const focusIn = rootRef.current?.contains(document.activeElement) ?? false
       if (y < 120) setAway(false)
-      else if (dy > 6 && byUser) setAway(true)
+      else if (dy > 6 && byUser && !focusIn) setAway(true)
       else if (dy < -6) setAway(false)
       if (Math.abs(dy) > 6 || y < 120) lastY.current = y
     }
