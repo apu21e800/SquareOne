@@ -122,42 +122,58 @@ const meta = ({ content: _c, ...rest }: BlogPost): BlogPostMeta => {
   return rest
 }
 
+/**
+ * The file posts (content/blog): the listed ones, with the record's job on
+ * each that tells one, and the slugs taken off the site. `unlisted: true` in
+ * the front-matter takes a post out of every list (the index, the home page,
+ * related posts, search, the sitemap) without deleting the file (28 Sept
+ * 2026 QA; each carries its reason), the Studio's copy of the same slug
+ * included (7 Nov 2026, Windsor Gate phase two: the same job told twice,
+ * folded into the Windsor Gate post; its address redirects there).
+ */
+function filePosts(): { listed: BlogPostMeta[]; unlisted: Set<string> } {
+  const listed: BlogPostMeta[] = []
+  const unlisted = new Set<string>()
+  for (const filename of ensureBlogDir()) {
+    const slug = filename.replace(/\.(mdx|md)$/, "")
+    const raw = readText(path.join(BLOG_DIR, filename))
+    if (raw === null) continue
+    const { data } = matter(raw)
+    if (data.unlisted === true) {
+      unlisted.add(slug)
+      continue
+    }
+    const record = recordJobFor(slug)
+    const featured_image = ledeFor(slug, data.featured_image)
+    listed.push({
+      slug,
+      title: data.title ?? "",
+      description: data.description ?? "",
+      date: data.date ?? "",
+      author: data.author ?? "Square One Paving",
+      category: data.category ? plainCase(data.category) : "",
+      featured_image,
+      tags: data.tags ?? [],
+      ...(record ? { job: recordJob(record, featured_image) } : {}),
+    })
+  }
+  return { listed, unlisted }
+}
+
+/** The slugs whose file is marked `unlisted`: off every list, whichever source holds the post. */
+export function unlistedSlugs(): Set<string> {
+  return filePosts().unlisted
+}
+
 /** Every file post (content/blog) with the record's job on each that tells one, then the record's own posts. */
 export function getAllPosts(): BlogPostMeta[] {
-  const files = ensureBlogDir()
-
-  const fromFiles = files
-    .map((filename) => {
-      const slug = filename.replace(/\.(mdx|md)$/, "")
-      const raw = readText(path.join(BLOG_DIR, filename))
-      if (raw === null) return null
-      const { data } = matter(raw)
-      // `unlisted: true` in the front-matter takes a post out of every list
-      // (the index, the home page, related posts, search, the sitemap)
-      // without deleting the file (28 Sept 2026 QA; each carries its reason).
-      if (data.unlisted === true) return null
-
-      const record = recordJobFor(slug)
-      const featured_image = ledeFor(slug, data.featured_image)
-      return {
-        slug,
-        title: data.title ?? "",
-        description: data.description ?? "",
-        date: data.date ?? "",
-        author: data.author ?? "Square One Paving",
-        category: data.category ? plainCase(data.category) : "",
-        featured_image,
-        tags: data.tags ?? [],
-        ...(record ? { job: recordJob(record, featured_image) } : {}),
-      } satisfies BlogPostMeta
-    })
-    .filter((post): post is BlogPostMeta => post !== null)
-  const seen = new Set(fromFiles.map((p) => p.slug))
+  const { listed, unlisted } = filePosts()
+  const seen = new Set(listed.map((p) => p.slug))
   const fromRecord = recordOnlyProjects()
-    .filter((p) => !seen.has(p.slug))
+    .filter((p) => !seen.has(p.slug) && !unlisted.has(p.slug))
     .map((p) => meta(postFromRecord(p)))
 
-  return [...fromFiles, ...fromRecord].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  return [...listed, ...fromRecord].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 }
 
 /** One post from the files, or made from its record; null when neither has it. */
@@ -385,9 +401,13 @@ function fromDoc(d: CmsPostDoc, preview = false): CmsPost {
   }
 }
 
-/** The merge, kept pure so `npm run test:projects` can test it without Sanity: Studio docs over the files' and the record's posts. */
-export function mergePosts(docs: CmsPostDoc[] | null, files: BlogPostMeta[], preview = false): BlogPostMeta[] {
-  const cms = (docs ?? []).filter((d) => d.slug && d.title).map((d) => fromDoc(d, preview))
+/**
+ * The merge, kept pure so `npm run test:projects` can test it without Sanity:
+ * Studio docs over the files' and the record's posts. A slug in `unlisted`
+ * (a file marked so, filePosts) is left out whichever source holds it.
+ */
+export function mergePosts(docs: CmsPostDoc[] | null, files: BlogPostMeta[], preview = false, unlisted: ReadonlySet<string> = new Set()): BlogPostMeta[] {
+  const cms = (docs ?? []).filter((d) => d.slug && d.title && !unlisted.has(d.slug)).map((d) => fromDoc(d, preview))
   const seen = new Set(cms.map((p) => p.slug))
   const metas: BlogPostMeta[] = cms.map(({ source: _s, body: _b, words: _w, ...rest }) => rest)
   return [...metas, ...files.filter((p) => !seen.has(p.slug))].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
@@ -404,7 +424,7 @@ async function cmsPostDocs(): Promise<CmsPostDoc[] | null> {
  * this order.
  */
 export async function getPosts(): Promise<BlogPostMeta[]> {
-  return mergePosts(await cmsPostDocs(), getAllPosts(), await inDraftMode())
+  return mergePosts(await cmsPostDocs(), getAllPosts(), await inDraftMode(), unlistedSlugs())
 }
 
 /** One post by slug — the CMS version if it exists, else the file's or the record's. */
