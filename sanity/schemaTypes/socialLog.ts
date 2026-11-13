@@ -33,7 +33,7 @@ export const socialLog = defineType({
       title: "Style check",
       type: "text",
       rows: 6,
-      description: "Sentences in the Buffer posts that still break the house style after the drafter's own rewrite. Fix them in Buffer before you approve the posts.",
+      description: "Sentences in the Buffer posts that still break the house style after 21e8's own rewrite. Fix them in Buffer before you approve the posts.",
     }),
     defineField({
       name: "slug",

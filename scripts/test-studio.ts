@@ -18,7 +18,8 @@ import { mergePosts, getAllPosts, type CmsPostDoc } from "../lib/blog"
 import { projectOf } from "../lib/projects-cms"
 import { postSlugOf, projects as RECORD } from "../lib/projects"
 import { organization } from "../components/StructuredData"
-import { CONTENT_TOOL, EDIT_ON_THE_PAGE, buildStructure, creatable, structure } from "../sanity/structure"
+import { CONTENT_TOOL, EDIT_ON_THE_PAGE, GROUPS, buildStructure, creatable, structure } from "../sanity/structure"
+import { JOB_CARD_TITLE, OPEN_THE_ARTICLE, SEE_IT_ON_THE_SITE } from "../sanity/job-photos-line"
 import { ICONS } from "../sanity/icons"
 import { STUDIO_HEADINGS, STUDIO_ROOT_ID } from "../sanity/studio-headings"
 import { ADDONS, ADDON_TYPES, DRAFTER, addonsOn, drafterOn } from "../lib/addons"
@@ -333,25 +334,45 @@ async function main() {
     assert.equal(ADDONS, addonsOn(process.env.NEXT_PUBLIC_STUDIO_ADDONS))
   })
 
-  await check("with the add-ons switched off: the guide first, then Website Pages, Services, Documents, Blog posts, Site Settings; no Projects list (6 Nov 2026), no Blog ideas, Job photos or Sent to Buffer", () => {
+  await check("with the add-ons switched off: the guide first, then Blog posts, Website Pages, Services, Documents, Site Settings, Advanced; no Projects list (6 Nov 2026), no Blog ideas, Job photos or Sent to Buffer", () => {
     const titles = listTitles(false)
     assert.equal(titles[0], "Start here: how to update the site")
-    assert.deepEqual(titles.slice(1), ["Website Pages", "Services", "Documents", "Blog posts", "Site Settings", "Advanced"], titles.join(" | "))
+    assert.deepEqual(titles.slice(1), ["Blog posts", "Website Pages", "Services", "Documents", "Site Settings", "Advanced"], titles.join(" | "))
     assert.ok(allTitles(false).includes("Blog posts · on the site as Projects · drafts wait here until you press Publish"))
     assert.ok(!allTitles(false).some((t) => /Buffer|go live at their set time|drafter/.test(t)), "nothing in the list names an add-on")
   })
 
-  await check("with the add-ons, as Square One has it (the blog drafter off since 6 Nov 2026): Website Pages, Services, Documents, Blog posts, Job photos, Sent to Buffer, Site Settings; no Blog ideas", () => {
+  await check("with the add-ons, as Square One has it (the blog drafter off since 6 Nov 2026): Blog posts, Job photos, then the website's lists, then Sent to Buffer and Advanced; no Blog ideas", () => {
     const titles = listTitles(true, undefined, false)
     assert.equal(titles[0], "Start here: how to update the site")
-    assert.deepEqual(titles.slice(1), ["Website Pages", "Services", "Documents", "Blog posts", "Job photos", "Sent to Buffer", "Site Settings", "Advanced"], titles.join(" | "))
+    assert.deepEqual(titles.slice(1), ["Blog posts", "Job photos", "Website Pages", "Services", "Documents", "Site Settings", "Sent to Buffer", "Advanced"], titles.join(" | "))
     assert.ok(allTitles(true).includes("Job photos · publish one and its posts go to Buffer right away; add the story and it becomes a project article"))
   })
 
-  await check("with the blog drafter switched on: Blog ideas back in the brief's place, before Blog posts", () => {
+  await check("with the blog drafter switched on: Blog ideas back, behind the scenes before Sent to Buffer", () => {
     const titles = listTitles(true, undefined, true)
-    assert.deepEqual(titles.slice(1), ["Website Pages", "Services", "Documents", "Blog ideas", "Blog posts", "Job photos", "Sent to Buffer", "Site Settings", "Advanced"], titles.join(" | "))
-    assert.deepEqual(listTitles(false, undefined, true).slice(1), ["Website Pages", "Services", "Documents", "Blog posts", "Site Settings", "Advanced"], "an add-on: never without the add-ons")
+    assert.deepEqual(titles.slice(1), ["Blog posts", "Job photos", "Website Pages", "Services", "Documents", "Site Settings", "Blog ideas", "Sent to Buffer", "Advanced"], titles.join(" | "))
+    assert.deepEqual(listTitles(false, undefined, true).slice(1), ["Blog posts", "Website Pages", "Services", "Documents", "Site Settings", "Advanced"], "an add-on: never without the add-ons")
+  })
+
+  await check("three groups, as titled dividers (never folders): Blog, then Website, then Behind the scenes (12 Nov 2026)", () => {
+    for (const [addons, drafter] of [[false, false], [true, false], [true, true]] as const) {
+      const items = listTree(addons, undefined, drafter).items ?? []
+      assert.deepEqual(items.filter((i) => i.divider).map((i) => i.title), [GROUPS.blog, GROUPS.website, GROUPS.behind], `add-ons ${addons}, drafter ${drafter}`)
+      const group = (title: string) => {
+        const at = items.findIndex((i) => i.divider && i.title === title)
+        const end = items.findIndex((i, n) => n > at && i.divider)
+        return items.slice(at + 1, end < 0 ? undefined : end).map((i) => i.title)
+      }
+      assert.deepEqual(group(GROUPS.blog), addons ? ["Blog posts", "Job photos"] : ["Blog posts"])
+      assert.deepEqual(group(GROUPS.website), ["Website Pages", "Services", "Documents", "Site Settings"])
+      assert.deepEqual(group(GROUPS.behind), [...(addons && drafter ? ["Blog ideas"] : []), ...(addons ? ["Sent to Buffer"] : []), "Advanced"])
+    }
+  })
+
+  await check("every list keeps the id it had before the groups, so a saved Studio link still opens it", () => {
+    const ids = (listTree(true, undefined, true).items ?? []).filter((i) => !i.divider).map((i) => i.id)
+    assert.deepEqual([...ids].sort(), ["advanced", "fieldPost", "guide", "post", "resource", "service", "siteSettings", "socialLog", "storyIdea", "website-pages"])
   })
 
   await check("the blog drafter switch: off unless Vercel says \"on\" (6 Nov 2026)", () => {
@@ -652,7 +673,7 @@ async function main() {
       }
     }
     walk(schemaTypes)
-    for (const t of [...allTitles(false), ...allTitles(true), CONTENT_TOOL, EDIT_ON_THE_PAGE]) titles.add(t)
+    for (const t of [...allTitles(false), ...allTitles(true), CONTENT_TOOL, EDIT_ON_THE_PAGE, JOB_CARD_TITLE, OPEN_THE_ARTICLE, SEE_IT_ON_THE_SITE]) titles.add(t)
     // The Studio's own buttons and tabs (checked in the live Studio, 21 and
     // 23 Oct 2026), and Buffer's words: not field titles.
     const app = new Set(["+", "Publish", "Generate", "Upload", "Select", "Crop image", "Discard changes", "Draft", "Published", "Unpublish", "Structure", "Edit", "Drafts", "Add to Queue", "Delete"])
@@ -693,7 +714,7 @@ async function main() {
 }
 
 type Builder = (s: unknown, c: unknown) => unknown
-type Node = { title?: string; items?: Node[]; child?: Node; divider?: boolean; icon?: unknown }
+type Node = { title?: string; id?: string; items?: Node[]; child?: Node; divider?: boolean; icon?: unknown }
 
 /**
  * The Studio's list, by running the structure against a stand-in builder
@@ -707,6 +728,7 @@ function listTree(addons: boolean, resolver?: Builder, drafter: boolean = DRAFTE
         if (prop === "__node") return node
         return (...args: unknown[]) => {
           if (prop === "title") node.title = String(args[0])
+          if (prop === "id") node.id = String(args[0])
           if (prop === "icon") node.icon = args[0]
           if (prop === "items") node.items = (args[0] as { __node: Node }[]).map((i) => i.__node)
           if (prop === "child") node.child = (args[0] as { __node?: Node })?.__node

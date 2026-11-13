@@ -199,6 +199,7 @@ export const GUIDE_SOURCE: { title: string; lead: { free: string; addons: string
         "No story: a minute or two later its posts wait in Buffer for your approval ({step:buffer}).",
         "With a story: the next morning an article is written from your words and the service's page, nothing else, and you get an email. It waits in the Studio until you read it and press Publish ({step:drafts}).",
         "Added several jobs at once? They go one at a time, oldest first.",
+        "The card at the top of the post, **What happens to this job**, always says what **Publish** does with it and how far it has got. Once there's an article, **Open the article** takes you to it.",
       ],
       shot: {
         src: "/images/guide/job-photos.png",
@@ -241,6 +242,7 @@ export const GUIDE_SOURCE: { title: string; lead: { free: string; addons: string
       title: "How the Studio keeps the site safe",
       when: "Worth reading once.",
       steps: [
+        "The list on the left is in three groups: **Blog** for what you open every week, **Website** for the pages, services, documents and settings, and **Behind the scenes** for what the site keeps for itself, which you rarely need.",
         "Everything you type saves itself as a draft. The site doesn't change until you press **Publish**.",
         "At the top of a post or a page, **Draft** is the version you're working on and **Published** is the one on the site.",
         "Changed your mind? The three dots beside **Publish**, then **Discard changes**: it goes back to what's on the site.",

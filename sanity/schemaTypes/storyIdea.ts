@@ -37,7 +37,7 @@ export const storyIdea = defineType({
       name: "title",
       title: "Working title",
       type: "string",
-      description: "The idea in a line, e.g. “Stamped asphalt over an old driveway: what has to be true first”. The drafter writes the final headline.",
+      description: "The idea in a line, e.g. “Stamped asphalt over an old driveway: what has to be true first”. 21e8 writes the final headline.",
       validation: (r) => [r.required().error("Give the idea a working title"), r.custom(copyCheck).warning()],
     }),
     defineField({
@@ -47,7 +47,7 @@ export const storyIdea = defineType({
       initialValue: "idea",
       options: { list: optionList(PLAN_STATUSES), layout: "radio" },
       description:
-        "Set it to Ready and the drafter writes it next (Tuesday and Thursday mornings); with nothing Ready it takes the top Idea. It sets Drafted itself. New Ideas are added at the bottom by themselves when the plan gets low; set one to Not doing to skip it.",
+        "Set it to Ready and 21e8 writes it up next (Tuesday and Thursday mornings); with nothing Ready, the top Idea. It is set to Drafted once written. 21e8 adds new Ideas at the bottom when the plan gets low; set one to Not doing to skip it.",
       validation: (r) => r.required(),
     }),
     defineField({
@@ -90,7 +90,7 @@ export const storyIdea = defineType({
       // job is a blog post with its job filled in (sanity/schemaTypes/post.ts).
       of: [defineArrayMember({ type: "reference", to: [{ type: "post" }], weak: true })],
       description:
-        "The documented jobs the article tells, from Blog posts (a post with its job filled in): one for a project story, three to six for a roundup. The drafter writes only what their records say, and the first one's lead photograph opens the draft.",
+        "The documented jobs the article tells, from Blog posts (a post with its job filled in): one for a project story, three to six for a roundup. 21e8 writes only what their records say, and the first one's lead photograph opens the draft.",
       hidden: ({ document }) => kindOf(document) === "guide",
       validation: (r) =>
         r.custom((refs, context) => {
@@ -141,7 +141,7 @@ export const storyIdea = defineType({
       type: "text",
       rows: 6,
       description:
-        "What the article must cover, and any real facts to use that aren't in the job's record. The drafter treats what you write here as true and invents nothing else. A brief the planner wrote starts “Questions to answer (not facts)”: those are questions, and the drafter answers them only from the pages. The plan isn't private: keep personal details and prices out of it.",
+        "What the article must cover, and any real facts to use that aren't in the job's record. 21e8 treats what you write here as true and invents nothing else. A brief 21e8 added starts “Questions to answer (not facts)”: those are questions, answered only from the pages. The plan isn't private: keep personal details and prices out of it.",
       // The drafter copies the brief's wording, dashes and all.
       validation: (r) => r.custom(copyCheck).warning(),
     }),
@@ -150,7 +150,7 @@ export const storyIdea = defineType({
       title: "Draft",
       type: "string",
       readOnly: true,
-      description: "Set by the drafter: the web address of the draft it wrote, in Blog.",
+      description: "Set by 21e8: the web address of the draft, in Blog posts.",
     }),
     defineField({
       name: "draftedAt",

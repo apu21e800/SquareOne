@@ -853,7 +853,7 @@ function articleEmail(a: {
   const intro = a.waits
     ? (a.why ??
       (a.clean
-        ? `A project article was written from the Job photos post "${a.name}". It waits in Studio → Blog posts until someone presses Publish: nothing is on the site until then. The day after it is live, its social posts are drafted in Buffer for approval.`
+        ? `A project article was written from the Job photos post "${a.name}". It waits in Studio → Blog posts until someone presses Publish: nothing is on the site until then. A few minutes after it goes live, its social posts wait in Buffer for approval.`
         : `A project article was written from the Job photos post "${a.name}", and a check found something (below). It waits in Studio → Blog posts until someone presses Publish: fix what's listed first.`))
     : a.ready
       ? `A project article was written from the Job photos post "${a.name}" and goes live on squareonepaving.com by itself ${a.when}. Nothing is on the site until then. The day after it is live, its social posts are drafted in Buffer for approval.`
