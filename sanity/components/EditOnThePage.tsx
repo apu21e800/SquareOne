@@ -1,4 +1,4 @@
-import { Component, type ReactNode } from "react"
+import type { MouseEventHandler, ReactNode } from "react"
 import { Box, Button, Card, Flex, Text } from "@sanity/ui"
 import { EyeOpenIcon } from "@sanity/icons/EyeOpen"
 import { isDocumentSchemaType, type InputProps } from "sanity"
@@ -6,6 +6,15 @@ import { useIntentLink } from "sanity/router"
 import { usePresentationParams } from "sanity/presentation"
 import { EDIT_ON_THE_PAGE } from "../structure"
 import { TYPES_WITH_A_PAGE, documentPage, editOnThePageIntent } from "../studio-pages"
+import QuietBoundary from "./QuietBoundary"
+
+/** The card's words: what the button does for this document, or what to do first. */
+export function editOnThePageWords(type: string, ready: boolean): string {
+  if (!ready) return type === "pageHero" ? "Pick its Page below, then you can see it there from here." : "Press Generate under Web address, then you can see it on its page from here."
+  return type === "post"
+    ? "See this post as it looks on the site, and click any words to change them. Only you can see it before it's published."
+    : "See this page as it looks on the site, and click any words or photo to change them."
+}
 
 /**
  * The Edit on the page button above the fields of every document with a page
@@ -29,21 +38,22 @@ function EditOnThePageCard({ type, value }: { type: string; value: Record<string
   if (inPresentation) return null
 
   const ready = !!(id && page)
-  const words = !ready
-    ? type === "pageHero"
-      ? "Pick its Page below, then you can see it there from here."
-      : "Press Generate under Web address, then you can see it on its page from here."
-    : type === "post"
-      ? "See this post as it looks on the site, and click any words to change them. Only you can see it before it's published."
-      : "See this page as it looks on the site, and click any words or photo to change them."
+  return <EditOnThePageCardView words={editOnThePageWords(type, ready)} link={ready ? link : undefined} />
+}
 
+/**
+ * The card, from plain values (12 Nov 2026): a link to open, or none while
+ * the document has no page yet (the button shows, switched off).
+ * scripts/studio-panels.tsx shows each state without a signed-in Studio.
+ */
+export function EditOnThePageCardView({ words, link }: { words: string; link?: { href: string; onClick?: MouseEventHandler<HTMLElement> } }) {
   return (
     <Card padding={3} radius={2} border tone="primary" marginBottom={4}>
       <Flex align="center" gap={3} wrap="wrap">
         <Box flex={1} style={{ minWidth: 200 }}>
           <Text size={1}>{words}</Text>
         </Box>
-        {ready ? (
+        {link ? (
           <Button as="a" href={link.href} onClick={link.onClick} icon={EyeOpenIcon} text={EDIT_ON_THE_PAGE} tone="primary" />
         ) : (
           <Button disabled icon={EyeOpenIcon} text={EDIT_ON_THE_PAGE} tone="primary" />
@@ -54,33 +64,18 @@ function EditOnThePageCard({ type, value }: { type: string; value: Record<string
 }
 
 /**
- * If the button ever fails (a Studio upgrade, an odd document), it disappears
- * and the fields below it carry on: the office must always be able to edit.
- */
-class QuietBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
-  state = { failed: false }
-  static getDerivedStateFromError() {
-    return { failed: true }
-  }
-  componentDidCatch(err: unknown) {
-    console.error("[studio] the Edit on the page button failed; the fields are unaffected", err)
-  }
-  render() {
-    return this.state.failed ? null : this.props.children
-  }
-}
-
-/**
  * The Studio's form input (sanity.config.ts, `form.components.input`): the
  * button above the fields of a document with a page; every other input
- * renders as before.
+ * renders as before. If the button ever fails (a Studio upgrade, an odd
+ * document), it disappears and the fields below it carry on
+ * (sanity/components/QuietBoundary.tsx): the office must always be able to edit.
  */
 export function EditOnThePageInput(props: InputProps): ReactNode {
   const type = props.schemaType
   if (!isDocumentSchemaType(type) || !TYPES_WITH_A_PAGE.has(type.name)) return props.renderDefault(props)
   return (
     <div>
-      <QuietBoundary>
+      <QuietBoundary name="The Edit on the page button">
         <EditOnThePageCard type={type.name} value={props.value as Record<string, unknown> | undefined} />
       </QuietBoundary>
       {props.renderDefault(props)}

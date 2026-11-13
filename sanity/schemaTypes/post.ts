@@ -4,6 +4,7 @@ import { bodyCheck, copyCheck, headingCheck } from "./style"
 import { officeDate } from "../lib/publish-date"
 import { ADDONS } from "../../lib/addons"
 import { POST_PIN_DESCRIPTION, pinFields } from "./pin"
+import { postListLine } from "../post-line"
 
 const SYSTEMS = ["StreetPrint", "StreetBond", "StreetBondSR", "StreetBond150", "TrafficPatterns", "TrafficPatternsXD", "DuraTherm", "DecoMark", "PreMark", "DuraShield"]
 const APPLICATIONS = ["Crosswalks", "Streetscapes", "Roundabouts & traffic calming", "Parking lots", "Parks & paths", "Schools & sports courts", "Bike lanes", "Public art", "Branding & wayfinding", "Driveways"]
@@ -85,7 +86,7 @@ export const post = defineType({
       type: "text",
       title: "Notes for the editor",
       rows: 12,
-      description: "Written by the drafter: the fact check, the style check, the photo. Never shown on the site; clear it before publishing.",
+      description: "Left by 21e8 with the draft: the fact check, the style check, the photo. Never shown on the site; clear it before publishing.",
       hidden: ({ document }) => !document?.editorNotes,
       group: "content",
     }),
@@ -261,7 +262,10 @@ export const post = defineType({
     defineField({ name: "seoDescription", type: "text", title: "Search description (optional)", rows: 2, validation: (r) => [r.max(160), r.custom(copyCheck).warning()], group: "seo" }),
   ],
   orderings: [{ title: "Newest first", name: "dateDesc", by: [{ field: "date", direction: "desc" }] }],
+  // The list's line (12 Nov 2026, sanity/post-line.ts): the date, then when a
+  // draft goes live by itself, the pin, and an article from Job photos.
   preview: {
-    select: { title: "title", subtitle: "date", media: "mainImage" },
+    select: { title: "title", date: "date", media: "mainImage", scheduled: "scheduled", scheduledFor: "scheduledFor", pinned: "pinned", fromJob: "fieldPost._ref" },
+    prepare: ({ title, date, media, scheduled, scheduledFor, pinned, fromJob }) => ({ title, subtitle: postListLine({ date, scheduled, scheduledFor, pinned, fromJob }), media }),
   },
 })

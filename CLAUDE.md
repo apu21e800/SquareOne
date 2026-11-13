@@ -333,7 +333,26 @@ page its "Used on" list names (23 Oct 2026, sanity/components/EditOnThePage.tsx,
 sanity/studio-pages.ts; ported from hubss.com's; `npm run test:studio`).
 
 **The Studio at hubss.com's level** (14 Oct 2026, docs/CMS.md): the list is
-Website Pages, Services, Documents (7 Nov 2026), Blog, Site Settings (sanity/structure.ts).
+"Start here" (the guide), then three groups since 12 Nov 2026 (as hubss.com's;
+Vern: "eliminate pain points from the sanity experience ... so everything is
+made clear"): **Blog** (Blog posts, Job photos), **Website** (Website Pages,
+Services, Documents, Site Settings) and **Behind the scenes** (Blog ideas with
+the drafter on, Sent to Buffer, Advanced). The groups are titled dividers,
+never folders, and every list keeps its id, so a saved Studio link still opens
+it (sanity/structure.ts `GROUPS`). A Job photos post opens on a card, **What
+happens to this job**, that says what Publish does with it (no story: social
+posts waiting in Buffer; a story: an article that waits for Publish) and how far
+its article has got, with **Open the article** (sanity/components/JobPhotosInput.tsx);
+its words are one file with no imports (sanity/job-photos-line.ts), and its line
+in the list says the same in three words. A blog post's line in the list adds
+when a draft goes live by itself, the pin and "from Job photos"
+(sanity/post-line.ts). Every panel of ours sits inside a QuietBoundary
+(sanity/components/QuietBoundary.tsx) with Sanity's own fields outside it, and
+draws from plain values: `npm run studio:panels` writes every state, light and
+dark, to .studio-panels/ without a signed-in Studio (a preview's Studio isn't
+registered with Square One's Sanity project). Nothing the Studio shows names the
+machinery (AI, Claude, the drafter, the planner, automation): 21e8 does the
+work. `npm run test:studio` (scripts/test-studio-words.ts) checks all of it.
 Every page's words below its opener are the Studio's, the code's where a
 field is blank: `lib/page-copy.ts` holds the code's words verbatim and the
 merge (a heading and its lighter ending travel as a pair); a page reads
@@ -535,7 +554,8 @@ npm run test:projects  # projects from the Studio
 npm run test:resources  # the document library from the Studio: the record exactly until someone edits, renames, uploads, adds, hides
 npm run test:pages  # the hero, page openers and galleries from the Studio
 npm run test:preview  # Edit on the page: preview marks, exit path, clickable photos, style warnings
-npm run test:studio   # focal points, first-Publish dates, Site Settings, every page's words, the Studio list
+npm run test:studio   # focal points, first-Publish dates, Site Settings, every page's words, the Studio list, the job photos card's words, no machinery
+npm run studio:panels # the Studio's panels in every state, light and dark, as pages in .studio-panels/
 npm run sync:pages -- --dry-run  # what the fill-only sync would put into the Studio's empty fields
 npm run test:automation  # the cron gate, the drafter end to end against stand-ins, fail-loud emails
 npm run test:planner     # the Blog ideas' top-up: vetting, no repeats, each job told once, no "vs"
@@ -584,6 +604,11 @@ Two checkouts exist and they are not equals.
   check`, Playwright, Lighthouse, image work. It is disposable.
 
 ### The sandbox cannot push. Do not look for a way around it.
+
+12 Nov 2026: with the repository attached to the session for push (Claude's
+`add_repo`, which asks Vern), a cloud session pushed `staging` to GitHub
+directly. Without that, everything below still holds, and the handoff rule
+always does: never leave a commit that exists only in a sandbox.
 
 Verified 21 Sept 2026, not inferred:
 

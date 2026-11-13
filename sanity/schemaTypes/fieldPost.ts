@@ -3,6 +3,8 @@ import { ICONS } from "../icons"
 import { copyCheck } from "./style"
 import { officeDate } from "../lib/publish-date"
 import { APPLICATION_OPTIONS, SERVICE_OPTIONS, SYSTEM_OPTIONS } from "../../lib/automation/plan"
+import JobPhotosInput from "../components/JobPhotosInput"
+import { jobPhotosListLine } from "../job-photos-line"
 
 /**
  * Job photos (14 Oct 2026, as hubss.com's; "From the field" until 20 Oct):
@@ -24,6 +26,11 @@ import { APPLICATION_OPTIONS, SERVICE_OPTIONS, SYSTEM_OPTIONS } from "../../lib/
  *
  * Not shown on the website by itself: the photos live here, in the posts and
  * in the article.
+ *
+ * Above the form, a card says what Publish does with this post and how far
+ * its article has got, and its line in the list says the same in three words
+ * (12 Nov 2026, as hubss.com's; sanity/components/JobPhotosInput.tsx,
+ * sanity/job-photos-line.ts).
  */
 const optionList = (list: readonly { value: string; title: string }[]) => list.map((o) => ({ value: o.value, title: o.title }))
 
@@ -32,6 +39,7 @@ export const fieldPost = defineType({
   title: "Job photos",
   type: "document",
   icon: ICONS.fieldPost,
+  components: { input: JobPhotosInput },
   fields: [
     defineField({
       name: "photos",
@@ -128,10 +136,10 @@ export const fieldPost = defineType({
   ],
   orderings: [{ title: "Newest first", name: "dateDesc", by: [{ field: "date", direction: "desc" }] }],
   preview: {
-    select: { place: "place", service: "service", media: "photos.0", date: "date" },
-    prepare: ({ place, service, media, date }) => ({
+    select: { place: "place", service: "service", media: "photos.0", date: "date", writeUp: "writeUp", article: "article._ref" },
+    prepare: ({ place, service, media, date, writeUp, article }) => ({
       title: [SERVICE_OPTIONS.find((o) => o.value === service)?.title, place].filter(Boolean).join(" in ") || "New job photos",
-      subtitle: typeof date === "string" ? date : undefined,
+      subtitle: [typeof date === "string" ? date : undefined, jobPhotosListLine({ story: typeof writeUp === "string" && !!writeUp.trim(), hasArticle: !!article })].filter(Boolean).join(" · "),
       media,
     }),
   },

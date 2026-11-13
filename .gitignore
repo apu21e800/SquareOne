@@ -73,3 +73,6 @@ public/images/_pre-photo-pass/
 
 # before/after screenshot folders written by the own-company build (docs/OWN-COMPANY-BRIEF.md §8)
 /_shots/
+
+# the Studio's panels, every state (npm run studio:panels)
+/.studio-panels/
